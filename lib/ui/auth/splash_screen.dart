@@ -27,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   route() async {
+    //   Get.off(() => const FirstScreen());
     // if (authController.authStatus == AuthStatus.isFirstTime) {
     //   Get.off(() => const FirstScreen());
     // } else if (authController.authStatus == AuthStatus.authenticated) {
@@ -53,10 +54,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     image: AssetImage(
                   "assets/images/png/esport.png",
                 ))),
-            // child: Image.asset(
-            //   "assets/images/pngs/farmerdomainappicon.png",
-            //   height: Get.height * 0.2,
-            // ),
           ),
         ],
       ),
