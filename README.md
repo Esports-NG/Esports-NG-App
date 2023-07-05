@@ -1,4 +1,4 @@
-# e_sport
+# Esports NG
 
 A new Flutter project.
 
