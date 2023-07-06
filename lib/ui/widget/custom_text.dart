@@ -6,6 +6,7 @@ class CustomText extends StatelessWidget {
   final double? size;
   final Color? color;
   final FontWeight? weight;
+  final String? fontFamily;
   final double? height;
   final TextAlign? textAlign;
   final TextOverflow? overflow;
@@ -18,19 +19,20 @@ class CustomText extends StatelessWidget {
     this.height,
     this.textAlign,
     this.overflow,
+    this.fontFamily,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(title!,
         textAlign: textAlign ?? TextAlign.left,
-        style: GoogleFonts.inter(
-            textStyle: TextStyle(
+        style: TextStyle(
           color: color ?? Colors.black,
+          fontFamily: fontFamily ?? 'GilroyRegular',
           fontSize: size,
           fontWeight: weight ?? FontWeight.normal,
           overflow: overflow,
-        )));
+        ));
   }
 }
 
