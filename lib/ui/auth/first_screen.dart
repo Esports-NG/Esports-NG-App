@@ -23,10 +23,10 @@ class _FirstScreenState extends State<FirstScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Gap(Get.height * 0.06),
+              Gap(Get.height * 0.1),
               SvgPicture.asset(
                 'assets/images/svg/splashTest.svg',
-                height: Get.height * 0.15,
+                height: Get.height * 0.17,
               ),
               Gap(Get.height * 0.02),
               Center(
@@ -36,7 +36,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.center,
                   fontFamily: 'GilroyLight',
-                  size: Get.height * 0.017,
+                  size: Get.height * 0.02,
                 ),
               )
             ],
