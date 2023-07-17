@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'login.dart';
+import 'register.dart';
 
 class FirstScreen extends StatefulWidget {
   const FirstScreen({super.key});
@@ -58,7 +60,9 @@ class _FirstScreenState extends State<FirstScreen> {
                     buttonText: 'Sign up',
                     fontWeight: FontWeight.w600,
                     textSize: 16,
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => const RegisterScreen());
+                    },
                     isLoading: false,
                   ),
                   Gap(Get.height * 0.02),
@@ -68,7 +72,9 @@ class _FirstScreenState extends State<FirstScreen> {
                     fontWeight: FontWeight.w600,
                     buttonColor: AppColor().pureBlackColor,
                     textSize: Get.height * 0.021,
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => const LoginScreen());
+                    },
                     isLoading: false,
                   ),
                   Gap(Get.height * 0.05),
@@ -84,7 +90,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   Gap(Get.height * 0.05),
                   CustomFillButton(
                     onTap: () {},
-                    buttonText: 'Log in',
+                    buttonText: '',
                     textColor: AppColor().primaryColor,
                     boarderColor: AppColor().primaryWhite,
                     fontWeight: FontWeight.w600,

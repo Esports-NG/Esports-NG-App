@@ -7,7 +7,7 @@ class AppColor {
   Color primaryWhite = const Color(0xffffffff);
   Color primaryYellow = const Color(0xffF29528);
   Color primaryRed = const Color(0xffFF5449);
-  Color primaryGreen = const Color(0xff2EFF81);
+  Color primaryGreen = const Color(0xff5CFF9D);
   Color textBlack = const Color(0xff2B3155);
   Color textPrimary = const Color(0xff008585);
   Color textFieldColor = const Color(0xffF7F8F9);
