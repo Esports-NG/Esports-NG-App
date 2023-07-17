@@ -90,6 +90,7 @@ class AuthRepository extends GetxController {
   late final lNameController = TextEditingController();
   late final emailController = TextEditingController();
   late final phoneNoController = TextEditingController();
+  late final genderController = TextEditingController();
   late final passwordController = TextEditingController();
   late final currentPasswordController = TextEditingController();
   late final confirmPasswordController = TextEditingController();

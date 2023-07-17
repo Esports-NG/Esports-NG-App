@@ -28,6 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String lgaValue = 'Select a Local Government Area';
   String selectedLGAFromAllLGAs = NigerianStatesAndLGA.getAllNigerianLGAs()[0];
   List<String> statesLga = [];
+  String? genderValue;
 
   bool isHiddenPassword = true;
   bool? isChecked = false;
@@ -120,103 +121,153 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Gap(Get.height * 0.02),
               CustomText(
-                title: 'Password',
+                title: 'Phone number',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
                 fontFamily: 'GilroyRegular',
                 size: Get.height * 0.018,
               ),
               Gap(Get.height * 0.01),
-              IntlPhoneField(
-                  disableLengthCheck: true,
-                  keyboardType: Platform.isIOS
-                      ? const TextInputType.numberWithOptions(
-                          signed: true, decimal: false)
-                      : TextInputType.phone,
-                  flagsButtonMargin: const EdgeInsets.only(left: 8),
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 13,
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'GilroyMedium',
-                      fontWeight: FontWeight.w600,
-                      height: 1.7),
-                  decoration: InputDecoration(
-                    fillColor: AppColor().lightBlack,
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 15),
-                    filled: true,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColor().textFieldColor,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(10)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor().textFieldColor, width: 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor().textFieldColor, width: 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    hintText: 'Phone Number',
-                    hintStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 13,
-                        fontStyle: FontStyle.normal,
-                        fontFamily: 'GilroyMedium',
-                        fontWeight: FontWeight.w600,
-                        height: 1.7),
+              CustomTextField(
+                hint: "+234",
+                textEditingController: authController.phoneNoController,
+                validate: (value) {
+                  if (value!.isEmpty) {
+                    return 'phone no must not be empty';
+                  } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                    return "Please enter only digits";
+                  }
+                  return null;
+                },
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Country',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.018,
+              ),
+              Gap(Get.height * 0.01),
+              CustomTextField(
+                hint: "Country",
+                // textEditingController: authController.fNameController,
+                validate: (value) {
+                  if (value!.isEmpty) {
+                    return 'Fullname must not be empty';
+                  } else if (!RegExp(r'[A-Za-z]+$').hasMatch(value)) {
+                    return "Please enter only letters";
+                  }
+                  return null;
+                },
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'State',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.018,
+              ),
+              Gap(Get.height * 0.01),
+              CustomTextField(
+                hint: "State",
+                // textEditingController: authController.fNameController,
+                validate: (value) {
+                  if (value!.isEmpty) {
+                    return 'Fullname must not be empty';
+                  } else if (!RegExp(r'[A-Za-z]+$').hasMatch(value)) {
+                    return "Please enter only letters";
+                  }
+                  return null;
+                },
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Gender',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.018,
+              ),
+              Gap(Get.height * 0.01),
+              InputDecorator(
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColor().lightBlack,
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   ),
-                  controller: authController.phoneNoController,
-                  initialCountryCode: "NG",
-                  validator: (data) {
-                    number = data!.number;
-                    if (number.length < 10 || number.length > 10) {
-                      return "Invalid phone number";
-                    } else if (!RegExp(r'^[0-9]+$').hasMatch(number)) {
-                      return "Please enter only digits";
-                    }
-                    return null;
-                  },
-                  onChanged: (data) {
-                    number = data.countryCode;
-                    if (kDebugMode) {
-                      print("number is ${data.countryCode}");
-                    }
-                  }),
-              Gap(Get.height * 0.15),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: genderValue,
+                    items: <String>[
+                      'Male',
+                      'Female',
+                    ].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: CustomText(
+                          title: value,
+                          color: AppColor().pureBlackColor,
+                          fontFamily: 'GilroyMedium',
+                          weight: FontWeight.w600,
+                          size: 13,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        genderValue = value;
+                        authController.genderController.text = value!;
+                        if (kDebugMode) {
+                          print(value);
+                        }
+                      });
+                    },
+                    hint: CustomText(
+                      title: "Gender",
+                      color: AppColor().hintTextColor,
+                      weight: FontWeight.w400,
+                      size: 13,
+                    ),
+                  ),
+                ),
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Date of birth',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.018,
+              ),
+              Gap(Get.height * 0.01),
+              CustomTextField(
+                hint: "Date of birth",
+                // textEditingController: authController.fNameController,
+                validate: (value) {
+                  if (value!.isEmpty) {
+                    return 'Fullname must not be empty';
+                  } else if (!RegExp(r'[A-Za-z]+$').hasMatch(value)) {
+                    return "Please enter only letters";
+                  }
+                  return null;
+                },
+              ),
+              Gap(Get.height * 0.05),
               CustomFillButton(
-                buttonText: 'Log in',
+                buttonText: 'Sign up',
                 fontWeight: FontWeight.w600,
                 textSize: 16,
                 onTap: () {},
                 isLoading: false,
               ),
-              Gap(Get.height * 0.05),
-              Center(
-                child: Text.rich(TextSpan(
-                  text: "Don’t have an account?",
-                  style: TextStyle(
-                    color: AppColor().primaryWhite,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'GilroyRegular',
-                    fontSize: Get.height * 0.019,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: " Sign Up",
-                        style: TextStyle(
-                            color: AppColor().primaryGreen,
-                            decoration: TextDecoration.underline),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // Get.to(() => const AccountOption());
-                          }),
-                  ],
-                )),
-              ),
+              Gap(Get.height * 0.02),
             ],
           ),
         ),
