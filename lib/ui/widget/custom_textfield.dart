@@ -97,14 +97,14 @@ class CustomTextField extends StatelessWidget {
       initialValue: initialValue,
       obscureText: obscure ?? false,
       style: TextStyle(
-          color: hintColor ?? Colors.black,
+          color: hintColor ?? AppColor().lightItemsColor,
           fontSize: 13,
           fontStyle: FontStyle.normal,
-          fontFamily: 'GilroyMedium',
-          fontWeight: FontWeight.w600,
+          fontFamily: 'GilroyBold',
+          fontWeight: FontWeight.w400,
           height: 1.7),
       decoration: InputDecoration(
-        fillColor: fillColor ?? AppColor().lightBlack,
+        fillColor: fillColor ?? AppColor().pureBlackColor,
         contentPadding:
             const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
         filled: true,
@@ -113,17 +113,17 @@ class CustomTextField extends StatelessWidget {
         suffixText: sufText,
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: colors ?? AppColor().textFieldColor,
+              color: colors ?? AppColor().lightItemsColor,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(radius ?? 10)),
         enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-                color: enableColor ?? AppColor().textFieldColor, width: 1),
+                color: enableColor ?? AppColor().lightItemsColor, width: 1),
             borderRadius: BorderRadius.circular(radius ?? 10)),
         border: OutlineInputBorder(
             borderSide: BorderSide(
-                color: borderColor ?? AppColor().textFieldColor, width: 1),
+                color: borderColor ?? AppColor().lightItemsColor, width: 1),
             borderRadius: BorderRadius.circular(radius ?? 10)),
         hintText: hint,
         prefixIcon: prefixIcon,
@@ -133,13 +133,13 @@ class CustomTextField extends StatelessWidget {
             fontSize: 13,
             fontStyle: FontStyle.normal,
             fontFamily: 'GilroyMedium',
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w400,
             height: 1.7),
         hintStyle: TextStyle(
-            color: hintColor ?? Colors.black54,
+            color: hintColor ?? AppColor().lightItemsColor,
             fontSize: 13,
             fontStyle: FontStyle.normal,
-            fontFamily: 'GilroyMedium',
+            fontFamily: 'GilroyBold',
             fontWeight: FontWeight.w400,
             height: 1.7),
       ),

@@ -61,3 +61,54 @@ class CustomFillButton extends StatelessWidget {
     );
   }
 }
+
+class CustomFillButtonOption extends StatelessWidget {
+  const CustomFillButtonOption({
+    Key? key,
+    this.onTap,
+    this.width,
+    this.textColor,
+    this.buttonColor,
+    this.borderRadius,
+    this.isLoading = false,
+    required this.buttonText,
+    this.boarderColor,
+    this.height,
+    this.textSize,
+    this.fontWeight,
+  }) : super(key: key);
+  final double? width;
+  final double? height;
+  final double? textSize;
+  final FontWeight? fontWeight;
+  final Color? textColor;
+  final Color? buttonColor;
+  final Color? boarderColor;
+  final String? buttonText;
+  final VoidCallback? onTap;
+  final BorderRadiusGeometry? borderRadius;
+  final bool isLoading;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        width: width ?? MediaQuery.of(context).size.width,
+        height: height ?? 45,
+        decoration: BoxDecoration(
+            color: buttonColor,
+            borderRadius: borderRadius ?? BorderRadius.circular(10),
+            border: Border.all(color: boarderColor ?? AppColor().primaryDark)),
+        child: CustomText(
+          title: buttonText!,
+          size: textSize ?? 16,
+          weight: fontWeight ?? FontWeight.w400,
+          textAlign: TextAlign.start,
+          color: textColor!,
+        ),
+      ),
+    );
+  }
+}
