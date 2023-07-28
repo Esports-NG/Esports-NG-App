@@ -52,14 +52,14 @@ class _FirstScreenState extends State<FirstScreen> {
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
                       fontFamily: 'GilroyLight',
-                      size: Get.height * 0.021,
+                      size: Get.height * 0.018,
                     ),
                   ),
                   Gap(Get.height * 0.1),
                   CustomFillButton(
                     buttonText: 'Sign up',
                     fontWeight: FontWeight.w600,
-                    textSize: 16,
+                    textSize: Get.height * 0.016,
                     onTap: () {
                       Get.to(() => const RegisterScreen());
                     },
@@ -71,7 +71,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     textColor: AppColor().primaryColor,
                     fontWeight: FontWeight.w600,
                     buttonColor: AppColor().pureBlackColor,
-                    textSize: Get.height * 0.021,
+                    textSize: Get.height * 0.016,
                     onTap: () {
                       Get.to(() => const LoginScreen());
                     },
@@ -84,7 +84,7 @@ class _FirstScreenState extends State<FirstScreen> {
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
                       fontFamily: 'GilroyLight',
-                      size: Get.height * 0.021,
+                      size: Get.height * 0.016,
                     ),
                   ),
                   Gap(Get.height * 0.05),
@@ -110,7 +110,7 @@ class _FirstScreenState extends State<FirstScreen> {
                           textAlign: TextAlign.center,
                           fontFamily: 'GilroyLight',
                           weight: FontWeight.w600,
-                          size: Get.height * 0.021,
+                          size: Get.height * 0.016,
                         ),
                       ],
                     ),

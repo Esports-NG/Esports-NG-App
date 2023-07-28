@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
                     fontFamily: 'GilroyBold',
-                    size: Get.height * 0.04,
+                    size: Get.height * 0.032,
                   ),
                   Gap(Get.height * 0.01),
                   Image.asset(
@@ -61,15 +61,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: AppColor().primaryWhite.withOpacity(0.8),
                 textAlign: TextAlign.center,
                 fontFamily: 'GilroyRegular',
-                size: Get.height * 0.018,
+                size: Get.height * 0.014,
               ),
-              Gap(Get.height * 0.08),
+              Gap(Get.height * 0.05),
               CustomText(
                 title: 'Email address',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
                 fontFamily: 'GilroyRegular',
-                size: Get.height * 0.018,
+                size: Get.height * 0.014,
               ),
               Gap(Get.height * 0.01),
               CustomTextField(
@@ -86,13 +86,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   return null;
                 },
               ),
-              Gap(Get.height * 0.05),
+              Gap(Get.height * 0.03),
               CustomText(
                 title: 'Password',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
                 fontFamily: 'GilroyRegular',
-                size: Get.height * 0.018,
+                size: Get.height * 0.014,
               ),
               Gap(Get.height * 0.01),
               CustomTextField(
@@ -120,18 +120,18 @@ class _LoginScreenState extends State<LoginScreen> {
               Gap(Get.height * 0.02),
               CustomText(
                 title: 'Forgot password?',
-                color: AppColor().primaryGreen,
+                color: AppColor().primaryColor,
                 textAlign: TextAlign.center,
                 fontFamily: 'GilroyRegular',
                 weight: FontWeight.w600,
-                size: Get.height * 0.02,
+                size: Get.height * 0.016,
                 underline: TextDecoration.underline,
               ),
-              Gap(Get.height * 0.15),
+              Gap(Get.height * 0.12),
               CustomFillButton(
                 buttonText: 'Log in',
                 fontWeight: FontWeight.w600,
-                textSize: 16,
+                textSize: Get.height * 0.016,
                 onTap: () {},
                 isLoading: false,
               ),
@@ -143,13 +143,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: AppColor().primaryWhite,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'GilroyRegular',
-                    fontSize: Get.height * 0.019,
+                    fontSize: Get.height * 0.016,
                   ),
                   children: <TextSpan>[
                     TextSpan(
                         text: " Sign Up",
                         style: TextStyle(
-                            color: AppColor().primaryGreen,
+                            color: AppColor().primaryColor,
                             decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
