@@ -94,6 +94,7 @@ class AuthRepository extends GetxController {
   late final phoneNoController = TextEditingController();
   late final genderController = TextEditingController();
   late final dobController = TextEditingController();
+  late final referralController = TextEditingController();
   late final passwordController = TextEditingController();
   late final currentPasswordController = TextEditingController();
   late final confirmPasswordController = TextEditingController();
@@ -110,6 +111,8 @@ class AuthRepository extends GetxController {
   late final bankAccountNoController = TextEditingController();
   late final bankAccountNameController = TextEditingController();
   late final userIdController = TextEditingController();
+
+  DateTime? date;
 
   final _authStatus = AuthStatus.empty.obs;
   final _signInStatus = SignInStatus.empty.obs;

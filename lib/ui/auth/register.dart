@@ -1,3 +1,4 @@
+import 'package:country_state_picker/country_state_picker.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -11,8 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:intl/intl.dart';
 import 'package:nigerian_states_and_lga/nigerian_states_and_lga.dart';
+
+import 'choose_alias.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -23,6 +26,8 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  int? current;
+  List<UserPreference> selectedCategories = [];
   final authController = Get.put(AuthRepository());
   String stateValue = NigerianStatesAndLGA.allStates[0];
   String lgaValue = 'Select a Local Government Area';
@@ -35,12 +40,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool boolPass = false;
   int pageCount = 0;
   int? primaryUseCount;
-  var number = "";
-  var bizNo = "";
+  String state = '';
+  String country = '';
+
+  void displayMsg(msg) {
+    print(msg);
+  }
 
   void _togglePasswordView() {
     setState(() {
       isHiddenPassword = !isHiddenPassword;
+    });
+  }
+
+  Future pickDate(BuildContext context) async {
+    final initialDate = DateTime.now();
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: authController.date ?? initialDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+
+    if (newDate == null) return;
+
+    setState(() {
+      authController.dobController.text =
+          DateFormat("yyyy-MM-dd").format(newDate).toString();
+      authController.date = newDate;
+      if (kDebugMode) {
+        print(authController.dobController.text);
+      }
     });
   }
 
@@ -76,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 color: AppColor().primaryWhite,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'GilroyBold',
-                fontSize: Get.height * 0.014,
+                fontSize: Get.height * 0.015,
               ),
               children: <TextSpan>[
                 TextSpan(
@@ -110,7 +140,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Gap(Get.height * 0.02),
                   Row(
                     children: [
                       CustomText(
@@ -147,19 +176,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   Gap(Get.height * 0.02),
                   pageCount == 0
-                      ? Stack(
-                          alignment: Alignment.center,
+                      ? Column(
                           children: [
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Center(
+                                  child: Image.asset(
+                                    'assets/images/png/photo.png',
+                                    height: Get.height * 0.15,
+                                  ),
+                                ),
+                                Positioned(
+                                    right: Get.width * 0.3,
+                                    bottom: 0,
+                                    child: SvgPicture.asset(
+                                      'assets/images/svg/camera.svg',
+                                      height: Get.height * 0.05,
+                                    )),
+                              ],
+                            ),
+                            Gap(Get.height * 0.02),
                             Center(
-                              child: Image.asset(
-                                'assets/images/png/photo.png',
+                              child: CustomText(
+                                title: 'Max file size 1MB *',
+                                color: AppColor().primaryWhite,
+                                textAlign: TextAlign.center,
+                                fontFamily: 'GilroyRegular',
+                                size: Get.height * 0.015,
                               ),
                             ),
-                            Positioned(
-                                right: Get.width * 0.3,
-                                bottom: 0,
-                                child: SvgPicture.asset(
-                                    'assets/images/svg/camera.svg')),
+                            Gap(Get.height * 0.01),
                           ],
                         )
                       : Container(),
@@ -171,11 +218,58 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: [
                           Gap(Get.height * 0.02),
                           CustomText(
+                            title: 'Full name',
+                            color: AppColor().primaryWhite,
+                            textAlign: TextAlign.center,
+                            fontFamily: 'GilroyRegular',
+                            size: Get.height * 0.015,
+                          ),
+                          Gap(Get.height * 0.01),
+                          CustomTextField(
+                            hint: "eg john doe",
+                            textEditingController:
+                                authController.fNameController,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Full Name must not be empty';
+                              } else if (!RegExp(r'[A-Za-z]+$')
+                                  .hasMatch(value)) {
+                                return "Please enter only letters";
+                              }
+                              return null;
+                            },
+                          ),
+                          Gap(Get.height * 0.02),
+                          CustomText(
+                            title: 'Email Address',
+                            color: AppColor().primaryWhite,
+                            textAlign: TextAlign.center,
+                            fontFamily: 'GilroyRegular',
+                            size: Get.height * 0.015,
+                          ),
+                          Gap(Get.height * 0.01),
+                          CustomTextField(
+                            hint: "johndoe@mail.com",
+                            textEditingController:
+                                authController.emailController,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Email address must not be empty';
+                              } else if (!RegExp(
+                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                  .hasMatch(value)) {
+                                return "enter a valid email address";
+                              }
+                              return null;
+                            },
+                          ),
+                          Gap(Get.height * 0.02),
+                          CustomText(
                             title: 'Username',
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.014,
+                            size: Get.height * 0.015,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
@@ -194,11 +288,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           Gap(Get.height * 0.02),
                           CustomText(
+                            title: 'Password',
+                            color: AppColor().primaryWhite,
+                            textAlign: TextAlign.center,
+                            fontFamily: 'GilroyRegular',
+                            size: Get.height * 0.015,
+                          ),
+                          Gap(Get.height * 0.01),
+                          CustomTextField(
+                            hint: "Password",
+                            textEditingController:
+                                authController.passwordController,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'password must not be empty';
+                              } else if (value.length < 8) {
+                                return 'password must not be less than 8 character';
+                              }
+                              return null;
+                            },
+                            suffixIcon: InkWell(
+                              onTap: _togglePasswordView,
+                              child: Icon(
+                                isHiddenPassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: isHiddenPassword
+                                    ? Colors.grey.withOpacity(0.5)
+                                    : AppColor().primaryColor,
+                              ),
+                            ),
+                          ),
+                          Gap(Get.height * 0.02),
+                          CustomText(
                             title: 'Phone number',
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.014,
+                            size: Get.height * 0.015,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
@@ -215,80 +342,151 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
                           Gap(Get.height * 0.02),
-                          CustomText(
-                            title: 'Country',
-                            color: AppColor().primaryWhite,
-                            textAlign: TextAlign.center,
-                            fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.014,
-                          ),
-                          Gap(Get.height * 0.01),
-                          CustomTextField(
-                            hint: "Country",
-                            // textEditingController: authController.fNameController,
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Fullname must not be empty';
-                              } else if (!RegExp(r'[A-Za-z]+$')
-                                  .hasMatch(value)) {
-                                return "Please enter only letters";
-                              }
-                              return null;
-                            },
-                          ),
-                          Gap(Get.height * 0.02),
-                          CustomText(
-                            title: 'State',
-                            color: AppColor().primaryWhite,
-                            textAlign: TextAlign.center,
-                            fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.014,
-                          ),
-                          Gap(Get.height * 0.01),
-                          CustomTextField(
-                            hint: "State",
-                            // textEditingController: authController.fNameController,
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Fullname must not be empty';
-                              } else if (!RegExp(r'[A-Za-z]+$')
-                                  .hasMatch(value)) {
-                                return "Please enter only letters";
-                              }
-                              return null;
-                            },
-                          ),
-                          Gap(Get.height * 0.02),
-                          CustomText(
-                            title: 'Gender',
-                            color: AppColor().primaryWhite,
-                            textAlign: TextAlign.center,
-                            fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.014,
-                          ),
-                          Gap(Get.height * 0.01),
-                          InputDecorator(
-                            decoration: InputDecoration(
+                          // CustomText(
+                          //   title: 'Country',
+                          //   color: AppColor().primaryWhite,
+                          //   textAlign: TextAlign.center,
+                          //   fontFamily: 'GilroyRegular',
+                          //   size: Get.height * 0.015,
+                          // ),
+                          // Gap(Get.height * 0.01),
+                          CountryStatePicker(
+                            dropdownColor: Colors.black,
+                            countryLabel: Padding(
+                              padding:
+                                  EdgeInsets.only(bottom: Get.height * 0.01),
+                              child: CustomText(
+                                title: 'Country',
+                                color: AppColor().primaryWhite,
+                                textAlign: TextAlign.left,
+                                fontFamily: 'GilroyRegular',
+                                size: Get.height * 0.015,
+                              ),
+                            ),
+                            stateLabel: Padding(
+                              padding:
+                                  EdgeInsets.only(bottom: Get.height * 0.01),
+                              child: CustomText(
+                                title: 'State',
+                                color: AppColor().primaryWhite,
+                                textAlign: TextAlign.left,
+                                fontFamily: 'GilroyRegular',
+                                size: Get.height * 0.015,
+                              ),
+                            ),
+                            hintTextStyle: TextStyle(
+                              color: AppColor().lightItemsColor,
+                              fontSize: 13,
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'GilroyBold',
+                              fontWeight: FontWeight.w400,
+                              height: 1.7,
+                            ),
+                            itemTextStyle: TextStyle(
+                              color: AppColor().lightItemsColor,
+                              fontSize: 13,
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'GilroyBold',
+                              fontWeight: FontWeight.w400,
+                              height: 1.7,
+                            ),
+                            inputDecoration: InputDecoration(
                               filled: true,
-                              fillColor: AppColor().pureBlackColor,
+                              isDense: true,
+                              fillColor: AppColor().bgDark,
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: AppColor().lightItemsColor,
                                       width: 1),
                                   borderRadius: BorderRadius.circular(10)),
                               enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                            onCountryChanged: (ct) => setState(() {
+                              country = ct;
+                              state = '';
+
+                              // List<String> statesForCountry =
+                              //     countryToStates[country];
+                              // if (statesForCountry != null &&
+                              //     statesForCountry.isNotEmpty) {
+                              //   state = statesForCountry[0];
+                              //   // Set the first state as default
+                              // }
+                              if (kDebugMode) {
+                                print(country);
+                                print(state);
+                              }
+                            }),
+                            onStateChanged: (st) => setState(() {
+                              state = st;
+                              if (kDebugMode) {
+                                print(country);
+                                print(state);
+                              }
+                            }),
+                            countryHintText: "Country",
+                            stateHintText: "State",
+                            noStateFoundText: "No State Found",
+                          ),
+                          // Gap(Get.height * 0.02),
+                          // CustomTextField(
+                          //   hint: "Country",
+                          //   // textEditingController: authController.fNameController,
+                          //   validate: (value) {
+                          //     if (value!.isEmpty) {
+                          //       return 'country must not be empty';
+                          //     } else if (!RegExp(r'[A-Za-z]+$')
+                          //         .hasMatch(value)) {
+                          //       return "Please enter only letters";
+                          //     }
+                          //     return null;
+                          //   },
+                          // ),
+                          // Gap(Get.height * 0.02),
+                          // CustomText(
+                          //   title: 'State',
+                          //   color: AppColor().primaryWhite,
+                          //   textAlign: TextAlign.center,
+                          //   fontFamily: 'GilroyRegular',
+                          //   size: Get.height * 0.015,
+                          // ),
+                          // Gap(Get.height * 0.01),
+                          // CustomTextField(
+                          //   hint: "State",
+                          //   // textEditingController: authController.fNameController,
+                          //   validate: (value) {
+                          //     if (value!.isEmpty) {
+                          //       return 'state must not be empty';
+                          //     } else if (!RegExp(r'[A-Za-z]+$')
+                          //         .hasMatch(value)) {
+                          //       return "Please enter only letters";
+                          //     }
+                          //     return null;
+                          //   },
+                          // ),
+                          Gap(Get.height * 0.02),
+                          CustomText(
+                            title: 'Gender',
+                            color: AppColor().primaryWhite,
+                            textAlign: TextAlign.center,
+                            fontFamily: 'GilroyRegular',
+                            size: Get.height * 0.015,
+                          ),
+                          Gap(Get.height * 0.01),
+                          InputDecorator(
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: AppColor().bgDark,
+                              focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: AppColor().lightItemsColor,
                                       width: 1),
                                   borderRadius: BorderRadius.circular(10)),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppColor().lightItemsColor,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(8.0)),
-                              ),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(10)),
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
                             ),
@@ -336,28 +534,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.014,
+                            size: Get.height * 0.015,
                           ),
                           Gap(Get.height * 0.01),
-                          CustomTextField(
-                            hint: "DD/MM/YY",
-                            textEditingController: authController.dobController,
-                            suffixIcon: IconButton(
-                              icon: Icon(
+                          InkWell(
+                            onTap: () {
+                              pickDate(context);
+                            },
+                            child: CustomTextField(
+                              hint: "DD/MM/YY",
+                              enabled: false,
+                              textEditingController:
+                                  authController.dobController,
+                              suffixIcon: Icon(
                                 CupertinoIcons.calendar,
                                 color: AppColor().lightItemsColor,
                               ),
-                              onPressed: () {},
                             ),
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Fullname must not be empty';
-                              } else if (!RegExp(r'[A-Za-z]+$')
-                                  .hasMatch(value)) {
-                                return "Please enter only letters";
-                              }
-                              return null;
-                            },
                           ),
                           Gap(Get.height * 0.02),
                           CustomText(
@@ -365,12 +558,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.014,
+                            size: Get.height * 0.015,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
                             hint: "DJKNDFD7786S",
-                            textEditingController: authController.dobController,
+                            textEditingController:
+                                authController.referralController,
                           ),
                         ],
                       ),
@@ -384,35 +578,99 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         itemCount: primaryUseCard.length,
                         itemBuilder: (BuildContext context, int index) {
                           var item = primaryUseCard[index];
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: CustomFillButtonOption(
-                              onTap: () {
-                                setState(() {
-                                  primaryUseCount = index;
-                                });
-                              },
-                              height: 50,
-                              buttonText: item.title,
-                              textColor: AppColor().primaryDark,
-                              buttonColor: primaryUseCount == index
-                                  ? AppColor().primaryGreen
-                                  : AppColor().primaryWhite,
-                              boarderColor: primaryUseCount == index
-                                  ? AppColor().primaryGreen
-                                  : AppColor().primaryColor,
-                              borderRadius: BorderRadius.circular(30),
-                              fontWeight: FontWeight.w400,
-                            ),
+                          return CustomFillButtonOption(
+                            onTap: () {
+                              setState(() {
+                                primaryUseCount = index;
+                              });
+                            },
+                            height: Get.height * 0.06,
+                            buttonText: item.title,
+                            textColor: AppColor().primaryWhite,
+                            buttonColor: primaryUseCount == index
+                                ? AppColor().primaryGreen
+                                : AppColor().pureBlackColor,
+                            boarderColor: primaryUseCount == index
+                                ? AppColor().primaryGreen
+                                : AppColor().primaryWhite,
+                            borderRadius: BorderRadius.circular(30),
+                            fontWeight: FontWeight.w400,
+                          );
+                        }),
+                  ] else ...[
+                    Gap(Get.height * 0.02),
+                    GridView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 3 / 1,
+                        ),
+                        itemCount: categoryCard.length,
+                        itemBuilder: (context, index) {
+                          var item = categoryCard[index];
+                          return Column(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    current = index;
+                                    item.isSelected = !item.isSelected!;
+                                    if (item.isSelected == true) {
+                                      selectedCategories.add(
+                                          UserPreference(title: item.title!));
+                                    } else if (item.isSelected == false) {
+                                      selectedCategories.removeWhere(
+                                          (element) =>
+                                              element.title == item.title);
+                                    }
+                                    // userPreferences[index].isSelected = !userPreferences[index].isSelected!
+                                  });
+                                  if (kDebugMode) {
+                                    print('item $current');
+                                    print(
+                                        'Selected Category: ${selectedCategories.length}');
+                                  }
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  padding: EdgeInsets.all(Get.height * 0.02),
+                                  decoration: BoxDecoration(
+                                    color: item.isSelected == true
+                                        ? AppColor().primaryGreen
+                                        : AppColor().pureBlackColor,
+                                    borderRadius: BorderRadius.circular(40),
+                                    border: Border.all(
+                                      color: item.isSelected == true
+                                          ? AppColor().primaryGreen
+                                          : AppColor().primaryWhite,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: CustomText(
+                                      title: item.title,
+                                      size: 12,
+                                      color: AppColor().primaryWhite,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           );
                         }),
                   ],
-                  Gap(Get.height * 0.05),
+                  Gap(pageCount == 0
+                      ? Get.height * 0.05
+                      : pageCount == 1
+                          ? Get.height * 0.35
+                          : Get.height * 0.1),
                   CustomFillButton(
                     onTap: () {
                       if (pageCount < 2
-                          // && _formKey.currentState!.validate()
+                          //  && _formKey.currentState!.validate()
                           ) {
                         setState(() {
                           pageCount++;
@@ -420,22 +678,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             print('PageCount: $pageCount');
                           }
                         });
+                        // if(pageCount)
                       } else {
-                        if (pageCount < 2) {
-                          if (kDebugMode) {
-                            print('PageCount: $pageCount');
-                          }
-                        }
-                        // else if (isChecked != true) {
-                        //   Get.snackbar('Alert',
-                        //       'Agree to the terms and condition to continue!');
-                        // }
-                        else {
+                        if (primaryUseCount == null) {
+                          Get.snackbar('Alert',
+                              'Agree to the terms and condition to continue!');
+                        } else {
                           // if (authController.signUpStatus !=
                           //         SignUpStatus.loading &&
                           //     _businessFormKey.currentState!.validate()) {
                           //   authController.signUp(user);
                           // }
+                          Get.to(() => const ChooseAlias());
                         }
                       }
                     },
@@ -461,8 +715,29 @@ class PrimaryUse {
   PrimaryUse({this.title});
 }
 
+class UserPreference {
+  String? title;
+  bool? isSelected;
+  UserPreference({this.title, this.isSelected});
+}
+
 var primaryUseCard = [
   PrimaryUse(title: 'Competitions'),
   PrimaryUse(title: 'Gaming news'),
   PrimaryUse(title: 'Communities'),
+];
+
+var categoryCard = [
+  UserPreference(title: 'Puzzle', isSelected: false),
+  UserPreference(title: 'Warfare', isSelected: false),
+  UserPreference(title: 'RPG', isSelected: false),
+  UserPreference(title: 'Sports', isSelected: false),
+  UserPreference(title: 'Apocalypse', isSelected: false),
+  UserPreference(title: 'Board', isSelected: false),
+  UserPreference(title: 'Puzzle', isSelected: false),
+  UserPreference(title: 'Warfare', isSelected: false),
+  UserPreference(title: 'RPG', isSelected: false),
+  UserPreference(title: 'Sports', isSelected: false),
+  UserPreference(title: 'Apocalypse', isSelected: false),
+  UserPreference(title: 'Board', isSelected: false),
 ];

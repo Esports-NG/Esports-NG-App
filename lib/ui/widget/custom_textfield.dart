@@ -104,9 +104,7 @@ class CustomTextField extends StatelessWidget {
           fontWeight: FontWeight.w400,
           height: 1.7),
       decoration: InputDecoration(
-        fillColor: fillColor ?? AppColor().pureBlackColor,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
+        fillColor: fillColor ?? AppColor().bgDark,
         filled: true,
         isDense: true,
         prefixText: pretext,
@@ -118,12 +116,10 @@ class CustomTextField extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(radius ?? 10)),
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: enableColor ?? AppColor().lightItemsColor, width: 1),
+            borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(radius ?? 10)),
-        border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: borderColor ?? AppColor().lightItemsColor, width: 1),
+        disabledBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(radius ?? 10)),
         hintText: hint,
         prefixIcon: prefixIcon,
