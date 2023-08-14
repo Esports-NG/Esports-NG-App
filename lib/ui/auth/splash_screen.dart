@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -45,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // } else {
     //   Get.off(() => const FirstScreen());
     // }
-    Get.off(() => const FirstScreen());
+    Get.off(() => const Dashboard());
   }
 
   @override

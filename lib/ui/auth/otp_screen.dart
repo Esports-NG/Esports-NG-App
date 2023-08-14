@@ -1,4 +1,5 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
@@ -189,7 +190,9 @@ class _OTPScreenState extends State<OTPScreen> {
                       size: Get.height * 0.015,
                     ),
                   );
-                } else {}
+                } else {
+                  Get.off(() => const Dashboard());
+                }
               },
               isLoading: false,
             ),

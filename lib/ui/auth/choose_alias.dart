@@ -1,4 +1,5 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
@@ -53,7 +54,9 @@ class ChooseAlias extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomFillButton(
-                onTap: () {},
+                onTap: () {
+                  Get.off(() => const Dashboard());
+                },
                 width: Get.width / 2 - Get.height * 0.04,
                 height: Get.height * 0.07,
                 buttonText: 'Skip',
@@ -65,7 +68,9 @@ class ChooseAlias extends StatelessWidget {
                 textColor: AppColor().primaryColor,
               ),
               CustomFillButton(
-                onTap: () {},
+                onTap: () {
+                  Get.off(() => const Dashboard());
+                },
                 width: Get.width / 2 - Get.height * 0.04,
                 height: Get.height * 0.07,
                 buttonText: 'Next',
