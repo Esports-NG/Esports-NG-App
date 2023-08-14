@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
@@ -7,6 +9,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import 'account.dart';
+import 'community.dart';
+import 'events.dart';
 import 'home.dart';
 
 class Dashboard extends StatefulWidget {
@@ -18,33 +23,33 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int _selectedIndex = 0;
-  var _pages = <Widget>[
+  var pages = <Widget>[
     const HomePage(),
-    Container(),
-    Container(),
-    Container(),
+    const EventsPage(),
+    const CommunityPage(),
+    const AccountPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor().pureBlackColor,
-      body: _pages.elementAt(_selectedIndex),
+      body: pages.elementAt(_selectedIndex),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(6.0),
-        child: FloatingActionButton(
-          backgroundColor: AppColor().primaryColor,
-          child: const Icon(Icons.add, color: Colors.white),
-          onPressed: () {
-            // WAQrScannerScreen().launch(context);
-          },
-        ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColor().primaryColor,
+        child: const Icon(Icons.add, color: Colors.white),
+        onPressed: () {
+          // WAQrScannerScreen().launch(context);
+        },
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
+        color: AppColor().pureBlackColor,
+        notchMargin: 1,
+        padding: const EdgeInsets.only(top: 10),
         child: BottomNavigationBar(
           backgroundColor: AppColor().pureBlackColor,
           currentIndex: _selectedIndex,
@@ -56,41 +61,53 @@ class _DashboardState extends State<Dashboard> {
           selectedLabelStyle: TextStyle(
             color: AppColor().primaryColor,
             fontFamily: 'GilroyMedium',
-            fontSize: 14,
             fontWeight: FontWeight.normal,
           ),
           unselectedLabelStyle: TextStyle(
             color: AppColor().lightItemsColor,
             fontFamily: 'GilroyMedium',
-            fontSize: 14,
             fontWeight: FontWeight.normal,
           ),
           type: BottomNavigationBarType.fixed,
           selectedItemColor: AppColor().primaryColor,
           unselectedItemColor: Colors.grey,
-          items: <BottomNavigationBarItem>[
+          items: [
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   'assets/images/svg/home_icon.svg',
                   height: Get.height * 0.03,
+                  color: _selectedIndex == 0
+                      ? AppColor().primaryColor
+                      : AppColor().lightItemsColor,
                 ),
                 label: 'Home'),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   'assets/images/svg/event_icon.svg',
                   height: Get.height * 0.03,
+                  color: _selectedIndex == 1
+                      ? AppColor().primaryColor
+                      : AppColor().lightItemsColor,
                 ),
                 label: 'Events'),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   'assets/images/svg/community_icon.svg',
                   height: Get.height * 0.03,
+                  color: _selectedIndex == 2
+                      ? AppColor().primaryColor
+                      : AppColor().lightItemsColor,
                 ),
-                label: 'Wallet'),
-            BottomNavigationBarItem(icon:SvgPicture.asset(
+                label: 'Community'),
+            BottomNavigationBarItem(
+                icon: SvgPicture.asset(
                   'assets/images/svg/account_icon.svg',
                   height: Get.height * 0.03,
-                ), label: 'Profile'),
+                  color: _selectedIndex == 3
+                      ? AppColor().primaryColor
+                      : AppColor().lightItemsColor,
+                ),
+                label: 'Account'),
           ],
         ),
       ),

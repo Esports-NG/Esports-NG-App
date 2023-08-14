@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,6 +40,7 @@ class CustomTextField extends StatelessWidget {
     this.enableColor,
     this.labelSize,
     this.radius,
+    this.fontFamily,
   });
 
   final VoidCallback? onClick;
@@ -54,6 +57,7 @@ class CustomTextField extends StatelessWidget {
   final String? pretext;
   final String? sufText;
   final String? initialValue;
+  final String? fontFamily;
   final int? maxLength;
   final int? maxLines;
   final int? minLines;
@@ -100,7 +104,7 @@ class CustomTextField extends StatelessWidget {
           color: hintColor ?? AppColor().lightItemsColor,
           fontSize: 13,
           fontStyle: FontStyle.normal,
-          fontFamily: 'GilroyBold',
+          fontFamily: fontFamily ?? 'GilroyBold',
           fontWeight: FontWeight.w400,
           height: 1.7),
       decoration: InputDecoration(
@@ -128,18 +132,17 @@ class CustomTextField extends StatelessWidget {
             color: hintColor ?? Colors.black,
             fontSize: 13,
             fontStyle: FontStyle.normal,
-            fontFamily: 'GilroyMedium',
+            fontFamily: fontFamily ?? 'GilroyBold',
             fontWeight: FontWeight.w400,
             height: 1.7),
         hintStyle: TextStyle(
             color: hintColor ?? AppColor().lightItemsColor,
             fontSize: 13,
             fontStyle: FontStyle.normal,
-            fontFamily: 'GilroyBold',
+            fontFamily: fontFamily ?? 'GilroyBold',
             fontWeight: FontWeight.w400,
             height: 1.7),
       ),
-      // validator: validate,
       onFieldSubmitted: onSubmited,
       onTap: onTap,
     );

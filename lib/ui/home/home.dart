@@ -58,9 +58,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            Gap(Get.height * 0.05),
+            Gap(Get.height * 0.03),
             CustomTextField(
               hint: "Search for gaming news, competitions...",
+              fontFamily: 'GilroyMedium',
               // textEditingController: authController.emailController,
               onChanged: (text) {},
             ),
