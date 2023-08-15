@@ -41,7 +41,7 @@ class PostItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/images/png/photo.png',
+                      item.pImage!,
                       height: Get.height * 0.025,
                       width: Get.height * 0.025,
                     ),

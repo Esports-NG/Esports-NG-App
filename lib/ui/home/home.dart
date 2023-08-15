@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import 'post/post_details.dart';
 import 'post/post_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -82,7 +83,16 @@ class _HomePageState extends State<HomePage> {
               separatorBuilder: (context, index) => Gap(Get.height * 0.02),
               itemBuilder: (context, index) {
                 var item = postItem[index];
-                return InkWell(onTap: () {}, child: PostItem(item: item));
+                return InkWell(
+                  onTap: () {
+                    Get.to(
+                      () => PostDetails(
+                        item: item,
+                      ),
+                    );
+                  },
+                  child: PostItem(item: item),
+                );
               },
             ),
           ],
