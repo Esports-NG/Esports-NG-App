@@ -40,9 +40,7 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColor().primaryColor,
         child: const Icon(Icons.add, color: Colors.white),
-        onPressed: () {
-          // WAQrScannerScreen().launch(context);
-        },
+        onPressed: () {},
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),

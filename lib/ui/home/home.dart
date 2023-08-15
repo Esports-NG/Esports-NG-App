@@ -1,3 +1,5 @@
+import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
+import 'post/post_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -62,8 +66,24 @@ class _HomePageState extends State<HomePage> {
             CustomTextField(
               hint: "Search for gaming news, competitions...",
               fontFamily: 'GilroyMedium',
+              prefixIcon: Icon(
+                CupertinoIcons.search,
+                color: AppColor().lightItemsColor,
+              ),
               // textEditingController: authController.emailController,
               onChanged: (text) {},
+            ),
+            Gap(Get.height * 0.03),
+            ListView.separated(
+              padding: EdgeInsets.zero,
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: postItem.length,
+              separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+              itemBuilder: (context, index) {
+                var item = postItem[index];
+                return InkWell(onTap: () {}, child: PostItem(item: item));
+              },
             ),
           ],
         ),
