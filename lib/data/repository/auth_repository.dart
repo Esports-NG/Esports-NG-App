@@ -1,4 +1,13 @@
+// ignore_for_file: depend_on_referenced_packages
+
+import 'dart:convert';
+import 'package:e_sport/data/model/user_model.dart';
+import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/shared_pref.dart';
+import 'package:e_sport/ui/auth/login.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 enum DeliveryAddressStatus {
@@ -111,7 +120,6 @@ class AuthRepository extends GetxController {
   late final bankAccountNoController = TextEditingController();
   late final bankAccountNameController = TextEditingController();
   late final userIdController = TextEditingController();
-
   DateTime? date;
 
   final _authStatus = AuthStatus.empty.obs;
@@ -139,4 +147,174 @@ class AuthRepository extends GetxController {
   UserTransactionStatus get transactionStatus => _userTransactionStatus.value;
 
   final status = AuthStatus.uninitialized.obs;
+
+  final Rx<UserModel?> mUser = Rx(null);
+  UserModel? get user => mUser.value;
+
+  // final Rx<Data?> userAddress = Rx(null);
+  // Data? get deliveryAddress => userAddress.value;
+  SharedPref? pref;
+
+  Rx<String> mToken = Rx("");
+  String get token => mToken.value;
+
+  Rx<String> mFcmToken = Rx("");
+  String get fcmToken => mFcmToken.value;
+
+  @override
+  void onInit() async {
+    super.onInit();
+    pref = SharedPref();
+    await pref!.init();
+    if (pref!.getFirstTimeOpen()) {
+      _authStatus(AuthStatus.isFirstTime);
+      if (kDebugMode) {
+        debugPrint(authStatus.name);
+        print("My first time using this app");
+      }
+    } else {
+      if (kDebugMode) {
+        print("Not my First Time Using this app");
+      }
+
+      if (pref!.getUser() != null) {
+        mUser(pref!.getUser()!);
+        mToken(pref!.read());
+        if (kDebugMode) {
+          print("result of token is ${mToken.value}");
+        }
+        _authStatus(AuthStatus.authenticated);
+
+        if (mToken.value == "0") {
+          _authStatus(AuthStatus.unAuthenticated);
+        }
+      } else {
+        _authStatus(AuthStatus.unAuthenticated);
+      }
+    }
+  }
+
+  Future signUp(UserModel user) async {
+    try {
+      _signUpStatus(SignUpStatus.loading);
+      if (kDebugMode) {
+        print('registering user...');
+        print("request json ${user.toJson()}");
+      }
+
+      var response = await http.post(Uri.parse(ApiLink.register),
+          body: jsonEncode(user.toJson()),
+          headers: {
+            "Content-Type": "application/json",
+          });
+      var json = jsonDecode(response.body);
+
+      if (json['success'] == false) {
+        throw (json['message']);
+      }
+
+      if (kDebugMode) {
+        print("response $json");
+        print("user id ${json['data']['user_id']}");
+      }
+      if (json['success'] == true) {
+        _signUpStatus(SignUpStatus.success);
+
+        Get.snackbar('Success',
+            'Account created successfully, Proceed to validate your account!');
+      }
+
+      return response.body;
+    } catch (error) {
+      _signUpStatus(SignUpStatus.error);
+      Get.snackbar(
+          'Error',
+          (error.toString() ==
+                      "Failed host lookup: 'farmersdomain.herokuapp.com'" ||
+                  error.toString() ==
+                      "Failed host lookup: 'staging-farmers-domain-ae54637d7865.herokuapp.com'")
+              ? 'No internet connection!'
+              : error.toString());
+      if (kDebugMode) {
+        print("Error occurred ${error.toString()}");
+      }
+    }
+  }
+
+  Future login() async {
+    _signInStatus(SignInStatus.loading);
+    try {
+      if (kDebugMode) {
+        print('login here...');
+      }
+
+      var response = await http.post(
+          Uri.parse(
+            ApiLink.login,
+          ),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({
+            "email": emailController.text.trim(),
+            "password": passwordController.text.trim(),
+          }));
+
+      if (kDebugMode) {
+        print(response.body);
+      }
+
+      var json = jsonDecode(response.body);
+      if (json['errors'] != null) {
+        throw (json['message']);
+      }
+
+      if (response.statusCode == 200) {
+        _signInStatus(SignInStatus.success);
+        clear();
+        mToken(json['access_token']);
+        pref!.saveToken(token);
+      } else if (response.statusCode == 403) {
+        _signInStatus(SignInStatus.notVerified);
+        clear();
+        Get.snackbar('Alert', 'Please verify your account in order to proceed');
+        // await resendOTP(id: json['data']['user_id']);
+        // Get.off(() => OTPVerification(
+        //       title: 'Account',
+        //       userId: json['data']['user_id'],
+        //     ));
+      }
+      return response.body;
+    } catch (error) {
+      _signInStatus(SignInStatus.error);
+      Get.snackbar(
+          'Error',
+          (error.toString() ==
+                      "Failed host lookup: 'farmersdomain.herokuapp.com'" ||
+                  error.toString() ==
+                      "Failed host lookup: 'staging-farmers-domain-ae54637d7865.herokuapp.com'")
+              ? 'No internet connection!'
+              : error.toString());
+      if (kDebugMode) {
+        print("error ${error.toString()}");
+      }
+    }
+  }
+
+  void clear() {
+    passwordController.clear();
+    confirmPasswordController.clear();
+    currentPasswordController.clear();
+    transactionPinController.clear();
+    confirmTransactionPinController.clear();
+  }
+
+  void logout() {
+    _authStatus(AuthStatus.unAuthenticated);
+    clear();
+    pref!.saveToken("0");
+    mToken("0");
+    pref!.logout();
+    Get.offAll(() => const LoginScreen());
+  }
 }

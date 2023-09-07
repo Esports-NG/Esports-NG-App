@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/notification/notification.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
@@ -55,9 +56,14 @@ class _HomePageState extends State<HomePage> {
                       height: Get.height * 0.025,
                     ),
                     Gap(Get.height * 0.04),
-                    SvgPicture.asset(
-                      'assets/images/svg/notification.svg',
-                      height: Get.height * 0.025,
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => const NotificationPage());
+                      },
+                      child: SvgPicture.asset(
+                        'assets/images/svg/notification.svg',
+                        height: Get.height * 0.025,
+                      ),
                     ),
                   ],
                 ),
