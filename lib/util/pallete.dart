@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Palette {
   static const MaterialColor primaryColor = MaterialColor(
-    0xff000000,
+    0xff111827,
     <int, Color>{
       50: Color(0xffce5641), //10%
       100: Color(0xffb74c3a), //20%

@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor().pureBlackColor,
+      backgroundColor: AppColor().primaryBgColor,
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(20.0),

@@ -32,8 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      backgroundColor: AppColor().pureBlackColor,
+      // appBar: AppBar(),
+      backgroundColor: AppColor().primaryBgColor,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Gap(Get.height * 0.03),
+                Gap(Get.height * 0.09),
                 Row(
                   children: [
                     CustomText(

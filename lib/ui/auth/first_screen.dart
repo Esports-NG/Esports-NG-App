@@ -19,11 +19,11 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor().pureBlackColor,
+      backgroundColor: AppColor().primaryBgColor,
       body: Stack(
         children: [
           Container(
-            color: AppColor().pureBlackColor.withOpacity(0.5),
+            color: AppColor().primaryBgColor.withOpacity(0.5),
             width: Get.width,
             child: Center(
                 child: Opacity(
@@ -70,7 +70,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     buttonText: 'Log in',
                     textColor: AppColor().primaryColor,
                     fontWeight: FontWeight.w600,
-                    buttonColor: AppColor().pureBlackColor,
+                    buttonColor: AppColor().primaryBgColor,
                     textSize: Get.height * 0.016,
                     onTap: () {
                       Get.to(() => const LoginScreen());
@@ -94,7 +94,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     textColor: AppColor().primaryColor,
                     boarderColor: AppColor().primaryWhite,
                     fontWeight: FontWeight.w600,
-                    buttonColor: AppColor().pureBlackColor,
+                    buttonColor: AppColor().primaryBgColor,
                     textSize: Get.height * 0.021,
                     isLoading: false,
                     child: Row(

@@ -15,7 +15,7 @@ class ChooseAlias extends StatelessWidget {
   Widget build(BuildContext context) {
     final authController = Get.put(AuthRepository());
     return Scaffold(
-      backgroundColor: AppColor().pureBlackColor,
+      backgroundColor: AppColor().primaryBgColor,
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -63,7 +63,7 @@ class ChooseAlias extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 textSize: Get.height * 0.016,
                 isLoading: false,
-                buttonColor: AppColor().pureBlackColor,
+                buttonColor: AppColor().primaryBgColor,
                 boarderColor: AppColor().primaryColor,
                 textColor: AppColor().primaryColor,
               ),

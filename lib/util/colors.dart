@@ -4,6 +4,7 @@ class AppColor {
   Color primaryColor = const Color(0xff7D7AFF);
   Color secondaryColor = const Color(0xffD6E8CE);
   Color primaryDark = const Color(0xff1E232C);
+  Color primaryBgColor = const Color(0xff111827);
   Color bgDark = const Color(0xff1F252F);
   Color primaryWhite = const Color(0xffffffff);
   Color primaryYellow = const Color(0xffF29528);

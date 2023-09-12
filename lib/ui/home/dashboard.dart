@@ -33,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor().pureBlackColor,
+      backgroundColor: AppColor().primaryBgColor,
       body: pages.elementAt(_selectedIndex),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
@@ -45,11 +45,11 @@ class _DashboardState extends State<Dashboard> {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
-        color: AppColor().pureBlackColor,
+        color: AppColor().primaryBgColor,
         notchMargin: 1,
         padding: const EdgeInsets.only(top: 10),
         child: BottomNavigationBar(
-          backgroundColor: AppColor().pureBlackColor,
+          backgroundColor: AppColor().primaryBgColor,
           currentIndex: _selectedIndex,
           onTap: (index) {
             setState(() {

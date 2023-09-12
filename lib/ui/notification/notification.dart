@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
 import 'notification_type/events.dart';
 import 'notification_type/personal.dart';
 import 'notification_type/posts.dart';
@@ -40,7 +39,7 @@ class _NotificationPageState extends State<NotificationPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor().pureBlackColor,
+        backgroundColor: AppColor().primaryBgColor,
         centerTitle: true,
         title: CustomText(
           title: 'Notifications',
@@ -105,7 +104,7 @@ class _NotificationPageState extends State<NotificationPage>
               ),
             ]),
       ),
-      backgroundColor: AppColor().pureBlackColor,
+      backgroundColor: AppColor().primaryBgColor,
       body: Padding(
         padding: const EdgeInsets.only(top: 20.0),
         child: TabBarView(controller: _tabController, children: const [

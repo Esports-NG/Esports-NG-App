@@ -46,13 +46,13 @@ class _SplashScreenState extends State<SplashScreen> {
     // } else {
     //   Get.off(() => const FirstScreen());
     // }
-    Get.off(() => const FirstScreen());
+    Get.off(() => const Dashboard());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor().pureBlackColor,
+      backgroundColor: AppColor().primaryBgColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
