@@ -1,6 +1,8 @@
 import 'package:e_sport/data/model/notification_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -60,44 +62,105 @@ class PersonalItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: Get.height * 0.05,
-                  child: ListView.separated(
-                    padding: EdgeInsets.zero,
-                    physics: const ScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: item.likeImages!.length,
-                    separatorBuilder: (context, index) => Divider(),
-                    itemBuilder: (context, index) {
-                      var images = item.likeImages![index];
-                      return Image.asset(
-                        images,
+                (item.type == 'comment' || item.type == 'tagged')
+                    ? Row(
+                        children: [
+                          CustomText(
+                            title: '${item.infoName} ',
+                            color: AppColor().primaryWhite,
+                            textAlign: TextAlign.start,
+                            fontFamily: 'GilroyRegular',
+                            size: Get.height * 0.016,
+                          ),
+                          CustomText(
+                            title: item.infoTag,
+                            color: AppColor().lightItemsColor,
+                            textAlign: TextAlign.start,
+                            fontFamily: 'GilroyRegular',
+                            size: Get.height * 0.016,
+                          ),
+                          Gap(Get.height * 0.01),
+                          const SmallCircle(),
+                          Gap(Get.height * 0.01),
+                          CustomText(
+                            title: '21 hours ago',
+                            color: AppColor().lightItemsColor,
+                            textAlign: TextAlign.start,
+                            fontFamily: 'GilroyRegular',
+                            size: Get.height * 0.016,
+                          ),
+                        ],
+                      )
+                    : SizedBox(
                         height: Get.height * 0.05,
-                        width: Get.height * 0.05,
-                      );
-                    },
-                  ),
+                        child: ListView.separated(
+                          padding: EdgeInsets.zero,
+                          physics: const ScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: item.likeImages!.length,
+                          separatorBuilder: (context, index) =>
+                              Gap(Get.height * 0.001),
+                          itemBuilder: (context, index) {
+                            var images = item.likeImages![index];
+                            return Image.asset(
+                              images,
+                              height: Get.height * 0.05,
+                              width: Get.height * 0.05,
+                            );
+                          },
+                        ),
+                      ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Gap(Get.height * 0.01),
+                    CustomText(
+                      title: item.likeDetails,
+                      color: (item.type == 'comment' || item.type == 'tagged')
+                          ? AppColor().lightItemsColor
+                          : AppColor().primaryWhite,
+                      textAlign: TextAlign.start,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.016,
+                    ),
+                  ],
                 ),
                 Gap(Get.height * 0.01),
-                CustomText(
-                  title: item.likeDetails,
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.start,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.016,
-                ),
-                Gap(Get.height * 0.01),
-                CustomText(
-                  title: item.details,
-                  color: AppColor().lightItemsColor,
-                  textAlign: TextAlign.start,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.016,
-                ),
+                item.type == 'follow'
+                    ? Container()
+                    : Text.rich(TextSpan(
+                        text: item.details,
+                        style: TextStyle(
+                          color: AppColor().lightItemsColor,
+                          fontFamily: 'GilroyRegular',
+                          fontSize: Get.height * 0.016,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: item.link,
+                              style: TextStyle(
+                                  color: AppColor().primaryColor,
+                                  decoration: TextDecoration.underline),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  // Get.to(() => const RegisterScreen());
+                                }),
+                        ],
+                      )),
               ],
             ),
-          )
+          ),
+          (item.type == 'comment' || item.type == 'tagged')
+              ? IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: AppColor().lightItemsColor,
+                  ))
+              : Container()
         ],
       ),
     );
