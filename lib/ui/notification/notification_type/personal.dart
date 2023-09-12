@@ -4,7 +4,6 @@ import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -153,6 +152,7 @@ class PersonalItem extends StatelessWidget {
               ],
             ),
           ),
+          Gap(Get.height * 0.02),
           (item.type == 'comment' || item.type == 'tagged')
               ? IconButton(
                   padding: EdgeInsets.zero,
