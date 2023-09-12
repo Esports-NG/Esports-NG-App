@@ -22,12 +22,11 @@ class _FirstScreenState extends State<FirstScreen> {
       backgroundColor: AppColor().primaryBgColor,
       body: Stack(
         children: [
-          Container(
-            color: AppColor().primaryBgColor.withOpacity(0.5),
+          SizedBox(
             width: Get.width,
             child: Center(
                 child: Opacity(
-              opacity: 0.5,
+              opacity: 0.2,
               child: Image.asset(
                 'assets/images/png/bg.png',
               ),
@@ -59,7 +58,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   CustomFillButton(
                     buttonText: 'Sign up',
                     fontWeight: FontWeight.w600,
-                    textSize: Get.height * 0.016,
+                    textSize: Get.height * 0.018,
                     onTap: () {
                       Get.to(() => const RegisterScreen());
                     },
@@ -71,7 +70,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     textColor: AppColor().primaryColor,
                     fontWeight: FontWeight.w600,
                     buttonColor: AppColor().primaryBgColor,
-                    textSize: Get.height * 0.016,
+                    textSize: Get.height * 0.018,
                     onTap: () {
                       Get.to(() => const LoginScreen());
                     },
@@ -84,7 +83,7 @@ class _FirstScreenState extends State<FirstScreen> {
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
                       fontFamily: 'GilroyLight',
-                      size: Get.height * 0.016,
+                      size: Get.height * 0.018,
                     ),
                   ),
                   Gap(Get.height * 0.05),
@@ -110,7 +109,7 @@ class _FirstScreenState extends State<FirstScreen> {
                           textAlign: TextAlign.center,
                           fontFamily: 'GilroyLight',
                           weight: FontWeight.w600,
-                          size: Get.height * 0.016,
+                          size: Get.height * 0.018,
                         ),
                       ],
                     ),

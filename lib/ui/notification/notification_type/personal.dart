@@ -52,12 +52,14 @@ class PersonalItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-              height: Get.height * 0.05,
-              width: Get.height * 0.05,
-              child: Center(child: Image.asset(item.profileImage!))),
-          Gap(Get.height * 0.01),
           Expanded(
+            child: SizedBox(
+                height: Get.height * 0.05,
+                width: Get.height * 0.05,
+                child: Center(child: Image.asset(item.profileImage!))),
+          ),
+          Expanded(
+            flex: 5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

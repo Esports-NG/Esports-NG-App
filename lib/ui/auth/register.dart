@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 color: AppColor().primaryWhite,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'GilroyBold',
-                fontSize: Get.height * 0.015,
+                fontSize: Get.height * 0.017,
               ),
               children: <TextSpan>[
                 TextSpan(
@@ -151,7 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
                         fontFamily: 'GilroyBold',
-                        size: Get.height * 0.032,
+                        size: Get.height * 0.035,
                       ),
                       Gap(Get.height * 0.01),
                       Image.asset(
@@ -172,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: AppColor().primaryWhite.withOpacity(0.8),
                     textAlign: TextAlign.start,
                     fontFamily: 'GilroyRegular',
-                    size: Get.height * 0.016,
+                    size: Get.height * 0.018,
                   ),
                   Gap(Get.height * 0.02),
                   pageCount == 0
@@ -203,7 +203,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 color: AppColor().primaryWhite,
                                 textAlign: TextAlign.center,
                                 fontFamily: 'GilroyRegular',
-                                size: Get.height * 0.015,
+                                size: Get.height * 0.017,
                               ),
                             ),
                             Gap(Get.height * 0.01),
@@ -222,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.015,
+                            size: Get.height * 0.017,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
@@ -245,7 +245,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.015,
+                            size: Get.height * 0.017,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
@@ -269,7 +269,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.015,
+                            size: Get.height * 0.017,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
@@ -292,7 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.015,
+                            size: Get.height * 0.017,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
@@ -311,8 +311,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               onTap: _togglePasswordView,
                               child: Icon(
                                 isHiddenPassword
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
                                 color: isHiddenPassword
                                     ? Colors.grey.withOpacity(0.5)
                                     : AppColor().primaryColor,
@@ -325,7 +325,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.015,
+                            size: Get.height * 0.017,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
@@ -347,7 +347,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           //   color: AppColor().primaryWhite,
                           //   textAlign: TextAlign.center,
                           //   fontFamily: 'GilroyRegular',
-                          //   size: Get.height * 0.015,
+                          //   size: Get.height * 0.017,
                           // ),
                           // Gap(Get.height * 0.01),
                           CountryStatePicker(
@@ -360,7 +360,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 color: AppColor().primaryWhite,
                                 textAlign: TextAlign.left,
                                 fontFamily: 'GilroyRegular',
-                                size: Get.height * 0.015,
+                                size: Get.height * 0.017,
                               ),
                             ),
                             stateLabel: Padding(
@@ -371,7 +371,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 color: AppColor().primaryWhite,
                                 textAlign: TextAlign.left,
                                 fontFamily: 'GilroyRegular',
-                                size: Get.height * 0.015,
+                                size: Get.height * 0.017,
                               ),
                             ),
                             hintTextStyle: TextStyle(
@@ -450,7 +450,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           //   color: AppColor().primaryWhite,
                           //   textAlign: TextAlign.center,
                           //   fontFamily: 'GilroyRegular',
-                          //   size: Get.height * 0.015,
+                          //   size: Get.height * 0.017,
                           // ),
                           // Gap(Get.height * 0.01),
                           // CustomTextField(
@@ -472,7 +472,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.015,
+                            size: Get.height * 0.017,
                           ),
                           Gap(Get.height * 0.01),
                           InputDecorator(
@@ -534,7 +534,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.015,
+                            size: Get.height * 0.017,
                           ),
                           Gap(Get.height * 0.01),
                           InkWell(
@@ -558,7 +558,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
                             fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.015,
+                            size: Get.height * 0.017,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(

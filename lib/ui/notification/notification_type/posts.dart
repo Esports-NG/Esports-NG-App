@@ -53,9 +53,11 @@ class PostItems extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(child: SvgPicture.asset('assets/images/svg/bell.svg')),
-          Gap(Get.height * 0.015),
           Expanded(
+              child: Center(
+                  child: SvgPicture.asset('assets/images/svg/bell.svg'))),
+          Expanded(
+            flex: 5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

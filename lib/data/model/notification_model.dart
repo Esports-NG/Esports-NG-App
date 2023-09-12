@@ -126,3 +126,56 @@ var post = [
         'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
   ),
 ];
+
+var events = [
+  NotificationModel(
+    profileImage: 'assets/images/png/sparkles.png',
+    type: 'event',
+    link: 'http://jointournament@nexal.com',
+    infoTag: 'PLAYSTATION.NG',
+    likeDetails: 'Click the link to join the tournament',
+    details: 'FIFA 23 Tournament is about to start! Don’t miss out',
+  ),
+  NotificationModel(
+    profileImage: 'assets/images/png/clipboard-list.png',
+    type: 'tournament',
+    link: 'See all',
+    infoTag: 'See Fixtures for Tournament Z',
+    likeDetails:
+        'Avengers FC    vs    Indomitables                5pm WAT\nControllers       vs    Evolution                       7pm WAT',
+    details: '',
+  ),
+  NotificationModel(
+    profileImage: 'assets/images/png/photo5.png',
+    type: 'announcement',
+    link: 'See Details',
+    infoTag: 'ARE YOU A GAME DEVELOPER? APPLY FOR GAMATHON’S ARK PITCH TODAY!',
+    likeDetails: '',
+    details: '',
+  ),
+  NotificationModel(
+    profileImage: 'assets/images/png/sparkles.png',
+    type: 'announcement',
+    link: 'jpeg/mortalkombat/tuyhxueye....',
+    infoTag: 'Nexal Gaming’s Event Registration Closes Soon!!!',
+    likeDetails: 'Haven’t registered? Click the link to do so.',
+    details: '',
+  ),
+  NotificationModel(
+    profileImage: 'assets/images/png/sparkles.png',
+    type: 'event',
+    link: 'http://jointournament@nexal.com',
+    infoTag: 'PLAYSTATION.NG',
+    likeDetails: 'Click the link to join the tournament',
+    details: 'FIFA 23 Tournament is about to start! Don’t miss out',
+  ),
+  NotificationModel(
+    profileImage: 'assets/images/png/clipboard-list.png',
+    type: 'tournament',
+    link: 'See all',
+    infoTag: 'See Fixtures for Tournament Z',
+    likeDetails:
+        'Avengers FC    vs    Indomitables                5pm WAT\nControllers       vs    Evolution                       7pm WAT',
+    details: '',
+  ),
+];

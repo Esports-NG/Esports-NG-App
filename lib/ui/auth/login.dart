@@ -32,7 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0,
+      ),
       backgroundColor: AppColor().primaryBgColor,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -42,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Gap(Get.height * 0.09),
+                Gap(Get.height * 0.03),
                 Row(
                   children: [
                     CustomText(
@@ -50,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
                       fontFamily: 'GilroyBold',
-                      size: Get.height * 0.032,
+                      size: Get.height * 0.035,
                     ),
                     Gap(Get.height * 0.01),
                     Image.asset(
@@ -71,11 +73,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.center,
                   fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.015,
+                  size: Get.height * 0.016,
                 ),
                 Gap(Get.height * 0.01),
                 CustomTextField(
-                  hint: "Email address",
+                  hint: "johndoe@gmail.com",
                   textEditingController: authController.emailController,
                   validate: (value) {
                     if (value!.isEmpty) {
@@ -94,11 +96,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.center,
                   fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.015,
+                  size: Get.height * 0.016,
                 ),
                 Gap(Get.height * 0.01),
                 CustomTextField(
-                  hint: "Password",
+                  hint: "eg 12345678",
                   textEditingController: authController.passwordController,
                   obscure: isHiddenPassword,
                   validate: (value) {
@@ -113,8 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: _togglePasswordView,
                     child: Icon(
                       isHiddenPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
                       color: isHiddenPassword
                           ? Colors.grey.withOpacity(0.5)
                           : AppColor().pureBlackColor,
@@ -128,14 +130,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.center,
                   fontFamily: 'GilroyRegular',
                   weight: FontWeight.w600,
-                  size: Get.height * 0.016,
+                  size: Get.height * 0.018,
                   underline: TextDecoration.underline,
                 ),
                 Gap(Get.height * 0.12),
                 CustomFillButton(
                   buttonText: 'Log in',
                   fontWeight: FontWeight.w600,
-                  textSize: Get.height * 0.016,
+                  textSize: Get.height * 0.018,
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
                       Get.to(() => const OTPScreen());
@@ -151,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: AppColor().primaryWhite,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'GilroyRegular',
-                      fontSize: Get.height * 0.016,
+                      fontSize: Get.height * 0.018,
                     ),
                     children: <TextSpan>[
                       TextSpan(
