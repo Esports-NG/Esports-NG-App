@@ -31,6 +31,7 @@ dependencies:
   numpad_layout: ^0.0.3
   pin_code_text_field: ^1.8.0
   shared_preferences: ^2.1.0
+  timer_count_down: ^2.2.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0
