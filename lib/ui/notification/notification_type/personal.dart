@@ -83,7 +83,7 @@ class PersonalItem extends StatelessWidget {
                           const SmallCircle(),
                           Gap(Get.height * 0.01),
                           CustomText(
-                            title: '21 hours ago',
+                            title: item.time,
                             color: AppColor().lightItemsColor,
                             textAlign: TextAlign.start,
                             fontFamily: 'GilroyRegular',
@@ -129,25 +129,27 @@ class PersonalItem extends StatelessWidget {
                 Gap(Get.height * 0.01),
                 item.type == 'follow'
                     ? Container()
-                    : Text.rich(TextSpan(
-                        text: item.details,
-                        style: TextStyle(
-                          color: AppColor().lightItemsColor,
-                          fontFamily: 'GilroyRegular',
-                          fontSize: Get.height * 0.016,
+                    : Text.rich(
+                        TextSpan(
+                          text: item.details,
+                          style: TextStyle(
+                            color: AppColor().lightItemsColor,
+                            fontFamily: 'GilroyRegular',
+                            fontSize: Get.height * 0.016,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: item.link,
+                                style: TextStyle(
+                                    color: AppColor().primaryColor,
+                                    decoration: TextDecoration.underline),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // open link here
+                                  }),
+                          ],
                         ),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: item.link,
-                              style: TextStyle(
-                                  color: AppColor().primaryColor,
-                                  decoration: TextDecoration.underline),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  // Get.to(() => const RegisterScreen());
-                                }),
-                        ],
-                      )),
+                      ),
               ],
             ),
           ),

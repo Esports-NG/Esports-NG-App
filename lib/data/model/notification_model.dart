@@ -54,15 +54,14 @@ var personal = [
     infoName: 'Ashley Stone',
     infoTag: '@toxicgyal234',
     type: 'comment',
+    time: '21 hours ago',
     likeDetails: 'Commented on your post @Paula Bakare',
     details: 'This Update is so sick! I love it!',
-    likeImages: [],
   ),
   NotificationModel(
     profileImage: 'assets/images/png/user.png',
     type: 'follow',
     likeDetails: 'Dustin and 3 others followed you',
-    details: '',
     likeImages: [
       'assets/images/png/photo1.png',
       'assets/images/png/photo2.png',
@@ -75,10 +74,55 @@ var personal = [
     infoName: 'Stephanie',
     infoTag: '@stephinreallife',
     type: 'tagged',
+    time: '2 days ago',
     link: 'jpeg/mortalkombat/tuyhxueye....',
     likeDetails: 'Tagged you to a post made by @Evade @Paula Bakare',
     details:
         'Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain... jpeg/mortalkombat/tuyhxueye....',
-    likeImages: [],
+  ),
+];
+
+var post = [
+  NotificationModel(
+    link: 'jpeg/mortalkombat/tuyhxueye....',
+    time: '2 minutes ago',
+    likeDetails: 'XBox.NG Made a post',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
+  ),
+  NotificationModel(
+    link: 'jpeg/mortalkombat/tuyhxueye....',
+    time: '4 hours ago',
+    likeDetails: 'XBox.NG Made a post',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
+  ),
+  NotificationModel(
+    link: 'jpeg/mortalkombat/tuyhxueye....',
+    time: '1 day ago',
+    likeDetails: 'XBox.NG Made a post',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
+  ),
+  NotificationModel(
+    link: 'jpeg/mortalkombat/tuyhxueye....',
+    time: '3 weeks ago',
+    likeDetails: 'XBox.NG Made a post',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
+  ),
+  NotificationModel(
+    link: 'jpeg/mortalkombat/tuyhxueye....',
+    time: '2 months ago',
+    likeDetails: 'XBox.NG Made a post',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
+  ),
+  NotificationModel(
+    link: 'jpeg/mortalkombat/tuyhxueye....',
+    time: '1 year ago',
+    likeDetails: 'XBox.NG Made a post',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
   ),
 ];
