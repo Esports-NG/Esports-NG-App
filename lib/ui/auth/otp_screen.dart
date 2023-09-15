@@ -1,7 +1,6 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/keypad.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-// import 'package:numpad_layout/numpad.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
@@ -124,9 +122,9 @@ class _OTPScreenState extends State<OTPScreen> {
                 seconds: 60,
                 onFinished: () {
                   debugPrint('Timer is done!');
-                   setState(() {
-                                    resend = false;
-                                  });
+                  setState(() {
+                    resend = false;
+                  });
                 },
                 build: (context, time) {
                   return Center(
@@ -158,33 +156,33 @@ class _OTPScreenState extends State<OTPScreen> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           if (resend == true) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: CustomText(
-                                        title:
-                                            'Password reset link sent successfully',
-                                        size: Get.height * 0.02,
-                                        color: AppColor().primaryWhite,
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                  );
-                                  _controller.restart();
-                                  setState(() {
-                                    resend = false;
-                                  });
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: CustomText(
-                                        title: 'Please wait...',
-                                        size: Get.height * 0.02,
-                                        color: AppColor().primaryWhite,
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                  );
-                                }
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: CustomText(
+                                  title:
+                                      'Password reset link sent successfully',
+                                  size: Get.height * 0.02,
+                                  color: AppColor().primaryWhite,
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            );
+                            _controller.restart();
+                            setState(() {
+                              resend = false;
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: CustomText(
+                                  title: 'Please wait...',
+                                  size: Get.height * 0.02,
+                                  color: AppColor().primaryWhite,
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            );
+                          }
                         }),
                 ],
               )),
@@ -228,7 +226,20 @@ class _OTPScreenState extends State<OTPScreen> {
                     size: 30,
                   ),
                   onPressed: () {
-                    // _authenticate;
+                    if (controller.text.length == 4) {
+                      Get.to(() => const Dashboard());
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: CustomText(
+                            title: 'Incomplete pin!',
+                            size: Get.height * 0.02,
+                            color: AppColor().primaryWhite,
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      );
+                    }
                   },
                 ),
               ),
