@@ -1,14 +1,7 @@
-// ignore_for_file: deprecated_member_use
-
-import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
 import 'account.dart';
 import 'community.dart';
 import 'events.dart';

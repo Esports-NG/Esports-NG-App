@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/messages/messages.dart';
 import 'package:e_sport/ui/notification/notification.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -46,9 +47,23 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    SvgPicture.asset(
-                      'assets/images/svg/chat.svg',
-                      height: Get.height * 0.025,
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => const Messages());
+                      },
+                      child: Badge(
+                        label: CustomText(
+                          title: '4',
+                          weight: FontWeight.w500,
+                          size: 10,
+                          fontFamily: 'GilroyBold',
+                          color: AppColor().primaryWhite,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/images/svg/chat.svg',
+                          height: Get.height * 0.025,
+                        ),
+                      ),
                     ),
                     Gap(Get.height * 0.04),
                     SvgPicture.asset(
@@ -60,9 +75,18 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         Get.to(() => const NotificationPage());
                       },
-                      child: SvgPicture.asset(
-                        'assets/images/svg/notification.svg',
-                        height: Get.height * 0.025,
+                      child: Badge(
+                        label: CustomText(
+                          title: '10',
+                          weight: FontWeight.w500,
+                          size: 10,
+                          fontFamily: 'GilroyBold',
+                          color: AppColor().primaryWhite,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/images/svg/notification.svg',
+                          height: Get.height * 0.025,
+                        ),
                       ),
                     ),
                   ],
