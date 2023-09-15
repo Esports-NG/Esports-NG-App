@@ -11,6 +11,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 // import 'package:numpad_layout/numpad.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
@@ -22,12 +24,19 @@ class OTPScreen extends StatefulWidget {
 class _OTPScreenState extends State<OTPScreen> {
   final authController = Get.put(AuthRepository());
   TextEditingController controller = TextEditingController(text: "");
+  final CountdownController _controller = CountdownController(autoStart: true);
   String thisText = "";
   String? otpText, otp;
   bool hasError = false;
   bool isLoading = false;
   String? errorMessage;
   String number = "";
+  bool resend = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -38,7 +47,9 @@ class _OTPScreenState extends State<OTPScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0,
+      ),
       backgroundColor: AppColor().primaryBgColor,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -52,7 +63,7 @@ class _OTPScreenState extends State<OTPScreen> {
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
               fontFamily: 'GilroyBold',
-              size: Get.height * 0.032,
+              size: Get.height * 0.035,
             ),
             CustomText(
               title:
@@ -60,17 +71,15 @@ class _OTPScreenState extends State<OTPScreen> {
               color: AppColor().primaryWhite.withOpacity(0.8),
               textAlign: TextAlign.start,
               fontFamily: 'GilroyRegular',
-              size: Get.height * 0.016,
+              size: Get.height * 0.018,
             ),
-            Gap(Get.height * 0.1),
+            Gap(Get.height * 0.05),
             Center(
               child: PinCodeTextField(
                 pinBoxRadius: 8,
-                autofocus: true,
+                autofocus: false,
                 controller: controller,
                 pinBoxOuterPadding: const EdgeInsets.symmetric(horizontal: 10),
-                // hideCharacter:
-                //      false,
                 highlight: true,
                 highlightAnimation: true,
                 highlightColor: AppColor().lightBlack,
@@ -78,19 +87,17 @@ class _OTPScreenState extends State<OTPScreen> {
                 hasTextBorderColor: AppColor().primaryColor,
                 highlightPinBoxColor: AppColor().lightBlack,
                 hasError: hasError,
-                // maskCharacter:
-                //     widget.title == 'withdrawal' ? "*" : thisText,
                 onTextChanged: (text) {
                   setState(() {
-                    otp = text;
+                    number = text;
                     hasError = false;
                   });
                 },
                 onDone: (text) {
-                  otpText = text;
-                  authController.otpPin.text = text;
+                  number = text;
+
                   if (kDebugMode) {
-                    print("DONE $otpText");
+                    print("DONE $number");
                   }
                 },
                 pinBoxWidth: Get.height * 0.07,
@@ -109,19 +116,29 @@ class _OTPScreenState extends State<OTPScreen> {
                     const Duration(milliseconds: 300),
                 highlightAnimationBeginColor: Colors.black,
                 highlightAnimationEndColor: Colors.white12,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.none,
               ),
             ),
             Gap(Get.height * 0.05),
-            Center(
-              child: CustomText(
-                title: '00:59',
-                color: AppColor().primaryWhite,
-                textAlign: TextAlign.center,
-                fontFamily: 'GilroyBold',
-                size: Get.height * 0.028,
-              ),
-            ),
+            Countdown(
+                seconds: 60,
+                onFinished: () {
+                  debugPrint('Timer is done!');
+                   setState(() {
+                                    resend = false;
+                                  });
+                },
+                build: (context, time) {
+                  return Center(
+                    child: CustomText(
+                      title: '00:${time.toString().replaceAll('.0', '')}',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyBold',
+                      size: Get.height * 0.028,
+                    ),
+                  );
+                }),
             Gap(Get.height * 0.02),
             Center(
               child: Text.rich(TextSpan(
@@ -140,90 +157,82 @@ class _OTPScreenState extends State<OTPScreen> {
                           decoration: TextDecoration.underline),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          // Add Resend Code Logic
+                          if (resend == true) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: CustomText(
+                                        title:
+                                            'Password reset link sent successfully',
+                                        size: Get.height * 0.02,
+                                        color: AppColor().primaryWhite,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                  );
+                                  _controller.restart();
+                                  setState(() {
+                                    resend = false;
+                                  });
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: CustomText(
+                                        title: 'Please wait...',
+                                        size: Get.height * 0.02,
+                                        color: AppColor().primaryWhite,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                  );
+                                }
                         }),
                 ],
               )),
             ),
-
-            Gap(Get.height * 0.12),
-            CustomFillButton(
-              buttonText: 'Continue',
-              fontWeight: FontWeight.w600,
-              textSize: Get.height * 0.016,
-              onTap: () {
-                if (otp == null || otp == '') {
-                  Get.snackbar(
-                    'Alert',
-                    'Enter your OTP to continue!',
-                    titleText: CustomText(
-                      title: 'Alert',
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      fontFamily: 'GilroyBold',
-                      size: Get.height * 0.015,
-                    ),
-                    messageText: CustomText(
-                      title: 'Enter your OTP to continue!',
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
-                      size: Get.height * 0.015,
-                    ),
-                  );
-                } else if (otp!.length < 4 || otp!.length > 4) {
-                  Get.snackbar(
-                    'Alert',
-                    'Invalid OTP!',
-                    titleText: CustomText(
-                      title: 'Alert',
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      fontFamily: 'GilroyBold',
-                      size: Get.height * 0.015,
-                    ),
-                    messageText: CustomText(
-                      title: 'Invalid OTP!',
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
-                      size: Get.height * 0.015,
-                    ),
-                  );
-                } else {
-                  Get.off(() => const Dashboard());
-                }
-              },
-              isLoading: false,
-            ),
-            // NumPad(
-            //   highlightColor: AppColor().primaryWhite,
-            //   runSpace: Get.height * 0.03,
-            //   onType: (value) {
-            //     setState(() {
-            //       otpText += value;
-            //     });
-            //     if (kDebugMode) {
-            //       print("OTP: $otpText");
-            //     }
-            //   },
-            //   rightWidget: IconButton(
-            //     icon: Icon(
-            //       Icons.backspace,
-            //       color: AppColor().primaryWhite,
-            //     ),
-            //     onPressed: () {
-            //       if (otpText.isNotEmpty) {
-            //         setState(() {
-            //           otpText = otpText.substring(0, otpText.length - 1);
-            //         });
-            //         if (kDebugMode) {
-            //           print("OTP: $otpText");
-            //         }
-            //       }
-            //     },
-            //   ),
-            // )
+            Gap(Get.height * 0.06),
+            SizedBox(
+              height: Get.height * 0.35,
+              child: NumPad(
+                highlightColor: AppColor().primaryWhite,
+                runSpace: Get.height * 0.03,
+                onType: (value) {
+                  setState(() {
+                    if (number.length < 4) {
+                      number += value;
+                      controller.text += value;
+                    }
+                  });
+                  // authController.otpPin.text = controller.text;
+                  debugPrint("OTP: $number");
+                },
+                rightWidget: IconButton(
+                  icon: Icon(
+                    Icons.backspace,
+                    color: AppColor().primaryWhite,
+                  ),
+                  onPressed: () {
+                    if (number.isNotEmpty) {
+                      setState(() {
+                        controller.text =
+                            number.substring(0, number.length - 1);
+                      });
+                      // authController.otpPin.text = controller.text;
+                      debugPrint("OTP: $number");
+                    }
+                  },
+                ),
+                leftWidget: IconButton(
+                  icon: Icon(
+                    Icons.done,
+                    color: AppColor().primaryColor,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    // _authenticate;
+                  },
+                ),
+              ),
+            )
           ],
         )),
       ),

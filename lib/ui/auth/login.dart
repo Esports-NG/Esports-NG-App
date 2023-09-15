@@ -64,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   title: 'Welcome back, you’ve been missed',
                   color: AppColor().primaryWhite.withOpacity(0.8),
                   textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
                   size: Get.height * 0.016,
                 ),
                 Gap(Get.height * 0.05),
