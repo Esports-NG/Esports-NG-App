@@ -2,9 +2,7 @@ import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +17,7 @@ class PostItem extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             AppColor().bgDark,
-            AppColor().pureBlackColor,
+            AppColor().primaryBgColor,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -71,15 +69,91 @@ class PostItem extends StatelessWidget {
                     ),
                   ],
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.more_vert,
-                    color: AppColor().primaryWhite,
-                  ),
-                  onPressed: () {},
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
+                PopupMenuButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide.none),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    color: AppColor().primaryMenu,
+                    offset: Offset(0, -10),
+                    onSelected: (value) {
+                      // if value 1 show dialog
+                      if (value == 1) {
+                        // _showDialog(context);
+                        // if value 2 show dialog
+                      } else if (value == 2) {
+                        // _showDialog(context);
+                      }
+                    },
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            height: 20,
+                            padding:
+                                EdgeInsets.only(bottom: 20, left: 20, top: 20),
+                            child: popUpMenuItems(
+                                icon: Icons.bookmark_outline,
+                                title: 'Bookmark'),
+                          ),
+                          PopupMenuItem(
+                            height: 20,
+                            padding: EdgeInsets.only(bottom: 20, left: 20),
+                            child: popUpMenuItems(
+                                icon: Icons.thumb_down_alt_outlined,
+                                title: 'Not interested in this post'),
+                          ),
+                          PopupMenuItem(
+                            height: 20,
+                            padding: EdgeInsets.only(bottom: 20, left: 20),
+                            child: popUpMenuItems(
+                                icon: Icons.person_add_alt_outlined,
+                                title: 'Follow/Unfollow User'),
+                          ),
+                          PopupMenuItem(
+                            height: 20,
+                            padding: EdgeInsets.only(bottom: 20, left: 20),
+                            child: popUpMenuItems(
+                                icon: Icons.person_add_alt_outlined,
+                                title: 'Turn on/Turn off Notifications'),
+                          ),
+                          PopupMenuItem(
+                            height: 20,
+                            padding: EdgeInsets.only(bottom: 20, left: 20),
+                            child: popUpMenuItems(
+                                icon: Icons.person_add_alt_outlined,
+                                title: 'Mute/Unmute User'),
+                          ),
+                          PopupMenuItem(
+                            height: 20,
+                            padding: EdgeInsets.only(bottom: 20, left: 20),
+                            child: popUpMenuItems(
+                                icon: Icons.person_add_alt_outlined,
+                                title: 'Block User'),
+                          ),
+                          PopupMenuItem(
+                            height: 20,
+                            padding: EdgeInsets.only(bottom: 20, left: 20),
+                            child: popUpMenuItems(
+                                icon: Icons.flag, title: 'Report Post'),
+                          ),
+                        ],
+                    child: Icon(
+                      Icons.more_vert,
+                      color: AppColor().primaryWhite,
+                    ))
+                // IconButton(
+                //   icon:
+                // Icon(
+                //     Icons.more_vert,
+                //     color: AppColor().primaryWhite,
+                //   ),
+                //   splashColor: AppColor().primaryColor,
+                //   onPressed: () {
+
+                //   },
+                //   padding: EdgeInsets.zero,
+                //   constraints: const BoxConstraints(),
+                // ),
               ],
             ),
           ),
@@ -234,6 +308,26 @@ class PostItem extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Row popUpMenuItems({String? title, IconData? icon}) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: AppColor().primaryWhite,
+          size: Get.height * 0.016,
+        ),
+        Gap(Get.height * 0.02),
+        CustomText(
+          title: title,
+          size: Get.height * 0.014,
+          fontFamily: 'GilroyMedium',
+          textAlign: TextAlign.start,
+          color: AppColor().primaryWhite,
+        ),
+      ],
     );
   }
 }
