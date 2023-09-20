@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 
 class AppColor {
   Color primaryColor = const Color(0xff7D7AFF);
+  Color primaryLightColor = const Color(0xff091932);
   Color secondaryColor = const Color(0xffD6E8CE);
   Color primaryDark = const Color(0xff1E232C);
   Color primaryBgColor = const Color(0xff111827);
   Color bgDark = const Color(0xff1F252F);
   Color primaryWhite = const Color(0xffffffff);
   Color primaryYellow = const Color(0xffF29528);
-  Color primaryRed = const Color(0xffFF5449);
+  Color primaryRed = const Color(0xffFF2E2E);
   Color primaryGreen = const Color(0xff00AD45);
   Color primaryMenu = const Color(0xff283C5C);
   Color textPrimary = const Color(0xff008585);

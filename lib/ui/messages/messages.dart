@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-import 'message_type/chats.dart';
+import 'message_type/chats/chats.dart';
 import 'message_type/communities.dart';
 import 'message_type/tournaments.dart';
 
@@ -43,7 +43,7 @@ class _NotificationPageState extends State<Messages>
         centerTitle: true,
         title: CustomText(
           title: 'Messages',
-          weight: FontWeight.w500,
+          weight: FontWeight.w600,
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -83,34 +83,118 @@ class _NotificationPageState extends State<Messages>
             indicatorColor: AppColor().primaryColor,
             tabs: [
               Tab(
-                child: CustomText(
-                  title: 'Chats',
-                  color: _tabController.index == 0
-                      ? AppColor().primaryColor
-                      : AppColor().lightItemsColor,
-                  size: 14,
-                  weight: FontWeight.w600,
-                ),
+                child: _tabController.index == 0
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            title: 'Chats',
+                            color: _tabController.index == 0
+                                ? AppColor().primaryColor
+                                : AppColor().lightItemsColor,
+                            size: 14,
+                            weight: FontWeight.w600,
+                          ),
+                          Gap(Get.height * 0.01),
+                          Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                color: AppColor().primaryColor,
+                                shape: BoxShape.circle),
+                            child: Center(
+                              child: CustomText(
+                                title: '1000',
+                                color: AppColor().primaryWhite,
+                                size: 8,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : CustomText(
+                        title: 'Chats',
+                        color: _tabController.index == 0
+                            ? AppColor().primaryColor
+                            : AppColor().lightItemsColor,
+                        size: 14,
+                        weight: FontWeight.w600,
+                      ),
               ),
               Tab(
-                child: CustomText(
-                  title: 'Communities',
-                  color: _tabController.index == 1
-                      ? AppColor().primaryColor
-                      : AppColor().lightItemsColor,
-                  size: 14,
-                  weight: FontWeight.w600,
-                ),
+                child: _tabController.index == 1
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            title: 'Communities',
+                            color: _tabController.index == 1
+                                ? AppColor().primaryColor
+                                : AppColor().lightItemsColor,
+                            size: 14,
+                            weight: FontWeight.w600,
+                          ),
+                          Gap(Get.height * 0.01),
+                          Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                color: AppColor().primaryColor,
+                                shape: BoxShape.circle),
+                            child: Center(
+                              child: CustomText(
+                                title: '500',
+                                color: AppColor().primaryWhite,
+                                size: 8,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : CustomText(
+                        title: 'Communities',
+                        color: _tabController.index == 1
+                            ? AppColor().primaryColor
+                            : AppColor().lightItemsColor,
+                        size: 14,
+                        weight: FontWeight.w600,
+                      ),
               ),
               Tab(
-                child: CustomText(
-                  title: 'Tournaments',
-                  color: _tabController.index == 2
-                      ? AppColor().primaryColor
-                      : AppColor().lightItemsColor,
-                  size: 14,
-                  weight: FontWeight.w600,
-                ),
+                child: _tabController.index == 2
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            title: 'Tournaments',
+                            color: _tabController.index == 2
+                                ? AppColor().primaryColor
+                                : AppColor().lightItemsColor,
+                            size: 14,
+                            weight: FontWeight.w600,
+                          ),
+                          Gap(Get.height * 0.01),
+                          Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                color: AppColor().primaryColor,
+                                shape: BoxShape.circle),
+                            child: Center(
+                              child: CustomText(
+                                title: '200',
+                                color: AppColor().primaryWhite,
+                                size: 8,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : CustomText(
+                        title: 'Tournaments',
+                        color: _tabController.index == 2
+                            ? AppColor().primaryColor
+                            : AppColor().lightItemsColor,
+                        size: 14,
+                        weight: FontWeight.w600,
+                      ),
               ),
             ]),
       ),
