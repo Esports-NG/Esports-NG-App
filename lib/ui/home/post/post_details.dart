@@ -15,7 +15,7 @@ class PostDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      backgroundColor: AppColor().pureBlackColor,
+      backgroundColor: AppColor().primaryBgColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),

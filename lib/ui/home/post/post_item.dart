@@ -70,90 +70,76 @@ class PostItem extends StatelessWidget {
                   ],
                 ),
                 PopupMenuButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide.none),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    color: AppColor().primaryMenu,
-                    offset: Offset(0, -10),
-                    onSelected: (value) {
-                      // if value 1 show dialog
-                      if (value == 1) {
-                        // _showDialog(context);
-                        // if value 2 show dialog
-                      } else if (value == 2) {
-                        // _showDialog(context);
-                      }
-                    },
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            height: 20,
-                            padding:
-                                EdgeInsets.only(bottom: 20, left: 20, top: 20),
-                            child: popUpMenuItems(
-                                icon: Icons.bookmark_outline,
-                                title: 'Bookmark'),
-                          ),
-                          PopupMenuItem(
-                            height: 20,
-                            padding: EdgeInsets.only(bottom: 20, left: 20),
-                            child: popUpMenuItems(
-                                icon: Icons.thumb_down_alt_outlined,
-                                title: 'Not interested in this post'),
-                          ),
-                          PopupMenuItem(
-                            height: 20,
-                            padding: EdgeInsets.only(bottom: 20, left: 20),
-                            child: popUpMenuItems(
-                                icon: Icons.person_add_alt_outlined,
-                                title: 'Follow/Unfollow User'),
-                          ),
-                          PopupMenuItem(
-                            height: 20,
-                            padding: EdgeInsets.only(bottom: 20, left: 20),
-                            child: popUpMenuItems(
-                                icon: Icons.person_add_alt_outlined,
-                                title: 'Turn on/Turn off Notifications'),
-                          ),
-                          PopupMenuItem(
-                            height: 20,
-                            padding: EdgeInsets.only(bottom: 20, left: 20),
-                            child: popUpMenuItems(
-                                icon: Icons.person_add_alt_outlined,
-                                title: 'Mute/Unmute User'),
-                          ),
-                          PopupMenuItem(
-                            height: 20,
-                            padding: EdgeInsets.only(bottom: 20, left: 20),
-                            child: popUpMenuItems(
-                                icon: Icons.person_add_alt_outlined,
-                                title: 'Block User'),
-                          ),
-                          PopupMenuItem(
-                            height: 20,
-                            padding: EdgeInsets.only(bottom: 20, left: 20),
-                            child: popUpMenuItems(
-                                icon: Icons.flag, title: 'Report Post'),
-                          ),
-                        ],
-                    child: Icon(
-                      Icons.more_vert,
-                      color: AppColor().primaryWhite,
-                    ))
-                // IconButton(
-                //   icon:
-                // Icon(
-                //     Icons.more_vert,
-                //     color: AppColor().primaryWhite,
-                //   ),
-                //   splashColor: AppColor().primaryColor,
-                //   onPressed: () {
-
-                //   },
-                //   padding: EdgeInsets.zero,
-                //   constraints: const BoxConstraints(),
-                // ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide.none),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  color: AppColor().primaryMenu,
+                  offset: const Offset(0, -10),
+                  onSelected: (value) {
+                    // if value 1 show dialog
+                    if (value == 1) {
+                      // _showDialog(context);
+                      // if value 2 show dialog
+                    } else if (value == 2) {
+                      // _showDialog(context);
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      height: 20,
+                      padding:
+                          const EdgeInsets.only(bottom: 20, left: 20, top: 20),
+                      child: popUpMenuItems(
+                          icon: Icons.bookmark_outline, title: 'Bookmark'),
+                    ),
+                    PopupMenuItem(
+                      height: 20,
+                      padding: const EdgeInsets.only(bottom: 20, left: 20),
+                      child: popUpMenuItems(
+                          icon: Icons.thumb_down_alt_outlined,
+                          title: 'Not interested in this post'),
+                    ),
+                    PopupMenuItem(
+                      height: 20,
+                      padding: const EdgeInsets.only(bottom: 20, left: 20),
+                      child: popUpMenuItems(
+                          icon: Icons.person_add_alt_outlined,
+                          title: 'Follow/Unfollow User'),
+                    ),
+                    PopupMenuItem(
+                      height: 20,
+                      padding: const EdgeInsets.only(bottom: 20, left: 20),
+                      child: popUpMenuItems(
+                          icon: Icons.notifications_off_outlined,
+                          title: 'Turn on/Turn off Notifications'),
+                    ),
+                    PopupMenuItem(
+                      height: 20,
+                      padding: const EdgeInsets.only(bottom: 20, left: 20),
+                      child: popUpMenuItems(
+                          icon: Icons.volume_off_outlined,
+                          title: 'Mute/Unmute User'),
+                    ),
+                    PopupMenuItem(
+                      height: 20,
+                      padding: const EdgeInsets.only(bottom: 20, left: 20),
+                      child: popUpMenuItems(
+                          icon: Icons.block_outlined, title: 'Block User'),
+                    ),
+                    PopupMenuItem(
+                      height: 20,
+                      padding: const EdgeInsets.only(bottom: 20, left: 20),
+                      child: popUpMenuItems(
+                          icon: Icons.flag, title: 'Report Post'),
+                    ),
+                  ],
+                  child: Icon(
+                    Icons.more_vert,
+                    color: AppColor().primaryWhite,
+                  ),
+                ),
               ],
             ),
           ),
@@ -221,24 +207,65 @@ class PostItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/png/drop.png',
-                      height: Get.height * 0.02,
-                      width: Get.height * 0.02,
+                PopupMenuButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide.none),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  color: AppColor().primaryMenu,
+                  offset: const Offset(0, -10),
+                  onSelected: (value) {
+                    // if value 1 show dialog
+                    if (value == 1) {
+                      // _showDialog(context);
+                      // if value 2 show dialog
+                    } else if (value == 2) {
+                      // _showDialog(context);
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      height: 20,
+                      padding:
+                          const EdgeInsets.only(bottom: 20, left: 20, top: 20),
+                      child: CustomText(
+                        title: 'Like, Comment and Repost as:',
+                        size: Get.height * 0.014,
+                        fontFamily: 'GilroyBold',
+                        textAlign: TextAlign.start,
+                        color: AppColor().primaryWhite,
+                      ),
                     ),
-                    IconButton(
-                      icon: Icon(
+                    PopupMenuItem(
+                      height: 20,
+                      padding: const EdgeInsets.only(bottom: 20, left: 20),
+                      child: popUpMenuItems(
+                          icon: Icons.thumb_down_alt_outlined,
+                          title: 'Not interested in this post'),
+                    ),
+                    PopupMenuItem(
+                      height: 20,
+                      padding: const EdgeInsets.only(bottom: 20, left: 20),
+                      child: popUpMenuItems(
+                          icon: Icons.person_add_alt_outlined,
+                          title: 'Follow/Unfollow User'),
+                    ),
+                  ],
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/png/drop.png',
+                        height: Get.height * 0.02,
+                        width: Get.height * 0.02,
+                      ),
+                      Icon(
                         Icons.keyboard_arrow_down,
                         color: AppColor().primaryWhite,
                         size: Get.height * 0.02,
                       ),
-                      onPressed: () {},
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Row(
                   children: [

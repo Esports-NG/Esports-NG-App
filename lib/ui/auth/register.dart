@@ -9,12 +9,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:nigerian_states_and_lga/nigerian_states_and_lga.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'choose_alias.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -72,6 +73,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
         print(authController.dobController.text);
       }
     });
+  }
+
+  Future pickImageFromGallery() async {
+    try {
+      final pickedImages =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      setState(() {
+        if (pickedImages != null) {}
+      });
+    } on PlatformException catch (e) {
+      if (kDebugMode) {
+        print('$e');
+      }
+    }
+  }
+
+  Future pickImageFromCamera() async {
+    try {
+      final pickedImages =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+
+      setState(() {
+        if (pickedImages != null) {
+          // image.add(File(pickedImages.path));
+        }
+      });
+    } on PlatformException catch (e) {
+      if (kDebugMode) {
+        print('$e');
+      }
+    }
   }
 
   @override
@@ -188,12 +220,82 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                 ),
                                 Positioned(
-                                    right: Get.width * 0.3,
-                                    bottom: 0,
+                                  right: Get.width * 0.3,
+                                  bottom: 0,
+                                  child: InkWell(
+                                    onTap: () {
+                                      debugPrint('pick image');
+                                      Get.defaultDialog(
+                                        title: "Upload your product",
+                                        titlePadding:
+                                            const EdgeInsets.only(top: 30),
+                                        contentPadding: const EdgeInsets.only(
+                                            top: 5,
+                                            bottom: 30,
+                                            left: 25,
+                                            right: 25),
+                                        middleText:
+                                            "Upload pictures of your products",
+                                        titleStyle: TextStyle(
+                                          color: AppColor().primaryDark,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'GilroyRegular',
+                                        ),
+                                        radius: 10,
+                                        confirm: Column(
+                                          children: [
+                                            CustomFillButton(
+                                              onTap: () {
+                                                // pickImageFromGallery();
+                                                Get.back();
+                                              },
+                                              height: 45,
+                                              width: Get.width * 0.5,
+                                              buttonText: 'Upload from gallery',
+                                              textColor:
+                                                  AppColor().primaryWhite,
+                                              buttonColor:
+                                                  AppColor().primaryColor,
+                                              boarderColor:
+                                                  AppColor().primaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                            ),
+                                            const Gap(10),
+                                            CustomFillButton(
+                                              onTap: () {
+                                                // pickImageFromCamera();
+                                                Get.back();
+                                              },
+                                              height: 45,
+                                              width: Get.width * 0.5,
+                                              buttonText: 'Upload from camera',
+                                              textColor:
+                                                  AppColor().primaryWhite,
+                                              buttonColor:
+                                                  AppColor().primaryColor,
+                                              boarderColor:
+                                                  AppColor().primaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                            ),
+                                          ],
+                                        ),
+                                        middleTextStyle: TextStyle(
+                                          color: AppColor().primaryDark,
+                                          fontFamily: 'GilroyRegular',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      );
+                                    },
                                     child: SvgPicture.asset(
                                       'assets/images/svg/camera.svg',
                                       height: Get.height * 0.05,
-                                    )),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                             Gap(Get.height * 0.02),

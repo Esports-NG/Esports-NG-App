@@ -25,6 +25,7 @@ dependencies:
   gap: ^3.0.0
   get: ^4.6.5
   google_fonts: ^5.1.0
+  image_picker: ^1.0.4
   intl: ^0.18.0
   intl_phone_field: ^3.2.0
   nigerian_states_and_lga: ^1.0.0

@@ -48,9 +48,9 @@ class _FirstScreenState extends State<FirstScreen> {
                     child: CustomText(
                       title:
                           'Esports NG is your all in one social\nnetworking platform for Gaming',
-                      color: AppColor().primaryWhite,
+                      color: AppColor().primaryWhite.withOpacity(0.7),
                       textAlign: TextAlign.center,
-                      fontFamily: 'GilroyLight',
+                      fontFamily: 'GilroyMedium',
                       size: Get.height * 0.018,
                     ),
                   ),
@@ -69,7 +69,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     buttonText: 'Log in',
                     textColor: AppColor().primaryColor,
                     fontWeight: FontWeight.w600,
-                    buttonColor: AppColor().primaryBgColor,
+                    buttonColor: AppColor().primaryBgColor.withOpacity(0.7),
                     textSize: Get.height * 0.018,
                     onTap: () {
                       Get.to(() => const LoginScreen());
@@ -78,12 +78,28 @@ class _FirstScreenState extends State<FirstScreen> {
                   ),
                   Gap(Get.height * 0.05),
                   Center(
-                    child: CustomText(
-                      title: 'OR',
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      fontFamily: 'GilroyLight',
-                      size: Get.height * 0.018,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Divider(
+                          color: AppColor().primaryWhite.withOpacity(0.7),
+                        )),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Get.height * 0.01),
+                          child: CustomText(
+                            title: 'OR',
+                            color: AppColor().primaryWhite.withOpacity(0.7),
+                            textAlign: TextAlign.center,
+                            fontFamily: 'GilroyMedium',
+                            size: Get.height * 0.018,
+                          ),
+                        ),
+                        Expanded(
+                            child: Divider(
+                          color: AppColor().primaryWhite.withOpacity(0.7),
+                        )),
+                      ],
                     ),
                   ),
                   Gap(Get.height * 0.05),
@@ -93,7 +109,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     textColor: AppColor().primaryColor,
                     boarderColor: AppColor().primaryWhite,
                     fontWeight: FontWeight.w600,
-                    buttonColor: AppColor().primaryBgColor,
+                    buttonColor: AppColor().primaryBgColor.withOpacity(0.7),
                     textSize: Get.height * 0.021,
                     isLoading: false,
                     child: Row(

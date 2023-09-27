@@ -92,7 +92,7 @@ class _NotificationPageState extends State<Messages>
                             color: _tabController.index == 0
                                 ? AppColor().primaryColor
                                 : AppColor().lightItemsColor,
-                            size: 14,
+                            size: 13,
                             weight: FontWeight.w600,
                           ),
                           Gap(Get.height * 0.01),
@@ -130,7 +130,7 @@ class _NotificationPageState extends State<Messages>
                             color: _tabController.index == 1
                                 ? AppColor().primaryColor
                                 : AppColor().lightItemsColor,
-                            size: 14,
+                            size: 13,
                             weight: FontWeight.w600,
                           ),
                           Gap(Get.height * 0.01),
@@ -168,7 +168,7 @@ class _NotificationPageState extends State<Messages>
                             color: _tabController.index == 2
                                 ? AppColor().primaryColor
                                 : AppColor().lightItemsColor,
-                            size: 14,
+                            size: 13,
                             weight: FontWeight.w600,
                           ),
                           Gap(Get.height * 0.01),
