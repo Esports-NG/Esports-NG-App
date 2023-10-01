@@ -42,7 +42,7 @@ class CustomFillButton extends StatelessWidget {
             color: buttonColor ?? AppColor().primaryColor,
             borderRadius: borderRadius ?? BorderRadius.circular(30),
             border: Border.all(
-                color: boarderColor ?? AppColor().primaryColor, width: 1.5)),
+                color: boarderColor ?? AppColor().primaryColor, width: 1)),
         child: Center(
           child: (isLoading)
               ? const CircularProgressIndicator(
@@ -53,6 +53,7 @@ class CustomFillButton extends StatelessWidget {
                     title: buttonText ?? '',
                     size: textSize ?? 14,
                     weight: fontWeight ?? FontWeight.w500,
+                    fontFamily: 'GilroyMedium',
                     textAlign: TextAlign.center,
                     color: textColor ?? AppColor().primaryWhite,
                   ),

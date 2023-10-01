@@ -29,6 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int? current;
   List<UserPreference> selectedCategories = [];
+  List<PrimaryUse> selectedUse = [];
   final authController = Get.put(AuthRepository());
   String stateValue = NigerianStatesAndLGA.allStates[0];
   String lgaValue = 'Select a Local Government Area';
@@ -59,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final newDate = await showDatePicker(
       context: context,
       initialDate: authController.date ?? initialDate,
-      firstDate: DateTime(DateTime.now().year - 5),
+      firstDate: DateTime(DateTime.now().year - 40),
       lastDate: DateTime(DateTime.now().year + 5),
     );
 
@@ -366,29 +367,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
                           Gap(Get.height * 0.02),
-                          CustomText(
-                            title: 'Username',
-                            color: AppColor().primaryWhite,
-                            textAlign: TextAlign.center,
-                            fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.017,
-                          ),
-                          Gap(Get.height * 0.01),
-                          CustomTextField(
-                            hint: "@johndoe",
-                            textEditingController:
-                                authController.uNameController,
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Username must not be empty';
-                              } else if (!RegExp(r'[A-Za-z]+$')
-                                  .hasMatch(value)) {
-                                return "Please enter only letters";
-                              }
-                              return null;
-                            },
-                          ),
-                          Gap(Get.height * 0.02),
+                          // CustomText(
+                          //   title: 'Username',
+                          //   color: AppColor().primaryWhite,
+                          //   textAlign: TextAlign.center,
+                          //   fontFamily: 'GilroyRegular',
+                          //   size: Get.height * 0.017,
+                          // ),
+                          // Gap(Get.height * 0.01),
+                          // CustomTextField(
+                          //   hint: "@johndoe",
+                          //   textEditingController:
+                          //       authController.uNameController,
+                          //   validate: (value) {
+                          //     if (value!.isEmpty) {
+                          //       return 'Username must not be empty';
+                          //     } else if (!RegExp(r'[A-Za-z]+$')
+                          //         .hasMatch(value)) {
+                          //       return "Please enter only letters";
+                          //     }
+                          //     return null;
+                          //   },
+                          // ),
+                          // Gap(Get.height * 0.02),
                           CustomText(
                             title: 'Password',
                             color: AppColor().primaryWhite,
@@ -684,15 +685,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             onTap: () {
                               setState(() {
                                 primaryUseCount = index;
+                                item.isSelected = !item.isSelected!;
+                                if (item.isSelected == true) {
+                                  selectedUse
+                                      .add(PrimaryUse(title: item.title!));
+                                } else if (item.isSelected == false) {
+                                  selectedUse.removeWhere(
+                                      (element) => element.title == item.title);
+                                }
                               });
                             },
                             height: Get.height * 0.06,
                             buttonText: item.title,
                             textColor: AppColor().primaryWhite,
-                            buttonColor: primaryUseCount == index
+                            buttonColor: item.isSelected == true
                                 ? AppColor().primaryGreen
                                 : AppColor().primaryBgColor,
-                            boarderColor: primaryUseCount == index
+                            boarderColor: item.isSelected == true
                                 ? AppColor().primaryGreen
                                 : AppColor().primaryWhite,
                             borderRadius: BorderRadius.circular(30),
@@ -812,9 +821,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 }
 
 class PrimaryUse {
-  final String? title;
+  String? title;
+  bool? isSelected;
 
-  PrimaryUse({this.title});
+  PrimaryUse({this.title, this.isSelected});
 }
 
 class UserPreference {
@@ -824,9 +834,9 @@ class UserPreference {
 }
 
 var primaryUseCard = [
-  PrimaryUse(title: 'Competitions'),
-  PrimaryUse(title: 'Gaming news'),
-  PrimaryUse(title: 'Communities'),
+  PrimaryUse(title: 'Competitions', isSelected: false),
+  PrimaryUse(title: 'Gaming news', isSelected: false),
+  PrimaryUse(title: 'Communities', isSelected: false),
 ];
 
 var categoryCard = [

@@ -1,3 +1,4 @@
+import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/messages/messages.dart';
 import 'package:e_sport/ui/notification/notification.dart';
@@ -21,10 +22,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int? categoryType;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor().primaryBgColor,
+      backgroundColor: AppColor().primaryBackGroundColor,
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Gap(Get.height * 0.04),
                     SvgPicture.asset(
-                      'assets/images/svg/chart.svg',
+                      'assets/images/svg/leaderboard.svg',
                       height: Get.height * 0.025,
                     ),
                     Gap(Get.height * 0.04),
@@ -94,17 +96,67 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             Gap(Get.height * 0.03),
-            CustomTextField(
-              hint: "Search for gaming news, competitions...",
-              fontFamily: 'GilroyMedium',
-              prefixIcon: Icon(
-                CupertinoIcons.search,
-                color: AppColor().lightItemsColor,
+            SizedBox(
+              height: Get.height * 0.06,
+              child: CustomTextField(
+                hint: "Search for gaming news, competitions...",
+                fontFamily: 'GilroyMedium',
+                prefixIcon: Icon(
+                  CupertinoIcons.search,
+                  color: AppColor().lightItemsColor,
+                ),
+                // textEditingController: authController.emailController,
+                onChanged: (text) {},
               ),
-              // textEditingController: authController.emailController,
-              onChanged: (text) {},
             ),
             Gap(Get.height * 0.03),
+            SizedBox(
+              height: Get.height * 0.045,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                physics: const ScrollPhysics(),
+                shrinkWrap: false,
+                itemCount: categoryItem.length,
+                separatorBuilder: (context, index) => Gap(Get.height * 0.03),
+                itemBuilder: (context, index) {
+                  var item = categoryItem[index];
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        categoryType = index;
+                      });
+                    },
+                    child: Center(
+                      child: Column(
+                        children: [
+                          CustomText(
+                            title: item.title,
+                            size: 13,
+                            fontFamily: categoryType == index
+                                ? 'GilroyBold'
+                                : 'GilroyRegular',
+                            weight: FontWeight.w400,
+                            textAlign: TextAlign.start,
+                            color: categoryType == index
+                                ? AppColor().primaryColor
+                                : AppColor().lightItemsColor,
+                          ),
+                          Gap(Get.height * 0.01),
+                          Container(
+                            width: Get.height * 0.1,
+                            height: 1.5,
+                            color: categoryType == index
+                                ? AppColor().primaryColor
+                                : AppColor().primaryBackGroundColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Gap(Get.height * 0.02),
             ListView.separated(
               padding: EdgeInsets.zero,
               physics: const ScrollPhysics(),

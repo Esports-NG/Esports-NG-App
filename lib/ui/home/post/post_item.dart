@@ -46,7 +46,7 @@ class PostItem extends StatelessWidget {
                     Gap(Get.height * 0.01),
                     CustomText(
                       title: item.name!.toUpperCase(),
-                      size: Get.height * 0.014,
+                      size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().lightItemsColor,
@@ -54,7 +54,7 @@ class PostItem extends StatelessWidget {
                     Gap(Get.height * 0.005),
                     CustomText(
                       title: item.uName!.toUpperFirstCase(),
-                      size: Get.height * 0.014,
+                      size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().lightItemsColor,
@@ -62,7 +62,7 @@ class PostItem extends StatelessWidget {
                     Gap(Get.height * 0.005),
                     CustomText(
                       title: '|  ${item.time!.toSentenceCase()}',
-                      size: Get.height * 0.014,
+                      size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().lightItemsColor,
@@ -147,7 +147,7 @@ class PostItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: CustomText(
               title: item.details!.toUpperFirstCase(),
-              size: Get.height * 0.014,
+              size: Get.height * 0.015,
               fontFamily: 'GilroyBold',
               textAlign: TextAlign.start,
               color: AppColor().primaryWhite,
@@ -203,7 +203,7 @@ class PostItem extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -262,23 +262,26 @@ class PostItem extends StatelessWidget {
                       Icon(
                         Icons.keyboard_arrow_down,
                         color: AppColor().primaryWhite,
-                        size: Get.height * 0.02,
+                        size: Get.height * 0.025,
                       ),
                     ],
                   ),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
                       icon: Icon(
                         Icons.favorite_outline,
                         color: AppColor().primaryWhite,
-                        size: Get.height * 0.02,
+                        size: Get.height * 0.025,
                       ),
                       onPressed: () {},
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
+                    Gap(Get.height * 0.005),
                     CustomText(
                       title: '${item.likes!} likes',
                       size: Get.height * 0.014,
@@ -294,12 +297,13 @@ class PostItem extends StatelessWidget {
                       icon: Icon(
                         Icons.sms_outlined,
                         color: AppColor().primaryWhite,
-                        size: Get.height * 0.02,
+                        size: Get.height * 0.025,
                       ),
                       onPressed: () {},
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
+                    Gap(Get.height * 0.005),
                     CustomText(
                       title: item.comment!,
                       size: Get.height * 0.014,
@@ -311,22 +315,23 @@ class PostItem extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.share_outlined,
+                        color: AppColor().primaryWhite,
+                        size: Get.height * 0.025,
+                      ),
+                      onPressed: () {},
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                    Gap(Get.height * 0.005),
                     CustomText(
                       title: 'Share',
                       size: Get.height * 0.014,
                       fontFamily: 'GilroyBold',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.share_outlined,
-                        color: AppColor().primaryWhite,
-                        size: Get.height * 0.02,
-                      ),
-                      onPressed: () {},
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
                     ),
                   ],
                 ),

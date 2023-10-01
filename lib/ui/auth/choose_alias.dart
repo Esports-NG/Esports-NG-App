@@ -8,12 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class ChooseAlias extends StatelessWidget {
+class ChooseAlias extends StatefulWidget {
   const ChooseAlias({super.key});
 
   @override
+  State<ChooseAlias> createState() => _ChooseAliasState();
+}
+
+class _ChooseAliasState extends State<ChooseAlias> {
+  final authController = Get.put(AuthRepository());
+  bool userCheck = false;
+  @override
   Widget build(BuildContext context) {
-    final authController = Get.put(AuthRepository());
     return Scaffold(
       backgroundColor: AppColor().primaryBgColor,
       body: SingleChildScrollView(
@@ -24,11 +30,11 @@ class ChooseAlias extends StatelessWidget {
           Center(
             child: Image.asset(
               'assets/images/png/done1.png',
-              // height: Get.height * 0.2,
-              // width: Get.height * 0.2,
+              height: Get.height * 0.17,
+              width: Get.height * 0.17,
             ),
           ),
-          Gap(Get.height * 0.05),
+          Gap(Get.height * 0.04),
           CustomText(
             title: 'Choose an awesome\nalias for your profile ',
             color: AppColor().primaryWhite,
@@ -40,6 +46,14 @@ class ChooseAlias extends StatelessWidget {
           CustomTextField(
             hint: "e.g realmitcha",
             textEditingController: authController.uNameController,
+            onChanged: (value) {
+              setState(() {});
+              if (value.isEmpty) {
+                userCheck = false;
+              } else {
+                userCheck = true;
+              }
+            },
             validate: (value) {
               if (value!.isEmpty) {
                 return 'Username must not be empty';
@@ -50,35 +64,23 @@ class ChooseAlias extends StatelessWidget {
             },
           ),
           Gap(Get.height * 0.25),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomFillButton(
-                onTap: () {
-                  Get.off(() => const Dashboard());
-                },
-                width: Get.width / 2 - Get.height * 0.04,
-                height: Get.height * 0.07,
-                buttonText: 'Skip',
-                fontWeight: FontWeight.w600,
-                textSize: Get.height * 0.016,
-                isLoading: false,
-                buttonColor: AppColor().primaryBgColor,
-                boarderColor: AppColor().primaryColor,
-                textColor: AppColor().primaryColor,
-              ),
-              CustomFillButton(
-                onTap: () {
-                  Get.off(() => const Dashboard());
-                },
-                width: Get.width / 2 - Get.height * 0.04,
-                height: Get.height * 0.07,
-                buttonText: 'Next',
-                fontWeight: FontWeight.w600,
-                textSize: Get.height * 0.016,
-                isLoading: false,
-              ),
-            ],
+          CustomFillButton(
+            onTap: () =>
+                userCheck == false ? null : Get.off(() => const Dashboard()),
+            height: Get.height * 0.07,
+            buttonText: 'Continue',
+            fontWeight: FontWeight.w600,
+            textSize: Get.height * 0.016,
+            textColor: userCheck == false
+                ? AppColor().bgDark
+                : AppColor().primaryWhite,
+            boarderColor: userCheck == false
+                ? AppColor().bgDark
+                : AppColor().primaryColor,
+            buttonColor: userCheck == false
+                ? AppColor().bgDark
+                : AppColor().primaryColor,
+            isLoading: false,
           )
         ]),
       )),

@@ -122,13 +122,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.03),
                 CustomText(
                   title: 'Forgot password?',
                   color: AppColor().primaryColor,
                   textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  weight: FontWeight.w600,
+                  fontFamily: 'GilroyMedium',
                   size: Get.height * 0.018,
                   underline: TextDecoration.underline,
                 ),
@@ -150,8 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: "Don’t have an account?",
                     style: TextStyle(
                       color: AppColor().primaryWhite,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'GilroyMedium',
                       fontSize: Get.height * 0.018,
                     ),
                     children: <TextSpan>[
