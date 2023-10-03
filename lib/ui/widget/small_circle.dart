@@ -2,11 +2,12 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 
 class SmallCircle extends StatelessWidget {
-  final Color? color;
+  final Color? color, bColor;
   final double? size;
   const SmallCircle({
     super.key,
     this.color,
+    this.bColor,
     this.size,
   });
 
@@ -19,6 +20,7 @@ class SmallCircle extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color ?? AppColor().lightItemsColor,
+        border: Border.all(color: bColor ?? AppColor().lightItemsColor),
       ),
     );
   }

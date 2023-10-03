@@ -19,7 +19,7 @@ class Personal extends StatelessWidget {
         shrinkWrap: true,
         itemCount: personal.length,
         separatorBuilder: (context, index) => Divider(
-          color: AppColor().lightItemsColor.withOpacity(0.2),
+          color: AppColor().lightItemsColor.withOpacity(0.3),
           height: Get.height * 0.05,
           thickness: 0.5,
         ),

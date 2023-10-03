@@ -1,7 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
+import 'package:e_sport/ui/widget/custom_navbar.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'account.dart';
 import 'community.dart';
 import 'events.dart';
@@ -26,7 +27,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor().primaryBgColor,
+      backgroundColor: AppColor().primaryBackGroundColor,
       body: pages.elementAt(_selectedIndex),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
@@ -38,68 +39,15 @@ class _DashboardState extends State<Dashboard> {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
-        color: AppColor().primaryBgColor,
+        color: AppColor().primaryBackGroundColor,
         notchMargin: 1,
-        padding: const EdgeInsets.only(top: 10),
-        child: BottomNavigationBar(
-          backgroundColor: AppColor().primaryBgColor,
-          currentIndex: _selectedIndex,
+        child: CustomNavBar(
+          selectedIndex: _selectedIndex,
           onTap: (index) {
             setState(() {
               _selectedIndex = index;
             });
           },
-          selectedLabelStyle: TextStyle(
-            color: AppColor().primaryColor,
-            fontFamily: 'GilroyMedium',
-            fontWeight: FontWeight.normal,
-          ),
-          unselectedLabelStyle: TextStyle(
-            color: AppColor().lightItemsColor,
-            fontFamily: 'GilroyMedium',
-            fontWeight: FontWeight.normal,
-          ),
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: AppColor().primaryColor,
-          unselectedItemColor: Colors.grey,
-          items: [
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/images/svg/home_icon.svg',
-                  height: Get.height * 0.03,
-                  color: _selectedIndex == 0
-                      ? AppColor().primaryColor
-                      : AppColor().lightItemsColor,
-                ),
-                label: 'Home'),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/images/svg/event_icon.svg',
-                  height: Get.height * 0.03,
-                  color: _selectedIndex == 1
-                      ? AppColor().primaryColor
-                      : AppColor().lightItemsColor,
-                ),
-                label: 'Events'),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/images/svg/community_icon.svg',
-                  height: Get.height * 0.03,
-                  color: _selectedIndex == 2
-                      ? AppColor().primaryColor
-                      : AppColor().lightItemsColor,
-                ),
-                label: 'Community'),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/images/svg/account_icon.svg',
-                  height: Get.height * 0.03,
-                  color: _selectedIndex == 3
-                      ? AppColor().primaryColor
-                      : AppColor().lightItemsColor,
-                ),
-                label: 'Account'),
-          ],
         ),
       ),
     );

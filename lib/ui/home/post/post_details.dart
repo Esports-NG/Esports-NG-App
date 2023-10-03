@@ -1,5 +1,6 @@
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/widget/custom_navbar.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
@@ -7,15 +8,45 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class PostDetails extends StatelessWidget {
+class PostDetails extends StatefulWidget {
   final Posts item;
   const PostDetails({super.key, required this.item});
 
   @override
+  State<PostDetails> createState() => _PostDetailsState();
+}
+
+class _PostDetailsState extends State<PostDetails> {
+  int _selectedIndex = 0;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      backgroundColor: AppColor().primaryBgColor,
+      appBar: AppBar(
+        backgroundColor: AppColor().primaryBackGroundColor,
+        elevation: 0,
+      ),
+      backgroundColor: AppColor().primaryBackGroundColor,
+      // floatingActionButtonLocation:
+      //     FloatingActionButtonLocation.miniCenterDocked,
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: AppColor().primaryColor,
+      //   child: const Icon(Icons.add, color: Colors.white),
+      //   onPressed: () {},
+      // ),
+      // bottomNavigationBar: BottomAppBar(
+      //   shape: const CircularNotchedRectangle(),
+      //   clipBehavior: Clip.antiAlias,
+      //   color: AppColor().primaryBackGroundColor,
+      //   notchMargin: 1,
+      //   child: CustomNavBar(
+      //     selectedIndex: _selectedIndex,
+      //     onTap: (index) {
+      //       setState(() {
+      //         _selectedIndex = index;
+      //       });
+      //     },
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -29,22 +60,22 @@ class PostDetails extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        item.pImage!,
+                        widget.item.pImage!,
                         height: Get.height * 0.05,
                         width: Get.height * 0.05,
                       ),
                       Gap(Get.height * 0.01),
                       CustomText(
-                        title: item.name!.toUpperCase(),
-                        size: Get.height * 0.014,
+                        title: widget.item.name!.toUpperCase(),
+                        size: Get.height * 0.015,
                         fontFamily: 'GilroyMedium',
                         textAlign: TextAlign.start,
                         color: AppColor().lightItemsColor,
                       ),
                       Gap(Get.height * 0.005),
                       CustomText(
-                        title: item.uName!.toUpperFirstCase(),
-                        size: Get.height * 0.014,
+                        title: widget.item.uName!.toUpperFirstCase(),
+                        size: Get.height * 0.015,
                         fontFamily: 'GilroyMedium',
                         textAlign: TextAlign.start,
                         color: AppColor().lightItemsColor,
@@ -53,8 +84,7 @@ class PostDetails extends StatelessWidget {
                   ),
                   CustomFillButton(
                     buttonText: 'Follow',
-                    fontWeight: FontWeight.w600,
-                    textSize: Get.height * 0.016,
+                    textSize: Get.height * 0.015,
                     width: Get.width * 0.3,
                     height: Get.height * 0.04,
                     onTap: () {},
@@ -99,7 +129,7 @@ class PostDetails extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
                           image: AssetImage(
-                            item.image!,
+                            widget.item.image!,
                           ),
                           fit: BoxFit.cover,
                         )),
@@ -113,11 +143,11 @@ class PostDetails extends StatelessWidget {
                       child: ListView.separated(
                           padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
-                          itemCount: item.genre!.length,
+                          itemCount: widget.item.genre!.length,
                           separatorBuilder: (context, index) =>
                               Gap(Get.height * 0.01),
                           itemBuilder: (context, index) {
-                            var items = item.genre![index];
+                            var items = widget.item.genre![index];
                             return Container(
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
@@ -161,7 +191,7 @@ class PostDetails extends StatelessWidget {
                       Row(
                         children: [
                           CustomText(
-                            title: item.views!,
+                            title: widget.item.views!,
                             size: Get.height * 0.014,
                             fontFamily: 'GilroyBold',
                             textAlign: TextAlign.start,
@@ -181,7 +211,7 @@ class PostDetails extends StatelessWidget {
                       Row(
                         children: [
                           CustomText(
-                            title: item.repost!,
+                            title: widget.item.repost!,
                             size: Get.height * 0.014,
                             fontFamily: 'GilroyBold',
                             textAlign: TextAlign.start,
@@ -201,7 +231,7 @@ class PostDetails extends StatelessWidget {
                       Row(
                         children: [
                           CustomText(
-                            title: item.likes!,
+                            title: widget.item.likes!,
                             size: Get.height * 0.014,
                             fontFamily: 'GilroyBold',
                             textAlign: TextAlign.start,
@@ -314,7 +344,7 @@ class PostDetails extends StatelessWidget {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: AssetImage(
-                    item.image!,
+                    widget.item.image!,
                   ),
                   fit: BoxFit.cover,
                 )),

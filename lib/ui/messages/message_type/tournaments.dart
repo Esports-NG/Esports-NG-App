@@ -1,5 +1,4 @@
 import 'package:e_sport/data/model/message_model.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -11,10 +10,10 @@ class Tournaments extends StatefulWidget {
   const Tournaments({super.key});
 
   @override
-  State<Tournaments> createState() => _ChatsState();
+  State<Tournaments> createState() => _TournamentsState();
 }
 
-class _ChatsState extends State<Tournaments> {
+class _TournamentsState extends State<Tournaments> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +28,7 @@ class _ChatsState extends State<Tournaments> {
               shrinkWrap: true,
               itemCount: tournaments.length,
               separatorBuilder: (context, index) => Divider(
-                color: AppColor().lightItemsColor.withOpacity(0.2),
+                color: AppColor().lightItemsColor.withOpacity(0.3),
                 height: Get.height * 0.05,
                 thickness: 0.5,
               ),

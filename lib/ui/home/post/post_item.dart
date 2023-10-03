@@ -240,16 +240,50 @@ class PostItem extends StatelessWidget {
                     PopupMenuItem(
                       height: 20,
                       padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: popUpMenuItems(
-                          icon: Icons.thumb_down_alt_outlined,
-                          title: 'Not interested in this post'),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/png/account.png',
+                            height: Get.height * 0.02,
+                            width: Get.height * 0.02,
+                          ),
+                          Gap(Get.height * 0.02),
+                          CustomText(
+                            title: 'Paula Bakare',
+                            size: Get.height * 0.014,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().primaryWhite,
+                          ),
+                        ],
+                      ),
                     ),
                     PopupMenuItem(
                       height: 20,
                       padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: popUpMenuItems(
-                          icon: Icons.person_add_alt_outlined,
-                          title: 'Follow/Unfollow User'),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.group_outlined,
+                            color: AppColor().primaryWhite,
+                            size: Get.height * 0.016,
+                          ),
+                          Gap(Get.height * 0.02),
+                          CustomText(
+                            title: 'Your Team Profile',
+                            size: Get.height * 0.014,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().primaryWhite,
+                          ),
+                          Gap(Get.height * 0.02),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColor().primaryWhite,
+                            size: Get.height * 0.016,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                   child: Row(
