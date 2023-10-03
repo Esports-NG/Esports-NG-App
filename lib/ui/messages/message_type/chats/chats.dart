@@ -19,7 +19,7 @@ class _ChatsState extends State<Chats> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor().primaryBgColor,
+      backgroundColor: AppColor().primaryBackGroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [

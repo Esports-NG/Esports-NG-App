@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppColor().primaryBackGroundColor,
       body: SingleChildScrollView(
           child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(Get.height * 0.02),
         child: Column(
           children: [
             Gap(Get.height * 0.05),

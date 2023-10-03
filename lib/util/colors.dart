@@ -8,6 +8,7 @@ class AppColor {
   Color primaryBgColor = const Color(0xff111827);
   Color primaryBackGroundColor = const Color(0xff060D18);
   Color bgDark = const Color(0xff1F252F);
+  Color dashboardColor = const Color(0xff050B15);
   Color primaryWhite = const Color(0xffffffff);
   Color primaryYellow = const Color(0xffF29528);
   Color primaryRed = const Color(0xffFF2E2E);

@@ -24,7 +24,7 @@ class _PostItemState extends State<PostItem> {
         gradient: LinearGradient(
           colors: [
             AppColor().bgDark,
-            AppColor().primaryBgColor,
+            AppColor().primaryBackGroundColor,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

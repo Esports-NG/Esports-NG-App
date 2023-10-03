@@ -45,7 +45,7 @@ class _ChooseAliasState extends State<ChooseAlias> {
           Gap(Get.height * 0.03),
           CustomTextField(
             hint: "e.g realmitcha",
-            textEditingController: authController.uNameController,
+            textEditingController: authController.userNameController,
             onChanged: (value) {
               setState(() {});
               if (value.isEmpty) {

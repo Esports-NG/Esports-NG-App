@@ -96,9 +96,8 @@ enum AuthStatus {
 }
 
 class AuthRepository extends GetxController {
-  late final uNameController = TextEditingController();
-  late final fNameController = TextEditingController();
-  late final lNameController = TextEditingController();
+  late final userNameController = TextEditingController();
+  late final fullNameController = TextEditingController();
   late final emailController = TextEditingController();
   late final phoneNoController = TextEditingController();
   late final genderController = TextEditingController();
@@ -111,14 +110,6 @@ class AuthRepository extends GetxController {
   late final otpPin = TextEditingController();
   late final transactionPinController = TextEditingController();
   late final confirmTransactionPinController = TextEditingController();
-  late final businessNameController = TextEditingController();
-  late final businessAddressController = TextEditingController();
-  late final businessPhoneController = TextEditingController();
-  late final businessStateController = TextEditingController();
-  late final businessCityTownController = TextEditingController();
-  late final bankNameController = TextEditingController();
-  late final bankAccountNoController = TextEditingController();
-  late final bankAccountNameController = TextEditingController();
   late final userIdController = TextEditingController();
   DateTime? date;
 
@@ -197,26 +188,20 @@ class AuthRepository extends GetxController {
   Future signUp(UserModel user) async {
     try {
       _signUpStatus(SignUpStatus.loading);
-      if (kDebugMode) {
-        print('registering user...');
-        print("request json ${user.toJson()}");
-      }
-
+      debugPrint("request json ${user.toJson()}");
       var response = await http.post(Uri.parse(ApiLink.register),
           body: jsonEncode(user.toJson()),
           headers: {
             "Content-Type": "application/json",
           });
       var json = jsonDecode(response.body);
-
       if (json['success'] == false) {
         throw (json['message']);
       }
 
-      if (kDebugMode) {
-        print("response $json");
-        print("user id ${json['data']['user_id']}");
-      }
+      debugPrint("response $json");
+      debugPrint("user id ${json['data']['user_id']}");
+
       if (json['success'] == true) {
         _signUpStatus(SignUpStatus.success);
 
@@ -235,18 +220,15 @@ class AuthRepository extends GetxController {
                       "Failed host lookup: 'staging-farmers-domain-ae54637d7865.herokuapp.com'")
               ? 'No internet connection!'
               : error.toString());
-      if (kDebugMode) {
-        print("Error occurred ${error.toString()}");
-      }
+
+      debugPrint("Error occurred ${error.toString()}");
     }
   }
 
   Future login() async {
     _signInStatus(SignInStatus.loading);
     try {
-      if (kDebugMode) {
-        print('login here...');
-      }
+      debugPrint('login here...');
 
       var response = await http.post(
           Uri.parse(
@@ -260,9 +242,7 @@ class AuthRepository extends GetxController {
             "password": passwordController.text.trim(),
           }));
 
-      if (kDebugMode) {
-        print(response.body);
-      }
+      debugPrint(response.body);
 
       var json = jsonDecode(response.body);
       if (json['errors'] != null) {
@@ -295,9 +275,8 @@ class AuthRepository extends GetxController {
                       "Failed host lookup: 'staging-farmers-domain-ae54637d7865.herokuapp.com'")
               ? 'No internet connection!'
               : error.toString());
-      if (kDebugMode) {
-        print("error ${error.toString()}");
-      }
+
+      debugPrint("error ${error.toString()}");
     }
   }
 

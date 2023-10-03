@@ -13,7 +13,7 @@ class _ChatsState extends State<Communities> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor().primaryBgColor,
+      backgroundColor: AppColor().primaryBackGroundColor,
       body: Center(
         child: CustomText(
           title: 'Communities',

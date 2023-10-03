@@ -331,7 +331,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           CustomTextField(
                             hint: "eg john doe",
                             textEditingController:
-                                authController.fNameController,
+                                authController.fullNameController,
                             validate: (value) {
                               if (value!.isEmpty) {
                                 return 'Full Name must not be empty';
@@ -367,29 +367,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
                           Gap(Get.height * 0.02),
-                          // CustomText(
-                          //   title: 'Username',
-                          //   color: AppColor().primaryWhite,
-                          //   textAlign: TextAlign.center,
-                          //   fontFamily: 'GilroyRegular',
-                          //   size: Get.height * 0.017,
-                          // ),
-                          // Gap(Get.height * 0.01),
-                          // CustomTextField(
-                          //   hint: "@johndoe",
-                          //   textEditingController:
-                          //       authController.uNameController,
-                          //   validate: (value) {
-                          //     if (value!.isEmpty) {
-                          //       return 'Username must not be empty';
-                          //     } else if (!RegExp(r'[A-Za-z]+$')
-                          //         .hasMatch(value)) {
-                          //       return "Please enter only letters";
-                          //     }
-                          //     return null;
-                          //   },
-                          // ),
-                          // Gap(Get.height * 0.02),
                           CustomText(
                             title: 'Password',
                             color: AppColor().primaryWhite,
@@ -536,7 +513,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           // Gap(Get.height * 0.02),
                           // CustomTextField(
                           //   hint: "Country",
-                          //   // textEditingController: authController.fNameController,
+                          //   // textEditingController: authController.fullNameController,
                           //   validate: (value) {
                           //     if (value!.isEmpty) {
                           //       return 'country must not be empty';
@@ -558,7 +535,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           // Gap(Get.height * 0.01),
                           // CustomTextField(
                           //   hint: "State",
-                          //   // textEditingController: authController.fNameController,
+                          //   // textEditingController: authController.fullNameController,
                           //   validate: (value) {
                           //     if (value!.isEmpty) {
                           //       return 'state must not be empty';
@@ -780,20 +757,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           : Get.height * 0.1),
                   CustomFillButton(
                     onTap: () {
-                      if (pageCount < 2
+                      if (pageCount <= 2
                           //  && _formKey.currentState!.validate()
                           ) {
-                        setState(() {
-                          pageCount++;
-                          if (kDebugMode) {
-                            print('PageCount: $pageCount');
-                          }
-                        });
-                        // if(pageCount)
+                        if (pageCount == 1 && selectedUse.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: CustomText(
+                                title: 'Select primary use to proceed!',
+                                size: Get.height * 0.02,
+                                color: AppColor().primaryWhite,
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          );
+                        } else if (pageCount == 2 &&
+                            selectedCategories.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: CustomText(
+                                title:
+                                    'Select at least one category use to proceed!',
+                                size: Get.height * 0.02,
+                                color: AppColor().primaryWhite,
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            pageCount++;
+                            debugPrint('PageCount: $pageCount');
+                          });
+                        }
                       } else {
                         if (primaryUseCount == null) {
-                          Get.snackbar('Alert',
-                              'Agree to the terms and condition to continue!');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: CustomText(
+                                title:
+                                    'Agree to the terms and condition to continue!',
+                                size: Get.height * 0.02,
+                                color: AppColor().primaryWhite,
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          );
                         } else {
                           // if (authController.signUpStatus !=
                           //         SignUpStatus.loading &&
