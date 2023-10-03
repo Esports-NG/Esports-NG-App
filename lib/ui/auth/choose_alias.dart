@@ -21,7 +21,7 @@ class _ChooseAliasState extends State<ChooseAlias> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor().primaryBgColor,
+      backgroundColor: AppColor().primaryBackGroundColor,
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(20.0),

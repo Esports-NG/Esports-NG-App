@@ -156,7 +156,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ],
       ),
-      backgroundColor: AppColor().primaryBgColor,
+      backgroundColor: AppColor().primaryBackGroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -700,7 +700,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             textColor: AppColor().primaryWhite,
                             buttonColor: item.isSelected == true
                                 ? AppColor().primaryGreen
-                                : AppColor().primaryBgColor,
+                                : AppColor().primaryBackGroundColor,
                             boarderColor: item.isSelected == true
                                 ? AppColor().primaryGreen
                                 : AppColor().primaryWhite,
@@ -752,7 +752,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   decoration: BoxDecoration(
                                     color: item.isSelected == true
                                         ? AppColor().primaryGreen
-                                        : AppColor().primaryBgColor,
+                                        : AppColor().primaryBackGroundColor,
                                     borderRadius: BorderRadius.circular(40),
                                     border: Border.all(
                                       color: item.isSelected == true
