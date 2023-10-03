@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            Gap(Get.height * 0.03),
+            Gap(Get.height * 0.025),
             SizedBox(
               height: Get.height * 0.06,
               child: CustomTextField(
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                 onChanged: (text) {},
               ),
             ),
-            Gap(Get.height * 0.03),
+            Gap(Get.height * 0.025),
             SizedBox(
               height: Get.height * 0.045,
               child: ListView.separated(

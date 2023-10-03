@@ -1,15 +1,22 @@
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class PostItem extends StatelessWidget {
+class PostItem extends StatefulWidget {
   final Posts item;
   const PostItem({super.key, required this.item});
 
+  @override
+  State<PostItem> createState() => _PostItemState();
+}
+
+class _PostItemState extends State<PostItem> {
+  int? _selectedIndex;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,13 +46,13 @@ class PostItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      item.pImage!,
+                      widget.item.pImage!,
                       height: Get.height * 0.025,
                       width: Get.height * 0.025,
                     ),
                     Gap(Get.height * 0.01),
                     CustomText(
-                      title: item.name!.toUpperCase(),
+                      title: widget.item.name!.toUpperCase(),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -53,15 +60,17 @@ class PostItem extends StatelessWidget {
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: item.uName!.toUpperFirstCase(),
+                      title: widget.item.uName!.toUpperFirstCase(),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().lightItemsColor,
                     ),
                     Gap(Get.height * 0.005),
+                    const SmallCircle(),
+                    Gap(Get.height * 0.005),
                     CustomText(
-                      title: '|  ${item.time!.toSentenceCase()}',
+                      title: widget.item.time!.toSentenceCase(),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -77,14 +86,15 @@ class PostItem extends StatelessWidget {
                   constraints: const BoxConstraints(),
                   color: AppColor().primaryMenu,
                   offset: const Offset(0, -10),
+                  initialValue: _selectedIndex,
                   onSelected: (value) {
-                    // if value 1 show dialog
-                    if (value == 1) {
-                      // _showDialog(context);
-                      // if value 2 show dialog
-                    } else if (value == 2) {
-                      // _showDialog(context);
-                    }
+                    setState(() {
+                      if (value == 0) {
+                        _selectedIndex = value;
+                      } else if (value == 1) {
+                        _selectedIndex = value;
+                      } else if (value == 2) {}
+                    });
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(
@@ -146,7 +156,7 @@ class PostItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: CustomText(
-              title: item.details!.toUpperFirstCase(),
+              title: widget.item.details!.toUpperFirstCase(),
               size: Get.height * 0.015,
               fontFamily: 'GilroyBold',
               textAlign: TextAlign.start,
@@ -158,7 +168,7 @@ class PostItem extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               Image.asset(
-                item.image!,
+                widget.item.image!,
                 height: Get.height * 0.25,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -172,11 +182,11 @@ class PostItem extends StatelessWidget {
                   child: ListView.separated(
                       padding: EdgeInsets.zero,
                       scrollDirection: Axis.horizontal,
-                      itemCount: item.genre!.length,
+                      itemCount: widget.item.genre!.length,
                       separatorBuilder: (context, index) =>
                           Gap(Get.height * 0.01),
                       itemBuilder: (context, index) {
-                        var items = item.genre![index];
+                        var items = widget.item.genre![index];
                         return Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
@@ -215,13 +225,34 @@ class PostItem extends StatelessWidget {
                   constraints: const BoxConstraints(),
                   color: AppColor().primaryMenu,
                   offset: const Offset(0, -10),
+                  initialValue: _selectedIndex,
                   onSelected: (value) {
-                    // if value 1 show dialog
-                    if (value == 1) {
-                      // _showDialog(context);
-                      // if value 2 show dialog
+                    if (value == 0) {
+                      _selectedIndex = value;
+                    } else if (value == 1) {
+                      _selectedIndex = value;
                     } else if (value == 2) {
-                      // _showDialog(context);
+                      _selectedIndex = value;
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Alert Dialog Title'),
+                            content: Text(
+                                'This is the content of the alert dialog.'),
+                            actions: [
+                              // Define actions like "OK" or "Cancel" buttons.
+                              TextButton(
+                                onPressed: () {
+                                  // Close the dialog when the "OK" button is pressed.
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     }
                   },
                   itemBuilder: (context) => [
@@ -317,7 +348,7 @@ class PostItem extends StatelessWidget {
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: '${item.likes!} likes',
+                      title: '${widget.item.likes!} likes',
                       size: Get.height * 0.014,
                       fontFamily: 'GilroyBold',
                       textAlign: TextAlign.start,
@@ -339,7 +370,7 @@ class PostItem extends StatelessWidget {
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: item.comment!,
+                      title: widget.item.comment!,
                       size: Get.height * 0.014,
                       fontFamily: 'GilroyBold',
                       textAlign: TextAlign.start,

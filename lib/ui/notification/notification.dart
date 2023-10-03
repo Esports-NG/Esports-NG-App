@@ -75,8 +75,6 @@ class _NotificationPageState extends State<NotificationPage>
             offset: const Offset(0, -10),
             initialValue: _selectedIndex,
             onSelected: (value) async {
-              print('value: $value');
-
               setState(() {
                 if (value == 0) {
                   _selectedIndex = value;
