@@ -38,11 +38,11 @@ class _ChatsState extends State<Chats> {
                       weight: FontWeight.w500,
                       size: 14,
                       fontFamily: 'GilroyMedium',
-                      color: AppColor().primaryColor,
+                      color: AppColor().primaryLiteColor,
                     ),
                     Icon(
                       Icons.arrow_forward_ios,
-                      color: AppColor().primaryColor,
+                      color: AppColor().primaryLiteColor,
                       size: 20,
                     )
                   ],
