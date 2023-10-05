@@ -149,6 +149,9 @@ class AuthRepository extends GetxController {
   Rx<String> mToken = Rx("");
   String get token => mToken.value;
 
+  RxBool mOnSelect = false.obs;
+  // bool get onSelect => mOnSelect.value;
+
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;
 

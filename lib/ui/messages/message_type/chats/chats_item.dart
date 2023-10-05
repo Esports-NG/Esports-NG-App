@@ -7,7 +7,13 @@ import 'package:get/get.dart';
 
 class ChatsItem extends StatelessWidget {
   final MessageModel item;
-  const ChatsItem({super.key, required this.item});
+  final int? index, count;
+  const ChatsItem({
+    super.key,
+    required this.item,
+    required this.index,
+    required this.count,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +23,32 @@ class ChatsItem extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Container(
-              height: Get.height * 0.055,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(image: AssetImage(item.userImage!))),
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Container(
+                  height: Get.height * 0.06,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image:
+                          DecorationImage(image: AssetImage(item.userImage!))),
+                ),
+                if (count == index)
+                  Positioned(
+                    right: Get.height * 0.01,
+                    child: Container(
+                      padding: EdgeInsets.all(Get.height * 0.002),
+                      decoration: BoxDecoration(
+                          color: AppColor().primaryGreen,
+                          shape: BoxShape.circle),
+                      child: Icon(
+                        Icons.done,
+                        color: AppColor().primaryWhite,
+                        size: Get.height * 0.018,
+                      ),
+                    ),
+                  )
+              ],
             ),
           ),
           Expanded(

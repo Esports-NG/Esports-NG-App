@@ -1,11 +1,11 @@
 import 'package:e_sport/data/model/message_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/messages/request.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
 import 'chats_item.dart';
 
 class Chats extends StatefulWidget {
@@ -16,6 +16,9 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
+  final authController = Get.put(AuthRepository());
+  int? longSelect;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +65,7 @@ class _ChatsState extends State<Chats> {
               ),
               itemBuilder: (context, index) {
                 var item = chats[index];
-                return InkWell(
+                return GestureDetector(
                   onTap: () {
                     // Get.to(
                     //   () => PostDetails(
@@ -70,7 +73,22 @@ class _ChatsState extends State<Chats> {
                     //   ),
                     // );
                   },
-                  child: ChatsItem(item: item),
+                  onLongPress: () {
+                    setState(() {
+                      if (longSelect == index) {
+                        longSelect = null;
+                      } else {
+                        longSelect = index;
+                      }
+                      authController.mOnSelect.value =
+                          !authController.mOnSelect.value;
+                    });
+                  },
+                  child: ChatsItem(
+                    item: item,
+                    index: index,
+                    count: longSelect,
+                  ),
                 );
               },
             ),

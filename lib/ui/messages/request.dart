@@ -7,14 +7,20 @@ import 'package:get/get.dart';
 
 import 'message_type/chats/chats_item.dart';
 
-class DMRequest extends StatelessWidget {
+class DMRequest extends StatefulWidget {
   const DMRequest({super.key});
 
+  @override
+  State<DMRequest> createState() => _DMRequestState();
+}
+
+class _DMRequestState extends State<DMRequest> {
+  int? longSelect;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor().primaryBgColor,
+        backgroundColor: AppColor().primaryBackGroundColor,
         centerTitle: true,
         title: CustomText(
           title: 'DM Request',
@@ -44,7 +50,7 @@ class DMRequest extends StatelessWidget {
           Gap(Get.height * 0.01),
         ],
       ),
-      backgroundColor: AppColor().primaryBgColor,
+      backgroundColor: AppColor().primaryBackGroundColor,
       body: Column(
         children: [
           Gap(Get.height * 0.02),
@@ -93,7 +99,7 @@ class DMRequest extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               var item = chats[index];
-              return InkWell(
+              return GestureDetector(
                 onTap: () {
                   // Get.to(
                   //   () => PostDetails(
@@ -101,7 +107,12 @@ class DMRequest extends StatelessWidget {
                   //   ),
                   // );
                 },
-                child: ChatsItem(item: item),
+                 onLongPress: () {
+                    setState(() {
+                      longSelect = index;
+                    });
+                  },
+                child: ChatsItem(item: item, index: index, count:longSelect),
               );
             },
           ),

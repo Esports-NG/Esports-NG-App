@@ -14,6 +14,7 @@ class Tournaments extends StatefulWidget {
 }
 
 class _TournamentsState extends State<Tournaments> {
+  int? longSelect;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +35,7 @@ class _TournamentsState extends State<Tournaments> {
               ),
               itemBuilder: (context, index) {
                 var item = tournaments[index];
-                return InkWell(
+                return GestureDetector(
                   onTap: () {
                     // Get.to(
                     //   () => PostDetails(
@@ -42,7 +43,16 @@ class _TournamentsState extends State<Tournaments> {
                     //   ),
                     // );
                   },
-                  child: ChatsItem(item: item),
+                  onLongPress: () {
+                    setState(() {
+                      longSelect = index;
+                    });
+                  },
+                  child: ChatsItem(
+                    item: item,
+                    index: index,
+                    count: longSelect,
+                  ),
                 );
               },
             ),
