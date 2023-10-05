@@ -1,4 +1,5 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/messages/archive.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -180,7 +181,7 @@ class _NotificationPageState extends State<Messages>
               Gap(Get.height * 0.05),
               InkWell(
                 onTap: () {
-                  // Get.to(() => const Messages());
+                  Get.to(() => const Archives());
                 },
                 child: SvgPicture.asset(
                   'assets/images/svg/archive.svg',

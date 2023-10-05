@@ -5,17 +5,16 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
 import 'message_type/chats/chats_item.dart';
 
-class DMRequest extends StatefulWidget {
-  const DMRequest({super.key});
+class Archives extends StatefulWidget {
+  const Archives({super.key});
 
   @override
-  State<DMRequest> createState() => _DMRequestState();
+  State<Archives> createState() => _DMRequestState();
 }
 
-class _DMRequestState extends State<DMRequest> {
+class _DMRequestState extends State<Archives> {
   final authController = Get.put(AuthRepository());
   int? longSelect;
   @override
@@ -25,7 +24,7 @@ class _DMRequestState extends State<DMRequest> {
         backgroundColor: AppColor().primaryBackGroundColor,
         centerTitle: true,
         title: CustomText(
-          title: 'DM Request',
+          title: 'Archives',
           weight: FontWeight.w600,
           size: 18,
           color: AppColor().primaryWhite,
@@ -76,7 +75,7 @@ class _DMRequestState extends State<DMRequest> {
                   Expanded(
                     child: CustomText(
                       title:
-                          'Messages here will remain un-read until you’ve accepted the request',
+                          'The messages will remain archived even when new messages are received.',
                       weight: FontWeight.w500,
                       size: 14,
                       fontFamily: 'GilroyMedium',
@@ -93,7 +92,7 @@ class _DMRequestState extends State<DMRequest> {
             padding: EdgeInsets.zero,
             physics: const ScrollPhysics(),
             shrinkWrap: true,
-            itemCount: chats.take(4).length,
+            itemCount: chats.take(3).length,
             separatorBuilder: (context, index) => Divider(
               color: AppColor().lightItemsColor.withOpacity(0.2),
               height: Get.height * 0.05,

@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/message_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -14,6 +15,7 @@ class Tournaments extends StatefulWidget {
 }
 
 class _TournamentsState extends State<Tournaments> {
+  final authController = Get.put(AuthRepository());
   int? longSelect;
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,13 @@ class _TournamentsState extends State<Tournaments> {
                   },
                   onLongPress: () {
                     setState(() {
-                      longSelect = index;
+                      if (longSelect == index) {
+                        longSelect = null;
+                      } else {
+                        longSelect = index;
+                      }
+                      authController.mOnSelect.value =
+                          !authController.mOnSelect.value;
                     });
                   },
                   child: ChatsItem(
