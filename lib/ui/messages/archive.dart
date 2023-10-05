@@ -1,8 +1,10 @@
 import 'package:e_sport/data/model/message_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/message_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'message_type/chats/chats_item.dart';
@@ -16,6 +18,7 @@ class Archives extends StatefulWidget {
 
 class _DMRequestState extends State<Archives> {
   final authController = Get.put(AuthRepository());
+  final messageController = Get.put(MessageRepository());
   int? longSelect;
   @override
   Widget build(BuildContext context) {
@@ -23,12 +26,14 @@ class _DMRequestState extends State<Archives> {
       appBar: AppBar(
         backgroundColor: AppColor().primaryBackGroundColor,
         centerTitle: true,
-        title: CustomText(
-          title: 'Archives',
-          weight: FontWeight.w600,
-          size: 18,
-          color: AppColor().primaryWhite,
-        ),
+        title: (messageController.archiveOnSelect.isTrue)
+            ? CustomText(
+                title: 'Archives',
+                weight: FontWeight.w600,
+                size: 18,
+                color: AppColor().primaryWhite,
+              )
+            : null,
         leading: IconButton(
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(),
@@ -39,6 +44,17 @@ class _DMRequestState extends State<Archives> {
           ),
         ),
         actions: [
+          if (messageController.archiveOnSelect.isFalse)
+            InkWell(
+              onTap: () {
+                Get.to(() => const Archives());
+              },
+              child: SvgPicture.asset(
+                'assets/images/svg/archive.svg',
+                height: Get.height * 0.025,
+              ),
+            ),
+          Gap(Get.height * 0.05),
           InkWell(
             onTap: () {
               // Get.to(() => const Messages());
@@ -115,8 +131,8 @@ class _DMRequestState extends State<Archives> {
                     } else {
                       longSelect = index;
                     }
-                    authController.mOnSelect.value =
-                        !authController.mOnSelect.value;
+                    messageController.archiveOnSelect.value =
+                        !messageController.archiveOnSelect.value;
                   });
                 },
                 child: ChatsItem(item: item, index: index, count: longSelect),

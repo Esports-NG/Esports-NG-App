@@ -5,61 +5,62 @@ UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
+  String userName;
+  String fullName;
   String email;
-  String phoneNo;
-  String password;
-  String password2;
+  String phoneNumber;
   String country;
   String state;
   String gender;
-  DateTime dOB;
+  String dOB;
   String purpose;
   Profile profile;
+  Tokens tokens;
 
   UserModel({
+    required this.userName,
+    required this.fullName,
     required this.email,
-    required this.phoneNo,
-    required this.password,
-    required this.password2,
+    required this.phoneNumber,
     required this.country,
     required this.state,
     required this.gender,
     required this.dOB,
     required this.purpose,
     required this.profile,
+    required this.tokens,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+        userName: json["user_name"],
+        fullName: json["full_name"],
         email: json["email"],
-        phoneNo: json["phone_no"],
-        password: json["password"],
-        password2: json["password2"],
+        phoneNumber: json["phone_number"],
         country: json["country"],
         state: json["state"],
         gender: json["gender"],
-        dOB: DateTime.parse(json["d_o_b"]),
+        dOB: json["d_o_b"],
         purpose: json["purpose"],
         profile: Profile.fromJson(json["profile"]),
+        tokens: Tokens.fromJson(json["tokens"]),
       );
 
   Map<String, dynamic> toJson() => {
+        "user_name": userName,
+        "full_name": fullName,
         "email": email,
-        "phone_no": phoneNo,
-        "password": password,
-        "password2": password2,
+        "phone_number": phoneNumber,
         "country": country,
         "state": state,
         "gender": gender,
-        "d_o_b":
-            "${dOB.year.toString().padLeft(4, '0')}-${dOB.month.toString().padLeft(2, '0')}-${dOB.day.toString().padLeft(2, '0')}",
+        "d_o_b": dOB,
         "purpose": purpose,
-        "profile": profile.toJson(),
       };
 }
 
 class Profile {
   String gameType;
-  ProfilePicture profilePicture;
+  dynamic profilePicture;
 
   Profile({
     required this.gameType,
@@ -68,31 +69,31 @@ class Profile {
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
         gameType: json["game_type"],
-        profilePicture: ProfilePicture.fromJson(json["profile_picture"]),
+        profilePicture: json["profile_picture"],
       );
 
   Map<String, dynamic> toJson() => {
         "game_type": gameType,
-        "profile_picture": profilePicture.toJson(),
+        "profile_picture": profilePicture,
       };
 }
 
-class ProfilePicture {
-  String title;
-  String imageUrl;
+class Tokens {
+  String refresh;
+  String access;
 
-  ProfilePicture({
-    required this.title,
-    required this.imageUrl,
+  Tokens({
+    required this.refresh,
+    required this.access,
   });
 
-  factory ProfilePicture.fromJson(Map<String, dynamic> json) => ProfilePicture(
-        title: json["title"],
-        imageUrl: json["image_url"],
+  factory Tokens.fromJson(Map<String, dynamic> json) => Tokens(
+        refresh: json["refresh"],
+        access: json["access"],
       );
 
   Map<String, dynamic> toJson() => {
-        "title": title,
-        "image_url": imageUrl,
+        "refresh": refresh,
+        "access": access,
       };
 }

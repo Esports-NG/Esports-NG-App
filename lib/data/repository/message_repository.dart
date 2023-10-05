@@ -11,5 +11,6 @@ enum MessageStatus {
 
 class MessageRepository extends GetxController {
   final authController = Get.put(AuthRepository());
-  RxBool mOnSelect = false.obs;
+  RxBool messageOnSelect = false.obs;
+  RxBool archiveOnSelect = false.obs;
 }

@@ -1,4 +1,5 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/message_repository.dart';
 import 'package:e_sport/ui/messages/archive.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
@@ -15,12 +16,13 @@ class Messages extends StatefulWidget {
   const Messages({super.key});
 
   @override
-  State<Messages> createState() => _NotificationPageState();
+  State<Messages> createState() => _MessagesPageState();
 }
 
-class _NotificationPageState extends State<Messages>
+class _MessagesPageState extends State<Messages>
     with SingleTickerProviderStateMixin {
   final authController = Get.put(AuthRepository());
+  final messageController = Get.put(MessageRepository());
   late TabController _tabController;
   int? _selectedIndex;
 
@@ -46,7 +48,7 @@ class _NotificationPageState extends State<Messages>
         appBar: AppBar(
           backgroundColor: AppColor().primaryBackGroundColor,
           centerTitle: true,
-          title: (authController.mOnSelect.isFalse)
+          title: (messageController.messageOnSelect.isFalse)
               ? CustomText(
                   title: 'Messages',
                   weight: FontWeight.w600,
@@ -64,7 +66,7 @@ class _NotificationPageState extends State<Messages>
             ),
           ),
           actions: [
-            if (authController.mOnSelect.isFalse) ...[
+            if (messageController.messageOnSelect.isFalse) ...[
               InkWell(
                 onTap: () {
                   // Get.to(() => const Messages());
@@ -147,7 +149,7 @@ class _NotificationPageState extends State<Messages>
                   'assets/images/svg/sort.svg',
                   height: Get.height * 0.025,
                 ),
-              )
+              ),
             ] else ...[
               InkWell(
                 onTap: () {
@@ -189,15 +191,116 @@ class _NotificationPageState extends State<Messages>
                 ),
               ),
               Gap(Get.height * 0.05),
-              InkWell(
-                onTap: () {
-                  // Get.to(() => const Messages());
+              PopupMenuButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: BorderSide.none),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                color: AppColor().primaryMenu,
+                offset: const Offset(0, -10),
+                initialValue: _selectedIndex,
+                onSelected: (value) {
+                  if (value == 0) {
+                    _selectedIndex = value;
+                  } else if (value == 1) {
+                    _selectedIndex = value;
+                  } else if (value == 2) {
+                    _selectedIndex = value;
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Alert Dialog Title'),
+                          content: const Text(
+                              'This is the content of the alert dialog.'),
+                          actions: [
+                            // Define actions like "OK" or "Cancel" buttons.
+                            TextButton(
+                              onPressed: () {
+                                // Close the dialog when the "OK" button is pressed.
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    height: Get.height * 0.02,
+                    padding: EdgeInsets.all(Get.height * 0.02),
+                    child: CustomText(
+                      title: 'Mark as unread',
+                      size: Get.height * 0.016,
+                      fontFamily: 'GilroyMedium',
+                      textAlign: TextAlign.start,
+                      color: AppColor().primaryWhite,
+                    ),
+                  ),
+                  PopupMenuItem(
+                    height: Get.height * 0.02,
+                    padding: EdgeInsets.only(
+                        top: Get.height * 0.01,
+                        bottom: Get.height * 0.02,
+                        left: Get.height * 0.02,
+                        right: Get.height * 0.02),
+                    child: CustomText(
+                      title: 'Select all',
+                      size: Get.height * 0.016,
+                      fontFamily: 'GilroyMedium',
+                      textAlign: TextAlign.start,
+                      color: AppColor().primaryWhite,
+                    ),
+                  ),
+                  PopupMenuItem(
+                    height: Get.height * 0.02,
+                    padding: EdgeInsets.only(
+                      top: Get.height * 0.01,
+                      bottom: Get.height * 0.02,
+                      left: Get.height * 0.02,
+                    ),
+                    child: CustomText(
+                      title: 'Block user',
+                      size: Get.height * 0.016,
+                      fontFamily: 'GilroyMedium',
+                      textAlign: TextAlign.start,
+                      color: AppColor().primaryWhite,
+                    ),
+                  ),
+                  PopupMenuItem(
+                    height: Get.height * 0.02,
+                    padding: EdgeInsets.only(
+                        top: Get.height * 0.01,
+                        bottom: Get.height * 0.02,
+                        left: Get.height * 0.02,
+                        right: Get.height * 0.02),
+                    child: CustomText(
+                      title: 'Contact info',
+                      size: Get.height * 0.016,
+                      fontFamily: 'GilroyMedium',
+                      textAlign: TextAlign.start,
+                      color: AppColor().primaryWhite,
+                    ),
+                  ),
+                ],
                 child: SvgPicture.asset(
                   'assets/images/svg/dots-vert.svg',
                   height: Get.height * 0.025,
                 ),
               ),
+              // InkWell(
+              //   onTap: () {
+              //     // Get.to(() => const Messages());
+              //   },
+              //   child: SvgPicture.asset(
+              //     'assets/images/svg/dots-vert.svg',
+              //     height: Get.height * 0.025,
+              //   ),
+              // ),
             ],
             Gap(Get.height * 0.02)
           ],

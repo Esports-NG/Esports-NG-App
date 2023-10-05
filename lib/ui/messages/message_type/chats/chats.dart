@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/message_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/message_repository.dart';
 import 'package:e_sport/ui/messages/request.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -17,6 +18,7 @@ class Chats extends StatefulWidget {
 
 class _ChatsState extends State<Chats> {
   final authController = Get.put(AuthRepository());
+  final messageController = Get.put(MessageRepository());
   int? longSelect;
 
   @override
@@ -80,8 +82,8 @@ class _ChatsState extends State<Chats> {
                       } else {
                         longSelect = index;
                       }
-                      authController.mOnSelect.value =
-                          !authController.mOnSelect.value;
+                      messageController.messageOnSelect.value =
+                          !messageController.messageOnSelect.value;
                     });
                   },
                   child: ChatsItem(
