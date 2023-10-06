@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // } else {
     //   Get.off(() => const FirstScreen());
     // }
-    Get.off(() => const Dashboard());
+    Get.off(() => const FirstScreen());
   }
 
   @override

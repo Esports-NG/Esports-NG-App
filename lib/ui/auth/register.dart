@@ -1,10 +1,10 @@
-import 'package:country_state_picker/country_state_picker.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/page_indicator.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/csc_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -14,7 +14,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:nigerian_states_and_lga/nigerian_states_and_lga.dart';
 import 'package:image_picker/image_picker.dart';
 import 'choose_alias.dart';
 
@@ -31,10 +30,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   List<UserPreference> selectedCategories = [];
   List<PrimaryUse> selectedUse = [];
   final authController = Get.put(AuthRepository());
-  String stateValue = NigerianStatesAndLGA.allStates[0];
-  String lgaValue = 'Select a Local Government Area';
-  String selectedLGAFromAllLGAs = NigerianStatesAndLGA.getAllNigerianLGAs()[0];
-  List<String> statesLga = [];
   String? genderValue;
 
   bool isHiddenPassword = true;
@@ -45,8 +40,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String state = '';
   String country = '';
 
+  String countryValue = "";
+  String statesValue = "";
+  String cityValue = "";
+  String address = "";
+
   void displayMsg(msg) {
-    print(msg);
+    debugPrint(msg);
   }
 
   void _togglePasswordView() {
@@ -71,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           DateFormat("yyyy-MM-dd").format(newDate).toString();
       authController.date = newDate;
       if (kDebugMode) {
-        print(authController.dobController.text);
+        debugPrint(authController.dobController.text);
       }
     });
   }
@@ -85,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
     } on PlatformException catch (e) {
       if (kDebugMode) {
-        print('$e');
+        debugPrint('$e');
       }
     }
   }
@@ -102,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
     } on PlatformException catch (e) {
       if (kDebugMode) {
-        print('$e');
+        debugPrint('$e');
       }
     }
   }
@@ -119,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               setState(() {
                 --pageCount;
                 if (kDebugMode) {
-                  print('PageCount: $pageCount');
+                  debugPrint('PageCount: $pageCount');
                 }
               });
             } else {
@@ -335,7 +335,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             validate: (value) {
                               if (value!.isEmpty) {
                                 return 'Full Name must not be empty';
-                              } else if (!RegExp(r'[A-Za-z]+$')
+                              } else if (!RegExp(r'^[A-Za-z\- ]+$')
                                   .hasMatch(value)) {
                                 return "Please enter only letters";
                               }
@@ -409,7 +409,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
-                            hint: "+234",
+                            hint: "phone",
                             textEditingController:
                                 authController.phoneNoController,
                             validate: (value) {
@@ -422,130 +422,76 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
                           Gap(Get.height * 0.02),
-                          // CustomText(
-                          //   title: 'Country',
-                          //   color: AppColor().primaryWhite,
-                          //   textAlign: TextAlign.center,
-                          //   fontFamily: 'GilroyRegular',
-                          //   size: Get.height * 0.017,
-                          // ),
-                          // Gap(Get.height * 0.01),
-                          CountryStatePicker(
-                            dropdownColor: Colors.black,
-                            countryLabel: Padding(
-                              padding:
-                                  EdgeInsets.only(bottom: Get.height * 0.01),
-                              child: CustomText(
-                                title: 'Country',
-                                color: AppColor().primaryWhite,
-                                textAlign: TextAlign.left,
-                                fontFamily: 'GilroyRegular',
-                                size: Get.height * 0.017,
-                              ),
-                            ),
-                            stateLabel: Padding(
-                              padding:
-                                  EdgeInsets.only(bottom: Get.height * 0.01),
-                              child: CustomText(
-                                title: 'State',
-                                color: AppColor().primaryWhite,
-                                textAlign: TextAlign.left,
-                                fontFamily: 'GilroyRegular',
-                                size: Get.height * 0.017,
-                              ),
-                            ),
-                            hintTextStyle: TextStyle(
-                              color: AppColor().lightItemsColor,
-                              fontSize: 13,
-                              fontStyle: FontStyle.normal,
-                              fontFamily: 'GilroyBold',
-                              fontWeight: FontWeight.w400,
-                              height: 1.7,
-                            ),
-                            itemTextStyle: TextStyle(
-                              color: AppColor().lightItemsColor,
-                              fontSize: 13,
-                              fontStyle: FontStyle.normal,
-                              fontFamily: 'GilroyBold',
-                              fontWeight: FontWeight.w400,
-                              height: 1.7,
-                            ),
-                            inputDecoration: InputDecoration(
-                              filled: true,
-                              isDense: true,
-                              fillColor: AppColor().bgDark,
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: AppColor().lightItemsColor,
-                                      width: 1),
-                                  borderRadius: BorderRadius.circular(10)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
-                            onCountryChanged: (ct) => setState(() {
-                              country = ct;
-                              state = '';
-
-                              // List<String> statesForCountry =
-                              //     countryToStates[country];
-                              // if (statesForCountry != null &&
-                              //     statesForCountry.isNotEmpty) {
-                              //   state = statesForCountry[0];
-                              //   // Set the first state as default
-                              // }
-                              if (kDebugMode) {
-                                print(country);
-                                print(state);
-                              }
-                            }),
-                            onStateChanged: (st) => setState(() {
-                              state = st;
-                              if (kDebugMode) {
-                                print(country);
-                                print(state);
-                              }
-                            }),
-                            countryHintText: "Country",
-                            stateHintText: "State",
-                            noStateFoundText: "No State Found",
+                          CustomText(
+                            title: 'Country',
+                            color: AppColor().primaryWhite,
+                            textAlign: TextAlign.center,
+                            fontFamily: 'GilroyRegular',
+                            size: Get.height * 0.017,
                           ),
-                          // Gap(Get.height * 0.02),
-                          // CustomTextField(
-                          //   hint: "Country",
-                          //   // textEditingController: authController.fullNameController,
-                          //   validate: (value) {
-                          //     if (value!.isEmpty) {
-                          //       return 'country must not be empty';
-                          //     } else if (!RegExp(r'[A-Za-z]+$')
-                          //         .hasMatch(value)) {
-                          //       return "Please enter only letters";
-                          //     }
-                          //     return null;
-                          //   },
-                          // ),
-                          // Gap(Get.height * 0.02),
-                          // CustomText(
-                          //   title: 'State',
-                          //   color: AppColor().primaryWhite,
-                          //   textAlign: TextAlign.center,
-                          //   fontFamily: 'GilroyRegular',
-                          //   size: Get.height * 0.017,
-                          // ),
-                          // Gap(Get.height * 0.01),
-                          // CustomTextField(
-                          //   hint: "State",
-                          //   // textEditingController: authController.fullNameController,
-                          //   validate: (value) {
-                          //     if (value!.isEmpty) {
-                          //       return 'state must not be empty';
-                          //     } else if (!RegExp(r'[A-Za-z]+$')
-                          //         .hasMatch(value)) {
-                          //       return "Please enter only letters";
-                          //     }
-                          //     return null;
-                          //   },
-                          // ),
+                          Gap(Get.height * 0.01),
+                          CSCPicker(
+                            layout: Layout.vertical,
+                            showStates: true,
+                            showCities: false,
+                            flagState: CountryFlag.ENABLE,
+                            dropdownDecoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                color: AppColor().bgDark),
+                            disabledDropdownDecoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                color: AppColor().bgDark),
+                            countrySearchPlaceholder: "Select Country",
+                            stateSearchPlaceholder: "Select State",
+                            citySearchPlaceholder: "City",
+                            countryDropdownLabel: "Country",
+                            stateDropdownLabel: "State",
+                            cityDropdownLabel: "City",
+                            selectedItemStyle: TextStyle(
+                                color: AppColor().lightItemsColor,
+                                fontSize: 13,
+                                fontStyle: FontStyle.normal,
+                                fontFamily: 'GilroyBold',
+                                fontWeight: FontWeight.w400,
+                                height: 1.7),
+                            dropdownHeadingStyle: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'GilroyBold',
+                              fontWeight: FontWeight.w400,
+                            ),
+                            dropdownItemStyle: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 13,
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'GilroyBold',
+                              fontWeight: FontWeight.w400,
+                            ),
+                            dropdownDialogRadius: 10.0,
+                            searchBarRadius: 10.0,
+                            onCountryChanged: (value) {
+                              setState(() {
+                                countryValue = value;
+                                authController.countryController.text =
+                                    countryValue;
+                              });
+                            },
+                            onStateChanged: (value) {
+                              setState(() {
+                                statesValue = value ?? '';
+                                authController.stateController.text =
+                                    statesValue;
+                              });
+                            },
+                            onCityChanged: (value) {
+                              setState(() {
+                                cityValue = value ?? "";
+                              });
+                            },
+                          ),
                           Gap(Get.height * 0.02),
                           CustomText(
                             title: 'Gender',
@@ -594,7 +540,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     authController.genderController.text =
                                         value!;
                                     if (kDebugMode) {
-                                      print(value);
+                                      debugPrint(value);
                                     }
                                   });
                                 },
@@ -718,8 +664,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     // userPreferences[index].isSelected = !userPreferences[index].isSelected!
                                   });
                                   if (kDebugMode) {
-                                    print('item $current');
-                                    print(
+                                    debugPrint('item $current');
+                                    debugPrint(
                                         'Selected Category: ${selectedCategories.length}');
                                   }
                                 },
