@@ -5,8 +5,12 @@ import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/shared_pref.dart';
 import 'package:e_sport/ui/auth/login.dart';
+import 'package:e_sport/ui/home/dashboard.dart';
+import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/util/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
@@ -142,15 +146,12 @@ class AuthRepository extends GetxController {
   final Rx<UserModel?> mUser = Rx(null);
   UserModel? get user => mUser.value;
 
-  // final Rx<Data?> userAddress = Rx(null);
-  // Data? get deliveryAddress => userAddress.value;
   SharedPref? pref;
 
   Rx<String> mToken = Rx("");
   String get token => mToken.value;
 
   RxBool mOnSelect = false.obs;
-  // bool get onSelect => mOnSelect.value;
 
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;
@@ -188,7 +189,7 @@ class AuthRepository extends GetxController {
     }
   }
 
-  Future signUp(UserModel user) async {
+  Future signUp(UserModel user, BuildContext context) async {
     try {
       _signUpStatus(SignUpStatus.loading);
       debugPrint("request json ${user.toJson()}");
@@ -203,27 +204,42 @@ class AuthRepository extends GetxController {
       }
 
       debugPrint("response $json");
-      debugPrint("user id ${json['data']['user_id']}");
 
-      if (json['success'] == true) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         _signUpStatus(SignUpStatus.success);
-
-        Get.snackbar('Success',
-            'Account created successfully, Proceed to validate your account!');
+        clear();
+        mToken(json['tokens']['access']);
+        pref!.saveToken(token);
+        var userModel = UserModel.fromJson(json);
+        mUser(userModel);
+        EasyLoading.showInfo(
+                'Account created successfully, Proceed to validate your account!',
+                duration: const Duration(seconds: 3))
+            .then((value) async {
+          await Future.delayed(const Duration(seconds: 3));
+          Get.off(() => const Dashboard());
+        });
+      } else {
+        _signUpStatus(SignUpStatus.error);
       }
 
       return response.body;
     } catch (error) {
       _signUpStatus(SignUpStatus.error);
-      Get.snackbar(
-          'Error',
-          (error.toString() ==
-                      "Failed host lookup: 'farmersdomain.herokuapp.com'" ||
-                  error.toString() ==
-                      "Failed host lookup: 'staging-farmers-domain-ae54637d7865.herokuapp.com'")
-              ? 'No internet connection!'
-              : error.toString());
-
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: CustomText(
+            title: (error
+                    .toString()
+                    .contains("Failed host lookup: 'esports-ng.vercel.app'"))
+                ? 'No internet connection!'
+                : error.toString(),
+            size: Get.height * 0.02,
+            color: AppColor().primaryWhite,
+            textAlign: TextAlign.start,
+          ),
+        ),
+      );
       debugPrint("Error occurred ${error.toString()}");
     }
   }

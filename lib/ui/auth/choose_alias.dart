@@ -1,15 +1,18 @@
+import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class ChooseAlias extends StatefulWidget {
-  const ChooseAlias({super.key});
+  final UserModel user;
+  const ChooseAlias({super.key, required this.user});
 
   @override
   State<ChooseAlias> createState() => _ChooseAliasState();
@@ -64,24 +67,82 @@ class _ChooseAliasState extends State<ChooseAlias> {
             },
           ),
           Gap(Get.height * 0.25),
-          CustomFillButton(
-            onTap: () =>
-                userCheck == false ? null : Get.off(() => const Dashboard()),
-            height: Get.height * 0.07,
-            buttonText: 'Continue',
-            fontWeight: FontWeight.w600,
-            textSize: Get.height * 0.016,
-            textColor: userCheck == false
-                ? AppColor().bgDark
-                : AppColor().primaryWhite,
-            boarderColor: userCheck == false
-                ? AppColor().bgDark
-                : AppColor().primaryColor,
-            buttonColor: userCheck == false
-                ? AppColor().bgDark
-                : AppColor().primaryColor,
-            isLoading: false,
-          )
+          // CustomFillButton(
+          //   onTap: () {
+          //     widget.user.userName =
+          //         authController.userNameController.text.trim();
+          //     debugPrint('User: ${widget.user.toJson()}');
+          //     if (userCheck == false) {
+          //     } else {
+          //       if (authController.signUpStatus != SignUpStatus.loading) {
+          //         authController.signUp(widget.user);
+          //       }
+          //       // Get.off(() => const Dashboard());
+          //     }
+          //   },
+          //   height: Get.height * 0.07,
+          //   buttonText: 'Continue',
+          //   fontWeight: FontWeight.w600,
+          //   textSize: Get.height * 0.016,
+          //   textColor:
+          //userCheck == false
+          //       ? AppColor().bgDark
+          //       : AppColor().primaryWhite,
+          //   boarderColor: userCheck == false
+          //       ? AppColor().bgDark
+          //       : AppColor().primaryColor,
+          //   buttonColor: userCheck == false
+          //       ? AppColor().bgDark
+          //       : AppColor().primaryColor,
+          //   isLoading: false,
+          // )
+
+          Obx(() {
+            return InkWell(
+              onTap: () {
+                widget.user.userName =
+                    authController.userNameController.text.trim();
+                debugPrint('User: ${widget.user.toJson()}');
+                if (userCheck == false) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: CustomText(
+                        title: 'Enter your username to continue!',
+                        size: Get.height * 0.02,
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  );
+                } else {
+                  if (authController.signUpStatus != SignUpStatus.loading) {
+                    authController.signUp(widget.user, context);
+                  }
+                }
+              },
+              child: Container(
+                height: Get.height * 0.07,
+                width: Get.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: userCheck == false
+                      ? AppColor().bgDark
+                      : AppColor().primaryColor,
+                ),
+                child: (authController.signUpStatus == SignUpStatus.loading)
+                    ? const LoadingWidget()
+                    : Center(
+                        child: CustomText(
+                        title: 'Continue',
+                        color: userCheck == false
+                            ? AppColor().bgDark
+                            : AppColor().primaryWhite,
+                        weight: FontWeight.w600,
+                        size: Get.height * 0.016,
+                      )),
+              ),
+            );
+          }),
         ]),
       )),
     );

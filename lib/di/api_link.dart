@@ -2,8 +2,8 @@ class ApiLink {
   static String domain = "https://esports-ng.vercel.app";
   static String baseurl = "$domain/";
 
-  static String register = "${baseurl}user/register";
-  static String login = "${baseurl}user/login";
+  static String register = "${baseurl}user/register/";
+  static String login = "${baseurl}user/login/";
   static String logout = "${baseurl}user/logout";
   static String validateOtp = "${baseurl}user/otp";
   static String resendOtp = "${baseurl}user/resend-otp";

@@ -124,7 +124,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 }
               });
             } else {
+              setState(() {});
               Get.back();
+              authController.clear();
+              selectedUse.clear();
+              selectedCategories.clear();
+              primaryUseCount = null;
+              current = null;
             }
           },
           icon: Icon(
@@ -477,7 +483,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             searchBarRadius: 10.0,
                             onCountryChanged: (value) {
                               setState(() {
-                                countryValue = value;
+                                countryValue = value.replaceAll(' ', '');
+                                debugPrint('country: $countryValue');
                                 authController.countryController.text =
                                     countryValue;
                               });
@@ -731,35 +738,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       );
                       debugPrint('User: ${user.toJson()}');
-                      if (pageCount <= 2 && _formKey.currentState!.validate()) {
-                        if (authController.countryController.text == '' ||
-                            authController.stateController.text == '') {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: CustomText(
-                                title: 'choose your country/state!',
-                                size: Get.height * 0.02,
-                                color: AppColor().primaryWhite,
-                                textAlign: TextAlign.start,
+
+                      if (pageCount == 0) {
+                        if (_formKey.currentState!.validate()) {
+                          if (authController.countryController.text == '' ||
+                              authController.stateController.text == '') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: CustomText(
+                                  title: 'choose your country/state!',
+                                  size: Get.height * 0.02,
+                                  color: AppColor().primaryWhite,
+                                  textAlign: TextAlign.start,
+                                ),
                               ),
-                            ),
-                          );
-                        } else if (authController.genderController.text == '') {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: CustomText(
-                                title: 'choose your gender!',
-                                size: Get.height * 0.02,
-                                color: AppColor().primaryWhite,
-                                textAlign: TextAlign.start,
+                            );
+                          } else if (authController.genderController.text ==
+                              '') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: CustomText(
+                                  title: 'choose your gender!',
+                                  size: Get.height * 0.02,
+                                  color: AppColor().primaryWhite,
+                                  textAlign: TextAlign.start,
+                                ),
                               ),
-                            ),
-                          );
-                        } else if (authController.dobController.text == '') {
+                            );
+                          } else if (authController.dobController.text == '') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: CustomText(
+                                  title: 'pick your date of birth!',
+                                  size: Get.height * 0.02,
+                                  color: AppColor().primaryWhite,
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            );
+                          } else {
+                            setState(() {
+                              pageCount++;
+                              debugPrint('PageCount: $pageCount');
+                            });
+                          }
+                        }
+                      } else if (pageCount == 1) {
+                        if (selectedUse.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: CustomText(
-                                title: 'pick your date of birth!',
+                                title: 'Select primary use to proceed!',
                                 size: Get.height * 0.02,
                                 color: AppColor().primaryWhite,
                                 textAlign: TextAlign.start,
@@ -771,52 +800,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             pageCount++;
                             debugPrint('PageCount: $pageCount');
                           });
-                          if (pageCount == 1 && selectedUse.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: CustomText(
-                                  title: 'Select primary use to proceed!',
-                                  size: Get.height * 0.02,
-                                  color: AppColor().primaryWhite,
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                            );
-                          } else if (pageCount == 2) {
-                            if (selectedCategories.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: CustomText(
-                                    title:
-                                        'Select at least one category use to proceed!',
-                                    size: Get.height * 0.02,
-                                    color: AppColor().primaryWhite,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              );
-                            } else if (primaryUseCount == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: CustomText(
-                                    title:
-                                        'Agree to the terms and condition to continue!',
-                                    size: Get.height * 0.02,
-                                    color: AppColor().primaryWhite,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              );
-                            } else {
-                              // if (authController.signUpStatus !=
-                              //         SignUpStatus.loading &&
-                              //     _businessFormKey.currentState!.validate()) {
-                              //   authController.signUp(user);
-                              // }
-                              Get.to(() => const ChooseAlias());
-                            }
-                          }
                         }
+                      } else if (pageCount == 2) {
+                        if (selectedCategories.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: CustomText(
+                                title:
+                                    'Select at least one category use to proceed!',
+                                size: Get.height * 0.02,
+                                color: AppColor().primaryWhite,
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          );
+                        } else {
+                          Get.to(() => ChooseAlias(user: user));
+                        }
+                      } else {
+                        Get.to(() => ChooseAlias(user: user));
                       }
                     },
                     buttonText: 'Next',

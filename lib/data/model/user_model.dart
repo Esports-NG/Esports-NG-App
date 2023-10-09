@@ -16,7 +16,7 @@ class UserModel {
   String? password;
   String? password2;
   String purpose;
-  Profile profile;
+  Profile? profile;
   Tokens? tokens;
 
   UserModel({
@@ -31,7 +31,7 @@ class UserModel {
     this.password,
     this.password2,
     required this.purpose,
-    required this.profile,
+    this.profile,
     this.tokens,
   });
 
@@ -59,7 +59,7 @@ class UserModel {
         "gender": gender,
         "d_o_b": dOB,
         "purpose": purpose,
-        "profile": profile.toJson(),
+        "profile": profile!.toJson(),
         "password": password,
         "password2": password2,
       };
