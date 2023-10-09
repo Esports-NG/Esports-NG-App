@@ -104,15 +104,13 @@ class AuthRepository extends GetxController {
   late final stateController = TextEditingController();
   late final genderController = TextEditingController();
   late final dobController = TextEditingController();
+  late final purposeController = TextEditingController();
+  late final gameTypeController = TextEditingController();
+  late final pictureController = TextEditingController();
   late final referralController = TextEditingController();
   late final passwordController = TextEditingController();
-  late final currentPasswordController = TextEditingController();
   late final confirmPasswordController = TextEditingController();
-  late final forgotPassword = TextEditingController();
   late final otpPin = TextEditingController();
-  late final transactionPinController = TextEditingController();
-  late final confirmTransactionPinController = TextEditingController();
-  late final userIdController = TextEditingController();
   DateTime? date;
 
   final _authStatus = AuthStatus.empty.obs;
@@ -286,11 +284,18 @@ class AuthRepository extends GetxController {
   }
 
   void clear() {
+    fullNameController.clear();
+    emailController.clear();
     passwordController.clear();
     confirmPasswordController.clear();
-    currentPasswordController.clear();
-    transactionPinController.clear();
-    confirmTransactionPinController.clear();
+    phoneNoController.clear();
+    countryController.clear();
+    stateController.clear();
+    genderController.clear();
+    dobController.clear();
+    purposeController.clear();
+    gameTypeController.clear();
+    otpPin.clear();
   }
 
   void logout() {

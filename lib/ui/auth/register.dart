@@ -1,3 +1,4 @@
+import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -361,7 +362,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               } else if (!RegExp(
                                       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
                                   .hasMatch(value)) {
-                                return "enter a valid email address";
+                                return "Enter a valid email address";
                               }
                               return null;
                             },
@@ -379,11 +380,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hint: "Password",
                             textEditingController:
                                 authController.passwordController,
+                            obscure: isHiddenPassword,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'password must not be empty';
+                                return 'Password must not be empty';
                               } else if (value.length < 8) {
-                                return 'password must not be less than 8 character';
+                                return 'Password must not be less than 8 character';
                               }
                               return null;
                             },
@@ -412,9 +414,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hint: "phone",
                             textEditingController:
                                 authController.phoneNoController,
+                            keyType: TextInputType.phone,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'phone no must not be empty';
+                                return 'Phone no must not be empty';
                               } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                                 return "Please enter only digits";
                               }
@@ -538,7 +541,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   setState(() {
                                     genderValue = value;
                                     authController.genderController.text =
-                                        value!;
+                                        genderValue ?? '';
                                     if (kDebugMode) {
                                       debugPrint(value);
                                     }
@@ -703,27 +706,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           : Get.height * 0.1),
                   CustomFillButton(
                     onTap: () {
-                      if (pageCount <= 2
-                          //  && _formKey.currentState!.validate()
-                          ) {
-                        if (pageCount == 1 && selectedUse.isEmpty) {
+                      UserModel user = UserModel(
+                        fullName: authController.fullNameController.text.trim(),
+                        email: authController.emailController.text.trim(),
+                        password: authController.passwordController.text.trim(),
+                        password2:
+                            authController.passwordController.text.trim(),
+                        phoneNumber:
+                            authController.phoneNoController.text.trim(),
+                        country: authController.countryController.text.trim(),
+                        state: authController.stateController.text.trim(),
+                        gender: authController.genderController.text.trim(),
+                        dOB: authController.dobController.text.trim(),
+                        purpose: authController.purposeController.text.trim(),
+                        userName: authController.userNameController.text.trim(),
+                        profile: Profile(
+                          gameType:
+                              authController.gameTypeController.text.trim(),
+                          profilePicture:
+                              authController.pictureController.text.trim() == ''
+                                  ? null
+                                  : authController.pictureController.text
+                                      .trim(),
+                        ),
+                      );
+                      debugPrint('User: ${user.toJson()}');
+                      if (pageCount <= 2 && _formKey.currentState!.validate()) {
+                        if (authController.countryController.text == '' ||
+                            authController.stateController.text == '') {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: CustomText(
-                                title: 'Select primary use to proceed!',
+                                title: 'choose your country/state!',
                                 size: Get.height * 0.02,
                                 color: AppColor().primaryWhite,
                                 textAlign: TextAlign.start,
                               ),
                             ),
                           );
-                        } else if (pageCount == 2 &&
-                            selectedCategories.isEmpty) {
+                        } else if (authController.genderController.text == '') {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: CustomText(
-                                title:
-                                    'Select at least one category use to proceed!',
+                                title: 'choose your gender!',
+                                size: Get.height * 0.02,
+                                color: AppColor().primaryWhite,
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          );
+                        } else if (authController.dobController.text == '') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: CustomText(
+                                title: 'pick your date of birth!',
                                 size: Get.height * 0.02,
                                 color: AppColor().primaryWhite,
                                 textAlign: TextAlign.start,
@@ -735,27 +771,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             pageCount++;
                             debugPrint('PageCount: $pageCount');
                           });
-                        }
-                      } else {
-                        if (primaryUseCount == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: CustomText(
-                                title:
-                                    'Agree to the terms and condition to continue!',
-                                size: Get.height * 0.02,
-                                color: AppColor().primaryWhite,
-                                textAlign: TextAlign.start,
+                          if (pageCount == 1 && selectedUse.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: CustomText(
+                                  title: 'Select primary use to proceed!',
+                                  size: Get.height * 0.02,
+                                  color: AppColor().primaryWhite,
+                                  textAlign: TextAlign.start,
+                                ),
                               ),
-                            ),
-                          );
-                        } else {
-                          // if (authController.signUpStatus !=
-                          //         SignUpStatus.loading &&
-                          //     _businessFormKey.currentState!.validate()) {
-                          //   authController.signUp(user);
-                          // }
-                          Get.to(() => const ChooseAlias());
+                            );
+                          } else if (pageCount == 2) {
+                            if (selectedCategories.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: CustomText(
+                                    title:
+                                        'Select at least one category use to proceed!',
+                                    size: Get.height * 0.02,
+                                    color: AppColor().primaryWhite,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                              );
+                            } else if (primaryUseCount == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: CustomText(
+                                    title:
+                                        'Agree to the terms and condition to continue!',
+                                    size: Get.height * 0.02,
+                                    color: AppColor().primaryWhite,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              // if (authController.signUpStatus !=
+                              //         SignUpStatus.loading &&
+                              //     _businessFormKey.currentState!.validate()) {
+                              //   authController.signUp(user);
+                              // }
+                              Get.to(() => const ChooseAlias());
+                            }
+                          }
                         }
                       }
                     },

@@ -13,9 +13,11 @@ class UserModel {
   String state;
   String gender;
   String dOB;
+  String? password;
+  String? password2;
   String purpose;
   Profile profile;
-  Tokens tokens;
+  Tokens? tokens;
 
   UserModel({
     required this.userName,
@@ -26,9 +28,11 @@ class UserModel {
     required this.state,
     required this.gender,
     required this.dOB,
+    this.password,
+    this.password2,
     required this.purpose,
     required this.profile,
-    required this.tokens,
+    this.tokens,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -55,20 +59,23 @@ class UserModel {
         "gender": gender,
         "d_o_b": dOB,
         "purpose": purpose,
+        "profile": profile.toJson(),
+        "password": password,
+        "password2": password2,
       };
 }
 
 class Profile {
-  String gameType;
-  dynamic profilePicture;
+  String? gameType;
+  String? profilePicture;
 
   Profile({
-    required this.gameType,
+    this.gameType,
     required this.profilePicture,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        gameType: json["game_type"],
+        gameType: json["game_type"] ?? '',
         profilePicture: json["profile_picture"],
       );
 
