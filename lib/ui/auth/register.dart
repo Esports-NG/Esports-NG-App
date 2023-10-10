@@ -547,8 +547,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     genderValue = value;
-                                    authController.genderController.text =
-                                        genderValue ?? '';
+                                    if (genderValue == "Male") {
+                                      authController.genderController.text =
+                                          'M';
+                                    } else {
+                                      authController.genderController.text =
+                                          'F';
+                                    }
+
                                     if (kDebugMode) {
                                       debugPrint(value);
                                     }
@@ -626,6 +632,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   selectedUse.removeWhere(
                                       (element) => element.title == item.title);
                                 }
+                                if (selectedUse.isNotEmpty) {
+                                  authController.purposeController.text =
+                                      selectedUse.first.title!;
+                                } else {
+                                  authController.purposeController.text = '';
+                                }
                               });
                             },
                             height: Get.height * 0.06,
@@ -671,13 +683,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           (element) =>
                                               element.title == item.title);
                                     }
-                                    // userPreferences[index].isSelected = !userPreferences[index].isSelected!
+                                    if (selectedCategories.isNotEmpty) {
+                                      authController.gameTypeController.text =
+                                          selectedCategories.first.title!;
+                                    } else {
+                                      authController.gameTypeController.text =
+                                          '';
+                                    }
                                   });
-                                  if (kDebugMode) {
-                                    debugPrint('item $current');
-                                    debugPrint(
-                                        'Selected Category: ${selectedCategories.length}');
-                                  }
                                 },
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 300),
@@ -738,6 +751,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       );
                       debugPrint('User: ${user.toJson()}');
+                      // debugPrint('SelectedUse: ${electedUse.toJson()}');
 
                       if (pageCount == 0) {
                         if (_formKey.currentState!.validate()) {

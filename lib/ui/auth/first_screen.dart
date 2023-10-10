@@ -1,3 +1,4 @@
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
@@ -16,6 +17,7 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
+  final authController = Get.put(AuthRepository());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +62,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     fontWeight: FontWeight.w600,
                     textSize: Get.height * 0.018,
                     onTap: () {
+                      authController.pref!.setFirstTimeOpen(false);
                       Get.to(() => const RegisterScreen());
                     },
                     isLoading: false,
@@ -73,6 +76,7 @@ class _FirstScreenState extends State<FirstScreen> {
                         AppColor().primaryBackGroundColor.withOpacity(0.7),
                     textSize: Get.height * 0.018,
                     onTap: () {
+                      authController.pref!.setFirstTimeOpen(false);
                       Get.to(() => const LoginScreen());
                     },
                     isLoading: false,
@@ -105,7 +109,18 @@ class _FirstScreenState extends State<FirstScreen> {
                   ),
                   Gap(Get.height * 0.05),
                   CustomFillButton(
-                    onTap: () {},
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: CustomText(
+                            title: 'Coming soon!',
+                            size: Get.height * 0.02,
+                            color: AppColor().primaryWhite,
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      );
+                    },
                     buttonText: '',
                     textColor: AppColor().primaryColor,
                     boarderColor: AppColor().primaryWhite,

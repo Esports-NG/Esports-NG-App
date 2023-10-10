@@ -199,19 +199,25 @@ class AuthRepository extends GetxController {
             "Content-Type": "application/json",
           });
       var json = jsonDecode(response.body);
-      if (json['success'] == false) {
-        throw (json['message']);
+      if (response.statusCode != 201) {
+        throw (json['profile'] != null
+            ? json['profile'].toString().replaceAll('{', '').replaceAll('}', '')
+            : json.toString().replaceAll('{', '').replaceAll('}', ''));
       }
 
       debugPrint("response $json");
+      debugPrint(response.body);
+      debugPrint(response.statusCode.toString());
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 201) {
         _signUpStatus(SignUpStatus.success);
         clear();
         mToken(json['tokens']['access']);
         pref!.saveToken(token);
         var userModel = UserModel.fromJson(json);
         mUser(userModel);
+        pref!.setUser(userModel);
+        _authStatus(AuthStatus.authenticated);
         EasyLoading.showInfo(
                 'Account created successfully, Proceed to validate your account!',
                 duration: const Duration(seconds: 3))
@@ -229,9 +235,9 @@ class AuthRepository extends GetxController {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: CustomText(
-            title: (error
-                    .toString()
-                    .contains("Failed host lookup: 'esports-ng.vercel.app'"))
+            title: (error.toString().contains(
+                        "Failed host lookup: 'esports-ng.vercel.app'") ||
+                    error.toString().contains("Network is unreachable"))
                 ? 'No internet connection!'
                 : error.toString(),
             size: Get.height * 0.02,

@@ -45,7 +45,6 @@ class SharedPref {
     }
     if (user != null && user.isNotEmpty) {
       var json = jsonDecode(user);
-
       UserModel userValue = UserModel.fromJson(json);
       return userValue;
     } else {

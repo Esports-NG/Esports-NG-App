@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/auth/login.dart';
 import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  // final authController = Get.put(AuthRepository());
+  final authController = Get.put(AuthRepository());
   Timer? timer;
   bool displaySwitch = true;
 
@@ -39,14 +41,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   route() async {
-    // if (authController.authStatus == AuthStatus.isFirstTime) {
-    //   Get.off(() => const FirstScreen());
-    // } else if (authController.authStatus == AuthStatus.authenticated) {
-    //   Get.off(() => const Dashboard());
-    // } else {
-    //   Get.off(() => const FirstScreen());
-    // }
-    Get.off(() => const FirstScreen());
+    if (authController.authStatus == AuthStatus.isFirstTime) {
+      Get.off(() => const FirstScreen());
+    } else if (authController.authStatus == AuthStatus.authenticated) {
+      Get.off(() => const Dashboard());
+    } else {
+      Get.off(() => const LoginScreen());
+    }
+    
   }
 
   @override

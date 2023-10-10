@@ -46,7 +46,7 @@ class UserModel {
         dOB: json["d_o_b"],
         purpose: json["purpose"],
         profile: Profile.fromJson(json["profile"]),
-        tokens: Tokens.fromJson(json["tokens"]),
+        tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -60,6 +60,7 @@ class UserModel {
         "d_o_b": dOB,
         "purpose": purpose,
         "profile": profile!.toJson(),
+        "tokens": tokens!.toJson(),
         "password": password,
         "password2": password2,
       };
@@ -86,17 +87,17 @@ class Profile {
 }
 
 class Tokens {
-  String refresh;
-  String access;
+  String? refresh;
+  String? access;
 
   Tokens({
-    required this.refresh,
-    required this.access,
+    this.refresh,
+    this.access,
   });
 
   factory Tokens.fromJson(Map<String, dynamic> json) => Tokens(
-        refresh: json["refresh"],
-        access: json["access"],
+        refresh: json["refresh"] ?? '',
+        access: json["access"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
