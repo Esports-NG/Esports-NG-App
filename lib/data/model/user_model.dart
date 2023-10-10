@@ -46,7 +46,7 @@ class UserModel {
         dOB: json["d_o_b"],
         purpose: json["purpose"],
         profile: Profile.fromJson(json["profile"]),
-        tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
+        // tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -60,7 +60,7 @@ class UserModel {
         "d_o_b": dOB,
         "purpose": purpose,
         "profile": profile!.toJson(),
-        "tokens": tokens!.toJson(),
+        // "tokens": tokens!.toJson()??'',
         "password": password,
         "password2": password2,
       };

@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.all(Get.height * 0.02),
         child: Column(
           children: [
-            Gap(Get.height * 0.06),
+            Gap(Get.height * 0.05),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

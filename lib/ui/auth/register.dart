@@ -129,8 +129,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               authController.clear();
               selectedUse.clear();
               selectedCategories.clear();
-              primaryUseCount = null;
-              current = null;
+              // primaryUseCount = null;
+              // current = null;
             }
           },
           icon: Icon(

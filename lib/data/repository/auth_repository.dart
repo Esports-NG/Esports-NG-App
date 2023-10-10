@@ -211,19 +211,13 @@ class AuthRepository extends GetxController {
 
       if (response.statusCode == 201) {
         _signUpStatus(SignUpStatus.success);
-        clear();
-        mToken(json['tokens']['access']);
-        pref!.saveToken(token);
-        var userModel = UserModel.fromJson(json);
-        mUser(userModel);
-        pref!.setUser(userModel);
-        _authStatus(AuthStatus.authenticated);
+
         EasyLoading.showInfo(
                 'Account created successfully, Proceed to validate your account!',
                 duration: const Duration(seconds: 3))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 3));
-          Get.off(() => const Dashboard());
+          Get.off(() => const LoginScreen());
         });
       } else {
         _signUpStatus(SignUpStatus.error);
@@ -267,27 +261,28 @@ class AuthRepository extends GetxController {
             "password": passwordController.text.trim(),
           }));
 
-      debugPrint(response.body);
+      debugPrint(response.statusCode.toString() + response.body);
 
       var json = jsonDecode(response.body);
-      if (json['errors'] != null) {
-        throw (json['message']);
+      if (response.statusCode != 201) {
+        throw (json['profile'] != null
+            ? json['profile'].toString().replaceAll('{', '').replaceAll('}', '')
+            : json.toString().replaceAll('{', '').replaceAll('}', ''));
       }
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         _signInStatus(SignInStatus.success);
         clear();
-        mToken(json['access_token']);
+        mToken(json['tokens']['access']);
         pref!.saveToken(token);
-      } else if (response.statusCode == 403) {
-        _signInStatus(SignInStatus.notVerified);
-        clear();
-        Get.snackbar('Alert', 'Please verify your account in order to proceed');
-        // await resendOTP(id: json['data']['user_id']);
-        // Get.off(() => OTPVerification(
-        //       title: 'Account',
-        //       userId: json['data']['user_id'],
-        //     ));
+        var userModel = UserModel.fromJson(json);
+        mUser(userModel);
+        pref!.setUser(userModel);
+        _authStatus(AuthStatus.authenticated);
+        EasyLoading.show(status: 'Loading...');
+
+        await Future.delayed(const Duration(seconds: 3));
+        Get.off(() => const Dashboard());
       }
       return response.body;
     } catch (error) {
