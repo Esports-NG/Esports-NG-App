@@ -59,6 +59,10 @@ flutter:
       fonts:
         - asset: assets/font/Gilroy-Light.ttf
 
+    - family: GilroySemiBold
+      fonts:
+        - asset: assets/font/Gilroy-SemiBold.ttf
+
     - family: GilroyBold
       fonts:
         - asset: assets/font/Gilroy-Bold.ttf

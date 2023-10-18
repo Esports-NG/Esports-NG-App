@@ -11,14 +11,13 @@ var categoryItem = [
 
 var accountItem = [
   CategoryItem(title: 'Posts'),
-  CategoryItem(title: 'Personal Info'),
   CategoryItem(title: 'Player Profile'),
-  CategoryItem(title: 'Teams Owned'),
-  CategoryItem(title: 'Communities Owned'),
-  CategoryItem(title: 'Events Owned'),
+  CategoryItem(title: 'Teams'),
+  CategoryItem(title: 'Communities'),
+  CategoryItem(title: 'Events'),
   CategoryItem(title: 'Wallet'),
   CategoryItem(title: 'Referrals'),
-  CategoryItem(title: 'Ads'),
+  CategoryItem(title: 'Logout'),
 ];
 
 var productItem = [

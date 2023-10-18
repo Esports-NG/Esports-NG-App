@@ -120,61 +120,60 @@ class _AccountPageState extends State<AccountPage> {
               color: AppColor().primaryWhite,
             ),
             Gap(Get.height * 0.04),
-            Stack(
-              children: [
-                Divider(
-                  color: AppColor().lightItemsColor.withOpacity(0.5),
-                  height: Get.height * 0.06,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: ListView.separated(
+                physics: const ScrollPhysics(),
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: accountItem.length,
+                separatorBuilder: (context, index) => Divider(
+                  color: AppColor().lightItemsColor.withOpacity(0.2),
+                  height: 0,
                   thickness: 0.5,
                 ),
-                SizedBox(
-                  height: Get.height * 0.035,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: false,
-                    itemCount: accountItem.length,
-                    separatorBuilder: (context, index) =>
-                        Gap(Get.height * 0.02),
-                    itemBuilder: (context, index) {
-                      var item = accountItem[index];
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            accountTab = index;
-                          });
-                        },
-                        child: Center(
-                          child: Column(
-                            children: [
-                              CustomText(
-                                title: item.title,
-                                size: 13,
-                                fontFamily: 'GilroyRegular',
-                                weight: accountTab == index
-                                    ? FontWeight.w600
-                                    : FontWeight.w100,
-                                textAlign: TextAlign.start,
-                                color: accountTab == index
-                                    ? AppColor().primaryColor
-                                    : AppColor().lightItemsColor,
-                              ),
-                              Gap(Get.height * 0.01),
-                              Container(
-                                width: Get.height * 0.1,
-                                height: 1,
-                                color: accountTab == index
-                                    ? AppColor().primaryColor
-                                    : AppColor().primaryBackGroundColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                itemBuilder: (context, index) {
+                  var item = accountItem[index];
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        accountTab = index;
+                      });
                     },
-                  ),
-                ),
-              ],
+                    child: Container(
+                      height: Get.height * 0.07,
+                      padding: EdgeInsets.all(Get.height * 0.02),
+                      decoration: BoxDecoration(
+                          color: accountTab == index
+                              ? AppColor().primaryColor
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomText(
+                            title: item.title,
+                            size: Get.height * 0.017,
+                            fontFamily: 'GilroySemiBold',
+                            weight: FontWeight.w400,
+                            textAlign: TextAlign.start,
+                            color: accountTab == index
+                                ? AppColor().primaryWhite
+                                : AppColor().lightItemsColor,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: accountTab == index
+                                ? AppColor().primaryWhite
+                                : AppColor().lightItemsColor,
+                            size: Get.height * 0.02,
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
