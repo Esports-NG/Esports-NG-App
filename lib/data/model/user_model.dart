@@ -1,9 +1,3 @@
-import 'dart:convert';
-
-UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
-
-String userModelToJson(UserModel data) => json.encode(data.toJson());
-
 class UserModel {
   String userName;
   String fullName;
@@ -15,7 +9,7 @@ class UserModel {
   String dOB;
   String? password;
   String? password2;
-  String purpose;
+  List<String>? iPurpose;
   Profile? profile;
   Tokens? tokens;
 
@@ -30,7 +24,7 @@ class UserModel {
     required this.dOB,
     this.password,
     this.password2,
-    required this.purpose,
+    required this.iPurpose,
     this.profile,
     this.tokens,
   });
@@ -44,9 +38,11 @@ class UserModel {
         state: json["state"],
         gender: json["gender"],
         dOB: json["d_o_b"],
-        purpose: json["purpose"],
-        profile: Profile.fromJson(json["profile"]),
-        // tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
+        iPurpose: json["ipurpose"] == null
+            ? []
+            : List<String>.from(json["ipurpose"]!.map((x) => x)),
+        profile:
+            json["profile"] == null ? null : Profile.fromJson(json["profile"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,30 +54,34 @@ class UserModel {
         "state": state,
         "gender": gender,
         "d_o_b": dOB,
-        "purpose": purpose,
+        "ipurpose":
+            iPurpose == null ? [] : List<dynamic>.from(iPurpose!.map((x) => x)),
         "profile": profile!.toJson(),
-        // "tokens": tokens!.toJson()??'',
         "password": password,
         "password2": password2,
       };
 }
 
 class Profile {
-  String? gameType;
+  List<String>? iGameType;
   String? profilePicture;
 
   Profile({
-    this.gameType,
+    this.iGameType,
     required this.profilePicture,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        gameType: json["game_type"] ?? '',
+        iGameType: json["igame_type"] == null
+            ? []
+            : List<String>.from(json["igame_type"]!.map((x) => x)),
         profilePicture: json["profile_picture"],
       );
 
   Map<String, dynamic> toJson() => {
-        "game_type": gameType,
+        "igame_type": iGameType == null
+            ? []
+            : List<dynamic>.from(iGameType!.map((x) => x)),
         "profile_picture": profilePicture,
       };
 }

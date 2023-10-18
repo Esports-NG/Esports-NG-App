@@ -199,10 +199,23 @@ class AuthRepository extends GetxController {
             "Content-Type": "application/json",
           });
       var json = jsonDecode(response.body);
-      if (response.statusCode != 201) {
+      if (response.statusCode == 500) {
+        throw 'Internal server error, contact admin!';
+      } else if (response.statusCode != 500 && response.statusCode != 201) {
         throw (json['profile'] != null
-            ? json['profile'].toString().replaceAll('{', '').replaceAll('}', '')
-            : json.toString().replaceAll('{', '').replaceAll('}', ''));
+            ? json['profile'][0]
+            : json['phone_number'] != null
+                ? json['phone_number'][0]
+                : json['user_name'] != null
+                    ? json['user_name'][0]
+                    : json['full_name'] != null
+                        ? json['full_name'][0]
+                        : json['email'] != null
+                            ? json['email'][0]
+                            : json
+                                .toString()
+                                .replaceAll('{', '')
+                                .replaceAll('}', ''));
       }
 
       debugPrint("response $json");
@@ -211,40 +224,25 @@ class AuthRepository extends GetxController {
 
       if (response.statusCode == 201) {
         _signUpStatus(SignUpStatus.success);
-
         EasyLoading.showInfo(
-                'Account created successfully, Proceed to validate your account!',
+                'Account created successfully!\nConfirmation email sent, Please check your email for further instructions!',
                 duration: const Duration(seconds: 3))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 3));
-          Get.off(() => const LoginScreen());
+          Get.offAll(() => const LoginScreen());
+          clear();
         });
-      } else {
-        _signUpStatus(SignUpStatus.error);
       }
 
       return response.body;
     } catch (error) {
       _signUpStatus(SignUpStatus.error);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: CustomText(
-            title: (error.toString().contains(
-                        "Failed host lookup: 'esports-ng.vercel.app'") ||
-                    error.toString().contains("Network is unreachable"))
-                ? 'No internet connection!'
-                : error.toString(),
-            size: Get.height * 0.02,
-            color: AppColor().primaryWhite,
-            textAlign: TextAlign.start,
-          ),
-        ),
-      );
       debugPrint("Error occurred ${error.toString()}");
+      noInternetError(context, error);
     }
   }
 
-  Future login() async {
+  Future login(BuildContext context) async {
     _signInStatus(SignInStatus.loading);
     try {
       debugPrint('login here...');
@@ -287,17 +285,25 @@ class AuthRepository extends GetxController {
       return response.body;
     } catch (error) {
       _signInStatus(SignInStatus.error);
-      Get.snackbar(
-          'Error',
-          (error.toString() ==
-                      "Failed host lookup: 'farmersdomain.herokuapp.com'" ||
-                  error.toString() ==
-                      "Failed host lookup: 'staging-farmers-domain-ae54637d7865.herokuapp.com'")
-              ? 'No internet connection!'
-              : error.toString());
-
       debugPrint("error ${error.toString()}");
+      noInternetError(context, error);
     }
+  }
+
+  void noInternetError(BuildContext context, var error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: CustomText(
+          title: (error.toString().contains("esports-ng.vercel.app") ||
+                  error.toString().contains("Network is unreachable"))
+              ? 'No internet connection!'
+              : error.toString(),
+          size: Get.height * 0.02,
+          color: AppColor().primaryWhite,
+          textAlign: TextAlign.start,
+        ),
+      ),
+    );
   }
 
   void clear() {

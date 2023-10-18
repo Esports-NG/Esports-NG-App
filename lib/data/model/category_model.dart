@@ -9,9 +9,16 @@ var categoryItem = [
   CategoryItem(title: 'Following'),
 ];
 
-var availabilityItem = [
-  CategoryItem(title: 'Out of Stock'),
-  CategoryItem(title: 'In Stock'),
+var accountItem = [
+  CategoryItem(title: 'Posts'),
+  CategoryItem(title: 'Personal Info'),
+  CategoryItem(title: 'Player Profile'),
+  CategoryItem(title: 'Teams Owned'),
+  CategoryItem(title: 'Communities Owned'),
+  CategoryItem(title: 'Events Owned'),
+  CategoryItem(title: 'Wallet'),
+  CategoryItem(title: 'Referrals'),
+  CategoryItem(title: 'Ads'),
 ];
 
 var productItem = [

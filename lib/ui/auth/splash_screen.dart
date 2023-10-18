@@ -48,7 +48,6 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Get.off(() => const LoginScreen());
     }
-    
   }
 
   @override

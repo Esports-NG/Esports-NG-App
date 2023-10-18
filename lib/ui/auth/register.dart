@@ -738,11 +738,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         state: authController.stateController.text.trim(),
                         gender: authController.genderController.text.trim(),
                         dOB: authController.dobController.text.trim(),
-                        purpose: authController.purposeController.text.trim(),
+                        iPurpose: selectedUse.map((e) => e.title!).toList(),
                         userName: authController.userNameController.text.trim(),
                         profile: Profile(
-                          gameType:
-                              authController.gameTypeController.text.trim(),
+                          iGameType:
+                              selectedCategories.map((e) => e.title!).toList(),
                           profilePicture:
                               authController.pictureController.text.trim() == ''
                                   ? null
