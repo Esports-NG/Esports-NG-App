@@ -3,7 +3,7 @@
 import 'package:e_sport/ui/widget/custom_navbar.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'account/account.dart';
+import '../account/account.dart';
 import 'community.dart';
 import 'events.dart';
 import 'home.dart';

@@ -1,5 +1,5 @@
 import 'package:e_sport/data/model/games_played_model.dart';
-import 'package:e_sport/ui/home/games_played/games_played_item.dart';
+import 'package:e_sport/ui/account/games_played/games_played_item.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
