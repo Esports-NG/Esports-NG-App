@@ -483,7 +483,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             searchBarRadius: 10.0,
                             onCountryChanged: (value) {
                               setState(() {
-                                countryValue = value.replaceAll(' ', '');
+                                countryValue = value.replaceAll(
+                                    RegExp(r'[^A-Za-z\-\`\s]'), '');
                                 debugPrint('country: $countryValue');
                                 authController.countryController.text =
                                     countryValue;
@@ -751,7 +752,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       );
                       debugPrint('User: ${user.toJson()}');
-                      // debugPrint('SelectedUse: ${electedUse.toJson()}');
 
                       if (pageCount == 0) {
                         if (_formKey.currentState!.validate()) {

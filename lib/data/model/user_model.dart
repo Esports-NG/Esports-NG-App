@@ -3,8 +3,8 @@ class UserModel {
   String fullName;
   String email;
   String phoneNumber;
-  String country;
-  String state;
+  String? country;
+  String? state;
   String gender;
   String dOB;
   String? password;
@@ -18,8 +18,8 @@ class UserModel {
     required this.fullName,
     required this.email,
     required this.phoneNumber,
-    required this.country,
-    required this.state,
+    this.country,
+    this.state,
     required this.gender,
     required this.dOB,
     this.password,
@@ -34,8 +34,8 @@ class UserModel {
         fullName: json["full_name"],
         email: json["email"],
         phoneNumber: json["phone_number"],
-        country: json["country"],
-        state: json["state"],
+        country: json["country"] ?? '',
+        state: json["state"] ?? '',
         gender: json["gender"],
         dOB: json["d_o_b"],
         iPurpose: json["ipurpose"] == null
@@ -50,8 +50,8 @@ class UserModel {
         "full_name": fullName,
         "email": email,
         "phone_number": phoneNumber,
-        "country": country,
-        "state": state,
+        "country": country ?? '',
+        "state": state ?? '',
         "gender": gender,
         "d_o_b": dOB,
         "ipurpose":

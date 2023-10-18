@@ -192,7 +192,6 @@ class AuthRepository extends GetxController {
   Future signUp(UserModel user, BuildContext context) async {
     try {
       _signUpStatus(SignUpStatus.loading);
-      debugPrint("request json ${user.toJson()}");
       var response = await http.post(Uri.parse(ApiLink.register),
           body: jsonEncode(user.toJson()),
           headers: {
@@ -297,7 +296,9 @@ class AuthRepository extends GetxController {
           title: (error.toString().contains("esports-ng.vercel.app") ||
                   error.toString().contains("Network is unreachable"))
               ? 'No internet connection!'
-              : error.toString(),
+              : (error.toString().contains("FormatException"))
+                  ? 'An error occurred, try again!'
+                  : error.toString(),
           size: Get.height * 0.02,
           color: AppColor().primaryWhite,
           textAlign: TextAlign.start,

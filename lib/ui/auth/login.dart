@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Gap(Get.height * 0.01),
                 CustomTextField(
-                  hint: "johndoe@gmail.com",
+                  hint: "johndoe@mail.com",
                   textEditingController: authController.emailController,
                   validate: (value) {
                     if (value!.isEmpty) {

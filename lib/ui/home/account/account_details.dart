@@ -2,6 +2,7 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/notification_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/home/components/games_played_widget.dart';
 import 'package:e_sport/ui/home/components/post_widget.dart';
 import 'package:e_sport/ui/home/post/post_details.dart';
 import 'package:e_sport/ui/home/post/post_item.dart';
@@ -54,8 +55,9 @@ class _AccountDetailsState extends State<AccountDetails> {
             children: [
               if (widget.title == 'Posts') ...[
                 const PostWidget()
-              ] else if (widget.title == 'Player Profile')
-                ...[]
+              ] else if (widget.title == 'Player Profile') ...[
+                const GamesPlayedWidget()
+              ]
             ],
           ),
         ),
