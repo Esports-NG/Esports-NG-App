@@ -5,6 +5,7 @@ class AppColor {
   Color primaryLiteColor = const Color(0xff9B9CFF);
   Color primaryLightColor = const Color(0xff091932);
   Color secondaryColor = const Color(0xffD6E8CE);
+  Color secondaryGreenColor = const Color(0xff5CFF9D);
   Color primaryDark = const Color(0xff1E232C);
   Color primaryBgColor = const Color(0xff111827);
   Color primaryBackGroundColor = const Color(0xff060D18);

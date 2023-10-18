@@ -2,12 +2,14 @@ class AccountEventsModel {
   final String? image;
   final String? game, tName, tType;
   final int? entry, prizePool;
+  final List? genre;
 
   AccountEventsModel({
     this.image,
     this.game,
     this.tName,
     this.tType,
+    this.genre,
     this.entry,
     this.prizePool,
   });
@@ -19,6 +21,7 @@ var accountEventItem = [
     game: 'Mortal Kombat',
     tName: 'World Champions Cup',
     tType: 'Teams',
+    genre: ['Ranked', 'Ongoing Registration'],
     entry: 2000,
     prizePool: 200000,
   ),
@@ -27,6 +30,7 @@ var accountEventItem = [
     game: 'Mortal Kombat',
     tName: 'World Champions Cup',
     tType: 'Teams',
+    genre: ['Ranked', 'Ongoing Registration'],
     entry: 2000,
     prizePool: 200000,
   ),
