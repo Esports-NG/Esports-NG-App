@@ -1,5 +1,5 @@
 import 'package:e_sport/data/model/category_model.dart';
-import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/home/components/post_widget.dart';
 import 'package:e_sport/ui/messages/messages.dart';
 import 'package:e_sport/ui/notification/notification.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'post/post_details.dart';
-import 'post/post_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -109,79 +107,60 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Gap(Get.height * 0.025),
-            SizedBox(
-              height: Get.height * 0.045,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                physics: const ScrollPhysics(),
-                shrinkWrap: false,
-                itemCount: categoryItem.length,
-                separatorBuilder: (context, index) => Gap(Get.height * 0.03),
-                itemBuilder: (context, index) {
-                  var item = categoryItem[index];
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        categoryType = index;
-                      });
-                    },
-                    child: Center(
-                      child: Column(
-                        children: [
-                          CustomText(
-                            title: item.title,
-                            size: 13,
-                            fontFamily: categoryType == index
-                                ? 'GilroyBold'
-                                : 'GilroyRegular',
-                            weight: FontWeight.w400,
-                            textAlign: TextAlign.start,
-                            color: categoryType == index
-                                ? AppColor().primaryColor
-                                : AppColor().lightItemsColor,
-                          ),
-                          Gap(Get.height * 0.01),
-                          Container(
-                            width: Get.height * 0.1,
-                            height: 1.5,
-                            color: categoryType == index
-                                ? AppColor().primaryColor
-                                : AppColor().primaryBackGroundColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            categoryWidget(),
             Gap(Get.height * 0.02),
-            categoryType == 0
-                ? ListView.separated(
-                    padding: EdgeInsets.zero,
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: postItem.length,
-                    separatorBuilder: (context, index) =>
-                        Gap(Get.height * 0.02),
-                    itemBuilder: (context, index) {
-                      var item = postItem[index];
-                      return InkWell(
-                        onTap: () {
-                          Get.to(
-                            () => PostDetails(
-                              item: item,
-                            ),
-                          );
-                        },
-                        child: PostItem(item: item),
-                      );
-                    },
-                  )
-                : Container(),
+            categoryType == 0 ? const PostWidget() : Container(),
           ],
         ),
       )),
+    );
+  }
+
+  SizedBox categoryWidget() {
+    return SizedBox(
+      height: Get.height * 0.045,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: const ScrollPhysics(),
+        shrinkWrap: false,
+        itemCount: categoryItem.length,
+        separatorBuilder: (context, index) => Gap(Get.height * 0.03),
+        itemBuilder: (context, index) {
+          var item = categoryItem[index];
+          return InkWell(
+            onTap: () {
+              setState(() {
+                categoryType = index;
+              });
+            },
+            child: Center(
+              child: Column(
+                children: [
+                  CustomText(
+                    title: item.title,
+                    size: 13,
+                    fontFamily:
+                        categoryType == index ? 'GilroyBold' : 'GilroyRegular',
+                    weight: FontWeight.w400,
+                    textAlign: TextAlign.start,
+                    color: categoryType == index
+                        ? AppColor().primaryColor
+                        : AppColor().lightItemsColor,
+                  ),
+                  Gap(Get.height * 0.01),
+                  Container(
+                    width: Get.height * 0.1,
+                    height: 1.5,
+                    color: categoryType == index
+                        ? AppColor().primaryColor
+                        : AppColor().primaryBackGroundColor,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

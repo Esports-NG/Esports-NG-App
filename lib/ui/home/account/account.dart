@@ -7,44 +7,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+import 'account_details.dart';
+
+class Account extends StatefulWidget {
+  const Account({super.key});
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  State<Account> createState() => _AccountState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _AccountState extends State<Account> {
   final authController = Get.put(AuthRepository());
   int? accountTab = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor().primaryBackGroundColor,
-      // appBar: PreferredSize(
-      //   preferredSize: Size.fromHeight(Get.height * 0.06),
-      //   child: Container(
-      //     height: Get.height * 0.15,
-      //     decoration: const BoxDecoration(
-      //       image: DecorationImage(
-      //           image: AssetImage('assets/images/png/account_header.png'),
-      //           opacity: 0.2),
-      //     ),
-      //     child: Stack(
-      //       children: [
-      //         IconButton(
-      //           padding: EdgeInsets.zero,
-      //           constraints: const BoxConstraints(),
-      //           onPressed: () => authController.logout(),
-      //           icon: Icon(
-      //             Icons.settings,
-      //             color: AppColor().primaryWhite,
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -138,6 +116,9 @@ class _AccountPageState extends State<AccountPage> {
                     onTap: () {
                       setState(() {
                         accountTab = index;
+                        Get.to(() => AccountDetails(
+                              title: item.title,
+                            ));
                       });
                     },
                     child: Container(
@@ -157,9 +138,11 @@ class _AccountPageState extends State<AccountPage> {
                             fontFamily: 'GilroySemiBold',
                             weight: FontWeight.w400,
                             textAlign: TextAlign.start,
-                            color: accountTab == index
-                                ? AppColor().primaryWhite
-                                : AppColor().lightItemsColor,
+                            color: item.title == 'Logout'
+                                ? AppColor().primaryRed
+                                : accountTab == index
+                                    ? AppColor().primaryWhite
+                                    : AppColor().lightItemsColor,
                           ),
                           Icon(
                             Icons.arrow_forward_ios,
@@ -175,6 +158,7 @@ class _AccountPageState extends State<AccountPage> {
                 },
               ),
             ),
+            Gap(Get.height * 0.04),
           ],
         ),
       ),

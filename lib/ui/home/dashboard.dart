@@ -3,7 +3,7 @@
 import 'package:e_sport/ui/widget/custom_navbar.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'account.dart';
+import 'account/account.dart';
 import 'community.dart';
 import 'events.dart';
 import 'home.dart';
@@ -21,7 +21,7 @@ class _DashboardState extends State<Dashboard> {
     const HomePage(),
     const EventsPage(),
     const CommunityPage(),
-    const AccountPage(),
+    const Account(),
   ];
 
   @override
