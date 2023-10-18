@@ -1,5 +1,4 @@
-import 'package:e_sport/data/model/games_played_model.dart';
-import 'package:e_sport/data/model/teams_model.dart';
+import 'package:e_sport/data/model/account_teams_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class AccountTeamsItem extends StatelessWidget {
-  final TeamsModel item;
+  final AccountTeamsModel item;
   const AccountTeamsItem({super.key, required this.item});
 
   @override

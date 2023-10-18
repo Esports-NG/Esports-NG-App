@@ -1,8 +1,8 @@
-class TeamsModel {
+class AccountTeamsModel {
   final String? image;
   final String? name, members, details;
 
-  TeamsModel({
+  AccountTeamsModel({
     this.image,
     this.name,
     this.members,
@@ -11,21 +11,21 @@ class TeamsModel {
 }
 
 var accountTeamItem = [
-  TeamsModel(
+  AccountTeamsModel(
     image: 'assets/images/png/teamPhoto.png',
     name: 'AOT Team Levi ',
     members: '2,568 members',
     details:
         'If you are a fan of Eren, you are an enemy and we do not want you here.',
   ),
-  TeamsModel(
+  AccountTeamsModel(
     image: 'assets/images/png/teamPhoto.png',
     name: 'AOT Team Levi ',
     members: '2,568 members',
     details:
         'If you are a fan of Eren, you are an enemy and we do not want you here.',
   ),
-  TeamsModel(
+  AccountTeamsModel(
     image: 'assets/images/png/teamPhoto.png',
     name: 'AOT Team Levi ',
     members: '2,568 members',

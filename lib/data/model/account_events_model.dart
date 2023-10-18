@@ -1,9 +1,9 @@
-class EventsModel {
+class AccountEventsModel {
   final String? image;
   final String? game, tName, tType;
   final int? entry, prizePool;
 
-  EventsModel({
+  AccountEventsModel({
     this.image,
     this.game,
     this.tName,
@@ -13,8 +13,8 @@ class EventsModel {
   });
 }
 
-var accountTeamItem = [
-  EventsModel(
+var accountEventItem = [
+  AccountEventsModel(
     image: 'assets/images/png/postImage5.png',
     game: 'Mortal Kombat',
     tName: 'World Champions Cup',
@@ -22,7 +22,7 @@ var accountTeamItem = [
     entry: 2000,
     prizePool: 200000,
   ),
-  EventsModel(
+  AccountEventsModel(
     image: 'assets/images/png/postImage5.png',
     game: 'Mortal Kombat',
     tName: 'World Champions Cup',

@@ -1,11 +1,11 @@
-import 'package:e_sport/data/model/account_teams_model.dart';
-import 'package:e_sport/ui/account/account_teams/account_teams_item.dart';
+import 'package:e_sport/data/model/account_events_model.dart';
+import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class AccountTeamsWidget extends StatelessWidget {
-  const AccountTeamsWidget({
+class AccountEventsWidget extends StatelessWidget {
+  const AccountEventsWidget({
     super.key,
   });
 
@@ -15,10 +15,10 @@ class AccountTeamsWidget extends StatelessWidget {
       padding: EdgeInsets.zero,
       physics: const ScrollPhysics(),
       shrinkWrap: true,
-      itemCount: accountTeamItem.length,
-      separatorBuilder: (context, index) => Gap(Get.height * 0.0),
+      itemCount: accountEventItem.length,
+      separatorBuilder: (context, index) => Gap(Get.height * 0.02),
       itemBuilder: (context, index) {
-        var item = accountTeamItem[index];
+        var item = accountEventItem[index];
         return InkWell(
           onTap: () {
             // Get.to(
@@ -27,7 +27,7 @@ class AccountTeamsWidget extends StatelessWidget {
             //   ),
             // );
           },
-          child: AccountTeamsItem(item: item),
+          child: AccountEventsItem(item: item),
         );
       },
     );
