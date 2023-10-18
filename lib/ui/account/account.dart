@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/auth/login.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -116,9 +117,13 @@ class _AccountState extends State<Account> {
                     onTap: () {
                       setState(() {
                         accountTab = index;
-                        Get.to(() => AccountDetails(
-                              title: item.title,
-                            ));
+                        if (item.title == 'Logout') {
+                          Get.off(() => const LoginScreen());
+                        } else {
+                          Get.to(() => AccountDetails(
+                                title: item.title,
+                              ));
+                        }
                       });
                     },
                     child: Container(

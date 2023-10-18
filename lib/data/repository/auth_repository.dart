@@ -211,10 +211,12 @@ class AuthRepository extends GetxController {
                         ? json['full_name'][0]
                         : json['email'] != null
                             ? json['email'][0]
-                            : json
-                                .toString()
-                                .replaceAll('{', '')
-                                .replaceAll('}', ''));
+                            : json['password'] != null
+                                ? json['password'][0]
+                                : json
+                                    .toString()
+                                    .replaceAll('{', '')
+                                    .replaceAll('}', ''));
       }
 
       debugPrint("response $json");

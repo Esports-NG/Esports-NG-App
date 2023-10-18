@@ -16,7 +16,7 @@ class AccountTeamsWidget extends StatelessWidget {
       physics: const ScrollPhysics(),
       shrinkWrap: true,
       itemCount: accountTeamItem.length,
-      separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+      separatorBuilder: (context, index) => Gap(Get.height * 0.0),
       itemBuilder: (context, index) {
         var item = accountTeamItem[index];
         return InkWell(

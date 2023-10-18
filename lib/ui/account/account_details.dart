@@ -1,16 +1,10 @@
-import 'package:e_sport/data/model/category_model.dart';
-import 'package:e_sport/data/model/notification_model.dart';
-import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/components/account_team_widget.dart';
 import 'package:e_sport/ui/components/games_played_widget.dart';
 import 'package:e_sport/ui/components/post_widget.dart';
-import 'package:e_sport/ui/home/post/post_details.dart';
-import 'package:e_sport/ui/home/post/post_item.dart';
-import 'package:e_sport/ui/notification/notification_type/posts.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -52,14 +46,25 @@ class _AccountDetailsState extends State<AccountDetails> {
         child: Padding(
           padding: EdgeInsets.all(Get.height * 0.02),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (widget.title == 'Posts') ...[
                 const PostWidget()
               ] else if (widget.title == 'Player Profile') ...[
+                CustomText(
+                  title: 'Games played',
+                  size: 14,
+                  fontFamily: 'GilroyMedium',
+                  textAlign: TextAlign.start,
+                  color: AppColor().greyTwo,
+                ),
+                Gap(Get.height * 0.01),
                 const GamesPlayedWidget()
               ] else if (widget.title == 'Teams' ||
                   widget.title == 'Communities') ...[
-                const GamesPlayedWidget()
+                const AccountTeamsWidget()
+              ] else if (widget.title == 'Teams') ...[
+                const AccountTeamsWidget()
               ]
             ],
           ),

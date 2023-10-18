@@ -866,7 +866,7 @@ class UserPreference {
 
 var primaryUseCard = [
   PrimaryUse(title: 'Competitions', isSelected: false),
-  PrimaryUse(title: 'Gaming news', isSelected: false),
+  PrimaryUse(title: 'Gaming News', isSelected: false),
   PrimaryUse(title: 'Communities', isSelected: false),
 ];
 
