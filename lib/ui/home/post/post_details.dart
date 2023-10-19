@@ -1,6 +1,7 @@
+// ignore_for_file: prefer_final_fields, unused_field
+
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
-import 'package:e_sport/ui/widget/custom_navbar.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';

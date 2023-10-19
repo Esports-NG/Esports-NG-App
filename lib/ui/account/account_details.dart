@@ -48,14 +48,26 @@ class _AccountDetailsState extends State<AccountDetails> {
       floatingActionButton:
           (widget.title == 'Wallet' || widget.title == 'Referrals')
               ? null
-              : FloatingActionButton(
-                  backgroundColor: AppColor().primaryColor,
-                  onPressed: () {},
-                  child: Icon(
-                    Icons.add,
-                    color: AppColor().primaryWhite,
-                  ),
-                ),
+              : (widget.title == 'Events')
+                  ? FloatingActionButton.extended(
+                      backgroundColor: AppColor().primaryColor,
+                      onPressed: () {},
+                      label: CustomText(
+                        title: 'Create New Event',
+                        color: AppColor().greyTwo,
+                        weight: FontWeight.w400,
+                        size: Get.height * 0.018,
+                        fontFamily: 'GilroyMedium',
+                      ),
+                    )
+                  : FloatingActionButton(
+                      backgroundColor: AppColor().primaryColor,
+                      onPressed: () {},
+                      child: Icon(
+                        Icons.add,
+                        color: AppColor().primaryWhite,
+                      ),
+                    ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(Get.height * 0.02),

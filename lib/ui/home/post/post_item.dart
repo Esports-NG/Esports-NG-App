@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';

@@ -1,9 +1,7 @@
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
-import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
-import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
@@ -67,36 +65,6 @@ class _ChooseAliasState extends State<ChooseAlias> {
             },
           ),
           Gap(Get.height * 0.25),
-          // CustomFillButton(
-          //   onTap: () {
-          //     widget.user.userName =
-          //         authController.userNameController.text.trim();
-          //     debugPrint('User: ${widget.user.toJson()}');
-          //     if (userCheck == false) {
-          //     } else {
-          //       if (authController.signUpStatus != SignUpStatus.loading) {
-          //         authController.signUp(widget.user);
-          //       }
-          //       // Get.off(() => const Dashboard());
-          //     }
-          //   },
-          //   height: Get.height * 0.07,
-          //   buttonText: 'Continue',
-          //   fontWeight: FontWeight.w600,
-          //   textSize: Get.height * 0.016,
-          //   textColor:
-          //userCheck == false
-          //       ? AppColor().bgDark
-          //       : AppColor().primaryWhite,
-          //   boarderColor: userCheck == false
-          //       ? AppColor().bgDark
-          //       : AppColor().primaryColor,
-          //   buttonColor: userCheck == false
-          //       ? AppColor().bgDark
-          //       : AppColor().primaryColor,
-          //   isLoading: false,
-          // )
-
           Obx(() {
             return InkWell(
               onTap: () {
