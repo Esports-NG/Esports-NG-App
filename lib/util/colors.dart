@@ -27,6 +27,7 @@ class AppColor {
   Color greyTwo = const Color(0xffE0E0E0);
   Color greySix = const Color(0xff8F8F8F);
   Color greyEight = const Color(0xff666666);
+  Color referral = const Color(0xff1F242C);
   Color darkItemsColor = const Color(0xff222222);
   Color pureBlackColor = const Color(0xff000000);
   Color lightBlue = const Color(0xffBCEBF0);

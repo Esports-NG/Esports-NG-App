@@ -33,6 +33,7 @@ class CustomText extends StatelessWidget {
           fontSize: size,
           fontWeight: weight ?? FontWeight.normal,
           overflow: overflow,
+          height: height ?? 1,
           decoration: underline ?? TextDecoration.none,
         ));
   }
