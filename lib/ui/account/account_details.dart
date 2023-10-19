@@ -3,6 +3,7 @@ import 'package:e_sport/ui/components/account_event_widget.dart';
 import 'package:e_sport/ui/components/account_team_widget.dart';
 import 'package:e_sport/ui/components/games_played_widget.dart';
 import 'package:e_sport/ui/components/post_widget.dart';
+import 'package:e_sport/ui/components/wallet_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,17 @@ class _AccountDetailsState extends State<AccountDetails> {
         ],
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
+      floatingActionButton:
+          (widget.title == 'Wallet' || widget.title == 'Referrals')
+              ? null
+              : FloatingActionButton(
+                  backgroundColor: AppColor().primaryColor,
+                  onPressed: () {},
+                  child: Icon(
+                    Icons.add,
+                    color: AppColor().primaryWhite,
+                  ),
+                ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(Get.height * 0.02),
@@ -66,6 +78,8 @@ class _AccountDetailsState extends State<AccountDetails> {
                 const AccountTeamsWidget()
               ] else if (widget.title == 'Events') ...[
                 const AccountEventsWidget()
+              ] else if (widget.title == 'Wallet') ...[
+                const WalletWidget()
               ]
             ],
           ),
