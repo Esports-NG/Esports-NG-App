@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 library csc_picker;
 
 import 'package:csc_picker/model/select_status_model.dart';
@@ -587,15 +589,14 @@ class CSCPicker extends StatefulWidget {
 }
 
 class CSCPickerState extends State<CSCPicker> {
-  List<String?> _cities = [];
-  List<String?> _country = [];
-  List<String?> _states = [];
+  final List<String?> _cities = [];
+  final List<String?> _country = [];
+  final List<String?> _states = [];
   List<CscCountry> _countryFilter = [];
 
   String _selectedCity = 'City';
   String? _selectedCountry;
   String _selectedState = 'State';
-  var responses;
 
   @override
   void initState() {
@@ -627,7 +628,7 @@ class CSCPickerState extends State<CSCPicker> {
 
   void _setDefaultCountry() {
     if (widget.defaultCountry != null) {
-      print(_country[Countries[widget.defaultCountry]!]);
+      debugPrint(_country[Countries[widget.defaultCountry]!]);
       _onSelectedCountry(_country[Countries[widget.defaultCountry]!]!);
     }
   }
@@ -644,14 +645,14 @@ class CSCPickerState extends State<CSCPicker> {
     _country.clear();
     var countries = await getResponse() as List;
     if (_countryFilter.isNotEmpty) {
-      _countryFilter.forEach((element) {
+      for (var element in _countryFilter) {
         var result = countries[Countries[element]!];
         if (result != null) addCountryToList(result);
-      });
+      }
     } else {
-      countries.forEach((data) {
+      for (var data in countries) {
         addCountryToList(data);
-      });
+      }
     }
     _setDefaultCountry();
     return _country;
@@ -691,8 +692,8 @@ class CSCPickerState extends State<CSCPicker> {
             .map((item) => item.state)
             .toList();
     var states = takeState as List;
-    states.forEach((f) {
-      if (!mounted) return;
+    for (var f in states) {
+      if (!mounted) continue;
       setState(() {
         var name = f.map((item) => item.name).toList();
         for (var stateName in name) {
@@ -700,7 +701,7 @@ class CSCPickerState extends State<CSCPicker> {
           _states.add(stateName.toString());
         }
       });
-    });
+    }
     _states.sort((a, b) => a!.compareTo(b!));
     return _states;
   }
@@ -723,7 +724,7 @@ class CSCPickerState extends State<CSCPicker> {
             .map((item) => item.state)
             .toList();
     var cities = takeCity as List;
-    cities.forEach((f) {
+    for (var f in cities) {
       var name = f.where((item) => item.name == _selectedState);
       var cityName = name.map((item) => item.city).toList();
       cityName.forEach((ci) {
@@ -736,7 +737,7 @@ class CSCPickerState extends State<CSCPicker> {
           }
         });
       });
-    });
+    }
     _cities.sort((a, b) => a!.compareTo(b!));
     return _cities;
   }

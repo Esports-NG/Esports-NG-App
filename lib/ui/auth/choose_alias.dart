@@ -22,12 +22,26 @@ class _ChooseAliasState extends State<ChooseAlias> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(),
+          onPressed: () {
+            Get.back();
+            authController.userNameController.clear();
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: AppColor().primaryWhite,
+          ),
+        ),
+      ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Gap(Get.height * 0.2),
+          Gap(Get.height * 0.07),
           Center(
             child: Image.asset(
               'assets/images/png/done1.png',

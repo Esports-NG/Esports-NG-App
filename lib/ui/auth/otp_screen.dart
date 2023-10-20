@@ -75,9 +75,10 @@ class _OTPScreenState extends State<OTPScreen> {
             Center(
               child: PinCodeTextField(
                 pinBoxRadius: 8,
+                maxLength: 6,
                 autofocus: false,
-                controller: controller,
-                pinBoxOuterPadding: const EdgeInsets.symmetric(horizontal: 10),
+                controller: authController.otpPin,
+                pinBoxOuterPadding: const EdgeInsets.symmetric(horizontal: 4),
                 highlight: true,
                 highlightAnimation: true,
                 highlightColor: AppColor().lightBlack,
@@ -98,7 +99,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     print("DONE $number");
                   }
                 },
-                pinBoxWidth: Get.height * 0.07,
+                pinBoxWidth: Get.height * 0.06,
                 pinBoxHeight: Get.height * 0.07,
                 hasUnderline: false,
                 pinBoxDecoration:
@@ -194,9 +195,9 @@ class _OTPScreenState extends State<OTPScreen> {
                 runSpace: Get.height * 0.03,
                 onType: (value) {
                   setState(() {
-                    if (number.length < 4) {
+                    if (number.length < 6) {
                       number += value;
-                      controller.text += value;
+                      authController.otpPin.text += value;
                     }
                   });
                   // authController.otpPin.text = controller.text;
@@ -210,7 +211,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   onPressed: () {
                     if (number.isNotEmpty) {
                       setState(() {
-                        controller.text =
+                        authController.otpPin.text =
                             number.substring(0, number.length - 1);
                       });
                       // authController.otpPin.text = controller.text;
@@ -225,8 +226,8 @@ class _OTPScreenState extends State<OTPScreen> {
                     size: 30,
                   ),
                   onPressed: () {
-                    if (controller.text.length == 4) {
-                      Get.to(() => const Dashboard());
+                    if (authController.otpPin.text.length == 6) {
+                      authController.verifyOtp(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

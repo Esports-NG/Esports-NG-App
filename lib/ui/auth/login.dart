@@ -3,6 +3,7 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/loading.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -37,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -128,17 +129,33 @@ class _LoginScreenState extends State<LoginScreen> {
                   underline: TextDecoration.underline,
                 ),
                 Gap(Get.height * 0.1),
-                CustomFillButton(
-                  buttonText: 'Log in',
-                  fontWeight: FontWeight.w600,
-                  textSize: Get.height * 0.018,
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      Get.to(() => const OTPScreen());
-                    }
-                  },
-                  isLoading: false,
-                ),
+                Obx(() {
+                  return InkWell(
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        authController.login(context);
+                      }
+                    },
+                    child: Container(
+                      height: Get.height * 0.07,
+                      width: Get.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: AppColor().primaryColor,
+                      ),
+                      child:
+                          (authController.signInStatus == SignInStatus.loading)
+                              ? const LoadingWidget()
+                              : Center(
+                                  child: CustomText(
+                                  title: 'Log in',
+                                  color: AppColor().primaryWhite,
+                                  weight: FontWeight.w600,
+                                  size: Get.height * 0.018,
+                                )),
+                    ),
+                  );
+                }),
                 Gap(Get.height * 0.05),
                 Center(
                   child: Text.rich(TextSpan(

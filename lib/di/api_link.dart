@@ -5,7 +5,7 @@ class ApiLink {
   static String register = "${baseurl}user/register/";
   static String login = "${baseurl}user/login/";
   static String logout = "${baseurl}user/logout";
-  static String validateOtp = "${baseurl}user/otp";
+  static String verifyOtp = "${baseurl}user/otp";
   static String resendOtp = "${baseurl}user/resend-otp";
   static String forgotPassword = "${baseurl}user/forgot-password";
   static String resetPassword = "${baseurl}user/reset-password";

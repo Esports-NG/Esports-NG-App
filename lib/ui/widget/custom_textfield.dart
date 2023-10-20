@@ -32,7 +32,6 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.validatorText,
     this.onClick,
-    this.AllowClickable = false,
     this.color,
     this.fillColor,
     this.borderColor,
@@ -44,7 +43,6 @@ class CustomTextField extends StatelessWidget {
   });
 
   final VoidCallback? onClick;
-  final bool? AllowClickable;
   final bool? obscure;
   final String? hint;
   final String? label;

@@ -5,6 +5,7 @@ import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/shared_pref.dart';
 import 'package:e_sport/ui/auth/login.dart';
+import 'package:e_sport/ui/auth/otp_screen.dart';
 import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -198,6 +199,8 @@ class AuthRepository extends GetxController {
             "Content-Type": "application/json",
           });
       var json = jsonDecode(response.body);
+      debugPrint(response.statusCode.toString() + response.body);
+
       if (response.statusCode == 500) {
         throw 'Internal server error, contact admin!';
       } else if (response.statusCode != 500 && response.statusCode != 201) {
@@ -219,10 +222,6 @@ class AuthRepository extends GetxController {
                                     .replaceAll('}', ''));
       }
 
-      debugPrint("response $json");
-      debugPrint(response.body);
-      debugPrint(response.statusCode.toString());
-
       if (response.statusCode == 201) {
         _signUpStatus(SignUpStatus.success);
         EasyLoading.showInfo(
@@ -230,7 +229,7 @@ class AuthRepository extends GetxController {
                 duration: const Duration(seconds: 3))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 3));
-          Get.offAll(() => const LoginScreen());
+          Get.off(() => const LoginScreen());
           clear();
         });
       }
@@ -259,33 +258,79 @@ class AuthRepository extends GetxController {
             "email": emailController.text.trim(),
             "password": passwordController.text.trim(),
           }));
-
+      var json = jsonDecode(response.body);
       debugPrint(response.statusCode.toString() + response.body);
 
-      var json = jsonDecode(response.body);
-      if (response.statusCode != 201) {
-        throw (json['profile'] != null
-            ? json['profile'].toString().replaceAll('{', '').replaceAll('}', '')
-            : json.toString().replaceAll('{', '').replaceAll('}', ''));
+      if (response.statusCode == 400) {
+        throw (json[0]);
+      } else if (response.statusCode != 200) {
+        throw (json['non_field_errors'] != null
+            ? json['non_field_errors'][0]
+            : json.toString());
       }
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         _signInStatus(SignInStatus.success);
         clear();
-        mToken(json['tokens']['access']);
-        pref!.saveToken(token);
-        var userModel = UserModel.fromJson(json);
-        mUser(userModel);
-        pref!.setUser(userModel);
         _authStatus(AuthStatus.authenticated);
-        EasyLoading.show(status: 'Loading...');
-
-        await Future.delayed(const Duration(seconds: 3));
-        Get.off(() => const Dashboard());
+        EasyLoading.showInfo(json['message'],
+                duration: const Duration(seconds: 3))
+            .then((value) async {
+          await Future.delayed(const Duration(seconds: 3));
+          Get.to(() => const OTPScreen());
+        });
       }
       return response.body;
     } catch (error) {
       _signInStatus(SignInStatus.error);
+      debugPrint("error ${error.toString()}");
+      noInternetError(context, error);
+    }
+  }
+
+  Future verifyOtp(BuildContext context) async {
+    _otpValidateStatus(OtpValidateStatus.loading);
+    try {
+      debugPrint('verifying otp...');
+      EasyLoading.show(status: 'Verifying...');
+      var response = await http.post(
+          Uri.parse(
+            ApiLink.verifyOtp,
+          ),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode({
+            "otp": otpPin.text.trim(),
+          }));
+
+      var json = jsonDecode(response.body);
+      debugPrint(response.statusCode.toString() + response.body);
+
+      if (response.statusCode != 201) {
+        throw (json['message']);
+      }
+
+      if (response.statusCode == 201) {
+        _otpValidateStatus(OtpValidateStatus.success);
+        clear();
+        mToken(json['access']);
+        pref!.saveToken(token);
+        // var userModel = UserModel.fromJson(json);
+        // mUser(userModel);
+        // pref!.setUser(userModel);
+        _authStatus(AuthStatus.authenticated);
+
+        EasyLoading.showInfo('Success', duration: const Duration(seconds: 3))
+            .then((value) async {
+          await Future.delayed(const Duration(seconds: 3));
+          Get.off(() => const Dashboard());
+        });
+      }
+      return response.body;
+    } catch (error) {
+      _otpValidateStatus(OtpValidateStatus.error);
+      EasyLoading.dismiss();
       debugPrint("error ${error.toString()}");
       noInternetError(context, error);
     }
@@ -314,6 +359,7 @@ class AuthRepository extends GetxController {
     emailController.clear();
     passwordController.clear();
     confirmPasswordController.clear();
+    userNameController.clear();
     phoneNoController.clear();
     countryController.clear();
     stateController.clear();
