@@ -1,14 +1,13 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
-import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'otp_screen.dart';
 import 'register.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -133,7 +132,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   return InkWell(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        authController.login(context);
+                        // authController.login(context);
+                        Get.offAll(() => const Dashboard());
                       }
                     },
                     child: Container(

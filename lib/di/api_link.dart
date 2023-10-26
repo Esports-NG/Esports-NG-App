@@ -4,6 +4,7 @@ class ApiLink {
 
   static String register = "${baseurl}user/register/";
   static String login = "${baseurl}user/login/";
+  static String getCountryCode = "https://restcountries.com/v3/name/";
   static String logout = "${baseurl}user/logout";
   static String verifyOtp = "${baseurl}user/otp";
   static String resendOtp = "${baseurl}user/resend-otp";

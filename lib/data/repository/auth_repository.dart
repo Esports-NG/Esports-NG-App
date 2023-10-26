@@ -106,6 +106,7 @@ class AuthRepository extends GetxController {
   late final emailController = TextEditingController();
   late final phoneNoController = TextEditingController();
   late final countryController = TextEditingController();
+  late final countryCodeController = TextEditingController();
   late final stateController = TextEditingController();
   late final genderController = TextEditingController();
   late final dobController = TextEditingController();
@@ -201,9 +202,7 @@ class AuthRepository extends GetxController {
       var json = jsonDecode(response.body);
       debugPrint(response.statusCode.toString() + response.body);
 
-      if (response.statusCode == 500) {
-        throw 'Internal server error, contact admin!';
-      } else if (response.statusCode != 500 && response.statusCode != 201) {
+      if (response.statusCode != 201) {
         throw (json['profile'] != null
             ? json['profile'][0]
             : json['phone_number'] != null
@@ -226,10 +225,10 @@ class AuthRepository extends GetxController {
         _signUpStatus(SignUpStatus.success);
         EasyLoading.showInfo(
                 'Account created successfully!\nConfirmation email sent, Please check your email for further instructions!',
-                duration: const Duration(seconds: 3))
+                duration: const Duration(seconds: 2))
             .then((value) async {
-          await Future.delayed(const Duration(seconds: 3));
-          Get.off(() => const LoginScreen());
+          await Future.delayed(const Duration(seconds: 2));
+          Get.offAll(() => const LoginScreen());
           clear();
         });
       }
@@ -261,12 +260,12 @@ class AuthRepository extends GetxController {
       var json = jsonDecode(response.body);
       debugPrint(response.statusCode.toString() + response.body);
 
-      if (response.statusCode == 400) {
-        throw (json[0]);
-      } else if (response.statusCode != 200) {
-        throw (json['non_field_errors'] != null
-            ? json['non_field_errors'][0]
-            : json.toString());
+      if (response.statusCode != 200) {
+        throw (
+          json['non_field_errors'] != null
+              ? json['non_field_errors'][0]
+              : json['non_field_errors'][0],
+        );
       }
 
       if (response.statusCode == 200) {
@@ -274,9 +273,9 @@ class AuthRepository extends GetxController {
         clear();
         _authStatus(AuthStatus.authenticated);
         EasyLoading.showInfo(json['message'],
-                duration: const Duration(seconds: 3))
+                duration: const Duration(seconds: 2))
             .then((value) async {
-          await Future.delayed(const Duration(seconds: 3));
+          await Future.delayed(const Duration(seconds: 2));
           Get.to(() => const OTPScreen());
         });
       }
@@ -285,6 +284,28 @@ class AuthRepository extends GetxController {
       _signInStatus(SignInStatus.error);
       debugPrint("error ${error.toString()}");
       noInternetError(context, error);
+    }
+  }
+
+  Future getCountryCode() async {
+    try {
+      debugPrint('getting country code...');
+      var response = await http.get(
+          Uri.parse(
+              '${ApiLink.getCountryCode}${countryController.text.trim()}'),
+          headers: {"Content-Type": "application/json"});
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        List<dynamic> json = jsonDecode(response.body);
+        countryCodeController.text =
+            '${json[0]['idd']['root']}${json[0]['idd']['suffixes'][0]}';
+        debugPrint(
+            "code: ${json[0]['idd']['root']}${json[0]['idd']['suffixes'][0]}");
+      }
+      return response.body;
+    } catch (error) {
+      debugPrint("getting country code error: ${error.toString()}");
     }
   }
 
@@ -344,7 +365,7 @@ class AuthRepository extends GetxController {
                   error.toString().contains("Network is unreachable"))
               ? 'No internet connection!'
               : (error.toString().contains("FormatException"))
-                  ? 'An error occurred, try again!'
+                  ? 'Internal server error, contact admin!'
                   : error.toString(),
           size: Get.height * 0.02,
           color: AppColor().primaryWhite,
@@ -368,6 +389,7 @@ class AuthRepository extends GetxController {
     purposeController.clear();
     gameTypeController.clear();
     otpPin.clear();
+    countryCodeController.clear();
   }
 
   void logout() {

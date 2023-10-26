@@ -20,9 +20,9 @@ var accountItem = [
   CategoryItem(title: 'Logout'),
 ];
 
-var productItem = [
-  CategoryItem(title: 'All'),
-  CategoryItem(title: 'Live'),
-  CategoryItem(title: 'Pending'),
-  CategoryItem(title: 'Rejected'),
+var createMenu = [
+  CategoryItem(title: 'Post'),
+  CategoryItem(title: 'Event'),
+  CategoryItem(title: 'Team'),
+  CategoryItem(title: 'Community'),
 ];

@@ -409,29 +409,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           Gap(Get.height * 0.02),
                           CustomText(
-                            title: 'Phone number',
-                            color: AppColor().primaryWhite,
-                            textAlign: TextAlign.center,
-                            fontFamily: 'GilroyRegular',
-                            size: Get.height * 0.017,
-                          ),
-                          Gap(Get.height * 0.01),
-                          CustomTextField(
-                            hint: "phone",
-                            textEditingController:
-                                authController.phoneNoController,
-                            keyType: TextInputType.phone,
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Phone no must not be empty';
-                              } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                                return "Please enter only digits";
-                              }
-                              return null;
-                            },
-                          ),
-                          Gap(Get.height * 0.02),
-                          CustomText(
                             title: 'Country',
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.center,
@@ -483,11 +460,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             searchBarRadius: 10.0,
                             onCountryChanged: (value) {
                               setState(() {
+                                debugPrint('country: $value');
                                 countryValue = value.replaceAll(
                                     RegExp(r'[^A-Za-z\-\`\s]'), '');
                                 debugPrint('country: $countryValue');
                                 authController.countryController.text =
                                     countryValue;
+                                authController.getCountryCode();
                               });
                             },
                             onStateChanged: (value) {
@@ -501,6 +480,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               setState(() {
                                 cityValue = value ?? "";
                               });
+                            },
+                          ),
+                          Gap(Get.height * 0.02),
+                          CustomText(
+                            title: 'Phone number',
+                            color: AppColor().primaryWhite,
+                            textAlign: TextAlign.center,
+                            fontFamily: 'GilroyRegular',
+                            size: Get.height * 0.017,
+                          ),
+                          Gap(Get.height * 0.01),
+                          CustomTextField(
+                            hint: "phone",
+                            textEditingController:
+                                authController.phoneNoController,
+                            keyType: TextInputType.phone,
+                            pretext: authController.countryCodeController.text,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Phone no must not be empty';
+                              } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                                return "Please enter only digits";
+                              }
+                              return null;
                             },
                           ),
                           Gap(Get.height * 0.02),
@@ -734,7 +737,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         password2:
                             authController.passwordController.text.trim(),
                         phoneNumber:
-                            authController.phoneNoController.text.trim(),
+                            authController.countryCodeController.text.trim() +
+                                authController.phoneNoController.text.trim(),
                         country: authController.countryController.text.trim(),
                         state: authController.stateController.text.trim(),
                         gender: authController.genderController.text.trim(),
