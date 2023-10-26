@@ -11,7 +11,7 @@ class ApiLink {
   static String forgotPassword = "${baseurl}user/forgot-password";
   static String resetPassword = "${baseurl}user/reset-password";
   static String validateResetOtp = "${baseurl}user/otp/verify";
-  static String getUser = "${baseurl}users/info";
+  static String getUser = "${baseurl}user/info/";
   static String updateUser = "${baseurl}users/profile";
   static String deleteAcct = "${baseurl}users";
   static String changePassword = "${baseurl}users/profile";

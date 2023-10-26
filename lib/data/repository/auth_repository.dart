@@ -258,7 +258,6 @@ class AuthRepository extends GetxController {
             "password": passwordController.text.trim(),
           }));
       var json = jsonDecode(response.body);
-      debugPrint(response.statusCode.toString() + response.body);
 
       if (response.statusCode != 200) {
         throw (
@@ -269,10 +268,12 @@ class AuthRepository extends GetxController {
       }
 
       if (response.statusCode == 200) {
+        mToken(json['access']);
+        pref!.saveToken(token);
         _signInStatus(SignInStatus.success);
         clear();
         _authStatus(AuthStatus.authenticated);
-        EasyLoading.showInfo(json['message'],
+        EasyLoading.showInfo('Login success',
                 duration: const Duration(seconds: 2))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 2));
@@ -284,28 +285,6 @@ class AuthRepository extends GetxController {
       _signInStatus(SignInStatus.error);
       debugPrint("error ${error.toString()}");
       noInternetError(context, error);
-    }
-  }
-
-  Future getCountryCode() async {
-    try {
-      debugPrint('getting country code...');
-      var response = await http.get(
-          Uri.parse(
-              '${ApiLink.getCountryCode}${countryController.text.trim()}'),
-          headers: {"Content-Type": "application/json"});
-
-      if (response.statusCode == 200) {
-        debugPrint(response.body);
-        List<dynamic> json = jsonDecode(response.body);
-        countryCodeController.text =
-            '${json[0]['idd']['root']}${json[0]['idd']['suffixes'][0]}';
-        debugPrint(
-            "code: ${json[0]['idd']['root']}${json[0]['idd']['suffixes'][0]}");
-      }
-      return response.body;
-    } catch (error) {
-      debugPrint("getting country code error: ${error.toString()}");
     }
   }
 
@@ -354,6 +333,49 @@ class AuthRepository extends GetxController {
       EasyLoading.dismiss();
       debugPrint("error ${error.toString()}");
       noInternetError(context, error);
+    }
+  }
+
+  Future getUserInfo() async {
+    try {
+      debugPrint('getting user info...');
+      var response = await http.get(Uri.parse(ApiLink.getUser), headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'JWT $token',
+      });
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+      }
+      return response.body;
+    } catch (error) {
+      debugPrint("getting user info: ${error.toString()}");
+    }
+  }
+
+  Future getCountryCode() async {
+    try {
+      debugPrint('getting country code...');
+      var response = await http.get(
+          Uri.parse(
+              '${ApiLink.getCountryCode}${countryController.text.trim()}'),
+          headers: {"Content-Type": "application/json"});
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        List<dynamic> json = jsonDecode(response.body);
+        countryCodeController.text =
+            '${json[0]['idd']['root']}${json[0]['idd']['suffixes'][0]}';
+        debugPrint(
+            "code: ${json[0]['idd']['root']}${json[0]['idd']['suffixes'][0]}");
+      }
+      return response.body;
+    } catch (error) {
+      debugPrint("getting country code error: ${error.toString()}");
     }
   }
 

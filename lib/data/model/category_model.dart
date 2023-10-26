@@ -26,3 +26,9 @@ var createMenu = [
   CategoryItem(title: 'Team'),
   CategoryItem(title: 'Community'),
 ];
+
+var selectAccountItem = [
+  CategoryItem(title: 'Your User Profile'),
+  CategoryItem(title: 'Team'),
+  CategoryItem(title: 'Community'),
+];

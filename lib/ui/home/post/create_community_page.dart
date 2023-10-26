@@ -8,17 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
 import 'create_post_item.dart';
 
-class CreatePost extends StatefulWidget {
-  const CreatePost({super.key});
+class CreateCommunityPage extends StatefulWidget {
+  const CreateCommunityPage({super.key});
 
   @override
-  State<CreatePost> createState() => _CreatePostState();
+  State<CreateCommunityPage> createState() => _CreatePostState();
 }
 
-class _CreatePostState extends State<CreatePost> {
+class _CreatePostState extends State<CreateCommunityPage> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final authController = Get.put(AuthRepository());
   String? gameTag, seePost, engagePost;
@@ -30,7 +29,7 @@ class _CreatePostState extends State<CreatePost> {
         backgroundColor: AppColor().primaryBackGroundColor,
         centerTitle: true,
         title: CustomText(
-          title: 'Create a Post',
+          title: 'Create Community Page',
           weight: FontWeight.w600,
           size: 18,
           color: AppColor().primaryWhite,
@@ -54,41 +53,8 @@ class _CreatePostState extends State<CreatePost> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text.rich(TextSpan(
-                      text: "Post as: ",
-                      style: TextStyle(
-                        color: AppColor().primaryWhite,
-                        fontFamily: 'GilroyMedium',
-                        fontSize: 15,
-                      ),
-                      children: const [
-                        TextSpan(
-                          text: "“Your User Profile”",
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    )),
-                    InkWell(
-                      onTap: () {
-                        _showItemListDialog(context);
-                      },
-                      child: CustomText(
-                        title: 'Change Account',
-                        weight: FontWeight.w400,
-                        size: 15,
-                        fontFamily: 'GilroyMedium',
-                        color: AppColor().primaryColor,
-                        underline: TextDecoration.underline,
-                      ),
-                    ),
-                  ],
-                ),
-                Gap(Get.height * 0.03),
                 CustomText(
-                  title: 'Fill the form correctly to create a new post',
+                  title: 'Fill the form correctly to create a community page',
                   weight: FontWeight.w400,
                   size: 15,
                   fontFamily: 'GilroyMedium',
@@ -96,7 +62,45 @@ class _CreatePostState extends State<CreatePost> {
                 ),
                 Gap(Get.height * 0.03),
                 CustomText(
-                  title: 'Post an update *',
+                  title: 'Community name *',
+                  color: AppColor().primaryWhite,
+                  textAlign: TextAlign.center,
+                  fontFamily: 'GilroyRegular',
+                  size: Get.height * 0.017,
+                ),
+                Gap(Get.height * 0.01),
+                CustomTextField(
+                  hint: "The Willywonkers",
+                  // textEditingController: authController.fullNameController,
+                  validate: (value) {
+                    if (value!.isEmpty) {
+                      return 'community name must not be empty';
+                    }
+                    return null;
+                  },
+                ),
+                Gap(Get.height * 0.02),
+                CustomText(
+                  title: 'Community abbreviation (Max 5 characters) *',
+                  color: AppColor().primaryWhite,
+                  textAlign: TextAlign.center,
+                  fontFamily: 'GilroyRegular',
+                  size: Get.height * 0.017,
+                ),
+                Gap(Get.height * 0.01),
+                CustomTextField(
+                  hint: "The Willywonkers",
+                  // textEditingController: authController.fullNameController,
+                  validate: (value) {
+                    if (value!.isEmpty) {
+                      return 'abbreviation must not be empty';
+                    }
+                    return null;
+                  },
+                ),
+                Gap(Get.height * 0.02),
+                CustomText(
+                  title: 'Community bio *',
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.center,
                   fontFamily: 'GilroyRegular',
@@ -109,118 +113,34 @@ class _CreatePostState extends State<CreatePost> {
                   maxLines: 5,
                   validate: (value) {
                     if (value!.isEmpty) {
-                      return 'Full Name must not be empty';
+                      return 'bio must not be empty';
                     }
                     return null;
                   },
                 ),
                 Gap(Get.height * 0.02),
                 CustomText(
-                  title: 'Add game tags *',
+                  title: 'Community profile picture *',
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.center,
                   fontFamily: 'GilroyRegular',
                   size: Get.height * 0.017,
                 ),
                 Gap(Get.height * 0.01),
-                InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColor().bgDark,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor().lightItemsColor, width: 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10)),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: gameTag,
-                      icon: Icon(
-                        Icons.expand_more,
-                        color: AppColor().primaryWhite,
-                      ),
-                      items: <String>[
-                        'COD',
-                        'Others',
-                      ].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: CustomText(
-                            title: value,
-                            color: AppColor().lightItemsColor,
-                            fontFamily: 'GilroyBold',
-                            weight: FontWeight.w400,
-                            size: 13,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          gameTag = value;
-                        });
-                      },
-                      hint: CustomText(
-                        title: "Game Tag",
-                        color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
-                        size: 13,
-                      ),
-                    ),
-                  ),
-                ),
+                pickImage(onTap: () {}),
                 Gap(Get.height * 0.02),
                 CustomText(
-                  title: 'Upload an image (Optional)',
+                  title: 'Community cover photo *',
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.center,
                   fontFamily: 'GilroyRegular',
                   size: Get.height * 0.017,
                 ),
                 Gap(Get.height * 0.01),
-                Container(
-                  padding: EdgeInsets.all(Get.height * 0.04),
-                  decoration: BoxDecoration(
-                      color: AppColor().bgDark,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/images/svg/photo.svg',
-                          height: Get.height * 0.08,
-                        ),
-                        Gap(Get.height * 0.01),
-                        CustomText(
-                          title: 'Click to upload ',
-                          weight: FontWeight.w400,
-                          size: 15,
-                          fontFamily: 'GilroyMedium',
-                          color: AppColor().primaryColor,
-                          underline: TextDecoration.underline,
-                        ),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                          title: 'Max file size: 4MB',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.014,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                pickImage(onTap: () {}),
                 Gap(Get.height * 0.02),
                 CustomText(
-                  title: 'Who can see this post *',
+                  title: 'Games Covered *',
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.center,
                   fontFamily: 'GilroyRegular',
@@ -248,8 +168,7 @@ class _CreatePostState extends State<CreatePost> {
                         Icons.expand_more,
                         color: AppColor().primaryWhite,
                       ),
-                      items: <String>['Everyone', 'My Followers', 'Just Me']
-                          .map((String value) {
+                      items: <String>['COD', 'Others'].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: CustomText(
@@ -267,65 +186,7 @@ class _CreatePostState extends State<CreatePost> {
                         });
                       },
                       hint: CustomText(
-                        title: "Everyone",
-                        color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
-                        size: 13,
-                      ),
-                    ),
-                  ),
-                ),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Who can engage with this post *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColor().bgDark,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor().lightItemsColor, width: 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10)),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: engagePost,
-                      icon: Icon(
-                        Icons.expand_more,
-                        color: AppColor().primaryWhite,
-                      ),
-                      items: <String>['Everyone', 'My Followers', 'Just Me']
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: CustomText(
-                            title: value,
-                            color: AppColor().lightItemsColor,
-                            fontFamily: 'GilroyBold',
-                            weight: FontWeight.w400,
-                            size: 13,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          engagePost = value;
-                        });
-                      },
-                      hint: CustomText(
-                        title: "Everyone",
+                        title: "Games Covered",
                         color: AppColor().lightItemsColor,
                         fontFamily: 'GilroyBold',
                         weight: FontWeight.w400,
@@ -354,7 +215,7 @@ class _CreatePostState extends State<CreatePost> {
                               ? const LoadingWidget()
                               : Center(
                                   child: CustomText(
-                                  title: 'Create Post',
+                                  title: 'Next',
                                   color: AppColor().primaryWhite,
                                   weight: FontWeight.w600,
                                   size: Get.height * 0.018,
@@ -366,6 +227,46 @@ class _CreatePostState extends State<CreatePost> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Container pickImage({VoidCallback? onTap}) {
+    return Container(
+      padding: EdgeInsets.all(Get.height * 0.04),
+      decoration: BoxDecoration(
+          color: AppColor().bgDark, borderRadius: BorderRadius.circular(10)),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/images/svg/photo.svg',
+              height: Get.height * 0.08,
+            ),
+            Gap(Get.height * 0.01),
+            InkWell(
+              onTap: onTap,
+              child: CustomText(
+                title: 'Click to upload ',
+                weight: FontWeight.w400,
+                size: 15,
+                fontFamily: 'GilroyMedium',
+                color: AppColor().primaryColor,
+                underline: TextDecoration.underline,
+              ),
+            ),
+            Gap(Get.height * 0.02),
+            CustomText(
+              title: 'Max file size: 4MB',
+              color: AppColor().primaryWhite,
+              textAlign: TextAlign.center,
+              fontFamily: 'GilroyRegular',
+              size: Get.height * 0.014,
+            ),
+          ],
         ),
       ),
     );

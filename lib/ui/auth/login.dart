@@ -1,5 +1,4 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
-import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
@@ -132,8 +131,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   return InkWell(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        // authController.login(context);
-                        Get.offAll(() => const Dashboard());
+                        authController.login(context);
+                        // Get.offAll(() => const Dashboard());
                       }
                     },
                     child: Container(

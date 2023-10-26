@@ -227,7 +227,8 @@ class _OTPScreenState extends State<OTPScreen> {
                   ),
                   onPressed: () {
                     if (authController.otpPin.text.length == 6) {
-                      authController.verifyOtp(context);
+                      // authController.verifyOtp(context);
+                      Get.offAll(() => const Dashboard());
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

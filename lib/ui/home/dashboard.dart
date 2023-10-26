@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:e_sport/data/model/category_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/home/post/create_community_page.dart';
 import 'package:e_sport/ui/widget/custom_navbar.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
@@ -13,6 +15,7 @@ import 'community.dart';
 import 'events.dart';
 import 'home.dart';
 import 'post/create_post.dart';
+import 'post/create_post_item.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -22,6 +25,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  final authController = Get.put(AuthRepository());
   int _selectedIndex = 0;
   int? _selectedMenu;
   var pages = <Widget>[
@@ -113,6 +117,13 @@ class _DashboardState extends State<Dashboard> {
                         if (_selectedMenu == 0) {
                           Get.back();
                           Get.to(() => const CreatePost());
+                        } else if (_selectedMenu == 1) {
+                          Get.back();
+                        } else if (_selectedMenu == 2) {
+                          Get.back();
+                        } else {
+                          Get.back();
+                          Get.to(() => const CreateCommunityPage());
                         }
                       },
                       child: CreateMenu(
@@ -126,50 +137,6 @@ class _DashboardState extends State<Dashboard> {
           );
         });
       },
-    );
-  }
-}
-
-class CreateMenu extends StatelessWidget {
-  final CategoryItem? item;
-  final int? selectedItem, index;
-  const CreateMenu({
-    super.key,
-    this.item,
-    this.index,
-    this.selectedItem,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(Get.height * 0.025),
-      decoration: BoxDecoration(
-        color: selectedItem == index
-            ? AppColor().primaryColor
-            : Colors.transparent,
-        borderRadius: BorderRadius.circular(100),
-        border: Border.all(color: AppColor().primaryColor, width: 1),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CustomText(
-            title: item!.title,
-            size: Get.height * 0.016,
-            fontFamily: 'GilroyMedium',
-            textAlign: TextAlign.start,
-            color: AppColor().primaryWhite,
-          ),
-          Gap(Get.height * 0.1),
-          const Spacer(),
-          SmallCircle(
-            size: Get.height * 0.015,
-            color: AppColor().primaryWhite,
-            bColor: AppColor().primaryColor,
-          )
-        ],
-      ),
     );
   }
 }
