@@ -29,7 +29,7 @@ class GamesPlayedItem extends StatelessWidget {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10)),
                 image: DecorationImage(
-                    image: AssetImage(item.image!), fit: BoxFit.fitWidth)),
+                    image: AssetImage(item.image!), fit: BoxFit.cover)),
           ),
           Padding(
             padding: EdgeInsets.all(Get.height * 0.02),

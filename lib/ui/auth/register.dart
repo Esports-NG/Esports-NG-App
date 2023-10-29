@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -79,32 +81,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future pickImageFromGallery() async {
     try {
-      final pickedImages =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
-      setState(() {
-        if (pickedImages != null) {}
-      });
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(
+        () {
+          authController.mUserProfileImage(imageTemporary);
+        },
+      );
     } on PlatformException catch (e) {
-      if (kDebugMode) {
-        debugPrint('$e');
-      }
+      debugPrint('$e');
     }
   }
 
   Future pickImageFromCamera() async {
     try {
-      final pickedImages =
-          await ImagePicker().pickImage(source: ImageSource.camera);
-
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
       setState(() {
-        if (pickedImages != null) {
-          // image.add(File(pickedImages.path));
-        }
+        authController.mUserProfileImage(imageTemporary);
       });
     } on PlatformException catch (e) {
-      if (kDebugMode) {
-        debugPrint('$e');
-      }
+      debugPrint('$e');
     }
   }
 

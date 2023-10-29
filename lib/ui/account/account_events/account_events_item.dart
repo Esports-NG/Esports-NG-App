@@ -40,7 +40,7 @@ class AccountEventsItem extends StatelessWidget {
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10)),
                   image: DecorationImage(
-                      image: AssetImage(item.image!), fit: BoxFit.fitWidth),
+                      image: AssetImage(item.image!), fit: BoxFit.cover),
                 ),
               ),
               Positioned.fill(

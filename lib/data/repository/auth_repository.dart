@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/shared_pref.dart';
@@ -157,6 +158,9 @@ class AuthRepository extends GetxController {
 
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;
+
+  Rx<File?> mUserProfileImage = Rx(null);
+   File? get userProfileImage => mUserProfileImage.value;
 
   @override
   void onInit() async {
