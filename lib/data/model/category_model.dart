@@ -27,6 +27,11 @@ var createMenu = [
   CategoryItem(title: 'Community'),
 ];
 
+var pickImageItem = [
+  CategoryItem(title: 'Gallery'),
+  CategoryItem(title: 'Camera'),
+];
+
 var selectAccountItem = [
   CategoryItem(title: 'Your User Profile'),
   CategoryItem(title: 'Team'),

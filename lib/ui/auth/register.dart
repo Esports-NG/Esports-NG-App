@@ -84,11 +84,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
       final imageTemporary = File(image.path);
-      setState(
-        () {
-          authController.mUserProfileImage(imageTemporary);
-        },
-      );
+      setState(() {
+        authController.mUserImage(imageTemporary);
+      });
     } on PlatformException catch (e) {
       debugPrint('$e');
     }
@@ -100,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (image == null) return;
       final imageTemporary = File(image.path);
       setState(() {
-        authController.mUserProfileImage(imageTemporary);
+        authController.mUserImage(imageTemporary);
       });
     } on PlatformException catch (e) {
       debugPrint('$e');
@@ -217,94 +215,134 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   pageCount == 0
                       ? Column(
                           children: [
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Center(
-                                  child: Image.asset(
-                                    'assets/images/png/photo.png',
-                                    height: Get.height * 0.15,
-                                  ),
-                                ),
-                                Positioned(
-                                  right: Get.width * 0.3,
-                                  bottom: 0,
-                                  child: InkWell(
-                                    onTap: () {
-                                      debugPrint('pick image');
-                                      Get.defaultDialog(
-                                        title: "Upload your product",
-                                        titlePadding:
-                                            const EdgeInsets.only(top: 30),
-                                        contentPadding: const EdgeInsets.only(
-                                            top: 5,
-                                            bottom: 30,
-                                            left: 25,
-                                            right: 25),
-                                        middleText:
-                                            "Upload pictures of your products",
-                                        titleStyle: TextStyle(
-                                          color: AppColor().primaryDark,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'GilroyRegular',
-                                        ),
-                                        radius: 10,
-                                        confirm: Column(
-                                          children: [
-                                            CustomFillButton(
-                                              onTap: () {
-                                                // pickImageFromGallery();
-                                                Get.back();
-                                              },
-                                              height: 45,
-                                              width: Get.width * 0.5,
-                                              buttonText: 'Upload from gallery',
-                                              textColor:
-                                                  AppColor().primaryWhite,
-                                              buttonColor:
-                                                  AppColor().primaryColor,
-                                              boarderColor:
-                                                  AppColor().primaryColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                            ),
-                                            const Gap(10),
-                                            CustomFillButton(
-                                              onTap: () {
-                                                // pickImageFromCamera();
-                                                Get.back();
-                                              },
-                                              height: 45,
-                                              width: Get.width * 0.5,
-                                              buttonText: 'Upload from camera',
-                                              textColor:
-                                                  AppColor().primaryWhite,
-                                              buttonColor:
-                                                  AppColor().primaryColor,
-                                              boarderColor:
-                                                  AppColor().primaryColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                            ),
-                                          ],
-                                        ),
-                                        middleTextStyle: TextStyle(
-                                          color: AppColor().primaryDark,
-                                          fontFamily: 'GilroyRegular',
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      );
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/images/svg/camera.svg',
-                                      height: Get.height * 0.05,
+                            Obx(() {
+                              return Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Center(
+                                    child: Container(
+                                      height: Get.height * 0.15,
+                                      width: Get.height * 0.15,
+                                      decoration: BoxDecoration(
+                                        color: AppColor().primaryWhite,
+                                        shape: BoxShape.circle,
+                                        image: authController.userImage == null
+                                            ? const DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/png/photo.png'),
+                                                fit: BoxFit.contain)
+                                            : DecorationImage(
+                                                image: FileImage(
+                                                    authController.userImage!),
+                                                fit: BoxFit.cover),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                  Positioned(
+                                    right: Get.width * 0.3,
+                                    bottom: 0,
+                                    child: InkWell(
+                                      onTap: () {
+                                        debugPrint('pick image');
+                                        Get.defaultDialog(
+                                          title: "Select your image",
+                                          backgroundColor:
+                                              AppColor().primaryLightColor,
+                                          titlePadding:
+                                              const EdgeInsets.only(top: 30),
+                                          contentPadding: const EdgeInsets.only(
+                                              top: 5,
+                                              bottom: 30,
+                                              left: 25,
+                                              right: 25),
+                                          middleText:
+                                              "Upload your profile picture",
+                                          titleStyle: TextStyle(
+                                            color: AppColor().primaryWhite,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'GilroyRegular',
+                                          ),
+                                          radius: 10,
+                                          confirm: Column(
+                                            children: [
+                                              CustomFillButton(
+                                                onTap: () {
+                                                  pickImageFromGallery();
+                                                  Get.back();
+                                                },
+                                                height: 45,
+                                                width: Get.width * 0.5,
+                                                buttonText:
+                                                    'Upload from gallery',
+                                                textColor:
+                                                    AppColor().primaryWhite,
+                                                buttonColor:
+                                                    AppColor().primaryColor,
+                                                boarderColor:
+                                                    AppColor().primaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                              ),
+                                              const Gap(10),
+                                              CustomFillButton(
+                                                onTap: () {
+                                                  pickImageFromCamera();
+                                                  Get.back();
+                                                },
+                                                height: 45,
+                                                width: Get.width * 0.5,
+                                                buttonText:
+                                                    'Upload from camera',
+                                                textColor:
+                                                    AppColor().primaryWhite,
+                                                buttonColor:
+                                                    AppColor().primaryColor,
+                                                boarderColor:
+                                                    AppColor().primaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                              ),
+                                            ],
+                                          ),
+                                          middleTextStyle: TextStyle(
+                                            color: AppColor().primaryWhite,
+                                            fontFamily: 'GilroyRegular',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        );
+                                      },
+                                      child: authController.userImage == null
+                                          ? SvgPicture.asset(
+                                              'assets/images/svg/camera.svg',
+                                              height: Get.height * 0.05,
+                                            )
+                                          : InkWell(
+                                              onTap: () {
+                                                authController.clearPhoto();
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(6),
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        AppColor().primaryColor,
+                                                    border: Border.all(
+                                                        width: 2,
+                                                        color: AppColor()
+                                                            .primaryWhite),
+                                                    shape: BoxShape.circle),
+                                                child: Icon(Icons.close,
+                                                    color: AppColor()
+                                                        .primaryWhite),
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
                             Gap(Get.height * 0.02),
                             Center(
                               child: CustomText(

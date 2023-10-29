@@ -1,13 +1,18 @@
+import 'dart:io';
+
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
+import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'create_post_item.dart';
 
@@ -23,6 +28,33 @@ class _CreatePostState extends State<CreatePost> {
   final authController = Get.put(AuthRepository());
   String? gameTag, seePost, engagePost;
   int? _selectedMenu;
+
+  Future pickImageFromGallery() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() {
+        authController.mUserImage(imageTemporary);
+      });
+    } on PlatformException catch (e) {
+      debugPrint('$e');
+    }
+  }
+
+  Future pickImageFromCamera() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() {
+        authController.mUserImage(imageTemporary);
+      });
+    } on PlatformException catch (e) {
+      debugPrint('$e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -183,28 +215,104 @@ class _CreatePostState extends State<CreatePost> {
                   size: Get.height * 0.017,
                 ),
                 Gap(Get.height * 0.01),
-                Container(
-                  padding: EdgeInsets.all(Get.height * 0.04),
-                  decoration: BoxDecoration(
-                      color: AppColor().bgDark,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(
+                Obx(() {
+                  return Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(Get.height * 0.04),
+                    decoration: BoxDecoration(
+                        color: AppColor().bgDark,
+                        borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          'assets/images/svg/photo.svg',
-                          height: Get.height * 0.08,
-                        ),
+                        authController.userImage == null
+                            ? SvgPicture.asset(
+                                'assets/images/svg/photo.svg',
+                                height: Get.height * 0.08,
+                              )
+                            : Container(
+                                height: Get.height * 0.08,
+                                width: Get.height * 0.08,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image:
+                                          FileImage(authController.userImage!),
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
                         Gap(Get.height * 0.01),
-                        CustomText(
-                          title: 'Click to upload ',
-                          weight: FontWeight.w400,
-                          size: 15,
-                          fontFamily: 'GilroyMedium',
-                          color: AppColor().primaryColor,
-                          underline: TextDecoration.underline,
+                        InkWell(
+                          onTap: () {
+                            if (authController.userImage == null) {
+                              debugPrint('pick image');
+                              Get.defaultDialog(
+                                title: "Select your image",
+                                backgroundColor: AppColor().primaryLightColor,
+                                titlePadding: const EdgeInsets.only(top: 30),
+                                contentPadding: const EdgeInsets.only(
+                                    top: 5, bottom: 30, left: 25, right: 25),
+                                middleText: "Upload your profile picture",
+                                titleStyle: TextStyle(
+                                  color: AppColor().primaryWhite,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'GilroyRegular',
+                                ),
+                                radius: 10,
+                                confirm: Column(
+                                  children: [
+                                    CustomFillButton(
+                                      onTap: () {
+                                        pickImageFromGallery();
+                                        Get.back();
+                                      },
+                                      height: 45,
+                                      width: Get.width * 0.5,
+                                      buttonText: 'Upload from gallery',
+                                      textColor: AppColor().primaryWhite,
+                                      buttonColor: AppColor().primaryColor,
+                                      boarderColor: AppColor().primaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    const Gap(10),
+                                    CustomFillButton(
+                                      onTap: () {
+                                        pickImageFromCamera();
+                                        Get.back();
+                                      },
+                                      height: 45,
+                                      width: Get.width * 0.5,
+                                      buttonText: 'Upload from camera',
+                                      textColor: AppColor().primaryWhite,
+                                      buttonColor: AppColor().primaryColor,
+                                      boarderColor: AppColor().primaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                  ],
+                                ),
+                                middleTextStyle: TextStyle(
+                                  color: AppColor().primaryWhite,
+                                  fontFamily: 'GilroyRegular',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              );
+                            } else {
+                              authController.clearPhoto();
+                            }
+                          },
+                          child: CustomText(
+                            title: authController.userImage == null
+                                ? 'Click to upload'
+                                : 'Cancel',
+                            weight: FontWeight.w400,
+                            size: 15,
+                            fontFamily: 'GilroyMedium',
+                            color: AppColor().primaryColor,
+                            underline: TextDecoration.underline,
+                          ),
                         ),
                         Gap(Get.height * 0.02),
                         CustomText(
@@ -216,8 +324,8 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ],
                     ),
-                  ),
-                ),
+                  );
+                }),
                 Gap(Get.height * 0.02),
                 CustomText(
                   title: 'Who can see this post *',

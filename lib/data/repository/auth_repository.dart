@@ -159,8 +159,8 @@ class AuthRepository extends GetxController {
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;
 
-  Rx<File?> mUserProfileImage = Rx(null);
-   File? get userProfileImage => mUserProfileImage.value;
+  Rx<File?> mUserImage = Rx(null);
+  File? get userImage => mUserImage.value;
 
   @override
   void onInit() async {
@@ -234,6 +234,7 @@ class AuthRepository extends GetxController {
           await Future.delayed(const Duration(seconds: 2));
           Get.offAll(() => const LoginScreen());
           clear();
+          clearPhoto();
         });
       }
 
@@ -402,6 +403,11 @@ class AuthRepository extends GetxController {
         ),
       ),
     );
+  }
+
+  void clearPhoto() {
+    debugPrint('image cleared');
+    mUserImage.value = null;
   }
 
   void clear() {
