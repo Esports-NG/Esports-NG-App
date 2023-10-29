@@ -18,7 +18,7 @@ class SharedPref {
   }
 
   void setUser(UserModel? user) {
-    _preferences!.setString(isLogin, jsonEncode(user!.toJson()));
+    _preferences!.setString(isLogin, jsonEncode(user!.toUser()));
   }
 
   void logout() {

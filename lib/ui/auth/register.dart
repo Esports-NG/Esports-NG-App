@@ -745,7 +745,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         dOB: authController.dobController.text.trim(),
                         iPurpose: selectedUse.map((e) => e.title!).toList(),
                         userName: authController.userNameController.text.trim(),
-                        profile: Profile(
+                        iProfile: SignUpProfile(
                           iGameType:
                               selectedCategories.map((e) => e.title!).toList(),
                           profilePicture:

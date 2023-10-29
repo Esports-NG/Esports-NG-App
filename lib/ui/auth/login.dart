@@ -130,7 +130,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Obx(() {
                   return InkWell(
                     onTap: () {
-                      if (_formKey.currentState!.validate()) {
+                      if (_formKey.currentState!.validate() &&
+                          authController.signInStatus != SignInStatus.loading) {
                         authController.login(context);
                         // Get.offAll(() => const Dashboard());
                       }

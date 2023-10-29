@@ -50,7 +50,7 @@ class _OTPScreenState extends State<OTPScreen> {
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(Get.height * 0.020),
         child: SingleChildScrollView(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +99,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     print("DONE $number");
                   }
                 },
-                pinBoxWidth: Get.height * 0.06,
+                pinBoxWidth: Get.width / 6 - Get.height * 0.02,
                 pinBoxHeight: Get.height * 0.07,
                 hasUnderline: false,
                 pinBoxDecoration:

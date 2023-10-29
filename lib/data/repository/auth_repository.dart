@@ -268,16 +268,19 @@ class AuthRepository extends GetxController {
       }
 
       if (response.statusCode == 200) {
-        mToken(json['access']);
+        var userModel = UserModel.fromJson(json);
+        mToken(json['tokens']['access']);
         pref!.saveToken(token);
+        mUser(userModel);
+        pref!.setUser(userModel);
         _signInStatus(SignInStatus.success);
-        clear();
         _authStatus(AuthStatus.authenticated);
         EasyLoading.showInfo('Login success',
                 duration: const Duration(seconds: 2))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 2));
           Get.to(() => const OTPScreen());
+          clear();
         });
       }
       return response.body;
