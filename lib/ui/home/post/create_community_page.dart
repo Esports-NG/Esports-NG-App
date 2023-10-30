@@ -17,10 +17,10 @@ class CreateCommunityPage extends StatefulWidget {
   const CreateCommunityPage({super.key});
 
   @override
-  State<CreateCommunityPage> createState() => _CreatePostState();
+  State<CreateCommunityPage> createState() => _CreateCommunityState();
 }
 
-class _CreatePostState extends State<CreateCommunityPage> {
+class _CreateCommunityState extends State<CreateCommunityPage> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final communityController = Get.put(CommunityRepository());
   String? gameTag, seePost, engagePost;

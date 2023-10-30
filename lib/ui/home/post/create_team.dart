@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
@@ -13,16 +13,16 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CreateCommunityPage extends StatefulWidget {
-  const CreateCommunityPage({super.key});
+class CreateTeamPage extends StatefulWidget {
+  const CreateTeamPage({super.key});
 
   @override
-  State<CreateCommunityPage> createState() => _CreatePostState();
+  State<CreateTeamPage> createState() => _CreateTeamState();
 }
 
-class _CreatePostState extends State<CreateCommunityPage> {
+class _CreateTeamState extends State<CreateTeamPage> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final communityController = Get.put(CommunityRepository());
+  final teamController = Get.put(TeamRepository());
   String? gameTag, seePost, engagePost;
   bool enableChat = false;
   int pageCount = 0;
@@ -34,9 +34,9 @@ class _CreatePostState extends State<CreateCommunityPage> {
       final imageTemporary = File(image.path);
       setState(() {
         if (title == 'profile') {
-          communityController.mCommunityProfileImage(imageTemporary);
+          teamController.mTeamProfileImage(imageTemporary);
         } else {
-          communityController.mCommunityCoverImage(imageTemporary);
+          teamController.mTeamCoverImage(imageTemporary);
         }
       });
     } on PlatformException catch (e) {
@@ -50,9 +50,9 @@ class _CreatePostState extends State<CreateCommunityPage> {
       if (image == null) return;
       final imageTemporary = File(image.path);
       if (title == 'profile') {
-        communityController.mCommunityProfileImage(imageTemporary);
+        teamController.mTeamProfileImage(imageTemporary);
       } else {
-        communityController.mCommunityCoverImage(imageTemporary);
+        teamController.mTeamCoverImage(imageTemporary);
       }
     } on PlatformException catch (e) {
       debugPrint('$e');
@@ -67,7 +67,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
           backgroundColor: AppColor().primaryBackGroundColor,
           centerTitle: true,
           title: CustomText(
-            title: 'Create Community Page',
+            title: 'Create Team Page',
             weight: FontWeight.w600,
             size: 18,
             color: AppColor().primaryWhite,
@@ -83,8 +83,8 @@ class _CreatePostState extends State<CreateCommunityPage> {
                 });
               } else {
                 setState(() {});
-                communityController.clearCoverPhoto();
-                communityController.clearProfilePhoto();
+                teamController.clearCoverPhoto();
+                teamController.clearProfilePhoto();
                 Get.back();
               }
             },
@@ -144,7 +144,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                 child: CustomText(
-                  title: 'Fill the form correctly to create a community page',
+                  title: 'Fill the form correctly to create a team page',
                   weight: FontWeight.w400,
                   size: 15,
                   fontFamily: 'GilroyMedium',
@@ -161,7 +161,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
-                          title: 'Community name *',
+                          title: 'Team name *',
                           color: AppColor().primaryWhite,
                           textAlign: TextAlign.center,
                           fontFamily: 'GilroyRegular',
@@ -173,14 +173,14 @@ class _CreatePostState extends State<CreateCommunityPage> {
                           // textEditingController: authController.fullNameController,
                           validate: (value) {
                             if (value!.isEmpty) {
-                              return 'community name must not be empty';
+                              return 'team name must not be empty';
                             }
                             return null;
                           },
                         ),
                         Gap(Get.height * 0.02),
                         CustomText(
-                          title: 'Community abbreviation (Max 5 characters) *',
+                          title: 'Team abbreviation (Max 5 characters) *',
                           color: AppColor().primaryWhite,
                           textAlign: TextAlign.center,
                           fontFamily: 'GilroyRegular',
@@ -199,7 +199,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                         ),
                         Gap(Get.height * 0.02),
                         CustomText(
-                          title: 'Community bio *',
+                          title: 'Team bio *',
                           color: AppColor().primaryWhite,
                           textAlign: TextAlign.center,
                           fontFamily: 'GilroyRegular',
@@ -219,7 +219,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                         ),
                         Gap(Get.height * 0.02),
                         CustomText(
-                          title: 'Community profile picture *',
+                          title: 'Team profile picture *',
                           color: AppColor().primaryWhite,
                           textAlign: TextAlign.center,
                           fontFamily: 'GilroyRegular',
@@ -227,8 +227,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                         ),
                         Gap(Get.height * 0.01),
                         pickProfileImage(onTap: () {
-                          if (communityController.communityProfileImage ==
-                              null) {
+                          if (teamController.teamProfileImage == null) {
                             debugPrint('pick image');
                             Get.defaultDialog(
                               title: "Select your image",
@@ -236,8 +235,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                               titlePadding: const EdgeInsets.only(top: 30),
                               contentPadding: const EdgeInsets.only(
                                   top: 5, bottom: 30, left: 25, right: 25),
-                              middleText:
-                                  "Upload your community profile picture",
+                              middleText: "Upload your team profile picture",
                               titleStyle: TextStyle(
                                 color: AppColor().primaryWhite,
                                 fontSize: 15,
@@ -284,12 +282,12 @@ class _CreatePostState extends State<CreateCommunityPage> {
                               ),
                             );
                           } else {
-                            communityController.clearProfilePhoto();
+                            teamController.clearProfilePhoto();
                           }
                         }),
                         Gap(Get.height * 0.02),
                         CustomText(
-                          title: 'Community cover photo *',
+                          title: 'Team cover photo *',
                           color: AppColor().primaryWhite,
                           textAlign: TextAlign.center,
                           fontFamily: 'GilroyRegular',
@@ -297,7 +295,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                         ),
                         Gap(Get.height * 0.01),
                         pickCoverImage(onTap: () {
-                          if (communityController.communityCoverImage == null) {
+                          if (teamController.teamCoverImage == null) {
                             debugPrint('pick image');
                             Get.defaultDialog(
                               title: "Select your image",
@@ -305,7 +303,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                               titlePadding: const EdgeInsets.only(top: 30),
                               contentPadding: const EdgeInsets.only(
                                   top: 5, bottom: 30, left: 25, right: 25),
-                              middleText: "Upload your community cover picture",
+                              middleText: "Upload your team cover picture",
                               titleStyle: TextStyle(
                                 color: AppColor().primaryWhite,
                                 fontSize: 15,
@@ -352,7 +350,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                               ),
                             );
                           } else {
-                            communityController.clearCoverPhoto();
+                            teamController.clearCoverPhoto();
                           }
                         }),
                         Gap(Get.height * 0.02),
@@ -490,7 +488,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                        title: 'Add staff to your community *',
+                        title: 'Add staff to your team *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
                         fontFamily: 'GilroyRegular',
@@ -548,7 +546,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                       ),
                       Gap(Get.height * 0.02),
                       CustomText(
-                        title: 'Add secondary community manager *',
+                        title: 'Add secondary team manager *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
                         fontFamily: 'GilroyRegular',
@@ -605,11 +603,23 @@ class _CreatePostState extends State<CreateCommunityPage> {
                         ),
                       ),
                       Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Add team manager (Optional)',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                      CustomTextField(
+                        hint: "The Willywonkers",
+                        // textEditingController: authController.fullNameController,
+                      ),
                     ],
                   ),
                 ),
               ],
-              Gap(pageCount == 0 ? Get.height * 0.05 : Get.height * 0.35),
+              Gap(pageCount == 0 ? Get.height * 0.05 : Get.height * 0.3),
               Obx(() {
                 return InkWell(
                   onTap: () {
@@ -628,12 +638,12 @@ class _CreatePostState extends State<CreateCommunityPage> {
                       borderRadius: BorderRadius.circular(30),
                       color: AppColor().primaryColor,
                     ),
-                    child: (communityController.createCommunityStatus ==
-                            CreateCommunityStatus.loading)
+                    child: (teamController.createTeamStatus ==
+                            CreateTeamStatus.loading)
                         ? const LoadingWidget()
                         : Center(
                             child: CustomText(
-                            title: pageCount == 0 ? 'Next' : 'Create Community',
+                            title: pageCount == 0 ? 'Next' : 'Submit',
                             color: AppColor().primaryWhite,
                             weight: FontWeight.w600,
                             size: Get.height * 0.018,
@@ -686,7 +696,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            communityController.communityProfileImage == null
+            teamController.teamProfileImage == null
                 ? SvgPicture.asset(
                     'assets/images/svg/photo.svg',
                     height: Get.height * 0.08,
@@ -697,8 +707,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                          image: FileImage(
-                              communityController.communityProfileImage!),
+                          image: FileImage(teamController.teamProfileImage!),
                           fit: BoxFit.cover),
                     ),
                   ),
@@ -706,7 +715,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
             InkWell(
               onTap: onTap,
               child: CustomText(
-                title: communityController.communityProfileImage == null
+                title: teamController.teamProfileImage == null
                     ? 'Click to upload'
                     : 'Cancel',
                 weight: FontWeight.w400,
@@ -740,7 +749,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            communityController.communityCoverImage == null
+            teamController.teamCoverImage == null
                 ? SvgPicture.asset(
                     'assets/images/svg/photo.svg',
                     height: Get.height * 0.08,
@@ -751,8 +760,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                          image: FileImage(
-                              communityController.communityCoverImage!),
+                          image: FileImage(teamController.teamCoverImage!),
                           fit: BoxFit.cover),
                     ),
                   ),
@@ -760,7 +768,7 @@ class _CreatePostState extends State<CreateCommunityPage> {
             InkWell(
               onTap: onTap,
               child: CustomText(
-                title: communityController.communityCoverImage == null
+                title: teamController.teamCoverImage == null
                     ? 'Click to upload'
                     : 'Cancel',
                 weight: FontWeight.w400,

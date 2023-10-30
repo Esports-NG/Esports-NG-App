@@ -16,6 +16,7 @@ import 'events.dart';
 import 'home.dart';
 import 'post/create_post.dart';
 import 'post/create_post_item.dart';
+import 'post/create_team.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -114,15 +115,13 @@ class _DashboardState extends State<Dashboard> {
                         setState(() {
                           _selectedMenu = index;
                         });
+                        Get.back();
                         if (_selectedMenu == 0) {
-                          Get.back();
                           Get.to(() => const CreatePost());
                         } else if (_selectedMenu == 1) {
-                          Get.back();
                         } else if (_selectedMenu == 2) {
-                          Get.back();
+                          Get.to(() => const CreateTeamPage());
                         } else {
-                          Get.back();
                           Get.to(() => const CreateCommunityPage());
                         }
                       },
