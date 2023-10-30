@@ -147,17 +147,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               children: <TextSpan>[
                 TextSpan(
-                    text: "/3",
-                    style: TextStyle(
-                      color: AppColor().primaryWhite.withOpacity(0.5),
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Get.to(() => const RegisterScreen());
-                      }),
+                  text: "/3",
+                  style: TextStyle(
+                    color: AppColor().primaryWhite.withOpacity(0.5),
+                  ),
+                ),
               ],
             )),
           ),
+          Gap(Get.height * 0.02),
         ],
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
