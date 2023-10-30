@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
@@ -13,7 +13,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'create_post_item.dart';
 
 class CreatePost extends StatefulWidget {
@@ -26,6 +25,7 @@ class CreatePost extends StatefulWidget {
 class _CreatePostState extends State<CreatePost> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final authController = Get.put(AuthRepository());
+  final postController = Get.put(PostRepository());
   String? gameTag, seePost, engagePost;
   int? _selectedMenu;
 
@@ -35,7 +35,7 @@ class _CreatePostState extends State<CreatePost> {
       if (image == null) return;
       final imageTemporary = File(image.path);
       setState(() {
-        authController.mUserImage(imageTemporary);
+        postController.mPostImage(imageTemporary);
       });
     } on PlatformException catch (e) {
       debugPrint('$e');
@@ -48,7 +48,7 @@ class _CreatePostState extends State<CreatePost> {
       if (image == null) return;
       final imageTemporary = File(image.path);
       setState(() {
-        authController.mUserImage(imageTemporary);
+        postController.mPostImage(imageTemporary);
       });
     } on PlatformException catch (e) {
       debugPrint('$e');
@@ -57,166 +57,170 @@ class _CreatePostState extends State<CreatePost> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColor().primaryBackGroundColor,
-        centerTitle: true,
-        title: CustomText(
-          title: 'Create a Post',
-          weight: FontWeight.w600,
-          size: 18,
-          color: AppColor().primaryWhite,
-        ),
-        leading: IconButton(
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-          onPressed: () => Get.back(),
-          icon: Icon(
-            Icons.arrow_back,
+    return Obx(() {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColor().primaryBackGroundColor,
+          centerTitle: true,
+          title: CustomText(
+            title: 'Create a Post',
+            weight: FontWeight.w600,
+            size: 18,
             color: AppColor().primaryWhite,
           ),
+          leading: IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: () => Get.back(),
+            icon: Icon(
+              Icons.arrow_back,
+              color: AppColor().primaryWhite,
+            ),
+          ),
         ),
-      ),
-      backgroundColor: AppColor().primaryBackGroundColor,
-      body: Padding(
-        padding: EdgeInsets.all(Get.height * 0.02),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text.rich(TextSpan(
-                      text: "Post as: ",
-                      style: TextStyle(
-                        color: AppColor().primaryWhite,
-                        fontFamily: 'GilroyMedium',
-                        fontSize: 15,
-                      ),
-                      children: const [
-                        TextSpan(
-                          text: "“Your User Profile”",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+        backgroundColor: AppColor().primaryBackGroundColor,
+        body: Padding(
+          padding: EdgeInsets.all(Get.height * 0.02),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text.rich(TextSpan(
+                        text: "Post as: ",
+                        style: TextStyle(
+                          color: AppColor().primaryWhite,
+                          fontFamily: 'GilroyMedium',
+                          fontSize: 15,
                         ),
-                      ],
-                    )),
-                    InkWell(
-                      onTap: () {
-                        _showItemListDialog(context);
-                      },
-                      child: CustomText(
-                        title: 'Change Account',
-                        weight: FontWeight.w400,
-                        size: 15,
-                        fontFamily: 'GilroyMedium',
-                        color: AppColor().primaryColor,
-                        underline: TextDecoration.underline,
-                      ),
-                    ),
-                  ],
-                ),
-                Gap(Get.height * 0.03),
-                CustomText(
-                  title: 'Fill the form correctly to create a new post',
-                  weight: FontWeight.w400,
-                  size: 15,
-                  fontFamily: 'GilroyMedium',
-                  color: AppColor().primaryWhite,
-                ),
-                Gap(Get.height * 0.03),
-                CustomText(
-                  title: 'Post an update *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                CustomTextField(
-                  hint: "Type text here",
-                  // textEditingController: authController.fullNameController,
-                  maxLines: 5,
-                  validate: (value) {
-                    if (value!.isEmpty) {
-                      return 'Full Name must not be empty';
-                    }
-                    return null;
-                  },
-                ),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Add game tags *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColor().bgDark,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor().lightItemsColor, width: 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10)),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: gameTag,
-                      icon: Icon(
-                        Icons.expand_more,
-                        color: AppColor().primaryWhite,
-                      ),
-                      items: <String>[
-                        'COD',
-                        'Others',
-                      ].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: CustomText(
-                            title: value,
-                            color: AppColor().lightItemsColor,
-                            fontFamily: 'GilroyBold',
-                            weight: FontWeight.w400,
-                            size: 13,
+                        children: [
+                          TextSpan(
+                            text: postController.accountTypeController.text ==
+                                    ''
+                                ? "“Your User Profile”"
+                                : "“${postController.accountTypeController.text}”",
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          gameTag = value;
-                        });
-                      },
-                      hint: CustomText(
-                        title: "Game Tag",
-                        color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
-                        size: 13,
+                        ],
+                      )),
+                      InkWell(
+                        onTap: () {
+                          _showAccountListDialog(context);
+                        },
+                        child: CustomText(
+                          title: 'Change Account',
+                          weight: FontWeight.w400,
+                          size: 15,
+                          fontFamily: 'GilroyMedium',
+                          color: AppColor().primaryColor,
+                          underline: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Gap(Get.height * 0.03),
+                  CustomText(
+                    title: 'Fill the form correctly to create a new post',
+                    weight: FontWeight.w400,
+                    size: 15,
+                    fontFamily: 'GilroyMedium',
+                    color: AppColor().primaryWhite,
+                  ),
+                  Gap(Get.height * 0.03),
+                  CustomText(
+                    title: 'Post an update *',
+                    color: AppColor().primaryWhite,
+                    textAlign: TextAlign.center,
+                    fontFamily: 'GilroyRegular',
+                    size: Get.height * 0.017,
+                  ),
+                  Gap(Get.height * 0.01),
+                  CustomTextField(
+                    hint: "Type text here",
+                    textEditingController: postController.postTextController,
+                    maxLines: 5,
+                    validate: (value) {
+                      if (value!.isEmpty) {
+                        return 'post update must not be empty';
+                      }
+                      return null;
+                    },
+                  ),
+                  Gap(Get.height * 0.02),
+                  CustomText(
+                    title: 'Add game tags *',
+                    color: AppColor().primaryWhite,
+                    textAlign: TextAlign.center,
+                    fontFamily: 'GilroyRegular',
+                    size: Get.height * 0.017,
+                  ),
+                  Gap(Get.height * 0.01),
+                  InputDecorator(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColor().bgDark,
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: AppColor().lightItemsColor, width: 1),
+                          borderRadius: BorderRadius.circular(10)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: gameTag,
+                        icon: Icon(
+                          Icons.expand_more,
+                          color: AppColor().primaryWhite,
+                        ),
+                        items: <String>[
+                          'COD',
+                          'Others',
+                        ].map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: CustomText(
+                              title: value,
+                              color: AppColor().lightItemsColor,
+                              fontFamily: 'GilroyBold',
+                              weight: FontWeight.w400,
+                              size: 13,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            gameTag = value;
+                            postController.gameTagController.text = gameTag!;
+                          });
+                        },
+                        hint: CustomText(
+                          title: "Game Tag",
+                          color: AppColor().lightItemsColor,
+                          fontFamily: 'GilroyBold',
+                          weight: FontWeight.w400,
+                          size: 13,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Upload an image (Optional)',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                Obx(() {
-                  return Container(
+                  Gap(Get.height * 0.02),
+                  CustomText(
+                    title: 'Upload an image (Optional)',
+                    color: AppColor().primaryWhite,
+                    textAlign: TextAlign.center,
+                    fontFamily: 'GilroyRegular',
+                    size: Get.height * 0.017,
+                  ),
+                  Gap(Get.height * 0.01),
+                  Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(Get.height * 0.04),
                     decoration: BoxDecoration(
@@ -226,7 +230,7 @@ class _CreatePostState extends State<CreatePost> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        authController.userImage == null
+                        postController.postImage == null
                             ? SvgPicture.asset(
                                 'assets/images/svg/photo.svg',
                                 height: Get.height * 0.08,
@@ -238,14 +242,14 @@ class _CreatePostState extends State<CreatePost> {
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
                                       image:
-                                          FileImage(authController.userImage!),
+                                          FileImage(postController.postImage!),
                                       fit: BoxFit.cover),
                                 ),
                               ),
                         Gap(Get.height * 0.01),
                         InkWell(
                           onTap: () {
-                            if (authController.userImage == null) {
+                            if (postController.postImage == null) {
                               debugPrint('pick image');
                               Get.defaultDialog(
                                 title: "Select your image",
@@ -300,11 +304,11 @@ class _CreatePostState extends State<CreatePost> {
                                 ),
                               );
                             } else {
-                              authController.clearPhoto();
+                              postController.clearPhoto();
                             }
                           },
                           child: CustomText(
-                            title: authController.userImage == null
+                            title: postController.postImage == null
                                 ? 'Click to upload'
                                 : 'Cancel',
                             weight: FontWeight.w400,
@@ -324,127 +328,127 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ],
                     ),
-                  );
-                }),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Who can see this post *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColor().bgDark,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor().lightItemsColor, width: 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10)),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: seePost,
-                      icon: Icon(
-                        Icons.expand_more,
-                        color: AppColor().primaryWhite,
-                      ),
-                      items: <String>['Everyone', 'My Followers', 'Just Me']
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: CustomText(
-                            title: value,
-                            color: AppColor().lightItemsColor,
-                            fontFamily: 'GilroyBold',
-                            weight: FontWeight.w400,
-                            size: 13,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          seePost = value;
-                        });
-                      },
-                      hint: CustomText(
-                        title: "Everyone",
-                        color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
-                        size: 13,
+                  Gap(Get.height * 0.02),
+                  CustomText(
+                    title: 'Who can see this post *',
+                    color: AppColor().primaryWhite,
+                    textAlign: TextAlign.center,
+                    fontFamily: 'GilroyRegular',
+                    size: Get.height * 0.017,
+                  ),
+                  Gap(Get.height * 0.01),
+                  InputDecorator(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColor().bgDark,
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: AppColor().lightItemsColor, width: 1),
+                          borderRadius: BorderRadius.circular(10)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: seePost,
+                        icon: Icon(
+                          Icons.expand_more,
+                          color: AppColor().primaryWhite,
+                        ),
+                        items: <String>['Everyone', 'My Followers', 'Just Me']
+                            .map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: CustomText(
+                              title: value,
+                              color: AppColor().lightItemsColor,
+                              fontFamily: 'GilroyBold',
+                              weight: FontWeight.w400,
+                              size: 13,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            seePost = value;
+                            postController.seeController.text = seePost!;
+                          });
+                        },
+                        hint: CustomText(
+                          title: "Everyone",
+                          color: AppColor().lightItemsColor,
+                          fontFamily: 'GilroyBold',
+                          weight: FontWeight.w400,
+                          size: 13,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Who can engage with this post *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColor().bgDark,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor().lightItemsColor, width: 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10)),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  Gap(Get.height * 0.02),
+                  CustomText(
+                    title: 'Who can engage with this post *',
+                    color: AppColor().primaryWhite,
+                    textAlign: TextAlign.center,
+                    fontFamily: 'GilroyRegular',
+                    size: Get.height * 0.017,
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: engagePost,
-                      icon: Icon(
-                        Icons.expand_more,
-                        color: AppColor().primaryWhite,
-                      ),
-                      items: <String>['Everyone', 'My Followers', 'Just Me']
-                          .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: CustomText(
-                            title: value,
-                            color: AppColor().lightItemsColor,
-                            fontFamily: 'GilroyBold',
-                            weight: FontWeight.w400,
-                            size: 13,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          engagePost = value;
-                        });
-                      },
-                      hint: CustomText(
-                        title: "Everyone",
-                        color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
-                        size: 13,
+                  Gap(Get.height * 0.01),
+                  InputDecorator(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColor().bgDark,
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: AppColor().lightItemsColor, width: 1),
+                          borderRadius: BorderRadius.circular(10)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: engagePost,
+                        icon: Icon(
+                          Icons.expand_more,
+                          color: AppColor().primaryWhite,
+                        ),
+                        items: <String>['Everyone', 'My Followers', 'Just Me']
+                            .map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: CustomText(
+                              title: value,
+                              color: AppColor().lightItemsColor,
+                              fontFamily: 'GilroyBold',
+                              weight: FontWeight.w400,
+                              size: 13,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            engagePost = value;
+                            postController.engageController.text = engagePost!;
+                          });
+                        },
+                        hint: CustomText(
+                          title: "Everyone",
+                          color: AppColor().lightItemsColor,
+                          fontFamily: 'GilroyBold',
+                          weight: FontWeight.w400,
+                          size: 13,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Gap(Get.height * 0.05),
-                Obx(() {
-                  return InkWell(
+                  Gap(Get.height * 0.05),
+                  InkWell(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
                         Get.back();
@@ -468,22 +472,22 @@ class _CreatePostState extends State<CreatePost> {
                                   size: Get.height * 0.018,
                                 )),
                     ),
-                  );
-                }),
-                Gap(Get.height * 0.02),
-              ],
+                  ),
+                  Gap(Get.height * 0.02),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  void _showItemListDialog(BuildContext context) {
+  void _showAccountListDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState) {
+        return StatefulBuilder(builder: (context, myState) {
           return AlertDialog(
             title: Column(
               children: [
@@ -525,6 +529,10 @@ class _CreatePostState extends State<CreatePost> {
                     return InkWell(
                       onTap: () {
                         setState(() {
+                          postController.accountTypeController.text =
+                              item.title;
+                        });
+                        myState(() {
                           _selectedMenu = index;
                         });
                         Get.back();

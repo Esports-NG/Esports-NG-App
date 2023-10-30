@@ -167,13 +167,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                PageIndicator(pageCount, 0, 1, Get.width / 3),
-                PageIndicator(pageCount, 1, 1, Get.width / 3),
-                PageIndicator(pageCount, 2, 1, Get.width / 3),
+                PageIndicator(
+                  pageCount,
+                  0,
+                  1,
+                  Get.width / 3,
+                  AppColor().primaryWhite,
+                ),
+                PageIndicator(
+                  pageCount,
+                  1,
+                  1,
+                  Get.width / 3,
+                  AppColor().primaryWhite,
+                ),
+                PageIndicator(
+                  pageCount,
+                  2,
+                  1,
+                  Get.width / 3,
+                  AppColor().primaryWhite,
+                ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(Get.height * 0.02),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

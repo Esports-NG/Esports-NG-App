@@ -117,6 +117,7 @@ class AuthRepository extends GetxController {
   late final referralController = TextEditingController();
   late final passwordController = TextEditingController();
   late final confirmPasswordController = TextEditingController();
+  late final accountTypeController = TextEditingController();
   late final otpPin = TextEditingController();
   DateTime? date;
 

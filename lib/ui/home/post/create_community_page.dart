@@ -2,6 +2,7 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
+import 'package:e_sport/ui/widget/page_indicator.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,9 @@ class _CreatePostState extends State<CreateCommunityPage> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final authController = Get.put(AuthRepository());
   String? gameTag, seePost, engagePost;
+  bool enableChat = false;
   int? _selectedMenu;
+  int pageCount = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,173 +48,261 @@ class _CreatePostState extends State<CreateCommunityPage> {
         ),
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
-      body: Padding(
-        padding: EdgeInsets.all(Get.height * 0.02),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomText(
-                  title: 'Fill the form correctly to create a community page',
-                  weight: FontWeight.w400,
-                  size: 15,
-                  fontFamily: 'GilroyMedium',
-                  color: AppColor().primaryWhite,
+                PageIndicator(
+                  pageCount,
+                  0,
+                  0.5,
+                  Get.width / 2,
+                  AppColor().primaryColor,
                 ),
-                Gap(Get.height * 0.03),
-                CustomText(
-                  title: 'Community name *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
+                PageIndicator(
+                  pageCount,
+                  1,
+                  0.5,
+                  Get.width / 2,
+                  AppColor().primaryColor,
                 ),
-                Gap(Get.height * 0.01),
-                CustomTextField(
-                  hint: "The Willywonkers",
-                  // textEditingController: authController.fullNameController,
-                  validate: (value) {
-                    if (value!.isEmpty) {
-                      return 'community name must not be empty';
-                    }
-                    return null;
-                  },
-                ),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Community abbreviation (Max 5 characters) *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                CustomTextField(
-                  hint: "The Willywonkers",
-                  // textEditingController: authController.fullNameController,
-                  validate: (value) {
-                    if (value!.isEmpty) {
-                      return 'abbreviation must not be empty';
-                    }
-                    return null;
-                  },
-                ),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Community bio *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                CustomTextField(
-                  hint: "Type text here",
-                  // textEditingController: authController.fullNameController,
-                  maxLines: 5,
-                  validate: (value) {
-                    if (value!.isEmpty) {
-                      return 'bio must not be empty';
-                    }
-                    return null;
-                  },
-                ),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Community profile picture *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                pickImage(onTap: () {}),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Community cover photo *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                pickImage(onTap: () {}),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Games Covered *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColor().bgDark,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor().lightItemsColor, width: 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10)),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: seePost,
-                      icon: Icon(
-                        Icons.expand_more,
-                        color: AppColor().primaryWhite,
+              ],
+            ),
+            Gap(Get.height * 0.02),
+            Form(
+              key: _formKey,
+              child: Padding(
+                padding: EdgeInsets.all(Get.height * 0.02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      title:
+                          'Fill the form correctly to create a community page',
+                      weight: FontWeight.w400,
+                      size: 15,
+                      fontFamily: 'GilroyMedium',
+                      color: AppColor().primaryWhite,
+                    ),
+                    Gap(Get.height * 0.03),
+                    CustomText(
+                      title: 'Community name *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "The Willywonkers",
+                      // textEditingController: authController.fullNameController,
+                      validate: (value) {
+                        if (value!.isEmpty) {
+                          return 'community name must not be empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Community abbreviation (Max 5 characters) *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "The Willywonkers",
+                      // textEditingController: authController.fullNameController,
+                      validate: (value) {
+                        if (value!.isEmpty) {
+                          return 'abbreviation must not be empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Community bio *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "Type text here",
+                      // textEditingController: authController.fullNameController,
+                      maxLines: 5,
+                      validate: (value) {
+                        if (value!.isEmpty) {
+                          return 'bio must not be empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Community profile picture *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    pickImage(onTap: () {}),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Community cover photo *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    pickImage(onTap: () {}),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Games Covered *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: AppColor().bgDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                       ),
-                      items: <String>['COD', 'Others'].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: CustomText(
-                            title: value,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: seePost,
+                          icon: Icon(
+                            Icons.expand_more,
+                            color: AppColor().primaryWhite,
+                          ),
+                          items: <String>['COD', 'Others'].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: CustomText(
+                                title: value,
+                                color: AppColor().lightItemsColor,
+                                fontFamily: 'GilroyBold',
+                                weight: FontWeight.w400,
+                                size: 13,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              seePost = value;
+                            });
+                          },
+                          hint: CustomText(
+                            title: "Games Covered",
                             color: AppColor().lightItemsColor,
                             fontFamily: 'GilroyBold',
                             weight: FontWeight.w400,
                             size: 13,
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          seePost = value;
-                        });
-                      },
-                      hint: CustomText(
-                        title: "Games Covered",
-                        color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
-                        size: 13,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                Gap(Get.height * 0.05),
-                Obx(() {
-                  return InkWell(
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        Get.back();
-                      }
-                    },
-                    child: Container(
-                      height: Get.height * 0.07,
-                      width: Get.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppColor().primaryColor,
-                      ),
-                      child:
-                          (authController.signInStatus == SignInStatus.loading)
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Enable team chat *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.02),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          title: 'Yes',
+                          color: AppColor().primaryWhite,
+                          textAlign: TextAlign.center,
+                          fontFamily: 'GilroySemiBold',
+                          size: Get.height * 0.016,
+                        ),
+                        Gap(Get.height * 0.01),
+                        IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () {
+                              setState(() {
+                                enableChat = false;
+                              });
+                            },
+                            icon: Icon(
+                              !enableChat
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              color: !enableChat
+                                  ? AppColor().primaryColor
+                                  : AppColor().primaryWhite,
+                              size: 20,
+                            )),
+                        Gap(Get.height * 0.02),
+                        CustomText(
+                          title: 'No',
+                          color: AppColor().primaryWhite,
+                          textAlign: TextAlign.center,
+                          fontFamily: 'GilroySemiBold',
+                          size: Get.height * 0.016,
+                        ),
+                        Gap(Get.height * 0.01),
+                        IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () {
+                              setState(() {
+                                enableChat = true;
+                              });
+                            },
+                            icon: Icon(
+                              enableChat
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              color: enableChat
+                                  ? AppColor().primaryColor
+                                  : AppColor().primaryWhite,
+                              size: 20,
+                            ))
+                      ],
+                    ),
+                    Gap(Get.height * 0.05),
+                    Obx(() {
+                      return InkWell(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            Get.back();
+                          }
+                        },
+                        child: Container(
+                          height: Get.height * 0.07,
+                          width: Get.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: AppColor().primaryColor,
+                          ),
+                          child: (authController.signInStatus ==
+                                  SignInStatus.loading)
                               ? const LoadingWidget()
                               : Center(
                                   child: CustomText(
@@ -220,15 +311,44 @@ class _CreatePostState extends State<CreateCommunityPage> {
                                   weight: FontWeight.w600,
                                   size: Get.height * 0.018,
                                 )),
-                    ),
-                  );
-                }),
-                Gap(Get.height * 0.02),
-              ],
+                        ),
+                      );
+                    }),
+                    Gap(Get.height * 0.02),
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
+    );
+  }
+
+  Row enableChatOption({String? title, VoidCallback? onTap}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        CustomText(
+          title: title,
+          color: AppColor().primaryWhite,
+          textAlign: TextAlign.center,
+          fontFamily: 'GilroySemiBold',
+          size: Get.height * 0.016,
+        ),
+        Gap(Get.height * 0.01),
+        IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: onTap,
+            icon: Icon(
+              enableChat == true
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_unchecked,
+              color: AppColor().primaryWhite,
+              size: 20,
+            ))
+      ],
     );
   }
 
