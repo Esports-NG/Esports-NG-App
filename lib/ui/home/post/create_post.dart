@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:e_sport/data/model/category_model.dart';
-import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -24,7 +23,6 @@ class CreatePost extends StatefulWidget {
 
 class _CreatePostState extends State<CreatePost> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   String? gameTag, seePost, engagePost;
   int? _selectedMenu;
@@ -461,16 +459,16 @@ class _CreatePostState extends State<CreatePost> {
                         borderRadius: BorderRadius.circular(30),
                         color: AppColor().primaryColor,
                       ),
-                      child:
-                          (authController.signInStatus == SignInStatus.loading)
-                              ? const LoadingWidget()
-                              : Center(
-                                  child: CustomText(
-                                  title: 'Create Post',
-                                  color: AppColor().primaryWhite,
-                                  weight: FontWeight.w600,
-                                  size: Get.height * 0.018,
-                                )),
+                      child: (postController.createPostStatus ==
+                              CreatePostStatus.loading)
+                          ? const LoadingWidget()
+                          : Center(
+                              child: CustomText(
+                              title: 'Create Post',
+                              color: AppColor().primaryWhite,
+                              weight: FontWeight.w600,
+                              size: Get.height * 0.018,
+                            )),
                     ),
                   ),
                   Gap(Get.height * 0.02),

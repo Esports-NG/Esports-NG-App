@@ -33,11 +33,18 @@ class CommunityRepository extends GetxController {
   CreateCommunityStatus get createCommunityStatus =>
       _createCommunityStatus.value;
 
-  Rx<File?> mCommunityImage = Rx(null);
-  File? get postImage => mCommunityImage.value;
+  Rx<File?> mCommunityProfileImage = Rx(null);
+  Rx<File?> mCommunityCoverImage = Rx(null);
+  File? get communityProfileImage => mCommunityProfileImage.value;
+  File? get communityCoverImage => mCommunityCoverImage.value;
 
-  void clearPhoto() {
+  void clearProfilePhoto() {
     debugPrint('image cleared');
-    mCommunityImage.value = null;
+    mCommunityProfileImage.value = null;
+  }
+
+  void clearCoverPhoto() {
+    debugPrint('image cleared');
+    mCommunityCoverImage.value = null;
   }
 }
