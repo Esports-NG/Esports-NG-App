@@ -10,6 +10,12 @@ var categoryItem = [
   CategoryItem(title: 'Bookmarks'),
 ];
 
+var eventsItem = [
+  CategoryItem(title: 'Active Events'),
+  CategoryItem(title: 'My Events'),
+  CategoryItem(title: 'All Events'),
+];
+
 var accountItem = [
   CategoryItem(title: 'Posts'),
   CategoryItem(title: 'Player Profile'),

@@ -28,9 +28,7 @@ class SharedPref {
   String read() {
     const key = "token";
     String value = _preferences!.getString(key)!;
-    if (kDebugMode) {
-      print('read: $value');
-    }
+    debugPrint('read: $value');
     return value.isEmpty ? "0" : value;
   }
 
@@ -40,9 +38,8 @@ class SharedPref {
 
   UserModel? getUser() {
     var user = _preferences!.getString(isLogin);
-    if (kDebugMode) {
-      print("user value $user");
-    }
+    debugPrint("user value $user");
+
     if (user != null && user.isNotEmpty) {
       var json = jsonDecode(user);
       UserModel userValue = UserModel.fromJson(json);
@@ -58,9 +55,8 @@ class SharedPref {
 
   bool getFirstTimeOpen() {
     var value = _preferences!.getBool(firstTimeAppOpen);
-    if (kDebugMode) {
-      print("Am I a new UserModel?  $value");
-    }
+    debugPrint("Am I a new UserModel?  $value");
+
     return value ?? true;
   }
 }

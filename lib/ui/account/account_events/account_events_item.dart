@@ -127,7 +127,7 @@ class AccountEventsItem extends StatelessWidget {
               children: [
                 textItem(
                   title: 'Game: ',
-                  subTitle: item.game!,
+                  subTitle: item.game!.toUpperCase(),
                 ),
                 Gap(Get.height * 0.01),
                 textItem(
@@ -176,14 +176,14 @@ class AccountEventsItem extends StatelessWidget {
       children: [
         CustomText(
           title: title,
-          size: titleSize ?? 12,
+          size: titleSize ?? 14,
           fontFamily: titleFamily ?? 'GilroyRegular',
           textAlign: TextAlign.start,
           color: color ?? AppColor().greyTwo,
         ),
         CustomText(
           title: subTitle,
-          size: subTitleSize ?? 12,
+          size: subTitleSize ?? 14,
           fontFamily: subTitleFamily ?? 'GilroySemiBold',
           textAlign: TextAlign.start,
           color: color ?? AppColor().greyTwo,

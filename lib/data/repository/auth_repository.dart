@@ -173,23 +173,16 @@ class AuthRepository extends GetxController {
     await pref!.init();
     if (pref!.getFirstTimeOpen()) {
       _authStatus(AuthStatus.isFirstTime);
-      if (kDebugMode) {
-        debugPrint(authStatus.name);
-        print("My first time using this app");
-      }
+
+      debugPrint(authStatus.name);
+      debugPrint("My first time using this app");
     } else {
-      if (kDebugMode) {
-        print("Not my First Time Using this app");
-      }
+      debugPrint("Not my First Time Using this app");
 
       if (pref!.getUser() != null) {
         mUser(pref!.getUser()!);
         mToken(pref!.read());
-        if (kDebugMode) {
-          print("result of token is ${mToken.value}");
-        }
         _authStatus(AuthStatus.authenticated);
-
         if (mToken.value == "0") {
           _authStatus(AuthStatus.unAuthenticated);
         }

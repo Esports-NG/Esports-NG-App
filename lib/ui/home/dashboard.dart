@@ -12,7 +12,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import '../account/account.dart';
 import 'community.dart';
-import 'events.dart';
+import '../events/events.dart';
 import 'home.dart';
 import 'post/create_post.dart';
 import 'post/create_post_item.dart';
