@@ -14,6 +14,8 @@ class UserModel {
   SignUpProfile? iProfile;
   Profile? profile;
   Tokens? tokens;
+  List<dynamic>? following;
+  List<dynamic>? followers;
 
   UserModel({
     required this.userName,
@@ -31,6 +33,8 @@ class UserModel {
     this.iProfile,
     this.profile,
     this.tokens,
+    this.following,
+    this.followers,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -54,7 +58,13 @@ class UserModel {
             : SignUpProfile.fromJson(json["profile"]),
         profile:
             json["profile"] == null ? null : Profile.fromJson(json["profile"]),
-        tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
+        following: json["following"] == null
+            ? []
+            : List<dynamic>.from(json["following"]!.map((x) => x)),
+        followers: json["followers"] == null
+            ? []
+            : List<dynamic>.from(json["followers"]!.map((x) => x)),
+        // tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -86,7 +96,13 @@ class UserModel {
             ? []
             : List<dynamic>.from(purpose!.map((x) => x.toJson())),
         "profile": profile?.toJson(),
-        "tokens": tokens?.toJson(),
+        "following": following == null
+            ? []
+            : List<dynamic>.from(following!.map((x) => x)),
+        "followers": followers == null
+            ? []
+            : List<dynamic>.from(followers!.map((x) => x)),
+        // "tokens": tokens?.toJson(),
       };
 }
 
