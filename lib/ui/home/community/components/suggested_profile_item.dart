@@ -53,8 +53,8 @@ class SuggestedProfileItem extends StatelessWidget {
               Positioned(
                 child: SvgPicture.asset(
                   'assets/images/svg/check_badge.svg',
-                  height: Get.height * 0.04,
-                  width: Get.height * 0.04,
+                  height: Get.height * 0.025,
+                  width: Get.height * 0.025,
                 ),
               ),
             ],

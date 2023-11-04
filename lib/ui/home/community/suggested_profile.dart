@@ -50,47 +50,49 @@ class _SuggestedProfileState extends State<SuggestedProfile> {
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: Column(
-          children: [
-            SizedBox(
-              height: Get.height * 0.06,
-              child: CustomTextField(
-                hint: "Search for gaming news, competitions...",
-                fontFamily: 'GilroyMedium',
-                prefixIcon: Icon(
-                  CupertinoIcons.search,
-                  color: AppColor().lightItemsColor,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: Get.height * 0.06,
+                child: CustomTextField(
+                  hint: "Search for gaming news, competitions...",
+                  fontFamily: 'GilroyMedium',
+                  prefixIcon: Icon(
+                    CupertinoIcons.search,
+                    color: AppColor().lightItemsColor,
+                  ),
+                  textEditingController: eventController.searchController,
+                  hasText: isSearch!,
+                  focusNode: _searchFocusNode,
+                  onTap: handleTap,
+                  onSubmited: (_) {
+                    _searchFocusNode.unfocus();
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      isSearch = value.isNotEmpty;
+                    });
+                  },
                 ),
-                textEditingController: eventController.searchController,
-                hasText: isSearch!,
-                focusNode: _searchFocusNode,
-                onTap: handleTap,
-                onSubmited: (_) {
-                  _searchFocusNode.unfocus();
-                },
-                onChanged: (value) {
-                  setState(() {
-                    isSearch = value.isNotEmpty;
-                  });
-                },
               ),
-            ),
-            Gap(Get.height * 0.025),
-            GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  childAspectRatio: 1 * 0.8,
-                ),
-                itemCount: suggestedProfileItems.take(2).length,
-                itemBuilder: (context, index) {
-                  var item = suggestedProfileItems[index];
-                  return SuggestedProfileItem(item: item);
-                }),
-          ],
+              Gap(Get.height * 0.025),
+              GridView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1 * 0.8,
+                  ),
+                  itemCount: suggestedProfileItems.length,
+                  itemBuilder: (context, index) {
+                    var item = suggestedProfileItems[index];
+                    return SuggestedProfileItem(item: item);
+                  }),
+            ],
+          ),
         ),
       ),
     );
