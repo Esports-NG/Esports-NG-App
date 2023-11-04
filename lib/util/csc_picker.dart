@@ -748,23 +748,24 @@ class CSCPickerState extends State<CSCPicker> {
     setState(() {
       if (widget.flagState == CountryFlag.SHOW_IN_DROP_DOWN_ONLY) {
         try {
-          this.widget.onCountryChanged!(value.substring(6).trim());
+          widget.onCountryChanged!(value.substring(6).trim());
         } catch (e) {}
-      } else
-        this.widget.onCountryChanged!(value);
+      } else {
+        widget.onCountryChanged!(value);
+      }
       //code added in if condition
       if (value != _selectedCountry) {
         _states.clear();
         _cities.clear();
         _selectedState = widget.stateDropdownLabel;
         _selectedCity = widget.cityDropdownLabel;
-        this.widget.onStateChanged!(null);
-        this.widget.onCityChanged!(null);
+        widget.onStateChanged!(null);
+        widget.onCityChanged!(null);
         _selectedCountry = value;
         getStates();
       } else {
-        this.widget.onStateChanged!(_selectedState);
-        this.widget.onCityChanged!(_selectedCity);
+        widget.onStateChanged!(_selectedState);
+        widget.onCityChanged!(_selectedCity);
       }
     });
   }
@@ -772,16 +773,16 @@ class CSCPickerState extends State<CSCPicker> {
   void _onSelectedState(String value) {
     if (!mounted) return;
     setState(() {
-      this.widget.onStateChanged!(value);
+      widget.onStateChanged!(value);
       //code added in if condition
       if (value != _selectedState) {
         _cities.clear();
         _selectedCity = widget.cityDropdownLabel;
-        this.widget.onCityChanged!(null);
+        widget.onCityChanged!(null);
         _selectedState = value;
         getCities();
       } else {
-        this.widget.onCityChanged!(_selectedCity);
+        widget.onCityChanged!(_selectedCity);
       }
     });
   }
@@ -792,7 +793,7 @@ class CSCPickerState extends State<CSCPicker> {
       //code added in if condition
       if (value != _selectedCity) {
         _selectedCity = value;
-        this.widget.onCityChanged!(value);
+        widget.onCityChanged!(value);
       }
     });
   }
@@ -860,10 +861,11 @@ class CSCPickerState extends State<CSCPicker> {
         .where(
             (country) => country!.toLowerCase().contains(filter.toLowerCase()))
         .toList();
-    if (filteredList.isEmpty)
+    if (filteredList.isEmpty) {
       return _country;
-    else
+    } else {
       return filteredList;
+    }
   }
 
   ///filter Sate Data according to user input
@@ -871,10 +873,11 @@ class CSCPickerState extends State<CSCPicker> {
     var filteredList = _states
         .where((state) => state!.toLowerCase().contains(filter.toLowerCase()))
         .toList();
-    if (filteredList.isEmpty)
+    if (filteredList.isEmpty) {
       return _states;
-    else
+    } else {
       return filteredList;
+    }
   }
 
   ///filter City Data according to user input
@@ -882,10 +885,11 @@ class CSCPickerState extends State<CSCPicker> {
     var filteredList = _cities
         .where((city) => city!.toLowerCase().contains(filter.toLowerCase()))
         .toList();
-    if (filteredList.isEmpty)
+    if (filteredList.isEmpty) {
       return _cities;
-    else
+    } else {
       return filteredList;
+    }
   }
 
   ///Country Dropdown Widget

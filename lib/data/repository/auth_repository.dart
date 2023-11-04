@@ -1,10 +1,11 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/shared_pref.dart';
+import 'package:e_sport/ui/auth/first_screen.dart';
 import 'package:e_sport/ui/auth/login.dart';
 import 'package:e_sport/ui/auth/otp_screen.dart';
 import 'package:e_sport/ui/home/dashboard.dart';
@@ -119,6 +120,7 @@ class AuthRepository extends GetxController {
   late final confirmPasswordController = TextEditingController();
   late final accountTypeController = TextEditingController();
   late final otpPin = TextEditingController();
+  late final searchController = TextEditingController();
   DateTime? date;
 
   final _authStatus = AuthStatus.empty.obs;
@@ -156,6 +158,7 @@ class AuthRepository extends GetxController {
   String get token => mToken.value;
 
   RxBool mOnSelect = false.obs;
+  RxBool mGetCountryCode = false.obs;
 
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;
@@ -368,22 +371,30 @@ class AuthRepository extends GetxController {
 
   Future getCountryCode() async {
     try {
-      debugPrint('getting country code...');
+      EasyLoading.show(status: 'Fetching country info');
+      debugPrint('getting country data');
       var response = await http.get(
           Uri.parse(
               '${ApiLink.getCountryCode}${countryController.text.trim()}'),
           headers: {"Content-Type": "application/json"});
 
       if (response.statusCode == 200) {
-        debugPrint(response.body);
+        // debugPrint(response.body);
+        mGetCountryCode.value = true;
         List<dynamic> json = jsonDecode(response.body);
         countryCodeController.text =
             '${json[0]['idd']['root']}${json[0]['idd']['suffixes'][0]}';
         debugPrint(
             "code: ${json[0]['idd']['root']}${json[0]['idd']['suffixes'][0]}");
+        EasyLoading.showSuccess('Success');
       }
       return response.body;
     } catch (error) {
+      if (error.toString().contains('restcountries.com')) {
+        EasyLoading.showInfo('Network error, try again');
+      } else {
+        EasyLoading.dismiss();
+      }
       debugPrint("getting country code error: ${error.toString()}");
     }
   }
@@ -434,6 +445,6 @@ class AuthRepository extends GetxController {
     pref!.saveToken("0");
     mToken("0");
     pref!.logout();
-    Get.offAll(() => const LoginScreen());
+    Get.offAll(() => const FirstScreen());
   }
 }

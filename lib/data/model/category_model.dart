@@ -7,6 +7,7 @@ class CategoryItem {
 var categoryItem = [
   CategoryItem(title: 'For you'),
   CategoryItem(title: 'Following'),
+  CategoryItem(title: 'Bookmarks'),
 ];
 
 var accountItem = [

@@ -10,9 +10,9 @@ import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/csc_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -35,9 +35,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final authController = Get.put(AuthRepository());
   String? genderValue;
 
-  bool isHiddenPassword = true;
-  bool? isChecked = false;
-  bool boolPass = false;
+  bool? isEmail = false,
+      isPassword = false,
+      isFullname = false,
+      isCountry = false,
+      isState = false,
+      isPhone = false,
+      isGender = false,
+      isDob = false,
+      isReferral = false;
+  bool isHiddenPassword = true, isChecked = false, boolPass = false;
+
   int pageCount = 0;
   int? primaryUseCount;
   String state = '';
@@ -47,6 +55,70 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String statesValue = "";
   String cityValue = "";
   String address = "";
+
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _fullnameFocusNode = FocusNode();
+  final FocusNode _countryFocusNode = FocusNode();
+  final FocusNode _stateFocusNode = FocusNode();
+  final FocusNode _phoneFocusNode = FocusNode();
+  final FocusNode _genderFocusNode = FocusNode();
+  final FocusNode _dobFocusNode = FocusNode();
+  final FocusNode _referralFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _fullnameFocusNode.dispose();
+    _countryFocusNode.dispose();
+    _stateFocusNode.dispose();
+    _phoneFocusNode.dispose();
+    _genderFocusNode.dispose();
+    _dobFocusNode.dispose();
+    _referralFocusNode.dispose();
+    super.dispose();
+  }
+
+  void handleTap(String? title) {
+    if (title == 'email') {
+      setState(() {
+        isEmail = true;
+      });
+    } else if (title == 'password') {
+      setState(() {
+        isPassword = true;
+      });
+    } else if (title == 'fullname') {
+      setState(() {
+        isFullname = true;
+      });
+    } else if (title == 'country') {
+      setState(() {
+        isCountry = true;
+      });
+    } else if (title == 'state') {
+      setState(() {
+        isState = true;
+      });
+    } else if (title == 'phone') {
+      setState(() {
+        isPhone = true;
+      });
+    } else if (title == 'gender') {
+      setState(() {
+        isGender = true;
+      });
+    } else if (title == 'dob') {
+      setState(() {
+        isDob = true;
+      });
+    } else {
+      setState(() {
+        isReferral = true;
+      });
+    }
+  }
 
   void displayMsg(msg) {
     debugPrint(msg);
@@ -126,6 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               authController.clear();
               selectedUse.clear();
               selectedCategories.clear();
+              authController.mGetCountryCode.value = false;
               // primaryUseCount = null;
               // current = null;
             }
@@ -392,6 +465,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hint: "eg john doe",
                             textEditingController:
                                 authController.fullNameController,
+                            hasText: isFullname!,
+                            focusNode: _fullnameFocusNode,
+                            onTap: () {
+                              handleTap('fullname');
+                            },
+                            onSubmited: (_) {
+                              _fullnameFocusNode.unfocus();
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                isFullname = value.isNotEmpty;
+                              });
+                            },
                             validate: (value) {
                               if (value!.isEmpty) {
                                 return 'Full Name must not be empty';
@@ -415,6 +501,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hint: "johndoe@mail.com",
                             textEditingController:
                                 authController.emailController,
+                            hasText: isEmail!,
+                            focusNode: _emailFocusNode,
+                            onTap: () {
+                              handleTap('email');
+                            },
+                            onSubmited: (_) {
+                              _emailFocusNode.unfocus();
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                isEmail = value.isNotEmpty;
+                              });
+                            },
                             validate: (value) {
                               if (value!.isEmpty) {
                                 return 'Email address must not be empty';
@@ -440,6 +539,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             textEditingController:
                                 authController.passwordController,
                             obscure: isHiddenPassword,
+                            hasText: isPassword!,
+                            focusNode: _passwordFocusNode,
+                            onTap: () {
+                              handleTap('password');
+                            },
+                            onSubmited: (_) {
+                              _passwordFocusNode.unfocus();
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                isPassword = value.isNotEmpty;
+                              });
+                            },
                             validate: (value) {
                               if (value!.isEmpty) {
                                 return 'Password must not be empty';
@@ -477,7 +589,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             dropdownDecoration: BoxDecoration(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(10)),
-                                color: AppColor().bgDark),
+                                color: isCountry == true
+                                    ? AppColor().primaryWhite
+                                    : AppColor().bgDark),
                             disabledDropdownDecoration: BoxDecoration(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(10)),
@@ -489,7 +603,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             stateDropdownLabel: "State",
                             cityDropdownLabel: "City",
                             selectedItemStyle: TextStyle(
-                                color: AppColor().lightItemsColor,
+                                color: isCountry == true
+                                    ? AppColor().primaryBackGroundColor
+                                    : AppColor().lightItemsColor,
                                 fontSize: 13,
                                 fontStyle: FontStyle.normal,
                                 fontFamily: 'GilroyBold',
@@ -521,6 +637,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     countryValue;
                                 authController.getCountryCode();
                               });
+                              handleTap('country');
                             },
                             onStateChanged: (value) {
                               setState(() {
@@ -544,20 +661,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             size: Get.height * 0.017,
                           ),
                           Gap(Get.height * 0.01),
-                          CustomTextField(
-                            hint: "phone",
-                            textEditingController:
-                                authController.phoneNoController,
-                            keyType: TextInputType.phone,
-                            pretext: authController.countryCodeController.text,
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Phone no must not be empty';
-                              } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                                return "Please enter only digits";
-                              }
-                              return null;
-                            },
+                          InkWell(
+                            onTap: authController.mGetCountryCode.isFalse
+                                ? () {
+                                    if (authController
+                                        .mGetCountryCode.isFalse) {
+                                      EasyLoading.showInfo(
+                                          'Select your country');
+                                    }
+                                  }
+                                : null,
+                            child: CustomTextField(
+                              hint: "phone",
+                              textEditingController:
+                                  authController.phoneNoController,
+                              enabled: authController.mGetCountryCode.isFalse
+                                  ? false
+                                  : true,
+                              hasText: isPhone!,
+                              focusNode: _phoneFocusNode,
+                              onTap: () {
+                                if (authController.mGetCountryCode.isFalse) {
+                                  EasyLoading.showInfo('Select your country');
+                                }
+                                handleTap('phone');
+                              },
+                              onSubmited: (_) {
+                                _phoneFocusNode.unfocus();
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  isPhone = value.isNotEmpty;
+                                });
+                              },
+                              keyType: TextInputType.phone,
+                              pretext:
+                                  authController.countryCodeController.text,
+                              validate: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Phone no must not be empty';
+                                } else if (!RegExp(r'^[0-9]+$')
+                                    .hasMatch(value)) {
+                                  return "Please enter only digits";
+                                }
+                                return null;
+                              },
+                            ),
                           ),
                           Gap(Get.height * 0.02),
                           CustomText(
@@ -571,7 +720,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           InputDecorator(
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: AppColor().bgDark,
+                              fillColor: isGender == true
+                                  ? AppColor().primaryWhite
+                                  : AppColor().bgDark,
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: AppColor().lightItemsColor,
@@ -594,7 +745,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     value: value,
                                     child: CustomText(
                                       title: value,
-                                      color: AppColor().lightItemsColor,
+                                      color: isGender == true
+                                          ? AppColor().primaryBackGroundColor
+                                          : AppColor().lightItemsColor,
                                       fontFamily: 'GilroyBold',
                                       weight: FontWeight.w400,
                                       size: 13,
@@ -612,14 +765,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           'F';
                                     }
 
-                                    if (kDebugMode) {
-                                      debugPrint(value);
-                                    }
+                                    debugPrint(value);
+                                    handleTap('gender');
                                   });
                                 },
                                 hint: CustomText(
                                   title: "Gender",
-                                  color: AppColor().lightItemsColor,
+                                  color: isGender == true
+                                      ? AppColor().primaryBackGroundColor
+                                      : AppColor().lightItemsColor,
                                   fontFamily: 'GilroyBold',
                                   weight: FontWeight.w400,
                                   size: 13,
@@ -639,12 +793,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           InkWell(
                             onTap: () {
                               pickDate(context);
+                              handleTap('dob');
                             },
                             child: CustomTextField(
                               hint: "DD/MM/YY",
                               enabled: false,
                               textEditingController:
                                   authController.dobController,
+                              hasText: isDob!,
+                              focusNode: _dobFocusNode,
+                              onSubmited: (_) {
+                                _dobFocusNode.unfocus();
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  isDob = value.isNotEmpty;
+                                });
+                              },
                               suffixIcon: Icon(
                                 CupertinoIcons.calendar,
                                 color: AppColor().lightItemsColor,
@@ -664,6 +829,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hint: "DJKNDFD7786S",
                             textEditingController:
                                 authController.referralController,
+                            hasText: isReferral!,
+                            focusNode: _referralFocusNode,
+                            onTap: () {
+                              handleTap('referral');
+                            },
+                            onSubmited: (_) {
+                              _referralFocusNode.unfocus();
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                isReferral = value.isNotEmpty;
+                              });
+                            },
                           ),
                         ],
                       ),

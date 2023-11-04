@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/category_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/components/post_widget.dart';
 import 'package:e_sport/ui/messages/messages.dart';
 import 'package:e_sport/ui/notification/notification.dart';
@@ -20,6 +21,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int? categoryType = 0;
+  bool? isSearch = false;
+  final FocusNode _searchFocusNode = FocusNode();
+  final authController = Get.put(AuthRepository());
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  void handleTap() {
+    setState(() {
+      isSearch = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,8 +118,18 @@ class _HomePageState extends State<HomePage> {
                   CupertinoIcons.search,
                   color: AppColor().lightItemsColor,
                 ),
-                // textEditingController: authController.emailController,
-                onChanged: (text) {},
+                textEditingController: authController.searchController,
+                hasText: isSearch!,
+                focusNode: _searchFocusNode,
+                onTap: handleTap,
+                onSubmited: (_) {
+                  _searchFocusNode.unfocus();
+                },
+                onChanged: (value) {
+                  setState(() {
+                    isSearch = value.isNotEmpty;
+                  });
+                },
               ),
             ),
             Gap(Get.height * 0.025),
@@ -124,7 +150,7 @@ class _HomePageState extends State<HomePage> {
         physics: const ScrollPhysics(),
         shrinkWrap: false,
         itemCount: categoryItem.length,
-        separatorBuilder: (context, index) => Gap(Get.height * 0.03),
+        separatorBuilder: (context, index) => Gap(Get.height * 0.05),
         itemBuilder: (context, index) {
           var item = categoryItem[index];
           return InkWell(
@@ -140,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                     title: item.title,
                     size: 13,
                     fontFamily:
-                        categoryType == index ? 'GilroyBold' : 'GilroyRegular',
+                        categoryType == index ? 'GilroyBold' : 'GilroyMedium',
                     weight: FontWeight.w400,
                     textAlign: TextAlign.start,
                     color: categoryType == index
@@ -149,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Gap(Get.height * 0.01),
                   Container(
-                    width: Get.height * 0.1,
+                    width: Get.height * 0.08,
                     height: 1.5,
                     color: categoryType == index
                         ? AppColor().primaryColor
@@ -163,5 +189,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  
 }

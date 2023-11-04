@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else if (authController.authStatus == AuthStatus.authenticated) {
       Get.off(() => const Dashboard());
     } else {
-      Get.off(() => const LoginScreen());
+      Get.off(() => const FirstScreen());
     }
   }
 

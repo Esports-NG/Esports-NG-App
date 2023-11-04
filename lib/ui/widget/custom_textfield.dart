@@ -40,6 +40,8 @@ class CustomTextField extends StatelessWidget {
     this.labelSize,
     this.radius,
     this.fontFamily,
+    this.hasText = false,
+    this.focusNode,
   });
 
   final VoidCallback? onClick;
@@ -62,6 +64,7 @@ class CustomTextField extends StatelessWidget {
   final double? labelSize, radius;
   final bool? enabled;
   final bool readOnly;
+  final bool hasText;
   final Widget? icon, prefixIcon, suffixIcon;
   final TextInputType? keyType;
   final TextEditingController? textEditingController;
@@ -72,6 +75,7 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final String? validatorText;
   final List<TextInputFormatter>? inputformater;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +88,7 @@ class CustomTextField extends StatelessWidget {
       minLines: minLines,
       controller: textEditingController,
       enabled: enabled,
+      focusNode: focusNode,
       keyboardType: keyType,
       textInputAction: keyAction,
       readOnly: readOnly,
@@ -99,17 +104,28 @@ class CustomTextField extends StatelessWidget {
       initialValue: initialValue,
       obscureText: obscure ?? false,
       style: TextStyle(
-          color: hintColor ?? AppColor().lightItemsColor,
+          color: hasText
+              ? AppColor().primaryBackGroundColor
+              : AppColor().lightItemsColor,
           fontSize: 13,
           fontStyle: FontStyle.normal,
           fontFamily: fontFamily ?? 'GilroyBold',
           fontWeight: FontWeight.w400,
           height: 1.7),
       decoration: InputDecoration(
-        fillColor: fillColor ?? AppColor().bgDark,
+        fillColor: hasText ? AppColor().primaryWhite : AppColor().bgDark,
         filled: true,
         isDense: true,
         prefixText: pretext,
+        prefixStyle: TextStyle(
+            color: hasText
+                ? AppColor().primaryBackGroundColor
+                : AppColor().lightItemsColor,
+            fontSize: 13,
+            fontStyle: FontStyle.normal,
+            fontFamily: fontFamily ?? 'GilroyBold',
+            fontWeight: FontWeight.w400,
+            height: 1.7),
         suffixText: sufText,
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(

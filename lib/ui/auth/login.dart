@@ -19,13 +19,34 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final authController = Get.put(AuthRepository());
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
   bool isHiddenPassword = true;
-  bool? isChecked = false;
+  bool? isEmail = false, isPassword = false;
 
   void _togglePasswordView() {
     setState(() {
       isHiddenPassword = !isHiddenPassword;
     });
+  }
+
+  @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  void handleTap(String? title) {
+    if (title == 'email') {
+      setState(() {
+        isEmail = true;
+      });
+    } else {
+      setState(() {
+        isPassword = true;
+      });
+    }
   }
 
   @override
@@ -75,6 +96,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomTextField(
                   hint: "johndoe@mail.com",
                   textEditingController: authController.emailController,
+                  hasText: isEmail!,
+                  focusNode: _emailFocusNode,
+                  onTap: () {
+                    handleTap('email');
+                  },
+                  onSubmited: (_) {
+                    _emailFocusNode.unfocus();
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      isEmail = value.isNotEmpty;
+                    });
+                  },
                   validate: (value) {
                     if (value!.isEmpty) {
                       return 'Email address must not be empty';
@@ -98,6 +132,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   hint: "eg 12345678",
                   textEditingController: authController.passwordController,
                   obscure: isHiddenPassword,
+                  hasText: isPassword!,
+                  focusNode: _passwordFocusNode,
+                  onTap: () {
+                    handleTap('password');
+                  },
+                  onSubmited: (_) {
+                    _passwordFocusNode.unfocus();
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      isPassword = value.isNotEmpty;
+                    });
+                  },
                   validate: (value) {
                     if (value!.isEmpty) {
                       return 'password must not be empty';
