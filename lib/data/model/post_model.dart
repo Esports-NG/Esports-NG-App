@@ -67,3 +67,30 @@ var postItem = [
     repost: '17',
   ),
 ];
+
+var suggestedProfileItems = [
+  Posts(
+    image: 'assets/images/png/suggested-profile1.png',
+    pImage: 'assets/images/png/suggested-profile.png',
+    name: 'Michael Jay White',
+    uName: 'captainbarbosa',
+  ),
+  Posts(
+    image: 'assets/images/png/suggested-profile2.png',
+    pImage: 'assets/images/png/suggested-profile.png',
+    name: 'Michael Jay White',
+    uName: 'captainbarbosa',
+  ),
+  Posts(
+    image: 'assets/images/png/suggested-profile1.png',
+    pImage: 'assets/images/png/suggested-profile.png',
+    name: 'Michael Jay White',
+    uName: 'captainbarbosa',
+  ),
+  Posts(
+    image: 'assets/images/png/suggested-profile2.png',
+    pImage: 'assets/images/png/suggested-profile.png',
+    name: 'Michael Jay White',
+    uName: 'captainbarbosa',
+  ),
+];

@@ -20,7 +20,7 @@ class AppColor {
   Color textPrimary = const Color(0xff008585);
   Color textFieldColor = const Color(0xffF7F8F9);
   Color hintTextColor = const Color(0xff8391A1);
-  Color darkGrey = const Color(0xff6A707C);
+  Color darkGrey = const Color(0xff3D3D3D);
   Color secondaryGreen = const Color(0xff38656A);
   Color lightItemsColor = const Color(0xff9B9B9B);
   Color greyOne = const Color(0xffF5F5F5);

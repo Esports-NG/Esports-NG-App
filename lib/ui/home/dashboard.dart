@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import '../account/account.dart';
-import 'community.dart';
+import 'community/community.dart';
 import '../events/events.dart';
 import 'home.dart';
 import 'post/create_post.dart';

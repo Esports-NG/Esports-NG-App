@@ -1,3 +1,4 @@
+import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -6,6 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
+import 'components/suggested_profile_item.dart';
+import 'suggested_profile.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({super.key});
@@ -111,24 +115,44 @@ class _CommunityPageState extends State<CommunityPage> {
                     size: 16,
                     color: AppColor().primaryWhite,
                   ),
-                  Row(
-                    children: [
-                      CustomText(
-                        title: 'See all',
-                        fontFamily: 'GilroyMedium',
-                        size: 16,
-                        color: AppColor().primaryColor,
-                      ),
-                      Gap(Get.height * 0.01),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: AppColor().primaryColor,
-                        size: 18,
-                      ),
-                    ],
+                  InkWell(
+                    onTap: () {
+                      Get.to(() => const SuggestedProfile());
+                    },
+                    child: Row(
+                      children: [
+                        CustomText(
+                          title: 'See all',
+                          fontFamily: 'GilroyMedium',
+                          size: 16,
+                          color: AppColor().primaryLiteColor,
+                        ),
+                        Gap(Get.height * 0.01),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColor().primaryLiteColor,
+                          size: 18,
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
+              Gap(Get.height * 0.03),
+              GridView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1 * 0.8,
+                  ),
+                  itemCount: suggestedProfileItems.take(2).length,
+                  itemBuilder: (context, index) {
+                    var item = suggestedProfileItems[index];
+                    return SuggestedProfileItem(item: item);
+                  }),
             ],
           ),
         ),
