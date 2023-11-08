@@ -1,13 +1,9 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'components/suggested_profile_item.dart';
 import 'components/trending_games_item.dart';
 
 class TrendingGames extends StatefulWidget {
@@ -48,9 +44,9 @@ class _TrendingGamesState extends State<TrendingGames> {
                     mainAxisSpacing: 20,
                     childAspectRatio: 1 * 0.8,
                   ),
-                  itemCount: suggestedProfileItems.length,
+                  itemCount: trendingGamesItems.length,
                   itemBuilder: (context, index) {
-                    var item = suggestedProfileItems[index];
+                    var item = trendingGamesItems[index];
                     return TrendingGamesItem(item: item);
                   }),
             ],

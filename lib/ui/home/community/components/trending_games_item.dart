@@ -2,7 +2,6 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -33,31 +32,19 @@ class TrendingGamesItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              Container(
-                height: Get.height * 0.08,
-                width: Get.height * 0.08,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  // border: Border.all(
-                  //   color: AppColor().greySix,
-                  // ),
-                  image: DecorationImage(
-                    image: AssetImage(item.pImage!),
-                    fit: BoxFit.contain,
-                  ),
-                ),
+          Container(
+            height: Get.height * 0.08,
+            width: Get.height * 0.08,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              // border: Border.all(
+              //   color: AppColor().greySix,
+              // ),
+              image: DecorationImage(
+                image: AssetImage(item.pImage!),
+                fit: BoxFit.contain,
               ),
-              Positioned(
-                child: SvgPicture.asset(
-                  'assets/images/svg/check_badge.svg',
-                  height: Get.height * 0.025,
-                  width: Get.height * 0.025,
-                ),
-              ),
-            ],
+            ),
           ),
           Gap(Get.height * 0.01),
           CustomText(

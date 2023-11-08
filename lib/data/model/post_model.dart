@@ -134,3 +134,30 @@ var latestNewsItems = [
     postedBy: 'Linda Kareem',
   ),
 ];
+
+var trendingGamesItems = [
+  Posts(
+    image: 'assets/images/png/trending-games1.png',
+    pImage: 'assets/images/png/trending-games.png',
+    name: 'Call of Duty (COD)',
+    uName: '32,000 Players',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-games1.png',
+    pImage: 'assets/images/png/trending-games.png',
+    name: 'Call of Duty (COD)',
+    uName: '32,000 Players',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-games1.png',
+    pImage: 'assets/images/png/trending-games.png',
+    name: 'Call of Duty (COD)',
+    uName: '32,000 Players',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-games1.png',
+    pImage: 'assets/images/png/trending-games.png',
+    name: 'Call of Duty (COD)',
+    uName: '32,000 Players',
+  ),
+];

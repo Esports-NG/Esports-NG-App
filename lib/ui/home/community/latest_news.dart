@@ -1,9 +1,7 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -17,7 +15,6 @@ class LatestNews extends StatefulWidget {
 }
 
 class _LatestNewsState extends State<LatestNews> {
-  int? eventType = 0;
   final eventController = Get.put(EventRepository());
 
   @override

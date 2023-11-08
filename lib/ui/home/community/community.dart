@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -13,6 +14,7 @@ import 'components/latest_news_item.dart';
 import 'components/suggested_profile_item.dart';
 import 'latest_news.dart';
 import 'suggested_profile.dart';
+import 'trending_games.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({super.key});
@@ -140,12 +142,15 @@ class _CommunityPageState extends State<CommunityPage> {
             ),
             Gap(Get.height * 0.03),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              padding: EdgeInsets.only(left: Get.height * 0.02),
               child: Column(
                 children: [
-                  PageHeaderWidget(
-                    onTap: () => Get.to(() => const LatestNews()),
-                    title: 'Latest News',
+                  Padding(
+                    padding: EdgeInsets.only(right: Get.height * 0.02),
+                    child: PageHeaderWidget(
+                      onTap: () => Get.to(() => const LatestNews()),
+                      title: 'Latest News',
+                    ),
                   ),
                   Gap(Get.height * 0.03),
                   SizedBox(
@@ -176,8 +181,41 @@ class _CommunityPageState extends State<CommunityPage> {
               child: Column(
                 children: [
                   PageHeaderWidget(
-                    onTap: () => Get.to(() => const LatestNews()),
+                    onTap: () => Get.to(() => const TrendingGames()),
                     title: 'Trending Games',
+                  ),
+                  Gap(Get.height * 0.03),
+                  GridView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 20,
+                        mainAxisSpacing: 20,
+                        childAspectRatio: 1 * 0.8,
+                      ),
+                      itemCount: trendingGamesItems.take(2).length,
+                      itemBuilder: (context, index) {
+                        var item = trendingGamesItems[index];
+                        return TrendingGamesItem(item: item);
+                      }),
+                ],
+              ),
+            ),
+            Gap(Get.height * 0.03),
+            Divider(
+              color: AppColor().primaryWhite.withOpacity(0.1),
+              thickness: 4,
+            ),
+            Gap(Get.height * 0.03),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: Column(
+                children: [
+                  PageHeaderWidget(
+                    onTap: () => Get.to(() => const TrendingGames()),
+                    title: 'Tournaments',
                   ),
                   Gap(Get.height * 0.03),
                   SizedBox(
