@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import 'components/latest_news_item.dart';
 import 'components/suggested_profile_item.dart';
+import 'latest_news.dart';
 import 'suggested_profile.dart';
 
 class CommunityPage extends StatefulWidget {
@@ -142,22 +144,27 @@ class _CommunityPageState extends State<CommunityPage> {
               child: Column(
                 children: [
                   PageHeaderWidget(
-                    onTap: () => Get.to(() => const SuggestedProfile()),
+                    onTap: () => Get.to(() => const LatestNews()),
                     title: 'Latest News',
+                  ),
+                  Gap(Get.height * 0.03),
+                  SizedBox(
+                    height: Get.height * 0.4,
+                    child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (context, index) =>
+                            Gap(Get.height * 0.03),
+                        itemCount: latestNewsItems.take(2).length,
+                        itemBuilder: (context, index) {
+                          var item = latestNewsItems[index];
+                          return LatestNewsItem(item: item);
+                        }),
                   ),
                 ],
               ),
             ),
-            Gap(Get.height * 0.03),
-            ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: suggestedProfileItems.take(2).length,
-                      itemBuilder: (context, index) {
-                        var item = suggestedProfileItems[index];
-                        return LatestNews(item: item);
-                      }),
           ],
         ),
       ),

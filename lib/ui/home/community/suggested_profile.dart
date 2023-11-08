@@ -48,7 +48,7 @@ class _SuggestedProfileState extends State<SuggestedProfile> {
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+        padding: EdgeInsets.all(Get.height * 0.02),
         child: SingleChildScrollView(
           child: Column(
             children: [

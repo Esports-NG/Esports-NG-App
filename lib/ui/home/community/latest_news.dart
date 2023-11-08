@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
 import 'components/latest_news_item.dart';
 
 class LatestNews extends StatefulWidget {
@@ -18,21 +17,8 @@ class LatestNews extends StatefulWidget {
 }
 
 class _LatestNewsState extends State<LatestNews> {
-  bool? isSearch = false;
-  final FocusNode _searchFocusNode = FocusNode();
   int? eventType = 0;
   final eventController = Get.put(EventRepository());
-  @override
-  void dispose() {
-    _searchFocusNode.dispose();
-    super.dispose();
-  }
-
-  void handleTap() {
-    setState(() {
-      isSearch = true;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +27,7 @@ class _LatestNewsState extends State<LatestNews> {
         elevation: 0,
         centerTitle: true,
         title: CustomText(
-          title: 'Suggested Profiles',
+          title: 'Latest News',
           fontFamily: 'GilroySemiBold',
           size: 18,
           color: AppColor().primaryWhite,
@@ -49,43 +35,14 @@ class _LatestNewsState extends State<LatestNews> {
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+        padding: EdgeInsets.all(Get.height * 0.02),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: Get.height * 0.06,
-                child: CustomTextField(
-                  hint: "Search for gaming news, competitions...",
-                  fontFamily: 'GilroyMedium',
-                  prefixIcon: Icon(
-                    CupertinoIcons.search,
-                    color: AppColor().lightItemsColor,
-                  ),
-                  textEditingController: eventController.searchController,
-                  hasText: isSearch!,
-                  focusNode: _searchFocusNode,
-                  onTap: handleTap,
-                  onSubmited: (_) {
-                    _searchFocusNode.unfocus();
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      isSearch = value.isNotEmpty;
-                    });
-                  },
-                ),
-              ),
-              Gap(Get.height * 0.025),
-              GridView.builder(
+              ListView.separated(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 1 * 0.8,
-                  ),
+                  separatorBuilder: (context, index) => Gap(Get.height * 0.03),
                   itemCount: latestNewsItems.length,
                   itemBuilder: (context, index) {
                     var item = latestNewsItems[index];

@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +17,8 @@ class LatestNewsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: Get.width * 0.8,
+      height: Get.height * 0.4,
       padding: EdgeInsets.all(Get.height * 0.02),
       decoration: BoxDecoration(
         color: AppColor().bgDark,
@@ -23,78 +26,99 @@ class LatestNewsItem extends StatelessWidget {
         border: Border.all(
           color: AppColor().greySix,
         ),
+        gradient: LinearGradient(
+          colors: [
+            AppColor().bgDark,
+            AppColor().primaryBackGroundColor,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         image: DecorationImage(
           image: AssetImage(item.image!),
           fit: BoxFit.fitWidth,
-          alignment: Alignment.topCenter,
+          alignment: Alignment.bottomCenter,
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              Container(
-                height: Get.height * 0.08,
-                width: Get.height * 0.08,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  // border: Border.all(
-                  //   color: AppColor().greySix,
-                  // ),
-                  image: DecorationImage(
-                    image: AssetImage(item.pImage!),
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              Positioned(
-                child: SvgPicture.asset(
-                  'assets/images/svg/check_badge.svg',
-                  height: Get.height * 0.025,
-                  width: Get.height * 0.025,
-                ),
-              ),
-            ],
-          ),
           Gap(Get.height * 0.01),
           CustomText(
             title: item.name,
-            size: 14,
+            size: Get.height * 0.018,
             fontFamily: 'GilroySemiBold',
             weight: FontWeight.w400,
             color: AppColor().primaryWhite,
           ),
           Gap(Get.height * 0.01),
           CustomText(
-            title: '@${item.uName}',
-            size: 12,
+            title: item.uName,
+            size: Get.height * 0.016,
             fontFamily: 'GilroyRegular',
             weight: FontWeight.w400,
             color: AppColor().greySix,
           ),
-          Gap(Get.height * 0.02),
-          Container(
-            padding: EdgeInsets.all(Get.height * 0.015),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              border: Border.all(
-                color: AppColor().primaryColor,
+          Divider(
+              color: AppColor().primaryWhite.withOpacity(0.1), thickness: 1),
+          CustomText(
+            title: item.details,
+            size: Get.height * 0.016,
+            fontFamily: 'GilroyRegular',
+            weight: FontWeight.w400,
+            color: AppColor().primaryWhite,
+          ),
+          Gap(Get.height * 0.01),
+          Row(
+            children: [
+              CustomText(
+                title: 'By',
+                size: Get.height * 0.016,
+                fontFamily: 'GilroyRegular',
+                weight: FontWeight.w400,
+                color: AppColor().greySix,
               ),
-            ),
-            child: Center(
-              child: CustomText(
-                title: 'Follow',
-                size: 14,
+              Gap(Get.height * 0.01),
+              CustomText(
+                title: item.postedBy,
+                size: Get.height * 0.016,
+                fontFamily: 'GilroySemiBold',
+                weight: FontWeight.w400,
+                color: AppColor().primaryGreen,
+              ),
+              Gap(Get.height * 0.01),
+              const SmallCircle(),
+              Gap(Get.height * 0.01),
+              CustomText(
+                title: item.time,
+                size: Get.height * 0.016,
                 fontFamily: 'GilroyMedium',
                 weight: FontWeight.w400,
-                color: AppColor().primaryColor,
+                color: AppColor().primaryWhite,
               ),
-            ),
-          )
+            ],
+          ),
+          // Gap(Get.height * 0.02),
+          // Container(
+          //   padding: EdgeInsets.all(Get.height * 0.015),
+          //   width: double.infinity,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(40),
+          //     border: Border.all(
+          //       color: AppColor().primaryColor,
+          //     ),
+          //   ),
+          //   child: Center(
+          //     child: CustomText(
+          //       title: 'Follow',
+          //       size: 14,
+          //       fontFamily: 'GilroyMedium',
+          //       weight: FontWeight.w400,
+          //       color: AppColor().primaryColor,
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
