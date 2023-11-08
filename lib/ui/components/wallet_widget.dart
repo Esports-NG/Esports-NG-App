@@ -94,7 +94,16 @@ class WalletWidget extends StatelessWidget {
               title: 'Withdraw',
               color: AppColor().primaryBackGroundColor,
               border: Border.all(
-                color: AppColor().lightItemsColor.withOpacity(0.3),
+                color: AppColor().primaryColor,
+                width: 0.5,
+              ),
+            ),
+            Gap(Get.height * 0.02),
+            options(
+              title: 'Transfer',
+              color: AppColor().primaryBackGroundColor,
+              border: Border.all(
+                color: AppColor().primaryColor,
                 width: 0.5,
               ),
             ),
@@ -115,7 +124,7 @@ class WalletWidget extends StatelessWidget {
   Expanded options({String? title, Color? color, BoxBorder? border}) {
     return Expanded(
       child: Container(
-        height: Get.height * 0.08,
+        height: Get.height * 0.06,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: color,
@@ -123,7 +132,8 @@ class WalletWidget extends StatelessWidget {
         child: Center(
           child: CustomText(
             title: title,
-            color: border != null ? AppColor().primaryRed : AppColor().greyTwo,
+            color:
+                border != null ? AppColor().primaryColor : AppColor().greyTwo,
             weight: FontWeight.w400,
             size: Get.height * 0.016,
             fontFamily: 'GilroySemiBold',

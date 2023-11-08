@@ -3,6 +3,7 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/auth/login.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -74,7 +75,7 @@ class _AccountState extends State<Account> {
                     child: IconButton(
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
-                      onPressed: () => authController.logout(),
+                      onPressed: () {},
                       icon: Icon(
                         Icons.settings,
                         size: 25,
@@ -120,7 +121,7 @@ class _AccountState extends State<Account> {
                         setState(() {
                           accountTab = index;
                           if (item.title == 'Logout') {
-                            Get.off(() => const LoginScreen());
+                            logOutDialog(context);
                           } else {
                             Get.to(() => AccountDetails(
                                   title: item.title,
@@ -171,5 +172,112 @@ class _AccountState extends State<Account> {
         ),
       );
     });
+  }
+
+  void logOutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                        onPressed: () => Get.back(),
+                        icon: Icon(
+                          Icons.close,
+                          color: AppColor().primaryWhite,
+                        ))
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: CustomText(
+                    title: 'Are you sure you want to log out?',
+                    size: Get.height * 0.018,
+                    fontFamily: 'GilroySemiBold',
+                    textAlign: TextAlign.center,
+                    color: AppColor().primaryWhite,
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: AppColor().primaryLightColor,
+            content: Container(
+                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                width: Get.width * 0.5,
+                height: Get.height * 0.2,
+                child: Column(
+                  children: [
+                    InkWell(
+                      onTap: () => authController.logout(),
+                      child: Container(
+                        padding: EdgeInsets.all(Get.height * 0.025),
+                        decoration: BoxDecoration(
+                          color: AppColor().primaryColor,
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(
+                              color: AppColor().primaryColor, width: 1),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              title: 'Yes',
+                              size: Get.height * 0.016,
+                              fontFamily: 'GilroyMedium',
+                              textAlign: TextAlign.start,
+                              color: AppColor().primaryWhite,
+                            ),
+                            const Spacer(),
+                            SmallCircle(
+                              size: Get.height * 0.015,
+                              color: AppColor().primaryWhite,
+                              bColor: AppColor().primaryColor,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    InkWell(
+                      onTap: () => Get.back(),
+                      child: Container(
+                        padding: EdgeInsets.all(Get.height * 0.025),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(
+                              color: AppColor().lightItemsColor, width: 1),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              title: 'No',
+                              size: Get.height * 0.016,
+                              fontFamily: 'GilroyMedium',
+                              textAlign: TextAlign.start,
+                              color: AppColor().primaryWhite,
+                            ),
+                            const Spacer(),
+                            SmallCircle(
+                              size: Get.height * 0.015,
+                              color: AppColor().primaryWhite,
+                              bColor: AppColor().primaryColor,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+          );
+        });
+      },
+    );
   }
 }

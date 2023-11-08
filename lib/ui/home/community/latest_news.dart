@@ -7,16 +7,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'components/suggested_profile_item.dart';
 
-class SuggestedProfile extends StatefulWidget {
-  const SuggestedProfile({super.key});
+import 'components/latest_news_item.dart';
+
+class LatestNews extends StatefulWidget {
+  const LatestNews({super.key});
 
   @override
-  State<SuggestedProfile> createState() => _SuggestedProfileState();
+  State<LatestNews> createState() => _LatestNewsState();
 }
 
-class _SuggestedProfileState extends State<SuggestedProfile> {
+class _LatestNewsState extends State<LatestNews> {
   bool? isSearch = false;
   final FocusNode _searchFocusNode = FocusNode();
   int? eventType = 0;
@@ -85,10 +86,10 @@ class _SuggestedProfileState extends State<SuggestedProfile> {
                     mainAxisSpacing: 20,
                     childAspectRatio: 1 * 0.8,
                   ),
-                  itemCount: suggestedProfileItems.length,
+                  itemCount: latestNewsItems.length,
                   itemBuilder: (context, index) {
-                    var item = suggestedProfileItems[index];
-                    return SuggestedProfileItem(item: item);
+                    var item = latestNewsItems[index];
+                    return LatestNewsItem(item: item);
                   }),
             ],
           ),

@@ -7,6 +7,7 @@ class UserModel {
   String? state;
   String gender;
   String dOB;
+  int? referralCode;
   String? password;
   String? password2;
   List<String>? iPurpose;
@@ -26,6 +27,7 @@ class UserModel {
     this.state,
     required this.gender,
     required this.dOB,
+    this.referralCode,
     this.password,
     this.password2,
     required this.iPurpose,
@@ -46,6 +48,7 @@ class UserModel {
         state: json["state"] ?? '',
         gender: json["gender"],
         dOB: json["d_o_b"],
+        referralCode: json["referral_code"] ?? 0,
         iPurpose: json["ipurpose"] == null
             ? []
             : List<String>.from(json["ipurpose"]!.map((x) => x)),
@@ -92,6 +95,7 @@ class UserModel {
         "state": state,
         "gender": gender,
         "d_o_b": dOB,
+        "referral_code": referralCode,
         "purpose": purpose == null
             ? []
             : List<dynamic>.from(purpose!.map((x) => x.toJson())),

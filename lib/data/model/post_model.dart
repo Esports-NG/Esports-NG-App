@@ -1,6 +1,6 @@
 class Posts {
   final String? image, pImage;
-  final String? name, uName;
+  final String? name, uName, postedBy;
   final String? time;
   final List? genre;
   final String? details;
@@ -19,6 +19,7 @@ class Posts {
       this.details,
       this.likes,
       this.comment,
+      this.postedBy,
       this.views,
       this.repost});
 }
@@ -92,5 +93,44 @@ var suggestedProfileItems = [
     pImage: 'assets/images/png/suggested-profile.png',
     name: 'Michael Jay White',
     uName: 'captainbarbosa',
+  ),
+];
+
+var latestNewsItems = [
+  Posts(
+    image: 'assets/images/png/newsImage1.png',
+    name: 'AFRICA COMICADE SUCCESSFULLY RAISES THE BAR FOR GAMING IN AFRICA',
+    uName: 'Powered by Nexal Gaming',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain... New quest unlocked: Get a chance to win 5 new skins.',
+    time: '2hours ago',
+    postedBy: 'Linda Kareem',
+  ),
+  Posts(
+    image: 'assets/images/png/newsImage1.png',
+    name: 'AFRICA COMICADE SUCCESSFULLY RAISES THE BAR FOR GAMING IN AFRICA',
+    uName: 'Powered by Nexal Gaming',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain... New quest unlocked: Get a chance to win 5 new skins.',
+    time: '2hours ago',
+    postedBy: 'Linda Kareem',
+  ),
+  Posts(
+    image: 'assets/images/png/newsImage1.png',
+    name: 'AFRICA COMICADE SUCCESSFULLY RAISES THE BAR FOR GAMING IN AFRICA',
+    uName: 'Powered by Nexal Gaming',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain... New quest unlocked: Get a chance to win 5 new skins.',
+    time: '2hours ago',
+    postedBy: 'Linda Kareem',
+  ),
+  Posts(
+    image: 'assets/images/png/newsImage1.png',
+    name: 'AFRICA COMICADE SUCCESSFULLY RAISES THE BAR FOR GAMING IN AFRICA',
+    uName: 'Powered by Nexal Gaming',
+    details:
+        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain... New quest unlocked: Get a chance to win 5 new skins.',
+    time: '2hours ago',
+    postedBy: 'Linda Kareem',
   ),
 ];
