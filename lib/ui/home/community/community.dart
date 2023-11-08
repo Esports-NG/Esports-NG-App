@@ -165,6 +165,38 @@ class _CommunityPageState extends State<CommunityPage> {
                 ],
               ),
             ),
+            Gap(Get.height * 0.03),
+            Divider(
+              color: AppColor().primaryWhite.withOpacity(0.1),
+              thickness: 4,
+            ),
+            Gap(Get.height * 0.03),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: Column(
+                children: [
+                  PageHeaderWidget(
+                    onTap: () => Get.to(() => const LatestNews()),
+                    title: 'Trending Games',
+                  ),
+                  Gap(Get.height * 0.03),
+                  SizedBox(
+                    height: Get.height * 0.4,
+                    child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (context, index) =>
+                            Gap(Get.height * 0.03),
+                        itemCount: latestNewsItems.take(2).length,
+                        itemBuilder: (context, index) {
+                          var item = latestNewsItems[index];
+                          return LatestNewsItem(item: item);
+                        }),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

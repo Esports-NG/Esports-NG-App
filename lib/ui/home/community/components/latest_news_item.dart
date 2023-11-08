@@ -3,7 +3,6 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -99,26 +98,6 @@ class LatestNewsItem extends StatelessWidget {
               ),
             ],
           ),
-          // Gap(Get.height * 0.02),
-          // Container(
-          //   padding: EdgeInsets.all(Get.height * 0.015),
-          //   width: double.infinity,
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(40),
-          //     border: Border.all(
-          //       color: AppColor().primaryColor,
-          //     ),
-          //   ),
-          //   child: Center(
-          //     child: CustomText(
-          //       title: 'Follow',
-          //       size: 14,
-          //       fontFamily: 'GilroyMedium',
-          //       weight: FontWeight.w400,
-          //       color: AppColor().primaryColor,
-          //     ),
-          //   ),
-          // )
         ],
       ),
     );
