@@ -32,7 +32,7 @@ class Tournament extends StatelessWidget {
                   physics: const ScrollPhysics(),
                   shrinkWrap: true,
                   separatorBuilder: (context, index) => Gap(Get.height * 0.03),
-                  itemCount: tournamentItem.take(1).length,
+                  itemCount: tournamentItem.length,
                   itemBuilder: (context, index) {
                     var item = tournamentItem[index];
                     return TournamentItem(item: item);

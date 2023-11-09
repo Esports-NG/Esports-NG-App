@@ -19,6 +19,7 @@ class TournamentItem extends StatelessWidget {
       decimal: 10,
     );
     return Container(
+      width: Get.width * 0.9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(

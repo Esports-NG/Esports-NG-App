@@ -61,4 +61,15 @@ var tournamentItem = [
     entry: 2000,
     prizePool: 200000,
   ),
+  AccountEventsModel(
+    image: 'assets/images/png/tournament.png',
+    game: 'Mortal Kombat',
+    tName: 'World Champions Cup',
+    tType: 'Teams',
+    registrationDate: 'Aug26 2023 - Aug31 2023',
+    tournamentDate: 'Aug26 2023 - Aug31 2023',
+    genre: ['Ranked', 'Ongoing Registration'],
+    entry: 2000,
+    prizePool: 200000,
+  ),
 ];
