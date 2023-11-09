@@ -13,9 +13,11 @@ import 'package:get/get.dart';
 import 'components/latest_news_item.dart';
 import 'components/suggested_profile_item.dart';
 import 'components/tournament_item.dart';
+import 'components/trending_community_item.dart';
 import 'latest_news.dart';
 import 'suggested_profile.dart';
 import 'tournament.dart';
+import 'trending_community.dart';
 import 'trending_games.dart';
 
 class CommunityPage extends StatefulWidget {
@@ -244,27 +246,32 @@ class _CommunityPageState extends State<CommunityPage> {
               thickness: 4,
             ),
             Gap(Get.height * 0.03),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-              child: Column(
-                children: [
-                  PageHeaderWidget(
-                    onTap: () => Get.to(() => const Tournament()),
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  child: PageHeaderWidget(
+                    onTap: () => Get.to(() => const TrendingCommunity()),
                     title: 'Trending Communities',
                   ),
-                  Gap(Get.height * 0.03),
-                  ListView.separated(
+                ),
+                Gap(Get.height * 0.03),
+                Container(
+                  padding: EdgeInsets.only(left: Get.height * 0.02),
+                  height: Get.height * 0.28,
+                  child: ListView.separated(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
                       separatorBuilder: (context, index) =>
-                          Gap(Get.height * 0.03),
-                      itemCount: tournamentItem.take(1).length,
+                          Gap(Get.height * 0.02),
+                      itemCount: trendingCommunitiesItems.take(2).length,
                       itemBuilder: (context, index) {
-                        var item = tournamentItem[index];
-                        return TournamentItem(item: item);
+                        var item = trendingCommunitiesItems[index];
+                        return TrendingCommunityItem(item: item);
                       }),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

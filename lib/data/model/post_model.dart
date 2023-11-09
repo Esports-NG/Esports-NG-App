@@ -161,3 +161,42 @@ var trendingGamesItems = [
     uName: '32,000 Players',
   ),
 ];
+
+var trendingCommunitiesItems = [
+  Posts(
+    image: 'assets/images/png/trending-community1.png',
+    pImage: 'assets/images/png/trending-community.png',
+    name: 'Kuzio Gaming Community',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-community1.png',
+    pImage: 'assets/images/png/trending-community.png',
+    name: 'Kuzio Gaming Community',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-community1.png',
+    pImage: 'assets/images/png/trending-community.png',
+    name: 'Kuzio Gaming Community',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-community1.png',
+    pImage: 'assets/images/png/trending-community.png',
+    name: 'Kuzio Gaming Community',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-community1.png',
+    pImage: 'assets/images/png/trending-community.png',
+    name: 'Kuzio Gaming Community',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-community1.png',
+    pImage: 'assets/images/png/trending-community.png',
+    name: 'Kuzio Gaming Community',
+    uName: '2,000 Members',
+  ),
+];

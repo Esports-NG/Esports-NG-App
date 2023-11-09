@@ -1,8 +1,11 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'components/trending_games_item.dart';
 
@@ -15,6 +18,19 @@ class TrendingGames extends StatefulWidget {
 
 class _TrendingGamesState extends State<TrendingGames> {
   final eventController = Get.put(EventRepository());
+  bool? isSearch = false;
+  final FocusNode _searchFocusNode = FocusNode();
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  void handleTap() {
+    setState(() {
+      isSearch = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +51,30 @@ class _TrendingGamesState extends State<TrendingGames> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(
+                height: Get.height * 0.06,
+                child: CustomTextField(
+                  hint: "Search for gaming news, competitions...",
+                  fontFamily: 'GilroyMedium',
+                  prefixIcon: Icon(
+                    CupertinoIcons.search,
+                    color: AppColor().lightItemsColor,
+                  ),
+                  textEditingController: eventController.searchController,
+                  hasText: isSearch!,
+                  focusNode: _searchFocusNode,
+                  onTap: handleTap,
+                  onSubmited: (_) {
+                    _searchFocusNode.unfocus();
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      isSearch = value.isNotEmpty;
+                    });
+                  },
+                ),
+              ),
+              Gap(Get.height * 0.025),
               GridView.builder(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,

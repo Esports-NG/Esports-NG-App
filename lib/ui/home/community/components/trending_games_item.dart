@@ -16,6 +16,7 @@ class TrendingGamesItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(Get.height * 0.02),
+      width: Get.width * 0.55,
       decoration: BoxDecoration(
         color: AppColor().bgDark,
         borderRadius: BorderRadius.circular(10),
