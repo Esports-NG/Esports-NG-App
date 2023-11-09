@@ -1,3 +1,4 @@
+import 'package:e_sport/data/model/account_events_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
@@ -9,9 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
 import 'components/latest_news_item.dart';
 import 'components/suggested_profile_item.dart';
+import 'components/tournament_item.dart';
 import 'latest_news.dart';
 import 'suggested_profile.dart';
 import 'trending_games.dart';
@@ -218,20 +219,16 @@ class _CommunityPageState extends State<CommunityPage> {
                     title: 'Tournaments',
                   ),
                   Gap(Get.height * 0.03),
-                  SizedBox(
-                    height: Get.height * 0.4,
-                    child: ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            Gap(Get.height * 0.03),
-                        itemCount: latestNewsItems.take(2).length,
-                        itemBuilder: (context, index) {
-                          var item = latestNewsItems[index];
-                          return LatestNewsItem(item: item);
-                        }),
-                  ),
+                  ListView.separated(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      separatorBuilder: (context, index) =>
+                          Gap(Get.height * 0.03),
+                      itemCount: tournamentItem.take(1).length,
+                      itemBuilder: (context, index) {
+                        var item = tournamentItem[index];
+                        return TournamentItem(item: item);
+                      }),
                 ],
               ),
             ),
