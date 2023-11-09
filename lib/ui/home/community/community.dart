@@ -21,6 +21,7 @@ import 'suggested_profile.dart';
 import 'tournament.dart';
 import 'trending_community.dart';
 import 'trending_games.dart';
+import 'trending_team.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({super.key});
@@ -304,6 +305,39 @@ class _CommunityPageState extends State<CommunityPage> {
                       itemBuilder: (context, index) {
                         var item = socialEventItem[index];
                         return SocialEventItem(item: item);
+                      }),
+                ),
+              ],
+            ),
+            Gap(Get.height * 0.03),
+            Divider(
+              color: AppColor().primaryWhite.withOpacity(0.1),
+              thickness: 4,
+            ),
+            Gap(Get.height * 0.03),
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  child: PageHeaderWidget(
+                    onTap: () => Get.to(() => const TrendingTeam()),
+                    title: 'Trending Teams',
+                  ),
+                ),
+                Gap(Get.height * 0.03),
+                Container(
+                  padding: EdgeInsets.only(left: Get.height * 0.02),
+                  height: Get.height * 0.28,
+                  child: ListView.separated(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      separatorBuilder: (context, index) =>
+                          Gap(Get.height * 0.02),
+                      itemCount: trendingTeamsItems.take(2).length,
+                      itemBuilder: (context, index) {
+                        var item = trendingTeamsItems[index];
+                        return TrendingCommunityItem(item: item);
                       }),
                 ),
               ],

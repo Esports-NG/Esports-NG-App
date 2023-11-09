@@ -200,3 +200,42 @@ var trendingCommunitiesItems = [
     uName: '2,000 Members',
   ),
 ];
+
+var trendingTeamsItems = [
+  Posts(
+    image: 'assets/images/png/trending-team.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-team.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-team.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-team.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-team.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/trending-team.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+];
