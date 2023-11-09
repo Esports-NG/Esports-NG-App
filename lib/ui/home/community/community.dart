@@ -11,10 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'components/latest_news_item.dart';
+import 'components/social_event_item.dart';
 import 'components/suggested_profile_item.dart';
 import 'components/tournament_item.dart';
 import 'components/trending_community_item.dart';
 import 'latest_news.dart';
+import 'social_event.dart';
 import 'suggested_profile.dart';
 import 'tournament.dart';
 import 'trending_community.dart';
@@ -269,6 +271,39 @@ class _CommunityPageState extends State<CommunityPage> {
                       itemBuilder: (context, index) {
                         var item = trendingCommunitiesItems[index];
                         return TrendingCommunityItem(item: item);
+                      }),
+                ),
+              ],
+            ),
+            Gap(Get.height * 0.03),
+            Divider(
+              color: AppColor().primaryWhite.withOpacity(0.1),
+              thickness: 4,
+            ),
+            Gap(Get.height * 0.03),
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  child: PageHeaderWidget(
+                    onTap: () => Get.to(() => const SocialEvent()),
+                    title: 'Social Events',
+                  ),
+                ),
+                Gap(Get.height * 0.03),
+                Container(
+                  padding: EdgeInsets.only(left: Get.height * 0.02),
+                  height: Get.height * 0.44,
+                  child: ListView.separated(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      separatorBuilder: (context, index) =>
+                          Gap(Get.height * 0.02),
+                      itemCount: socialEventItem.take(2).length,
+                      itemBuilder: (context, index) {
+                        var item = socialEventItem[index];
+                        return SocialEventItem(item: item);
                       }),
                 ),
               ],
