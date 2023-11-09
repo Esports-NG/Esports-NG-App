@@ -75,19 +75,14 @@ class _TrendingCommunityState extends State<TrendingCommunity> {
                 ),
               ),
               Gap(Get.height * 0.025),
-              GridView.builder(
-                  physics: const BouncingScrollPhysics(),
+              ListView.separated(
+                  physics: const ScrollPhysics(),
                   shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 1 * 0.8,
-                  ),
+                  separatorBuilder: (context, index) => Gap(Get.height * 0.02),
                   itemCount: trendingCommunitiesItems.length,
                   itemBuilder: (context, index) {
                     var item = trendingCommunitiesItems[index];
-                    return TrendingCommunityItem(item: item);
+                    return TrendingCommunityItem(item: item, index: 0);
                   }),
             ],
           ),

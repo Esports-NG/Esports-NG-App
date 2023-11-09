@@ -8,15 +8,18 @@ import 'package:get/get.dart';
 
 class TrendingCommunityItem extends StatelessWidget {
   final Posts item;
+  final int? index;
   const TrendingCommunityItem({
     super.key,
     required this.item,
+    this.index,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(Get.height * 0.02),
+      height: Get.height * 0.4,
       width: Get.width * 0.55,
       decoration: BoxDecoration(
         color: AppColor().bgDark,
@@ -77,6 +80,22 @@ class TrendingCommunityItem extends StatelessWidget {
             weight: FontWeight.w400,
             color: AppColor().greySix,
           ),
+          if (index == 0)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Gap(Get.height * 0.02),
+                CustomText(
+                  title:
+                      'This team is made up of skilled gamers who are\npassionate about the Attack on Titan series.',
+                  size: 12,
+                  fontFamily: 'GilroyMedium',
+                  weight: FontWeight.w400,
+                  color: AppColor().greySix,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           Gap(Get.height * 0.02),
           Container(
             padding: EdgeInsets.all(Get.height * 0.015),
