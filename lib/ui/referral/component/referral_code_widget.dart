@@ -3,7 +3,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
+import 'referral_item.dart';
 import 'referral_option.dart';
 
 class ReferralCodeWidget extends StatelessWidget {
@@ -67,40 +67,16 @@ class ReferralCodeWidget extends StatelessWidget {
           ),
         ),
         Gap(Get.height * 0.05),
-        referralItem(
+        ReferralItem(
           title: 'View Referral Earnings',
           onTap: () {},
         ),
         Gap(Get.height * 0.03),
-        referralItem(
+        ReferralItem(
           title: 'View Referral Leader board',
           onTap: () {},
         ),
       ],
-    );
-  }
-
-  referralItem({VoidCallback? onTap, String? title}) {
-    return InkWell(
-      onTap: onTap,
-      child: Row(
-        children: [
-          CustomText(
-            title: title,
-            color: AppColor().primaryColor,
-            weight: FontWeight.w400,
-            size: Get.height * 0.018,
-            underline: TextDecoration.underline,
-            fontFamily: 'GilroyMedium',
-          ),
-          Gap(Get.height * 0.01),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: AppColor().primaryColor,
-            size: 17,
-          )
-        ],
-      ),
     );
   }
 }
