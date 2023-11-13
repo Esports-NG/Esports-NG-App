@@ -3,7 +3,7 @@ import 'package:e_sport/ui/components/account_event_widget.dart';
 import 'package:e_sport/ui/components/account_team_widget.dart';
 import 'package:e_sport/ui/components/games_played_widget.dart';
 import 'package:e_sport/ui/components/post_widget.dart';
-import 'package:e_sport/ui/components/referral_code_widget.dart';
+import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/components/wallet_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -45,29 +45,28 @@ class _AccountDetailsState extends State<AccountDetails> {
         ],
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
-      floatingActionButton:
-          (widget.title == 'Wallet' || widget.title == 'Referrals')
-              ? null
-              : (widget.title == 'Events')
-                  ? FloatingActionButton.extended(
-                      backgroundColor: AppColor().primaryColor,
-                      onPressed: () {},
-                      label: CustomText(
-                        title: 'Create New Event',
-                        color: AppColor().greyTwo,
-                        weight: FontWeight.w400,
-                        size: Get.height * 0.018,
-                        fontFamily: 'GilroyMedium',
-                      ),
-                    )
-                  : FloatingActionButton(
-                      backgroundColor: AppColor().primaryColor,
-                      onPressed: () {},
-                      child: Icon(
-                        Icons.add,
-                        color: AppColor().primaryWhite,
-                      ),
-                    ),
+      floatingActionButton: (widget.title == 'Wallet')
+          ? null
+          : (widget.title == 'Events')
+              ? FloatingActionButton.extended(
+                  backgroundColor: AppColor().primaryColor,
+                  onPressed: () {},
+                  label: CustomText(
+                    title: 'Create New Event',
+                    color: AppColor().greyTwo,
+                    weight: FontWeight.w400,
+                    size: Get.height * 0.018,
+                    fontFamily: 'GilroyMedium',
+                  ),
+                )
+              : FloatingActionButton(
+                  backgroundColor: AppColor().primaryColor,
+                  onPressed: () {},
+                  child: Icon(
+                    Icons.add,
+                    color: AppColor().primaryWhite,
+                  ),
+                ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(Get.height * 0.02),
@@ -93,8 +92,6 @@ class _AccountDetailsState extends State<AccountDetails> {
                 const AccountEventsWidget()
               ] else if (widget.title == 'Wallet') ...[
                 const WalletWidget()
-              ] else ...[
-                const ReferralCodeWidget()
               ]
             ],
           ),

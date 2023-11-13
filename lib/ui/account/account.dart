@@ -1,6 +1,7 @@
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -117,10 +118,13 @@ class _AccountState extends State<Account> {
                     var item = accountItem[index];
                     return InkWell(
                       onTap: () {
+                        print(item.title);
                         setState(() {
                           accountTab = index;
                           if (item.title == 'Logout') {
                             logOutDialog(context);
+                          } else if (item.title == 'Referrals') {
+                            Get.to(() => const Referral());
                           } else {
                             Get.to(() => AccountDetails(
                                   title: item.title,

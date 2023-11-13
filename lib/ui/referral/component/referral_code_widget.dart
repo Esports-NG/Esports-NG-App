@@ -1,6 +1,5 @@
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -17,18 +16,20 @@ class ReferralCodeWidget extends StatelessWidget {
       children: [
         Center(
           child: Container(
-             height: Get.height * 0.3,
-              width: Get.height * 0.3,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor().primaryLightColor,
-              ),
+            height: Get.height * 0.25,
+            width: Get.height * 0.25,
+            padding: EdgeInsets.all(Get.height * 0.03),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColor().referralC,
+            ),
             child: Image.asset(
               'assets/images/png/referral.png',
-              height: Get.height * 0.2,
+              height: Get.height * 0.17,
             ),
           ),
         ),
+        Gap(Get.height * 0.05),
         CustomText(
           title: 'Invite Friends and Earn!',
           color: AppColor().greyTwo,
@@ -64,56 +65,40 @@ class ReferralCodeWidget extends StatelessWidget {
           ),
         ),
         Gap(Get.height * 0.05),
-        CustomText(
-          title: 'My Referral Earnings',
-          color: AppColor().greyTwo,
-          weight: FontWeight.w400,
-          size: Get.height * 0.018,
-          fontFamily: 'GilroySemiBold',
+        referralItem(
+          title: 'View Referral Earnings',
+          onTap: () {},
         ),
-        Gap(Get.height * 0.01),
-        Container(
-          padding: EdgeInsets.all(Get.height * 0.02),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: AppColor().referral,
-          ),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            metrics(title: 'Subscribed', no: '3'),
-            Container(
-              width: 1,
-              height: Get.height * 0.08,
-              color: AppColor().greyTwo,
-              // width: 1,
-            ),
-            metrics(title: 'Referrals', no: '11')
-          ]),
-        )
+        Gap(Get.height * 0.03),
+        referralItem(
+          title: 'View Referral Leader board',
+          onTap: () {},
+        ),
       ],
     );
   }
 
-  Column metrics({String? title, no}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CustomText(
-          title: title,
-          color: AppColor().greyTwo,
-          weight: FontWeight.w400,
-          size: Get.height * 0.018,
-          fontFamily: 'GilroyMedium',
-        ),
-        Gap(Get.height * 0.02),
-        CustomText(
-          title: no,
-          color: AppColor().greyTwo,
-          weight: FontWeight.w400,
-          size: Get.height * 0.036,
-          fontFamily: 'GilroyMedium',
-        ),
-      ],
+  referralItem({VoidCallback? onTap, String? title}) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          CustomText(
+            title: title,
+            color: AppColor().primaryColor,
+            weight: FontWeight.w400,
+            size: Get.height * 0.018,
+            underline: TextDecoration.underline,
+            fontFamily: 'GilroyMedium',
+          ),
+          Gap(Get.height * 0.01),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: AppColor().primaryColor,
+            size: 17,
+          )
+        ],
+      ),
     );
   }
 
