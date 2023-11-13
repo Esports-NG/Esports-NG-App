@@ -2,6 +2,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'referral_earning_modal.dart';
 import 'referral_info.dart';
 import 'referral_item.dart';
 import 'referral_option.dart';
@@ -36,7 +37,21 @@ class ReferralCodeWidget extends StatelessWidget {
         Gap(Get.height * 0.04),
         ReferralItem(
           title: 'View Referral Earnings',
-          onTap: () {},
+          onTap: () {
+            showModalBottomSheet(
+                isScrollControlled: false,
+                backgroundColor: AppColor().primaryWhite,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                context: context,
+                builder: (context) {
+                  return const ReferralEarningModal();
+                });
+          },
         ),
         Gap(Get.height * 0.03),
         ReferralItem(

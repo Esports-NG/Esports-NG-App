@@ -49,7 +49,7 @@ class ReferralLinkWidget extends StatelessWidget {
                 ),
                 context: context,
                 builder: (context) {
-                  return ReferralEarningModal();
+                  return const ReferralEarningModal();
                 });
           },
         ),

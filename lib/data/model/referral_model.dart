@@ -8,8 +8,8 @@ class ReferralModel {
   });
 }
 
-var referralMetricsItem = [
-  ReferralModel(title: 'Price Poll Winning', price: 790.05),
-  ReferralModel(title: 'Tournament X Registration', price: 1000),
-  ReferralModel(title: 'Withdrawal', price: 3000),
+var referralEarningsItem = [
+  ReferralModel(title: 'Subscribed', price: 3),
+  ReferralModel(title: 'Referrals', price: 11),
+  ReferralModel(title: 'Total Cash Earned', price: 1500),
 ];
