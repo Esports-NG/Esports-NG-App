@@ -1,11 +1,14 @@
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/category_model.dart';
+import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -21,6 +24,13 @@ class Account extends StatefulWidget {
 class _AccountState extends State<Account> {
   final authController = Get.put(AuthRepository());
   int? accountTab = 0;
+  String? _selectedIndex;
+
+  void toProfile() async {
+    await Future.delayed(const Duration(milliseconds: 10));
+    Get.to(() => Profile());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -72,11 +82,102 @@ class _AccountState extends State<Account> {
                   Positioned(
                     right: Get.height * 0.03,
                     bottom: Get.height * 0.05,
-                    child: IconButton(
+                    child: PopupMenuButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide.none),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
-                      onPressed: () {},
-                      icon: Icon(
+                      color: AppColor().primaryMenu,
+                      offset: const Offset(0, -10),
+                      initialValue: _selectedIndex,
+                      onSelected: (value) {
+                        setState(() {
+                          if (value == '1') {
+                            _selectedIndex = value;
+                          } else if (value == '2') {
+                            _selectedIndex = value;
+                          } else if (value == '3') {
+                            _selectedIndex = value;
+                          }
+                        });
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: '1',
+                          height: 20,
+                          onTap: () {
+                            SchedulerBinding.instance
+                                .addPersistentFrameCallback((_) {
+                              Get.to(() => Profile());
+                            });
+                          },
+                          padding: const EdgeInsets.only(
+                              bottom: 20, left: 20, top: 20),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.016,
+                              ),
+                              Gap(Get.height * 0.02),
+                              CustomText(
+                                title: 'Edit Profile',
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyMedium',
+                                textAlign: TextAlign.start,
+                                color: AppColor().primaryWhite,
+                              ),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: '2',
+                          height: 20,
+                          padding: const EdgeInsets.only(bottom: 20, left: 20),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.016,
+                              ),
+                              Gap(Get.height * 0.02),
+                              CustomText(
+                                title: 'Edit Socials',
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyMedium',
+                                textAlign: TextAlign.start,
+                                color: AppColor().primaryWhite,
+                              ),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: '3',
+                          height: 20,
+                          padding: const EdgeInsets.only(bottom: 20, left: 20),
+                          child: Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.lock_fill,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.016,
+                              ),
+                              Gap(Get.height * 0.02),
+                              CustomText(
+                                title: 'Privacy and Security',
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyMedium',
+                                textAlign: TextAlign.start,
+                                color: AppColor().primaryWhite,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      child: Icon(
                         Icons.settings,
                         size: 25,
                         color: AppColor().primaryWhite,
