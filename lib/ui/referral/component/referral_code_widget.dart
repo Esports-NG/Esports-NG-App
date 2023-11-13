@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import 'referral_option.dart';
+
 class ReferralCodeWidget extends StatelessWidget {
   const ReferralCodeWidget({
     super.key,
@@ -48,13 +50,13 @@ class ReferralCodeWidget extends StatelessWidget {
           fontFamily: 'GilroyRegular',
         ),
         Gap(Get.height * 0.05),
-        options(
+        ReferralOption(
           title: 'Copy Referral Code',
           icon: Icons.copy,
           color: AppColor().primaryColor,
         ),
         Gap(Get.height * 0.02),
-        options(
+        ReferralOption(
           title: 'Share Code',
           icon: Icons.share,
           color: AppColor().primaryBackGroundColor,
@@ -98,41 +100,6 @@ class ReferralCodeWidget extends StatelessWidget {
             size: 17,
           )
         ],
-      ),
-    );
-  }
-
-  options({
-    String? title,
-    Color? color,
-    textColor,
-    BoxBorder? border,
-    IconData? icon,
-  }) {
-    return Container(
-      height: Get.height * 0.06,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
-          color: color,
-          border: border ?? Border.all()),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: textColor ?? AppColor().greyTwo,
-            ),
-            Gap(Get.height * 0.01),
-            CustomText(
-              title: title,
-              color: textColor ?? AppColor().greyTwo,
-              weight: FontWeight.w400,
-              size: Get.height * 0.016,
-              fontFamily: 'GilroySemiBold',
-            ),
-          ],
-        ),
       ),
     );
   }
