@@ -3,7 +3,7 @@ import 'package:e_sport/ui/components/account_event_widget.dart';
 import 'package:e_sport/ui/components/account_team_widget.dart';
 import 'package:e_sport/ui/components/games_played_widget.dart';
 import 'package:e_sport/ui/components/post_widget.dart';
-import 'package:e_sport/ui/components/referral_widget.dart';
+import 'package:e_sport/ui/components/referral_code_widget.dart';
 import 'package:e_sport/ui/components/wallet_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -94,7 +94,7 @@ class _AccountDetailsState extends State<AccountDetails> {
               ] else if (widget.title == 'Wallet') ...[
                 const WalletWidget()
               ] else ...[
-                const ReferralWidget()
+                const ReferralCodeWidget()
               ]
             ],
           ),

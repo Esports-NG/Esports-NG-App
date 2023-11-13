@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class ReferralWidget extends StatelessWidget {
-  const ReferralWidget({
+class ReferralCodeWidget extends StatelessWidget {
+  const ReferralCodeWidget({
     super.key,
   });
 
@@ -16,9 +16,17 @@ class ReferralWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
-          child: Image.asset(
-            'assets/images/png/referral.png',
-            height: Get.height * 0.4,
+          child: Container(
+             height: Get.height * 0.3,
+              width: Get.height * 0.3,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColor().primaryLightColor,
+              ),
+            child: Image.asset(
+              'assets/images/png/referral.png',
+              height: Get.height * 0.2,
+            ),
           ),
         ),
         CustomText(
@@ -38,25 +46,22 @@ class ReferralWidget extends StatelessWidget {
           size: Get.height * 0.016,
           fontFamily: 'GilroyRegular',
         ),
-        Gap(Get.height * 0.01),
-        Row(
-          children: [
-            options(
-              title: 'Copy Referral Link',
-              icon: CupertinoIcons.link,
-              color: AppColor().primaryColor,
-            ),
-            Gap(Get.height * 0.02),
-            options(
-              title: 'Share',
-              icon: Icons.share,
-              color: AppColor().primaryBackGroundColor,
-              border: Border.all(
-                color: AppColor().lightItemsColor.withOpacity(0.3),
-                width: 0.5,
-              ),
-            ),
-          ],
+        Gap(Get.height * 0.05),
+        options(
+          title: 'Copy Referral Code',
+          icon: Icons.copy,
+          color: AppColor().primaryColor,
+        ),
+        Gap(Get.height * 0.02),
+        options(
+          title: 'Share Code',
+          icon: Icons.share,
+          color: AppColor().primaryBackGroundColor,
+          textColor: AppColor().primaryColor,
+          border: Border.all(
+            color: AppColor().primaryColor,
+            width: 0.5,
+          ),
         ),
         Gap(Get.height * 0.05),
         CustomText(
@@ -112,37 +117,36 @@ class ReferralWidget extends StatelessWidget {
     );
   }
 
-  Expanded options({
+  options({
     String? title,
     Color? color,
+    textColor,
     BoxBorder? border,
     IconData? icon,
   }) {
-    return Expanded(
-      child: Container(
-        height: Get.height * 0.06,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40),
-            color: color,
-            border: border ?? Border.all()),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color: AppColor().greyTwo,
-              ),
-              Gap(Get.height * 0.01),
-              CustomText(
-                title: title,
-                color: AppColor().greyTwo,
-                weight: FontWeight.w400,
-                size: Get.height * 0.016,
-                fontFamily: 'GilroySemiBold',
-              ),
-            ],
-          ),
+    return Container(
+      height: Get.height * 0.06,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40),
+          color: color,
+          border: border ?? Border.all()),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: textColor ?? AppColor().greyTwo,
+            ),
+            Gap(Get.height * 0.01),
+            CustomText(
+              title: title,
+              color: textColor ?? AppColor().greyTwo,
+              weight: FontWeight.w400,
+              size: Get.height * 0.016,
+              fontFamily: 'GilroySemiBold',
+            ),
+          ],
         ),
       ),
     );
