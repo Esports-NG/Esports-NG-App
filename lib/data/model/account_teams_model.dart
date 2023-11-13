@@ -40,3 +40,10 @@ var accountTeamItem = [
         'If you are a fan of Eren, you are an enemy and we do not want you here.',
   ),
 ];
+
+var paymentMethodItem = [
+  AccountTeamsModel(
+      image: 'assets/images/svg/credit-card.svg', name: 'Debit Card'),
+  AccountTeamsModel(
+      image: 'assets/images/svg/bank-transfer.svg', name: 'Bank Transfer'),
+];

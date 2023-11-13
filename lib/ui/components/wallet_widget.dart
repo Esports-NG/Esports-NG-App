@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import 'deposit.dart';
 import 'transaction_history_item.dart';
 
 class WalletWidget extends StatelessWidget {
@@ -89,9 +90,9 @@ class WalletWidget extends StatelessWidget {
         Row(
           children: [
             options(
-              title: 'Deposit',
-              color: AppColor().primaryColor,
-            ),
+                title: 'Deposit',
+                color: AppColor().primaryColor,
+                onTap: () => Get.to(() => const Deposit())),
             Gap(Get.height * 0.02),
             options(
               title: 'Withdraw',
@@ -145,22 +146,26 @@ class WalletWidget extends StatelessWidget {
     );
   }
 
-  Expanded options({String? title, Color? color, BoxBorder? border}) {
+  options(
+      {String? title, Color? color, BoxBorder? border, VoidCallback? onTap}) {
     return Expanded(
-      child: Container(
-        height: Get.height * 0.06,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(90),
-            color: color,
-            border: border ?? Border.all()),
-        child: Center(
-          child: CustomText(
-            title: title,
-            color:
-                border != null ? AppColor().primaryColor : AppColor().greyTwo,
-            weight: FontWeight.w400,
-            size: Get.height * 0.016,
-            fontFamily: 'GilroySemiBold',
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          height: Get.height * 0.06,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(90),
+              color: color,
+              border: border ?? Border.all()),
+          child: Center(
+            child: CustomText(
+              title: title,
+              color:
+                  border != null ? AppColor().primaryColor : AppColor().greyTwo,
+              weight: FontWeight.w400,
+              size: Get.height * 0.016,
+              fontFamily: 'GilroySemiBold',
+            ),
           ),
         ),
       ),
