@@ -35,6 +35,23 @@ class _ReferralState extends State<Referral>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColor().primaryBackGroundColor,
+        centerTitle: true,
+        title: CustomText(
+          title: 'Referrals',
+          weight: FontWeight.w600,
+          size: 18,
+          color: AppColor().primaryWhite,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.settings,
+              color: AppColor().primaryWhite,
+            ),
+          ),
+        ],
         bottom: TabBar(
             controller: _tabController,
             indicatorColor: AppColor().primaryColor,

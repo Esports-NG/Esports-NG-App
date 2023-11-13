@@ -36,7 +36,7 @@ class _AccountDetailsState extends State<AccountDetails> {
         ),
         actions: [
           IconButton(
-            onPressed: () => authController.logout(),
+            onPressed: () {},
             icon: Icon(
               Icons.settings,
               color: AppColor().primaryWhite,
