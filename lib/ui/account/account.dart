@@ -118,7 +118,6 @@ class _AccountState extends State<Account> {
                     var item = accountItem[index];
                     return InkWell(
                       onTap: () {
-                        print(item.title);
                         setState(() {
                           accountTab = index;
                           if (item.title == 'Logout') {
