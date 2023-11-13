@@ -14,7 +14,15 @@ class AccountTeamsItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(Get.height * 0.02),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(10),
+        gradient: LinearGradient(
+          colors: [
+            AppColor().greyGradient.withOpacity(0.5),
+            AppColor().primaryBackGroundColor,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         border: Border.all(
           color: AppColor().lightItemsColor.withOpacity(0.2),
           width: 0.5,
@@ -54,7 +62,11 @@ class AccountTeamsItem extends StatelessWidget {
                   textAlign: TextAlign.start,
                   color: AppColor().greySix,
                 ),
-                Gap(Get.height * 0.02),
+                Divider(
+                  color: AppColor().lightItemsColor.withOpacity(0.3),
+                  height: Get.height * 0.05,
+                  thickness: 0.5,
+                ),
                 CustomText(
                   title: item.details,
                   size: 12,

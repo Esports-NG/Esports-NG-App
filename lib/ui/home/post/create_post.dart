@@ -12,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../components/create_success_page.dart';
 import 'create_post_item.dart';
 
 class CreatePost extends StatefulWidget {
@@ -25,7 +26,41 @@ class _CreatePostState extends State<CreatePost> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final postController = Get.put(PostRepository());
   String? gameTag, seePost, engagePost;
-  int? _selectedMenu;
+  int? _selectedMenu = 0;
+  bool? isPostUpdate = false,
+      isGameTag = false,
+      isSeePost = false,
+      isEngagePost = false;
+
+  final FocusNode _postUpdateFocusNode = FocusNode();
+  final FocusNode _gameTagFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _postUpdateFocusNode.dispose();
+    _gameTagFocusNode.dispose();
+    super.dispose();
+  }
+
+  void handleTap(String? title) {
+    if (title == 'postUpdate') {
+      setState(() {
+        isPostUpdate = true;
+      });
+    } else if (title == 'gameTag') {
+      setState(() {
+        isGameTag = true;
+      });
+    } else if (title == 'seePost') {
+      setState(() {
+        isSeePost = true;
+      });
+    } else {
+      setState(() {
+        isEngagePost = true;
+      });
+    }
+  }
 
   Future pickImageFromGallery() async {
     try {
@@ -140,6 +175,19 @@ class _CreatePostState extends State<CreatePost> {
                   CustomTextField(
                     hint: "Type text here",
                     textEditingController: postController.postTextController,
+                    hasText: isPostUpdate!,
+                    focusNode: _postUpdateFocusNode,
+                    onTap: () {
+                      handleTap('postUpdate');
+                    },
+                    onSubmited: (_) {
+                      _postUpdateFocusNode.unfocus();
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        isPostUpdate = value.isNotEmpty;
+                      });
+                    },
                     maxLines: 5,
                     validate: (value) {
                       if (value!.isEmpty) {
@@ -160,7 +208,9 @@ class _CreatePostState extends State<CreatePost> {
                   InputDecorator(
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: AppColor().bgDark,
+                      fillColor: isGameTag == true
+                          ? AppColor().primaryWhite
+                          : AppColor().bgDark,
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: AppColor().lightItemsColor, width: 1),
@@ -186,7 +236,9 @@ class _CreatePostState extends State<CreatePost> {
                             value: value,
                             child: CustomText(
                               title: value,
-                              color: AppColor().lightItemsColor,
+                              color: isGameTag == true
+                                  ? AppColor().primaryBackGroundColor
+                                  : AppColor().lightItemsColor,
                               fontFamily: 'GilroyBold',
                               weight: FontWeight.w400,
                               size: 13,
@@ -197,11 +249,14 @@ class _CreatePostState extends State<CreatePost> {
                           setState(() {
                             gameTag = value;
                             postController.gameTagController.text = gameTag!;
+                            handleTap('gameTag');
                           });
                         },
                         hint: CustomText(
                           title: "Game Tag",
-                          color: AppColor().lightItemsColor,
+                          color: isGameTag == true
+                              ? AppColor().primaryBackGroundColor
+                              : AppColor().lightItemsColor,
                           fontFamily: 'GilroyBold',
                           weight: FontWeight.w400,
                           size: 13,
@@ -339,7 +394,9 @@ class _CreatePostState extends State<CreatePost> {
                   InputDecorator(
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: AppColor().bgDark,
+                      fillColor: isSeePost == true
+                          ? AppColor().primaryWhite
+                          : AppColor().bgDark,
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: AppColor().lightItemsColor, width: 1),
@@ -363,7 +420,9 @@ class _CreatePostState extends State<CreatePost> {
                             value: value,
                             child: CustomText(
                               title: value,
-                              color: AppColor().lightItemsColor,
+                              color: isSeePost == true
+                                  ? AppColor().primaryBackGroundColor
+                                  : AppColor().lightItemsColor,
                               fontFamily: 'GilroyBold',
                               weight: FontWeight.w400,
                               size: 13,
@@ -374,11 +433,14 @@ class _CreatePostState extends State<CreatePost> {
                           setState(() {
                             seePost = value;
                             postController.seeController.text = seePost!;
+                            handleTap('seePost');
                           });
                         },
                         hint: CustomText(
                           title: "Everyone",
-                          color: AppColor().lightItemsColor,
+                          color: isSeePost == true
+                              ? AppColor().primaryBackGroundColor
+                              : AppColor().lightItemsColor,
                           fontFamily: 'GilroyBold',
                           weight: FontWeight.w400,
                           size: 13,
@@ -398,7 +460,9 @@ class _CreatePostState extends State<CreatePost> {
                   InputDecorator(
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: AppColor().bgDark,
+                      fillColor: isEngagePost == true
+                          ? AppColor().primaryWhite
+                          : AppColor().bgDark,
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: AppColor().lightItemsColor, width: 1),
@@ -422,7 +486,9 @@ class _CreatePostState extends State<CreatePost> {
                             value: value,
                             child: CustomText(
                               title: value,
-                              color: AppColor().lightItemsColor,
+                              color: isEngagePost == true
+                                  ? AppColor().primaryBackGroundColor
+                                  : AppColor().lightItemsColor,
                               fontFamily: 'GilroyBold',
                               weight: FontWeight.w400,
                               size: 13,
@@ -433,11 +499,14 @@ class _CreatePostState extends State<CreatePost> {
                           setState(() {
                             engagePost = value;
                             postController.engageController.text = engagePost!;
+                            handleTap('engagePost');
                           });
                         },
                         hint: CustomText(
                           title: "Everyone",
-                          color: AppColor().lightItemsColor,
+                          color: isEngagePost == true
+                              ? AppColor().primaryBackGroundColor
+                              : AppColor().lightItemsColor,
                           fontFamily: 'GilroyBold',
                           weight: FontWeight.w400,
                           size: 13,
@@ -449,7 +518,7 @@ class _CreatePostState extends State<CreatePost> {
                   InkWell(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        Get.back();
+                        Get.to(()=> const CreateSuccessPage(title: 'Post'));
                       }
                     },
                     child: Container(

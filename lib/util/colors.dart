@@ -16,6 +16,8 @@ class AppColor {
   Color primaryYellow = const Color(0xffF29528);
   Color primaryRed = const Color(0xffFF2E2E);
   Color primaryGreen = const Color(0xff00AD45);
+  Color transactGreen = const Color(0xff00D656);
+  Color transactOrange = const Color(0xffFFAA5C);
   Color primaryMenu = const Color(0xff283C5C);
   Color textPrimary = const Color(0xff008585);
   Color textFieldColor = const Color(0xffF7F8F9);
@@ -44,4 +46,5 @@ class AppColor {
   Color overviewButton = const Color(0xffDAF6F5);
   Color overviewContainer = const Color(0xffF7F7F7);
   Color profileBackground = const Color(0xffF1FFFE);
+  Color greyGradient = const Color(0xff525252);
 }

@@ -1,3 +1,4 @@
+import 'package:e_sport/data/model/transaction_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
+import 'transaction_history_item.dart';
 
 class WalletWidget extends StatelessWidget {
   const WalletWidget({
@@ -109,13 +112,34 @@ class WalletWidget extends StatelessWidget {
             ),
           ],
         ),
-        Gap(Get.height * 0.04),
+        Gap(Get.height * 0.07),
         CustomText(
           title: 'Transaction History',
           color: AppColor().greyTwo,
           weight: FontWeight.w400,
           size: Get.height * 0.016,
           fontFamily: 'GilroySemiBold',
+        ),
+        Gap(Get.height * 0.02),
+        ListView.separated(
+          padding: EdgeInsets.zero,
+          physics: const ScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: transactionHistory.length,
+          separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+          itemBuilder: (context, index) {
+            var item = transactionHistory[index];
+            return InkWell(
+              onTap: () {
+                // Get.to(
+                //   () => PostDetails(
+                //     item: item,
+                //   ),
+                // );
+              },
+              child: TransactionHistoryItem(item: item),
+            );
+          },
         ),
       ],
     );
@@ -126,7 +150,7 @@ class WalletWidget extends StatelessWidget {
       child: Container(
         height: Get.height * 0.06,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(90),
             color: color,
             border: border ?? Border.all()),
         child: Center(
