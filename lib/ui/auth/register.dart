@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -973,11 +972,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         country: authController.countryController.text.trim(),
                         state: authController.stateController.text.trim(),
                         gender: authController.genderController.text.trim(),
-                        dOB: authController.dobController.text.trim(),
-                        iPurpose: selectedUse.map((e) => e.title!).toList(),
+                        dOB:
+                            authController.dobController.text.trim().toString(),
+                        ipurpose: selectedUse.map((e) => e.title!).toList(),
                         userName: authController.userNameController.text.trim(),
-                        iProfile: SignUpProfile(
-                          iGameType:
+                        profile: Profile(
+                          igameType:
                               selectedCategories.map((e) => e.title!).toList(),
                           profilePicture:
                               authController.pictureController.text.trim() == ''

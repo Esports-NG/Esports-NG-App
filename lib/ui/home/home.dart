@@ -1,6 +1,7 @@
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/components/post_widget.dart';
+import 'package:e_sport/ui/leaderboard/leaderboard.dart';
 import 'package:e_sport/ui/messages/messages.dart';
 import 'package:e_sport/ui/notification/notification.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -81,9 +82,14 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Gap(Get.height * 0.04),
-                    SvgPicture.asset(
-                      'assets/images/svg/leaderboard.svg',
-                      height: Get.height * 0.025,
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => const Leaderboard());
+                      },
+                      child: SvgPicture.asset(
+                        'assets/images/svg/leaderboard.svg',
+                        height: Get.height * 0.025,
+                      ),
                     ),
                     Gap(Get.height * 0.04),
                     InkWell(

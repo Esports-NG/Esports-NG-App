@@ -16,8 +16,9 @@ class ApiLink {
   static String deleteAcct = "${baseurl}users";
   static String changePassword = "${baseurl}users/profile";
 
-  //Products
-  // static String product = "${baseurl}products";
+  //Post
+  static String createPost = "${baseurl}post/create/";
+  static String getAllPost = "${baseurl}post/view/";
   // static String recommendedProduct = "${baseurl}products/recommendations";
   // static String sellerProduct = "${baseurl}products/catalog";
   // static String uploadImage = "${baseurl}uploads/products";

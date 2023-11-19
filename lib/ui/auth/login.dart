@@ -3,6 +3,7 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
+import 'package:e_sport/util/validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -61,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -109,16 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       isEmail = value.isNotEmpty;
                     });
                   },
-                  validate: (value) {
-                    if (value!.isEmpty) {
-                      return 'Email address must not be empty';
-                    } else if (!RegExp(
-                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                        .hasMatch(value)) {
-                      return "enter a valid email address";
-                    }
-                    return null;
-                  },
+                  validate: Validator.isEmail,
                 ),
                 Gap(Get.height * 0.03),
                 CustomText(
@@ -145,14 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       isPassword = value.isNotEmpty;
                     });
                   },
-                  validate: (value) {
-                    if (value!.isEmpty) {
-                      return 'password must not be empty';
-                    } else if (value.length < 4) {
-                      return 'password must not be less than 8 character';
-                    }
-                    return null;
-                  },
+                  validate: Validator.isPassword,
                   suffixIcon: InkWell(
                     onTap: _togglePasswordView,
                     child: Icon(
@@ -180,7 +166,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (_formKey.currentState!.validate() &&
                           authController.signInStatus != SignInStatus.loading) {
                         authController.login(context);
-                        // Get.offAll(() => const Dashboard());
                       }
                     },
                     child: Container(

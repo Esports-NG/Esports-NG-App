@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:e_sport/data/model/category_model.dart';
+import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -517,8 +518,17 @@ class _CreatePostState extends State<CreatePost> {
                   Gap(Get.height * 0.05),
                   InkWell(
                     onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        Get.to(()=> const CreateSuccessPage(title: 'Post'));
+                      PostModel post = PostModel(
+                          title: postController.postTextController.text,
+                          body: postController.postTextController.text,
+                          iTags: ['#${postController.gameTagController.text}'],
+                          viewers: [postController.seeController.text],
+                          image: null);
+                      debugPrint('post: ${post.toCreatePostJson()}');
+                      if (_formKey.currentState!.validate() &&
+                          postController.createPostStatus !=
+                              CreatePostStatus.loading) {
+                        postController.createPost(post, context);
                       }
                     },
                     child: Container(

@@ -1,3 +1,105 @@
+import 'user_model.dart';
+
+class PostModel {
+  int? id;
+  UserModel? author;
+  String? title;
+  String? body;
+  int? likeCount;
+  List<dynamic>? likes;
+  List<Tag>? tags;
+  List? iTags;
+  List<dynamic>? viewers;
+  dynamic image;
+  List<dynamic>? comment;
+
+  PostModel({
+    this.id,
+    this.author,
+    this.title,
+    this.body,
+    this.likeCount,
+    this.likes,
+    this.iTags,
+    this.tags,
+    this.viewers,
+    this.image,
+    this.comment,
+  });
+
+  factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
+        id: json["id"],
+        author: json["author"] == null
+            ? null
+            : UserModel.fromPostJson(json["author"]),
+        title: json["title"],
+        body: json["body"],
+        likeCount: json["like_count"],
+        likes: json["likes"] == null
+            ? []
+            : List<dynamic>.from(json["likes"]!.map((x) => x)),
+        iTags: json['tags'] == null
+            ? []
+            : List<dynamic>.from(json["tags"]!.map((x) => x)),
+        tags: json["tags"] == null
+            ? []
+            : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
+        viewers: json["viewers"] == null
+            ? []
+            : List<dynamic>.from(json["viewers"]!.map((x) => x)),
+        image: json["image"],
+        comment: json["comment"] == null
+            ? []
+            : List<dynamic>.from(json["comment"]!.map((x) => x)),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "author": author?.toJson(),
+        "title": title,
+        "body": body,
+        "like_count": likeCount,
+        "likes": likes == null ? [] : List<dynamic>.from(likes!.map((x) => x)),
+        "tags": tags == null
+            ? []
+            : List<dynamic>.from(tags!.map((x) => x.toJson())),
+        "viewers":
+            viewers == null ? [] : List<dynamic>.from(viewers!.map((x) => x)),
+        "image": image,
+        "comment":
+            comment == null ? [] : List<dynamic>.from(comment!.map((x) => x)),
+      };
+
+  Map<String, dynamic> toCreatePostJson() => {
+        "title": title,
+        "body": body,
+        "tags": iTags == null ? [] : List<dynamic>.from(iTags!.map((x) => x)),
+        "viewers":
+            viewers == null ? [] : List<dynamic>.from(viewers!.map((x) => x)),
+        "image": image,
+      };
+}
+
+class Tag {
+  int? id;
+  String? title;
+
+  Tag({
+    this.id,
+    this.title,
+  });
+
+  factory Tag.fromJson(Map<String, dynamic> json) => Tag(
+        id: json["id"],
+        title: json["title"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+      };
+}
+
 class Posts {
   final String? image, pImage;
   final String? name, uName, postedBy;

@@ -1,95 +1,114 @@
 class UserModel {
-  String userName;
-  String fullName;
-  String email;
-  String phoneNumber;
-  String? country;
-  String? state;
-  String gender;
-  String dOB;
-  int? referralCode;
+  int? id;
+  String? email;
+  String? fullName;
+  String? userName;
+  String? phoneNumber;
   String? password;
   String? password2;
-  List<String>? iPurpose;
-  List<Purpose>? purpose;
-  SignUpProfile? iProfile;
+  String? country;
+  String? state;
+  String? gender;
+  String? dOB;
+  List<String>? ipurpose;
   Profile? profile;
+  UserProfile? userProfile;
+  String? referralCode;
+  List<Purpose>? purpose;
   Tokens? tokens;
   List<dynamic>? following;
   List<dynamic>? followers;
 
   UserModel({
-    required this.userName,
-    required this.fullName,
-    required this.email,
-    required this.phoneNumber,
-    this.country,
-    this.state,
-    required this.gender,
-    required this.dOB,
-    this.referralCode,
+    this.id,
+    this.email,
+    this.fullName,
+    this.userName,
+    this.phoneNumber,
     this.password,
     this.password2,
-    required this.iPurpose,
-    this.purpose,
-    this.iProfile,
+    this.country,
+    this.state,
+    this.gender,
+    this.dOB,
+    this.ipurpose,
     this.profile,
+    this.userProfile,
+    this.referralCode,
+    this.purpose,
     this.tokens,
     this.following,
     this.followers,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        userName: json["user_name"],
-        fullName: json["full_name"],
+        id: json["id"],
         email: json["email"],
+        fullName: json["full_name"],
+        userName: json["user_name"],
         phoneNumber: json["phone_number"],
-        country: json["country"] ?? '',
-        state: json["state"] ?? '',
+        country: json["country"],
+        state: json["state"],
         gender: json["gender"],
         dOB: json["d_o_b"],
-        referralCode: json["referral_code"] ?? 0,
-        iPurpose: json["ipurpose"] == null
+        ipurpose: json["ipurpose"] == null
             ? []
             : List<String>.from(json["ipurpose"]!.map((x) => x)),
+        profile:
+            json["profile"] == null ? null : Profile.fromJson(json["profile"]),
+        referralCode: json["referral_code"],
         purpose: json["purpose"] == null
             ? []
             : List<Purpose>.from(
                 json["purpose"]!.map((x) => Purpose.fromJson(x))),
-        iProfile: json["profile"] == null
+        userProfile: json["profile"] == null
             ? null
-            : SignUpProfile.fromJson(json["profile"]),
-        profile:
-            json["profile"] == null ? null : Profile.fromJson(json["profile"]),
+            : UserProfile.fromJson(json["profile"]),
+        tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
         following: json["following"] == null
             ? []
             : List<dynamic>.from(json["following"]!.map((x) => x)),
         followers: json["followers"] == null
             ? []
             : List<dynamic>.from(json["followers"]!.map((x) => x)),
-        // tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
+      );
+
+      factory UserModel.fromPostJson(Map<String, dynamic> json) => UserModel(
+        id: json["id"],
+        userName: json["user_name"],
+        fullName: json["full_name"],
+        email: json["email"],
+        phoneNumber: json["phone_number"],
+        country: json["country"],
+        state: json["state"],
+        gender: json["gender"],
+        dOB: json["d_o_b"],
+        referralCode: json["referral_code"],
+        purpose: json["purpose"] == null ? [] : List<Purpose>.from(json["purpose"]!.map((x) => Purpose.fromJson(x))),
+        profile: json["profile"] == null ? null : Profile.fromJson(json["profile"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "user_name": userName,
-        "full_name": fullName,
         "email": email,
+        "full_name": fullName,
+        "user_name": userName,
         "phone_number": phoneNumber,
+        "password": password,
+        "password2": password2,
         "country": country,
         "state": state,
         "gender": gender,
         "d_o_b": dOB,
         "ipurpose":
-            iPurpose == null ? [] : List<dynamic>.from(iPurpose!.map((x) => x)),
-        "profile": iProfile!.toJson(),
-        "password": password,
-        "password2": password2,
+            ipurpose == null ? [] : List<dynamic>.from(ipurpose!.map((x) => x)),
+        "profile": profile?.toJson(),
       };
 
   Map<String, dynamic> toUser() => {
-        "user_name": userName,
-        "full_name": fullName,
+        "id": id,
         "email": email,
+        "full_name": fullName,
+        "user_name": userName,
         "phone_number": phoneNumber,
         "country": country,
         "state": state,
@@ -99,91 +118,64 @@ class UserModel {
         "purpose": purpose == null
             ? []
             : List<dynamic>.from(purpose!.map((x) => x.toJson())),
-        "profile": profile?.toJson(),
+        "profile": userProfile?.toJson(),
         "following": following == null
             ? []
             : List<dynamic>.from(following!.map((x) => x)),
         "followers": followers == null
             ? []
             : List<dynamic>.from(followers!.map((x) => x)),
-        // "tokens": tokens?.toJson(),
+      };
+
+  Map<String, dynamic> toPostUser() => {
+        "id": id,
+        "email": email,
+        "full_name": fullName,
+        "user_name": userName,
+        "phone_number": phoneNumber,
+        "country": country,
+        "state": state,
+        "gender": gender,
+        "d_o_b": dOB,
+        "referral_code": referralCode,
+        "purpose": purpose == null
+            ? []
+            : List<dynamic>.from(purpose!.map((x) => x.toJson())),
+        "profile": userProfile?.toJson(),
       };
 }
 
-class SignUpProfile {
-  List<String>? iGameType;
-  String? profilePicture;
+class Profile {
+  List<String>? igameType;
+  dynamic profilePicture;
 
-  SignUpProfile({
-    this.iGameType,
-    required this.profilePicture,
+  Profile({
+    this.igameType,
+    this.profilePicture,
   });
 
-  factory SignUpProfile.fromJson(Map<String, dynamic> json) => SignUpProfile(
-        iGameType: json["igame_type"] == null
+  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+        igameType: json["igame_type"] == null
             ? []
             : List<String>.from(json["igame_type"]!.map((x) => x)),
         profilePicture: json["profile_picture"],
       );
 
   Map<String, dynamic> toJson() => {
-        "igame_type": iGameType == null
+        "igame_type": igameType == null
             ? []
-            : List<dynamic>.from(iGameType!.map((x) => x)),
+            : List<dynamic>.from(igameType!.map((x) => x)),
         "profile_picture": profilePicture,
       };
 }
 
-class Tokens {
-  String? refresh;
-  String? access;
-
-  Tokens({
-    this.refresh,
-    this.access,
-  });
-
-  factory Tokens.fromJson(Map<String, dynamic> json) => Tokens(
-        refresh: json["refresh"],
-        access: json["access"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "refresh": refresh,
-        "access": access,
-      };
-}
-
-class Purpose {
-  int? id;
-  String? purpose;
-
-  Purpose({
-    this.id,
-    this.purpose,
-  });
-
-  factory Purpose.fromJson(Map<String, dynamic> json) => Purpose(
-        id: json["id"],
-        purpose: json["purpose"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "purpose": purpose,
-      };
-}
-
-class Profile {
+class UserProfile {
   List<GameType>? gameType;
   dynamic profilePicture;
 
-  Profile({
-    this.gameType,
-    this.profilePicture,
-  });
+  UserProfile({this.gameType, this.profilePicture});
 
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+  factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
         gameType: json["game_type"] == null
             ? []
             : List<GameType>.from(
@@ -203,18 +195,34 @@ class GameType {
   int? id;
   String? type;
 
-  GameType({
-    this.id,
-    this.type,
-  });
+  GameType({this.id, this.type});
 
-  factory GameType.fromJson(Map<String, dynamic> json) => GameType(
-        id: json["id"],
-        type: json["type"],
-      );
+  factory GameType.fromJson(Map<String, dynamic> json) =>
+      GameType(id: json["id"], type: json["type"]);
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "type": type,
-      };
+  Map<String, dynamic> toJson() => {"id": id, "type": type};
+}
+
+class Purpose {
+  int? id;
+  String? purpose;
+
+  Purpose({this.id, this.purpose});
+
+  factory Purpose.fromJson(Map<String, dynamic> json) =>
+      Purpose(id: json["id"], purpose: json["purpose"]);
+
+  Map<String, dynamic> toJson() => {"id": id, "purpose": purpose};
+}
+
+class Tokens {
+  String? refresh;
+  String? access;
+
+  Tokens({this.refresh, this.access});
+
+  factory Tokens.fromJson(Map<String, dynamic> json) =>
+      Tokens(refresh: json["refresh"], access: json["access"]);
+
+  Map<String, dynamic> toJson() => {"refresh": refresh, "access": access};
 }

@@ -263,7 +263,6 @@ class AuthRepository extends GetxController {
             "password": passwordController.text.trim(),
           }));
       var json = jsonDecode(response.body);
-
       if (response.statusCode != 200) {
         throw (
           json['non_field_errors'] != null
@@ -291,7 +290,7 @@ class AuthRepository extends GetxController {
       return response.body;
     } catch (error) {
       _signInStatus(SignInStatus.error);
-      debugPrint("error ${error.toString()}");
+      debugPrint("error $error");
       noInternetError(context, error);
     }
   }
@@ -404,7 +403,7 @@ class AuthRepository extends GetxController {
               ? 'No internet connection!'
               : (error.toString().contains("FormatException"))
                   ? 'Internal server error, contact admin!'
-                  : error.toString(),
+                  : error.toString().replaceAll('(', '').replaceAll(')', ''),
           size: Get.height * 0.02,
           color: AppColor().primaryWhite,
           textAlign: TextAlign.start,

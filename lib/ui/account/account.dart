@@ -196,7 +196,7 @@ class _AccountState extends State<Account> {
               ),
               Gap(Get.height * 0.01),
               CustomText(
-                title: authController.user?.fullName.toCapitalCase(),
+                title: authController.user!.fullName!.toCapitalCase(),
                 size: 20,
                 fontFamily: 'GilroyBold',
                 textAlign: TextAlign.start,

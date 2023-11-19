@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -43,13 +45,15 @@ class PostRepository extends GetxController {
   Rx<File?> mPostImage = Rx(null);
   File? get postImage => mPostImage.value;
 
-  Future createPost(BuildContext context) async {
+  Future createPost(PostModel post, BuildContext context) async {
     try {
       _createPostStatus(CreatePostStatus.loading);
-      var response = await http
-          .post(Uri.parse(ApiLink.register), body: jsonEncode({}), headers: {
-        "Content-Type": "application/json",
-      });
+      var response = await http.post(Uri.parse(ApiLink.createPost),
+          body: jsonEncode(post.toCreatePostJson()),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'JWT ${authController.token}',
+          });
       var json = jsonDecode(response.body);
       debugPrint(response.statusCode.toString() + response.body);
 
@@ -61,14 +65,7 @@ class PostRepository extends GetxController {
 
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
-        EasyLoading.showInfo(
-                'Account created successfully!\nConfirmation email sent, Please check your email for further instructions!',
-                duration: const Duration(seconds: 2))
-            .then((value) async {
-          await Future.delayed(const Duration(seconds: 2));
-
-          clearPhoto();
-        });
+        Get.off(() => const CreateSuccessPage(title: 'Post'));
       }
 
       return response.body;
@@ -76,6 +73,26 @@ class PostRepository extends GetxController {
       _createPostStatus(CreatePostStatus.error);
       debugPrint("Error occurred ${error.toString()}");
       noInternetError(context, error);
+    }
+  }
+
+  Future getAllPost() async {
+    try {
+      debugPrint('getting user info...');
+      var response = await http.get(Uri.parse(ApiLink.getUser), headers: {
+        "Content-Type": "application/json",
+      });
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+      }
+      return response.body;
+    } catch (error) {
+      debugPrint("getting user info: ${error.toString()}");
     }
   }
 
@@ -100,5 +117,11 @@ class PostRepository extends GetxController {
   void clearPhoto() {
     debugPrint('image cleared');
     mPostImage.value = null;
+  }
+
+  void clear() {
+    postTextController.clear();
+    gameTagController.clear();
+    seeController.clear();
   }
 }
