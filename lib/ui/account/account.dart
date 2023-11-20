@@ -2,6 +2,7 @@ import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
@@ -23,6 +24,7 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   final authController = Get.put(AuthRepository());
+  final postController = Get.put(PostRepository());
   int? accountTab = 0;
   String? _selectedIndex;
 
@@ -223,6 +225,7 @@ class _AccountState extends State<Account> {
                           accountTab = index;
                           if (item.title == 'Logout') {
                             logOutDialog(context);
+                            postController.getAllPost();
                           } else if (item.title == 'Referrals') {
                             Get.to(() => const Referral());
                           } else {

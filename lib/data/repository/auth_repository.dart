@@ -263,6 +263,7 @@ class AuthRepository extends GetxController {
             "password": passwordController.text.trim(),
           }));
       var json = jsonDecode(response.body);
+
       if (response.statusCode != 200) {
         throw (
           json['non_field_errors'] != null

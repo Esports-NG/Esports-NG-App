@@ -10,7 +10,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class PostItem extends StatefulWidget {
-  final Posts item;
+  final PostModel item;
   const PostItem({super.key, required this.item});
 
   @override
@@ -38,6 +38,7 @@ class _PostItemState extends State<PostItem> {
         ),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
@@ -48,13 +49,13 @@ class _PostItemState extends State<PostItem> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      widget.item.pImage!,
+                      'assets/images/png/postDImage.png',
                       height: Get.height * 0.025,
                       width: Get.height * 0.025,
                     ),
                     Gap(Get.height * 0.01),
                     CustomText(
-                      title: widget.item.name!.toUpperCase(),
+                      title: widget.item.author!.fullName!,
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -62,7 +63,7 @@ class _PostItemState extends State<PostItem> {
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: widget.item.uName!.toUpperFirstCase(),
+                      title: widget.item.author!.userName!,
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -72,7 +73,8 @@ class _PostItemState extends State<PostItem> {
                     const SmallCircle(),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: widget.item.time!.toSentenceCase(),
+                      title: 'Time',
+                      // widget.item.time!.toSentenceCase(),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -158,7 +160,7 @@ class _PostItemState extends State<PostItem> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: CustomText(
-              title: widget.item.details!.toUpperFirstCase(),
+              title: widget.item.title!.toUpperFirstCase(),
               size: Get.height * 0.015,
               fontFamily: 'GilroyBold',
               textAlign: TextAlign.start,
@@ -170,7 +172,7 @@ class _PostItemState extends State<PostItem> {
             alignment: Alignment.center,
             children: [
               Image.asset(
-                widget.item.image!,
+                'assets/images/png/postImage1.png',
                 height: Get.height * 0.25,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -184,11 +186,11 @@ class _PostItemState extends State<PostItem> {
                   child: ListView.separated(
                       padding: EdgeInsets.zero,
                       scrollDirection: Axis.horizontal,
-                      itemCount: widget.item.genre!.length,
+                      itemCount: widget.item.tags!.length,
                       separatorBuilder: (context, index) =>
                           Gap(Get.height * 0.01),
                       itemBuilder: (context, index) {
-                        var items = widget.item.genre![index];
+                        var items = widget.item.tags![index];
                         return Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
@@ -201,7 +203,7 @@ class _PostItemState extends State<PostItem> {
                           ),
                           child: Center(
                             child: CustomText(
-                              title: '# $items',
+                              title: items.title,
                               color: AppColor().primaryWhite,
                               textAlign: TextAlign.center,
                               size: Get.height * 0.014,
@@ -350,7 +352,7 @@ class _PostItemState extends State<PostItem> {
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: '${widget.item.likes!} likes',
+                      title: '${widget.item.likes!.length} likes',
                       size: Get.height * 0.014,
                       fontFamily: 'GilroyBold',
                       textAlign: TextAlign.start,
@@ -372,7 +374,7 @@ class _PostItemState extends State<PostItem> {
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: widget.item.comment!,
+                      title: widget.item.comment!.length.toString(),
                       size: Get.height * 0.014,
                       fontFamily: 'GilroyBold',
                       textAlign: TextAlign.start,

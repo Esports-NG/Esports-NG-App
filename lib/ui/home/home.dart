@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/components/post_widget.dart';
 import 'package:e_sport/ui/leaderboard/leaderboard.dart';
 import 'package:e_sport/ui/messages/messages.dart';
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   bool? isSearch = false;
   final FocusNode _searchFocusNode = FocusNode();
   final authController = Get.put(AuthRepository());
+  final postController = Get.put(PostRepository());
   @override
   void dispose() {
     _searchFocusNode.dispose();
@@ -41,110 +43,118 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor().primaryBackGroundColor,
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: EdgeInsets.all(Get.height * 0.02),
-        child: Column(
-          children: [
-            Gap(Get.height * 0.06),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/png/account.png',
-                      height: Get.height * 0.05,
-                    ),
-                  ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => const Messages());
-                      },
-                      child: Badge(
-                        label: CustomText(
-                          title: '4',
-                          weight: FontWeight.w500,
-                          size: 10,
-                          fontFamily: 'GilroyBold',
-                          color: AppColor().primaryWhite,
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/images/svg/chat.svg',
-                          height: Get.height * 0.025,
-                        ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          return Future.delayed(const Duration(seconds: 2), () {
+            postController.getAllPost();
+          });
+        },
+        child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Padding(
+              padding: EdgeInsets.all(Get.height * 0.02),
+              child: Column(
+                children: [
+                  Gap(Get.height * 0.06),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/png/account.png',
+                            height: Get.height * 0.05,
+                          ),
+                        ],
                       ),
-                    ),
-                    Gap(Get.height * 0.04),
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => const Leaderboard());
-                      },
-                      child: SvgPicture.asset(
-                        'assets/images/svg/leaderboard.svg',
-                        height: Get.height * 0.025,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => const Messages());
+                            },
+                            child: Badge(
+                              label: CustomText(
+                                title: '4',
+                                weight: FontWeight.w500,
+                                size: 10,
+                                fontFamily: 'GilroyBold',
+                                color: AppColor().primaryWhite,
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/images/svg/chat.svg',
+                                height: Get.height * 0.025,
+                              ),
+                            ),
+                          ),
+                          Gap(Get.height * 0.04),
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => const Leaderboard());
+                            },
+                            child: SvgPicture.asset(
+                              'assets/images/svg/leaderboard.svg',
+                              height: Get.height * 0.025,
+                            ),
+                          ),
+                          Gap(Get.height * 0.04),
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => const NotificationPage());
+                            },
+                            child: Badge(
+                              label: CustomText(
+                                title: '10',
+                                weight: FontWeight.w500,
+                                size: 10,
+                                fontFamily: 'GilroyBold',
+                                color: AppColor().primaryWhite,
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/images/svg/notification.svg',
+                                height: Get.height * 0.025,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Gap(Get.height * 0.04),
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => const NotificationPage());
-                      },
-                      child: Badge(
-                        label: CustomText(
-                          title: '10',
-                          weight: FontWeight.w500,
-                          size: 10,
-                          fontFamily: 'GilroyBold',
-                          color: AppColor().primaryWhite,
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/images/svg/notification.svg',
-                          height: Get.height * 0.025,
-                        ),
+                    ],
+                  ),
+                  Gap(Get.height * 0.025),
+                  SizedBox(
+                    height: Get.height * 0.06,
+                    child: CustomTextField(
+                      hint: "Search for gaming news, competitions...",
+                      fontFamily: 'GilroyMedium',
+                      prefixIcon: Icon(
+                        CupertinoIcons.search,
+                        color: AppColor().lightItemsColor,
                       ),
+                      textEditingController: authController.searchController,
+                      hasText: isSearch!,
+                      focusNode: _searchFocusNode,
+                      onTap: handleTap,
+                      onSubmited: (_) {
+                        _searchFocusNode.unfocus();
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          isSearch = value.isNotEmpty;
+                        });
+                      },
                     ),
-                  ],
-                ),
-              ],
-            ),
-            Gap(Get.height * 0.025),
-            SizedBox(
-              height: Get.height * 0.06,
-              child: CustomTextField(
-                hint: "Search for gaming news, competitions...",
-                fontFamily: 'GilroyMedium',
-                prefixIcon: Icon(
-                  CupertinoIcons.search,
-                  color: AppColor().lightItemsColor,
-                ),
-                textEditingController: authController.searchController,
-                hasText: isSearch!,
-                focusNode: _searchFocusNode,
-                onTap: handleTap,
-                onSubmited: (_) {
-                  _searchFocusNode.unfocus();
-                },
-                onChanged: (value) {
-                  setState(() {
-                    isSearch = value.isNotEmpty;
-                  });
-                },
+                  ),
+                  Gap(Get.height * 0.025),
+                  categoryWidget(),
+                  Gap(Get.height * 0.02),
+                  categoryType == 0 ? const PostWidget() : Container(),
+                ],
               ),
-            ),
-            Gap(Get.height * 0.025),
-            categoryWidget(),
-            Gap(Get.height * 0.02),
-            categoryType == 0 ? const PostWidget() : Container(),
-          ],
-        ),
-      )),
+            )),
+      ),
     );
   }
 

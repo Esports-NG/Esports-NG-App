@@ -36,6 +36,9 @@ class PostRepository extends GetxController {
   late final gameTagController = TextEditingController();
   late final accountTypeController = TextEditingController();
 
+  final Rx<List<PostModel>> _allPost = Rx([]);
+  List<PostModel> get allPost => _allPost.value;
+
   final _postStatus = PostStatus.empty.obs;
   final _createPostStatus = CreatePostStatus.empty.obs;
 
@@ -44,6 +47,16 @@ class PostRepository extends GetxController {
 
   Rx<File?> mPostImage = Rx(null);
   File? get postImage => mPostImage.value;
+
+  @override
+  void onInit() {
+    super.onInit();
+    authController.mToken.listen((p0) async {
+      if (p0 != '0') {
+        getAllPost();
+      }
+    });
+  }
 
   Future createPost(PostModel post, BuildContext context) async {
     try {
@@ -65,7 +78,7 @@ class PostRepository extends GetxController {
 
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
-        Get.off(() => const CreateSuccessPage(title: 'Post'));
+        Get.to(() => const CreateSuccessPage(title: 'Post'));
       }
 
       return response.body;
@@ -78,21 +91,30 @@ class PostRepository extends GetxController {
 
   Future getAllPost() async {
     try {
-      debugPrint('getting user info...');
-      var response = await http.get(Uri.parse(ApiLink.getUser), headers: {
+      _postStatus(PostStatus.loading);
+      debugPrint('getting all post...');
+      var response = await http.get(Uri.parse(ApiLink.getAllPost), headers: {
         "Content-Type": "application/json",
       });
       var json = jsonDecode(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
-      debugPrint(response.body);
+
       if (response.statusCode == 200) {
-        debugPrint(response.body);
+        var list = List.from(json);
+        var posts = list.map((e) => PostModel.fromJson(e)).toList();
+        debugPrint("${posts.length} posts found");
+        _allPost(posts);
+        posts.isNotEmpty
+            ? _postStatus(PostStatus.available)
+            : _postStatus(PostStatus.empty);
+        _postStatus(PostStatus.success);
       }
       return response.body;
     } catch (error) {
-      debugPrint("getting user info: ${error.toString()}");
+      _postStatus(PostStatus.error);
+      debugPrint("getting all post: ${error.toString()}");
     }
   }
 

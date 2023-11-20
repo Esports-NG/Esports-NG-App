@@ -10,7 +10,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class PostDetails extends StatefulWidget {
-  final Posts item;
+  final PostModel item;
   const PostDetails({super.key, required this.item});
 
   @override
@@ -61,13 +61,13 @@ class _PostDetailsState extends State<PostDetails> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        widget.item.pImage!,
+                        'assets/images/png/postDImage.png',
                         height: Get.height * 0.05,
                         width: Get.height * 0.05,
                       ),
                       Gap(Get.height * 0.01),
                       CustomText(
-                        title: widget.item.name!.toUpperCase(),
+                        title: widget.item.author!.fullName!,
                         size: Get.height * 0.015,
                         fontFamily: 'GilroyMedium',
                         textAlign: TextAlign.start,
@@ -75,7 +75,7 @@ class _PostDetailsState extends State<PostDetails> {
                       ),
                       Gap(Get.height * 0.005),
                       CustomText(
-                        title: widget.item.uName!.toUpperFirstCase(),
+                        title: widget.item.author!.userName!,
                         size: Get.height * 0.015,
                         fontFamily: 'GilroyMedium',
                         textAlign: TextAlign.start,
@@ -104,7 +104,7 @@ class _PostDetailsState extends State<PostDetails> {
               ),
               Gap(Get.height * 0.015),
               CustomText(
-                title: 'New quest unlocked!',
+                title: widget.item.title,
                 size: Get.height * 0.018,
                 fontFamily: 'GilroyBold',
                 textAlign: TextAlign.start,
@@ -112,8 +112,7 @@ class _PostDetailsState extends State<PostDetails> {
               ),
               Gap(Get.height * 0.015),
               CustomText(
-                title:
-                    'Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain by finding the missing keys from the locked tower at the highest mountain.\n\nGet a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain by finding the missing keys from the locked tower. https://nexalgamingcommunity.com/',
+                title: widget.item.body,
                 size: Get.height * 0.015,
                 fontFamily: 'GilroyRegular',
                 weight: FontWeight.w500,
@@ -128,9 +127,9 @@ class _PostDetailsState extends State<PostDetails> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
+                        image: const DecorationImage(
                           image: AssetImage(
-                            widget.item.image!,
+                            'assets/images/png/postImage1.png',
                           ),
                           fit: BoxFit.cover,
                         )),
@@ -144,11 +143,11 @@ class _PostDetailsState extends State<PostDetails> {
                       child: ListView.separated(
                           padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
-                          itemCount: widget.item.genre!.length,
+                          itemCount: widget.item.tags!.length,
                           separatorBuilder: (context, index) =>
                               Gap(Get.height * 0.01),
                           itemBuilder: (context, index) {
-                            var items = widget.item.genre![index];
+                            var items = widget.item.tags![index];
                             return Container(
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
@@ -162,7 +161,7 @@ class _PostDetailsState extends State<PostDetails> {
                               ),
                               child: Center(
                                 child: CustomText(
-                                  title: '# $items',
+                                  title: items.title,
                                   color: AppColor().primaryWhite,
                                   textAlign: TextAlign.center,
                                   size: Get.height * 0.014,
@@ -192,7 +191,7 @@ class _PostDetailsState extends State<PostDetails> {
                       Row(
                         children: [
                           CustomText(
-                            title: widget.item.views!,
+                            title: widget.item.viewers!.length.toString(),
                             size: Get.height * 0.014,
                             fontFamily: 'GilroyBold',
                             textAlign: TextAlign.start,
@@ -212,7 +211,7 @@ class _PostDetailsState extends State<PostDetails> {
                       Row(
                         children: [
                           CustomText(
-                            title: widget.item.repost!,
+                            title: widget.item.comment!.length.toString(),
                             size: Get.height * 0.014,
                             fontFamily: 'GilroyBold',
                             textAlign: TextAlign.start,
@@ -232,7 +231,7 @@ class _PostDetailsState extends State<PostDetails> {
                       Row(
                         children: [
                           CustomText(
-                            title: widget.item.likes!,
+                            title: widget.item.likeCount.toString(),
                             size: Get.height * 0.014,
                             fontFamily: 'GilroyBold',
                             textAlign: TextAlign.start,
@@ -314,18 +313,27 @@ class _PostDetailsState extends State<PostDetails> {
                 color: AppColor().primaryWhite,
               ),
               Gap(Get.height * 0.02),
-              commentItem(
-                comment: 'i`m here for it!\ni`m here for it!!',
-                like: '1 Like',
-                icon: Icons.favorite,
+              Center(
+                child: CustomText(
+                  title: 'No comment',
+                  size: Get.height * 0.016,
+                  fontFamily: 'GilroyMedium',
+                  textAlign: TextAlign.start,
+                  color: AppColor().lightItemsColor,
+                ),
               ),
-              Gap(Get.height * 0.01),
-              commentItem(
-                comment:
-                    'I think the part where the snake crossed the narrow scene has a glitch. Is anybody else experiencing this?',
-                like: 'Like',
-                icon: Icons.favorite_outline,
-              )
+              // commentItem(
+              //   comment: 'i`m here for it!\ni`m here for it!!',
+              //   like: '1 Like',
+              //   icon: Icons.favorite,
+              // ),
+              // Gap(Get.height * 0.01),
+              // commentItem(
+              //   comment:
+              //       'I think the part where the snake crossed the narrow scene has a glitch. Is anybody else experiencing this?',
+              //   like: 'Like',
+              //   icon: Icons.favorite_outline,
+              // )
             ],
           ),
         ),
@@ -341,11 +349,11 @@ class _PostDetailsState extends State<PostDetails> {
           child: Container(
             height: Get.height * 0.05,
             width: Get.height * 0.05,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: AssetImage(
-                    widget.item.image!,
+                    'assets/images/png/postImage1.png',
                   ),
                   fit: BoxFit.cover,
                 )),

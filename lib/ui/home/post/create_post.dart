@@ -528,7 +528,9 @@ class _CreatePostState extends State<CreatePost> {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        postController.createPost(post, context);
+                        postController
+                            .createPost(post, context)
+                            .then((value) => postController.clear());
                       }
                     },
                     child: Container(
