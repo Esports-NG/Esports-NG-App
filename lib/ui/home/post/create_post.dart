@@ -38,6 +38,7 @@ class _CreatePostState extends State<CreatePost> {
 
   @override
   void dispose() {
+    _formKey.currentState!.dispose();
     _postUpdateFocusNode.dispose();
     _gameTagFocusNode.dispose();
     super.dispose();
@@ -528,9 +529,10 @@ class _CreatePostState extends State<CreatePost> {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        postController
-                            .createPost(post, context)
-                            .then((value) => postController.clear());
+                        postController.createPost(post, context).then((value) {
+                          postController.clear();
+                          _formKey.currentState!.reset();
+                        });
                       }
                     },
                     child: Container(

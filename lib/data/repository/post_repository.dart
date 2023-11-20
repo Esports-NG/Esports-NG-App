@@ -68,7 +68,6 @@ class PostRepository extends GetxController {
             'Authorization': 'JWT ${authController.token}',
           });
       var json = jsonDecode(response.body);
-      debugPrint(response.statusCode.toString() + response.body);
 
       if (response.statusCode != 201) {
         throw (json['profile'] != null
@@ -78,7 +77,10 @@ class PostRepository extends GetxController {
 
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
-        Get.to(() => const CreateSuccessPage(title: 'Post'));
+        Get.to(() => const CreateSuccessPage(title: 'Post'))!.then((value) {
+          getAllPost();
+          clear();
+        });
       }
 
       return response.body;

@@ -284,7 +284,7 @@ class _PostItemState extends State<PostItem> {
                           ),
                           Gap(Get.height * 0.02),
                           CustomText(
-                            title: 'Paula Bakare',
+                            title: widget.item.author!.fullName,
                             size: Get.height * 0.014,
                             fontFamily: 'GilroyMedium',
                             textAlign: TextAlign.start,
