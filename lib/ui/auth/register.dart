@@ -7,6 +7,7 @@ import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/page_indicator.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/csc_picker.dart';
+import 'package:e_sport/util/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   int? current;
   List<UserPreference> selectedCategories = [];
   List<PrimaryUse> selectedUse = [];
@@ -447,7 +448,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       : Container(),
                   if (pageCount == 0) ...[
                     Form(
-                      key: _formKey,
+                      key: formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -477,15 +478,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 isFullname = value.isNotEmpty;
                               });
                             },
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Full Name must not be empty';
-                              } else if (!RegExp(r'^[A-Za-z\- ]+$')
-                                  .hasMatch(value)) {
-                                return "Please enter only letters";
-                              }
-                              return null;
-                            },
+                            validate: Validator.isName,
                           ),
                           Gap(Get.height * 0.02),
                           CustomText(
@@ -513,16 +506,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 isEmail = value.isNotEmpty;
                               });
                             },
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Email address must not be empty';
-                              } else if (!RegExp(
-                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                  .hasMatch(value)) {
-                                return "Enter a valid email address";
-                              }
-                              return null;
-                            },
+                            validate: Validator.isEmail,
                           ),
                           Gap(Get.height * 0.02),
                           CustomText(
@@ -551,14 +535,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 isPassword = value.isNotEmpty;
                               });
                             },
-                            validate: (value) {
-                              if (value!.isEmpty) {
-                                return 'Password must not be empty';
-                              } else if (value.length < 8) {
-                                return 'Password must not be less than 8 character';
-                              }
-                              return null;
-                            },
+                            validate: Validator.isPassword,
                             suffixIcon: InkWell(
                               onTap: _togglePasswordView,
                               child: Icon(
@@ -696,15 +673,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               keyType: TextInputType.phone,
                               pretext:
                                   authController.countryCodeController.text,
-                              validate: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Phone no must not be empty';
-                                } else if (!RegExp(r'^[0-9]+$')
-                                    .hasMatch(value)) {
-                                  return "Please enter only digits";
-                                }
-                                return null;
-                              },
+                              validate: Validator.isPhone,
                             ),
                           ),
                           Gap(Get.height * 0.02),
@@ -763,7 +732,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       authController.genderController.text =
                                           'F';
                                     }
-
                                     debugPrint(value);
                                     handleTap('gender');
                                   });
@@ -989,7 +957,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       debugPrint('User: ${user.toJson()}');
 
                       if (pageCount == 0) {
-                        if (_formKey.currentState!.validate()) {
+                        if (formKey.currentState!.validate()) {
                           if (authController.countryController.text == '' ||
                               authController.stateController.text == '') {
                             ScaffoldMessenger.of(context).showSnackBar(

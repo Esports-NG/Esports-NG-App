@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
   bool isHiddenPassword = true;
-  bool? isEmail = false, isPassword = false;
+  bool isEmail = false, isPassword = false;
 
   void _togglePasswordView() {
     setState(() {
@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomTextField(
                   hint: "johndoe@mail.com",
                   textEditingController: authController.emailController,
-                  hasText: isEmail!,
+                  hasText: isEmail,
                   focusNode: _emailFocusNode,
                   onTap: () {
                     handleTap('email');
@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   hint: "eg 12345678",
                   textEditingController: authController.passwordController,
                   obscure: isHiddenPassword,
-                  hasText: isPassword!,
+                  hasText: isPassword,
                   focusNode: _passwordFocusNode,
                   onTap: () {
                     handleTap('password');
@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     },
                     child: Container(
-                      height: Get.height * 0.07,
+                      height: Get.height * 0.06,
                       width: Get.width,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),

@@ -14,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'account_details.dart';
+import 'my_profile.dart';
 
 class Account extends StatefulWidget {
   const Account({super.key});
@@ -84,101 +85,8 @@ class _AccountState extends State<Account> {
                   Positioned(
                     right: Get.height * 0.03,
                     bottom: Get.height * 0.05,
-                    child: PopupMenuButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide.none),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      color: AppColor().primaryMenu,
-                      offset: const Offset(0, -10),
-                      initialValue: _selectedIndex,
-                      onSelected: (value) {
-                        setState(() {
-                          if (value == '1') {
-                            _selectedIndex = value;
-                          } else if (value == '2') {
-                            _selectedIndex = value;
-                          } else if (value == '3') {
-                            _selectedIndex = value;
-                          }
-                        });
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: '1',
-                          height: 20,
-                          onTap: () {
-                            SchedulerBinding.instance
-                                .addPersistentFrameCallback((_) {
-                              Get.to(() => Profile());
-                            });
-                          },
-                          padding: const EdgeInsets.only(
-                              bottom: 20, left: 20, top: 20),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.016,
-                              ),
-                              Gap(Get.height * 0.02),
-                              CustomText(
-                                title: 'Edit Profile',
-                                size: Get.height * 0.014,
-                                fontFamily: 'GilroyMedium',
-                                textAlign: TextAlign.start,
-                                color: AppColor().primaryWhite,
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: '2',
-                          height: 20,
-                          padding: const EdgeInsets.only(bottom: 20, left: 20),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.016,
-                              ),
-                              Gap(Get.height * 0.02),
-                              CustomText(
-                                title: 'Edit Socials',
-                                size: Get.height * 0.014,
-                                fontFamily: 'GilroyMedium',
-                                textAlign: TextAlign.start,
-                                color: AppColor().primaryWhite,
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: '3',
-                          height: 20,
-                          padding: const EdgeInsets.only(bottom: 20, left: 20),
-                          child: Row(
-                            children: [
-                              Icon(
-                                CupertinoIcons.lock_fill,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.016,
-                              ),
-                              Gap(Get.height * 0.02),
-                              CustomText(
-                                title: 'Privacy and Security',
-                                size: Get.height * 0.014,
-                                fontFamily: 'GilroyMedium',
-                                textAlign: TextAlign.start,
-                                color: AppColor().primaryWhite,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    child: InkWell(
+                      onTap: () => showPopupMenu(context),
                       child: Icon(
                         Icons.settings,
                         size: 25,
@@ -278,6 +186,115 @@ class _AccountState extends State<Account> {
         ),
       );
     });
+  }
+
+  void showPopupMenu(BuildContext context) async {
+    String? selectedMenuItem = await showMenu(
+      context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), side: BorderSide.none),
+      constraints: const BoxConstraints(),
+      color: AppColor().primaryMenu,
+      position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+      items: [
+        PopupMenuItem(
+          value: 'ScreenA',
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
+          child: Row(
+            children: [
+              Icon(
+                Icons.edit,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Edit Profile',
+                size: Get.height * 0.014,
+                fontFamily: 'GilroyMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'ScreenB',
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: Row(
+            children: [
+              Icon(
+                Icons.edit,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Edit Socials',
+                size: Get.height * 0.014,
+                fontFamily: 'GilroyMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'ScreenC',
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: Row(
+            children: [
+              Icon(
+                CupertinoIcons.lock_fill,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Privacy and Security',
+                size: Get.height * 0.014,
+                fontFamily: 'GilroyMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    if (selectedMenuItem != null) {
+      _navigateToScreen(context, selectedMenuItem);
+    }
+  }
+
+  void _navigateToScreen(BuildContext context, String screen) {
+    switch (screen) {
+      case 'ScreenA':
+        print('a');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyProfile()),
+        );
+        break;
+      case 'ScreenB':
+        print('b');
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => ScreenB()),
+        // );
+        break;
+      case 'ScreenC':
+        print('c');
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => ScreenC()),
+        // );
+        break;
+    }
   }
 
   void logOutDialog(BuildContext context) {

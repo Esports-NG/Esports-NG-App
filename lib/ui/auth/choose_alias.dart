@@ -4,6 +4,7 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
+import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,21 @@ class ChooseAlias extends StatefulWidget {
 
 class _ChooseAliasState extends State<ChooseAlias> {
   final authController = Get.put(AuthRepository());
-  bool userCheck = false;
+  final FocusNode _aliasFocusNode = FocusNode();
+  bool userCheck = false, isAlias = false;
+
+  @override
+  void dispose() {
+    _aliasFocusNode.dispose();
+    super.dispose();
+  }
+
+  void handleTap() {
+    setState(() {
+      isAlias = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,22 +76,22 @@ class _ChooseAliasState extends State<ChooseAlias> {
           CustomTextField(
             hint: "e.g realmitcha",
             textEditingController: authController.userNameController,
+            hasText: isAlias,
+            focusNode: _aliasFocusNode,
+            onTap: () => handleTap(),
+            onSubmited: (_) {
+              _aliasFocusNode.unfocus();
+            },
             onChanged: (value) {
               setState(() {});
+              isAlias = value.isNotEmpty;
               if (value.isEmpty) {
                 userCheck = false;
               } else {
                 userCheck = true;
               }
             },
-            validate: (value) {
-              if (value!.isEmpty) {
-                return 'Username must not be empty';
-              } else if (!RegExp(r'[A-Za-z]+$').hasMatch(value)) {
-                return "Please enter only letters";
-              }
-              return null;
-            },
+            validate: Validator.isUsername,
           ),
           Gap(Get.height * 0.25),
           Obx(() {
@@ -103,7 +118,7 @@ class _ChooseAliasState extends State<ChooseAlias> {
                 }
               },
               child: Container(
-                height: Get.height * 0.07,
+                height: Get.height * 0.06,
                 width: Get.width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),

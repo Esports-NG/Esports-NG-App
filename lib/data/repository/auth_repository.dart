@@ -242,7 +242,7 @@ class AuthRepository extends GetxController {
     } catch (error) {
       _signUpStatus(SignUpStatus.error);
       debugPrint("Error occurred ${error.toString()}");
-      noInternetError(context, error);
+      getError(error);
     }
   }
 
@@ -268,7 +268,7 @@ class AuthRepository extends GetxController {
         throw (
           json['non_field_errors'] != null
               ? json['non_field_errors'][0]
-              : json['non_field_errors'][0],
+              : json[0],
         );
       }
 
@@ -288,11 +288,12 @@ class AuthRepository extends GetxController {
           clear();
         });
       }
+
       return response.body;
     } catch (error) {
       _signInStatus(SignInStatus.error);
       debugPrint("error $error");
-      noInternetError(context, error);
+      getError(error);
     }
   }
 
@@ -340,7 +341,7 @@ class AuthRepository extends GetxController {
       _otpValidateStatus(OtpValidateStatus.error);
       EasyLoading.dismiss();
       debugPrint("error ${error.toString()}");
-      noInternetError(context, error);
+      getError(error);
     }
   }
 
@@ -362,6 +363,37 @@ class AuthRepository extends GetxController {
       return response.body;
     } catch (error) {
       debugPrint("getting user info: ${error.toString()}");
+    }
+  }
+
+  Future updateUser(String title) async {
+    try {
+      _updateProfileStatus(UpdateProfileStatus.loading);
+
+      var response = await http.put(
+          Uri.parse('${ApiLink.user}${user!.id}/update/'),
+          body: jsonEncode({
+            "otp_code": int.tryParse(otpPin.text.trim()),
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token'
+          });
+
+      var json = jsonDecode(response.body);
+      if (json['succes'] == false) {
+        throw json['message'];
+      }
+
+      debugPrint("response $json");
+      if (json['succes'] == true) {
+        _updateProfileStatus(UpdateProfileStatus.success);
+      }
+      return response.body;
+    } catch (error) {
+      _updateProfileStatus(UpdateProfileStatus.error);
+      debugPrint("Error occurred ${error.toString()}");
+      getError(error);
     }
   }
 
@@ -395,21 +427,14 @@ class AuthRepository extends GetxController {
     }
   }
 
-  void noInternetError(BuildContext context, var error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: CustomText(
-          title: (error.toString().contains("esports-ng.vercel.app") ||
-                  error.toString().contains("Network is unreachable"))
-              ? 'No internet connection!'
-              : (error.toString().contains("FormatException"))
-                  ? 'Internal server error, contact admin!'
-                  : error.toString().replaceAll('(', '').replaceAll(')', ''),
-          size: Get.height * 0.02,
-          color: AppColor().primaryWhite,
-          textAlign: TextAlign.start,
-        ),
-      ),
+  void getError(var error) {
+    EasyLoading.showInfo(
+      (error.toString().contains("esports-ng.vercel.app") ||
+              error.toString().contains("Network is unreachable"))
+          ? 'No internet connection!'
+          : (error.toString().contains("FormatException"))
+              ? 'Internal server error, contact admin!'
+              : error.toString().replaceAll('(', '').replaceAll(')', ''),
     );
   }
 
