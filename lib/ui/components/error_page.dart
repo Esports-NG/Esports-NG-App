@@ -11,23 +11,25 @@ class ErrorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Gap(Get.height * 0.1),
-        Icon(
-          Icons.error_outline,
-          color: AppColor().primaryColor,
-          size: Get.height * 0.1,
-        ),
-        Gap(Get.height * 0.02),
-        CustomText(
-          title: 'Error occurred, try again!',
-          size: 15,
-          color: AppColor().primaryWhite,
-        ),
-      ],
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Gap(Get.height * 0.1),
+          Icon(
+            Icons.error_outline,
+            color: AppColor().primaryColor,
+            size: Get.height * 0.1,
+          ),
+          Gap(Get.height * 0.02),
+          CustomText(
+            title: 'Error occurred, try again!',
+            size: 15,
+            color: AppColor().primaryWhite,
+          ),
+        ],
+      ),
     );
   }
 }

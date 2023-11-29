@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
@@ -141,261 +142,289 @@ class _MyProfileState extends State<MyProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor().primaryBackGroundColor,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Gap(Get.height * 0.07),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () => Get.back(),
-                    child: Icon(
-                      Icons.arrow_back,
-                      size: 25,
-                      color: AppColor().primaryWhite,
+    return Obx(() {
+      return Scaffold(
+        backgroundColor: AppColor().primaryBackGroundColor,
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Gap(Get.height * 0.07),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                        authController.clearPhoto();
+                      },
+                      child: Icon(
+                        Icons.arrow_back,
+                        size: 25,
+                        color: AppColor().primaryWhite,
+                      ),
                     ),
+                    Gap(Get.height * 0.01),
+                  ],
+                ),
+                Center(
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      authController.userImage == null
+                          ? ProfileImage(itemSize: Get.height * 0.13)
+                          : Container(
+                              height: Get.height * 0.13,
+                              width: Get.height * 0.13,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: FileImage(authController.userImage!),
+                                    fit: BoxFit.cover),
+                              ),
+                            ),
+                      Positioned(
+                        bottom: 0,
+                        child: InkWell(
+                          onTap: () {
+                            Get.defaultDialog(
+                              title: "Select your image",
+                              backgroundColor: AppColor().primaryLightColor,
+                              titlePadding: const EdgeInsets.only(top: 30),
+                              contentPadding: const EdgeInsets.only(
+                                  top: 5, bottom: 30, left: 25, right: 25),
+                              middleText: "Upload your profile picture",
+                              titleStyle: TextStyle(
+                                color: AppColor().primaryWhite,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'GilroyRegular',
+                              ),
+                              radius: 10,
+                              confirm: Column(
+                                children: [
+                                  CustomFillButton(
+                                    onTap: () {
+                                      pickImageFromGallery();
+                                      Get.back();
+                                    },
+                                    height: 45,
+                                    width: Get.width * 0.5,
+                                    buttonText: 'Upload from gallery',
+                                    textColor: AppColor().primaryWhite,
+                                    buttonColor: AppColor().primaryColor,
+                                    boarderColor: AppColor().primaryColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  const Gap(10),
+                                  CustomFillButton(
+                                    onTap: () {
+                                      pickImageFromCamera();
+                                      Get.back();
+                                    },
+                                    height: 45,
+                                    width: Get.width * 0.5,
+                                    buttonText: 'Upload from camera',
+                                    textColor: AppColor().primaryWhite,
+                                    buttonColor: AppColor().primaryColor,
+                                    boarderColor: AppColor().primaryColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                ],
+                              ),
+                              middleTextStyle: TextStyle(
+                                color: AppColor().primaryWhite,
+                                fontFamily: 'GilroyRegular',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            );
+                          },
+                          child: authController.userImage == null
+                              ? SvgPicture.asset(
+                                  'assets/images/svg/camera.svg',
+                                  height: Get.height * 0.05,
+                                )
+                              : InkWell(
+                                  onTap: () {
+                                    authController.clearPhoto();
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                        color: AppColor().primaryColor,
+                                        border: Border.all(
+                                            width: 2,
+                                            color: AppColor().primaryWhite),
+                                        shape: BoxShape.circle),
+                                    child: Icon(Icons.close,
+                                        color: AppColor().primaryWhite),
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Gap(Get.height * 0.01),
-                ],
-              ),
-              Center(
-                child: Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    Container(
-                      height: Get.height * 0.15,
-                      width: Get.height * 0.15,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: authController.userImage == null
-                            ? const DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/png/account2.png'))
-                            : DecorationImage(
-                                image: FileImage(authController.userImage!),
-                                fit: BoxFit.cover),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      child: InkWell(
-                        onTap: () {
-                          Get.defaultDialog(
-                            title: "Select your image",
-                            backgroundColor: AppColor().primaryLightColor,
-                            titlePadding: const EdgeInsets.only(top: 30),
-                            contentPadding: const EdgeInsets.only(
-                                top: 5, bottom: 30, left: 25, right: 25),
-                            middleText: "Upload your profile picture",
-                            titleStyle: TextStyle(
-                              color: AppColor().primaryWhite,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'GilroyRegular',
-                            ),
-                            radius: 10,
-                            confirm: Column(
-                              children: [
-                                CustomFillButton(
-                                  onTap: () {
-                                    pickImageFromGallery();
-                                    Get.back();
-                                  },
-                                  height: 45,
-                                  width: Get.width * 0.5,
-                                  buttonText: 'Upload from gallery',
-                                  textColor: AppColor().primaryWhite,
-                                  buttonColor: AppColor().primaryColor,
-                                  boarderColor: AppColor().primaryColor,
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                const Gap(10),
-                                CustomFillButton(
-                                  onTap: () {
-                                    pickImageFromCamera();
-                                    Get.back();
-                                  },
-                                  height: 45,
-                                  width: Get.width * 0.5,
-                                  buttonText: 'Upload from camera',
-                                  textColor: AppColor().primaryWhite,
-                                  buttonColor: AppColor().primaryColor,
-                                  boarderColor: AppColor().primaryColor,
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                              ],
-                            ),
-                            middleTextStyle: TextStyle(
-                              color: AppColor().primaryWhite,
-                              fontFamily: 'GilroyRegular',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          );
-                        },
-                        child: SvgPicture.asset(
-                          'assets/images/svg/camera.svg',
-                          height: Get.height * 0.04,
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-              Gap(Get.height * 0.05),
-              Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      title: 'Username',
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
-                      size: Get.height * 0.017,
-                    ),
-                    Gap(Get.height * 0.01),
-                    CustomTextField(
-                      hint: "e.g realmitcha",
-                      textEditingController: authController.userNameController,
-                      hasText: isAlias,
-                      focusNode: _aliasFocusNode,
-                      onTap: () => handleTap('alias'),
-                      onSubmited: (_) {
-                        _aliasFocusNode.unfocus();
-                      },
-                      onChanged: (value) {
-                        setState(() {});
-                        isAlias = value.isNotEmpty;
-                      },
-                      validate: Validator.isUsername,
-                    ),
-                    Gap(Get.height * 0.02),
-                    CustomText(
-                      title: 'Full name',
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
-                      size: Get.height * 0.017,
-                    ),
-                    Gap(Get.height * 0.01),
-                    CustomTextField(
-                      hint: "eg john doe",
-                      textEditingController: authController.fullNameController,
-                      hasText: isFullname,
-                      focusNode: _fullnameFocusNode,
-                      onTap: () {
-                        handleTap('fullname');
-                      },
-                      onSubmited: (_) {
-                        _fullnameFocusNode.unfocus();
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          isFullname = value.isNotEmpty;
-                        });
-                      },
-                      validate: Validator.isName,
-                    ),
-                    Gap(Get.height * 0.02),
-                    CustomText(
-                      title: 'Email Address',
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
-                      size: Get.height * 0.017,
-                    ),
-                    Gap(Get.height * 0.01),
-                    CustomTextField(
-                      hint: "johndoe@mail.com",
-                      textEditingController: authController.emailController,
-                      hasText: isEmail,
-                      focusNode: _emailFocusNode,
-                      onTap: () {
-                        handleTap('email');
-                      },
-                      onSubmited: (_) {
-                        _emailFocusNode.unfocus();
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          isEmail = value.isNotEmpty;
-                        });
-                      },
-                      validate: Validator.isEmail,
-                    ),
-                    Gap(Get.height * 0.02),
-                    CustomText(
-                      title: 'Phone number',
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
-                      size: Get.height * 0.017,
-                    ),
-                    Gap(Get.height * 0.01),
-                    CustomTextField(
-                      hint: "phone",
-                      textEditingController: authController.phoneNoController,
-                      hasText: isPhone,
-                      focusNode: _phoneFocusNode,
-                      onTap: () {
-                        handleTap('phone');
-                      },
-                      onSubmited: (_) {
-                        _phoneFocusNode.unfocus();
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          isPhone = value.isNotEmpty;
-                        });
-                      },
-                      keyType: TextInputType.phone,
-                      pretext: authController.countryCodeController.text,
-                      validate: Validator.isPhone,
-                    ),
-                    Gap(Get.height * 0.05),
-                    Obx(() {
-                      return InkWell(
-                        onTap: () {
-                          if (authController.signUpStatus !=
-                              SignUpStatus.loading) {
-                            // authController.signUp(widget.user, context);
-                          }
+                Gap(Get.height * 0.05),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        title: 'Username',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                      CustomTextField(
+                        hint: "e.g realmitcha",
+                        textEditingController:
+                            authController.userNameController,
+                        hasText: isAlias,
+                        focusNode: _aliasFocusNode,
+                        onTap: () => handleTap('alias'),
+                        onSubmited: (_) {
+                          _aliasFocusNode.unfocus();
                         },
-                        child: Container(
-                          height: Get.height * 0.06,
-                          width: Get.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: AppColor().primaryColor,
+                        onChanged: (value) {
+                          setState(() {});
+                          isAlias = value.isNotEmpty;
+                        },
+                        validate: Validator.isUsername,
+                      ),
+                      Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Full name',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                      CustomTextField(
+                        hint: "eg john doe",
+                        textEditingController:
+                            authController.fullNameController,
+                        hasText: isFullname,
+                        focusNode: _fullnameFocusNode,
+                        onTap: () {
+                          handleTap('fullname');
+                        },
+                        onSubmited: (_) {
+                          _fullnameFocusNode.unfocus();
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            isFullname = value.isNotEmpty;
+                          });
+                        },
+                        validate: Validator.isName,
+                      ),
+                      Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Email Address',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                      CustomTextField(
+                        hint: "johndoe@mail.com",
+                        textEditingController: authController.emailController,
+                        hasText: isEmail,
+                        focusNode: _emailFocusNode,
+                        onTap: () {
+                          handleTap('email');
+                        },
+                        onSubmited: (_) {
+                          _emailFocusNode.unfocus();
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            isEmail = value.isNotEmpty;
+                          });
+                        },
+                        validate: Validator.isEmail,
+                      ),
+                      Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Phone number',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                      CustomTextField(
+                        hint: "phone",
+                        textEditingController: authController.phoneNoController,
+                        hasText: isPhone,
+                        focusNode: _phoneFocusNode,
+                        onTap: () {
+                          handleTap('phone');
+                        },
+                        onSubmited: (_) {
+                          _phoneFocusNode.unfocus();
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            isPhone = value.isNotEmpty;
+                          });
+                        },
+                        keyType: TextInputType.phone,
+                        pretext: authController.countryCodeController.text,
+                        validate: Validator.isPhone,
+                      ),
+                      Gap(Get.height * 0.05),
+                      Obx(() {
+                        return InkWell(
+                          onTap: () {
+                            if (authController.updateProfileStatus !=
+                                UpdateProfileStatus.loading) {
+                              if (authController.userImage == null) {
+                                debugPrint("updating user only");
+                                authController.updateUser();
+                              } else {
+                                debugPrint("updating user");
+                                authController.updateProfileImage();
+                              }
+                            }
+                          },
+                          child: Container(
+                            height: Get.height * 0.06,
+                            width: Get.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: AppColor().primaryColor,
+                            ),
+                            child: (authController.updateProfileStatus ==
+                                    UpdateProfileStatus.loading)
+                                ? const LoadingWidget()
+                                : Center(
+                                    child: CustomText(
+                                    title: 'Save',
+                                    color: AppColor().primaryWhite,
+                                    weight: FontWeight.w600,
+                                    size: Get.height * 0.016,
+                                  )),
                           ),
-                          child: (authController.signUpStatus ==
-                                  SignUpStatus.loading)
-                              ? const LoadingWidget()
-                              : Center(
-                                  child: CustomText(
-                                  title: 'Save',
-                                  color: AppColor().primaryWhite,
-                                  weight: FontWeight.w600,
-                                  size: Get.height * 0.016,
-                                )),
-                        ),
-                      );
-                    }),
-                  ],
+                        );
+                      }),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

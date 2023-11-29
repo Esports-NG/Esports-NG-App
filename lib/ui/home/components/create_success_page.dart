@@ -42,7 +42,7 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
           ),
           Gap(Get.height * 0.04),
           CustomText(
-            title: '${widget.title} Created Successfully!!',
+            title: '${widget.title} Successfully!!',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
             fontFamily: 'GilroyBold',

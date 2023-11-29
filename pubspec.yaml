@@ -9,6 +9,7 @@ environment:
   sdk: ">=3.0.5 <4.0.0"
 
 dependencies:
+  cached_network_image: ^3.3.0
   change_case: ^1.1.0
   csc_picker: ^0.2.7
   cupertino_icons: ^1.0.2

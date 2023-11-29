@@ -3,6 +3,7 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
@@ -60,20 +61,8 @@ class _AccountState extends State<Account> {
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        Container(
-                          height: Get.height * 0.15,
-                          width: Get.height * 0.15,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/png/account2.png'),
-                            ),
-                          ),
-                        ),
+                        ProfileImage(itemSize: Get.height * 0.13),
                         Positioned(
-                          right: Get.height * 0.01,
-                          bottom: Get.height * 0.015,
                           child: SvgPicture.asset(
                             'assets/images/svg/check_badge.svg',
                             height: Get.height * 0.035,

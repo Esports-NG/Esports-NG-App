@@ -7,7 +7,6 @@ import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
 import 'error_page.dart';
 import 'no_post_page.dart';
 

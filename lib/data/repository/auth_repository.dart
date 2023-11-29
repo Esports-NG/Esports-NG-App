@@ -8,6 +8,7 @@ import 'package:e_sport/di/shared_pref.dart';
 import 'package:e_sport/ui/auth/first_screen.dart';
 import 'package:e_sport/ui/auth/login.dart';
 import 'package:e_sport/ui/auth/otp_screen.dart';
+import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/home/dashboard.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -366,30 +367,59 @@ class AuthRepository extends GetxController {
     }
   }
 
-  Future updateUser(String title) async {
+  Future updateUser() async {
     try {
+      EasyLoading.show(status: 'Updating user info');
       _updateProfileStatus(UpdateProfileStatus.loading);
-
       var response = await http.put(
           Uri.parse('${ApiLink.user}${user!.id}/update/'),
-          body: jsonEncode({
-            "otp_code": int.tryParse(otpPin.text.trim()),
-          }),
+          body: jsonEncode({"full_name": fullNameController.text.trim()}),
           headers: {
             "Content-Type": "application/json",
-            'Authorization': 'Bearer $token'
+            'Authorization': 'JWT $token'
           });
-
       var json = jsonDecode(response.body);
-      if (json['succes'] == false) {
-        throw json['message'];
+      if (response.statusCode != 200) {
+        throw (json['detail']);
       }
-
-      debugPrint("response $json");
-      if (json['succes'] == true) {
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
         _updateProfileStatus(UpdateProfileStatus.success);
+        Get.to(() => const CreateSuccessPage(title: 'Profile Updated'))!
+            .then((value) {
+          EasyLoading.dismiss();
+          getUserInfo();
+          clearPhoto();
+        });
       }
       return response.body;
+    } catch (error) {
+      _updateProfileStatus(UpdateProfileStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("Error occurred ${error.toString()}");
+      getError(error);
+    }
+  }
+
+  void updateProfileImage() async {
+    try {
+      EasyLoading.show(status: 'Updating user info');
+      _updateProfileStatus(UpdateProfileStatus.loading);
+      var headers = {'Authorization': 'JWT $token'};
+      var request = http.MultipartRequest(
+          "PUT", Uri.parse('${ApiLink.user}${user!.id}/update/'));
+      request.files.add(await http.MultipartFile.fromPath(
+          'profile.profile_picture', userImage!.path));
+      request.headers.addAll(headers);
+
+      await request.send().then((response) {
+        response.stream.transform(utf8.decoder).listen((response) {
+          var res = jsonDecode(response);
+          debugPrint(res);
+
+          updateUser();
+        });
+      });
     } catch (error) {
       _updateProfileStatus(UpdateProfileStatus.error);
       debugPrint("Error occurred ${error.toString()}");

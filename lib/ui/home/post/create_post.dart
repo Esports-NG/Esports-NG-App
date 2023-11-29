@@ -7,13 +7,14 @@ import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
+import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../components/create_success_page.dart';
 import 'create_post_item.dart';
 
 class CreatePost extends StatefulWidget {
@@ -27,27 +28,33 @@ class _CreatePostState extends State<CreatePost> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final postController = Get.put(PostRepository());
   String? gameTag, seePost, engagePost;
-  int? _selectedMenu = 0;
-  bool? isPostUpdate = false,
+  int? selectedMenu = 0;
+  bool? isPostTitle = false,
+      isPostBody = false,
       isGameTag = false,
       isSeePost = false,
       isEngagePost = false;
 
-  final FocusNode _postUpdateFocusNode = FocusNode();
-  final FocusNode _gameTagFocusNode = FocusNode();
+  final FocusNode postTitleFocusNode = FocusNode();
+  final FocusNode postBodyFocusNode = FocusNode();
+  final FocusNode gameTagFocusNode = FocusNode();
 
   @override
   void dispose() {
-    _formKey.currentState!.dispose();
-    _postUpdateFocusNode.dispose();
-    _gameTagFocusNode.dispose();
+    postTitleFocusNode.dispose();
+    postBodyFocusNode.dispose();
+    gameTagFocusNode.dispose();
     super.dispose();
   }
 
   void handleTap(String? title) {
-    if (title == 'postUpdate') {
+    if (title == 'postTitle') {
       setState(() {
-        isPostUpdate = true;
+        isPostTitle = true;
+      });
+    } else if (title == 'postBody') {
+      setState(() {
+        isPostBody = true;
       });
     } else if (title == 'gameTag') {
       setState(() {
@@ -106,7 +113,10 @@ class _CreatePostState extends State<CreatePost> {
           leading: IconButton(
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
-            onPressed: () => Get.back(),
+            onPressed: () {
+              Get.back();
+              postController.clear();
+            },
             icon: Icon(
               Icons.arrow_back,
               color: AppColor().primaryWhite,
@@ -167,7 +177,7 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   Gap(Get.height * 0.03),
                   CustomText(
-                    title: 'Post an update *',
+                    title: 'Post title *',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
                     fontFamily: 'GilroyRegular',
@@ -176,27 +186,50 @@ class _CreatePostState extends State<CreatePost> {
                   Gap(Get.height * 0.01),
                   CustomTextField(
                     hint: "Type text here",
-                    textEditingController: postController.postTextController,
-                    hasText: isPostUpdate!,
-                    focusNode: _postUpdateFocusNode,
+                    textEditingController: postController.postTitleController,
+                    hasText: isPostTitle!,
+                    focusNode: postTitleFocusNode,
                     onTap: () {
-                      handleTap('postUpdate');
+                      handleTap('postTitle');
                     },
                     onSubmited: (_) {
-                      _postUpdateFocusNode.unfocus();
+                      postTitleFocusNode.unfocus();
                     },
                     onChanged: (value) {
                       setState(() {
-                        isPostUpdate = value.isNotEmpty;
+                        isPostTitle = value.isNotEmpty;
+                      });
+                    },
+                    maxLines: 2,
+                    validate: Validator.isName,
+                  ),
+                  Gap(Get.height * 0.02),
+                  CustomText(
+                    title: 'Post body *',
+                    color: AppColor().primaryWhite,
+                    textAlign: TextAlign.center,
+                    fontFamily: 'GilroyRegular',
+                    size: Get.height * 0.017,
+                  ),
+                  Gap(Get.height * 0.01),
+                  CustomTextField(
+                    hint: "Type text here",
+                    textEditingController: postController.postBodyController,
+                    hasText: isPostBody!,
+                    focusNode: postBodyFocusNode,
+                    onTap: () {
+                      handleTap('postBody');
+                    },
+                    onSubmited: (_) {
+                      postBodyFocusNode.unfocus();
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        isPostBody = value.isNotEmpty;
                       });
                     },
                     maxLines: 5,
-                    validate: (value) {
-                      if (value!.isEmpty) {
-                        return 'post update must not be empty';
-                      }
-                      return null;
-                    },
+                    validate: Validator.isName,
                   ),
                   Gap(Get.height * 0.02),
                   CustomText(
@@ -520,19 +553,27 @@ class _CreatePostState extends State<CreatePost> {
                   InkWell(
                     onTap: () {
                       PostModel post = PostModel(
-                          title: postController.postTextController.text,
-                          body: postController.postTextController.text,
-                          iTags: ['#${postController.gameTagController.text}'],
-                          viewers: [postController.seeController.text],
-                          image: null);
+                        title: postController.postTitleController.text.trim(),
+                        body: postController.postBodyController.text.trim(),
+                        iTags: '#${postController.gameTagController.text}',
+                        iViewers: postController.seeController.text,
+                      );
                       debugPrint('post: ${post.toCreatePostJson()}');
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        postController.createPost(post, context).then((value) {
-                          postController.clear();
-                          _formKey.currentState!.reset();
-                        });
+                        if (postController.postImage == null) {
+                          EasyLoading.showInfo('Select post image!');
+                        } else if (postController.gameTagController.text ==
+                            '') {
+                          EasyLoading.showInfo('Select game tag!');
+                        } else if (postController.seeController.text == '') {
+                          EasyLoading.showInfo('Select who can see post!');
+                        } else if (postController.engageController.text == '') {
+                          EasyLoading.showInfo('Select who can engage post!');
+                        } else {
+                          postController.createPost(post, context);
+                        }
                       }
                     },
                     child: Container(
@@ -614,13 +655,13 @@ class _CreatePostState extends State<CreatePost> {
                               item.title;
                         });
                         myState(() {
-                          _selectedMenu = index;
+                          selectedMenu = index;
                         });
                         Get.back();
                       },
                       child: CreateMenu(
                         item: item,
-                        selectedItem: _selectedMenu,
+                        selectedItem: selectedMenu,
                         index: index,
                       ),
                     );

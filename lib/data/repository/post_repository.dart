@@ -6,12 +6,18 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+enum LikePostStatus {
+  loading,
+  success,
+  error,
+  empty,
+}
 
 enum PostStatus {
   loading,
@@ -30,7 +36,8 @@ enum CreatePostStatus {
 
 class PostRepository extends GetxController {
   final authController = Get.put(AuthRepository());
-  late final postTextController = TextEditingController();
+  late final postTitleController = TextEditingController();
+  late final postBodyController = TextEditingController();
   late final seeController = TextEditingController();
   late final engageController = TextEditingController();
   late final gameTagController = TextEditingController();
@@ -41,7 +48,9 @@ class PostRepository extends GetxController {
 
   final _postStatus = PostStatus.empty.obs;
   final _createPostStatus = CreatePostStatus.empty.obs;
+  final _likePostStatus = LikePostStatus.empty.obs;
 
+  LikePostStatus get likePostStatus => _likePostStatus.value;
   PostStatus get postStatus => _postStatus.value;
   CreatePostStatus get createPostStatus => _createPostStatus.value;
 
@@ -61,33 +70,66 @@ class PostRepository extends GetxController {
   Future createPost(PostModel post, BuildContext context) async {
     try {
       _createPostStatus(CreatePostStatus.loading);
-      var response = await http.post(Uri.parse(ApiLink.createPost),
-          body: jsonEncode(post.toCreatePostJson()),
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': 'JWT ${authController.token}',
-          });
-      var json = jsonDecode(response.body);
+      var headers = {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      };
+      var request =
+          http.MultipartRequest("POST", Uri.parse(ApiLink.createPost));
 
-      if (response.statusCode != 201) {
-        throw (json['profile'] != null
-            ? json['profile'][0]
-            : json.toString().replaceAll('{', '').replaceAll('}', ''));
-      }
+      request.fields.addAll(
+          post.toCreatePostJson().map((key, value) => MapEntry(key, value)));
+      request.files
+          .add(await http.MultipartFile.fromPath('image', postImage!.path));
+      request.headers.addAll(headers);
 
+      http.StreamedResponse response = await request.send();
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
-        Get.to(() => const CreateSuccessPage(title: 'Post'))!.then((value) {
+        debugPrint(await response.stream.bytesToString());
+        Get.to(() => const CreateSuccessPage(title: 'Post Created'))!
+            .then((value) {
           getAllPost();
           clear();
         });
+      } else {
+        _createPostStatus(CreatePostStatus.error);
+        debugPrint(response.reasonPhrase);
+        noInternetError(context, response.reasonPhrase);
       }
-
-      return response.body;
     } catch (error) {
       _createPostStatus(CreatePostStatus.error);
       debugPrint("Error occurred ${error.toString()}");
       noInternetError(context, error);
+    }
+  }
+
+  Future likePost(BuildContext context) async {
+    _likePostStatus(LikePostStatus.loading);
+    try {
+      debugPrint('liking post');
+      var response = await http.post(
+        Uri.parse(ApiLink.likePost),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode != 200) {
+        throw (
+          json['non_field_errors'] != null
+              ? json['non_field_errors'][0]
+              : json[0],
+        );
+      }
+
+      if (response.statusCode == 200) {}
+      return response.body;
+    } catch (error) {
+      _likePostStatus(LikePostStatus.error);
+      debugPrint("error $error");
     }
   }
 
@@ -97,6 +139,7 @@ class PostRepository extends GetxController {
       debugPrint('getting all post...');
       var response = await http.get(Uri.parse(ApiLink.getAllPost), headers: {
         "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
       });
       var json = jsonDecode(response.body);
       if (response.statusCode != 200) {
@@ -144,7 +187,8 @@ class PostRepository extends GetxController {
   }
 
   void clear() {
-    postTextController.clear();
+    postTitleController.clear();
+    postBodyController.clear();
     gameTagController.clear();
     seeController.clear();
   }

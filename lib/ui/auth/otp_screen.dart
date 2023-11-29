@@ -198,10 +198,10 @@ class _OTPScreenState extends State<OTPScreen> {
                     if (number.length < 6) {
                       number += value;
                       authController.otpPin.text += value;
+                    } else if (number.length == 6) {
+                      Get.offAll(() => const Dashboard());
                     }
                   });
-                  // authController.otpPin.text = controller.text;
-                  debugPrint("OTP: $number");
                 },
                 rightWidget: IconButton(
                   icon: Icon(
@@ -214,8 +214,6 @@ class _OTPScreenState extends State<OTPScreen> {
                         authController.otpPin.text =
                             number.substring(0, number.length - 1);
                       });
-                      // authController.otpPin.text = controller.text;
-                      debugPrint("OTP: $number");
                     }
                   },
                 ),
@@ -227,7 +225,6 @@ class _OTPScreenState extends State<OTPScreen> {
                   ),
                   onPressed: () {
                     if (authController.otpPin.text.length == 6) {
-                      // authController.verifyOtp(context);
                       Get.offAll(() => const Dashboard());
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

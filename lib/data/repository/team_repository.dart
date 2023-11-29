@@ -20,7 +20,7 @@ enum CreateTeamStatus {
 
 class TeamRepository extends GetxController {
   final authController = Get.put(AuthRepository());
-  late final postTextController = TextEditingController();
+  late final postTitleController = TextEditingController();
   late final seeController = TextEditingController();
   late final engageController = TextEditingController();
   late final gameTagController = TextEditingController();

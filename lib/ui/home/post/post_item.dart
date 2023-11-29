@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +21,28 @@ class PostItem extends StatefulWidget {
 
 class _PostItemState extends State<PostItem> {
   int? _selectedIndex;
+
+  String timeAgo(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds} seconds ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays < 30) {
+      return '${(difference.inDays / 7).floor()} weeks ago';
+    } else if (difference.inDays < 365) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else {
+      return '${(difference.inDays / 365).floor()} years ago';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,22 +72,34 @@ class _PostItemState extends State<PostItem> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/images/png/postDImage.png',
-                      height: Get.height * 0.025,
-                      width: Get.height * 0.025,
-                    ),
+                    widget.item.author!.profile!.profilePicture == null
+                        ? SvgPicture.asset(
+                            'assets/images/svg/people.svg',
+                            height: Get.height * 0.025,
+                            width: Get.height * 0.025,
+                          )
+                        : CachedNetworkImage(
+                            height: Get.height * 0.025,
+                            width: Get.height * 0.025,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                            imageUrl:
+                                widget.item.author!.profile!.profilePicture,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage(widget
+                                        .item.author!.profile!.profilePicture),
+                                    fit: BoxFit.cover),
+                              ),
+                            ),
+                          ),
                     Gap(Get.height * 0.01),
                     CustomText(
-                      title: widget.item.author!.fullName!,
-                      size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
-                      textAlign: TextAlign.start,
-                      color: AppColor().lightItemsColor,
-                    ),
-                    Gap(Get.height * 0.005),
-                    CustomText(
-                      title: widget.item.author!.userName!,
+                      title: widget.item.author!.fullName!.toCapitalCase(),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -73,8 +109,7 @@ class _PostItemState extends State<PostItem> {
                     const SmallCircle(),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: 'Time',
-                      // widget.item.time!.toSentenceCase(),
+                      title: timeAgo(widget.item.createdAt!),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -171,12 +206,43 @@ class _PostItemState extends State<PostItem> {
           Stack(
             alignment: Alignment.center,
             children: [
-              Image.asset(
-                'assets/images/png/postImage1.png',
-                height: Get.height * 0.25,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              widget.item.image == null
+                  ? Container(
+                      height: Get.height * 0.25,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image:
+                                AssetImage('assets/images/png/placeholder.png'),
+                            fit: BoxFit.cover),
+                      ),
+                    )
+                  : CachedNetworkImage(
+                      height: Get.height * 0.25,
+                      width: double.infinity,
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          Center(
+                        child: SizedBox(
+                          height: Get.height * 0.05,
+                          width: Get.height * 0.05,
+                          child: CircularProgressIndicator(
+                              color: AppColor().primaryWhite,
+                              value: progress.progress),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.error, color: AppColor().primaryWhite),
+                      imageUrl:
+                          'http://res.cloudinary.com/dkykwpryb/${widget.item.image!}',
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  'http://res.cloudinary.com/dkykwpryb/${widget.item.image!}'),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
+                    ),
               Positioned.fill(
                 left: Get.height * 0.02,
                 bottom: Get.height * 0.02,
