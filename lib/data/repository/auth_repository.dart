@@ -280,7 +280,7 @@ class AuthRepository extends GetxController {
         pref!.setUser(userModel);
         _signInStatus(SignInStatus.success);
         _authStatus(AuthStatus.authenticated);
-        EasyLoading.showInfo('Login success',
+        EasyLoading.showInfo('Login Successful',
                 duration: const Duration(seconds: 2))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 2));
@@ -325,11 +325,7 @@ class AuthRepository extends GetxController {
         clear();
         mToken(json['access']);
         pref!.saveToken(token);
-        // var userModel = UserModel.fromJson(json);
-        // mUser(userModel);
-        // pref!.setUser(userModel);
         _authStatus(AuthStatus.authenticated);
-
         EasyLoading.showInfo('Success', duration: const Duration(seconds: 3))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 3));
@@ -423,6 +419,31 @@ class AuthRepository extends GetxController {
       _updateProfileStatus(UpdateProfileStatus.error);
       debugPrint("Error occurred ${error.toString()}");
       getError(error);
+    }
+  }
+
+  Future refreshToken() async {
+    try {
+      var response = await http.post(Uri.parse(ApiLink.tokenRefresh),
+          body: jsonEncode({"refresh": user!.tokens!.refresh}),
+          headers: {
+            "Content-Type": "application/json",
+          });
+      var json = jsonDecode(response.body);
+
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        var tokens = Tokens.fromJson(json);
+        UserModel userModel = UserModel();
+        userModel.tokens = tokens;
+        mToken(userModel.tokens!.access);
+        pref!.saveToken(userModel.tokens!.access!);
+        mUser(userModel);
+        pref!.setUser(userModel);
+      }
+      return response.body;
+    } catch (error) {
+      debugPrint("refresh token error: ${error.toString()}");
     }
   }
 

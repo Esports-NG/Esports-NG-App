@@ -5,6 +5,7 @@ class ApiLink {
   static String register = "${baseurl}user/register/";
   static String login = "${baseurl}user/login/";
   static String user = "${baseurl}user/";
+  static String tokenRefresh = "${baseurl}user/token/refresh/";
   static String getCountryCode = "https://restcountries.com/v3/name/";
   static String logout = "${baseurl}user/logout";
   static String verifyOtp = "${baseurl}user/otp";
@@ -40,15 +41,4 @@ class ApiLink {
   // static String changeTransactionPin =
   //     "${baseurl}wallet/change-transaction-pin";
 
-  //Order
-  // static String orders = "${baseurl}my-orders";
-
-  //Notification
-  // static String notification = "${baseurl}users/notifications";
-
-  //Bank
-  // static String allBank = "${baseurl}nuban/banks";
-  // static String resolveBank = "${baseurl}nuban/resolve";
-  // static String myBank = "${baseurl}nuban/my-banks";
-  // static String withdrawFund = "${baseurl}initiate-withdrawal";
 }
