@@ -1,12 +1,13 @@
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/home/post/post_details.dart';
 import 'package:e_sport/ui/home/post/post_item.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'error_page.dart';
+import 'no_post_page.dart';
 
 class PostWidget extends StatelessWidget {
   const PostWidget({
@@ -19,7 +20,7 @@ class PostWidget extends StatelessWidget {
     return Obx(() {
       if (postController.postStatus == PostStatus.loading) {
         return LoadingWidget(color: AppColor().primaryColor);
-      } else if (postController.postStatus == PostStatus.success) {
+      } else if (postController.postStatus == PostStatus.available) {
         return ListView.separated(
           padding: EdgeInsets.zero,
           physics: const ScrollPhysics(),
@@ -40,25 +41,13 @@ class PostWidget extends StatelessWidget {
             );
           },
         );
+      } else if (postController.postStatus == PostStatus.empty) {
+        return const NoPostPage();
       } else {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error_outline,
-              color: AppColor().primaryColor,
-              size: Get.height * 0.1,
-            ),
-            Gap(Get.height * 0.02),
-            CustomText(
-              title: 'Error occurred, try again!',
-              size: 15,
-              color: AppColor().primaryWhite,
-            ),
-          ],
-        );
+        return const ErrorPage();
       }
     });
   }
 }
+
+

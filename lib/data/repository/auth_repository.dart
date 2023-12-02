@@ -8,9 +8,8 @@ import 'package:e_sport/di/shared_pref.dart';
 import 'package:e_sport/ui/auth/first_screen.dart';
 import 'package:e_sport/ui/auth/login.dart';
 import 'package:e_sport/ui/auth/otp_screen.dart';
+import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/home/dashboard.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -162,6 +161,7 @@ class AuthRepository extends GetxController {
 
   RxBool mOnSelect = false.obs;
   RxBool mGetCountryCode = false.obs;
+  RxBool mNetworkAvailable = false.obs;
 
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;
@@ -242,7 +242,7 @@ class AuthRepository extends GetxController {
     } catch (error) {
       _signUpStatus(SignUpStatus.error);
       debugPrint("Error occurred ${error.toString()}");
-      noInternetError(context, error);
+      getError(error);
     }
   }
 
@@ -268,7 +268,7 @@ class AuthRepository extends GetxController {
         throw (
           json['non_field_errors'] != null
               ? json['non_field_errors'][0]
-              : json['non_field_errors'][0],
+              : json[0],
         );
       }
 
@@ -280,7 +280,7 @@ class AuthRepository extends GetxController {
         pref!.setUser(userModel);
         _signInStatus(SignInStatus.success);
         _authStatus(AuthStatus.authenticated);
-        EasyLoading.showInfo('Login success',
+        EasyLoading.showInfo('Login Successful',
                 duration: const Duration(seconds: 2))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 2));
@@ -288,11 +288,12 @@ class AuthRepository extends GetxController {
           clear();
         });
       }
+
       return response.body;
     } catch (error) {
       _signInStatus(SignInStatus.error);
       debugPrint("error $error");
-      noInternetError(context, error);
+      getError(error);
     }
   }
 
@@ -324,11 +325,7 @@ class AuthRepository extends GetxController {
         clear();
         mToken(json['access']);
         pref!.saveToken(token);
-        // var userModel = UserModel.fromJson(json);
-        // mUser(userModel);
-        // pref!.setUser(userModel);
         _authStatus(AuthStatus.authenticated);
-
         EasyLoading.showInfo('Success', duration: const Duration(seconds: 3))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 3));
@@ -340,7 +337,7 @@ class AuthRepository extends GetxController {
       _otpValidateStatus(OtpValidateStatus.error);
       EasyLoading.dismiss();
       debugPrint("error ${error.toString()}");
-      noInternetError(context, error);
+      getError(error);
     }
   }
 
@@ -362,6 +359,91 @@ class AuthRepository extends GetxController {
       return response.body;
     } catch (error) {
       debugPrint("getting user info: ${error.toString()}");
+    }
+  }
+
+  Future updateUser() async {
+    try {
+      EasyLoading.show(status: 'Updating user info');
+      _updateProfileStatus(UpdateProfileStatus.loading);
+      var response = await http.put(
+          Uri.parse('${ApiLink.user}${user!.id}/update/'),
+          body: jsonEncode({"full_name": fullNameController.text.trim()}),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'JWT $token'
+          });
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        _updateProfileStatus(UpdateProfileStatus.success);
+        Get.to(() => const CreateSuccessPage(title: 'Profile Updated'))!
+            .then((value) {
+          EasyLoading.dismiss();
+          getUserInfo();
+          clearPhoto();
+        });
+      }
+      return response.body;
+    } catch (error) {
+      _updateProfileStatus(UpdateProfileStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("Error occurred ${error.toString()}");
+      getError(error);
+    }
+  }
+
+  void updateProfileImage() async {
+    try {
+      EasyLoading.show(status: 'Updating user info');
+      _updateProfileStatus(UpdateProfileStatus.loading);
+      var headers = {'Authorization': 'JWT $token'};
+      var request = http.MultipartRequest(
+          "PUT", Uri.parse('${ApiLink.user}${user!.id}/update/'));
+      request.files.add(await http.MultipartFile.fromPath(
+          'profile.profile_picture', userImage!.path));
+      request.headers.addAll(headers);
+
+      await request.send().then((response) {
+        response.stream.transform(utf8.decoder).listen((response) {
+          var res = jsonDecode(response);
+          debugPrint(res);
+
+          updateUser();
+        });
+      });
+    } catch (error) {
+      _updateProfileStatus(UpdateProfileStatus.error);
+      debugPrint("Error occurred ${error.toString()}");
+      getError(error);
+    }
+  }
+
+  Future refreshToken() async {
+    try {
+      var response = await http.post(Uri.parse(ApiLink.tokenRefresh),
+          body: jsonEncode({"refresh": user!.tokens!.refresh}),
+          headers: {
+            "Content-Type": "application/json",
+          });
+      var json = jsonDecode(response.body);
+
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        var tokens = Tokens.fromJson(json);
+        UserModel userModel = UserModel();
+        userModel.tokens = tokens;
+        mToken(userModel.tokens!.access);
+        pref!.saveToken(userModel.tokens!.access!);
+        mUser(userModel);
+        pref!.setUser(userModel);
+      }
+      return response.body;
+    } catch (error) {
+      debugPrint("refresh token error: ${error.toString()}");
     }
   }
 
@@ -395,21 +477,14 @@ class AuthRepository extends GetxController {
     }
   }
 
-  void noInternetError(BuildContext context, var error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: CustomText(
-          title: (error.toString().contains("esports-ng.vercel.app") ||
-                  error.toString().contains("Network is unreachable"))
-              ? 'No internet connection!'
-              : (error.toString().contains("FormatException"))
-                  ? 'Internal server error, contact admin!'
-                  : error.toString().replaceAll('(', '').replaceAll(')', ''),
-          size: Get.height * 0.02,
-          color: AppColor().primaryWhite,
-          textAlign: TextAlign.start,
-        ),
-      ),
+  void getError(var error) {
+    EasyLoading.showInfo(
+      (error.toString().contains("esports-ng.vercel.app") ||
+              error.toString().contains("Network is unreachable"))
+          ? 'No internet connection!'
+          : (error.toString().contains("FormatException"))
+              ? 'Internal server error, contact admin!'
+              : error.toString().replaceAll('(', '').replaceAll(')', ''),
     );
   }
 

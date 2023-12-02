@@ -104,7 +104,7 @@ class CustomTextField extends StatelessWidget {
       initialValue: initialValue,
       obscureText: obscure ?? false,
       style: TextStyle(
-          color: hasText
+          color:hasText 
               ? AppColor().primaryBackGroundColor
               : AppColor().lightItemsColor,
           fontSize: 13,

@@ -3,17 +3,19 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/components/my_post_widget.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'account_details.dart';
+import 'my_profile.dart';
 
 class Account extends StatefulWidget {
   const Account({super.key});
@@ -26,7 +28,6 @@ class _AccountState extends State<Account> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   int? accountTab = 0;
-  String? _selectedIndex;
 
   void toProfile() async {
     await Future.delayed(const Duration(milliseconds: 10));
@@ -59,20 +60,8 @@ class _AccountState extends State<Account> {
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        Container(
-                          height: Get.height * 0.15,
-                          width: Get.height * 0.15,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/png/account2.png'),
-                            ),
-                          ),
-                        ),
+                        ProfileImage(itemSize: Get.height * 0.13),
                         Positioned(
-                          right: Get.height * 0.01,
-                          bottom: Get.height * 0.015,
                           child: SvgPicture.asset(
                             'assets/images/svg/check_badge.svg',
                             height: Get.height * 0.035,
@@ -84,101 +73,8 @@ class _AccountState extends State<Account> {
                   Positioned(
                     right: Get.height * 0.03,
                     bottom: Get.height * 0.05,
-                    child: PopupMenuButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide.none),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      color: AppColor().primaryMenu,
-                      offset: const Offset(0, -10),
-                      initialValue: _selectedIndex,
-                      onSelected: (value) {
-                        setState(() {
-                          if (value == '1') {
-                            _selectedIndex = value;
-                          } else if (value == '2') {
-                            _selectedIndex = value;
-                          } else if (value == '3') {
-                            _selectedIndex = value;
-                          }
-                        });
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: '1',
-                          height: 20,
-                          onTap: () {
-                            SchedulerBinding.instance
-                                .addPersistentFrameCallback((_) {
-                              Get.to(() => Profile());
-                            });
-                          },
-                          padding: const EdgeInsets.only(
-                              bottom: 20, left: 20, top: 20),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.016,
-                              ),
-                              Gap(Get.height * 0.02),
-                              CustomText(
-                                title: 'Edit Profile',
-                                size: Get.height * 0.014,
-                                fontFamily: 'GilroyMedium',
-                                textAlign: TextAlign.start,
-                                color: AppColor().primaryWhite,
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: '2',
-                          height: 20,
-                          padding: const EdgeInsets.only(bottom: 20, left: 20),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.016,
-                              ),
-                              Gap(Get.height * 0.02),
-                              CustomText(
-                                title: 'Edit Socials',
-                                size: Get.height * 0.014,
-                                fontFamily: 'GilroyMedium',
-                                textAlign: TextAlign.start,
-                                color: AppColor().primaryWhite,
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: '3',
-                          height: 20,
-                          padding: const EdgeInsets.only(bottom: 20, left: 20),
-                          child: Row(
-                            children: [
-                              Icon(
-                                CupertinoIcons.lock_fill,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.016,
-                              ),
-                              Gap(Get.height * 0.02),
-                              CustomText(
-                                title: 'Privacy and Security',
-                                size: Get.height * 0.014,
-                                fontFamily: 'GilroyMedium',
-                                textAlign: TextAlign.start,
-                                color: AppColor().primaryWhite,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    child: InkWell(
+                      onTap: () => showPopupMenu(),
                       child: Icon(
                         Icons.settings,
                         size: 25,
@@ -221,13 +117,15 @@ class _AccountState extends State<Account> {
                     var item = accountItem[index];
                     return InkWell(
                       onTap: () {
+                        debugPrint(item.title);
                         setState(() {
                           accountTab = index;
                           if (item.title == 'Logout') {
                             logOutDialog(context);
-                            postController.getAllPost();
                           } else if (item.title == 'Referrals') {
                             Get.to(() => const Referral());
+                          } else if (item.title == 'Posts') {
+                            Get.to(() => const MyPostWidget());
                           } else {
                             Get.to(() => AccountDetails(
                                   title: item.title,
@@ -278,6 +176,103 @@ class _AccountState extends State<Account> {
         ),
       );
     });
+  }
+
+  void showPopupMenu() async {
+    String? selectedMenuItem = await showMenu(
+      context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), side: BorderSide.none),
+      constraints: const BoxConstraints(),
+      color: AppColor().primaryMenu,
+      position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+      items: [
+        PopupMenuItem(
+          value: 'ScreenA',
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
+          child: Row(
+            children: [
+              Icon(
+                Icons.edit,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Edit Profile',
+                size: Get.height * 0.014,
+                fontFamily: 'GilroyMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'ScreenB',
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: Row(
+            children: [
+              Icon(
+                Icons.edit,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Edit Socials',
+                size: Get.height * 0.014,
+                fontFamily: 'GilroyMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'ScreenC',
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: Row(
+            children: [
+              Icon(
+                CupertinoIcons.lock_fill,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Privacy and Security',
+                size: Get.height * 0.014,
+                fontFamily: 'GilroyMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    if (selectedMenuItem != null) {
+      _navigateToScreen(selectedMenuItem);
+    }
+  }
+
+  void _navigateToScreen(String screen) {
+    switch (screen) {
+      case 'ScreenA':
+        Get.to(() => const MyProfile());
+        break;
+      case 'ScreenB':
+        // Get.to(() => const Social());
+        break;
+      case 'ScreenC':
+        // Get.to(() => const Privacy());
+        break;
+    }
   }
 
   void logOutDialog(BuildContext context) {

@@ -620,7 +620,7 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                         pageCount = 1;
                       });
                     } else {
-                      Get.to(() => const CreateSuccessPage(title: 'Community'));
+                      Get.to(() => const CreateSuccessPage(title: 'Community Created'));
                     }
                   },
                   child: Container(

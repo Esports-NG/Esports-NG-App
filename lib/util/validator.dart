@@ -48,7 +48,7 @@ class Validator {
     if (value?.isEmpty ?? true) {
       return 'This field is required';
     } else if (!GetUtils.isNumericOnly(value!.trim()) ||
-        !GetUtils.isLengthBetween(value.trim(), 8, 11)) {
+        !GetUtils.isLengthBetween(value.trim(), 8, 14)) {
       return 'Please enter a valid phone number';
     }
     return null;
@@ -163,11 +163,11 @@ class Validator {
     return null;
   }
 
-  static String? isTag(String? value) {
+  static String? isUsername(String? value) {
     if (value!.isEmpty) {
-      return 'Tag must be empty';
+      return 'username must be empty';
     } else if (!GetUtils.isLengthGreaterOrEqual(value.trim(), 6)) {
-      return 'Tag must be min. of six characters long';
+      return 'Username must be min. of six characters long';
     }
     return null;
   }

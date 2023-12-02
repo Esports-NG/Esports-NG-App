@@ -1,7 +1,7 @@
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
-import 'package:e_sport/ui/components/post_widget.dart';
+import 'package:e_sport/ui/components/all_post_widget.dart';
 import 'package:e_sport/ui/leaderboard/leaderboard.dart';
 import 'package:e_sport/ui/messages/messages.dart';
 import 'package:e_sport/ui/notification/notification.dart';
@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'components/profile_image.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
       body: RefreshIndicator(
         onRefresh: () async {
           return Future.delayed(const Duration(seconds: 2), () {
-            postController.getAllPost();
+            postController.getAllPost(false);
           });
         },
         child: SingleChildScrollView(
@@ -60,14 +61,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/png/account.png',
-                            height: Get.height * 0.05,
-                          ),
-                        ],
-                      ),
+                      const ProfileImage(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,

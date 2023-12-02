@@ -1,13 +1,18 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:like_button/like_button.dart';
 
 class PostItem extends StatefulWidget {
   final PostModel item;
@@ -18,7 +23,38 @@ class PostItem extends StatefulWidget {
 }
 
 class _PostItemState extends State<PostItem> {
+  final authController = Get.put(AuthRepository());
+  final postController = Get.put(PostRepository());
   int? _selectedIndex;
+
+  String timeAgo(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds} seconds ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays < 30) {
+      return '${(difference.inDays / 7).floor()} weeks ago';
+    } else if (difference.inDays < 365) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else {
+      return '${(difference.inDays / 365).floor()} years ago';
+    }
+  }
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    if (postController.postStatus != PostStatus.loading && isLiked == false) {
+      postController.likePost(widget.item.id!);
+    }
+    return !isLiked;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,22 +84,34 @@ class _PostItemState extends State<PostItem> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/images/png/postDImage.png',
-                      height: Get.height * 0.025,
-                      width: Get.height * 0.025,
-                    ),
+                    widget.item.author!.profile!.profilePicture == null
+                        ? SvgPicture.asset(
+                            'assets/images/svg/people.svg',
+                            height: Get.height * 0.025,
+                            width: Get.height * 0.025,
+                          )
+                        : CachedNetworkImage(
+                            height: Get.height * 0.025,
+                            width: Get.height * 0.025,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                            imageUrl:
+                                widget.item.author!.profile!.profilePicture,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage(widget
+                                        .item.author!.profile!.profilePicture),
+                                    fit: BoxFit.cover),
+                              ),
+                            ),
+                          ),
                     Gap(Get.height * 0.01),
                     CustomText(
-                      title: widget.item.author!.fullName!,
-                      size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
-                      textAlign: TextAlign.start,
-                      color: AppColor().lightItemsColor,
-                    ),
-                    Gap(Get.height * 0.005),
-                    CustomText(
-                      title: widget.item.author!.userName!,
+                      title: widget.item.author!.fullName!.toCapitalCase(),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -73,8 +121,7 @@ class _PostItemState extends State<PostItem> {
                     const SmallCircle(),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: 'Time',
-                      // widget.item.time!.toSentenceCase(),
+                      title: timeAgo(widget.item.createdAt!),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -171,12 +218,43 @@ class _PostItemState extends State<PostItem> {
           Stack(
             alignment: Alignment.center,
             children: [
-              Image.asset(
-                'assets/images/png/postImage1.png',
-                height: Get.height * 0.25,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              widget.item.image == null
+                  ? Container(
+                      height: Get.height * 0.25,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image:
+                                AssetImage('assets/images/png/placeholder.png'),
+                            fit: BoxFit.cover),
+                      ),
+                    )
+                  : CachedNetworkImage(
+                      height: Get.height * 0.25,
+                      width: double.infinity,
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          Center(
+                        child: SizedBox(
+                          height: Get.height * 0.05,
+                          width: Get.height * 0.05,
+                          child: CircularProgressIndicator(
+                              color: AppColor().primaryWhite,
+                              value: progress.progress),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.error, color: AppColor().primaryWhite),
+                      imageUrl:
+                          'http://res.cloudinary.com/dkykwpryb/${widget.item.image!}',
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  'http://res.cloudinary.com/dkykwpryb/${widget.item.image!}'),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
+                    ),
               Positioned.fill(
                 left: Get.height * 0.02,
                 bottom: Get.height * 0.02,
@@ -277,11 +355,32 @@ class _PostItemState extends State<PostItem> {
                       padding: const EdgeInsets.only(bottom: 20, left: 20),
                       child: Row(
                         children: [
-                          Image.asset(
-                            'assets/images/png/account.png',
-                            height: Get.height * 0.02,
-                            width: Get.height * 0.02,
-                          ),
+                          widget.item.author!.profile!.profilePicture == null
+                              ? SvgPicture.asset(
+                                  'assets/images/svg/people.svg',
+                                  height: Get.height * 0.02,
+                                  width: Get.height * 0.02,
+                                )
+                              : CachedNetworkImage(
+                                  height: Get.height * 0.02,
+                                  width: Get.height * 0.02,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  imageUrl: widget
+                                      .item.author!.profile!.profilePicture,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(widget.item
+                                              .author!.profile!.profilePicture),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                ),
                           Gap(Get.height * 0.02),
                           CustomText(
                             title: widget.item.author!.fullName,
@@ -340,23 +439,60 @@ class _PostItemState extends State<PostItem> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.favorite_outline,
-                        color: AppColor().primaryWhite,
-                        size: Get.height * 0.025,
+                    LikeButton(
+                      size: Get.height * 0.025,
+                      onTap: onLikeButtonTapped,
+                      circleColor: CircleColor(
+                          start: AppColor().primaryColor,
+                          end: AppColor().primaryColor),
+                      bubblesColor: BubblesColor(
+                        dotPrimaryColor: AppColor().primaryColor,
+                        dotSecondaryColor: AppColor().primaryColor,
                       ),
-                      onPressed: () {},
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                    Gap(Get.height * 0.005),
-                    CustomText(
-                      title: '${widget.item.likes!.length} likes',
-                      size: Get.height * 0.014,
-                      fontFamily: 'GilroyBold',
-                      textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
+                      likeBuilder: (bool isLiked) {
+                        return widget.item.likes!
+                                .contains(authController.user!.id)
+                            ? Icon(
+                                isLiked
+                                    ? Icons.favorite_outline
+                                    : Icons.favorite,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.025)
+                            : Icon(
+                                isLiked
+                                    ? Icons.favorite
+                                    : Icons.favorite_outline,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.025);
+                      },
+                      likeCount: widget.item.likes!.length,
+                      countBuilder: (int? count, bool isLiked, String text) {
+                        var color = AppColor().primaryWhite;
+                        Widget result;
+                        if (count == 0) {
+                          result = CustomText(
+                              title: '0',
+                              size: Get.height * 0.014,
+                              fontFamily: 'GilroyBold',
+                              textAlign: TextAlign.start,
+                              color: color);
+                        } else if (count == 1) {
+                          result = CustomText(
+                              title: '$text like',
+                              size: Get.height * 0.014,
+                              fontFamily: 'GilroyBold',
+                              textAlign: TextAlign.start,
+                              color: color);
+                        } else {
+                          result = CustomText(
+                              title: '$text likes',
+                              size: Get.height * 0.014,
+                              fontFamily: 'GilroyBold',
+                              textAlign: TextAlign.start,
+                              color: color);
+                        }
+                        return result;
+                      },
                     ),
                   ],
                 ),

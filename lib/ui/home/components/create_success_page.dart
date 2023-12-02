@@ -19,6 +19,7 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
   bool userCheck = false;
   @override
   Widget build(BuildContext context) {
+    debugPrint(widget.title);
     return Scaffold(
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
@@ -42,7 +43,7 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
           ),
           Gap(Get.height * 0.04),
           CustomText(
-            title: '${widget.title} Created Successfully!!',
+            title: '${widget.title} Successfully!!',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
             fontFamily: 'GilroyBold',
@@ -50,7 +51,16 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
           ),
           const Spacer(),
           InkWell(
-            onTap: () => Get.back(),
+            onTap: () {
+              if ((widget.title != 'Post Deleted' &&
+                  widget.title != 'Post Updated')) {
+                Get.back();
+              } else {
+                Get.back();
+                Get.back();
+                Get.back();
+              }
+            },
             child: Container(
               height: Get.height * 0.07,
               width: Get.width,
@@ -60,7 +70,10 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
               ),
               child: Center(
                   child: CustomText(
-                title: 'Create Again',
+                title: (widget.title != 'Post Deleted' &&
+                        widget.title != 'Post Updated')
+                    ? 'Create Again'
+                    : 'My Posts',
                 color: AppColor().primaryWhite,
                 weight: FontWeight.w600,
                 size: Get.height * 0.016,
