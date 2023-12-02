@@ -3,6 +3,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:like_button/like_button.dart';
 
 class PostDetails extends StatefulWidget {
   final PostModel item;
@@ -22,7 +25,15 @@ class PostDetails extends StatefulWidget {
 }
 
 class _PostDetailsState extends State<PostDetails> {
+  final authController = Get.put(AuthRepository());
+  final postController = Get.put(PostRepository());
   int _selectedIndex = 0;
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    postController.likePost(widget.item.id!);
+    return !isLiked;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,33 +42,13 @@ class _PostDetailsState extends State<PostDetails> {
         elevation: 0,
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
-      // floatingActionButtonLocation:
-      //     FloatingActionButtonLocation.miniCenterDocked,
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: AppColor().primaryColor,
-      //   child: const Icon(Icons.add, color: Colors.white),
-      //   onPressed: () {},
-      // ),
-      // bottomNavigationBar: BottomAppBar(
-      //   shape: const CircularNotchedRectangle(),
-      //   clipBehavior: Clip.antiAlias,
-      //   color: AppColor().primaryBackGroundColor,
-      //   notchMargin: 1,
-      //   child: CustomNavBar(
-      //     selectedIndex: _selectedIndex,
-      //     onTap: (index) {
-      //       setState(() {
-      //         _selectedIndex = index;
-      //       });
-      //     },
-      //   ),
-      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Gap(Get.height * 0.01),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -144,18 +135,6 @@ class _PostDetailsState extends State<PostDetails> {
               Gap(Get.height * 0.015),
               Stack(
                 children: [
-                  // Container(
-                  //   height: Get.height * 0.25,
-                  //   width: double.infinity,
-                  //   decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(10),
-                  //       image: const DecorationImage(
-                  //         image: AssetImage(
-                  //           'assets/images/png/postImage1.png',
-                  //         ),
-                  //         fit: BoxFit.cover,
-                  //       )),
-                  // ),
                   widget.item.image == null
                       ? Container(
                           height: Get.height * 0.25,
@@ -338,15 +317,66 @@ class _PostDetailsState extends State<PostDetails> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.favorite_outline,
-                      color: AppColor().primaryWhite,
-                      size: Get.height * 0.03,
-                    ),
-                    onPressed: () {},
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      LikeButton(
+                        size: Get.height * 0.025,
+                        onTap: onLikeButtonTapped,
+                        circleColor: CircleColor(
+                            start: AppColor().primaryColor,
+                            end: AppColor().primaryColor),
+                        bubblesColor: BubblesColor(
+                          dotPrimaryColor: AppColor().primaryColor,
+                          dotSecondaryColor: AppColor().primaryColor,
+                        ),
+                        likeBuilder: (bool isLiked) {
+                          return widget.item.likes!
+                                  .contains(authController.user!.id)
+                              ? Icon(
+                                  isLiked
+                                      ? Icons.favorite_outline
+                                      : Icons.favorite,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.025)
+                              : Icon(
+                                  isLiked
+                                      ? Icons.favorite
+                                      : Icons.favorite_outline,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.025);
+                        },
+                        likeCount: widget.item.likes!.length,
+                        countBuilder: (int? count, bool isLiked, String text) {
+                          var color = AppColor().primaryWhite;
+                          Widget result;
+                          if (count == 0) {
+                            result = CustomText(
+                                title: '0',
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyBold',
+                                textAlign: TextAlign.start,
+                                color: color);
+                          } else if (count == 1) {
+                            result = CustomText(
+                                title: '$text like',
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyBold',
+                                textAlign: TextAlign.start,
+                                color: color);
+                          } else {
+                            result = CustomText(
+                                title: '$text likes',
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyBold',
+                                textAlign: TextAlign.start,
+                                color: color);
+                          }
+                          return result;
+                        },
+                      ),
+                    ],
                   ),
                   IconButton(
                     icon: Icon(
@@ -402,18 +432,6 @@ class _PostDetailsState extends State<PostDetails> {
                   color: AppColor().lightItemsColor,
                 ),
               ),
-              // commentItem(
-              //   comment: 'i`m here for it!\ni`m here for it!!',
-              //   like: '1 Like',
-              //   icon: Icons.favorite,
-              // ),
-              // Gap(Get.height * 0.01),
-              // commentItem(
-              //   comment:
-              //       'I think the part where the snake crossed the narrow scene has a glitch. Is anybody else experiencing this?',
-              //   like: 'Like',
-              //   icon: Icons.favorite_outline,
-              // )
             ],
           ),
         ),

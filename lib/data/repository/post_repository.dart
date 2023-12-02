@@ -4,8 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/util/colors.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
@@ -52,7 +51,7 @@ class PostRepository extends GetxController {
     super.onInit();
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
-        getPosts();
+        getPosts(true);
       }
     });
   }
@@ -79,53 +78,55 @@ class PostRepository extends GetxController {
         debugPrint(await response.stream.bytesToString());
         Get.to(() => const CreateSuccessPage(title: 'Post Created'))!
             .then((value) {
-          getPosts();
+          getPosts(false);
           clear();
         });
       } else {
         _createPostStatus(CreatePostStatus.error);
         debugPrint(response.reasonPhrase);
-        noInternetError(context, response.reasonPhrase);
+        handleError(response.reasonPhrase);
       }
     } catch (error) {
       _createPostStatus(CreatePostStatus.error);
       debugPrint("Error occurred ${error.toString()}");
-      noInternetError(context, error);
+      handleError(error);
     }
   }
 
-  Future likePost(BuildContext context) async {
+  Future<bool> likePost(int postId) async {
     _likePostStatus(LikePostStatus.loading);
     try {
-      debugPrint('liking post');
+      if()
+      debugPrint('liking post...');
       var response = await http.post(
-        Uri.parse(ApiLink.likePost),
+        Uri.parse('${ApiLink.likePost}$postId/'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": 'JWT ${authController.token}'
         },
       );
       var json = jsonDecode(response.body);
-
-      if (response.statusCode != 200) {
-        throw (
-          json['non_field_errors'] != null
-              ? json['non_field_errors'][0]
-              : json[0],
-        );
+      if (response.statusCode == 200 && json['message'] == 'Post liked') {
+        debugPrint("Post liked!");
+        getPosts(false);
+        return true;
+      } else {
+        debugPrint("Post like failed: ${json['message']}");
+        return false;
       }
-
-      if (response.statusCode == 200) {}
-      return response.body;
     } catch (error) {
       _likePostStatus(LikePostStatus.error);
-      debugPrint("error $error");
+      debugPrint("like post error: $error");
+      handleError(error);
+      return false;
     }
   }
 
-  Future getMyPost() async {
+  Future getMyPost(bool isFirstTime) async {
     try {
-      _getPostStatus(GetPostStatus.loading);
+      if (isFirstTime == true) {
+        _getPostStatus(GetPostStatus.loading);
+      }
       debugPrint('getting my post...');
       var response = await http.get(Uri.parse(ApiLink.getMyPost), headers: {
         "Content-Type": "application/json",
@@ -153,9 +154,12 @@ class PostRepository extends GetxController {
     }
   }
 
-  Future getAllPost() async {
+  Future getAllPost(bool isFirstTime) async {
     try {
-      _postStatus(PostStatus.loading);
+      if (isFirstTime == true) {
+        _postStatus(PostStatus.loading);
+      }
+
       debugPrint('getting all post...');
       var response = await http.get(Uri.parse(ApiLink.getAllPost), headers: {
         "Content-Type": "application/json",
@@ -183,27 +187,22 @@ class PostRepository extends GetxController {
     }
   }
 
-  void noInternetError(BuildContext context, var error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: CustomText(
-          title: (error.toString().contains("esports-ng.vercel.app") ||
-                  error.toString().contains("Network is unreachable"))
-              ? 'No internet connection!'
-              : (error.toString().contains("FormatException"))
-                  ? 'Internal server error, contact admin!'
-                  : error.toString(),
-          size: Get.height * 0.02,
-          color: AppColor().primaryWhite,
-          textAlign: TextAlign.start,
-        ),
-      ),
-    );
+  void handleError(dynamic error) {
+    debugPrint("error $error");
+    Fluttertoast.showToast(
+        msg: (error.toString().contains("esports-ng.vercel.app") ||
+                error.toString().contains("Network is unreachable"))
+            ? 'Post like: No internet connection!'
+            : (error.toString().contains("FormatException"))
+                ? 'Post like: Internal server error, contact admin!'
+                : error.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM);
   }
 
-  void getPosts() {
-    getAllPost();
-    getMyPost();
+  void getPosts(bool isFirstTime) {
+    getAllPost(isFirstTime);
+    getMyPost(isFirstTime);
   }
 
   void clearPhoto() {

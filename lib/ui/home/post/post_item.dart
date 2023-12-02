@@ -3,6 +3,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -21,6 +23,8 @@ class PostItem extends StatefulWidget {
 }
 
 class _PostItemState extends State<PostItem> {
+  final authController = Get.put(AuthRepository());
+  final postController = Get.put(PostRepository());
   int? _selectedIndex;
 
   String timeAgo(DateTime itemDate) {
@@ -42,6 +46,14 @@ class _PostItemState extends State<PostItem> {
     } else {
       return '${(difference.inDays / 365).floor()} years ago';
     }
+  }
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    if (isLiked == false) {
+      debugPrint('call api');
+      // postController.likePost(widget.item.id!);
+    }
+    return !isLiked;
   }
 
   @override
@@ -409,26 +421,33 @@ class _PostItemState extends State<PostItem> {
                   children: [
                     LikeButton(
                       size: Get.height * 0.025,
+                      onTap: onLikeButtonTapped,
                       circleColor: CircleColor(
-                          start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                          start: AppColor().primaryColor,
+                          end: AppColor().primaryColor),
                       bubblesColor: BubblesColor(
-                        dotPrimaryColor: Color(0xff33b5e5),
-                        dotSecondaryColor: Color(0xff0099cc),
+                        dotPrimaryColor: AppColor().primaryColor,
+                        dotSecondaryColor: AppColor().primaryColor,
                       ),
                       likeBuilder: (bool isLiked) {
-                        return Icon(
-                          isLiked ? Icons.favorite : Icons.favorite_outline,
-                          color: isLiked
-                              ? AppColor().primaryColor
-                              : AppColor().primaryWhite,
-                          size: Get.height * 0.025,
-                        );
+                        return widget.item.likes!
+                                .contains(authController.user!.id)
+                            ? Icon(
+                                isLiked
+                                    ? Icons.favorite_outline
+                                    : Icons.favorite,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.025)
+                            : Icon(
+                                isLiked
+                                    ? Icons.favorite
+                                    : Icons.favorite_outline,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.025);
                       },
                       likeCount: widget.item.likes!.length,
                       countBuilder: (int? count, bool isLiked, String text) {
-                        var color = isLiked
-                            ? AppColor().primaryColor
-                            : AppColor().primaryWhite;
+                        var color = AppColor().primaryWhite;
                         Widget result;
                         if (count == 0) {
                           result = CustomText(

@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
       body: RefreshIndicator(
         onRefresh: () async {
           return Future.delayed(const Duration(seconds: 2), () {
-            postController.getAllPost();
+            postController.getAllPost(false);
           });
         },
         child: SingleChildScrollView(

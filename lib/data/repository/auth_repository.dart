@@ -10,8 +10,6 @@ import 'package:e_sport/ui/auth/login.dart';
 import 'package:e_sport/ui/auth/otp_screen.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/home/dashboard.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -163,6 +161,7 @@ class AuthRepository extends GetxController {
 
   RxBool mOnSelect = false.obs;
   RxBool mGetCountryCode = false.obs;
+  RxBool mNetworkAvailable = false.obs;
 
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;

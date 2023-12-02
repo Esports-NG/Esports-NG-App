@@ -42,7 +42,7 @@ class MyPostWidget extends StatelessWidget {
       body: RefreshIndicator(
         onRefresh: () async {
           return Future.delayed(const Duration(seconds: 2), () {
-            postController.getMyPost();
+            postController.getMyPost(false);
           });
         },
         child: SingleChildScrollView(
