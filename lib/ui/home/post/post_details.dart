@@ -15,6 +15,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
+import 'edit_post.dart';
 
 class PostDetails extends StatefulWidget {
   final PostModel item;
@@ -27,10 +28,11 @@ class PostDetails extends StatefulWidget {
 class _PostDetailsState extends State<PostDetails> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
-  int _selectedIndex = 0;
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
-    postController.likePost(widget.item.id!);
+    if (postController.postStatus != PostStatus.loading && isLiked == false) {
+      postController.likePost(widget.item.id!);
+    }
     return !isLiked;
   }
 
@@ -101,16 +103,16 @@ class _PostDetailsState extends State<PostDetails> {
                         onTap: () {},
                         isLoading: false,
                       ),
-                      Gap(Get.height * 0.01),
-                      IconButton(
-                        icon: Icon(
-                          Icons.more_vert,
-                          color: AppColor().primaryWhite,
+                      if (authController.user!.id == widget.item.author!.id)
+                        IconButton(
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: AppColor().primaryWhite,
+                          ),
+                          onPressed: () => showEditPopup(),
+                          padding: EdgeInsets.only(left: Get.height * 0.01),
+                          constraints: const BoxConstraints(),
                         ),
-                        onPressed: () {},
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                      ),
                     ],
                   ),
                 ],
@@ -437,6 +439,45 @@ class _PostDetailsState extends State<PostDetails> {
         ),
       ),
     );
+  }
+
+  void showEditPopup() async {
+    String? selectedMenuItem = await showMenu(
+      context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), side: BorderSide.none),
+      constraints: const BoxConstraints(),
+      color: AppColor().primaryMenu,
+      position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+      items: [
+        PopupMenuItem(
+          value: 'ScreenA',
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
+          child: Row(
+            children: [
+              Icon(
+                Icons.edit,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Edit Post',
+                size: Get.height * 0.014,
+                fontFamily: 'GilroyMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    if (selectedMenuItem != null) {
+      Get.to(() => EditPost(item: widget.item));
+    }
   }
 
   Row commentItem({String? comment, like, IconData? icon}) {

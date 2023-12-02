@@ -11,7 +11,6 @@ import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -29,7 +28,6 @@ class _AccountState extends State<Account> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   int? accountTab = 0;
-  String? _selectedIndex;
 
   void toProfile() async {
     await Future.delayed(const Duration(milliseconds: 10));
@@ -76,7 +74,7 @@ class _AccountState extends State<Account> {
                     right: Get.height * 0.03,
                     bottom: Get.height * 0.05,
                     child: InkWell(
-                      onTap: () => showPopupMenu(context),
+                      onTap: () => showPopupMenu(),
                       child: Icon(
                         Icons.settings,
                         size: 25,
@@ -180,7 +178,7 @@ class _AccountState extends State<Account> {
     });
   }
 
-  void showPopupMenu(BuildContext context) async {
+  void showPopupMenu() async {
     String? selectedMenuItem = await showMenu(
       context: context,
       shape: RoundedRectangleBorder(
@@ -259,32 +257,20 @@ class _AccountState extends State<Account> {
     );
 
     if (selectedMenuItem != null) {
-      _navigateToScreen(context, selectedMenuItem);
+      _navigateToScreen(selectedMenuItem);
     }
   }
 
-  void _navigateToScreen(BuildContext context, String screen) {
+  void _navigateToScreen(String screen) {
     switch (screen) {
       case 'ScreenA':
-        print('a');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyProfile()),
-        );
+        Get.to(() => const MyProfile());
         break;
       case 'ScreenB':
-        print('b');
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => ScreenB()),
-        // );
+        // Get.to(() => const Social());
         break;
       case 'ScreenC':
-        print('c');
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => ScreenC()),
-        // );
+        // Get.to(() => const Privacy());
         break;
     }
   }

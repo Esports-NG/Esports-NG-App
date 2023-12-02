@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:e_sport/data/repository/auth_repository.dart';
@@ -56,7 +57,7 @@ class PostRepository extends GetxController {
     });
   }
 
-  Future createPost(PostModel post, BuildContext context) async {
+  Future createPost(PostModel post) async {
     try {
       _createPostStatus(CreatePostStatus.loading);
       var headers = {
@@ -93,10 +94,75 @@ class PostRepository extends GetxController {
     }
   }
 
+  Future editPost(int postId) async {
+    try {
+      debugPrint('editing post...');
+      var body = {
+        "title": postTitleController.text.trim(),
+        "body": postBodyController.text.trim()
+      };
+      _createPostStatus(CreatePostStatus.loading);
+      var response = await http.put(
+        Uri.parse("${ApiLink.editPost}$postId/"),
+        body: jsonEncode(body),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw ('An error occurred');
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        _createPostStatus(CreatePostStatus.success);
+        Get.to(() => const CreateSuccessPage(title: 'Post Updated'))!
+            .then((value) {
+          getPosts(false);
+        });
+      }
+      return response.body;
+    } catch (error) {
+      _createPostStatus(CreatePostStatus.error);
+      debugPrint("edit post error: ${error.toString()}");
+      handleError(error);
+    }
+  }
+
+  Future deletePost(int postId) async {
+    try {
+      EasyLoading.show(status: 'Deleting post...');
+      _postStatus(PostStatus.loading);
+      var response = await http.post(
+        Uri.parse("${ApiLink.deletePost}$postId/"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        _postStatus(PostStatus.success);
+        EasyLoading.dismiss();
+        Get.to(() => const CreateSuccessPage(title: 'Post Deleted'))!
+            .then((value) {
+          getPosts(false);
+        });
+      }
+      return response.body;
+    } catch (error) {
+      _postStatus(PostStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("delete post error: ${error.toString()}");
+      handleError(error);
+    }
+  }
+
   Future<bool> likePost(int postId) async {
     _likePostStatus(LikePostStatus.loading);
     try {
-      if()
       debugPrint('liking post...');
       var response = await http.post(
         Uri.parse('${ApiLink.likePost}$postId/'),
@@ -107,11 +173,9 @@ class PostRepository extends GetxController {
       );
       var json = jsonDecode(response.body);
       if (response.statusCode == 200 && json['message'] == 'Post liked') {
-        debugPrint("Post liked!");
         getPosts(false);
         return true;
       } else {
-        debugPrint("Post like failed: ${json['message']}");
         return false;
       }
     } catch (error) {
@@ -190,6 +254,7 @@ class PostRepository extends GetxController {
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(
+        fontSize: Get.height * 0.015,
         msg: (error.toString().contains("esports-ng.vercel.app") ||
                 error.toString().contains("Network is unreachable"))
             ? 'Post like: No internet connection!'

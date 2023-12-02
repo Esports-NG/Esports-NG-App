@@ -49,9 +49,8 @@ class _PostItemState extends State<PostItem> {
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
-    if (isLiked == false) {
-      debugPrint('call api');
-      // postController.likePost(widget.item.id!);
+    if (postController.postStatus != PostStatus.loading && isLiked == false) {
+      postController.likePost(widget.item.id!);
     }
     return !isLiked;
   }
@@ -356,11 +355,32 @@ class _PostItemState extends State<PostItem> {
                       padding: const EdgeInsets.only(bottom: 20, left: 20),
                       child: Row(
                         children: [
-                          Image.asset(
-                            'assets/images/png/account.png',
-                            height: Get.height * 0.02,
-                            width: Get.height * 0.02,
-                          ),
+                          widget.item.author!.profile!.profilePicture == null
+                              ? SvgPicture.asset(
+                                  'assets/images/svg/people.svg',
+                                  height: Get.height * 0.02,
+                                  width: Get.height * 0.02,
+                                )
+                              : CachedNetworkImage(
+                                  height: Get.height * 0.02,
+                                  width: Get.height * 0.02,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  imageUrl: widget
+                                      .item.author!.profile!.profilePicture,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(widget.item
+                                              .author!.profile!.profilePicture),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                ),
                           Gap(Get.height * 0.02),
                           CustomText(
                             title: widget.item.author!.fullName,
