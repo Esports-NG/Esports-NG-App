@@ -12,8 +12,6 @@ import 'package:e_sport/util/loading.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -46,7 +44,6 @@ class _EditPostState extends State<EditPost> {
   void initState() {
     postController.postTitleController.text = widget.item.title!;
     postController.postBodyController.text = widget.item.body!;
-    // gameTag = widget.item.tags!.first.title;
     super.initState();
   }
 
@@ -136,7 +133,59 @@ class _EditPostState extends State<EditPost> {
             IconButton(
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
-              onPressed: () => deletePostDialog,
+              onPressed: () {
+                Get.defaultDialog(
+                  title: "Delete Post",
+                  backgroundColor: AppColor().primaryLightColor,
+                  titlePadding: const EdgeInsets.only(top: 30),
+                  contentPadding: const EdgeInsets.only(
+                      top: 5, bottom: 30, left: 25, right: 25),
+                  middleText: "Are you sure?",
+                  titleStyle: TextStyle(
+                    color: AppColor().primaryWhite,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'GilroyRegular',
+                  ),
+                  radius: 10,
+                  confirm: Column(
+                    children: [
+                      CustomFillButton(
+                        onTap: () {
+                          postController.deletePost(widget.item.id!);
+                          Get.back();
+                        },
+                        height: 45,
+                        width: Get.width * 0.5,
+                        buttonText: 'Yes',
+                        textColor: AppColor().primaryWhite,
+                        buttonColor: AppColor().primaryColor,
+                        boarderColor: AppColor().primaryColor,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      const Gap(10),
+                      CustomFillButton(
+                        onTap: () {
+                          Get.back();
+                        },
+                        height: 45,
+                        width: Get.width * 0.5,
+                        buttonText: 'No',
+                        textColor: AppColor().primaryWhite,
+                        buttonColor: AppColor().primaryColor,
+                        boarderColor: AppColor().primaryColor,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ],
+                  ),
+                  middleTextStyle: TextStyle(
+                    color: AppColor().primaryWhite,
+                    fontFamily: 'GilroyRegular',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                );
+              },
               icon: Icon(
                 Icons.delete_outline,
                 color: AppColor().primaryWhite,
@@ -613,13 +662,6 @@ class _EditPostState extends State<EditPost> {
                   Gap(Get.height * 0.05),
                   InkWell(
                     onTap: () {
-                      PostModel post = PostModel(
-                        title: postController.postTitleController.text.trim(),
-                        body: postController.postBodyController.text.trim(),
-                        iTags: '#${postController.gameTagController.text}',
-                        iViewers: postController.seeController.text,
-                      );
-                      debugPrint('post: ${post.toCreatePostJson()}');
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
@@ -633,7 +675,7 @@ class _EditPostState extends State<EditPost> {
                         // } else if (postController.engageController.text == '') {
                         //   EasyLoading.showInfo('Select who can engage post!');
                         // } else {
-                        postController.createPost(post);
+                        postController.editPost(widget.item.id!);
                         // }
                       }
                     },
