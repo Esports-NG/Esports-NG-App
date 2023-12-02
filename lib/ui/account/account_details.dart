@@ -2,7 +2,7 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/components/account_event_widget.dart';
 import 'package:e_sport/ui/components/account_team_widget.dart';
 import 'package:e_sport/ui/components/games_played_widget.dart';
-import 'package:e_sport/ui/components/post_widget.dart';
+import 'package:e_sport/ui/components/my_post_widget.dart';
 import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/components/wallet_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -74,7 +74,7 @@ class _AccountDetailsState extends State<AccountDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (widget.title == 'Posts') ...[
-                const PostWidget()
+                const MyPostWidget()
               ] else if (widget.title == 'Player Profile') ...[
                 CustomText(
                   title: 'Games played',

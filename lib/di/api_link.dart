@@ -20,6 +20,7 @@ class ApiLink {
   //Post
   static String createPost = "${baseurl}post/create/";
   static String getAllPost = "${baseurl}post/view/";
+  static String getMyPost = "${baseurl}post/myposts/";
   static String likePost = "${baseurl}post/like/";
   // static String recommendedProduct = "${baseurl}products/recommendations";
   // static String sellerProduct = "${baseurl}products/catalog";

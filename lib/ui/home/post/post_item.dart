@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:like_button/like_button.dart';
 
 class PostItem extends StatefulWidget {
   final PostModel item;
@@ -406,23 +407,53 @@ class _PostItemState extends State<PostItem> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.favorite_outline,
-                        color: AppColor().primaryWhite,
-                        size: Get.height * 0.025,
+                    LikeButton(
+                      size: Get.height * 0.025,
+                      circleColor: CircleColor(
+                          start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                      bubblesColor: BubblesColor(
+                        dotPrimaryColor: Color(0xff33b5e5),
+                        dotSecondaryColor: Color(0xff0099cc),
                       ),
-                      onPressed: () {},
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                    Gap(Get.height * 0.005),
-                    CustomText(
-                      title: '${widget.item.likes!.length} likes',
-                      size: Get.height * 0.014,
-                      fontFamily: 'GilroyBold',
-                      textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          isLiked ? Icons.favorite : Icons.favorite_outline,
+                          color: isLiked
+                              ? AppColor().primaryColor
+                              : AppColor().primaryWhite,
+                          size: Get.height * 0.025,
+                        );
+                      },
+                      likeCount: widget.item.likes!.length,
+                      countBuilder: (int? count, bool isLiked, String text) {
+                        var color = isLiked
+                            ? AppColor().primaryColor
+                            : AppColor().primaryWhite;
+                        Widget result;
+                        if (count == 0) {
+                          result = CustomText(
+                              title: '0',
+                              size: Get.height * 0.014,
+                              fontFamily: 'GilroyBold',
+                              textAlign: TextAlign.start,
+                              color: color);
+                        } else if (count == 1) {
+                          result = CustomText(
+                              title: '$text like',
+                              size: Get.height * 0.014,
+                              fontFamily: 'GilroyBold',
+                              textAlign: TextAlign.start,
+                              color: color);
+                        } else {
+                          result = CustomText(
+                              title: '$text likes',
+                              size: Get.height * 0.014,
+                              fontFamily: 'GilroyBold',
+                              textAlign: TextAlign.start,
+                              color: color);
+                        }
+                        return result;
+                      },
                     ),
                   ],
                 ),

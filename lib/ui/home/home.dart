@@ -1,7 +1,7 @@
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
-import 'package:e_sport/ui/components/post_widget.dart';
+import 'package:e_sport/ui/components/all_post_widget.dart';
 import 'package:e_sport/ui/leaderboard/leaderboard.dart';
 import 'package:e_sport/ui/messages/messages.dart';
 import 'package:e_sport/ui/notification/notification.dart';

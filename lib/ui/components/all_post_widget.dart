@@ -1,7 +1,6 @@
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/home/post/post_details.dart';
 import 'package:e_sport/ui/home/post/post_item.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
@@ -50,3 +49,5 @@ class PostWidget extends StatelessWidget {
     });
   }
 }
+
+

@@ -3,6 +3,7 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/components/my_post_widget.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -118,13 +119,15 @@ class _AccountState extends State<Account> {
                     var item = accountItem[index];
                     return InkWell(
                       onTap: () {
+                        debugPrint(item.title);
                         setState(() {
                           accountTab = index;
                           if (item.title == 'Logout') {
                             logOutDialog(context);
-                            postController.getAllPost();
                           } else if (item.title == 'Referrals') {
                             Get.to(() => const Referral());
+                          } else if (item.title == 'Posts') {
+                            Get.to(() => const MyPostWidget());
                           } else {
                             Get.to(() => AccountDetails(
                                   title: item.title,

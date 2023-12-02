@@ -12,27 +12,13 @@ import 'package:e_sport/di/api_link.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-enum LikePostStatus {
-  loading,
-  success,
-  error,
-  empty,
-}
+enum LikePostStatus { loading, success, error, empty }
 
-enum PostStatus {
-  loading,
-  success,
-  error,
-  empty,
-  available,
-}
+enum CreatePostStatus { loading, success, error, empty }
 
-enum CreatePostStatus {
-  loading,
-  success,
-  error,
-  empty,
-}
+enum PostStatus { loading, success, error, empty, available }
+
+enum GetPostStatus { loading, success, error, empty, available }
 
 class PostRepository extends GetxController {
   final authController = Get.put(AuthRepository());
@@ -44,12 +30,16 @@ class PostRepository extends GetxController {
   late final accountTypeController = TextEditingController();
 
   final Rx<List<PostModel>> _allPost = Rx([]);
+  final Rx<List<PostModel>> _myPost = Rx([]);
   List<PostModel> get allPost => _allPost.value;
+  List<PostModel> get myPost => _myPost.value;
 
   final _postStatus = PostStatus.empty.obs;
   final _createPostStatus = CreatePostStatus.empty.obs;
   final _likePostStatus = LikePostStatus.empty.obs;
+  final _getPostStatus = GetPostStatus.empty.obs;
 
+  GetPostStatus get getPostStatus => _getPostStatus.value;
   LikePostStatus get likePostStatus => _likePostStatus.value;
   PostStatus get postStatus => _postStatus.value;
   CreatePostStatus get createPostStatus => _createPostStatus.value;
@@ -62,7 +52,7 @@ class PostRepository extends GetxController {
     super.onInit();
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
-        getAllPost();
+        getPosts();
       }
     });
   }
@@ -89,7 +79,7 @@ class PostRepository extends GetxController {
         debugPrint(await response.stream.bytesToString());
         Get.to(() => const CreateSuccessPage(title: 'Post Created'))!
             .then((value) {
-          getAllPost();
+          getPosts();
           clear();
         });
       } else {
@@ -130,6 +120,36 @@ class PostRepository extends GetxController {
     } catch (error) {
       _likePostStatus(LikePostStatus.error);
       debugPrint("error $error");
+    }
+  }
+
+  Future getMyPost() async {
+    try {
+      _getPostStatus(GetPostStatus.loading);
+      debugPrint('getting my post...');
+      var response = await http.get(Uri.parse(ApiLink.getMyPost), headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+
+      if (response.statusCode == 200) {
+        var list = List.from(json);
+        var myPosts = list.map((e) => PostModel.fromJson(e)).toList();
+        debugPrint("${myPosts.length} my posts found");
+        _myPost(myPosts);
+        _getPostStatus(GetPostStatus.success);
+        myPosts.isNotEmpty
+            ? _getPostStatus(GetPostStatus.available)
+            : _getPostStatus(GetPostStatus.empty);
+      }
+      return response.body;
+    } catch (error) {
+      _getPostStatus(GetPostStatus.error);
+      debugPrint("getting my post: ${error.toString()}");
     }
   }
 
@@ -179,6 +199,11 @@ class PostRepository extends GetxController {
         ),
       ),
     );
+  }
+
+  void getPosts() {
+    getAllPost();
+    getMyPost();
   }
 
   void clearPhoto() {
