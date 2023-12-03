@@ -351,6 +351,9 @@ class AuthRepository extends GetxController {
       debugPrint(response.body);
       if (response.statusCode == 200) {
         debugPrint(response.body);
+        var userModel = UserModel.fromJson(json);
+        mUser(userModel);
+        pref!.setUser(userModel);
       }
       return response.body;
     } catch (error) {
@@ -377,12 +380,12 @@ class AuthRepository extends GetxController {
       if (response.statusCode == 200) {
         EasyLoading.dismiss();
         _updateProfileStatus(UpdateProfileStatus.success);
-        Get.to(() => const CreateSuccessPage(title: 'Profile Updated'))!
-            .then((value) {
-          EasyLoading.dismiss();
-          getUserInfo();
-          clearPhoto();
-        });
+        Get.to(() => const CreateSuccessPage(title: 'Profile Updated'));
+        EasyLoading.dismiss();
+        getUserInfo();
+        clearPhoto();
+      } else if (response.statusCode == 401) {
+        refreshToken().then((value) => EasyLoading.showInfo('try again!'));
       }
       return response.body;
     } catch (error) {
