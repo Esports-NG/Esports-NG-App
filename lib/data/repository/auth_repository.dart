@@ -251,25 +251,21 @@ class AuthRepository extends GetxController {
     try {
       debugPrint('login here...');
 
-      var response = await http.post(
-          Uri.parse(
-            ApiLink.login,
-          ),
-          headers: {
-            "Content-Type": "application/json",
-          },
+      var response = await http.post(Uri.parse(ApiLink.login),
+          headers: {"Content-Type": "application/json"},
           body: jsonEncode({
             "email": emailController.text.trim(),
             "password": passwordController.text.trim(),
           }));
-      var json = jsonDecode(response.body);
 
-      if (response.statusCode != 200) {
-        throw (
-          json['non_field_errors'] != null
-              ? json['non_field_errors'][0]
-              : json[0],
-        );
+      var json = jsonDecode(response.body);
+      debugPrint(response.body);
+      if (json.toString().contains('non_field_errors')) {
+        throw (json['non_field_errors'][0]);
+      }
+
+      if (json.toString().contains('Quota Exceeded')) {
+        throw ('${json[0]}. Contact admin!');
       }
 
       if (response.statusCode == 200) {
@@ -379,6 +375,7 @@ class AuthRepository extends GetxController {
       }
       debugPrint(response.body);
       if (response.statusCode == 200) {
+        EasyLoading.dismiss();
         _updateProfileStatus(UpdateProfileStatus.success);
         Get.to(() => const CreateSuccessPage(title: 'Profile Updated'))!
             .then((value) {
@@ -409,6 +406,7 @@ class AuthRepository extends GetxController {
 
       await request.send().then((response) {
         response.stream.transform(utf8.decoder).listen((response) {
+          EasyLoading.dismiss();
           var res = jsonDecode(response);
           debugPrint(res);
 
@@ -416,6 +414,7 @@ class AuthRepository extends GetxController {
         });
       });
     } catch (error) {
+      EasyLoading.dismiss();
       _updateProfileStatus(UpdateProfileStatus.error);
       debugPrint("Error occurred ${error.toString()}");
       getError(error);
