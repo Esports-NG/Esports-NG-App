@@ -1,8 +1,6 @@
-import 'user_model.dart';
-
 class PlayerModel {
   int? id;
-  UserModel? player;
+  Player? player;
   String? profile;
   List<dynamic>? statistics;
   GamePlayed? gamePlayed;
@@ -23,9 +21,7 @@ class PlayerModel {
 
   factory PlayerModel.fromJson(Map<String, dynamic> json) => PlayerModel(
         id: json["id"],
-        player: json["player"] == null
-            ? null
-            : UserModel.fromPostJson(json["player"]),
+        player: json["player"] == null ? null : Player.fromJson(json["player"]),
         profile: json["profile"],
         statistics: json["statistics"] == null
             ? []
@@ -169,6 +165,73 @@ class GameMode {
         "id": id,
         "name": name,
         "sub_categories": subCategories,
+      };
+}
+
+class Player {
+  int? id;
+  String? userName;
+  String? fullName;
+  String? email;
+  String? phoneNumber;
+  String? country;
+  String? state;
+  String? gender;
+  DateTime? dOB;
+  String? referralCode;
+  List<Purpose>? purpose;
+  Profile? profile;
+
+  Player({
+    this.id,
+    this.userName,
+    this.fullName,
+    this.email,
+    this.phoneNumber,
+    this.country,
+    this.state,
+    this.gender,
+    this.dOB,
+    this.referralCode,
+    this.purpose,
+    this.profile,
+  });
+
+  factory Player.fromJson(Map<String, dynamic> json) => Player(
+        id: json["id"],
+        userName: json["user_name"],
+        fullName: json["full_name"],
+        email: json["email"],
+        phoneNumber: json["phone_number"],
+        country: json["country"],
+        state: json["state"],
+        gender: json["gender"],
+        dOB: json["d_o_b"] == null ? null : DateTime.parse(json["d_o_b"]),
+        referralCode: json["referral_code"],
+        purpose: json["purpose"] == null
+            ? []
+            : List<Purpose>.from(
+                json["purpose"]!.map((x) => Purpose.fromJson(x))),
+        profile:
+            json["profile"] == null ? null : Profile.fromJson(json["profile"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "user_name": userName,
+        "full_name": fullName,
+        "email": email,
+        "phone_number": phoneNumber,
+        "country": country,
+        "state": state,
+        "gender": gender,
+        "d_o_b":
+            "${dOB!.year.toString().padLeft(4, '0')}-${dOB!.month.toString().padLeft(2, '0')}-${dOB!.day.toString().padLeft(2, '0')}",
+        "referral_code": referralCode,
+        "purpose": purpose == null
+            ? []
+            : List<dynamic>.from(purpose!.map((x) => x.toJson())),
+        "profile": profile?.toJson(),
       };
 }
 

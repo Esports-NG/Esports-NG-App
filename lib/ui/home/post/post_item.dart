@@ -104,7 +104,7 @@ class _PostItemState extends State<PostItem> {
                                   errorWidget: (context, url, error) =>
                                       const Icon(Icons.error),
                                   imageUrl: widget.item.reposts!.first.author!
-                                      .profile!.profilePicture,
+                                      .profile!.profilePicture!,
                                   imageBuilder: (context, imageProvider) =>
                                       Container(
                                     decoration: BoxDecoration(
@@ -116,7 +116,7 @@ class _PostItemState extends State<PostItem> {
                                               .first
                                               .author!
                                               .profile!
-                                              .profilePicture),
+                                              .profilePicture!),
                                           fit: BoxFit.cover),
                                     ),
                                   ),
@@ -165,13 +165,13 @@ class _PostItemState extends State<PostItem> {
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
                             imageUrl:
-                                widget.item.author!.profile!.profilePicture,
+                                widget.item.author!.profile!.profilePicture!,
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image: NetworkImage(widget
-                                        .item.author!.profile!.profilePicture),
+                                        .item.author!.profile!.profilePicture!),
                                     fit: BoxFit.cover),
                               ),
                             ),
@@ -363,14 +363,17 @@ class _PostItemState extends State<PostItem> {
                                   errorWidget: (context, url, error) =>
                                       const Icon(Icons.error),
                                   imageUrl: widget
-                                      .item.author!.profile!.profilePicture,
+                                      .item.author!.profile!.profilePicture!,
                                   imageBuilder: (context, imageProvider) =>
                                       Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
-                                          image: NetworkImage(widget.item
-                                              .author!.profile!.profilePicture),
+                                          image: NetworkImage(widget
+                                              .item
+                                              .author!
+                                              .profile!
+                                              .profilePicture!),
                                           fit: BoxFit.cover),
                                     ),
                                   ),

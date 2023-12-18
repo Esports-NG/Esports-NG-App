@@ -72,14 +72,14 @@ class _PostDetailsState extends State<PostDetails> {
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
                               imageUrl:
-                                  widget.item.author!.profile!.profilePicture,
+                                  widget.item.author!.profile!.profilePicture!,
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       image: NetworkImage(widget.item.author!
-                                          .profile!.profilePicture),
+                                          .profile!.profilePicture!),
                                       fit: BoxFit.cover),
                                 ),
                               ),
