@@ -49,7 +49,7 @@ class _PostItemState extends State<PostItem> {
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
-    if (postController.postStatus != PostStatus.loading && isLiked == false) {
+    if (postController.postStatus != PostStatus.loading) {
       postController.likePost(widget.item.id!);
     }
     return !isLiked;
@@ -76,6 +76,73 @@ class _PostItemState extends State<PostItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (widget.item.reposts!.isNotEmpty)
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          widget.item.reposts!.first.author!.profile!
+                                      .profilePicture ==
+                                  null
+                              ? SvgPicture.asset(
+                                  'assets/images/svg/people.svg',
+                                  height: Get.height * 0.025,
+                                  width: Get.height * 0.025,
+                                )
+                              : CachedNetworkImage(
+                                  height: Get.height * 0.025,
+                                  width: Get.height * 0.025,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  imageUrl: widget.item.reposts!.first.author!
+                                      .profile!.profilePicture,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(widget
+                                              .item
+                                              .reposts!
+                                              .first
+                                              .author!
+                                              .profile!
+                                              .profilePicture),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                ),
+                          Gap(Get.height * 0.01),
+                          CustomText(
+                            title:
+                                '${widget.item.reposts!.first.author!.fullName!.toCapitalCase()} Reposted this',
+                            size: Get.height * 0.015,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().lightItemsColor,
+                          ),
+                        ],
+                      ),
+                      postMenu(),
+                    ],
+                  ),
+                  Gap(Get.height * 0.01),
+                  Divider(
+                    thickness: 0.4,
+                    color: AppColor().lightItemsColor,
+                  ),
+                ],
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
@@ -87,12 +154,12 @@ class _PostItemState extends State<PostItem> {
                     widget.item.author!.profile!.profilePicture == null
                         ? SvgPicture.asset(
                             'assets/images/svg/people.svg',
-                            height: Get.height * 0.025,
-                            width: Get.height * 0.025,
+                            height: Get.height * 0.035,
+                            width: Get.height * 0.035,
                           )
                         : CachedNetworkImage(
-                            height: Get.height * 0.025,
-                            width: Get.height * 0.025,
+                            height: Get.height * 0.035,
+                            width: Get.height * 0.035,
                             placeholder: (context, url) =>
                                 const CircularProgressIndicator(),
                             errorWidget: (context, url, error) =>
@@ -129,85 +196,14 @@ class _PostItemState extends State<PostItem> {
                     ),
                   ],
                 ),
-                PopupMenuButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide.none),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  color: AppColor().primaryMenu,
-                  offset: const Offset(0, -10),
-                  initialValue: _selectedIndex,
-                  onSelected: (value) {
-                    setState(() {
-                      if (value == 0) {
-                        _selectedIndex = value;
-                      } else if (value == 1) {
-                        _selectedIndex = value;
-                      } else if (value == 2) {}
-                    });
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      height: 20,
-                      padding:
-                          const EdgeInsets.only(bottom: 20, left: 20, top: 20),
-                      child: popUpMenuItems(
-                          icon: Icons.bookmark_outline, title: 'Bookmark'),
-                    ),
-                    PopupMenuItem(
-                      height: 20,
-                      padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: popUpMenuItems(
-                          icon: Icons.thumb_down_alt_outlined,
-                          title: 'Not interested in this post'),
-                    ),
-                    PopupMenuItem(
-                      height: 20,
-                      padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: popUpMenuItems(
-                          icon: Icons.person_add_alt_outlined,
-                          title: 'Follow/Unfollow User'),
-                    ),
-                    PopupMenuItem(
-                      height: 20,
-                      padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: popUpMenuItems(
-                          icon: Icons.notifications_off_outlined,
-                          title: 'Turn on/Turn off Notifications'),
-                    ),
-                    PopupMenuItem(
-                      height: 20,
-                      padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: popUpMenuItems(
-                          icon: Icons.volume_off_outlined,
-                          title: 'Mute/Unmute User'),
-                    ),
-                    PopupMenuItem(
-                      height: 20,
-                      padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: popUpMenuItems(
-                          icon: Icons.block_outlined, title: 'Block User'),
-                    ),
-                    PopupMenuItem(
-                      height: 20,
-                      padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: popUpMenuItems(
-                          icon: Icons.flag, title: 'Report Post'),
-                    ),
-                  ],
-                  child: Icon(
-                    Icons.more_vert,
-                    color: AppColor().primaryWhite,
-                  ),
-                ),
+                if (widget.item.reposts!.isEmpty) postMenu(),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: CustomText(
-              title: widget.item.title!.toUpperFirstCase(),
+              title: widget.item.body!.toUpperFirstCase(),
               size: Get.height * 0.015,
               fontFamily: 'GilroyBold',
               textAlign: TextAlign.start,
@@ -244,13 +240,11 @@ class _PostItemState extends State<PostItem> {
                       ),
                       errorWidget: (context, url, error) =>
                           Icon(Icons.error, color: AppColor().primaryWhite),
-                      imageUrl:
-                          'http://res.cloudinary.com/dkykwpryb/${widget.item.image!}',
+                      imageUrl: widget.item.image!,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(
-                                  'http://res.cloudinary.com/dkykwpryb/${widget.item.image!}'),
+                              image: NetworkImage(widget.item.image!),
                               fit: BoxFit.cover),
                         ),
                       ),
@@ -544,6 +538,77 @@ class _PostItemState extends State<PostItem> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  PopupMenuButton<dynamic> postMenu() {
+    return PopupMenuButton(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), side: BorderSide.none),
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      color: AppColor().primaryMenu,
+      offset: const Offset(0, -10),
+      initialValue: _selectedIndex,
+      onSelected: (value) {
+        setState(() {
+          if (value == 0) {
+            _selectedIndex = value;
+          } else if (value == 1) {
+            _selectedIndex = value;
+          } else if (value == 2) {}
+        });
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
+          child:
+              popUpMenuItems(icon: Icons.bookmark_outline, title: 'Bookmark'),
+        ),
+        PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: popUpMenuItems(
+              icon: Icons.thumb_down_alt_outlined,
+              title: 'Not interested in this post'),
+        ),
+        PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: popUpMenuItems(
+              icon: Icons.person_add_alt_outlined,
+              title: 'Follow/Unfollow User'),
+        ),
+        PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: popUpMenuItems(
+              icon: Icons.notifications_off_outlined,
+              title: 'Turn on/Turn off Notifications'),
+        ),
+        PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: popUpMenuItems(
+              icon: Icons.volume_off_outlined, title: 'Mute/Unmute User'),
+        ),
+        PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child:
+              popUpMenuItems(icon: Icons.block_outlined, title: 'Block User'),
+        ),
+        PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: popUpMenuItems(icon: Icons.flag, title: 'Report Post'),
+        ),
+      ],
+      child: Icon(
+        Icons.more_vert,
+        color: AppColor().primaryWhite,
       ),
     );
   }

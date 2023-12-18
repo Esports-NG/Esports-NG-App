@@ -42,7 +42,6 @@ class _EditPostState extends State<EditPost> {
 
   @override
   void initState() {
-    postController.postTitleController.text = widget.item.title!;
     postController.postBodyController.text = widget.item.body!;
     super.initState();
   }

@@ -553,7 +553,6 @@ class _CreatePostState extends State<CreatePost> {
                   InkWell(
                     onTap: () {
                       PostModel post = PostModel(
-                        title: postController.postTitleController.text.trim(),
                         body: postController.postBodyController.text.trim(),
                         iTags: '#${postController.gameTagController.text}',
                         iViewers: postController.seeController.text,

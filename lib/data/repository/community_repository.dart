@@ -38,6 +38,53 @@ class CommunityRepository extends GetxController {
   File? get communityProfileImage => mCommunityProfileImage.value;
   File? get communityCoverImage => mCommunityCoverImage.value;
 
+  @override
+  void onInit() {
+    super.onInit();
+    authController.mToken.listen((p0) async {
+      if (p0 != '0') {
+        // getPosts(true);
+      }
+    });
+  }
+
+  //  Future createPost(PostModel post) async {
+  //   try {
+  //     _createPostStatus(CreatePostStatus.loading);
+  //     var headers = {
+  //       "Content-Type": "application/json",
+  //       "Authorization": 'JWT ${authController.token}'
+  //     };
+  //     var request =
+  //         http.MultipartRequest("POST", Uri.parse(ApiLink.createPost));
+
+  //     request.fields.addAll(
+  //         post.toCreatePostJson().map((key, value) => MapEntry(key, value)));
+  //     request.files
+  //         .add(await http.MultipartFile.fromPath('image', postImage!.path));
+  //     request.headers.addAll(headers);
+
+  //     http.StreamedResponse response = await request.send();
+  //     if (response.statusCode == 201) {
+  //       _createPostStatus(CreatePostStatus.success);
+  //       debugPrint(await response.stream.bytesToString());
+  //       Get.to(() => const CreateSuccessPage(title: 'Post Created'))!
+  //           .then((value) {
+  //         getPosts(false);
+  //         clear();
+  //       });
+  //     } else {
+  //       _createPostStatus(CreatePostStatus.error);
+  //       debugPrint(response.reasonPhrase);
+  //       handleError(response.reasonPhrase);
+  //     }
+  //   } catch (error) {
+  //     _createPostStatus(CreatePostStatus.error);
+  //     debugPrint("Error occurred ${error.toString()}");
+  //     handleError(error);
+  //   }
+  // }
+
   void clearProfilePhoto() {
     debugPrint('image cleared');
     mCommunityProfileImage.value = null;

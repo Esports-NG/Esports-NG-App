@@ -25,12 +25,16 @@ class ApiLink {
   static String getAllPost = "${baseurl}post/view/";
   static String getMyPost = "${baseurl}post/myposts/";
   static String likePost = "${baseurl}post/like/";
-  // static String recommendedProduct = "${baseurl}products/recommendations";
-  // static String sellerProduct = "${baseurl}products/catalog";
-  // static String uploadImage = "${baseurl}uploads/products";
-  // static String favorite = "${baseurl}favorites";
-  // static String myCart = "${baseurl}my-cart";
-  // static String checkOut = "${baseurl}checkout-session";
+  static String post = "${baseurl}post/";
+  static String comment = "${baseurl}post/comment/";
+
+  //Team
+  static String createTeam = "${baseurl}team/create/";
+  static String getAllTeam = "${baseurl}team/view/";
+
+  //Player
+  static String createPlayer = "${baseurl}player/register/";
+  static String getAllPlayer = "${baseurl}player/view/";
 
   //Transactions
   // static String transaction = "${baseurl}transactions";
@@ -40,5 +44,4 @@ class ApiLink {
   // static String setTransactionPin = "${baseurl}wallet/set-transaction-pin";
   // static String changeTransactionPin =
   //     "${baseurl}wallet/change-transaction-pin";
-
 }

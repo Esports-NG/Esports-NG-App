@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
+import 'package:e_sport/data/model/other_models.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
@@ -30,7 +31,7 @@ class _PostDetailsState extends State<PostDetails> {
   final postController = Get.put(PostRepository());
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
-    if (postController.postStatus != PostStatus.loading && isLiked == false) {
+    if (postController.postStatus != PostStatus.loading) {
       postController.likePost(widget.item.id!);
     }
     return !isLiked;
@@ -119,14 +120,6 @@ class _PostDetailsState extends State<PostDetails> {
               ),
               Gap(Get.height * 0.015),
               CustomText(
-                title: widget.item.title,
-                size: Get.height * 0.018,
-                fontFamily: 'GilroyBold',
-                textAlign: TextAlign.start,
-                color: AppColor().primaryWhite,
-              ),
-              Gap(Get.height * 0.015),
-              CustomText(
                 title: widget.item.body,
                 size: Get.height * 0.015,
                 fontFamily: 'GilroyRegular',
@@ -164,14 +157,12 @@ class _PostDetailsState extends State<PostDetails> {
                           ),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error, color: AppColor().primaryWhite),
-                          imageUrl:
-                              'http://res.cloudinary.com/dkykwpryb/${widget.item.image!}',
+                          imageUrl: widget.item.image!,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               image: DecorationImage(
-                                  image: NetworkImage(
-                                      'http://res.cloudinary.com/dkykwpryb/${widget.item.image!}'),
+                                  image: NetworkImage(widget.item.image!),
                                   fit: BoxFit.cover),
                             ),
                           ),
@@ -386,7 +377,88 @@ class _PostDetailsState extends State<PostDetails> {
                       color: AppColor().primaryWhite,
                       size: Get.height * 0.03,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                          isScrollControlled: false,
+                          backgroundColor: AppColor().primaryWhite,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                            ),
+                          ),
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              height: Get.height * 0.2,
+                              padding: EdgeInsets.only(
+                                top: Get.height * 0.005,
+                                left: Get.height * 0.02,
+                                right: Get.height * 0.02,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColor().primaryModalColor,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30),
+                                ),
+                              ),
+                              child: Column(children: [
+                                Center(
+                                  child: Container(
+                                    height: Get.height * 0.006,
+                                    width: Get.height * 0.09,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: AppColor().greyGradient),
+                                  ),
+                                ),
+                                Gap(Get.height * 0.03),
+                                ListView.separated(
+                                  padding: EdgeInsets.zero,
+                                  physics: const ScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: repostItem.length,
+                                  separatorBuilder: (context, index) => Divider(
+                                    color: AppColor()
+                                        .greyGradient
+                                        .withOpacity(0.5),
+                                    height: Get.height * 0.04,
+                                    thickness: 0.5,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    var item = repostItem[index];
+                                    return InkWell(
+                                      onTap: () {
+                                        if (index == 0) {
+                                          postController
+                                              .rePost(widget.item.id!);
+                                        } else {}
+                                        Get.back();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            item.icon,
+                                            color: AppColor().greyTwo,
+                                          ),
+                                          Gap(Get.height * 0.03),
+                                          CustomText(
+                                            title: item.title,
+                                            color: AppColor().greyTwo,
+                                            weight: FontWeight.w400,
+                                            fontFamily: 'GilroyMedium',
+                                            size: Get.height * 0.020,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ]),
+                            );
+                          });
+                    },
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),

@@ -160,6 +160,35 @@ class PostRepository extends GetxController {
     }
   }
 
+  Future rePost(int postId) async {
+    try {
+      EasyLoading.show(status: 'Reposting...');
+      var body = {"body": 'repost!'};
+      _postStatus(PostStatus.loading);
+      var response = await http.post(
+        Uri.parse("${ApiLink.post}$postId/repost/"),
+        body: jsonEncode(body),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+
+      debugPrint(response.body);
+      debugPrint(response.statusCode.toString());
+      if (response.statusCode == 201) {
+        _postStatus(PostStatus.success);
+        EasyLoading.showInfo('Success').then((value) => getPosts(false));
+      }
+      return response.body;
+    } catch (error) {
+      _postStatus(PostStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("Repost error: ${error.toString()}");
+      handleError(error);
+    }
+  }
+
   Future<bool> likePost(int postId) async {
     _likePostStatus(LikePostStatus.loading);
     try {

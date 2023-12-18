@@ -1,4 +1,4 @@
-import 'package:e_sport/data/model/referral_model.dart';
+import 'package:e_sport/data/model/other_models.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';

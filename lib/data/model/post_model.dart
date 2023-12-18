@@ -3,21 +3,26 @@ import 'user_model.dart';
 class PostModel {
   int? id;
   UserModel? author;
-  String? title, body, image;
-  int? likeCount, viewCount;
-  List<dynamic>? likes, views, viewers, comment;
+  String? body, image, community;
+  int? likeCount, viewCount, repostCount;
+  List<PostModel>? reposts;
+  List<UserModel>? likes, views;
+  List<dynamic>? viewers, comment;
   List<Tag>? tags;
   String? iTags;
   String? iViewers;
   DateTime? createdAt;
+  DateTime? updatedAt;
 
   PostModel({
     this.id,
     this.author,
-    this.title,
     this.body,
+    this.community,
     this.likeCount,
     this.viewCount,
+    this.repostCount,
+    this.reposts,
     this.likes,
     this.views,
     this.iTags,
@@ -27,6 +32,7 @@ class PostModel {
     this.comment,
     this.iViewers,
     this.createdAt,
+    this.updatedAt,
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
@@ -34,14 +40,20 @@ class PostModel {
         author: json["author"] == null
             ? null
             : UserModel.fromPostJson(json["author"]),
-        title: json["title"],
+        reposts: json["reposts"] == null
+            ? []
+            : List<PostModel>.from(
+                json["reposts"]!.map((x) => PostModel.fromJson(x))),
         body: json["body"],
+        community: json["community"],
         likeCount: json["like_count"],
         viewCount: json["view_count"],
+        repostCount: json["repost_count"],
         image: json["image"],
         likes: json["likes"] == null
             ? []
-            : List<dynamic>.from(json["likes"]!.map((x) => x)),
+            : List<UserModel>.from(
+                json["likes"]!.map((x) => UserModel.fromPostJson(x))),
         tags: json["tags"] == null
             ? []
             : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
@@ -50,22 +62,30 @@ class PostModel {
             : List<dynamic>.from(json["viewers"]!.map((x) => x)),
         views: json["views"] == null
             ? []
-            : List<dynamic>.from(json["views"]!.map((x) => x)),
+            : List<UserModel>.from(
+                json["views"]!.map((x) => UserModel.fromPostJson(x))),
         comment: json["comment"] == null
             ? []
             : List<dynamic>.from(json["comment"]!.map((x) => x)),
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "author": author?.toJson(),
-        "title": title,
+        "reposts": reposts == null
+            ? []
+            : List<dynamic>.from(reposts!.map((x) => x.toJson())),
+        "community": community,
         "body": body,
         "like_count": likeCount,
         "view_count": viewCount,
+        "repost_count": repostCount,
         "image": image,
         "likes": likes == null ? [] : List<dynamic>.from(likes!.map((x) => x)),
         "tags": tags == null
@@ -77,10 +97,10 @@ class PostModel {
         "comment":
             comment == null ? [] : List<dynamic>.from(comment!.map((x) => x)),
         "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
       };
 
   Map<String, dynamic> toCreatePostJson() => {
-        "title": title,
         "body": body,
         "itags": iTags,
         "iviewers": iViewers,
