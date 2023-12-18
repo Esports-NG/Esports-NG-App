@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/no_internet.dart';
+import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -68,6 +68,9 @@ class _ESportAppState extends State<ESportApp> {
         title: 'ESports NG',
         initialBinding: AppBinding(),
         theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: AppColor().primaryBackGroundColor),
+          useMaterial3: true,
           primarySwatch: Palette.primaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           pageTransitionsTheme: const PageTransitionsTheme(
