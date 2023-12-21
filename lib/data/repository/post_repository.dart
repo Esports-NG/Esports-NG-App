@@ -234,7 +234,7 @@ class PostRepository extends GetxController {
         var list = List.from(json);
         var myPosts = list.map((e) => PostModel.fromJson(e)).toList();
         debugPrint("${myPosts.length} my posts found");
-        _myPost(myPosts);
+        _myPost(myPosts.reversed.toList());
         _getPostStatus(GetPostStatus.success);
         myPosts.isNotEmpty
             ? _getPostStatus(GetPostStatus.available)
@@ -267,7 +267,7 @@ class PostRepository extends GetxController {
         var list = List.from(json);
         var posts = list.map((e) => PostModel.fromJson(e)).toList();
         debugPrint("${posts.length} posts found");
-        _allPost(posts);
+        _allPost(posts.reversed.toList());
         _postStatus(PostStatus.success);
         posts.isNotEmpty
             ? _postStatus(PostStatus.available)

@@ -7,9 +7,12 @@ import 'package:e_sport/ui/widget/custom_navbar.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import '../account/account.dart';
 import 'community/community.dart';
 import '../events/events.dart';
@@ -27,44 +30,162 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final authController = Get.put(AuthRepository());
+  final _controller = PersistentTabController(initialIndex: 0);
   int _selectedIndex = 0;
   int? _selectedMenu;
-  var pages = <Widget>[
-    const HomePage(),
-    const EventsPage(),
-    const CommunityPage(),
-    const Account(),
-  ];
+
+  List<Widget> _buildScreens() {
+    return [
+      const HomePage(),
+      const EventsPage(),
+      const CommunityPage(),
+      const Account(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor().primaryBackGroundColor,
-      body: pages.elementAt(_selectedIndex),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColor().primaryColor,
-        child: const Icon(Icons.add, color: Colors.white),
-        onPressed: () {
-          _showItemListDialog(context);
-        },
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        clipBehavior: Clip.antiAlias,
-        color: AppColor().primaryBackGroundColor,
-        notchMargin: 1,
-        child: CustomNavBar(
-          selectedIndex: _selectedIndex,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
+    // return Scaffold(
+    //   backgroundColor: AppColor().primaryBackGroundColor,
+    //   body: pages.elementAt(_selectedIndex),
+    //   floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    //   floatingActionButton: FloatingActionButton(
+    //     backgroundColor: AppColor().primaryColor,
+    //     child: const Icon(Icons.add, color: Colors.white),
+    //     onPressed: () {
+    //       _showItemListDialog(context);
+    //     },
+    //   ),
+    //   bottomNavigationBar: BottomAppBar(
+    //     shape: const CircularNotchedRectangle(),
+    //     clipBehavior: Clip.antiAlias,
+    //     color: AppColor().dashboardColor,
+    //     notchMargin: 1,
+    //     // child: CustomNavBar(
+    //     //   selectedIndex: _selectedIndex,
+    //     //   onTap: (index) {
+    //     //     setState(() {
+    //     //       _selectedIndex = index;
+    //     //     });
+    //     //   },
+    //     // ),
+    //   ),
+    // );
+
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        PersistentTabView(
+          context,
+          controller: _controller,
+          screens: _buildScreens(),
+          items: _navBarsItems(),
+          confineInSafeArea: true,
+          backgroundColor: AppColor().primaryBackGroundColor,
+          handleAndroidBackButtonPress: true, // Default is true.
+          resizeToAvoidBottomInset:
+              true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+          stateManagement: true, // Default is true.
+          hideNavigationBarWhenKeyboardShows:
+              true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+          decoration: NavBarDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            colorBehindNavBar: Colors.white,
+          ),
+          popAllScreensOnTapOfSelectedTab: true,
+          popActionScreens: PopActionScreensType.all,
+          itemAnimationProperties: const ItemAnimationProperties(
+            duration: Duration(milliseconds: 200),
+            curve: Curves.ease,
+          ),
+          screenTransitionAnimation: const ScreenTransitionAnimation(
+            animateTabTransition: true,
+            curve: Curves.ease,
+            duration: Duration(milliseconds: 200),
+          ),
+          navBarStyle: NavBarStyle
+              .style3, // Choose the nav bar style with this property.
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: Get.height * 0.05),
+          child: Container(
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: AppColor().primaryColor),
+            child: IconButton(
+              onPressed: () {
+                _showItemListDialog(context);
+              },
+              icon: const Icon(Icons.add, color: Colors.white),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: SvgPicture.asset(
+          'assets/images/svg/home_icon.svg',
+          height: Get.height * 0.025,
+          color: AppColor().lightItemsColor,
+        ),
+        title: "Home",
+        activeColorPrimary: AppColor().primaryColor,
+        inactiveColorPrimary: AppColor().lightItemsColor,
+        textStyle: TextStyle(
+          fontFamily: 'GilroyMedium',
+          fontWeight: FontWeight.normal,
+          fontSize: Get.height * 0.015,
         ),
       ),
-    );
+      PersistentBottomNavBarItem(
+        icon: SvgPicture.asset(
+          'assets/images/svg/event_icon.svg',
+          height: Get.height * 0.025,
+          color: AppColor().lightItemsColor,
+        ),
+        title: "Events",
+        activeColorPrimary: AppColor().primaryColor,
+        inactiveColorPrimary: AppColor().lightItemsColor,
+        textStyle: TextStyle(
+          fontFamily: 'GilroyMedium',
+          fontWeight: FontWeight.normal,
+          fontSize: Get.height * 0.015,
+        ),
+      ),
+      PersistentBottomNavBarItem(
+        icon: SvgPicture.asset(
+          'assets/images/svg/community_icon.svg',
+          height: Get.height * 0.025,
+          color: AppColor().lightItemsColor,
+        ),
+        title: "Community",
+        activeColorPrimary: AppColor().primaryColor,
+        inactiveColorPrimary: AppColor().lightItemsColor,
+        textStyle: TextStyle(
+          fontFamily: 'GilroyMedium',
+          fontWeight: FontWeight.normal,
+          fontSize: Get.height * 0.015,
+        ),
+      ),
+      PersistentBottomNavBarItem(
+        icon: SvgPicture.asset(
+          'assets/images/svg/account_icon.svg',
+          height: Get.height * 0.025,
+          color: AppColor().lightItemsColor,
+        ),
+        title: "Account",
+        activeColorPrimary: AppColor().primaryColor,
+        inactiveColorPrimary: AppColor().lightItemsColor,
+        textStyle: TextStyle(
+          fontFamily: 'GilroyMedium',
+          fontWeight: FontWeight.normal,
+          fontSize: Get.height * 0.015,
+        ),
+      ),
+    ];
   }
 
   void _showItemListDialog(BuildContext context) {

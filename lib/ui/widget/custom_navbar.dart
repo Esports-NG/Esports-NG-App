@@ -39,14 +39,14 @@ class CustomNavBar extends StatelessWidget {
         BottomNavigationBarItem(
             icon: Column(
               children: [
-                selectedIndex == 0
-                    ? Container(
-                        height: 3,
-                        width: Get.height * 0.07,
-                        color: AppColor().primaryColor,
-                      )
-                    : Container(),
-                Gap(Get.height * 0.015),
+                // selectedIndex == 0
+                //     ? Container(
+                //         height: 3,
+                //         width: Get.height * 0.07,
+                //         color: AppColor().primaryColor,
+                //       )
+                //     : Container(),
+                // Gap(Get.height * 0.01),
                 SvgPicture.asset(
                   'assets/images/svg/home_icon.svg',
                   height: Get.height * 0.025,
@@ -72,14 +72,14 @@ class CustomNavBar extends StatelessWidget {
               padding: EdgeInsets.only(right: Get.height * 0.03),
               child: Column(
                 children: [
-                  selectedIndex == 1
-                      ? Container(
-                          height: 3,
-                          width: Get.height * 0.07,
-                          color: AppColor().primaryColor,
-                        )
-                      : Container(),
-                  Gap(Get.height * 0.015),
+                  // selectedIndex == 1
+                  //     ? Container(
+                  //         height: 3,
+                  //         width: Get.height * 0.07,
+                  //         color: AppColor().primaryColor,
+                  //       )
+                  //     : Container(),
+                  // Gap(Get.height * 0.01),
                   SvgPicture.asset(
                     'assets/images/svg/event_icon.svg',
                     height: Get.height * 0.025,
@@ -92,7 +92,7 @@ class CustomNavBar extends StatelessWidget {
                     title: 'Events',
                     fontFamily: 'GilroyMedium',
                     weight: FontWeight.normal,
-                    size: Get.height * 0.015,
+                    size: Get.height * 0.01,
                     color: selectedIndex == 1
                         ? AppColor().primaryColor
                         : AppColor().lightItemsColor,
@@ -106,14 +106,14 @@ class CustomNavBar extends StatelessWidget {
               padding: EdgeInsets.only(left: Get.height * 0.03),
               child: Column(
                 children: [
-                  selectedIndex == 2
-                      ? Container(
-                          height: 3,
-                          width: Get.height * 0.07,
-                          color: AppColor().primaryColor,
-                        )
-                      : Container(),
-                  Gap(Get.height * 0.015),
+                  // selectedIndex == 2
+                  //     ? Container(
+                  //         height: 3,
+                  //         width: Get.height * 0.07,
+                  //         color: AppColor().primaryColor,
+                  //       )
+                  //     : Container(),
+                  // Gap(Get.height * 0.01),
                   SvgPicture.asset(
                     'assets/images/svg/community_icon.svg',
                     height: Get.height * 0.025,
@@ -138,14 +138,14 @@ class CustomNavBar extends StatelessWidget {
         BottomNavigationBarItem(
             icon: Column(
               children: [
-                selectedIndex == 3
-                    ? Container(
-                        height: 3,
-                        width: Get.height * 0.07,
-                        color: AppColor().primaryColor,
-                      )
-                    : Container(),
-                Gap(Get.height * 0.015),
+                // selectedIndex == 3
+                //     ? Container(
+                //         height: 3,
+                //         width: Get.height * 0.07,
+                //         color: AppColor().primaryColor,
+                //       )
+                //     : Container(),
+                // Gap(Get.height * 0.015),
                 SvgPicture.asset(
                   'assets/images/svg/account_icon.svg',
                   height: Get.height * 0.025,

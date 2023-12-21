@@ -88,9 +88,7 @@ class _PostItemState extends State<PostItem> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          widget.item.reposts!.first.author!.profile!
-                                      .profilePicture ==
-                                  null
+                          widget.item.author!.profile!.profilePicture == null
                               ? SvgPicture.asset(
                                   'assets/images/svg/people.svg',
                                   height: Get.height * 0.025,
@@ -99,6 +97,68 @@ class _PostItemState extends State<PostItem> {
                               : CachedNetworkImage(
                                   height: Get.height * 0.025,
                                   width: Get.height * 0.025,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  imageUrl: widget
+                                      .item.author!.profile!.profilePicture!,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(widget
+                                              .item
+                                              .author!
+                                              .profile!
+                                              .profilePicture!),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                ),
+                          Gap(Get.height * 0.01),
+                          CustomText(
+                            title:
+                                '${widget.item.author!.fullName!.toCapitalCase()} Reposted this',
+                            size: Get.height * 0.015,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().lightItemsColor,
+                          ),
+                        ],
+                      ),
+                      postMenu(),
+                    ],
+                  ),
+                  Gap(Get.height * 0.01),
+                  Divider(
+                    thickness: 0.4,
+                    color: AppColor().lightItemsColor,
+                  ),
+                ],
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                widget.item.reposts!.isNotEmpty
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          (widget.item.reposts!.first.author!.profile!
+                                      .profilePicture ==
+                                  null)
+                              ? SvgPicture.asset(
+                                  'assets/images/svg/people.svg',
+                                  height: Get.height * 0.035,
+                                  width: Get.height * 0.035,
+                                )
+                              : CachedNetworkImage(
+                                  height: Get.height * 0.035,
+                                  width: Get.height * 0.035,
                                   placeholder: (context, url) =>
                                       const CircularProgressIndicator(),
                                   errorWidget: (context, url, error) =>
@@ -123,8 +183,71 @@ class _PostItemState extends State<PostItem> {
                                 ),
                           Gap(Get.height * 0.01),
                           CustomText(
+                            title: widget.item.reposts!.first.author!.fullName!
+                                .toCapitalCase(),
+                            size: Get.height * 0.015,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().lightItemsColor,
+                          ),
+                          Gap(Get.height * 0.005),
+                          const SmallCircle(),
+                          Gap(Get.height * 0.005),
+                          CustomText(
+                            title: timeAgo(widget.item.createdAt!),
+                            size: Get.height * 0.015,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().lightItemsColor,
+                          ),
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          (widget.item.author!.profile!.profilePicture == null)
+                              ? SvgPicture.asset(
+                                  'assets/images/svg/people.svg',
+                                  height: Get.height * 0.035,
+                                  width: Get.height * 0.035,
+                                )
+                              : CachedNetworkImage(
+                                  height: Get.height * 0.035,
+                                  width: Get.height * 0.035,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  imageUrl: widget
+                                      .item.author!.profile!.profilePicture!,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(widget
+                                              .item
+                                              .author!
+                                              .profile!
+                                              .profilePicture!),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                ),
+                          Gap(Get.height * 0.01),
+                          CustomText(
                             title:
-                                '${widget.item.reposts!.first.author!.fullName!.toCapitalCase()} Reposted this',
+                                widget.item.author!.fullName!.toCapitalCase(),
+                            size: Get.height * 0.015,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().lightItemsColor,
+                          ),
+                          Gap(Get.height * 0.005),
+                          const SmallCircle(),
+                          Gap(Get.height * 0.005),
+                          CustomText(
+                            title: timeAgo(widget.item.createdAt!),
                             size: Get.height * 0.015,
                             fontFamily: 'GilroyMedium',
                             textAlign: TextAlign.start,
@@ -132,70 +255,6 @@ class _PostItemState extends State<PostItem> {
                           ),
                         ],
                       ),
-                      postMenu(),
-                    ],
-                  ),
-                  Gap(Get.height * 0.01),
-                  Divider(
-                    thickness: 0.4,
-                    color: AppColor().lightItemsColor,
-                  ),
-                ],
-              ),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    widget.item.author!.profile!.profilePicture == null
-                        ? SvgPicture.asset(
-                            'assets/images/svg/people.svg',
-                            height: Get.height * 0.035,
-                            width: Get.height * 0.035,
-                          )
-                        : CachedNetworkImage(
-                            height: Get.height * 0.035,
-                            width: Get.height * 0.035,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            imageUrl:
-                                widget.item.author!.profile!.profilePicture!,
-                            imageBuilder: (context, imageProvider) => Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: NetworkImage(widget
-                                        .item.author!.profile!.profilePicture!),
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                          ),
-                    Gap(Get.height * 0.01),
-                    CustomText(
-                      title: widget.item.author!.fullName!.toCapitalCase(),
-                      size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
-                      textAlign: TextAlign.start,
-                      color: AppColor().lightItemsColor,
-                    ),
-                    Gap(Get.height * 0.005),
-                    const SmallCircle(),
-                    Gap(Get.height * 0.005),
-                    CustomText(
-                      title: timeAgo(widget.item.createdAt!),
-                      size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
-                      textAlign: TextAlign.start,
-                      color: AppColor().lightItemsColor,
-                    ),
-                  ],
-                ),
                 if (widget.item.reposts!.isEmpty) postMenu(),
               ],
             ),

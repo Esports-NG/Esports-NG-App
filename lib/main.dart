@@ -67,11 +67,11 @@ class _ESportAppState extends State<ESportApp> {
         debugShowCheckedModeBanner: false,
         title: 'ESports NG',
         initialBinding: AppBinding(),
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColor().primaryBackGroundColor),
-          useMaterial3: true,
-          primarySwatch: Palette.primaryColor,
+        theme: ThemeData.light().copyWith(
+          appBarTheme: AppBarTheme(
+            backgroundColor: AppColor().primaryBackGroundColor,
+          ),
+          scaffoldBackgroundColor: AppColor().primaryBackGroundColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: {
