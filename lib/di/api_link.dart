@@ -36,6 +36,10 @@ class ApiLink {
   static String createPlayer = "${baseurl}player/register/";
   static String getAllPlayer = "${baseurl}player/view/";
 
+  //Events
+  static String createEvent = "${baseurl}event/";
+  static String getAllEvent = "${baseurl}player/view/";
+
   //Transactions
   // static String transaction = "${baseurl}transactions";
   // static String myTransaction = "${baseurl}users/my-transactions";
