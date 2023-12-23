@@ -44,7 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       isGender = false,
       isDob = false,
       isReferral = false;
-  bool isHiddenPassword = true, isChecked = false, boolPass = false;
+  bool isHiddenPassword = true, boolPass = false;
 
   int pageCount = 0;
   int? primaryUseCount;
@@ -145,9 +145,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       authController.dobController.text =
           DateFormat("yyyy-MM-dd").format(newDate).toString();
       authController.date = newDate;
-      if (kDebugMode) {
-        debugPrint(authController.dobController.text);
-      }
+
+      debugPrint(authController.dobController.text);
     });
   }
 
@@ -1074,8 +1073,8 @@ var primaryUseCard = [
 ];
 
 var eventTypeCard = [
-  PrimaryUse(title: 'Competitions', isSelected: false),
-  PrimaryUse(title: 'Gaming News', isSelected: false),
+  PrimaryUse(title: 'Tournaments', isSelected: false),
+  PrimaryUse(title: 'Social events', isSelected: false),
 ];
 
 var categoryCard = [

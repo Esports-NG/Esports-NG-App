@@ -1,14 +1,19 @@
 import 'dart:io';
-
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/ui/auth/choose_alias.dart';
 import 'package:e_sport/ui/auth/register.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/validator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -29,89 +34,141 @@ class _CreateEventState extends State<CreateEvent> {
   List<UserPreference> selectedCategories = [];
   List<PrimaryUse> selectedUse = [];
   final authController = Get.put(AuthRepository());
-  String? genderValue;
+  final eventController = Get.put(EventRepository());
+  final communityController = Get.put(CommunityRepository());
+  String? communitiesValue,
+      gameValue,
+      gameModeValue,
+      knockoutValue,
+      rankTypeValue,
+      tournamentTypeValue,
+      participantValue;
 
-  bool? isEmail = false,
-      isPassword = false,
-      isFullname = false,
-      isCountry = false,
-      isState = false,
-      isPhone = false,
-      isGender = false,
-      isDob = false,
-      isReferral = false;
-  bool isHiddenPassword = true, isChecked = false, boolPass = false;
+  bool isTournamentLink = false,
+      isGame = false,
+      isTournamentName = false,
+      isGameMode = false,
+      isTournamentType = false,
+      isKnockout = false,
+      isCommunities = false,
+      isRankType = false,
+      isRegistrationDate = false,
+      isTournamentDate = false,
+      isPrizePool = false,
+      isEntryFee = false,
+      enableLeaderboard = false,
+      dontEnableLeaderboard = false,
+      isParticipant = false,
+      isFirstPrize = false,
+      isSecondPrize = false,
+      isThirdPrize = false;
 
-  int pageCount = 0;
-  int? primaryUseCount;
-  String state = '';
-  String country = '';
+  int pageCount = 0, eventTypeCount = 0, participantCount = 1;
 
-  String countryValue = "";
-  String statesValue = "";
-  String cityValue = "";
-  String address = "";
-
-  final FocusNode _emailFocusNode = FocusNode();
-  final FocusNode _passwordFocusNode = FocusNode();
-  final FocusNode _fullnameFocusNode = FocusNode();
-  final FocusNode _countryFocusNode = FocusNode();
-  final FocusNode _stateFocusNode = FocusNode();
-  final FocusNode _phoneFocusNode = FocusNode();
-  final FocusNode _genderFocusNode = FocusNode();
-  final FocusNode _dobFocusNode = FocusNode();
-  final FocusNode _referralFocusNode = FocusNode();
+  final FocusNode _tournamentLinkFocusNode = FocusNode();
+  final FocusNode _gameFocusNode = FocusNode();
+  final FocusNode _tournamentnameFocusNode = FocusNode();
+  final FocusNode _gameModeFocusNode = FocusNode();
+  final FocusNode _tournamentTypeFocusNode = FocusNode();
+  final FocusNode _knockoutFocusNode = FocusNode();
+  final FocusNode _communitiesFocusNode = FocusNode();
+  final FocusNode _rankTypeFocusNode = FocusNode();
+  final FocusNode _registrationDateFocusNode = FocusNode();
+  final FocusNode _tournamentDateFocusNode = FocusNode();
+  final FocusNode _prizePoolFocusNode = FocusNode();
+  final FocusNode _entryFeeFocusNode = FocusNode();
+  final FocusNode _firstPrizeFocusNode = FocusNode();
+  final FocusNode _secondPrizeFocusNode = FocusNode();
+  final FocusNode _thirdPrizeFocusNode = FocusNode();
 
   @override
   void dispose() {
-    _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
-    _fullnameFocusNode.dispose();
-    _countryFocusNode.dispose();
-    _stateFocusNode.dispose();
-    _phoneFocusNode.dispose();
-    _genderFocusNode.dispose();
-    _dobFocusNode.dispose();
-    _referralFocusNode.dispose();
+    _tournamentLinkFocusNode.dispose();
+    _gameFocusNode.dispose();
+    _tournamentnameFocusNode.dispose();
+    _gameModeFocusNode.dispose();
+    _tournamentTypeFocusNode.dispose();
+    _knockoutFocusNode.dispose();
+    _communitiesFocusNode.dispose();
+    _rankTypeFocusNode.dispose();
+    _registrationDateFocusNode.dispose();
+    _tournamentDateFocusNode.dispose();
+    _prizePoolFocusNode.dispose();
+    _entryFeeFocusNode.dispose();
+    _firstPrizeFocusNode.dispose();
+    _secondPrizeFocusNode.dispose();
+    _thirdPrizeFocusNode.dispose();
     super.dispose();
   }
 
   void handleTap(String? title) {
-    if (title == 'email') {
+    if (title == 'tournamentLink') {
       setState(() {
-        isEmail = true;
+        isTournamentLink = true;
       });
-    } else if (title == 'password') {
+    } else if (title == 'game') {
       setState(() {
-        isPassword = true;
+        isGame = true;
       });
-    } else if (title == 'fullname') {
+    } else if (title == 'tournamentName') {
       setState(() {
-        isFullname = true;
+        isTournamentName = true;
       });
-    } else if (title == 'country') {
+    } else if (title == 'gameMode') {
       setState(() {
-        isCountry = true;
+        isGameMode = true;
       });
-    } else if (title == 'state') {
+    } else if (title == 'tournamentType') {
       setState(() {
-        isState = true;
+        isTournamentType = true;
       });
-    } else if (title == 'phone') {
+    } else if (title == 'knockout') {
       setState(() {
-        isPhone = true;
+        isKnockout = true;
       });
-    } else if (title == 'gender') {
+    } else if (title == 'communities') {
       setState(() {
-        isGender = true;
+        isCommunities = true;
       });
-    } else if (title == 'dob') {
+    } else if (title == 'rankType') {
       setState(() {
-        isDob = true;
+        isRankType = true;
+      });
+    } else if (title == 'regDate') {
+      setState(() {
+        isRegistrationDate = true;
+      });
+    } else if (title == 'tourDate') {
+      setState(() {
+        isTournamentDate = true;
+      });
+    } else if (title == 'prizePool') {
+      setState(() {
+        isPrizePool = true;
+      });
+    } else if (title == 'entryFee') {
+      setState(() {
+        isEntryFee = true;
+      });
+    } else if (title == 'participant') {
+      setState(() {
+        isParticipant = true;
+      });
+    } else if (title == 'first') {
+      setState(() {
+        isFirstPrize = true;
+      });
+    } else if (title == 'second') {
+      setState(() {
+        isSecondPrize = true;
+      });
+    } else if (title == 'third') {
+      setState(() {
+        isThirdPrize = true;
       });
     } else {
       setState(() {
-        isReferral = true;
+        isRegistrationDate = true;
       });
     }
   }
@@ -120,11 +177,11 @@ class _CreateEventState extends State<CreateEvent> {
     debugPrint(msg);
   }
 
-  Future pickDate(BuildContext context) async {
+  Future pickDate(String title) async {
     final initialDate = DateTime.now();
     final newDate = await showDatePicker(
       context: context,
-      initialDate: authController.date ?? initialDate,
+      initialDate: eventController.date ?? initialDate,
       firstDate: DateTime(DateTime.now().year - 40),
       lastDate: DateTime(DateTime.now().year + 5),
     );
@@ -132,11 +189,18 @@ class _CreateEventState extends State<CreateEvent> {
     if (newDate == null) return;
 
     setState(() {
-      authController.dobController.text =
-          DateFormat("yyyy-MM-dd").format(newDate).toString();
-      authController.date = newDate;
-
-      debugPrint(authController.dobController.text);
+      if (title == 'registration') {
+        eventController.regDateController.text =
+            DateFormat("yyyy-MM-dd").format(newDate).toString();
+        eventController.date = newDate;
+        debugPrint('Reg Date: ${eventController.regDateController.text}');
+      } else {
+        eventController.tournamentDateController.text =
+            DateFormat("yyyy-MM-dd").format(newDate).toString();
+        eventController.date = newDate;
+        debugPrint(
+            'Tournament Date: ${eventController.tournamentDateController.text}');
+      }
     });
   }
 
@@ -166,14 +230,35 @@ class _CreateEventState extends State<CreateEvent> {
     }
   }
 
+  DropdownMenuItem<String> buildDropDownItem(String item) => DropdownMenuItem(
+      value: item,
+      child: CustomText(
+          title: item,
+          fontFamily: 'GilroyBold',
+          weight: FontWeight.w400,
+          size: 13));
+
+  CommunityModel? selectedItem;
+
   @override
   Widget build(BuildContext context) {
+    selectedItem = communityController.allCommunity.first;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor().primaryBackGroundColor,
         elevation: 0,
         leading: GoBackButton(
-          onPressed: () {},
+          onPressed: () {
+            if (pageCount > 0) {
+              setState(() {
+                --pageCount;
+                debugPrint('PageCount: $pageCount');
+              });
+            } else {
+              setState(() {});
+              Get.back();
+            }
+          },
         ),
         centerTitle: true,
         title: CustomText(
@@ -206,9 +291,9 @@ class _CreateEventState extends State<CreateEvent> {
         ],
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(Get.height * 0.02),
+      body: Padding(
+        padding: EdgeInsets.all(Get.height * 0.02),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -225,90 +310,957 @@ class _CreateEventState extends State<CreateEvent> {
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
                     separatorBuilder: (context, index) => const Gap(20),
-                    itemCount: primaryUseCard.length,
+                    itemCount: eventTypeCard.length,
                     itemBuilder: (BuildContext context, int index) {
-                      var item = primaryUseCard[index];
+                      var item = eventTypeCard[index];
                       return CustomFillButtonOption(
                         onTap: () {
                           setState(() {
-                            primaryUseCount = index;
+                            eventTypeCount = index;
                             item.isSelected = !item.isSelected!;
-                            if (item.isSelected == true) {
-                              selectedUse.add(PrimaryUse(title: item.title!));
-                            } else if (item.isSelected == false) {
-                              selectedUse.removeWhere(
-                                  (element) => element.title == item.title);
-                            }
-                            if (selectedUse.isNotEmpty) {
-                              authController.purposeController.text =
-                                  selectedUse.first.title!;
-                            } else {
-                              authController.purposeController.text = '';
-                            }
+                            debugPrint('Type: ${item.title}');
+                            eventController.eventTypeController.text =
+                                item.title!;
                           });
                         },
                         height: Get.height * 0.06,
                         buttonText: item.title,
                         textColor: AppColor().primaryWhite,
-                        buttonColor: item.isSelected == true
+                        buttonColor: eventTypeCount == index
                             ? AppColor().primaryGreen
                             : AppColor().primaryBackGroundColor,
-                        boarderColor: item.isSelected == true
+                        boarderColor: eventTypeCount == index
                             ? AppColor().primaryGreen
                             : AppColor().primaryWhite,
                         borderRadius: BorderRadius.circular(30),
                         fontWeight: FontWeight.w400,
                       );
                     }),
-              ] else if (pageCount == 1)
-                ...[]
-              else
+              ] else if (pageCount == 1) ...[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: AppColor().primaryLightColor,
+                          borderRadius: BorderRadius.circular(10)),
+                      padding: EdgeInsets.all(Get.height * 0.02),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            color: AppColor().primaryWhite,
+                            size: 20,
+                          ),
+                          Gap(Get.height * 0.01),
+                          Expanded(
+                            child: CustomText(
+                              title:
+                                  'Please note: External software will be required for Bracket Management... You can still create fixtures on the platform',
+                              weight: FontWeight.w500,
+                              size: 14,
+                              fontFamily: 'GilroyMedium',
+                              textAlign: TextAlign.start,
+                              color: AppColor().primaryWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title:
+                          'Fill the form correctly to create a tournament page',
+                      weight: FontWeight.w500,
+                      size: 16,
+                      fontFamily: 'GilroyMedium',
+                      textAlign: TextAlign.start,
+                      color: AppColor().primaryWhite,
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Organising community *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: isCommunities == true
+                            ? AppColor().primaryWhite
+                            : AppColor().bgDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<CommunityModel>(
+                          value: selectedItem,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: isCommunities == true
+                                ? AppColor().primaryBackGroundColor
+                                : AppColor().lightItemsColor,
+                          ),
+                          items: communityController.allCommunity.map((value) {
+                            return DropdownMenuItem<CommunityModel>(
+                              value: value,
+                              child: CustomText(
+                                title: value.name,
+                                color: isCommunities == true
+                                    ? AppColor().primaryBackGroundColor
+                                    : AppColor().lightItemsColor,
+                                fontFamily: 'GilroyBold',
+                                weight: FontWeight.w400,
+                                size: 13,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              communitiesValue = value!.name;
+                              eventController.communitiesOwnedController.text =
+                                  value.name!;
+                              debugPrint(communitiesValue);
+                              handleTap('communities');
+                            });
+                          },
+                          hint: CustomText(
+                            title: "Communities Owned",
+                            color: isCommunities == true
+                                ? AppColor().primaryBackGroundColor
+                                : AppColor().lightItemsColor,
+                            fontFamily: 'GilroyBold',
+                            weight: FontWeight.w400,
+                            size: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Tournament name *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "The Willywonkers",
+                      textEditingController:
+                          eventController.tournamentNameController,
+                      hasText: isTournamentName,
+                      focusNode: _tournamentnameFocusNode,
+                      onTap: () {
+                        handleTap('tournamentName');
+                      },
+                      onSubmited: (_) {
+                        _tournamentnameFocusNode.unfocus();
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          isTournamentName = value.isNotEmpty;
+                        });
+                      },
+                      validate: Validator.isName,
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Tournament link for brackets *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "https://",
+                      textEditingController:
+                          eventController.tournamentLinkController,
+                      hasText: isTournamentLink,
+                      focusNode: _tournamentLinkFocusNode,
+                      onTap: () {
+                        handleTap('tournamentLink');
+                      },
+                      onSubmited: (_) {
+                        _tournamentLinkFocusNode.unfocus();
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          isTournamentLink = value.isNotEmpty;
+                        });
+                      },
+                      validate: Validator.isLink,
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Game to be played *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: isGame == true
+                            ? AppColor().primaryWhite
+                            : AppColor().bgDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          icon: Icon(Icons.keyboard_arrow_down,
+                              color: isGame == true
+                                  ? AppColor().primaryBackGroundColor
+                                  : AppColor().lightItemsColor),
+                          value: gameValue,
+                          items: <String>[
+                            '1',
+                            '2',
+                          ].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: CustomText(
+                                title: value,
+                                color: isGame == true
+                                    ? AppColor().primaryBackGroundColor
+                                    : AppColor().lightItemsColor,
+                                fontFamily: 'GilroyBold',
+                                weight: FontWeight.w400,
+                                size: 13,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              gameValue = value;
+                              debugPrint(value);
+                              eventController.gamePlayedController.text =
+                                  value!;
+                              handleTap('game');
+                            });
+                          },
+                          hint: CustomText(
+                            title: "Game",
+                            color: isGame == true
+                                ? AppColor().primaryBackGroundColor
+                                : AppColor().lightItemsColor,
+                            fontFamily: 'GilroyBold',
+                            weight: FontWeight.w400,
+                            size: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Game Mode',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: isGameMode == true
+                            ? AppColor().primaryWhite
+                            : AppColor().bgDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          icon: Icon(Icons.keyboard_arrow_down,
+                              color: isGameMode == true
+                                  ? AppColor().primaryBackGroundColor
+                                  : AppColor().lightItemsColor),
+                          value: gameModeValue,
+                          items: <String>[
+                            'Male',
+                            'Female',
+                          ].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: CustomText(
+                                title: value,
+                                color: isGameMode == true
+                                    ? AppColor().primaryBackGroundColor
+                                    : AppColor().lightItemsColor,
+                                fontFamily: 'GilroyBold',
+                                weight: FontWeight.w400,
+                                size: 13,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              gameModeValue = value;
+                              debugPrint(value);
+                              eventController.gameModeController.text = value!;
+                              handleTap('gameMode');
+                            });
+                          },
+                          hint: CustomText(
+                            title: "Game Mode",
+                            color: isGameMode == true
+                                ? AppColor().primaryBackGroundColor
+                                : AppColor().lightItemsColor,
+                            fontFamily: 'GilroyBold',
+                            weight: FontWeight.w400,
+                            size: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Tournament Type',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: isTournamentType == true
+                            ? AppColor().primaryWhite
+                            : AppColor().bgDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          icon: Icon(Icons.keyboard_arrow_down,
+                              color: isTournamentType == true
+                                  ? AppColor().primaryBackGroundColor
+                                  : AppColor().lightItemsColor),
+                          value: tournamentTypeValue,
+                          items: <String>[
+                            'Male',
+                            'Female',
+                          ].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: CustomText(
+                                title: value,
+                                color: isTournamentType == true
+                                    ? AppColor().primaryBackGroundColor
+                                    : AppColor().lightItemsColor,
+                                fontFamily: 'GilroyBold',
+                                weight: FontWeight.w400,
+                                size: 13,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              tournamentTypeValue = value!;
+                              debugPrint(value);
+                              eventController.tournamentTypeController.text =
+                                  value;
+                              handleTap('tournamentType');
+                            });
+                          },
+                          hint: CustomText(
+                            title: "Tournament Type",
+                            color: isTournamentType == true
+                                ? AppColor().primaryBackGroundColor
+                                : AppColor().lightItemsColor,
+                            fontFamily: 'GilroyBold',
+                            weight: FontWeight.w400,
+                            size: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Knockout Type',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: isKnockout == true
+                            ? AppColor().primaryWhite
+                            : AppColor().bgDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          icon: Icon(Icons.keyboard_arrow_down,
+                              color: isKnockout == true
+                                  ? AppColor().primaryBackGroundColor
+                                  : AppColor().lightItemsColor),
+                          value: knockoutValue,
+                          items: <String>[
+                            'Male',
+                            'Female',
+                          ].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: CustomText(
+                                title: value,
+                                color: isKnockout == true
+                                    ? AppColor().primaryBackGroundColor
+                                    : AppColor().lightItemsColor,
+                                fontFamily: 'GilroyBold',
+                                weight: FontWeight.w400,
+                                size: 13,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              knockoutValue = value;
+                              debugPrint(value);
+                              eventController.knockoutTypeController.text =
+                                  value!;
+                              handleTap('knockout');
+                            });
+                          },
+                          hint: CustomText(
+                            title: "Knockout Type",
+                            color: isKnockout == true
+                                ? AppColor().primaryBackGroundColor
+                                : AppColor().lightItemsColor,
+                            fontFamily: 'GilroyBold',
+                            weight: FontWeight.w400,
+                            size: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Rank Type',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: isRankType == true
+                            ? AppColor().primaryWhite
+                            : AppColor().bgDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          icon: Icon(Icons.keyboard_arrow_down,
+                              color: isRankType == true
+                                  ? AppColor().primaryBackGroundColor
+                                  : AppColor().lightItemsColor),
+                          value: rankTypeValue,
+                          items: <String>[
+                            'Ranked',
+                            'Unranked',
+                          ].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: CustomText(
+                                title: value,
+                                color: isRankType == true
+                                    ? AppColor().primaryBackGroundColor
+                                    : AppColor().lightItemsColor,
+                                fontFamily: 'GilroyBold',
+                                weight: FontWeight.w400,
+                                size: 13,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              rankTypeValue = value;
+                              eventController.rankTypeController.text = value!;
+                              debugPrint(value);
+                              handleTap('rank');
+                            });
+                          },
+                          hint: CustomText(
+                            title: "Rank Type",
+                            color: isRankType == true
+                                ? AppColor().primaryBackGroundColor
+                                : AppColor().lightItemsColor,
+                            fontFamily: 'GilroyBold',
+                            weight: FontWeight.w400,
+                            size: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Registration dates *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InkWell(
+                      onTap: () {
+                        pickDate('registration');
+                        handleTap('regDate');
+                      },
+                      child: CustomTextField(
+                        hint: "DD/MM/YY",
+                        enabled: false,
+                        textEditingController:
+                            eventController.regDateController,
+                        hasText: isRegistrationDate,
+                        focusNode: _registrationDateFocusNode,
+                        onSubmited: (_) {
+                          _registrationDateFocusNode.unfocus();
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            isRegistrationDate = value.isNotEmpty;
+                          });
+                        },
+                        suffixIcon: Icon(
+                          CupertinoIcons.calendar,
+                          color: isRegistrationDate == true
+                              ? AppColor().primaryBackGroundColor
+                              : AppColor().lightItemsColor,
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Tournament dates *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InkWell(
+                      onTap: () {
+                        pickDate('tournament');
+                        handleTap('tourDate');
+                      },
+                      child: CustomTextField(
+                        hint: "DD/MM/YY",
+                        enabled: false,
+                        textEditingController:
+                            eventController.tournamentDateController,
+                        hasText: isTournamentDate,
+                        focusNode: _tournamentDateFocusNode,
+                        onSubmited: (_) {
+                          _tournamentDateFocusNode.unfocus();
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            isTournamentDate = value.isNotEmpty;
+                          });
+                        },
+                        suffixIcon: Icon(
+                          CupertinoIcons.calendar,
+                          color: isTournamentDate == true
+                              ? AppColor().primaryBackGroundColor
+                              : AppColor().lightItemsColor,
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Prize pool *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "NGN 0.00",
+                      textEditingController:
+                          eventController.prizePoolController,
+                      hasText: isPrizePool,
+                      focusNode: _prizePoolFocusNode,
+                      onTap: () {
+                        handleTap('prizePool');
+                      },
+                      onSubmited: (_) {
+                        _prizePoolFocusNode.unfocus();
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          isPrizePool = value.isNotEmpty;
+                        });
+                      },
+                      validate: Validator.isNumber,
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Entry fee *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "NGN 0.00",
+                      textEditingController: eventController.entryFeeController,
+                      hasText: isEntryFee,
+                      focusNode: _entryFeeFocusNode,
+                      onTap: () => handleTap('entryFee'),
+                      onSubmited: (_) {
+                        _entryFeeFocusNode.unfocus();
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          isEntryFee = value.isNotEmpty;
+                        });
+                      },
+                      validate: Validator.isNumber,
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Prize pool distribution *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.02),
+                    Divider(
+                      thickness: 0.4,
+                      height: Get.height * 0.02,
+                      color: AppColor().lightItemsColor,
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'First',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "NGN 0.00",
+                      textEditingController:
+                          eventController.firstPrizeController,
+                      hasText: isFirstPrize,
+                      focusNode: _firstPrizeFocusNode,
+                      onTap: () => handleTap('first'),
+                      onSubmited: (_) {
+                        _firstPrizeFocusNode.unfocus();
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          isFirstPrize = value.isNotEmpty;
+                        });
+                      },
+                      validate: Validator.isNumber,
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Second',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "NGN 0.00",
+                      textEditingController:
+                          eventController.secondPrizeController,
+                      hasText: isSecondPrize,
+                      focusNode: _secondPrizeFocusNode,
+                      onTap: () => handleTap('second'),
+                      onSubmited: (_) {
+                        _secondPrizeFocusNode.unfocus();
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          isSecondPrize = value.isNotEmpty;
+                        });
+                      },
+                      validate: Validator.isNumber,
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Third',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      hint: "NGN 0.00",
+                      textEditingController:
+                          eventController.thirdPrizeController,
+                      hasText: isThirdPrize,
+                      focusNode: _thirdPrizeFocusNode,
+                      onTap: () {
+                        handleTap('third');
+                      },
+                      onSubmited: (_) {
+                        _thirdPrizeFocusNode.unfocus();
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          isThirdPrize = value.isNotEmpty;
+                        });
+                      },
+                      validate: Validator.isNumber,
+                    ),
+                    Gap(Get.height * 0.02),
+                    Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColor().primaryColor),
+                            child: Icon(Icons.add,
+                                size: 15,
+                                color: AppColor().primaryBackGroundColor)),
+                        Gap(Get.height * 0.01),
+                        CustomText(
+                          title: 'Add Others',
+                          size: 14,
+                          fontFamily: 'GilroyMeduim',
+                          textAlign: TextAlign.start,
+                          color: AppColor().primaryColor,
+                        ),
+                      ],
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Max number of participants *',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.02),
+                    Container(
+                      height: Get.height * 0.065,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: isParticipant == true
+                            ? AppColor().primaryWhite
+                            : AppColor().bgDark,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            title: participantCount.toString(),
+                            color: isParticipant == true
+                                ? AppColor().primaryBackGroundColor
+                                : AppColor().lightItemsColor,
+                            fontFamily: 'GilroyBold',
+                            weight: FontWeight.w400,
+                            size: 13,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if (participantCount >= 0) {
+                                      participantCount++;
+                                      eventController.participantController
+                                          .text = participantCount.toString();
+                                    }
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.arrow_drop_up,
+                                  color: isParticipant == true
+                                      ? AppColor().primaryBackGroundColor
+                                      : AppColor().lightItemsColor,
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if (participantCount >= 2) {
+                                      --participantCount;
+                                      eventController.participantController
+                                          .text = participantCount.toString();
+                                    }
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: isParticipant == true
+                                      ? AppColor().primaryBackGroundColor
+                                      : AppColor().lightItemsColor,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title:
+                          'Enable leaderboard *\n(Automatically enabled for ranked tournaments) ',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.left,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.02),
+                    Row(
+                      children: [
+                        CustomText(
+                          title: 'Yes',
+                          color: AppColor().primaryWhite,
+                          textAlign: TextAlign.left,
+                          fontFamily: 'GilroyMedium',
+                          size: Get.height * 0.017,
+                          weight: FontWeight.w600,
+                        ),
+                        Gap(Get.height * 0.01),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (enableLeaderboard == false) {
+                                enableLeaderboard = true;
+                                dontEnableLeaderboard = false;
+                                eventController.enableLeaderboardController
+                                    .text = enableLeaderboard.toString();
+                              } else {
+                                enableLeaderboard = false;
+                                dontEnableLeaderboard = true;
+                                eventController.enableLeaderboardController
+                                    .text = enableLeaderboard.toString();
+                              }
+                            });
+                          },
+                          child: Icon(
+                              enableLeaderboard
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              color: enableLeaderboard
+                                  ? AppColor().primaryColor
+                                  : AppColor().primaryWhite),
+                        ),
+                        Gap(Get.height * 0.02),
+                        CustomText(
+                          title: 'No',
+                          color: AppColor().primaryWhite,
+                          textAlign: TextAlign.left,
+                          fontFamily: 'GilroyMedium',
+                          size: Get.height * 0.017,
+                          weight: FontWeight.w600,
+                        ),
+                        Gap(Get.height * 0.01),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (dontEnableLeaderboard == false) {
+                                dontEnableLeaderboard = true;
+                                enableLeaderboard = false;
+                                eventController.enableLeaderboardController
+                                    .text = dontEnableLeaderboard.toString();
+                              } else {
+                                enableLeaderboard = true;
+                                dontEnableLeaderboard = false;
+                                eventController.enableLeaderboardController
+                                    .text = dontEnableLeaderboard.toString();
+                              }
+                            });
+                          },
+                          child: Icon(
+                              dontEnableLeaderboard
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              color: dontEnableLeaderboard
+                                  ? AppColor().primaryColor
+                                  : AppColor().primaryWhite),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ] else
                 ...[],
+              Gap(pageCount == 0 ? Get.height * 0.5 : Get.height * 0.02),
               CustomFillButton(
                 onTap: () {
                   if (pageCount == 0) {
-                    if (formKey.currentState!.validate()) {
-                      if (authController.countryController.text == '' ||
-                          authController.stateController.text == '') {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: CustomText(
-                              title: 'choose your country/state!',
-                              size: Get.height * 0.02,
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                        );
-                      } else if (authController.genderController.text == '') {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: CustomText(
-                              title: 'choose your gender!',
-                              size: Get.height * 0.02,
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                        );
-                      } else if (authController.dobController.text == '') {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: CustomText(
-                              title: 'pick your date of birth!',
-                              size: Get.height * 0.02,
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                        );
-                      } else {
-                        setState(() {
-                          pageCount++;
-                          debugPrint('PageCount: $pageCount');
-                        });
-                      }
-                    }
+                    setState(() {
+                      pageCount++;
+                      debugPrint('PageCount: $pageCount');
+                    });
                   } else if (pageCount == 1) {
                     if (selectedUse.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(

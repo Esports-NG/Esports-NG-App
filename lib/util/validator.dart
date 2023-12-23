@@ -25,6 +25,15 @@ class Validator {
     return null;
   }
 
+  static String? isLink(String? value) {
+    if (value?.isEmpty ?? true) {
+      return 'This field is required';
+    } else if (!GetUtils.isURL(value!.trim())) {
+      return 'Please enter a valid url';
+    }
+    return null;
+  }
+
   static String? isEmail(String? value) {
     if (value?.isEmpty ?? true) {
       return 'This field is required';

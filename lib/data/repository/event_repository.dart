@@ -42,16 +42,25 @@ enum DeleteEventStatus {
 
 class EventRepository extends GetxController {
   final authController = Get.put(AuthRepository());
+  late final eventTypeController = TextEditingController();
+  late final communitiesOwnedController = TextEditingController();
   late final searchController = TextEditingController();
-  late final fullNameController = TextEditingController();
-  late final emailController = TextEditingController();
-  late final phoneNoController = TextEditingController();
-  late final countryController = TextEditingController();
-  late final countryCodeController = TextEditingController();
-  late final stateController = TextEditingController();
-  late final genderController = TextEditingController();
-  late final dobController = TextEditingController();
-  late final purposeController = TextEditingController();
+  late final tournamentNameController = TextEditingController();
+  late final tournamentLinkController = TextEditingController();
+  late final regDateController = TextEditingController();
+  late final tournamentDateController = TextEditingController();
+  late final prizePoolController = TextEditingController();
+  late final entryFeeController = TextEditingController();
+  late final firstPrizeController = TextEditingController();
+  late final secondPrizeController = TextEditingController();
+  late final thirdPrizeController = TextEditingController();
+  late final participantController = TextEditingController();
+  late final enableLeaderboardController = TextEditingController();
+  late final rankTypeController = TextEditingController();
+  late final gamePlayedController = TextEditingController();
+  late final gameModeController = TextEditingController();
+  late final knockoutTypeController = TextEditingController();
+  late final tournamentTypeController = TextEditingController();
 
   final Rx<List<EventModel>> _allEvent = Rx([]);
   final Rx<List<EventModel>> _myEvent = Rx([]);
@@ -68,6 +77,8 @@ class EventRepository extends GetxController {
   Rx<File?> mEventCoverImage = Rx(null);
   File? get eventProfileImage => mEventProfileImage.value;
   File? get eventCoverImage => mEventCoverImage.value;
+
+  DateTime? date;
 
   @override
   void onInit() {
@@ -178,14 +189,14 @@ class EventRepository extends GetxController {
 
   void clear() {
     searchController.clear();
-    fullNameController.clear();
-    emailController.clear();
-    phoneNoController.clear();
-    countryController.clear();
-    countryCodeController.clear();
-    stateController.clear();
-    genderController.clear();
-    dobController.clear();
-    purposeController.clear();
+    tournamentNameController.clear();
+    tournamentLinkController.clear();
+    regDateController.clear();
+    tournamentDateController.clear();
+    prizePoolController.clear();
+    entryFeeController.clear();
+    enableLeaderboardController.clear();
+    rankTypeController.clear();
+    gamePlayedController.clear();
   }
 }

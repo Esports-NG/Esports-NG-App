@@ -69,23 +69,15 @@ class CommunityModel {
       };
 
   Map<String, dynamic> toCreateCommunityJson() => {
-        "id": id,
         "name": name,
-        "logo": logo,
-        "cover": cover,
         "bio": bio,
-        "owner": owner?.toJson(),
         "games_played": gamesPlayed == null
             ? []
             : List<dynamic>.from(gamesPlayed!.map((x) => x)),
-        "created_at": createdAt?.toIso8601String(),
         "enable_teamchat": enableTeamchat,
         "socials": socials == null
             ? []
             : List<dynamic>.from(socials!.map((x) => x.toJson())),
-        "comm_staffs": commStaffs == null
-            ? []
-            : List<dynamic>.from(commStaffs!.map((x) => x)),
       };
 }
 

@@ -9,7 +9,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'di/app_binding.dart';
 import 'ui/auth/splash_screen.dart';
-import 'util/pallete.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
