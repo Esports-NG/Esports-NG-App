@@ -2,12 +2,10 @@
 
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/account/account_events/create_event.dart';
 import 'package:e_sport/ui/home/post/create_community_page.dart';
-import 'package:e_sport/ui/widget/custom_navbar.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -31,7 +29,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final authController = Get.put(AuthRepository());
   final _controller = PersistentTabController(initialIndex: 0);
-  int _selectedIndex = 0;
   int? _selectedMenu;
 
   List<Widget> _buildScreens() {
@@ -45,33 +42,6 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   backgroundColor: AppColor().primaryBackGroundColor,
-    //   body: pages.elementAt(_selectedIndex),
-    //   floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    //   floatingActionButton: FloatingActionButton(
-    //     backgroundColor: AppColor().primaryColor,
-    //     child: const Icon(Icons.add, color: Colors.white),
-    //     onPressed: () {
-    //       _showItemListDialog(context);
-    //     },
-    //   ),
-    //   bottomNavigationBar: BottomAppBar(
-    //     shape: const CircularNotchedRectangle(),
-    //     clipBehavior: Clip.antiAlias,
-    //     color: AppColor().dashboardColor,
-    //     notchMargin: 1,
-    //     // child: CustomNavBar(
-    //     //   selectedIndex: _selectedIndex,
-    //     //   onTap: (index) {
-    //     //     setState(() {
-    //     //       _selectedIndex = index;
-    //     //     });
-    //     //   },
-    //     // ),
-    //   ),
-    // );
-
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -82,12 +52,9 @@ class _DashboardState extends State<Dashboard> {
           items: _navBarsItems(),
           confineInSafeArea: true,
           backgroundColor: AppColor().primaryBackGroundColor,
-          handleAndroidBackButtonPress: true, // Default is true.
-          resizeToAvoidBottomInset:
-              true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-          stateManagement: true, // Default is true.
-          hideNavigationBarWhenKeyboardShows:
-              true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+          resizeToAvoidBottomInset: true,
+          stateManagement: true,
+          hideNavigationBarWhenKeyboardShows: true,
           decoration: NavBarDecoration(
             borderRadius: BorderRadius.circular(10.0),
             colorBehindNavBar: Colors.white,
@@ -103,8 +70,7 @@ class _DashboardState extends State<Dashboard> {
             curve: Curves.ease,
             duration: Duration(milliseconds: 200),
           ),
-          navBarStyle: NavBarStyle
-              .style3, // Choose the nav bar style with this property.
+          navBarStyle: NavBarStyle.style3,
         ),
         Padding(
           padding: EdgeInsets.only(bottom: Get.height * 0.05),
@@ -240,6 +206,7 @@ class _DashboardState extends State<Dashboard> {
                         if (_selectedMenu == 0) {
                           Get.to(() => const CreatePost());
                         } else if (_selectedMenu == 1) {
+                          Get.to(() => const CreateEvent());
                         } else if (_selectedMenu == 2) {
                           Get.to(() => const CreateTeamPage());
                         } else {

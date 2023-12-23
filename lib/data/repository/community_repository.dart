@@ -1,6 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 enum CommunityStatus {
@@ -26,10 +32,15 @@ class CommunityRepository extends GetxController {
   late final gameTagController = TextEditingController();
   late final accountTypeController = TextEditingController();
 
-  final _postStatus = CommunityStatus.empty.obs;
+  final Rx<List<CommunityModel>> _allCommunity = Rx([]);
+  final Rx<List<CommunityModel>> _myCommunity = Rx([]);
+  List<CommunityModel> get allCommunity => _allCommunity.value;
+  List<CommunityModel> get myCommunity => _myCommunity.value;
+
+  final _communityStatus = CommunityStatus.empty.obs;
   final _createCommunityStatus = CreateCommunityStatus.empty.obs;
 
-  CommunityStatus get postStatus => _postStatus.value;
+  CommunityStatus get communityStatus => _communityStatus.value;
   CreateCommunityStatus get createCommunityStatus =>
       _createCommunityStatus.value;
 
@@ -43,47 +54,99 @@ class CommunityRepository extends GetxController {
     super.onInit();
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
-        // getPosts(true);
+        getAllCommunity(true);
       }
     });
   }
 
-  //  Future createPost(PostModel post) async {
-  //   try {
-  //     _createPostStatus(CreatePostStatus.loading);
-  //     var headers = {
-  //       "Content-Type": "application/json",
-  //       "Authorization": 'JWT ${authController.token}'
-  //     };
-  //     var request =
-  //         http.MultipartRequest("POST", Uri.parse(ApiLink.createPost));
+  Future createCommunity(CommunityModel community) async {
+    try {
+      _createCommunityStatus(CreateCommunityStatus.loading);
+      var headers = {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      };
+      var request =
+          http.MultipartRequest("POST", Uri.parse(ApiLink.createCommunity));
 
-  //     request.fields.addAll(
-  //         post.toCreatePostJson().map((key, value) => MapEntry(key, value)));
-  //     request.files
-  //         .add(await http.MultipartFile.fromPath('image', postImage!.path));
-  //     request.headers.addAll(headers);
+      request.files.add(await http.MultipartFile.fromPath(
+          'profile_picture', communityProfileImage!.path));
+      request.files.add(await http.MultipartFile.fromPath(
+          'cover', communityCoverImage!.path));
 
-  //     http.StreamedResponse response = await request.send();
-  //     if (response.statusCode == 201) {
-  //       _createPostStatus(CreatePostStatus.success);
-  //       debugPrint(await response.stream.bytesToString());
-  //       Get.to(() => const CreateSuccessPage(title: 'Post Created'))!
-  //           .then((value) {
-  //         getPosts(false);
-  //         clear();
-  //       });
-  //     } else {
-  //       _createPostStatus(CreatePostStatus.error);
-  //       debugPrint(response.reasonPhrase);
-  //       handleError(response.reasonPhrase);
-  //     }
-  //   } catch (error) {
-  //     _createPostStatus(CreatePostStatus.error);
-  //     debugPrint("Error occurred ${error.toString()}");
-  //     handleError(error);
-  //   }
-  // }
+      request.fields.addAll(community
+          .toCreateCommunityJson()
+          .map((key, value) => MapEntry(key, value)));
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 201) {
+        _createCommunityStatus(CreateCommunityStatus.success);
+        debugPrint(await response.stream.bytesToString());
+        Get.to(() => const CreateSuccessPage(title: 'Community Created'))!
+            .then((value) {
+          getAllCommunity(false);
+          clear();
+        });
+      } else {
+        _createCommunityStatus(CreateCommunityStatus.error);
+        debugPrint(response.reasonPhrase);
+        handleError(response.reasonPhrase);
+      }
+    } catch (error) {
+      _createCommunityStatus(CreateCommunityStatus.error);
+      debugPrint("Error occurred ${error.toString()}");
+      handleError(error);
+    }
+  }
+
+  Future getAllCommunity(bool isFirstTime) async {
+    try {
+      if (isFirstTime == true) {
+        _communityStatus(CommunityStatus.loading);
+      }
+
+      debugPrint('getting all community...');
+      var response =
+          await http.get(Uri.parse(ApiLink.getAllCommunity), headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+
+      if (response.statusCode == 200) {
+        var list = List.from(json);
+        var communitys = list.map((e) => CommunityModel.fromJson(e)).toList();
+        debugPrint("${communitys.length} communitys found");
+        _allCommunity(communitys);
+        _communityStatus(CommunityStatus.success);
+        communitys.isNotEmpty
+            ? _communityStatus(CommunityStatus.available)
+            : _communityStatus(CommunityStatus.empty);
+      }
+      return response.body;
+    } catch (error) {
+      _communityStatus(CommunityStatus.error);
+      debugPrint("getting all community: ${error.toString()}");
+    }
+  }
+
+  void handleError(dynamic error) {
+    debugPrint("error $error");
+    Fluttertoast.showToast(
+        fontSize: Get.height * 0.015,
+        msg: (error.toString().contains("esports-ng.vercel.app") ||
+                error.toString().contains("Network is unreachable"))
+            ? 'Community like: No internet connection!'
+            : (error.toString().contains("FormatException"))
+                ? 'Community like: Internal server error, contact admin!'
+                : error.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM);
+  }
 
   void clearProfilePhoto() {
     debugPrint('image cleared');
@@ -93,5 +156,13 @@ class CommunityRepository extends GetxController {
   void clearCoverPhoto() {
     debugPrint('image cleared');
     mCommunityCoverImage.value = null;
+  }
+
+  void clear() {
+    postTitleController.clear();
+    seeController.clear();
+    engageController.clear();
+    gameTagController.clear();
+    accountTypeController.clear();
   }
 }

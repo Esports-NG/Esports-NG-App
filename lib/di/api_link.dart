@@ -1,6 +1,7 @@
 class ApiLink {
   static String domain = "https://esports-ng.vercel.app";
   static String baseurl = "$domain/";
+  static String imageUrl = "http://res.cloudinary.com/dkykwpryb/";
 
   static String register = "${baseurl}user/register/";
   static String login = "${baseurl}user/login/";
@@ -38,11 +39,12 @@ class ApiLink {
 
   //Events
   static String createEvent = "${baseurl}event/";
-  static String getAllEvent = "${baseurl}player/view/";
+  static String getAllEvent = "${baseurl}event/view/";
 
-  //Transactions
-  // static String transaction = "${baseurl}transactions";
-  // static String myTransaction = "${baseurl}users/my-transactions";
+  //Community
+  static String createCommunity = "${baseurl}org/register/";
+  static String getAllCommunity = "${baseurl}org/list/";
+
   // static String withdraw = "${baseurl}initiate-withdrawal";
   // static String dashboard = "${baseurl}users/dashboard";
   // static String setTransactionPin = "${baseurl}wallet/set-transaction-pin";

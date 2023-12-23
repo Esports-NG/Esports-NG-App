@@ -1073,6 +1073,11 @@ var primaryUseCard = [
   PrimaryUse(title: 'Communities', isSelected: false),
 ];
 
+var eventTypeCard = [
+  PrimaryUse(title: 'Competitions', isSelected: false),
+  PrimaryUse(title: 'Gaming News', isSelected: false),
+];
+
 var categoryCard = [
   UserPreference(title: 'Puzzle', isSelected: false),
   UserPreference(title: 'Warfare', isSelected: false),

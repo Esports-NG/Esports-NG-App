@@ -76,7 +76,7 @@ class _PostItemState extends State<PostItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.item.reposts!.isNotEmpty)
+          if (widget.item.parentPost!.isNotEmpty)
             Padding(
               padding:
                   const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
@@ -144,65 +144,8 @@ class _PostItemState extends State<PostItem> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                widget.item.reposts!.isNotEmpty
+                widget.item.parentPost!.isEmpty
                     ? Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          (widget.item.reposts!.first.author!.profile!
-                                      .profilePicture ==
-                                  null)
-                              ? SvgPicture.asset(
-                                  'assets/images/svg/people.svg',
-                                  height: Get.height * 0.035,
-                                  width: Get.height * 0.035,
-                                )
-                              : CachedNetworkImage(
-                                  height: Get.height * 0.035,
-                                  width: Get.height * 0.035,
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                  imageUrl: widget.item.reposts!.first.author!
-                                      .profile!.profilePicture!,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: NetworkImage(widget
-                                              .item
-                                              .reposts!
-                                              .first
-                                              .author!
-                                              .profile!
-                                              .profilePicture!),
-                                          fit: BoxFit.cover),
-                                    ),
-                                  ),
-                                ),
-                          Gap(Get.height * 0.01),
-                          CustomText(
-                            title: widget.item.reposts!.first.author!.fullName!
-                                .toCapitalCase(),
-                            size: Get.height * 0.015,
-                            fontFamily: 'GilroyMedium',
-                            textAlign: TextAlign.start,
-                            color: AppColor().lightItemsColor,
-                          ),
-                          Gap(Get.height * 0.005),
-                          const SmallCircle(),
-                          Gap(Get.height * 0.005),
-                          CustomText(
-                            title: timeAgo(widget.item.createdAt!),
-                            size: Get.height * 0.015,
-                            fontFamily: 'GilroyMedium',
-                            textAlign: TextAlign.start,
-                            color: AppColor().lightItemsColor,
-                          ),
-                        ],
-                      )
-                    : Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           (widget.item.author!.profile!.profilePicture == null)
@@ -254,15 +197,76 @@ class _PostItemState extends State<PostItem> {
                             color: AppColor().lightItemsColor,
                           ),
                         ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          (widget.item.parentPost!.first.author!.profile!
+                                      .profilePicture ==
+                                  null)
+                              ? SvgPicture.asset(
+                                  'assets/images/svg/people.svg',
+                                  height: Get.height * 0.035,
+                                  width: Get.height * 0.035,
+                                )
+                              : CachedNetworkImage(
+                                  height: Get.height * 0.035,
+                                  width: Get.height * 0.035,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  imageUrl: widget.item.parentPost!.first
+                                      .author!.profile!.profilePicture!,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(widget
+                                              .item
+                                              .parentPost!
+                                              .first
+                                              .author!
+                                              .profile!
+                                              .profilePicture!),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                ),
+                          Gap(Get.height * 0.01),
+                          CustomText(
+                            title: widget
+                                .item.parentPost!.first.author!.fullName!
+                                .toCapitalCase(),
+                            size: Get.height * 0.015,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().lightItemsColor,
+                          ),
+                          Gap(Get.height * 0.005),
+                          const SmallCircle(),
+                          Gap(Get.height * 0.005),
+                          CustomText(
+                            title: timeAgo(
+                                widget.item.parentPost!.first.createdAt!),
+                            size: Get.height * 0.015,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().lightItemsColor,
+                          ),
+                        ],
                       ),
-                if (widget.item.reposts!.isEmpty) postMenu(),
+                if (widget.item.parentPost!.isEmpty) postMenu(),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: CustomText(
-              title: widget.item.body!.toUpperFirstCase(),
+              title: widget.item.parentPost!.isEmpty
+                  ? widget.item.body!.toUpperFirstCase()
+                  : widget.item.parentPost!.first.body!.toUpperFirstCase(),
               size: Get.height * 0.015,
               fontFamily: 'GilroyBold',
               textAlign: TextAlign.start,
@@ -273,40 +277,85 @@ class _PostItemState extends State<PostItem> {
           Stack(
             alignment: Alignment.center,
             children: [
-              widget.item.image == null
+              widget.item.parentPost!.isEmpty
                   ? Container(
-                      height: Get.height * 0.25,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image:
-                                AssetImage('assets/images/png/placeholder.png'),
-                            fit: BoxFit.cover),
-                      ),
+                      child: widget.item.image == null
+                          ? Container(
+                              height: Get.height * 0.25,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/png/placeholder.png'),
+                                    fit: BoxFit.cover),
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              height: Get.height * 0.25,
+                              width: double.infinity,
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => Center(
+                                child: SizedBox(
+                                  height: Get.height * 0.05,
+                                  width: Get.height * 0.05,
+                                  child: CircularProgressIndicator(
+                                      color: AppColor().primaryWhite,
+                                      value: progress.progress),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Icon(
+                                  Icons.error,
+                                  color: AppColor().primaryWhite),
+                              imageUrl: widget.item.image!,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(widget.item.image!),
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                            ),
                     )
-                  : CachedNetworkImage(
-                      height: Get.height * 0.25,
-                      width: double.infinity,
-                      progressIndicatorBuilder: (context, url, progress) =>
-                          Center(
-                        child: SizedBox(
-                          height: Get.height * 0.05,
-                          width: Get.height * 0.05,
-                          child: CircularProgressIndicator(
-                              color: AppColor().primaryWhite,
-                              value: progress.progress),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          Icon(Icons.error, color: AppColor().primaryWhite),
-                      imageUrl: widget.item.image!,
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: NetworkImage(widget.item.image!),
-                              fit: BoxFit.cover),
-                        ),
-                      ),
+                  : Container(
+                      child: widget.item.parentPost!.first.image == null
+                          ? Container(
+                              height: Get.height * 0.25,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/png/placeholder.png'),
+                                    fit: BoxFit.cover),
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              height: Get.height * 0.25,
+                              width: double.infinity,
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => Center(
+                                child: SizedBox(
+                                  height: Get.height * 0.05,
+                                  width: Get.height * 0.05,
+                                  child: CircularProgressIndicator(
+                                      color: AppColor().primaryWhite,
+                                      value: progress.progress),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Icon(
+                                  Icons.error,
+                                  color: AppColor().primaryWhite),
+                              imageUrl: widget.item.parentPost!.first.image,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          widget.item.parentPost!.first.image),
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                            ),
                     ),
               Positioned.fill(
                 left: Get.height * 0.02,

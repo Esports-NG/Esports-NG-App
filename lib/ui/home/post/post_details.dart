@@ -6,6 +6,7 @@ import 'package:e_sport/data/model/other_models.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
@@ -43,6 +44,14 @@ class _PostDetailsState extends State<PostDetails> {
       appBar: AppBar(
         backgroundColor: AppColor().primaryBackGroundColor,
         elevation: 0,
+        leading: GoBackButton(onPressed: () => Get.back()),
+        centerTitle: true,
+        title: CustomText(
+          title: 'Posts',
+          fontFamily: 'GilroySemiBold',
+          size: 18,
+          color: AppColor().primaryWhite,
+        ),
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: SingleChildScrollView(
