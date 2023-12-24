@@ -46,8 +46,14 @@ class EventRepository extends GetxController {
   late final communitiesOwnedController = TextEditingController();
   late final searchController = TextEditingController();
   late final tournamentNameController = TextEditingController();
+  late final eventNameController = TextEditingController();
+  late final eventVenueController = TextEditingController();
+  late final eventDescController = TextEditingController();
   late final tournamentLinkController = TextEditingController();
+  late final eventLinkController = TextEditingController();
   late final regDateController = TextEditingController();
+  late final startTimeController = TextEditingController();
+  late final endTimeController = TextEditingController();
   late final tournamentDateController = TextEditingController();
   late final prizePoolController = TextEditingController();
   late final entryFeeController = TextEditingController();
@@ -58,9 +64,12 @@ class EventRepository extends GetxController {
   late final enableLeaderboardController = TextEditingController();
   late final rankTypeController = TextEditingController();
   late final gamePlayedController = TextEditingController();
+  late final gameCoveredController = TextEditingController();
   late final gameModeController = TextEditingController();
   late final knockoutTypeController = TextEditingController();
   late final tournamentTypeController = TextEditingController();
+  late final partnersController = TextEditingController();
+  late final staffController = TextEditingController();
 
   final Rx<List<EventModel>> _allEvent = Rx([]);
   final Rx<List<EventModel>> _myEvent = Rx([]);
@@ -198,5 +207,8 @@ class EventRepository extends GetxController {
     enableLeaderboardController.clear();
     rankTypeController.clear();
     gamePlayedController.clear();
+    partnersController.clear();
+    staffController.clear();
+    eventNameController.clear();
   }
 }
