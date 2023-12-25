@@ -1,14 +1,22 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/games_played_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class GamesPlayedItem extends StatelessWidget {
-  final GamesPlayed item;
+class GamesPlayedItem extends StatefulWidget {
+  final PlayerModel item;
   const GamesPlayedItem({super.key, required this.item});
 
+  @override
+  State<GamesPlayedItem> createState() => _GamesPlayedItemState();
+}
+
+class _GamesPlayedItemState extends State<GamesPlayedItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,32 +30,71 @@ class GamesPlayedItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: Get.height * 0.15,
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10)),
-                image: DecorationImage(
-                    image: AssetImage(item.image!), fit: BoxFit.cover)),
-          ),
+          // Container(
+          //   height: Get.height * 0.15,
+          //   decoration: BoxDecoration(
+          //       borderRadius: const BorderRadius.only(
+          //           topLeft: Radius.circular(10),
+          //           topRight: Radius.circular(10)),
+          //       image: DecorationImage(
+          //           image: AssetImage(widget.item.image!), fit: BoxFit.cover)),
+          // ),
+          (widget.item.profile == null)
+              ? Container(
+                  height: Get.height * 0.15,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/png/placeholder.png'),
+                        fit: BoxFit.cover),
+                  ),
+                )
+              : CachedNetworkImage(
+                  height: Get.height * 0.15,
+                  width: double.infinity,
+                  progressIndicatorBuilder: (context, url, progress) => Center(
+                    child: SizedBox(
+                      height: Get.height * 0.05,
+                      width: Get.height * 0.05,
+                      child: CircularProgressIndicator(
+                          color: AppColor().primaryColor,
+                          value: progress.progress),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) =>
+                      Icon(Icons.error, color: AppColor().primaryColor),
+                  imageUrl: widget.item.profile!,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10)),
+                      image: DecorationImage(
+                          image: NetworkImage(widget.item.profile!),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                ),
           Padding(
             padding: EdgeInsets.all(Get.height * 0.02),
             child: Column(
               children: [
                 textItem(
-                  title: 'Call of Duty: ',
-                  subTitle: item.name!,
+                  title: 'Game Name: ',
+                  subTitle: widget.item.inGameName,
                 ),
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'Game ID: ',
-                  subTitle: item.id!,
+                  subTitle: widget.item.inGameId!,
                 ),
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'IGN: ',
-                  subTitle: item.ign!,
+                  subTitle: widget.item.inGameName!,
                 ),
               ],
             ),

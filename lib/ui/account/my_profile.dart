@@ -174,7 +174,10 @@ class _MyProfileState extends State<MyProfile> {
                     alignment: Alignment.bottomRight,
                     children: [
                       authController.userImage == null
-                          ? ProfileImage(itemSize: Get.height * 0.13)
+                          ? ProfileImage(
+                              itemSize: Get.height * 0.13,
+                              image:
+                                  authController.user!.profile!.profilePicture)
                           : Container(
                               height: Get.height * 0.13,
                               width: Get.height * 0.13,

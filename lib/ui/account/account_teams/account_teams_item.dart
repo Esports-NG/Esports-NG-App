@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/account_teams_model.dart';
+import 'package:e_sport/data/model/team_model.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class AccountTeamsItem extends StatelessWidget {
-  final AccountTeamsModel item;
+  final TeamModel item;
   const AccountTeamsItem({super.key, required this.item});
 
   @override
@@ -32,16 +35,48 @@ class AccountTeamsItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            height: Get.height * 0.07,
-            width: Get.height * 0.07,
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10)),
-                image: DecorationImage(
-                    image: AssetImage(item.image!), fit: BoxFit.fitWidth)),
-          ),
+          (item.cover == null)
+              ? Container(
+                  height: Get.height * 0.07,
+                  width: Get.height * 0.07,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColor().primaryWhite,
+                    ),
+                    image: const DecorationImage(
+                        image: AssetImage('assets/images/png/placeholder.png'),
+                        fit: BoxFit.cover),
+                  ),
+                )
+              : CachedNetworkImage(
+                  height: Get.height * 0.07,
+                  width: Get.height * 0.07,
+                  progressIndicatorBuilder: (context, url, progress) => Center(
+                    child: SizedBox(
+                      height: Get.height * 0.02,
+                      width: Get.height * 0.02,
+                      child: CircularProgressIndicator(
+                          color: AppColor().primaryColor,
+                          value: progress.progress),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) =>
+                      Icon(Icons.error, color: AppColor().primaryColor),
+                  imageUrl: '${ApiLink.imageUrl}${item.cover}',
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColor().primaryWhite,
+                      ),
+                      image: DecorationImage(
+                          image:
+                              NetworkImage('${ApiLink.imageUrl}${item.cover}'),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                ),
           Gap(Get.height * 0.02),
           Expanded(
             child: Column(
@@ -56,7 +91,11 @@ class AccountTeamsItem extends StatelessWidget {
                 ),
                 Gap(Get.height * 0.01),
                 CustomText(
-                  title: item.members,
+                  title: item.members!.isEmpty
+                      ? 'No member'
+                      : item.membersCount == '1'
+                          ? '${item.membersCount} member'
+                          : '${item.membersCount} members',
                   size: 12,
                   fontFamily: 'GilroyRegular',
                   textAlign: TextAlign.start,
@@ -68,7 +107,7 @@ class AccountTeamsItem extends StatelessWidget {
                   thickness: 0.5,
                 ),
                 CustomText(
-                  title: item.details,
+                  title: item.bio,
                   size: 12,
                   fontFamily: 'GilroyMedium',
                   textAlign: TextAlign.start,

@@ -1,9 +1,9 @@
-import 'package:e_sport/data/model/account_events_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'account_tournament_detail.dart';
 
 class AccountEventsWidget extends StatefulWidget {
   const AccountEventsWidget({
@@ -28,13 +28,9 @@ class _AccountEventsWidgetState extends State<AccountEventsWidget> {
         itemBuilder: (context, index) {
           var item = eventController.allEvent[index];
           return InkWell(
-            onTap: () {
-              // Get.to(
-              //   () => PostDetails(
-              //     item: item,
-              //   ),
-              // );
-            },
+            onTap: () => Get.to(
+              () => AccountTournamentDetail(item: item),
+            ),
             child: AccountEventsItem(item: item),
           );
         },

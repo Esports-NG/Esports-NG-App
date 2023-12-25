@@ -21,11 +21,17 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: Get.width * 0.9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColor().lightItemsColor,
-          width: 0.5,
+        border: Border.all(color: AppColor().lightItemsColor, width: 0.5),
+        gradient: LinearGradient(
+          colors: [
+            AppColor().bgDark,
+            AppColor().primaryBackGroundColor,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
       ),
       child: Column(

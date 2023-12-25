@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 
 class ProfileImage extends StatefulWidget {
   final double? itemSize;
-  const ProfileImage({super.key, this.itemSize});
+  final String? image;
+  const ProfileImage({super.key, this.itemSize, required this.image});
 
   @override
   State<ProfileImage> createState() => _ProfileImageState();
@@ -17,7 +18,7 @@ class _ProfileImageState extends State<ProfileImage> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return authController.user!.profile!.profilePicture == null
+      return widget.image == null
           ? Container(
               height: widget.itemSize ?? Get.height * 0.05,
               width: widget.itemSize ?? Get.height * 0.05,
@@ -33,17 +34,55 @@ class _ProfileImageState extends State<ProfileImage> {
               width: widget.itemSize ?? Get.height * 0.05,
               placeholder: (context, url) => const CircularProgressIndicator(),
               errorWidget: (context, url, error) => const Icon(Icons.error),
-              imageUrl: authController.user!.profile!.profilePicture,
+              imageUrl: widget.image!,
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: NetworkImage(
-                          authController.user!.profile!.profilePicture),
-                      fit: BoxFit.cover),
+                      image: NetworkImage(widget.image!), fit: BoxFit.cover),
                 ),
               ),
             );
     });
+  }
+}
+
+class OtherImage extends StatefulWidget {
+  final double? itemSize;
+  final String? image;
+  const OtherImage({super.key, this.itemSize, required this.image});
+
+  @override
+  State<OtherImage> createState() => _OtherImageState();
+}
+
+class _OtherImageState extends State<OtherImage> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.image == null
+        ? Container(
+            height: widget.itemSize ?? Get.height * 0.05,
+            width: widget.itemSize ?? Get.height * 0.05,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+            child: SvgPicture.asset(
+              'assets/images/svg/people.svg',
+            ),
+          )
+        : CachedNetworkImage(
+            height: widget.itemSize ?? Get.height * 0.05,
+            width: widget.itemSize ?? Get.height * 0.05,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            imageUrl: widget.image!,
+            imageBuilder: (context, imageProvider) => Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: NetworkImage(widget.image!), fit: BoxFit.cover),
+              ),
+            ),
+          );
   }
 }

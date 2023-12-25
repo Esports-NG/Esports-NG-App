@@ -1,6 +1,8 @@
 import 'package:e_sport/data/model/account_events_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/ui/account/account_events/account_events_item.dart';
+import 'package:e_sport/ui/components/account_tournament_detail.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -226,21 +228,28 @@ class _CommunityPageState extends State<CommunityPage> {
                   ),
                 ),
                 Gap(Get.height * 0.03),
-                Container(
-                  height: Get.height * 0.42,
-                  padding: EdgeInsets.only(left: Get.height * 0.02),
+                SizedBox(
+                  height: Get.height * 0.38,
                   child: ListView.separated(
-                      physics: const ScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      separatorBuilder: (context, index) =>
-                          Gap(Get.height * 0.02),
-                      itemCount: tournamentItem.take(2).length,
-                      itemBuilder: (context, index) {
-                        var item = tournamentItem[index];
-                        return TournamentItem(item: item);
-                      }),
-                ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                    physics: const ScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: eventController.allEvent.take(2).length,
+                    separatorBuilder: (context, index) =>
+                        Gap(Get.height * 0.02),
+                    itemBuilder: (context, index) {
+                      var item = eventController.allEvent[index];
+                      return InkWell(
+                        onTap: () => Get.to(
+                          () => AccountTournamentDetail(item: item),
+                        ),
+                        child: AccountEventsItem(item: item),
+                      );
+                    },
+                  ),
+                )
               ],
             ),
             Gap(Get.height * 0.03),
@@ -342,6 +351,7 @@ class _CommunityPageState extends State<CommunityPage> {
                 ),
               ],
             ),
+            Gap(Get.height * 0.02),
           ],
         ),
       ),

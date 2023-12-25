@@ -99,7 +99,8 @@ class _EventsPageState extends State<EventsPage> {
                     ),
                   ),
                   Gap(Get.height * 0.03),
-                  const AccountEventsWidget()
+                  const AccountEventsWidget(),
+                  Gap(Get.height * 0.02),
                 ],
               ),
             ),

@@ -60,7 +60,10 @@ class _AccountState extends State<Account> {
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        ProfileImage(itemSize: Get.height * 0.13),
+                        OtherImage(
+                          itemSize: Get.height * 0.13,
+                          image: authController.user!.profile!.profilePicture,
+                        ),
                         Positioned(
                           child: SvgPicture.asset(
                             'assets/images/svg/check_badge.svg',
