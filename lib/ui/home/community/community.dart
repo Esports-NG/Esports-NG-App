@@ -3,11 +3,14 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/components/account_tournament_detail.dart';
+import 'package:e_sport/ui/components/error_page.dart';
+import 'package:e_sport/ui/components/no_item_page.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -15,7 +18,6 @@ import 'package:get/get.dart';
 import 'components/latest_news_item.dart';
 import 'components/social_event_item.dart';
 import 'components/suggested_profile_item.dart';
-import 'components/tournament_item.dart';
 import 'components/trending_community_item.dart';
 import 'latest_news.dart';
 import 'social_event.dart';
@@ -230,25 +232,32 @@ class _CommunityPageState extends State<CommunityPage> {
                 Gap(Get.height * 0.03),
                 SizedBox(
                   height: Get.height * 0.38,
-                  child: ListView.separated(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    physics: const ScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: eventController.allEvent.take(2).length,
-                    separatorBuilder: (context, index) =>
-                        Gap(Get.height * 0.02),
-                    itemBuilder: (context, index) {
-                      var item = eventController.allEvent[index];
-                      return InkWell(
-                        onTap: () => Get.to(
-                          () => AccountTournamentDetail(item: item),
-                        ),
-                        child: AccountEventsItem(item: item),
-                      );
-                    },
-                  ),
+                  child: (eventController.eventStatus == EventStatus.loading)
+                      ? LoadingWidget(color: AppColor().primaryColor)
+                      : (eventController.eventStatus == EventStatus.available)
+                          ? ListView.separated(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Get.height * 0.02),
+                              physics: const ScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount:
+                                  eventController.allEvent.take(2).length,
+                              separatorBuilder: (context, index) =>
+                                  Gap(Get.height * 0.02),
+                              itemBuilder: (context, index) {
+                                var item = eventController.allEvent[index];
+                                return InkWell(
+                                  onTap: () => Get.to(
+                                    () => AccountTournamentDetail(item: item),
+                                  ),
+                                  child: AccountEventsItem(item: item),
+                                );
+                              },
+                            )
+                          : (eventController.eventStatus == EventStatus.empty)
+                              ? const NoItemPage(title: 'Event')
+                              : const ErrorPage(),
                 )
               ],
             ),

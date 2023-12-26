@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class NoPostPage extends StatelessWidget {
-  const NoPostPage({
+class NoItemPage extends StatelessWidget {
+  final String title;
+  const NoItemPage({
     super.key,
+    required this.title,
   });
 
   @override
@@ -24,7 +26,7 @@ class NoPostPage extends StatelessWidget {
           ),
           Gap(Get.height * 0.02),
           CustomText(
-            title: 'No Post!',
+            title: 'No $title!',
             size: 15,
             color: AppColor().primaryWhite,
           ),

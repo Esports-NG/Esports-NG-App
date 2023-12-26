@@ -6,6 +6,8 @@ import 'package:e_sport/data/model/other_models.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/home/post/edit_post.dart';
+import 'package:e_sport/ui/home/post/components/post_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
@@ -17,17 +19,18 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
-import 'edit_post.dart';
 
-class PostDetails extends StatefulWidget {
+import 'repost_item.dart';
+
+class RepostDetails extends StatefulWidget {
   final PostModel item;
-  const PostDetails({super.key, required this.item});
+  const RepostDetails({super.key, required this.item});
 
   @override
-  State<PostDetails> createState() => _PostDetailsState();
+  State<RepostDetails> createState() => _RepostDetailsState();
 }
 
-class _PostDetailsState extends State<PostDetails> {
+class _RepostDetailsState extends State<RepostDetails> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
 
@@ -67,7 +70,9 @@ class _PostDetailsState extends State<PostDetails> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      widget.item.author!.profile!.profilePicture == null
+                      widget.item.parentPost!.first.author!.profile!
+                                  .profilePicture ==
+                              null
                           ? SvgPicture.asset(
                               'assets/images/svg/people.svg',
                               height: Get.height * 0.05,
@@ -80,22 +85,28 @@ class _PostDetailsState extends State<PostDetails> {
                                   const CircularProgressIndicator(),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
-                              imageUrl:
-                                  widget.item.author!.profile!.profilePicture!,
+                              imageUrl: widget.item.parentPost!.first.author!
+                                  .profile!.profilePicture!,
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                      image: NetworkImage(widget.item.author!
-                                          .profile!.profilePicture!),
+                                      image: NetworkImage(widget
+                                          .item
+                                          .parentPost!
+                                          .first
+                                          .author!
+                                          .profile!
+                                          .profilePicture!),
                                       fit: BoxFit.cover),
                                 ),
                               ),
                             ),
                       Gap(Get.height * 0.01),
                       CustomText(
-                        title: widget.item.author!.fullName!.toCapitalCase(),
+                        title: widget.item.parentPost!.first.author!.fullName!
+                            .toCapitalCase(),
                         size: Get.height * 0.015,
                         fontFamily: 'GilroyMedium',
                         textAlign: TextAlign.start,
@@ -105,21 +116,24 @@ class _PostDetailsState extends State<PostDetails> {
                   ),
                   Row(
                     children: [
-                      CustomFillButton(
-                        buttonText: 'Follow',
-                        textSize: Get.height * 0.015,
-                        width: Get.width * 0.25,
-                        height: Get.height * 0.04,
-                        onTap: () {},
-                        isLoading: false,
-                      ),
-                      if (authController.user!.id == widget.item.author!.id)
+                      if (widget.item.parentPost!.first.author!.fullName !=
+                          authController.user!.fullName)
+                        CustomFillButton(
+                          buttonText: 'Follow',
+                          textSize: Get.height * 0.015,
+                          width: Get.width * 0.25,
+                          height: Get.height * 0.04,
+                          onTap: () {},
+                          isLoading: false,
+                        ),
+                      if (authController.user!.id ==
+                          widget.item.parentPost!.first.author!.id)
                         IconButton(
                           icon: Icon(
                             Icons.more_vert,
                             color: AppColor().primaryWhite,
                           ),
-                          onPressed: () => showEditPopup(),
+                          onPressed: () {},
                           padding: EdgeInsets.only(left: Get.height * 0.01),
                           constraints: const BoxConstraints(),
                         ),
@@ -129,7 +143,7 @@ class _PostDetailsState extends State<PostDetails> {
               ),
               Gap(Get.height * 0.015),
               CustomText(
-                title: widget.item.body,
+                title: widget.item.parentPost!.first.body,
                 size: Get.height * 0.015,
                 fontFamily: 'GilroyRegular',
                 weight: FontWeight.w500,
@@ -139,7 +153,7 @@ class _PostDetailsState extends State<PostDetails> {
               Gap(Get.height * 0.015),
               Stack(
                 children: [
-                  widget.item.image == null
+                  widget.item.parentPost!.first.image == null
                       ? Container(
                           height: Get.height * 0.25,
                           width: double.infinity,
@@ -166,12 +180,13 @@ class _PostDetailsState extends State<PostDetails> {
                           ),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error, color: AppColor().primaryWhite),
-                          imageUrl: widget.item.image!,
+                          imageUrl: widget.item.parentPost!.first.image,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               image: DecorationImage(
-                                  image: NetworkImage(widget.item.image!),
+                                  image: NetworkImage(
+                                      widget.item.parentPost!.first.image!),
                                   fit: BoxFit.cover),
                             ),
                           ),
@@ -185,11 +200,12 @@ class _PostDetailsState extends State<PostDetails> {
                       child: ListView.separated(
                           padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
-                          itemCount: widget.item.tags!.length,
+                          itemCount: widget.item.parentPost!.first.tags!.length,
                           separatorBuilder: (context, index) =>
                               Gap(Get.height * 0.01),
                           itemBuilder: (context, index) {
-                            var items = widget.item.tags![index];
+                            var items =
+                                widget.item.parentPost!.first.tags![index];
                             return Container(
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(

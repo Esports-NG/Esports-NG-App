@@ -82,6 +82,12 @@ class PostRepository extends GetxController {
           getPosts(false);
           clear();
         });
+      } else if (response.statusCode == 401) {
+        debugPrint(response.reasonPhrase);
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _createPostStatus(CreatePostStatus.error);
       } else {
         _createPostStatus(CreatePostStatus.error);
         debugPrint(response.reasonPhrase);
@@ -121,6 +127,11 @@ class PostRepository extends GetxController {
             .then((value) {
           getPosts(false);
         });
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _createPostStatus(CreatePostStatus.error);
       }
       return response.body;
     } catch (error) {
@@ -150,6 +161,11 @@ class PostRepository extends GetxController {
             .then((value) {
           getPosts(false);
         });
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _postStatus(PostStatus.error);
       }
       return response.body;
     } catch (error) {
@@ -179,6 +195,11 @@ class PostRepository extends GetxController {
       if (response.statusCode == 201) {
         _postStatus(PostStatus.success);
         EasyLoading.showInfo('Success').then((value) => getPosts(false));
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _postStatus(PostStatus.error);
       }
       return response.body;
     } catch (error) {
@@ -226,6 +247,7 @@ class PostRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       });
       var json = jsonDecode(response.body);
+
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
@@ -239,6 +261,11 @@ class PostRepository extends GetxController {
         myPosts.isNotEmpty
             ? _getPostStatus(GetPostStatus.available)
             : _getPostStatus(GetPostStatus.empty);
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _getPostStatus(GetPostStatus.error);
       }
       return response.body;
     } catch (error) {
@@ -259,6 +286,7 @@ class PostRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       });
       var json = jsonDecode(response.body);
+
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
@@ -272,6 +300,11 @@ class PostRepository extends GetxController {
         posts.isNotEmpty
             ? _postStatus(PostStatus.available)
             : _postStatus(PostStatus.empty);
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _postStatus(PostStatus.error);
       }
       return response.body;
     } catch (error) {

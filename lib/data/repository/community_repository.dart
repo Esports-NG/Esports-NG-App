@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
@@ -5,6 +7,7 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -88,6 +91,11 @@ class CommunityRepository extends GetxController {
           getAllCommunity(false);
           clear();
         });
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _createCommunityStatus(CreateCommunityStatus.error);
       } else {
         _createCommunityStatus(CreateCommunityStatus.error);
         debugPrint(response.reasonPhrase);
@@ -126,6 +134,11 @@ class CommunityRepository extends GetxController {
         communitys.isNotEmpty
             ? _communityStatus(CommunityStatus.available)
             : _communityStatus(CommunityStatus.empty);
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _communityStatus(CommunityStatus.error);
       }
       return response.body;
     } catch (error) {

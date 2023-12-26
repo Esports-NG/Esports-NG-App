@@ -1,6 +1,6 @@
 import 'package:e_sport/data/repository/post_repository.dart';
-import 'package:e_sport/ui/home/post/post_details.dart';
-import 'package:e_sport/ui/home/post/post_item.dart';
+import 'package:e_sport/ui/home/post/components/post_details.dart';
+import 'package:e_sport/ui/home/post/components/post_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'error_page.dart';
-import 'no_post_page.dart';
+import 'no_item_page.dart';
 
 class MyPostWidget extends StatelessWidget {
   const MyPostWidget({
@@ -78,7 +78,7 @@ class MyPostWidget extends StatelessWidget {
                   },
                 );
               } else if (postController.getPostStatus == GetPostStatus.empty) {
-                return const NoPostPage();
+                return const NoItemPage(title: 'Post');
               } else {
                 return const ErrorPage();
               }

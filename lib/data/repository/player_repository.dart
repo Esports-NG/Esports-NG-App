@@ -6,6 +6,7 @@ import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -81,6 +82,11 @@ class PlayerRepository extends GetxController {
           getAllPlayer(false);
           clear();
         });
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _createPlayerStatus(CreatePlayerStatus.error);
       } else {
         _createPlayerStatus(CreatePlayerStatus.error);
         debugPrint(response.reasonPhrase);
@@ -118,6 +124,11 @@ class PlayerRepository extends GetxController {
         players.isNotEmpty
             ? _playerStatus(PlayerStatus.available)
             : _playerStatus(PlayerStatus.empty);
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _playerStatus(PlayerStatus.error);
       }
       return response.body;
     } catch (error) {

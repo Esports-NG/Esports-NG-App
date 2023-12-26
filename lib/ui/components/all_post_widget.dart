@@ -1,13 +1,12 @@
 import 'package:e_sport/data/repository/post_repository.dart';
-import 'package:e_sport/ui/home/post/post_details.dart';
-import 'package:e_sport/ui/home/post/post_item.dart';
+import 'package:e_sport/ui/home/post/components/post_item.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'error_page.dart';
-import 'no_post_page.dart';
+import 'no_item_page.dart';
 
 class PostWidget extends StatelessWidget {
   const PostWidget({
@@ -29,25 +28,14 @@ class PostWidget extends StatelessWidget {
           separatorBuilder: (context, index) => Gap(Get.height * 0.02),
           itemBuilder: (context, index) {
             var item = postController.allPost[index];
-            return InkWell(
-              onTap: () {
-                Get.to(
-                  () => PostDetails(
-                    item: item,
-                  ),
-                );
-              },
-              child: PostItem(item: item),
-            );
+            return PostItem(item: item);
           },
         );
       } else if (postController.postStatus == PostStatus.empty) {
-        return const NoPostPage();
+        return const NoItemPage(title: 'Post');
       } else {
         return const ErrorPage();
       }
     });
   }
 }
-
-
