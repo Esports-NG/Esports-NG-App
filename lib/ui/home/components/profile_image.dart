@@ -59,7 +59,7 @@ class OtherImage extends StatefulWidget {
 class _OtherImageState extends State<OtherImage> {
   @override
   Widget build(BuildContext context) {
-    return widget.image == null
+    return (widget.image == null)
         ? Container(
             height: widget.itemSize ?? Get.height * 0.05,
             width: widget.itemSize ?? Get.height * 0.05,

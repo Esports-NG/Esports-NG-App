@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:e_sport/data/model/account_teams_model.dart';
 import 'package:e_sport/data/model/team_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -37,21 +36,20 @@ class AccountTeamsItem extends StatelessWidget {
         children: [
           (item.cover == null)
               ? Container(
-                  height: Get.height * 0.07,
-                  width: Get.height * 0.07,
+                  height: Get.height * 0.08,
+                  width: Get.height * 0.08,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColor().primaryWhite,
-                    ),
+                    border:
+                        Border.all(color: AppColor().primaryWhite, width: 2),
                     image: const DecorationImage(
                         image: AssetImage('assets/images/png/placeholder.png'),
                         fit: BoxFit.cover),
                   ),
                 )
               : CachedNetworkImage(
-                  height: Get.height * 0.07,
-                  width: Get.height * 0.07,
+                  height: Get.height * 0.08,
+                  width: Get.height * 0.08,
                   progressIndicatorBuilder: (context, url, progress) => Center(
                     child: SizedBox(
                       height: Get.height * 0.02,
@@ -67,9 +65,8 @@ class AccountTeamsItem extends StatelessWidget {
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppColor().primaryWhite,
-                      ),
+                      border:
+                          Border.all(color: AppColor().primaryWhite, width: 2),
                       image: DecorationImage(
                           image:
                               NetworkImage('${ApiLink.imageUrl}${item.cover}'),
@@ -103,7 +100,7 @@ class AccountTeamsItem extends StatelessWidget {
                 ),
                 Divider(
                   color: AppColor().lightItemsColor.withOpacity(0.3),
-                  height: Get.height * 0.05,
+                  height: Get.height * 0.03,
                   thickness: 0.5,
                 ),
                 CustomText(

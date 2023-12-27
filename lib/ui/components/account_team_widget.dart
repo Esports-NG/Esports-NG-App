@@ -1,4 +1,5 @@
 import 'package:e_sport/data/repository/team_repository.dart';
+import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/account/account_teams/account_teams_item.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
@@ -33,13 +34,7 @@ class _AccountTeamsWidgetState extends State<AccountTeamsWidget> {
         itemBuilder: (context, index) {
           var item = teamController.allTeam[index];
           return InkWell(
-            onTap: () {
-              // Get.to(
-              //   () => PostDetails(
-              //     item: item,
-              //   ),
-              // );
-            },
+            onTap: () => Get.to(() => AccountTeamsDetail(item: item)),
             child: AccountTeamsItem(item: item),
           );
         },

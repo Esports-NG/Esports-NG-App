@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/team_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
@@ -12,9 +13,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class AccountTeamsDetail extends StatelessWidget {
-  final TeamModel item;
-  const AccountTeamsDetail({super.key, required this.item});
+class AccountCommunityDetail extends StatelessWidget {
+  final CommunityModel item;
+  const AccountCommunityDetail({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class AccountTeamsDetail extends StatelessWidget {
                 width: Get.width,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('assets/images/png/team_cover.png'),
+                      image: AssetImage('assets/images/png/community_cover.png'),
                       fit: BoxFit.cover,
                       opacity: 0.2),
                 ),
@@ -90,11 +91,7 @@ class AccountTeamsDetail extends StatelessWidget {
               color: AppColor().primaryWhite),
           Gap(Get.height * 0.01),
           CustomText(
-              title: item.members!.isEmpty
-                  ? 'No Member'
-                  : item.members!.length == 1
-                      ? '1 Member'
-                      : '${item.members!.length} Members',
+              title: 'No Member',
               weight: FontWeight.w400,
               size: Get.height * 0.017,
               fontFamily: 'GilroyRegular',

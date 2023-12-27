@@ -5,6 +5,7 @@ import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/account/account_events/create_event.dart';
+import 'package:e_sport/ui/components/account_community_widget.dart';
 import 'package:e_sport/ui/components/account_event_widget.dart';
 import 'package:e_sport/ui/components/account_team_widget.dart';
 import 'package:e_sport/ui/components/games_played_widget.dart';
@@ -128,7 +129,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                     ] else if (widget.title == 'Teams') ...[
                       const AccountTeamsWidget()
                     ] else if (widget.title == 'Communities') ...[
-                      const AccountTeamsWidget()
+                      const AccountCommunityWidget()
                     ] else if (widget.title == 'Events') ...[
                       const AccountEventsWidget()
                     ] else if (widget.title == 'Wallet') ...[

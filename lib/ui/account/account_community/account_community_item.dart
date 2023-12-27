@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -36,21 +37,20 @@ class AccountCommunityItem extends StatelessWidget {
         children: [
           (item.cover == null)
               ? Container(
-                  height: Get.height * 0.07,
-                  width: Get.height * 0.07,
+                  height: Get.height * 0.08,
+                  width: Get.height * 0.08,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColor().primaryWhite,
-                    ),
+                    border:
+                        Border.all(color: AppColor().primaryWhite, width: 2),
                     image: const DecorationImage(
                         image: AssetImage('assets/images/png/placeholder.png'),
                         fit: BoxFit.cover),
                   ),
                 )
               : CachedNetworkImage(
-                  height: Get.height * 0.07,
-                  width: Get.height * 0.07,
+                  height: Get.height * 0.08,
+                  width: Get.height * 0.08,
                   progressIndicatorBuilder: (context, url, progress) => Center(
                     child: SizedBox(
                       height: Get.height * 0.02,
@@ -66,9 +66,8 @@ class AccountCommunityItem extends StatelessWidget {
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppColor().primaryWhite,
-                      ),
+                      border:
+                          Border.all(color: AppColor().primaryWhite, width: 2),
                       image: DecorationImage(
                           image:
                               NetworkImage('${ApiLink.imageUrl}${item.cover}'),
@@ -88,25 +87,14 @@ class AccountCommunityItem extends StatelessWidget {
                   textAlign: TextAlign.start,
                   color: AppColor().greyOne,
                 ),
-                // Gap(Get.height * 0.01),
-                // CustomText(
-                //   title: item.members!.isEmpty
-                //       ? 'No member'
-                //       : item.membersCount == '1'
-                //           ? '${item.membersCount} member'
-                //           : '${item.membersCount} members',
-                //   size: 12,
-                //   fontFamily: 'GilroyRegular',
-                //   textAlign: TextAlign.start,
-                //   color: AppColor().greySix,
-                // ),
+               
                 Divider(
                   color: AppColor().lightItemsColor.withOpacity(0.3),
-                  height: Get.height * 0.05,
+                  height: Get.height * 0.03,
                   thickness: 0.5,
                 ),
                 CustomText(
-                  title: item.bio,
+                  title: item.bio!.toSentenceCase(),
                   size: 12,
                   fontFamily: 'GilroyMedium',
                   textAlign: TextAlign.start,

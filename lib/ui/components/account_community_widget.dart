@@ -1,5 +1,6 @@
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/ui/account/account_community/account_community_item.dart';
+import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
@@ -34,13 +35,7 @@ class _AccountCommunityWidgetState extends State<AccountCommunityWidget> {
         itemBuilder: (context, index) {
           var item = communityController.allCommunity[index];
           return InkWell(
-            onTap: () {
-              // Get.to(
-              //   () => PostDetails(
-              //     item: item,
-              //   ),
-              // );
-            },
+            onTap: () => Get.to(() => AccountCommunityDetail(item: item)),
             child: AccountCommunityItem(item: item),
           );
         },
