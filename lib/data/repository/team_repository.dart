@@ -134,7 +134,7 @@ class TeamRepository extends GetxController {
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
+            .then((value) => EasyLoading.showInfo('try again!'));  
         _teamStatus(TeamStatus.error);
       }
       return response.body;

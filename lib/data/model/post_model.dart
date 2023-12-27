@@ -7,12 +7,12 @@ class PostModel {
   int? likeCount;
   List<Author>? likes;
   int? viewCount;
-  List<dynamic>? views;
+  List<Author>? views;
   List<Tag>? tags;
   int? repostCount;
-  List<dynamic>? viewers;
-  dynamic image;
-  List<dynamic>? comment;
+  List<Viewer>? viewers;
+  String? image;
+  List<Comment>? comment;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -53,18 +53,20 @@ class PostModel {
         viewCount: json["view_count"],
         views: json["views"] == null
             ? []
-            : List<dynamic>.from(json["views"]!.map((x) => x)),
+            : List<Author>.from(json["views"]!.map((x) => Author.fromJson(x))),
         tags: json["tags"] == null
             ? []
             : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
         repostCount: json["repost_count"],
         viewers: json["viewers"] == null
             ? []
-            : List<dynamic>.from(json["viewers"]!.map((x) => x)),
+            : List<Viewer>.from(
+                json["viewers"]!.map((x) => Viewer.fromJson(x))),
         image: json["image"],
         comment: json["comment"] == null
             ? []
-            : List<dynamic>.from(json["comment"]!.map((x) => x)),
+            : List<Comment>.from(
+                json["comment"]!.map((x) => Comment.fromJson(x))),
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -86,16 +88,20 @@ class PostModel {
             ? []
             : List<dynamic>.from(likes!.map((x) => x.toJson())),
         "view_count": viewCount,
-        "views": views == null ? [] : List<dynamic>.from(views!.map((x) => x)),
+        "views": views == null
+            ? []
+            : List<dynamic>.from(views!.map((x) => x.toJson())),
         "tags": tags == null
             ? []
             : List<dynamic>.from(tags!.map((x) => x.toJson())),
         "repost_count": repostCount,
-        "viewers":
-            viewers == null ? [] : List<dynamic>.from(viewers!.map((x) => x)),
+        "viewers": viewers == null
+            ? []
+            : List<dynamic>.from(viewers!.map((x) => x.toJson())),
         "image": image,
-        "comment":
-            comment == null ? [] : List<dynamic>.from(comment!.map((x) => x)),
+        "comment": comment == null
+            ? []
+            : List<dynamic>.from(comment!.map((x) => x.toJson())),
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
@@ -235,6 +241,46 @@ class Purpose {
       };
 }
 
+class Comment {
+  int? id;
+  String? name;
+  String? body;
+  int? likes;
+  List<Tag>? tags;
+  dynamic image;
+
+  Comment({
+    this.id,
+    this.name,
+    this.body,
+    this.likes,
+    this.tags,
+    this.image,
+  });
+
+  factory Comment.fromJson(Map<String, dynamic> json) => Comment(
+        id: json["id"],
+        name: json["name"],
+        body: json["body"],
+        likes: json["likes"],
+        tags: json["tags"] == null
+            ? []
+            : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
+        image: json["image"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "body": body,
+        "likes": likes,
+        "tags": tags == null
+            ? []
+            : List<dynamic>.from(tags!.map((x) => x.toJson())),
+        "image": image,
+      };
+}
+
 class Tag {
   int? id;
   String? title;
@@ -252,6 +298,26 @@ class Tag {
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
+      };
+}
+
+class Viewer {
+  int? id;
+  String? name;
+
+  Viewer({
+    this.id,
+    this.name,
+  });
+
+  factory Viewer.fromJson(Map<String, dynamic> json) => Viewer(
+        id: json["id"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
       };
 }
 

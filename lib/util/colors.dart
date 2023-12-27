@@ -49,4 +49,5 @@ class AppColor {
   Color overviewContainer = const Color(0xffF7F7F7);
   Color profileBackground = const Color(0xffF1FFFE);
   Color greyGradient = const Color(0xff525252);
+  Color chatArea = const Color(0xff161C27);
 }

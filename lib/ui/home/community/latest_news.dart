@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class _LatestNewsState extends State<LatestNews> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
+        leading: GoBackButton(onPressed: () => Get.back()),
         title: CustomText(
           title: 'Latest News',
           fontFamily: 'GilroySemiBold',

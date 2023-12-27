@@ -370,13 +370,13 @@ class _PostItemState extends State<PostItem> {
                                 errorWidget: (context, url, error) => Icon(
                                     Icons.error,
                                     color: AppColor().primaryWhite),
-                                imageUrl: widget.item.parentPost!.first.image,
+                                imageUrl: widget.item.parentPost!.first.image!,
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: NetworkImage(widget
-                                            .item.parentPost!.first.image),
+                                            .item.parentPost!.first.image!),
                                         fit: BoxFit.cover),
                                   ),
                                 ),
@@ -582,22 +582,24 @@ class _PostItemState extends State<PostItem> {
                         dotSecondaryColor: AppColor().primaryColor,
                       ),
                       likeBuilder: (bool isLiked) {
-                        return widget.item.likes!
-                                .contains(authController.user!.id)
+                        return widget.item.likes!.any(
+                                (item) => item.id == authController.user!.id)
                             ? Icon(
                                 isLiked
                                     ? Icons.favorite_outline
                                     : Icons.favorite,
-                                color: AppColor().primaryWhite,
+                                color: AppColor().primaryColor,
                                 size: Get.height * 0.025)
                             : Icon(
                                 isLiked
                                     ? Icons.favorite
                                     : Icons.favorite_outline,
-                                color: AppColor().primaryWhite,
+                                color: isLiked
+                                    ? AppColor().primaryColor
+                                    : AppColor().primaryWhite,
                                 size: Get.height * 0.025);
                       },
-                      likeCount: widget.item.likes!.length,
+                      likeCount: widget.item.likeCount,
                       countBuilder: (int? count, bool isLiked, String text) {
                         var color = AppColor().primaryWhite;
                         Widget result;
@@ -630,15 +632,13 @@ class _PostItemState extends State<PostItem> {
                 ),
                 Row(
                   children: [
-                    IconButton(
-                      icon: Icon(
+                    InkWell(
+                      child: Icon(
                         Icons.sms_outlined,
                         color: AppColor().primaryWhite,
                         size: Get.height * 0.025,
                       ),
-                      onPressed: () {},
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                      onTap: () {},
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(
@@ -652,15 +652,13 @@ class _PostItemState extends State<PostItem> {
                 ),
                 Row(
                   children: [
-                    IconButton(
-                      icon: Icon(
+                    InkWell(
+                      child: Icon(
                         Icons.share_outlined,
                         color: AppColor().primaryWhite,
                         size: Get.height * 0.025,
                       ),
-                      onPressed: () {},
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                      onTap: () {},
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(

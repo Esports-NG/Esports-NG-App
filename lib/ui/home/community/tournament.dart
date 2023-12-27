@@ -1,4 +1,3 @@
-import 'package:e_sport/data/model/account_events_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';

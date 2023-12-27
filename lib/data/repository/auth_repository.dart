@@ -122,7 +122,9 @@ class AuthRepository extends GetxController {
   late final amountController = TextEditingController();
   late final cardNoController = TextEditingController();
   late final cardExpiryController = TextEditingController();
+  late final chatController = TextEditingController();
   late final cvvController = TextEditingController();
+
   DateTime? date;
 
   final _authStatus = AuthStatus.empty.obs;

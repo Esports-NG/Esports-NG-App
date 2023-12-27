@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
@@ -38,6 +39,7 @@ class _TrendingGamesState extends State<TrendingGames> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
+        leading: GoBackButton(onPressed: () => Get.back()),
         title: CustomText(
           title: 'Trending Games',
           fontFamily: 'GilroySemiBold',

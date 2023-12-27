@@ -34,8 +34,8 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                   height: Get.height * 0.15,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image:
-                            AssetImage('assets/images/png/account_header.png'),
+                        image: AssetImage(
+                            'assets/images/png/tournament_cover.png'),
                         opacity: 0.2),
                   ),
                 ),
@@ -45,12 +45,12 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                     alignment: Alignment.bottomRight,
                     children: [
                       OtherImage(
-                          itemSize: Get.height * 0.13,
+                          itemSize: Get.height * 0.1,
                           image: '${ApiLink.imageUrl}${widget.item.profile}'),
                       Positioned(
                         child: SvgPicture.asset(
                           'assets/images/svg/check_badge.svg',
-                          height: Get.height * 0.035,
+                          height: Get.height * 0.03,
                         ),
                       ),
                     ],
@@ -75,7 +75,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 ),
               ],
             ),
-            Gap(Get.height * 0.1),
+            Gap(Get.height * 0.07),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
               child: Column(

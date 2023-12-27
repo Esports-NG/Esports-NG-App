@@ -180,7 +180,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                           ),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error, color: AppColor().primaryWhite),
-                          imageUrl: widget.item.parentPost!.first.image,
+                          imageUrl: widget.item.parentPost!.first.image!,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),

@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'components/trending_community_item.dart';
+import 'components/trending_team_item.dart';
 
 class TrendingCommunity extends StatefulWidget {
   const TrendingCommunity({super.key});
@@ -38,6 +39,7 @@ class _TrendingCommunityState extends State<TrendingCommunity> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
+        leading: GoBackButton(onPressed: () => Get.back()),
         title: CustomText(
           title: 'Trending Communities',
           fontFamily: 'GilroySemiBold',
@@ -82,7 +84,7 @@ class _TrendingCommunityState extends State<TrendingCommunity> {
                   itemCount: trendingCommunitiesItems.length,
                   itemBuilder: (context, index) {
                     var item = trendingCommunitiesItems[index];
-                    return TrendingCommunityItem(item: item, index: 0);
+                    return TrendingTeamItem(item: item, index: 0);
                   }),
             ],
           ),

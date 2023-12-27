@@ -169,7 +169,7 @@ class _RepostItemState extends State<RepostItem> {
                         ),
                         errorWidget: (context, url, error) =>
                             Icon(Icons.error, color: AppColor().primaryWhite),
-                        imageUrl: widget.item.parentPost!.first.image,
+                        imageUrl: widget.item.parentPost!.first.image!,
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
@@ -177,7 +177,7 @@ class _RepostItemState extends State<RepostItem> {
                                 bottomRight: Radius.circular(10)),
                             image: DecorationImage(
                                 image: NetworkImage(
-                                    widget.item.parentPost!.first.image),
+                                    widget.item.parentPost!.first.image!),
                                 fit: BoxFit.cover),
                           ),
                         ),
