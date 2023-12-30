@@ -2,10 +2,13 @@ import 'package:e_sport/data/model/account_events_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
+import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/account_tournament_detail.dart';
 import 'package:e_sport/ui/components/error_page.dart';
 import 'package:e_sport/ui/components/no_item_page.dart';
+import 'package:e_sport/ui/home/community/components/community_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -19,7 +22,6 @@ import 'package:get/get.dart';
 import 'components/latest_news_item.dart';
 import 'components/social_event_item.dart';
 import 'components/suggested_profile_item.dart';
-import 'components/trending_community_item.dart';
 import 'components/trending_team_item.dart';
 import 'latest_news.dart';
 import 'social_event.dart';
@@ -41,7 +43,8 @@ class _CommunityPageState extends State<CommunityPage> {
   final FocusNode _searchFocusNode = FocusNode();
   int? eventType = 0;
   final eventController = Get.put(EventRepository());
-  final Controller = Get.put(CommunityRepository());
+  final communityController = Get.put(CommunityRepository());
+  final playerController = Get.put(PlayerRepository());
   @override
   void dispose() {
     _searchFocusNode.dispose();
@@ -209,9 +212,9 @@ class _CommunityPageState extends State<CommunityPage> {
                         mainAxisSpacing: 20,
                         childAspectRatio: 1 * 0.8,
                       ),
-                      itemCount: trendingGamesItems.take(2).length,
+                      itemCount: playerController.allPlayer.take(2).length,
                       itemBuilder: (context, index) {
-                        var item = trendingGamesItems[index];
+                        var item = playerController.allPlayer[index];
                         return TrendingGamesItem(item: item);
                       }),
                 ],
@@ -282,19 +285,34 @@ class _CommunityPageState extends State<CommunityPage> {
                 Gap(Get.height * 0.03),
                 SizedBox(
                   height: Get.height * 0.28,
-                  child: ListView.separated(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) =>
-                          Gap(Get.height * 0.02),
-                      itemCount: trendingCommunitiesItems.take(2).length,
-                      itemBuilder: (context, index) {
-                        var item = trendingCommunitiesItems[index];
-                        return TrendingTeamItem(item: item);
-                      }),
+                  child: (communityController.communityStatus ==
+                          CommunityStatus.loading)
+                      ? LoadingWidget(color: AppColor().primaryColor)
+                      : (communityController.communityStatus ==
+                              CommunityStatus.available)
+                          ? ListView.separated(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Get.height * 0.02),
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              separatorBuilder: (context, index) =>
+                                  Gap(Get.height * 0.02),
+                              itemCount: communityController.allCommunity
+                                  .take(2)
+                                  .length,
+                              itemBuilder: (context, index) {
+                                var item =
+                                    communityController.allCommunity[index];
+                                return InkWell(
+                                    onTap: () => Get.to(() =>
+                                        AccountCommunityDetail(item: item)),
+                                    child: CommunityItem(item: item));
+                              })
+                          : (communityController.communityStatus ==
+                                  CommunityStatus.empty)
+                              ? const NoItemPage(title: 'Communities')
+                              : const ErrorPage(),
                 ),
               ],
             ),

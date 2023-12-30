@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:change_case/change_case.dart';
-import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +9,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class TrendingGamesItem extends StatelessWidget {
-  final PlayerModel item;
-  const TrendingGamesItem({
+class CommunityItem extends StatelessWidget {
+  final CommunityModel item;
+  const CommunityItem({
     super.key,
     required this.item,
   });
@@ -18,6 +19,7 @@ class TrendingGamesItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: Get.height * 0.4,
       width: Get.width * 0.55,
       decoration: BoxDecoration(
         color: AppColor().bgDark,
@@ -30,12 +32,12 @@ class TrendingGamesItem extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              (item.profile == null)
+              (item.cover == null)
                   ? Container(
-                      height: Get.height * 0.1,
+                      height: Get.height * 0.12,
                       width: double.infinity,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
@@ -48,7 +50,7 @@ class TrendingGamesItem extends StatelessWidget {
                       ),
                     )
                   : CachedNetworkImage(
-                      height: Get.height * 0.1,
+                      height: Get.height * 0.12,
                       width: double.infinity,
                       progressIndicatorBuilder: (context, url, progress) =>
                           Center(
@@ -62,41 +64,38 @@ class TrendingGamesItem extends StatelessWidget {
                       ),
                       errorWidget: (context, url, error) =>
                           Icon(Icons.error, color: AppColor().primaryColor),
-                      imageUrl: item.profile!,
+                      imageUrl: item.cover!,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10)),
                           image: DecorationImage(
-                              image: NetworkImage(item.profile!),
+                              image: NetworkImage(item.cover!),
                               fit: BoxFit.cover),
                         ),
                       ),
                     ),
               const Spacer(),
               CustomText(
-                title: item.inGameName!.toCapitalCase(),
+                title: item.name,
                 size: 14,
                 fontFamily: 'GilroySemiBold',
                 weight: FontWeight.w400,
                 color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
               ),
               Gap(Get.height * 0.01),
               CustomText(
-                title: '@${item.inGameId}',
+                title: item.name,
                 size: 12,
                 fontFamily: 'GilroyRegular',
                 weight: FontWeight.w400,
                 color: AppColor().greySix,
               ),
-              Gap(Get.height * 0.005),
               Container(
-                padding: EdgeInsets.all(Get.height * 0.01),
-                margin: EdgeInsets.only(
-                    left: Get.height * 0.02,
-                    right: Get.height * 0.02,
-                    bottom: Get.height * 0.02),
+                padding: EdgeInsets.all(Get.height * 0.015),
+                margin: EdgeInsets.all(Get.height * 0.02),
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
@@ -113,49 +112,62 @@ class TrendingGamesItem extends StatelessWidget {
                     color: AppColor().primaryColor,
                   ),
                 ),
-              )
+              ),
             ],
           ),
           Positioned(
             top: Get.height * 0.065,
-            child: (item.player!.profile!.profilePicture == null)
-                ? Container(
-                    height: Get.height * 0.06,
-                    width: Get.height * 0.06,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: SvgPicture.asset(
-                      'assets/images/svg/people.svg',
-                    ),
-                  )
-                : CachedNetworkImage(
-                    height: Get.height * 0.06,
-                    width: Get.height * 0.06,
-                    progressIndicatorBuilder: (context, url, progress) =>
-                        Center(
-                      child: SizedBox(
-                        height: Get.height * 0.015,
-                        width: Get.height * 0.015,
-                        child: CircularProgressIndicator(
-                            color: AppColor().primaryColor,
-                            value: progress.progress),
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                (item.logo == null)
+                    ? Container(
+                        height: Get.height * 0.08,
+                        width: Get.height * 0.08,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/images/svg/people.svg',
+                        ),
+                      )
+                    : CachedNetworkImage(
+                        height: Get.height * 0.08,
+                        width: Get.height * 0.08,
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: SizedBox(
+                            height: Get.height * 0.02,
+                            width: Get.height * 0.02,
+                            child: CircularProgressIndicator(
+                                color: AppColor().primaryColor,
+                                value: progress.progress),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.error, color: AppColor().primaryColor),
+                        imageUrl: '${ApiLink.imageUrl}${item.logo}',
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color: AppColor().primaryWhite, width: 2),
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    '${ApiLink.imageUrl}${item.logo}'),
+                                fit: BoxFit.cover),
+                          ),
+                        ),
                       ),
-                    ),
-                    errorWidget: (context, url, error) =>
-                        Icon(Icons.error, color: AppColor().primaryColor),
-                    imageUrl: item.player!.profile!.profilePicture!,
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColor().primaryWhite),
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                item.player!.profile!.profilePicture!),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
+                Positioned(
+                  child: SvgPicture.asset(
+                    'assets/images/svg/check_badge.svg',
+                    height: Get.height * 0.025,
+                    width: Get.height * 0.025,
                   ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

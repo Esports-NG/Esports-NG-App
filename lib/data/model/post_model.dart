@@ -562,3 +562,30 @@ var trendingTeamsItems = [
     uName: '2,000 Members',
   ),
 ];
+
+var mediaItems = [
+  Posts(
+    image: 'assets/images/png/media1.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/media2.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/media3.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+  Posts(
+    image: 'assets/images/png/media1.png',
+    pImage: 'assets/images/png/trending-team1.png',
+    name: 'Team Levi',
+    uName: '2,000 Members',
+  ),
+];

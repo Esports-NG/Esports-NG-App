@@ -1,5 +1,5 @@
-import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -19,6 +19,7 @@ class TrendingGames extends StatefulWidget {
 
 class _TrendingGamesState extends State<TrendingGames> {
   final eventController = Get.put(EventRepository());
+  final playerController = Get.put(PlayerRepository());
   bool? isSearch = false;
   final FocusNode _searchFocusNode = FocusNode();
   @override
@@ -46,6 +47,7 @@ class _TrendingGamesState extends State<TrendingGames> {
           size: 18,
           color: AppColor().primaryWhite,
         ),
+
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
@@ -86,9 +88,9 @@ class _TrendingGamesState extends State<TrendingGames> {
                     mainAxisSpacing: 20,
                     childAspectRatio: 1 * 0.8,
                   ),
-                  itemCount: trendingGamesItems.length,
+                  itemCount: playerController.allPlayer.length,
                   itemBuilder: (context, index) {
-                    var item = trendingGamesItems[index];
+                    var item = playerController.allPlayer[index];
                     return TrendingGamesItem(item: item);
                   }),
             ],

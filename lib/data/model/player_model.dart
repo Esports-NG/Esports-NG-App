@@ -1,7 +1,18 @@
+// To parse this JSON data, do
+//
+//     final playerModel = playerModelFromJson(jsonString);
+
+import 'dart:convert';
+
+PlayerModel playerModelFromJson(String str) =>
+    PlayerModel.fromJson(json.decode(str));
+
+String playerModelToJson(PlayerModel data) => json.encode(data.toJson());
+
 class PlayerModel {
   int? id;
   Player? player;
-  String? profile;
+  dynamic profile;
   List<dynamic>? statistics;
   GamePlayed? gamePlayed;
   String? inGameId;
@@ -65,7 +76,7 @@ class GamePlayed {
   int? players;
   List<Category>? categories;
   List<GameMode>? gameModes;
-  List<int>? contributors;
+  List<Player>? contributors;
 
   GamePlayed({
     this.id,
@@ -100,7 +111,8 @@ class GamePlayed {
                 json["game_modes"]!.map((x) => GameMode.fromJson(x))),
         contributors: json["contributors"] == null
             ? []
-            : List<int>.from(json["contributors"]!.map((x) => x)),
+            : List<Player>.from(
+                json["contributors"]!.map((x) => Player.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -120,7 +132,7 @@ class GamePlayed {
             : List<dynamic>.from(gameModes!.map((x) => x.toJson())),
         "contributors": contributors == null
             ? []
-            : List<dynamic>.from(contributors!.map((x) => x)),
+            : List<dynamic>.from(contributors!.map((x) => x.toJson())),
       };
 }
 
@@ -141,30 +153,6 @@ class Category {
   Map<String, dynamic> toJson() => {
         "id": id,
         "type": type,
-      };
-}
-
-class GameMode {
-  int? id;
-  String? name;
-  String? subCategories;
-
-  GameMode({
-    this.id,
-    this.name,
-    this.subCategories,
-  });
-
-  factory GameMode.fromJson(Map<String, dynamic> json) => GameMode(
-        id: json["id"],
-        name: json["name"],
-        subCategories: json["sub_categories"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "sub_categories": subCategories,
       };
 }
 
@@ -277,5 +265,29 @@ class Purpose {
   Map<String, dynamic> toJson() => {
         "id": id,
         "purpose": purpose,
+      };
+}
+
+class GameMode {
+  int? id;
+  String? name;
+  String? subCategories;
+
+  GameMode({
+    this.id,
+    this.name,
+    this.subCategories,
+  });
+
+  factory GameMode.fromJson(Map<String, dynamic> json) => GameMode(
+        id: json["id"],
+        name: json["name"],
+        subCategories: json["sub_categories"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "sub_categories": subCategories,
       };
 }
