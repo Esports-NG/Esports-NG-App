@@ -6,9 +6,11 @@ import 'package:get/get.dart';
 
 class NoItemPage extends StatelessWidget {
   final String title;
+  final double? size;
   const NoItemPage({
     super.key,
     required this.title,
+    this.size,
   });
 
   @override
@@ -18,11 +20,11 @@ class NoItemPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Gap(Get.height * 0.1),
+          Gap(size ?? Get.height * 0.1),
           Icon(
             Icons.warning_amber,
             color: AppColor().primaryColor,
-            size: Get.height * 0.1,
+            size: size ?? Get.height * 0.1,
           ),
           Gap(Get.height * 0.02),
           CustomText(

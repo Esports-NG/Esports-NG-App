@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'error_page.dart';
+import 'games_played_details.dart';
 import 'no_item_page.dart';
 
 class GamesPlayedWidget extends StatefulWidget {
@@ -33,13 +34,7 @@ class _GamesPlayedWidgetState extends State<GamesPlayedWidget> {
         itemBuilder: (context, index) {
           var item = playerController.allPlayer[index];
           return InkWell(
-            onTap: () {
-              // Get.to(
-              //   () => PlayerDetails(
-              //     item: item,
-              //   ),
-              // );
-            },
+            onTap: () => Get.to(() => GamesPlayedDetails(item: item)),
             child: GamesPlayedItem(item: item),
           );
         },

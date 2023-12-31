@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:e_sport/data/model/games_played_model.dart';
+import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/player_model.dart';
-import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -30,15 +29,7 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Container(
-          //   height: Get.height * 0.15,
-          //   decoration: BoxDecoration(
-          //       borderRadius: const BorderRadius.only(
-          //           topLeft: Radius.circular(10),
-          //           topRight: Radius.circular(10)),
-          //       image: DecorationImage(
-          //           image: AssetImage(widget.item.image!), fit: BoxFit.cover)),
-          // ),
+        
           (widget.item.profile == null)
               ? Container(
                   height: Get.height * 0.15,
@@ -83,9 +74,8 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
             child: Column(
               children: [
                 textItem(
-                  title: 'Game Name: ',
-                  subTitle: widget.item.inGameName,
-                ),
+                    title: 'Game Name: ',
+                    subTitle: widget.item.inGameName!.toCapitalCase()),
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'Game ID: ',

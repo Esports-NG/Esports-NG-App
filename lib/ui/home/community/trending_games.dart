@@ -1,9 +1,12 @@
-import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
+import 'package:e_sport/ui/components/error_page.dart';
+import 'package:e_sport/ui/components/games_played_details.dart';
+import 'package:e_sport/ui/components/no_item_page.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -18,7 +21,6 @@ class TrendingGames extends StatefulWidget {
 }
 
 class _TrendingGamesState extends State<TrendingGames> {
-  final eventController = Get.put(EventRepository());
   final playerController = Get.put(PlayerRepository());
   bool? isSearch = false;
   final FocusNode _searchFocusNode = FocusNode();
@@ -47,7 +49,6 @@ class _TrendingGamesState extends State<TrendingGames> {
           size: 18,
           color: AppColor().primaryWhite,
         ),
-
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
@@ -64,7 +65,7 @@ class _TrendingGamesState extends State<TrendingGames> {
                     CupertinoIcons.search,
                     color: AppColor().lightItemsColor,
                   ),
-                  textEditingController: eventController.searchController,
+                  textEditingController: playerController.searchController,
                   hasText: isSearch!,
                   focusNode: _searchFocusNode,
                   onTap: handleTap,
@@ -79,20 +80,30 @@ class _TrendingGamesState extends State<TrendingGames> {
                 ),
               ),
               Gap(Get.height * 0.025),
-              GridView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 1 * 0.8,
-                  ),
-                  itemCount: playerController.allPlayer.length,
-                  itemBuilder: (context, index) {
-                    var item = playerController.allPlayer[index];
-                    return TrendingGamesItem(item: item);
-                  }),
+              (playerController.playerStatus == PlayerStatus.loading)
+                  ? LoadingWidget(color: AppColor().primaryColor)
+                  : (playerController.playerStatus == PlayerStatus.available)
+                      ? GridView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: 1 * 0.8,
+                          ),
+                          itemCount: playerController.allPlayer.length,
+                          itemBuilder: (context, index) {
+                            var item = playerController.allPlayer[index];
+                            return InkWell(
+                                onTap: () => Get.to(
+                                    () => GamesPlayedDetails(item: item)),
+                                child: TrendingGamesItem(item: item));
+                          })
+                      : (playerController.playerStatus == PlayerStatus.empty)
+                          ? const NoItemPage(title: 'Game Played')
+                          : const ErrorPage(),
             ],
           ),
         ),

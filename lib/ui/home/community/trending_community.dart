@@ -1,14 +1,17 @@
-import 'package:e_sport/data/model/post_model.dart';
-import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/ui/components/account_community_detail.dart';
+import 'package:e_sport/ui/components/error_page.dart';
+import 'package:e_sport/ui/components/no_item_page.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'components/trending_team_item.dart';
+import 'components/community_item.dart';
 
 class TrendingCommunity extends StatefulWidget {
   const TrendingCommunity({super.key});
@@ -18,7 +21,7 @@ class TrendingCommunity extends StatefulWidget {
 }
 
 class _TrendingCommunityState extends State<TrendingCommunity> {
-  final eventController = Get.put(EventRepository());
+  final communityController = Get.put(CommunityRepository());
   bool? isSearch = false;
   final FocusNode _searchFocusNode = FocusNode();
   @override
@@ -62,7 +65,7 @@ class _TrendingCommunityState extends State<TrendingCommunity> {
                     CupertinoIcons.search,
                     color: AppColor().lightItemsColor,
                   ),
-                  textEditingController: eventController.searchController,
+                  textEditingController: communityController.searchController,
                   hasText: isSearch!,
                   focusNode: _searchFocusNode,
                   onTap: handleTap,
@@ -77,15 +80,27 @@ class _TrendingCommunityState extends State<TrendingCommunity> {
                 ),
               ),
               Gap(Get.height * 0.025),
-              ListView.separated(
-                  physics: const ScrollPhysics(),
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-                  itemCount: trendingCommunitiesItems.length,
-                  itemBuilder: (context, index) {
-                    var item = trendingCommunitiesItems[index];
-                    return TrendingTeamItem(item: item, index: 0);
-                  }),
+              (communityController.communityStatus == CommunityStatus.loading)
+                  ? LoadingWidget(color: AppColor().primaryColor)
+                  : (communityController.communityStatus ==
+                          CommunityStatus.available)
+                      ? ListView.separated(
+                          physics: const ScrollPhysics(),
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) =>
+                              Gap(Get.height * 0.02),
+                          itemCount: communityController.allCommunity.length,
+                          itemBuilder: (context, index) {
+                            var item = communityController.allCommunity[index];
+                            return InkWell(
+                                onTap: () => Get.to(
+                                    () => AccountCommunityDetail(item: item)),
+                                child: AllCommunityItem(item: item));
+                          })
+                      : (communityController.communityStatus ==
+                              CommunityStatus.empty)
+                          ? const NoItemPage(title: 'Communities')
+                          : const ErrorPage(),
             ],
           ),
         ),

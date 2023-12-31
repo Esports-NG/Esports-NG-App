@@ -3,10 +3,13 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
+import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/account_tournament_detail.dart';
 import 'package:e_sport/ui/components/error_page.dart';
+import 'package:e_sport/ui/components/games_played_details.dart';
 import 'package:e_sport/ui/components/no_item_page.dart';
 import 'package:e_sport/ui/home/community/components/community_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
@@ -45,6 +48,7 @@ class _CommunityPageState extends State<CommunityPage> {
   final eventController = Get.put(EventRepository());
   final communityController = Get.put(CommunityRepository());
   final playerController = Get.put(PlayerRepository());
+  final teamController = Get.put(TeamRepository());
   @override
   void dispose() {
     _searchFocusNode.dispose();
@@ -215,7 +219,10 @@ class _CommunityPageState extends State<CommunityPage> {
                       itemCount: playerController.allPlayer.take(2).length,
                       itemBuilder: (context, index) {
                         var item = playerController.allPlayer[index];
-                        return TrendingGamesItem(item: item);
+                        return InkWell(
+                            onTap: () =>
+                                Get.to(() => GamesPlayedDetails(item: item)),
+                            child: TrendingGamesItem(item: item));
                       }),
                 ],
               ),
@@ -365,24 +372,34 @@ class _CommunityPageState extends State<CommunityPage> {
                   ),
                 ),
                 Gap(Get.height * 0.03),
-                Container(
-                  padding: EdgeInsets.only(left: Get.height * 0.02),
-                  height: Get.height * 0.28,
-                  child: ListView.separated(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) =>
-                          Gap(Get.height * 0.02),
-                      itemCount: trendingTeamsItems.take(2).length,
-                      itemBuilder: (context, index) {
-                        var item = trendingTeamsItems[index];
-                        return TrendingTeamItem(item: item);
-                      }),
-                ),
+                (teamController.teamStatus == TeamStatus.loading)
+                    ? LoadingWidget(color: AppColor().primaryColor)
+                    : (teamController.teamStatus == TeamStatus.available)
+                        ? Container(
+                            padding: EdgeInsets.only(left: Get.height * 0.02),
+                            height: Get.height * 0.28,
+                            child: ListView.separated(
+                                physics: const ScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                separatorBuilder: (context, index) =>
+                                    Gap(Get.height * 0.02),
+                                itemCount:
+                                    teamController.allTeam.take(2).length,
+                                itemBuilder: (context, index) {
+                                  var item = teamController.allTeam[index];
+                                  return InkWell(
+                                      onTap: () => Get.to(
+                                          () => AccountTeamsDetail(item: item)),
+                                      child: TrendingTeamsItem(item: item));
+                                }),
+                          )
+                        : (teamController.teamStatus == TeamStatus.empty)
+                            ? const NoItemPage(title: 'Teams')
+                            : const ErrorPage(),
               ],
             ),
-            Gap(Get.height * 0.02),
+            Gap(Get.height * 0.03),
           ],
         ),
       ),

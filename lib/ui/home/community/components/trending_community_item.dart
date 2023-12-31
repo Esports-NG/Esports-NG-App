@@ -7,9 +7,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class TrendingCommunityItem extends StatelessWidget {
+class CommunityItem extends StatelessWidget {
   final CommunityModel item;
-  const TrendingCommunityItem({
+  const CommunityItem({
     super.key,
     required this.item,
   });
@@ -65,6 +65,7 @@ class TrendingCommunityItem extends StatelessWidget {
                 color: AppColor().greySix,
               ),
               Gap(Get.height * 0.02),
+              
               Padding(
                 padding: EdgeInsets.all(Get.height * 0.02),
                 child: Container(

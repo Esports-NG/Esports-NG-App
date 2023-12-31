@@ -2,6 +2,7 @@
 
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
+import 'no_item_page.dart';
 
 class AccountCommunityDetail extends StatelessWidget {
   final CommunityModel item;
@@ -236,7 +239,7 @@ class AccountCommunityDetail extends StatelessWidget {
                   Gap(Get.height * 0.04),
                   CustomText(
                       title:
-                          'This team is made up of skilled gamers who are passionate about the Attack on Titan series.',
+                          'This team is made up of skilled gamers who are passionate\nabout the Attack on Titan series.',
                       weight: FontWeight.w400,
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyRegular',
@@ -345,6 +348,7 @@ class AccountCommunityDetail extends StatelessWidget {
                 title: 'Recent Post',
               ),
             ),
+            NoItemPage(title: 'Recent post', size: Get.height * 0.05),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -357,6 +361,7 @@ class AccountCommunityDetail extends StatelessWidget {
                 title: 'Games Covered',
               ),
             ),
+            NoItemPage(title: 'Games covered', size: Get.height * 0.05),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -369,6 +374,7 @@ class AccountCommunityDetail extends StatelessWidget {
                 title: 'Tournament',
               ),
             ),
+            NoItemPage(title: 'Tournament', size: Get.height * 0.05),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -381,6 +387,7 @@ class AccountCommunityDetail extends StatelessWidget {
                 title: 'Social Event',
               ),
             ),
+            NoItemPage(title: 'Social event', size: Get.height * 0.05),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -393,6 +400,7 @@ class AccountCommunityDetail extends StatelessWidget {
                 title: 'Community Staff',
               ),
             ),
+            NoItemPage(title: 'Community staff', size: Get.height * 0.05),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -405,6 +413,7 @@ class AccountCommunityDetail extends StatelessWidget {
                 title: 'Badges',
               ),
             ),
+            NoItemPage(title: 'Badges', size: Get.height * 0.05),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -416,6 +425,36 @@ class AccountCommunityDetail extends StatelessWidget {
                 onTap: () {},
                 title: 'Media, Links and Document',
               ),
+            ),
+            Gap(Get.height * 0.01),
+            SizedBox(
+              height: Get.height * 0.12,
+              child: ListView.separated(
+                  physics: const ScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) => Gap(Get.height * 0.01),
+                  itemCount: mediaItems.length,
+                  itemBuilder: (context, index) {
+                    var item = mediaItems[index];
+                    return Container(
+                      padding: EdgeInsets.all(Get.height * 0.02),
+                      width: Get.width * 0.25,
+                      decoration: BoxDecoration(
+                        color: AppColor().bgDark,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AppColor().greySix,
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage(item.image!),
+                          fit: BoxFit.fitWidth,
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),
+                    );
+                  }),
             ),
             Gap(Get.height * 0.04),
             Padding(

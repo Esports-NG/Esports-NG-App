@@ -31,6 +31,7 @@ class PlayerRepository extends GetxController {
   final authController = Get.put(AuthRepository());
   late final gameIdController = TextEditingController();
   late final gameNameController = TextEditingController();
+  late final searchController = TextEditingController();
 
   final Rx<List<PlayerModel>> _allPlayer = Rx([]);
   final Rx<List<PlayerModel>> _myPlayer = Rx([]);

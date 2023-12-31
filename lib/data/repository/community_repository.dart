@@ -34,6 +34,7 @@ class CommunityRepository extends GetxController {
   late final engageController = TextEditingController();
   late final gameTagController = TextEditingController();
   late final accountTypeController = TextEditingController();
+  late final searchController = TextEditingController();
 
   final Rx<List<CommunityModel>> _allCommunity = Rx([]);
   final Rx<List<CommunityModel>> _myCommunity = Rx([]);
