@@ -476,15 +476,22 @@ class _PostDetailsState extends State<PostDetails> {
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
                         ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.sms_outlined,
-                            color: AppColor().primaryWhite,
-                            size: Get.height * 0.03,
-                          ),
-                          onPressed: () {},
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.sms_outlined,
+                              color: AppColor().primaryWhite,
+                              size: Get.height * 0.025,
+                            ),
+                            Gap(Get.height * 0.005),
+                            CustomText(
+                              title: widget.item.comment!.length.toString(),
+                              size: Get.height * 0.014,
+                              fontFamily: 'GilroyBold',
+                              textAlign: TextAlign.start,
+                              color: AppColor().primaryWhite,
+                            ),
+                          ],
                         ),
                         IconButton(
                           icon: Icon(

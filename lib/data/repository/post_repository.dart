@@ -33,7 +33,6 @@ class PostRepository extends GetxController {
   final Rx<List<PostModel>> _allPost = Rx([]);
   final Rx<List<PostModel>> _myPost = Rx([]);
 
-   final Rx<PostModel> _post = Rx(null);
   List<PostModel> get allPost => _allPost.value;
   List<PostModel> get myPost => _myPost.value;
 
@@ -240,7 +239,7 @@ class PostRepository extends GetxController {
           getAllPost(false);
           getMyPost(false);
           Get.back();
-          await Get.to(() => PostDetails(item: item));
+          // await Get.to(() => PostDetails(item: item));
         });
       } else if (response.statusCode == 401) {
         authController

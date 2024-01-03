@@ -398,8 +398,7 @@ class _PostItemState extends State<PostItem> {
                             color: AppColor().primaryDark.withOpacity(0.7),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color:
-                                  AppColor().primaryColor.withOpacity(0.05),
+                              color: AppColor().primaryColor.withOpacity(0.05),
                               width: 0.5,
                             ),
                           ),
