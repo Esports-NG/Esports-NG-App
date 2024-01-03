@@ -6,6 +6,7 @@ import 'package:e_sport/data/model/other_models.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -78,23 +79,30 @@ class _PostDetailsState extends State<PostDetails> {
                                 height: Get.height * 0.05,
                                 width: Get.height * 0.05,
                               )
-                            : CachedNetworkImage(
-                                height: Get.height * 0.05,
-                                width: Get.height * 0.05,
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                                imageUrl: widget
-                                    .item.author!.profile!.profilePicture!,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: NetworkImage(widget.item.author!
-                                            .profile!.profilePicture!),
-                                        fit: BoxFit.cover),
+                            : InkWell(
+                                onTap: () => Get.to(() =>
+                                    UserDetails(item: widget.item.author!)),
+                                child: CachedNetworkImage(
+                                  height: Get.height * 0.05,
+                                  width: Get.height * 0.05,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  imageUrl: widget
+                                      .item.author!.profile!.profilePicture!,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(widget
+                                              .item
+                                              .author!
+                                              .profile!
+                                              .profilePicture!),
+                                          fit: BoxFit.cover),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -138,13 +146,13 @@ class _PostDetailsState extends State<PostDetails> {
                 CustomText(
                   title: widget.item.body,
                   size: Get.height * 0.015,
-                  fontFamily: 'GilroyRegular',
+                  fontFamily: 'GilroyBold',
                   weight: FontWeight.w500,
                   textAlign: TextAlign.start,
                   color: AppColor().primaryWhite,
                 ),
                 Gap(Get.height * 0.015),
-                (widget.item.parentPost!.isNotEmpty)
+                (widget.item.repost != null)
                     ? InkWell(
                         onTap: () {
                           debugPrint('okay');
@@ -555,7 +563,7 @@ class _PostDetailsState extends State<PostDetails> {
                                       title: item.body!,
                                       color: AppColor().primaryWhite,
                                       weight: FontWeight.w400,
-                                      fontFamily: 'GilroyMedium',
+                                      fontFamily: 'GilroyBold',
                                       size: Get.height * 0.015,
                                     ),
                                     Gap(Get.height * 0.01),
@@ -589,7 +597,7 @@ class _PostDetailsState extends State<PostDetails> {
                                     ),
                                   ],
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 LikeButton(
                                   size: Get.height * 0.025,
                                   onTap: onLikeButtonTapped,

@@ -19,7 +19,6 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
-
 import 'repost_item.dart';
 
 class RepostDetails extends StatefulWidget {
@@ -33,6 +32,27 @@ class RepostDetails extends StatefulWidget {
 class _RepostDetailsState extends State<RepostDetails> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
+
+  String timeAgo(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds} seconds ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays < 30) {
+      return '${(difference.inDays / 7).floor()} weeks ago';
+    } else if (difference.inDays < 365) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else {
+      return '${(difference.inDays / 365).floor()} years ago';
+    }
+  }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
     if (postController.postStatus != PostStatus.loading) {
@@ -70,8 +90,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      widget.item.parentPost!.first.author!.profile!
-                                  .profilePicture ==
+                      widget.item.repost!.author!.profile!.profilePicture ==
                               null
                           ? SvgPicture.asset(
                               'assets/images/svg/people.svg',
@@ -85,28 +104,33 @@ class _RepostDetailsState extends State<RepostDetails> {
                                   const CircularProgressIndicator(),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
-                              imageUrl: widget.item.parentPost!.first.author!
-                                  .profile!.profilePicture!,
+                              imageUrl: widget.item.repost!.author!.profile!
+                                  .profilePicture!,
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                      image: NetworkImage(widget
-                                          .item
-                                          .parentPost!
-                                          .first
-                                          .author!
-                                          .profile!
-                                          .profilePicture!),
+                                      image: NetworkImage(widget.item.repost!
+                                          .author!.profile!.profilePicture!),
                                       fit: BoxFit.cover),
                                 ),
                               ),
                             ),
                       Gap(Get.height * 0.01),
                       CustomText(
-                        title: widget.item.parentPost!.first.author!.fullName!
+                        title: widget.item.repost!.author!.fullName!
                             .toCapitalCase(),
+                        size: Get.height * 0.015,
+                        fontFamily: 'GilroyMedium',
+                        textAlign: TextAlign.start,
+                        color: AppColor().lightItemsColor,
+                      ),
+                      Gap(Get.height * 0.005),
+                      const SmallCircle(),
+                      Gap(Get.height * 0.005),
+                      CustomText(
+                        title: timeAgo(widget.item.repost!.createdAt!),
                         size: Get.height * 0.015,
                         fontFamily: 'GilroyMedium',
                         textAlign: TextAlign.start,
@@ -116,7 +140,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                   ),
                   Row(
                     children: [
-                      if (widget.item.parentPost!.first.author!.fullName !=
+                      if (widget.item.repost!.author!.fullName !=
                           authController.user!.fullName)
                         CustomFillButton(
                           buttonText: 'Follow',
@@ -127,7 +151,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                           isLoading: false,
                         ),
                       if (authController.user!.id ==
-                          widget.item.parentPost!.first.author!.id)
+                          widget.item.repost!.author!.id)
                         IconButton(
                           icon: Icon(
                             Icons.more_vert,
@@ -143,9 +167,11 @@ class _RepostDetailsState extends State<RepostDetails> {
               ),
               Gap(Get.height * 0.015),
               CustomText(
-                title: widget.item.parentPost!.first.body,
+                title: widget.item.repost == null
+                    ? widget.item.body
+                    : widget.item.repost!.body,
                 size: Get.height * 0.015,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'GilroyBold',
                 weight: FontWeight.w500,
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
@@ -153,43 +179,90 @@ class _RepostDetailsState extends State<RepostDetails> {
               Gap(Get.height * 0.015),
               Stack(
                 children: [
-                  widget.item.parentPost!.first.image == null
+                  widget.item.repost == null
                       ? Container(
-                          height: Get.height * 0.25,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: const DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/png/placeholder.png'),
-                                fit: BoxFit.cover),
-                          ),
+                          child: widget.item.image == null
+                              ? Container(
+                                  height: Get.height * 0.25,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: const DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/png/placeholder.png'),
+                                        fit: BoxFit.cover),
+                                  ),
+                                )
+                              : CachedNetworkImage(
+                                  height: Get.height * 0.25,
+                                  width: double.infinity,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Center(
+                                    child: SizedBox(
+                                      height: Get.height * 0.05,
+                                      width: Get.height * 0.05,
+                                      child: CircularProgressIndicator(
+                                          color: AppColor().primaryWhite,
+                                          value: progress.progress),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(
+                                      Icons.error,
+                                      color: AppColor().primaryWhite),
+                                  imageUrl: widget.item.image!,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                          image:
+                                              NetworkImage(widget.item.image!),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                ),
                         )
-                      : CachedNetworkImage(
-                          height: Get.height * 0.25,
-                          width: double.infinity,
-                          progressIndicatorBuilder: (context, url, progress) =>
-                              Center(
-                            child: SizedBox(
-                              height: Get.height * 0.05,
-                              width: Get.height * 0.05,
-                              child: CircularProgressIndicator(
-                                  color: AppColor().primaryWhite,
-                                  value: progress.progress),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error, color: AppColor().primaryWhite),
-                          imageUrl: widget.item.parentPost!.first.image!,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      widget.item.parentPost!.first.image!),
-                                  fit: BoxFit.cover),
-                            ),
-                          ),
+                      : Container(
+                          child: widget.item.repost!.image == null
+                              ? Container(
+                                  height: Get.height * 0.25,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: const DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/png/placeholder.png'),
+                                        fit: BoxFit.cover),
+                                  ),
+                                )
+                              : CachedNetworkImage(
+                                  height: Get.height * 0.25,
+                                  width: double.infinity,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Center(
+                                    child: SizedBox(
+                                      height: Get.height * 0.05,
+                                      width: Get.height * 0.05,
+                                      child: CircularProgressIndicator(
+                                          color: AppColor().primaryWhite,
+                                          value: progress.progress),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(
+                                      Icons.error,
+                                      color: AppColor().primaryWhite),
+                                  imageUrl: widget.item.repost!.image!,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              widget.item.repost!.image!),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                ),
                         ),
                   Positioned.fill(
                     left: Get.height * 0.02,
@@ -200,12 +273,11 @@ class _RepostDetailsState extends State<RepostDetails> {
                       child: ListView.separated(
                           padding: EdgeInsets.zero,
                           scrollDirection: Axis.horizontal,
-                          itemCount: widget.item.parentPost!.first.tags!.length,
+                          itemCount: widget.item.tags!.length,
                           separatorBuilder: (context, index) =>
                               Gap(Get.height * 0.01),
                           itemBuilder: (context, index) {
-                            var items =
-                                widget.item.parentPost!.first.tags![index];
+                            var items = widget.item.tags![index];
                             return Container(
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(

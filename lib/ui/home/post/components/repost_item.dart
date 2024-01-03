@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -70,39 +71,43 @@ class _RepostItemState extends State<RepostItem> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    (widget.item.parentPost!.first.author!.profile!
-                                .profilePicture ==
+                    (widget.item.repost!.author!.profile!.profilePicture ==
                             null)
                         ? SvgPicture.asset(
                             'assets/images/svg/people.svg',
                             height: Get.height * 0.035,
                             width: Get.height * 0.035,
                           )
-                        : CachedNetworkImage(
-                            height: Get.height * 0.035,
-                            width: Get.height * 0.035,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            imageUrl: widget.item.parentPost!.first.author!
-                                .profile!.profilePicture!,
-                            imageBuilder: (context, imageProvider) => Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                      widget.item.parentPost!.first.author!
-                                          .profile!.profilePicture!,
-                                    ),
-                                    fit: BoxFit.cover),
+                        : InkWell(
+                            onTap: () => Get.to(() =>
+                                UserDetails(item: widget.item.repost!.author!)),
+                            child: CachedNetworkImage(
+                              height: Get.height * 0.035,
+                              width: Get.height * 0.035,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                              imageUrl: widget.item.repost!.author!.profile!
+                                  .profilePicture!,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                        widget.item.repost!.author!.profile!
+                                            .profilePicture!,
+                                      ),
+                                      fit: BoxFit.cover),
+                                ),
                               ),
                             ),
                           ),
                     Gap(Get.height * 0.01),
                     CustomText(
-                      title: widget.item.parentPost!.first.author!.fullName!
-                          .toCapitalCase(),
+                      title:
+                          widget.item.repost!.author!.fullName!.toCapitalCase(),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -126,9 +131,9 @@ class _RepostItemState extends State<RepostItem> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: CustomText(
-              title: widget.item.parentPost!.isEmpty
+              title: widget.item.repost == null
                   ? widget.item.body!.toUpperFirstCase()
-                  : widget.item.parentPost!.first.body!.toUpperFirstCase(),
+                  : widget.item.repost!.body!.toUpperFirstCase(),
               size: Get.height * 0.015,
               fontFamily: 'GilroyBold',
               textAlign: TextAlign.start,
@@ -140,7 +145,7 @@ class _RepostItemState extends State<RepostItem> {
             alignment: Alignment.center,
             children: [
               Container(
-                child: widget.item.parentPost!.first.image == null
+                child: widget.item.repost!.image == null
                     ? Container(
                         height: Get.height * 0.25,
                         width: double.infinity,
@@ -169,15 +174,14 @@ class _RepostItemState extends State<RepostItem> {
                         ),
                         errorWidget: (context, url, error) =>
                             Icon(Icons.error, color: AppColor().primaryWhite),
-                        imageUrl: widget.item.parentPost!.first.image!,
+                        imageUrl: widget.item.repost!.image!,
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(10),
                                 bottomRight: Radius.circular(10)),
                             image: DecorationImage(
-                                image: NetworkImage(
-                                    widget.item.parentPost!.first.image!),
+                                image: NetworkImage(widget.item.repost!.image!),
                                 fit: BoxFit.cover),
                           ),
                         ),

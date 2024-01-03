@@ -1,7 +1,7 @@
 class PostModel {
   int? id;
   Author? author;
-  List<PostModel>? parentPost;
+  PostModel? repost;
   dynamic community;
   String? body, iTags, iViewers;
   int? likeCount;
@@ -19,7 +19,7 @@ class PostModel {
   PostModel({
     this.id,
     this.author,
-    this.parentPost,
+    this.repost,
     this.community,
     this.body,
     this.iTags,
@@ -40,10 +40,8 @@ class PostModel {
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         id: json["id"],
         author: json["author"] == null ? null : Author.fromJson(json["author"]),
-        parentPost: json["parent_post"] == null
-            ? []
-            : List<PostModel>.from(
-                json["parent_post"]!.map((x) => PostModel.fromJson(x))),
+        repost:
+            json["repost"] == null ? null : PostModel.fromJson(json['repost']),
         community: json["community"],
         body: json["body"],
         likeCount: json["like_count"],
@@ -78,9 +76,7 @@ class PostModel {
   Map<String, dynamic> toJson() => {
         "id": id,
         "author": author?.toJson(),
-        "parent_post": parentPost == null
-            ? []
-            : List<dynamic>.from(parentPost!.map((x) => x.toJson())),
+        "repost": repost?.toJson(),
         "community": community,
         "body": body,
         "like_count": likeCount,

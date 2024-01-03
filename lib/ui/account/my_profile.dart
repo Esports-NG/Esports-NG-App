@@ -33,7 +33,7 @@ class _MyProfileState extends State<MyProfile> {
   final FocusNode _stateFocusNode = FocusNode();
   final FocusNode _phoneFocusNode = FocusNode();
   final FocusNode _genderFocusNode = FocusNode();
-  final FocusNode _dobFocusNode = FocusNode();
+  final FocusNode _bioFocusNode = FocusNode();
   final FocusNode _referralFocusNode = FocusNode();
   bool isAlias = false,
       isEmail = false,
@@ -43,7 +43,7 @@ class _MyProfileState extends State<MyProfile> {
       isState = false,
       isPhone = false,
       isGender = false,
-      isDob = false,
+      isBio = false,
       isReferral = false;
 
   @override
@@ -65,7 +65,7 @@ class _MyProfileState extends State<MyProfile> {
     _stateFocusNode.dispose();
     _phoneFocusNode.dispose();
     _genderFocusNode.dispose();
-    _dobFocusNode.dispose();
+    _bioFocusNode.dispose();
     _referralFocusNode.dispose();
     super.dispose();
   }
@@ -103,9 +103,9 @@ class _MyProfileState extends State<MyProfile> {
       setState(() {
         isGender = true;
       });
-    } else if (title == 'dob') {
+    } else if (title == 'bio') {
       setState(() {
-        isDob = true;
+        isBio = true;
       });
     } else {
       setState(() {
@@ -143,6 +143,8 @@ class _MyProfileState extends State<MyProfile> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      debugPrint(
+          'username: ${authController.user?.userName ?? 'yourusername'}');
       return Scaffold(
         backgroundColor: AppColor().primaryBackGroundColor,
         body: Padding(
@@ -174,7 +176,7 @@ class _MyProfileState extends State<MyProfile> {
                     alignment: Alignment.bottomRight,
                     children: [
                       authController.userImage == null
-                          ? ProfileImage(
+                          ? OtherImage(
                               itemSize: Get.height * 0.13,
                               image:
                                   authController.user!.profile!.profilePicture)
@@ -271,7 +273,7 @@ class _MyProfileState extends State<MyProfile> {
                     ],
                   ),
                 ),
-                Gap(Get.height * 0.05),
+                Gap(Get.height * 0.02),
                 Form(
                   key: formKey,
                   child: Column(
@@ -384,6 +386,27 @@ class _MyProfileState extends State<MyProfile> {
                         keyType: TextInputType.phone,
                         pretext: authController.countryCodeController.text,
                         validate: Validator.isPhone,
+                      ),
+                      Gap(Get.height * 0.02),
+                      CustomTextField(
+                        hint: "Bio",
+                        // textEditingController: authController,
+                        maxLines: 3,
+                        hasText: isBio,
+                        focusNode: _bioFocusNode,
+                        onTap: () {
+                          handleTap('bio');
+                        },
+                        onSubmited: (_) {
+                          _bioFocusNode.unfocus();
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            isBio = value.isNotEmpty;
+                          });
+                        },
+                        keyType: TextInputType.multiline,
+                        validate: Validator.isName,
                       ),
                       Gap(Get.height * 0.05),
                       Obx(() {

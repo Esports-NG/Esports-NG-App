@@ -29,6 +29,7 @@ var accountItem = [
   CategoryItem(title: 'Events'),
   CategoryItem(title: 'Wallet'),
   CategoryItem(title: 'Referrals'),
+  CategoryItem(title: 'Ads'),
   CategoryItem(title: 'Logout'),
 ];
 

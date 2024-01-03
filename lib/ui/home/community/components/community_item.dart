@@ -146,15 +146,14 @@ class CommunityItem extends StatelessWidget {
                         ),
                         errorWidget: (context, url, error) =>
                             Icon(Icons.error, color: AppColor().primaryColor),
-                        imageUrl: '${ApiLink.imageUrl}${item.logo}',
+                        imageUrl: item.logo!,
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
                                 color: AppColor().primaryWhite, width: 2),
                             image: DecorationImage(
-                                image: NetworkImage(
-                                    '${ApiLink.imageUrl}${item.logo}'),
+                                image: NetworkImage(item.logo!),
                                 fit: BoxFit.cover),
                           ),
                         ),

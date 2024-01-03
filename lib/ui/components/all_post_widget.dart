@@ -1,4 +1,5 @@
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:e_sport/ui/home/post/components/post_item.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
@@ -28,7 +29,9 @@ class PostWidget extends StatelessWidget {
           separatorBuilder: (context, index) => Gap(Get.height * 0.02),
           itemBuilder: (context, index) {
             var item = postController.allPost[index];
-            return PostItem(item: item);
+            return InkWell(
+                onTap: () => Get.to(() => PostDetails(item: item)),
+                child: PostItem(item: item));
           },
         );
       } else if (postController.postStatus == PostStatus.empty) {
