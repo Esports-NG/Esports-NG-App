@@ -47,25 +47,21 @@ class AccountCommunityDetail extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      item.cover == null
+                      item.logo == null
                           ? Container(
                               height: Get.height * 0.1,
                               width: Get.height * 0.1,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
+                              decoration:
+                                  const BoxDecoration(shape: BoxShape.circle),
                               child: SvgPicture.asset(
-                                'assets/images/svg/people.svg',
-                              ),
+                                  'assets/images/svg/people.svg'),
                             )
                           : OtherImage(
-                              itemSize: Get.height * 0.1,
-                              image: '${ApiLink.imageUrl}${item.cover}'),
+                              itemSize: Get.height * 0.1, image: item.logo),
                       Positioned(
                         child: SvgPicture.asset(
-                          'assets/images/svg/check_badge.svg',
-                          height: Get.height * 0.03,
-                        ),
+                            'assets/images/svg/check_badge.svg',
+                            height: Get.height * 0.03),
                       ),
                     ],
                   ),

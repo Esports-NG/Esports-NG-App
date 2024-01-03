@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
+import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +32,8 @@ class PostRepository extends GetxController {
 
   final Rx<List<PostModel>> _allPost = Rx([]);
   final Rx<List<PostModel>> _myPost = Rx([]);
+
+   final Rx<PostModel> _post = Rx(null);
   List<PostModel> get allPost => _allPost.value;
   List<PostModel> get myPost => _myPost.value;
 
@@ -210,12 +213,56 @@ class PostRepository extends GetxController {
     }
   }
 
+  Future commentOnPost(int postId, PostModel item) async {
+    try {
+      EasyLoading.show(status: 'commenting...');
+      var body = {
+        "name": authController.user!.fullName,
+        "body": authController.chatController.text.trim(),
+        "itags": ['community']
+      };
+      _postStatus(PostStatus.loading);
+      var response = await http.post(
+        Uri.parse("${ApiLink.post}$postId/comment/"),
+        body: jsonEncode(body),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+
+      debugPrint(response.body);
+      debugPrint(response.statusCode.toString());
+      if (response.statusCode == 201) {
+        _postStatus(PostStatus.success);
+
+        EasyLoading.showInfo('Success').then((value) async {
+          getAllPost(false);
+          getMyPost(false);
+          Get.back();
+          await Get.to(() => PostDetails(item: item));
+        });
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _postStatus(PostStatus.error);
+      }
+      return response.body;
+    } catch (error) {
+      _postStatus(PostStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("Repost error: ${error.toString()}");
+      handleError(error);
+    }
+  }
+
   Future<bool> likePost(int postId) async {
     _likePostStatus(LikePostStatus.loading);
     try {
       debugPrint('liking post...');
       var response = await http.post(
-        Uri.parse('${ApiLink.likePost}$postId/'),
+        Uri.parse('${ApiLink.post}$postId/like/'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": 'JWT ${authController.token}'
