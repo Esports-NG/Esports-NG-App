@@ -82,6 +82,13 @@ enum UserTransactionStatus {
   success,
 }
 
+enum FollowStatus {
+  empty,
+  loading,
+  error,
+  success,
+}
+
 enum AuthStatus {
   loading,
   authenticated,
@@ -116,6 +123,7 @@ class AuthRepository extends GetxController {
   late final referralController = TextEditingController();
   late final passwordController = TextEditingController();
   late final confirmPasswordController = TextEditingController();
+  late final commentController = TextEditingController();
   late final accountTypeController = TextEditingController();
   late final otpPin = TextEditingController();
   late final searchController = TextEditingController();
@@ -137,6 +145,7 @@ class AuthRepository extends GetxController {
   final _changePasswordStatus = ChangePasswordStatus.empty.obs;
   final _deliveryAddressStatus = DeliveryAddressStatus.empty.obs;
   final _userTransactionStatus = UserTransactionStatus.empty.obs;
+  final _followStatus = FollowStatus.empty.obs;
 
   AuthStatus get authStatus => _authStatus.value;
   SignUpStatus get signUpStatus => _signUpStatus.value;
@@ -150,6 +159,7 @@ class AuthRepository extends GetxController {
   OtpForgotVerifyStatus get otpForgotVerifyStatus =>
       _otpForgotVerifyStatus.value;
   UserTransactionStatus get transactionStatus => _userTransactionStatus.value;
+  FollowStatus get followStatus => _followStatus.value;
 
   final status = AuthStatus.uninitialized.obs;
 
@@ -164,6 +174,7 @@ class AuthRepository extends GetxController {
   RxBool mOnSelect = false.obs;
   RxBool mGetCountryCode = false.obs;
   RxBool mNetworkAvailable = false.obs;
+  RxBool isLoading = false.obs;
 
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;
@@ -195,6 +206,10 @@ class AuthRepository extends GetxController {
         _authStatus(AuthStatus.unAuthenticated);
       }
     }
+  }
+
+  void setLoading(bool value) {
+    isLoading.value = value;
   }
 
   Future signUp(UserModel user, BuildContext context) async {
@@ -422,6 +437,32 @@ class AuthRepository extends GetxController {
       EasyLoading.dismiss();
       _updateProfileStatus(UpdateProfileStatus.error);
       debugPrint("Error occurred ${error.toString()}");
+      getError(error);
+    }
+  }
+
+  Future followUser(String title, userId) async {
+    _followStatus(FollowStatus.loading);
+    try {
+      debugPrint('following user...');
+      var response = await http.post(
+        Uri.parse('${ApiLink.followUser}$title/$userId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        _followStatus(FollowStatus.success);
+      } else {}
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      debugPrint("follow user error: $error");
       getError(error);
     }
   }

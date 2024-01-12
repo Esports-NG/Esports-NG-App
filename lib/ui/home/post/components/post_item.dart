@@ -301,16 +301,7 @@ class _PostItemState extends State<PostItem> {
               (widget.item.repost == null)
                   ? Container(
                       child: widget.item.image == null
-                          ? Container(
-                              height: Get.height * 0.25,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/png/placeholder.png'),
-                                    fit: BoxFit.cover),
-                              ),
-                            )
+                          ? Container()
                           : CachedNetworkImage(
                               height: Get.height * 0.25,
                               width: double.infinity,
@@ -340,16 +331,7 @@ class _PostItemState extends State<PostItem> {
                     )
                   : Container(
                       child: widget.item.repost!.image == null
-                          ? Container(
-                              height: Get.height * 0.25,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/png/placeholder.png'),
-                                    fit: BoxFit.cover),
-                              ),
-                            )
+                          ? Container()
                           : CachedNetworkImage(
                               height: Get.height * 0.25,
                               width: double.infinity,

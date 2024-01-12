@@ -146,19 +146,7 @@ class _RepostItemState extends State<RepostItem> {
             children: [
               Container(
                 child: widget.item.repost!.image == null
-                    ? Container(
-                        height: Get.height * 0.25,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/images/png/placeholder.png'),
-                              fit: BoxFit.cover),
-                        ),
-                      )
+                    ? Container()
                     : CachedNetworkImage(
                         height: Get.height * 0.25,
                         width: double.infinity,

@@ -14,6 +14,7 @@ import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -35,6 +36,8 @@ class PostDetails extends StatefulWidget {
 class _PostDetailsState extends State<PostDetails> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
+  static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isRepostActive = false;
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
     if (postController.postStatus != PostStatus.loading) {
@@ -49,7 +52,13 @@ class _PostDetailsState extends State<PostDetails> {
       appBar: AppBar(
         backgroundColor: AppColor().primaryBackGroundColor,
         elevation: 0,
-        leading: GoBackButton(onPressed: () => Get.back()),
+        leading: GoBackButton(onPressed: () {
+          Get.back();
+          setState(() {
+            isRepostActive = false;
+            authController.commentController.clear();
+          });
+        }),
         centerTitle: true,
         title: CustomText(
           title: 'Posts',
@@ -68,93 +77,158 @@ class _PostDetailsState extends State<PostDetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            widget.item.author!.profile!.profilePicture == null
-                                ? SvgPicture.asset(
-                                    'assets/images/svg/people.svg',
-                                    height: Get.height * 0.05,
-                                    width: Get.height * 0.05,
-                                  )
-                                : InkWell(
-                                    onTap: () => Get.to(() =>
-                                        UserDetails(item: widget.item.author!)),
-                                    child: CachedNetworkImage(
-                                      height: Get.height * 0.05,
-                                      width: Get.height * 0.05,
-                                      placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                      imageUrl: widget.item.author!.profile!
-                                          .profilePicture!,
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: NetworkImage(widget
-                                                  .item
-                                                  .author!
-                                                  .profile!
-                                                  .profilePicture!),
-                                              fit: BoxFit.cover),
-                                        ),
-                                      ),
+                    isRepostActive == true
+                        ? Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        isRepostActive = false;
+                                        authController.commentController
+                                            .clear();
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.close,
+                                      color: AppColor().primaryWhite,
                                     ),
                                   ),
-                            Gap(Get.height * 0.01),
-                            CustomText(
-                              title:
-                                  widget.item.author!.fullName!.toCapitalCase(),
-                              size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
-                              textAlign: TextAlign.start,
-                              color: AppColor().lightItemsColor,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            if (widget.item.author!.fullName !=
-                                authController.user!.fullName)
-                              CustomFillButton(
-                                buttonText: 'Follow',
-                                textSize: Get.height * 0.015,
-                                width: Get.width * 0.25,
-                                height: Get.height * 0.04,
-                                onTap: () {},
-                                isLoading: false,
+                                  CustomFillButton(
+                                    buttonText: 'Repost',
+                                    textSize: Get.height * 0.015,
+                                    width: Get.width * 0.25,
+                                    height: Get.height * 0.04,
+                                    onTap: () {
+                                      if (formKey.currentState!.validate()) {
+                                        postController
+                                            .rePost(widget.item.id!)
+                                            .then((value) {
+                                          setState(() {
+                                            isRepostActive = false;
+                                            authController.commentController
+                                                .clear();
+                                          });
+                                        });
+                                      }
+                                    },
+                                    isLoading: false,
+                                  ),
+                                ],
                               ),
-                            if (authController.user!.id ==
-                                widget.item.author!.id)
-                              IconButton(
-                                icon: Icon(
-                                  Icons.more_vert,
-                                  color: AppColor().primaryWhite,
+                              Form(
+                                key: formKey,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                child: CustomTextField(
+                                  hint: "Add your comment",
+                                  textEditingController:
+                                      authController.commentController,
+                                  fillColor: AppColor().primaryBackGroundColor,
+                                  colors: AppColor().primaryBackGroundColor,
+                                  keyType: TextInputType.multiline,
+                                  minLines: 1,
+                                  maxLines: 5,
+                                  keyAction: TextInputAction.newline,
+                                  validate: Validator.isName,
                                 ),
-                                onPressed: () {},
-                                padding:
-                                    EdgeInsets.only(left: Get.height * 0.01),
-                                constraints: const BoxConstraints(),
+                              )
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  widget.item.author!.profile!.profilePicture ==
+                                          null
+                                      ? SvgPicture.asset(
+                                          'assets/images/svg/people.svg',
+                                          height: Get.height * 0.05,
+                                          width: Get.height * 0.05,
+                                        )
+                                      : InkWell(
+                                          onTap: () => Get.to(() => UserDetails(
+                                              item: widget.item.author!)),
+                                          child: CachedNetworkImage(
+                                            height: Get.height * 0.05,
+                                            width: Get.height * 0.05,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                            imageUrl: widget.item.author!
+                                                .profile!.profilePicture!,
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    image: NetworkImage(widget
+                                                        .item
+                                                        .author!
+                                                        .profile!
+                                                        .profilePicture!),
+                                                    fit: BoxFit.cover),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                  Gap(Get.height * 0.01),
+                                  CustomText(
+                                    title: widget.item.author!.fullName!
+                                        .toCapitalCase(),
+                                    size: Get.height * 0.015,
+                                    fontFamily: 'GilroyMedium',
+                                    textAlign: TextAlign.start,
+                                    color: AppColor().lightItemsColor,
+                                  ),
+                                ],
                               ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Gap(Get.height * 0.015),
-                    CustomText(
-                      title: widget.item.body,
-                      size: Get.height * 0.015,
-                      fontFamily: 'GilroyBold',
-                      weight: FontWeight.w500,
-                      textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
-                    ),
+                              Row(
+                                children: [
+                                  if (widget.item.author!.fullName !=
+                                      authController.user!.fullName)
+                                    CustomFillButton(
+                                      buttonText: 'Follow',
+                                      textSize: Get.height * 0.015,
+                                      width: Get.width * 0.25,
+                                      height: Get.height * 0.04,
+                                      onTap: () {},
+                                      isLoading: false,
+                                    ),
+                                  if (authController.user!.id ==
+                                      widget.item.author!.id)
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.more_vert,
+                                        color: AppColor().primaryWhite,
+                                      ),
+                                      onPressed: () {},
+                                      padding: EdgeInsets.only(
+                                          left: Get.height * 0.01),
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                ],
+                              ),
+                            ],
+                          ),
+                    if (isRepostActive == false) Gap(Get.height * 0.015),
+                    if (isRepostActive == false)
+                      CustomText(
+                        title: widget.item.body,
+                        size: Get.height * 0.015,
+                        fontFamily: 'GilroyBold',
+                        weight: FontWeight.w500,
+                        textAlign: TextAlign.start,
+                        color: AppColor().primaryWhite,
+                      ),
                     Gap(Get.height * 0.015),
                     (widget.item.repost != null)
                         ? InkWell(
@@ -166,17 +240,7 @@ class _PostDetailsState extends State<PostDetails> {
                         : Stack(
                             children: [
                               widget.item.image == null
-                                  ? Container(
-                                      height: Get.height * 0.25,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: const DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/png/placeholder.png'),
-                                            fit: BoxFit.cover),
-                                      ),
-                                    )
+                                  ? Container()
                                   : CachedNetworkImage(
                                       height: Get.height * 0.25,
                                       width: double.infinity,
@@ -446,7 +510,11 @@ class _PostDetailsState extends State<PostDetails> {
                                                 if (index == 0) {
                                                   postController
                                                       .rePost(widget.item.id!);
-                                                } else {}
+                                                } else {
+                                                  setState(() {
+                                                    isRepostActive = true;
+                                                  });
+                                                }
                                                 Get.back();
                                               },
                                               child: Row(
@@ -645,65 +713,70 @@ class _PostDetailsState extends State<PostDetails> {
               ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.all(Get.height * 0.02),
-            color: AppColor().chatArea,
-            child: Row(
-              children: [
-                OtherImage(
-                  itemSize: Get.height * 0.03,
-                  image: authController.user!.profile!.profilePicture,
-                ),
-                Gap(Get.height * 0.01),
-                Expanded(
-                    child: ChatCustomTextField(
-                  textEditingController: authController.chatController,
-                  onSubmited: (_) {
-                    if (authController.chatController.text != '') {
-                      postController
-                          .commentOnPost(widget.item.id!, widget.item)
-                          .then((value) {
-                        if (postController.postStatus == PostStatus.success) {
-                          authController.chatController.clear();
-                        }
-                      });
-                    }
-                  },
-                  decoration: InputDecoration(
-                    hintText: "Leave your thoughts here...",
-                    fillColor: Colors.transparent,
-                    filled: true,
-                    isDense: true,
-                    border: InputBorder.none,
-                    labelStyle: TextStyle(
-                      color: AppColor().primaryWhite,
-                      fontSize: 13,
-                      fontFamily: 'GilroyRegular',
-                      fontWeight: FontWeight.w400,
-                    ),
-                    hintStyle: TextStyle(
-                      color: AppColor().primaryWhite,
-                      fontSize: 13,
-                      fontFamily: 'GilroyRegular',
-                      fontWeight: FontWeight.w400,
-                    ),
+          if (isRepostActive == false)
+            Container(
+              padding: EdgeInsets.all(Get.height * 0.02),
+              color: AppColor().chatArea,
+              child: Row(
+                children: [
+                  OtherImage(
+                    itemSize: Get.height * 0.03,
+                    image: authController.user!.profile!.profilePicture,
                   ),
-                )),
-                Gap(Get.height * 0.01),
-                CustomText(
-                  title: '@',
-                  size: 23,
-                  fontFamily: 'GilroyRegular',
-                  weight: FontWeight.w600,
-                  textAlign: TextAlign.start,
-                  color: AppColor().primaryWhite,
-                ),
-                Gap(Get.height * 0.02),
-                Icon(Icons.photo_camera_outlined,
-                    color: AppColor().primaryWhite)
-              ],
-            ),
-          )
+                  Gap(Get.height * 0.01),
+                  Expanded(
+                      child: ChatCustomTextField(
+                    textEditingController: authController.chatController,
+                    decoration: InputDecoration(
+                      hintText: "Leave your thoughts here...",
+                      fillColor: Colors.transparent,
+                      filled: true,
+                      isDense: true,
+                      border: InputBorder.none,
+                      labelStyle: TextStyle(
+                        color: AppColor().primaryWhite,
+                        fontSize: 13,
+                        fontFamily: 'GilroyRegular',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintStyle: TextStyle(
+                        color: AppColor().primaryWhite,
+                        fontSize: 13,
+                        fontFamily: 'GilroyRegular',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  )),
+                  Gap(Get.height * 0.01),
+                  InkWell(
+                    onTap: () {
+                      if (authController.chatController.text != '') {
+                        postController
+                            .commentOnPost(widget.item.id!, widget.item)
+                            .then((value) {
+                          if (postController.postStatus == PostStatus.success) {
+                            authController.chatController.clear();
+                          }
+                        });
+                      }
+                    },
+                    child: Icon(Icons.send, color: AppColor().primaryColor),
+                  ),
+                  Gap(Get.height * 0.015),
+                  CustomText(
+                    title: '@',
+                    size: 23,
+                    fontFamily: 'GilroyRegular',
+                    weight: FontWeight.w600,
+                    textAlign: TextAlign.start,
+                    color: AppColor().primaryWhite,
+                  ),
+                  Gap(Get.height * 0.015),
+                  Icon(Icons.photo_camera_outlined,
+                      color: AppColor().primaryWhite)
+                ],
+              ),
+            )
         ],
       ),
     );

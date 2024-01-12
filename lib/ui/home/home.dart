@@ -8,6 +8,7 @@ import 'package:e_sport/ui/notification/notification.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -42,115 +43,128 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor().primaryBackGroundColor,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          return Future.delayed(const Duration(seconds: 2), () {
-            postController.getAllPost(false);
-          });
-        },
-        child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Padding(
-              padding: EdgeInsets.all(Get.height * 0.02),
-              child: Column(
-                children: [
-                  Gap(Get.height * 0.06),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OtherImage(
-                          image: authController.user!.profile!.profilePicture),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Get.to(() => const Messages());
-                            },
-                            child: Badge(
-                              label: CustomText(
-                                title: '4',
-                                weight: FontWeight.w500,
-                                size: 10,
-                                fontFamily: 'GilroyBold',
-                                color: AppColor().primaryWhite,
-                              ),
-                              child: SvgPicture.asset(
-                                'assets/images/svg/chat.svg',
-                                height: Get.height * 0.025,
-                              ),
+    return Obx(() {
+      return Scaffold(
+        backgroundColor: AppColor().primaryBackGroundColor,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            return Future.delayed(const Duration(seconds: 2), () {
+              postController.getAllPost(false);
+            });
+          },
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Padding(
+                    padding: EdgeInsets.all(Get.height * 0.02),
+                    child: Column(
+                      children: [
+                        Gap(Get.height * 0.06),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OtherImage(
+                                image: authController
+                                    .user!.profile!.profilePicture),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(() => const Messages());
+                                  },
+                                  child: Badge(
+                                    label: CustomText(
+                                      title: '4',
+                                      weight: FontWeight.w500,
+                                      size: 10,
+                                      fontFamily: 'GilroyBold',
+                                      color: AppColor().primaryWhite,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/images/svg/chat.svg',
+                                      height: Get.height * 0.025,
+                                    ),
+                                  ),
+                                ),
+                                Gap(Get.height * 0.04),
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(() => const Leaderboard());
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/images/svg/leaderboard.svg',
+                                    height: Get.height * 0.025,
+                                  ),
+                                ),
+                                Gap(Get.height * 0.04),
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(() => const NotificationPage());
+                                  },
+                                  child: Badge(
+                                    label: CustomText(
+                                      title: '10',
+                                      weight: FontWeight.w500,
+                                      size: 10,
+                                      fontFamily: 'GilroyBold',
+                                      color: AppColor().primaryWhite,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/images/svg/notification.svg',
+                                      height: Get.height * 0.025,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Gap(Get.height * 0.04),
-                          InkWell(
-                            onTap: () {
-                              Get.to(() => const Leaderboard());
-                            },
-                            child: SvgPicture.asset(
-                              'assets/images/svg/leaderboard.svg',
-                              height: Get.height * 0.025,
+                          ],
+                        ),
+                        Gap(Get.height * 0.025),
+                        SizedBox(
+                          height: Get.height * 0.06,
+                          child: CustomTextField(
+                            hint: "Search for gaming news, competitions...",
+                            fontFamily: 'GilroyMedium',
+                            prefixIcon: Icon(
+                              CupertinoIcons.search,
+                              color: AppColor().lightItemsColor,
                             ),
-                          ),
-                          Gap(Get.height * 0.04),
-                          InkWell(
-                            onTap: () {
-                              Get.to(() => const NotificationPage());
+                            textEditingController:
+                                authController.searchController,
+                            hasText: isSearch!,
+                            focusNode: _searchFocusNode,
+                            onTap: handleTap,
+                            onSubmited: (_) {
+                              _searchFocusNode.unfocus();
                             },
-                            child: Badge(
-                              label: CustomText(
-                                title: '10',
-                                weight: FontWeight.w500,
-                                size: 10,
-                                fontFamily: 'GilroyBold',
-                                color: AppColor().primaryWhite,
-                              ),
-                              child: SvgPicture.asset(
-                                'assets/images/svg/notification.svg',
-                                height: Get.height * 0.025,
-                              ),
-                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                isSearch = value.isNotEmpty;
+                              });
+                            },
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Gap(Get.height * 0.025),
-                  SizedBox(
-                    height: Get.height * 0.06,
-                    child: CustomTextField(
-                      hint: "Search for gaming news, competitions...",
-                      fontFamily: 'GilroyMedium',
-                      prefixIcon: Icon(
-                        CupertinoIcons.search,
-                        color: AppColor().lightItemsColor,
-                      ),
-                      textEditingController: authController.searchController,
-                      hasText: isSearch!,
-                      focusNode: _searchFocusNode,
-                      onTap: handleTap,
-                      onSubmited: (_) {
-                        _searchFocusNode.unfocus();
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          isSearch = value.isNotEmpty;
-                        });
-                      },
+                        ),
+                        Gap(Get.height * 0.025),
+                        categoryWidget(),
+                        Gap(Get.height * 0.02),
+                        categoryType == 0 ? const PostWidget() : Container(),
+                      ],
                     ),
-                  ),
-                  Gap(Get.height * 0.025),
-                  categoryWidget(),
-                  Gap(Get.height * 0.02),
-                  categoryType == 0 ? const PostWidget() : Container(),
-                ],
-              ),
-            )),
-      ),
-    );
+                  )),
+              Center(
+                child: Visibility(
+                    visible: authController.isLoading.value,
+                    child: const ProgressLoader()),
+              )
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   SizedBox categoryWidget() {

@@ -18,6 +18,8 @@ class ApiLink {
   static String updateUser = "${baseurl}users/profile";
   static String deleteAcct = "${baseurl}users";
   static String changePassword = "${baseurl}users/profile";
+  static String followUser = "${baseurl}users/follow/";
+  static String viewUserTeam = "${baseurl}team/myteam/";
 
   //Post
   static String createPost = "${baseurl}post/create/";
@@ -32,6 +34,7 @@ class ApiLink {
   //Team
   static String createTeam = "${baseurl}team/create/";
   static String getAllTeam = "${baseurl}team/view/";
+  static String team = "${baseurl}team/";
 
   //Player
   static String createPlayer = "${baseurl}player/register/";

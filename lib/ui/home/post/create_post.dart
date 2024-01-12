@@ -559,10 +559,7 @@ class _CreatePostState extends State<CreatePost> {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        if (postController.postImage == null) {
-                          EasyLoading.showInfo('Select post image!');
-                        } else if (postController.gameTagController.text ==
-                            '') {
+                        if (postController.gameTagController.text == '') {
                           EasyLoading.showInfo('Select game tag!');
                         } else if (postController.seeController.text == '') {
                           EasyLoading.showInfo('Select who can see post!');

@@ -54,7 +54,7 @@ class PostRepository extends GetxController {
     super.onInit();
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
-        getPosts(true);
+        getPosts(false);
       }
     });
   }
@@ -71,19 +71,19 @@ class PostRepository extends GetxController {
 
       request.fields.addAll(
           post.toCreatePostJson().map((key, value) => MapEntry(key, value)));
-      request.files
-          .add(await http.MultipartFile.fromPath('image', postImage!.path));
+      if (postImage != null) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image', postImage!.path));
+      }
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
         debugPrint(await response.stream.bytesToString());
-        Get.to(() => const CreateSuccessPage(title: 'Post Created'))!
-            .then((value) {
-          getPosts(false);
-          clear();
-        });
+        getPosts(true);
+        clear();
+        Get.to(() => const CreateSuccessPage(title: 'Post Created'));
       } else if (response.statusCode == 401) {
         debugPrint(response.reasonPhrase);
         authController
@@ -127,7 +127,7 @@ class PostRepository extends GetxController {
         _createPostStatus(CreatePostStatus.success);
         Get.to(() => const CreateSuccessPage(title: 'Post Updated'))!
             .then((value) {
-          getPosts(false);
+          getPosts(true);
         });
       } else if (response.statusCode == 401) {
         authController
@@ -161,7 +161,7 @@ class PostRepository extends GetxController {
         EasyLoading.dismiss();
         Get.to(() => const CreateSuccessPage(title: 'Post Deleted'))!
             .then((value) {
-          getPosts(false);
+          getPosts(true);
         });
       } else if (response.statusCode == 401) {
         authController
@@ -181,8 +181,13 @@ class PostRepository extends GetxController {
   Future rePost(int postId) async {
     try {
       EasyLoading.show(status: 'Reposting...');
-      var body = {"body": 'repost!'};
       _postStatus(PostStatus.loading);
+      var body = {
+        "body": authController.commentController.text == ''
+            ? null
+            : authController.commentController.text
+      };
+
       var response = await http.post(
         Uri.parse("${ApiLink.post}$postId/repost/"),
         body: jsonEncode(body),
@@ -196,7 +201,7 @@ class PostRepository extends GetxController {
       debugPrint(response.statusCode.toString());
       if (response.statusCode == 201) {
         _postStatus(PostStatus.success);
-        EasyLoading.showInfo('Success').then((value) => getPosts(false));
+        EasyLoading.showInfo('Success').then((value) => getPosts(true));
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
@@ -236,8 +241,8 @@ class PostRepository extends GetxController {
         _postStatus(PostStatus.success);
 
         EasyLoading.showInfo('Success').then((value) async {
-          getAllPost(false);
-          getMyPost(false);
+          getAllPost(true);
+          getMyPost(true);
           Get.back();
           // await Get.to(() => PostDetails(item: item));
         });
@@ -284,6 +289,7 @@ class PostRepository extends GetxController {
 
   Future getMyPost(bool isFirstTime) async {
     try {
+      authController.setLoading(true);
       if (isFirstTime == true) {
         _getPostStatus(GetPostStatus.loading);
       }
@@ -307,15 +313,18 @@ class PostRepository extends GetxController {
         myPosts.isNotEmpty
             ? _getPostStatus(GetPostStatus.available)
             : _getPostStatus(GetPostStatus.empty);
+        authController.setLoading(false);
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
             .then((value) => EasyLoading.showInfo('try again!'));
         _getPostStatus(GetPostStatus.error);
+        authController.setLoading(false);
       }
       return response.body;
     } catch (error) {
       _getPostStatus(GetPostStatus.error);
+      authController.setLoading(false);
       debugPrint("getting my post: ${error.toString()}");
     }
   }
@@ -323,6 +332,7 @@ class PostRepository extends GetxController {
   Future getAllPost(bool isFirstTime) async {
     try {
       if (isFirstTime == true) {
+        authController.setLoading(true);
         _postStatus(PostStatus.loading);
       }
 
@@ -346,15 +356,18 @@ class PostRepository extends GetxController {
         posts.isNotEmpty
             ? _postStatus(PostStatus.available)
             : _postStatus(PostStatus.empty);
+        authController.setLoading(false);
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
             .then((value) => EasyLoading.showInfo('try again!'));
         _postStatus(PostStatus.error);
+        authController.setLoading(false);
       }
       return response.body;
     } catch (error) {
       _postStatus(PostStatus.error);
+      authController.setLoading(false);
       debugPrint("getting all post: ${error.toString()}");
     }
   }

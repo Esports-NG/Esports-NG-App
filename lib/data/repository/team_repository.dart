@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:e_sport/data/model/team_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
@@ -13,6 +13,22 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 enum TeamStatus {
+  loading,
+  success,
+  error,
+  empty,
+  available,
+}
+
+enum TeamInboxStatus {
+  loading,
+  success,
+  error,
+  empty,
+  available,
+}
+
+enum MyTeamStatus {
   loading,
   success,
   error,
@@ -41,9 +57,13 @@ class TeamRepository extends GetxController {
   List<TeamModel> get myTeam => _myTeam.value;
 
   final _teamStatus = TeamStatus.empty.obs;
+  final _teamInboxStatus = TeamInboxStatus.empty.obs;
+  final _myTeamStatus = MyTeamStatus.empty.obs;
   final _createTeamStatus = CreateTeamStatus.empty.obs;
 
   TeamStatus get teamStatus => _teamStatus.value;
+  TeamInboxStatus get teamInboxStatus => _teamInboxStatus.value;
+  MyTeamStatus get myTeamStatus => _myTeamStatus.value;
   CreateTeamStatus get createTeamStatus => _createTeamStatus.value;
 
   Rx<File?> mTeamProfileImage = Rx(null);
@@ -134,13 +154,85 @@ class TeamRepository extends GetxController {
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));  
+            .then((value) => EasyLoading.showInfo('try again!'));
         _teamStatus(TeamStatus.error);
       }
       return response.body;
     } catch (error) {
       _teamStatus(TeamStatus.error);
       debugPrint("getting all team: ${error.toString()}");
+    }
+  }
+
+  Future getMyTeam(bool isFirstTime, int teamId) async {
+    try {
+      if (isFirstTime == true) {
+        _myTeamStatus(MyTeamStatus.loading);
+      }
+
+      debugPrint('getting my team...');
+      var response =
+          await http.get(Uri.parse('${ApiLink.viewUserTeam}$teamId'), headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+
+      if (response.statusCode == 200) {
+        var list = List.from(json);
+        // var teams = list.map((e) => TeamModel.fromJson(e)).toList();
+        // debugPrint("${teams.length} teams found");
+        // _allTeam(teams);
+        // _myTeamStatus(MyTeamStatus.success);
+        // teams.isNotEmpty
+        //     ? _myTeamStatus(MyTeamStatus.available)
+        //     : _myTeamStatus(MyTeamStatus.empty);
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _myTeamStatus(MyTeamStatus.error);
+      }
+      return response.body;
+    } catch (error) {
+      debugPrint("getting my team: ${error.toString()}");
+      _myTeamStatus(MyTeamStatus.error);
+    }
+  }
+
+  Future getTeamInbox(bool isFirstTime, int teamId) async {
+    try {
+      if (isFirstTime == true) {
+        _teamInboxStatus(TeamInboxStatus.loading);
+      }
+
+      debugPrint('getting team inbox...');
+      var response =
+          await http.get(Uri.parse('${ApiLink.team}$teamId/inbox'), headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+
+      if (response.statusCode == 200) {
+        // _allTeam(teams);
+        _teamInboxStatus(TeamInboxStatus.success);
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _teamInboxStatus(TeamInboxStatus.error);
+      }
+      return response.body;
+    } catch (error) {
+      debugPrint("getting team inbox: ${error.toString()}");
+      _teamInboxStatus(TeamInboxStatus.error);
     }
   }
 

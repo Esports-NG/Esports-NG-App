@@ -115,7 +115,9 @@ class CustomTextField extends StatelessWidget {
           height: 1.7),
       decoration: decoration ??
           InputDecoration(
-            fillColor: hasText ? AppColor().primaryWhite : AppColor().bgDark,
+            fillColor: hasText
+                ? AppColor().primaryWhite
+                : fillColor ?? AppColor().bgDark,
             filled: true,
             isDense: true,
             prefixText: pretext,
@@ -194,8 +196,10 @@ class ChatCustomTextField extends StatelessWidget {
       autofocus: false,
       controller: textEditingController,
       enabled: enabled,
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.done,
+      minLines: 1,
+      maxLines: 5,
+      keyboardType: TextInputType.multiline,
+      textInputAction: TextInputAction.newline,
       style: TextStyle(
           color: AppColor().primaryWhite,
           fontSize: 13,

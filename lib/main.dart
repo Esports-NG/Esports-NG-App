@@ -48,12 +48,12 @@ class _ESportAppState extends State<ESportApp> {
         isCurrentlyOnNoInternet = true;
         authController.mNetworkAvailable.value = true;
         Get.to(() => const NoInternetScreen());
-      } else {
+      } else if (e == ConnectivityResult.wifi ||
+          e == ConnectivityResult.mobile) {
         if (isCurrentlyOnNoInternet) {
           Get.back();
           isCurrentlyOnNoInternet = false;
           authController.mNetworkAvailable.value = false;
-          Get.snackbar('Alert', 'Internet is connected.');
         }
         debugPrint('connected');
       }

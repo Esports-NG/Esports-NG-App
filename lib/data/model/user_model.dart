@@ -15,6 +15,7 @@ class UserModel {
   UserProfile? userProfile;
   String? referralCode;
   List<Purpose>? purpose;
+  bool? isVerified;
   Tokens? tokens;
   List<dynamic>? following;
   List<dynamic>? followers;
@@ -36,6 +37,7 @@ class UserModel {
     this.userProfile,
     this.referralCode,
     this.purpose,
+    this.isVerified,
     this.tokens,
     this.following,
     this.followers,
@@ -64,6 +66,7 @@ class UserModel {
         userProfile: json["profile"] == null
             ? null
             : UserProfile.fromJson(json["profile"]),
+        isVerified: json["is_verified"] ?? false,
         tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
         following: json["following"] == null
             ? []
@@ -73,7 +76,7 @@ class UserModel {
             : List<dynamic>.from(json["followers"]!.map((x) => x)),
       );
 
-      factory UserModel.fromPostJson(Map<String, dynamic> json) => UserModel(
+  factory UserModel.fromPostJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
         userName: json["user_name"],
         fullName: json["full_name"],
@@ -84,8 +87,12 @@ class UserModel {
         gender: json["gender"],
         dOB: json["d_o_b"],
         referralCode: json["referral_code"],
-        purpose: json["purpose"] == null ? [] : List<Purpose>.from(json["purpose"]!.map((x) => Purpose.fromJson(x))),
-        profile: json["profile"] == null ? null : Profile.fromJson(json["profile"]),
+        purpose: json["purpose"] == null
+            ? []
+            : List<Purpose>.from(
+                json["purpose"]!.map((x) => Purpose.fromJson(x))),
+        profile:
+            json["profile"] == null ? null : Profile.fromJson(json["profile"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -119,6 +126,7 @@ class UserModel {
             ? []
             : List<dynamic>.from(purpose!.map((x) => x.toJson())),
         "profile": userProfile?.toJson(),
+        "is_verified": isVerified,
         "following": following == null
             ? []
             : List<dynamic>.from(following!.map((x) => x)),

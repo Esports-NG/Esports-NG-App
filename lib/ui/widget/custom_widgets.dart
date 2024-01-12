@@ -138,8 +138,9 @@ class CustomFillOption extends StatelessWidget {
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        width: width ?? MediaQuery.of(context).size.width,
+        padding: EdgeInsets.only(
+            left: Get.height * 0.015, right: Get.height * 0.015),
+        width: width ?? Get.width,
         height: height ?? Get.height * 0.06,
         decoration: BoxDecoration(
             color: buttonColor ?? AppColor().primaryColor,

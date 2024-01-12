@@ -1,3 +1,5 @@
+import 'team_inbox_model.dart';
+
 class TeamModel {
   int? id;
   Owner? owner;
@@ -7,7 +9,7 @@ class TeamModel {
   dynamic gamePlayed;
   String? bio;
   dynamic manager;
-  List<dynamic>? members;
+  List<Member>? members;
   String? membersCount;
 
   TeamModel({
@@ -34,7 +36,8 @@ class TeamModel {
         manager: json["manager"],
         members: json["members"] == null
             ? []
-            : List<dynamic>.from(json["members"]!.map((x) => x)),
+            : List<Member>.from(
+                json["members"]!.map((x) => Member.fromJson(x))),
         membersCount: json["members_count"],
       );
 
@@ -47,8 +50,9 @@ class TeamModel {
         "game_played": gamePlayed,
         "bio": bio,
         "manager": manager,
-        "members":
-            members == null ? [] : List<dynamic>.from(members!.map((x) => x)),
+        "members": members == null
+            ? []
+            : List<dynamic>.from(members!.map((x) => x.toJson())),
         "members_count": membersCount,
       };
 

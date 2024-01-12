@@ -2,7 +2,7 @@
 
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
-import 'package:e_sport/data/model/team_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
