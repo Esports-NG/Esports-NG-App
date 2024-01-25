@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:e_sport/data/model/team/team_inbox_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
@@ -45,7 +46,8 @@ enum CreateTeamStatus {
 
 class TeamRepository extends GetxController {
   final authController = Get.put(AuthRepository());
-  late final teamTitleController = TextEditingController();
+  late final teamNameController = TextEditingController();
+  late final teamBioController = TextEditingController();
   late final seeController = TextEditingController();
   late final engageController = TextEditingController();
   late final gameTagController = TextEditingController();
@@ -53,8 +55,11 @@ class TeamRepository extends GetxController {
 
   final Rx<List<TeamModel>> _allTeam = Rx([]);
   final Rx<List<TeamModel>> _myTeam = Rx([]);
+  final Rx<TeamInboxModel?> _teamInbox = Rx(null);
+
   List<TeamModel> get allTeam => _allTeam.value;
   List<TeamModel> get myTeam => _myTeam.value;
+  TeamInboxModel? get teamInbox => _teamInbox.value;
 
   final _teamStatus = TeamStatus.empty.obs;
   final _teamInboxStatus = TeamInboxStatus.empty.obs;
@@ -221,7 +226,9 @@ class TeamRepository extends GetxController {
       }
 
       if (response.statusCode == 200) {
-        // _allTeam(teams);
+        debugPrint(response.body);
+        var teamInboxItem = TeamInboxModel.fromJson(json);
+        _teamInbox(teamInboxItem);
         _teamInboxStatus(TeamInboxStatus.success);
       } else if (response.statusCode == 401) {
         authController
@@ -261,7 +268,7 @@ class TeamRepository extends GetxController {
   }
 
   void clear() {
-    teamTitleController.clear();
+    teamNameController.clear();
     gameTagController.clear();
     seeController.clear();
   }

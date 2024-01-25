@@ -54,7 +54,7 @@ class _DashboardState extends State<Dashboard> {
           backgroundColor: AppColor().primaryBackGroundColor,
           resizeToAvoidBottomInset: true,
           stateManagement: true,
-          hideNavigationBarWhenKeyboardShows: true,
+          hideNavigationBarWhenKeyboardShows: false,
           decoration: NavBarDecoration(
             borderRadius: BorderRadius.circular(10.0),
             colorBehindNavBar: Colors.white,

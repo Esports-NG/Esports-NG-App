@@ -6,6 +6,7 @@ import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/page_indicator.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
+import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -155,6 +156,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
               if (pageCount == 0) ...[
                 Form(
                   key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Padding(
                     padding: EdgeInsets.all(Get.height * 0.02),
                     child: Column(
@@ -170,13 +172,9 @@ class _CreateTeamState extends State<CreateTeamPage> {
                         Gap(Get.height * 0.01),
                         CustomTextField(
                           hint: "The Willywonkers",
-                          // textEditingController: authController.fullNameController,
-                          validate: (value) {
-                            if (value!.isEmpty) {
-                              return 'team name must not be empty';
-                            }
-                            return null;
-                          },
+                          textEditingController:
+                              teamController.teamNameController,
+                          validate: Validator.isName,
                         ),
                         Gap(Get.height * 0.02),
                         CustomText(
@@ -189,13 +187,9 @@ class _CreateTeamState extends State<CreateTeamPage> {
                         Gap(Get.height * 0.01),
                         CustomTextField(
                           hint: "The Willywonkers",
-                          // textEditingController: authController.fullNameController,
-                          validate: (value) {
-                            if (value!.isEmpty) {
-                              return 'abbreviation must not be empty';
-                            }
-                            return null;
-                          },
+                          // textEditingController:
+                          //     teamController.teamBioController,
+                          validate: Validator.isName,
                         ),
                         Gap(Get.height * 0.02),
                         CustomText(
@@ -208,14 +202,10 @@ class _CreateTeamState extends State<CreateTeamPage> {
                         Gap(Get.height * 0.01),
                         CustomTextField(
                           hint: "Type text here",
-                          // textEditingController: authController.fullNameController,
+                          textEditingController:
+                              teamController.teamBioController,
                           maxLines: 5,
-                          validate: (value) {
-                            if (value!.isEmpty) {
-                              return 'bio must not be empty';
-                            }
-                            return null;
-                          },
+                          validate: Validator.isName,
                         ),
                         Gap(Get.height * 0.02),
                         CustomText(

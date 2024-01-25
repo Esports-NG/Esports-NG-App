@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
         body: RefreshIndicator(
           onRefresh: () async {
             return Future.delayed(const Duration(seconds: 2), () {
-              postController.getAllPost(false);
+              postController.getPosts(false);
             });
           },
           child: Stack(
@@ -151,7 +151,12 @@ class _HomePageState extends State<HomePage> {
                         Gap(Get.height * 0.025),
                         categoryWidget(),
                         Gap(Get.height * 0.02),
-                        categoryType == 0 ? const PostWidget() : Container(),
+                        if (categoryType == 0)
+                          PostWidget(posts: postController.allPost)
+                        else if (categoryType == 1)
+                          Container()
+                        else
+                          PostWidget(posts: postController.bookmarkedPost)
                       ],
                     ),
                   )),

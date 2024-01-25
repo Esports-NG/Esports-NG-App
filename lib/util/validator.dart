@@ -98,7 +98,7 @@ class Validator {
       return 'Password must be at least 8 characters long';
     } else if (!GetUtils.hasCapitalletter(value!.trim())) {
       return 'Password must be have a capital letter';
-    } else if (!upperCase.isCaseSensitive) {
+    } else if (upperCase.isCaseSensitive) {
       return 'Password must have at least uppercase letter';
     } else if (!oneDigit.hasMatch(value.trim())) {
       return 'Password must have at least a digit';

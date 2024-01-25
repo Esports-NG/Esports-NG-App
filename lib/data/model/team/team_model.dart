@@ -1,8 +1,10 @@
+import 'package:e_sport/data/model/post_model.dart';
+
 import 'team_inbox_model.dart';
 
 class TeamModel {
   int? id;
-  Owner? owner;
+  Author? owner;
   String? name;
   String? profilePicture;
   String? cover;
@@ -27,7 +29,7 @@ class TeamModel {
 
   factory TeamModel.fromJson(Map<String, dynamic> json) => TeamModel(
         id: json["id"],
-        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+        owner: json["owner"] == null ? null : Author.fromJson(json["owner"]),
         name: json["name"],
         profilePicture: json["profile_picture"],
         cover: json["cover"],

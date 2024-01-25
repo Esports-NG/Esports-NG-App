@@ -21,7 +21,6 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   final authController = Get.put(AuthRepository());
-  TextEditingController controller = TextEditingController(text: "");
   final CountdownController _controller = CountdownController(autoStart: true);
   String thisText = "";
   String? otpText, otp;
@@ -37,10 +36,7 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {

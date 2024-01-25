@@ -15,7 +15,6 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 import 'post_details.dart';
-import 'repost_details.dart';
 
 class PostItem extends StatefulWidget {
   final PostModel item;
@@ -138,7 +137,13 @@ class _PostItemState extends State<PostItem> {
                             ),
                           ],
                         ),
-                        postMenu(),
+                        InkWell(
+                          child: Icon(
+                            Icons.more_vert,
+                            color: AppColor().primaryWhite,
+                          ),
+                          onTap: () => postMenu(),
+                        ),
                       ],
                     ),
                     Gap(Get.height * 0.01),
@@ -278,7 +283,14 @@ class _PostItemState extends State<PostItem> {
                           ),
                         ],
                       ),
-                if (widget.item.repost == null) postMenu(),
+                if (widget.item.repost == null)
+                  InkWell(
+                    child: Icon(
+                      Icons.more_vert,
+                      color: AppColor().primaryWhite,
+                    ),
+                    onTap: () => postMenu(),
+                  ),
               ],
             ),
           ),
@@ -404,145 +416,7 @@ class _PostItemState extends State<PostItem> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                PopupMenuButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide.none),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  color: AppColor().primaryMenu,
-                  offset: const Offset(0, -10),
-                  initialValue: _selectedIndex,
-                  onSelected: (value) {
-                    if (value == 0) {
-                      _selectedIndex = value;
-                    } else if (value == 1) {
-                      _selectedIndex = value;
-                    } else if (value == 2) {
-                      _selectedIndex = value;
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Alert Dialog Title'),
-                            content: Text(
-                                'This is the content of the alert dialog.'),
-                            actions: [
-                              // Define actions like "OK" or "Cancel" buttons.
-                              TextButton(
-                                onPressed: () {
-                                  // Close the dialog when the "OK" button is pressed.
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      height: 20,
-                      padding:
-                          const EdgeInsets.only(bottom: 20, left: 20, top: 20),
-                      child: CustomText(
-                        title: 'Like, Comment and Repost as:',
-                        size: Get.height * 0.014,
-                        fontFamily: 'GilroyBold',
-                        textAlign: TextAlign.start,
-                        color: AppColor().primaryWhite,
-                      ),
-                    ),
-                    PopupMenuItem(
-                      height: 20,
-                      padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: Row(
-                        children: [
-                          widget.item.author!.profile!.profilePicture == null
-                              ? SvgPicture.asset(
-                                  'assets/images/svg/people.svg',
-                                  height: Get.height * 0.02,
-                                  width: Get.height * 0.02,
-                                )
-                              : CachedNetworkImage(
-                                  height: Get.height * 0.02,
-                                  width: Get.height * 0.02,
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                  imageUrl: widget
-                                      .item.author!.profile!.profilePicture!,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: NetworkImage(widget
-                                              .item
-                                              .author!
-                                              .profile!
-                                              .profilePicture!),
-                                          fit: BoxFit.cover),
-                                    ),
-                                  ),
-                                ),
-                          Gap(Get.height * 0.02),
-                          CustomText(
-                            title: widget.item.author!.fullName,
-                            size: Get.height * 0.014,
-                            fontFamily: 'GilroyMedium',
-                            textAlign: TextAlign.start,
-                            color: AppColor().primaryWhite,
-                          ),
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem(
-                      height: 20,
-                      padding: const EdgeInsets.only(bottom: 20, left: 20),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.group_outlined,
-                            color: AppColor().primaryWhite,
-                            size: Get.height * 0.016,
-                          ),
-                          Gap(Get.height * 0.02),
-                          CustomText(
-                            title: 'Your Team Profile',
-                            size: Get.height * 0.014,
-                            fontFamily: 'GilroyMedium',
-                            textAlign: TextAlign.start,
-                            color: AppColor().primaryWhite,
-                          ),
-                          Gap(Get.height * 0.02),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: AppColor().primaryWhite,
-                            size: Get.height * 0.016,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/images/png/drop.png',
-                        height: Get.height * 0.02,
-                        width: Get.height * 0.02,
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        color: AppColor().primaryWhite,
-                        size: Get.height * 0.025,
-                      ),
-                    ],
-                  ),
-                ),
+                profileMenu(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -654,7 +528,7 @@ class _PostItemState extends State<PostItem> {
     );
   }
 
-  PopupMenuButton<dynamic> postMenu() {
+  profileMenu() {
     return PopupMenuButton(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), side: BorderSide.none),
@@ -664,22 +538,148 @@ class _PostItemState extends State<PostItem> {
       offset: const Offset(0, -10),
       initialValue: _selectedIndex,
       onSelected: (value) {
-        setState(() {
-          if (value == 0) {
-            _selectedIndex = value;
-          } else if (value == 1) {
-            _selectedIndex = value;
-          } else if (value == 2) {}
-        });
+        if (value == 0) {
+          _selectedIndex = value;
+        } else if (value == 1) {
+          _selectedIndex = value;
+        } else if (value == 2) {
+          _selectedIndex = value;
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Alert Dialog Title'),
+                content: Text('This is the content of the alert dialog.'),
+                actions: [
+                  // Define actions like "OK" or "Cancel" buttons.
+                  TextButton(
+                    onPressed: () {
+                      // Close the dialog when the "OK" button is pressed.
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       },
       itemBuilder: (context) => [
         PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
+          child: CustomText(
+            title: 'Like, Comment and Repost as:',
+            size: Get.height * 0.014,
+            fontFamily: 'GilroyBold',
+            textAlign: TextAlign.start,
+            color: AppColor().primaryWhite,
+          ),
+        ),
+        PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: Row(
+            children: [
+              widget.item.author!.profile!.profilePicture == null
+                  ? SvgPicture.asset(
+                      'assets/images/svg/people.svg',
+                      height: Get.height * 0.02,
+                      width: Get.height * 0.02,
+                    )
+                  : CachedNetworkImage(
+                      height: Get.height * 0.02,
+                      width: Get.height * 0.02,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                      imageUrl: widget.item.author!.profile!.profilePicture!,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  widget.item.author!.profile!.profilePicture!),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
+                    ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: widget.item.author!.fullName,
+                size: Get.height * 0.014,
+                fontFamily: 'GilroyMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          child: Row(
+            children: [
+              Icon(
+                Icons.group_outlined,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Your Team Profile',
+                size: Get.height * 0.014,
+                fontFamily: 'GilroyMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+              Gap(Get.height * 0.02),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+            ],
+          ),
+        ),
+      ],
+      child: Row(
+        children: [
+          Image.asset(
+            'assets/images/png/drop.png',
+            height: Get.height * 0.02,
+            width: Get.height * 0.02,
+          ),
+          Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColor().primaryWhite,
+            size: Get.height * 0.025,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void postMenu() async {
+    String? selectedMenuItem = await showMenu(
+      context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), side: BorderSide.none),
+      constraints: const BoxConstraints(),
+      color: AppColor().primaryMenu,
+      position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+      items: [
+        PopupMenuItem(
+          value: '0',
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
           child:
               popUpMenuItems(icon: Icons.bookmark_outline, title: 'Bookmark'),
         ),
         PopupMenuItem(
+          value: '1',
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
@@ -687,11 +687,12 @@ class _PostItemState extends State<PostItem> {
               title: 'Not interested in this post'),
         ),
         PopupMenuItem(
+          value: '2',
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
               icon: Icons.person_add_alt_outlined,
-              title: 'Follow/Unfollow User'),
+              title: 'Follow/Unfollow @${widget.item.author!.userName}'),
         ),
         PopupMenuItem(
           height: 20,
@@ -704,13 +705,15 @@ class _PostItemState extends State<PostItem> {
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
-              icon: Icons.volume_off_outlined, title: 'Mute/Unmute User'),
+              icon: Icons.volume_off_outlined,
+              title: 'Mute/Unmute @${widget.item.author!.userName}'),
         ),
         PopupMenuItem(
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20),
-          child:
-              popUpMenuItems(icon: Icons.block_outlined, title: 'Block User'),
+          child: popUpMenuItems(
+              icon: Icons.block_outlined,
+              title: 'Block @${widget.item.author!.userName}'),
         ),
         PopupMenuItem(
           height: 20,
@@ -718,11 +721,13 @@ class _PostItemState extends State<PostItem> {
           child: popUpMenuItems(icon: Icons.flag, title: 'Report Post'),
         ),
       ],
-      child: Icon(
-        Icons.more_vert,
-        color: AppColor().primaryWhite,
-      ),
     );
+
+    if (selectedMenuItem == '0') {
+      debugPrint('bookmark');
+      postController.bookmarkPost(widget.item.id!);
+    } else if (selectedMenuItem == '1') {
+    } else if (selectedMenuItem == '2') {}
   }
 
   Row popUpMenuItems({String? title, IconData? icon}) {

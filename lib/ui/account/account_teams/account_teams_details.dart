@@ -3,6 +3,7 @@
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
@@ -15,13 +16,28 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class AccountTeamsDetail extends StatelessWidget {
+import 'account_teams_full_profile.dart';
+
+class AccountTeamsDetail extends StatefulWidget {
   final TeamModel item;
   const AccountTeamsDetail({super.key, required this.item});
 
   @override
+  State<AccountTeamsDetail> createState() => _AccountTeamsDetailState();
+}
+
+class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
+  final teamController = Get.put(TeamRepository());
+  @override
+  void initState() {
+    super.initState();
+    teamController.getTeamInbox(true, widget.item.id!);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor().primaryBackGroundColor,
       body: SingleChildScrollView(
           child: Column(
         children: [
@@ -44,7 +60,7 @@ class AccountTeamsDetail extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    item.cover == null
+                    widget.item.cover == null
                         ? Container(
                             height: Get.height * 0.1,
                             width: Get.height * 0.1,
@@ -57,7 +73,7 @@ class AccountTeamsDetail extends StatelessWidget {
                           )
                         : OtherImage(
                             itemSize: Get.height * 0.1,
-                            image: '${ApiLink.imageUrl}${item.cover}'),
+                            image: '${ApiLink.imageUrl}${widget.item.cover}'),
                     Positioned(
                       child: SvgPicture.asset(
                         'assets/images/svg/check_badge.svg',
@@ -86,18 +102,18 @@ class AccountTeamsDetail extends StatelessWidget {
           ),
           Gap(Get.height * 0.07),
           CustomText(
-              title: item.name,
+              title: widget.item.name,
               weight: FontWeight.w500,
               size: Get.height * 0.02,
               fontFamily: 'GilroyBold',
               color: AppColor().primaryWhite),
           Gap(Get.height * 0.01),
           CustomText(
-              title: item.members!.isEmpty
+              title: widget.item.members!.isEmpty
                   ? 'No Member'
-                  : item.members!.length == 1
+                  : widget.item.members!.length == 1
                       ? '1 Member'
-                      : '${item.members!.length} Members',
+                      : '${widget.item.members!.length} Members',
               weight: FontWeight.w400,
               size: Get.height * 0.017,
               fontFamily: 'GilroyRegular',
@@ -234,13 +250,17 @@ class AccountTeamsDetail extends StatelessWidget {
                     height: 1.5,
                     color: AppColor().greyEight),
                 Gap(Get.height * 0.02),
-                CustomText(
-                    title: 'See full profile',
-                    weight: FontWeight.w400,
-                    size: Get.height * 0.017,
-                    fontFamily: 'GilroyMedium',
-                    underline: TextDecoration.underline,
-                    color: AppColor().primaryColor),
+                InkWell(
+                  onTap: () =>
+                      Get.to(() => AccountTeamsFullProfile(item: widget.item)),
+                  child: CustomText(
+                      title: 'See full profile',
+                      weight: FontWeight.w400,
+                      size: Get.height * 0.017,
+                      fontFamily: 'GilroyMedium',
+                      underline: TextDecoration.underline,
+                      color: AppColor().primaryColor),
+                ),
               ],
             ),
           ),
@@ -268,7 +288,7 @@ class AccountTeamsDetail extends StatelessWidget {
                       Stack(
                         alignment: Alignment.bottomRight,
                         children: [
-                          item.owner!.profile!.profilePicture == null
+                          widget.item.owner!.profile!.profilePicture == null
                               ? Container(
                                   height: Get.height * 0.04,
                                   width: Get.height * 0.04,
@@ -281,7 +301,8 @@ class AccountTeamsDetail extends StatelessWidget {
                                 )
                               : OtherImage(
                                   itemSize: Get.height * 0.04,
-                                  image: item.owner!.profile!.profilePicture),
+                                  image: widget
+                                      .item.owner!.profile!.profilePicture),
                           Positioned(
                             child: SvgPicture.asset(
                               'assets/images/svg/check_badge.svg',
@@ -292,7 +313,7 @@ class AccountTeamsDetail extends StatelessWidget {
                       ),
                       Gap(Get.height * 0.015),
                       CustomText(
-                          title: item.owner!.fullName!.toCapitalCase(),
+                          title: widget.item.owner!.fullName!.toCapitalCase(),
                           weight: FontWeight.w400,
                           size: Get.height * 0.017,
                           fontFamily: 'GilroyMedium',

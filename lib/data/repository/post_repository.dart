@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
-import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 enum LikePostStatus { loading, success, error, empty }
+
+enum BookmarkPostStatus { loading, success, error, empty }
+
+enum BookmarkStatus { loading, success, error, empty, available }
 
 enum CreatePostStatus { loading, success, error, empty }
 
@@ -32,17 +35,23 @@ class PostRepository extends GetxController {
 
   final Rx<List<PostModel>> _allPost = Rx([]);
   final Rx<List<PostModel>> _myPost = Rx([]);
+  final Rx<List<PostModel>> _bookmarkedPost = Rx([]);
 
   List<PostModel> get allPost => _allPost.value;
   List<PostModel> get myPost => _myPost.value;
+  List<PostModel> get bookmarkedPost => _bookmarkedPost.value;
 
   final _postStatus = PostStatus.empty.obs;
+  final _bookmarkStatus = BookmarkStatus.empty.obs;
   final _createPostStatus = CreatePostStatus.empty.obs;
   final _likePostStatus = LikePostStatus.empty.obs;
+  final _bookmarkPostStatus = BookmarkPostStatus.empty.obs;
   final _getPostStatus = GetPostStatus.empty.obs;
 
   GetPostStatus get getPostStatus => _getPostStatus.value;
+  BookmarkStatus get bookmarkStatus => _bookmarkStatus.value;
   LikePostStatus get likePostStatus => _likePostStatus.value;
+  BookmarkPostStatus get bookmarkPostStatus => _bookmarkPostStatus.value;
   PostStatus get postStatus => _postStatus.value;
   CreatePostStatus get createPostStatus => _createPostStatus.value;
 
@@ -52,9 +61,9 @@ class PostRepository extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    authController.mToken.listen((p0) async {
+    authController.mToken.listen((p0) {
       if (p0 != '0') {
-        getPosts(false);
+        getPosts(true);
       }
     });
   }
@@ -184,7 +193,7 @@ class PostRepository extends GetxController {
       _postStatus(PostStatus.loading);
       var body = {
         "body": authController.commentController.text == ''
-            ? null
+            ? 'repost'
             : authController.commentController.text
       };
 
@@ -217,6 +226,40 @@ class PostRepository extends GetxController {
     }
   }
 
+  Future bookmarkPost(int postId) async {
+    try {
+      EasyLoading.show(status: 'Bookmarking...');
+      _bookmarkPostStatus(BookmarkPostStatus.loading);
+
+      var response = await http.put(
+        Uri.parse("${ApiLink.post}$postId/bookmark/"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        EasyLoading.showInfo(json['message']).then((value) => getPosts(true));
+        _bookmarkPostStatus(BookmarkPostStatus.success);
+         EasyLoading.dismiss();
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _bookmarkPostStatus(BookmarkPostStatus.error);
+         EasyLoading.dismiss();
+      }
+      return response.body;
+    } catch (error) {
+      _bookmarkPostStatus(BookmarkPostStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("bookmark error: ${error.toString()}");
+      handleError(error);
+    }
+  }
+
   Future commentOnPost(int postId, PostModel item) async {
     try {
       EasyLoading.show(status: 'commenting...');
@@ -241,10 +284,8 @@ class PostRepository extends GetxController {
         _postStatus(PostStatus.success);
 
         EasyLoading.showInfo('Success').then((value) async {
-          getAllPost(true);
           getMyPost(true);
           Get.back();
-          // await Get.to(() => PostDetails(item: item));
         });
       } else if (response.statusCode == 401) {
         authController
@@ -372,6 +413,50 @@ class PostRepository extends GetxController {
     }
   }
 
+  Future getBookmarkedPost(bool isFirstTime) async {
+    try {
+      if (isFirstTime == true) {
+        authController.setLoading(true);
+        _bookmarkStatus(BookmarkStatus.loading);
+      }
+
+      debugPrint('getting all bookmark post...');
+      var response =
+          await http.get(Uri.parse(ApiLink.getBookmarkedPost), headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+
+      if (response.statusCode == 200) {
+        var list = List.from(json);
+        var posts = list.map((e) => PostModel.fromJson(e)).toList();
+        debugPrint("${posts.length} bookmarked posts found");
+        _bookmarkedPost(posts.reversed.toList());
+        _bookmarkStatus(BookmarkStatus.success);
+        posts.isNotEmpty
+            ? _bookmarkStatus(BookmarkStatus.available)
+            : _bookmarkStatus(BookmarkStatus.empty);
+        authController.setLoading(false);
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _bookmarkStatus(BookmarkStatus.error);
+        authController.setLoading(false);
+      }
+      return response.body;
+    } catch (error) {
+      _bookmarkStatus(BookmarkStatus.error);
+      authController.setLoading(false);
+      debugPrint("getting bookmarked post: ${error.toString()}");
+    }
+  }
+
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(
@@ -388,6 +473,7 @@ class PostRepository extends GetxController {
 
   void getPosts(bool isFirstTime) {
     getAllPost(isFirstTime);
+    getBookmarkedPost(isFirstTime);
     getMyPost(isFirstTime);
   }
 

@@ -17,6 +17,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -61,7 +62,7 @@ class _PostDetailsState extends State<PostDetails> {
         }),
         centerTitle: true,
         title: CustomText(
-          title: 'Posts',
+          title: 'Post',
           fontFamily: 'GilroySemiBold',
           size: 18,
           color: AppColor().primaryWhite,
@@ -205,15 +206,12 @@ class _PostDetailsState extends State<PostDetails> {
                                     ),
                                   if (authController.user!.id ==
                                       widget.item.author!.id)
-                                    IconButton(
-                                      icon: Icon(
+                                    InkWell(
+                                      child: Icon(
                                         Icons.more_vert,
                                         color: AppColor().primaryWhite,
                                       ),
-                                      onPressed: () {},
-                                      padding: EdgeInsets.only(
-                                          left: Get.height * 0.01),
-                                      constraints: const BoxConstraints(),
+                                      onTap: () => showEditPopup(),
                                     ),
                                 ],
                               ),
@@ -508,8 +506,17 @@ class _PostDetailsState extends State<PostDetails> {
                                             return InkWell(
                                               onTap: () {
                                                 if (index == 0) {
-                                                  postController
-                                                      .rePost(widget.item.id!);
+                                                  Fluttertoast.showToast(
+                                                      fontSize:
+                                                          Get.height * 0.015,
+                                                      msg:
+                                                          'Not available, try again later!',
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM);
+                                                  // postController
+                                                  //     .rePost(widget.item.id!);
                                                 } else {
                                                   setState(() {
                                                     isRepostActive = true;

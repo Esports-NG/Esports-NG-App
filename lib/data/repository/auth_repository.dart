@@ -189,7 +189,6 @@ class AuthRepository extends GetxController {
     await pref!.init();
     if (pref!.getFirstTimeOpen()) {
       _authStatus(AuthStatus.isFirstTime);
-
       debugPrint(authStatus.name);
       debugPrint("My first time using this app");
     } else {
@@ -463,6 +462,58 @@ class AuthRepository extends GetxController {
     } catch (error) {
       _followStatus(FollowStatus.error);
       debugPrint("follow user error: $error");
+      getError(error);
+    }
+  }
+
+  Future followTeam(String title, userId) async {
+    _followStatus(FollowStatus.loading);
+    try {
+      debugPrint('following team...');
+      var response = await http.post(
+        Uri.parse('${ApiLink.followTeam}$title/$userId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        _followStatus(FollowStatus.success);
+      } else {}
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      debugPrint("follow team error: $error");
+      getError(error);
+    }
+  }
+
+  Future followCommunity(String title, userId) async {
+    _followStatus(FollowStatus.loading);
+    try {
+      debugPrint('following community...');
+      var response = await http.post(
+        Uri.parse('${ApiLink.followCommunity}$title/$userId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        _followStatus(FollowStatus.success);
+      } else {}
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      debugPrint("follow community error: $error");
       getError(error);
     }
   }
