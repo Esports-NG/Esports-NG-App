@@ -59,52 +59,136 @@ class _PostItemState extends State<PostItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColor().bgDark,
-            AppColor().primaryBackGroundColor,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Obx(() {
+      (postController.allPost.length);
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColor().bgDark,
+              AppColor().primaryBackGroundColor,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: AppColor().lightItemsColor,
+            width: 0.5,
+          ),
         ),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColor().lightItemsColor,
-          width: 0.5,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (widget.item.repost != null)
-            InkWell(
-              onTap: () => Get.to(() => PostDetails(item: widget.item)),
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.item.repost != null)
+              InkWell(
+                onTap: () => Get.to(() => PostDetails(item: widget.item)),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              widget.item.author!.profile!.profilePicture ==
+                                      null
+                                  ? SvgPicture.asset(
+                                      'assets/images/svg/people.svg',
+                                      height: Get.height * 0.025,
+                                      width: Get.height * 0.025,
+                                    )
+                                  : InkWell(
+                                      onTap: () => Get.to(() => UserDetails(
+                                          item: widget.item.author!)),
+                                      child: CachedNetworkImage(
+                                        height: Get.height * 0.025,
+                                        width: Get.height * 0.025,
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
+                                        imageUrl: widget.item.author!.profile!
+                                            .profilePicture!,
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: NetworkImage(widget
+                                                    .item
+                                                    .author!
+                                                    .profile!
+                                                    .profilePicture!),
+                                                fit: BoxFit.cover),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                              Gap(Get.height * 0.01),
+                              CustomText(
+                                title:
+                                    '${widget.item.author!.fullName!.toCapitalCase()} Reposted this',
+                                size: Get.height * 0.015,
+                                fontFamily: 'GilroyMedium',
+                                textAlign: TextAlign.start,
+                                color: AppColor().lightItemsColor,
+                              ),
+                            ],
+                          ),
+                          InkWell(
+                            child: Icon(
+                              Icons.more_vert,
+                              color: AppColor().primaryWhite,
+                            ),
+                            onTap: () => postMenu(),
+                          ),
+                        ],
+                      ),
+                      Gap(Get.height * 0.01),
+                      if (widget.item.body != '')
+                        CustomText(
+                          title: widget.item.body!.toUpperFirstCase(),
+                          size: Get.height * 0.015,
+                          fontFamily: 'GilroyBold',
+                          textAlign: TextAlign.start,
+                          color: AppColor().primaryWhite,
+                        ),
+                      if (widget.item.body != '') Gap(Get.height * 0.01),
+                      Divider(
+                        thickness: 0.4,
+                        color: AppColor().lightItemsColor,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  widget.item.repost == null
+                      ? Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            widget.item.author!.profile!.profilePicture == null
+                            (widget.item.author!.profile!.profilePicture ==
+                                    null)
                                 ? SvgPicture.asset(
                                     'assets/images/svg/people.svg',
-                                    height: Get.height * 0.025,
-                                    width: Get.height * 0.025,
-                                  )
+                                    height: Get.height * 0.035,
+                                    width: Get.height * 0.035)
                                 : InkWell(
                                     onTap: () => Get.to(() =>
                                         UserDetails(item: widget.item.author!)),
                                     child: CachedNetworkImage(
-                                      height: Get.height * 0.025,
-                                      width: Get.height * 0.025,
+                                      height: Get.height * 0.035,
+                                      width: Get.height * 0.035,
                                       placeholder: (context, url) =>
                                           const CircularProgressIndicator(),
                                       errorWidget: (context, url, error) =>
@@ -129,7 +213,76 @@ class _PostItemState extends State<PostItem> {
                             Gap(Get.height * 0.01),
                             CustomText(
                               title:
-                                  '${widget.item.author!.fullName!.toCapitalCase()} Reposted this',
+                                  widget.item.author!.fullName!.toCapitalCase(),
+                              size: Get.height * 0.015,
+                              fontFamily: 'GilroyMedium',
+                              textAlign: TextAlign.start,
+                              color: AppColor().lightItemsColor,
+                            ),
+                            Gap(Get.height * 0.005),
+                            const SmallCircle(),
+                            Gap(Get.height * 0.005),
+                            CustomText(
+                              title: timeAgo(widget.item.createdAt!),
+                              size: Get.height * 0.015,
+                              fontFamily: 'GilroyMedium',
+                              textAlign: TextAlign.start,
+                              color: AppColor().lightItemsColor,
+                            ),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            (widget.item.repost!.author!.profile!
+                                        .profilePicture ==
+                                    null)
+                                ? SvgPicture.asset(
+                                    'assets/images/svg/people.svg',
+                                    height: Get.height * 0.035,
+                                    width: Get.height * 0.035)
+                                : InkWell(
+                                    onTap: () => Get.to(() => UserDetails(
+                                        item: widget.item.repost!.author!)),
+                                    child: CachedNetworkImage(
+                                      height: Get.height * 0.035,
+                                      width: Get.height * 0.035,
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                      imageUrl: widget.item.repost!.author!
+                                          .profile!.profilePicture!,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: NetworkImage(widget
+                                                  .item
+                                                  .repost!
+                                                  .author!
+                                                  .profile!
+                                                  .profilePicture!),
+                                              fit: BoxFit.cover),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            Gap(Get.height * 0.01),
+                            CustomText(
+                              title: widget.item.repost!.author!.fullName!
+                                  .toCapitalCase(),
+                              size: Get.height * 0.015,
+                              fontFamily: 'GilroyMedium',
+                              textAlign: TextAlign.start,
+                              color: AppColor().lightItemsColor,
+                            ),
+                            Gap(Get.height * 0.005),
+                            const SmallCircle(),
+                            Gap(Get.height * 0.005),
+                            CustomText(
+                              title: timeAgo(widget.item.createdAt!),
                               size: Get.height * 0.015,
                               fontFamily: 'GilroyMedium',
                               textAlign: TextAlign.start,
@@ -137,395 +290,251 @@ class _PostItemState extends State<PostItem> {
                             ),
                           ],
                         ),
-                        InkWell(
-                          child: Icon(
-                            Icons.more_vert,
-                            color: AppColor().primaryWhite,
-                          ),
-                          onTap: () => postMenu(),
-                        ),
-                      ],
+                  if (widget.item.repost == null)
+                    InkWell(
+                      child: Icon(
+                        Icons.more_vert,
+                        color: AppColor().primaryWhite,
+                      ),
+                      onTap: () => postMenu(),
                     ),
-                    Gap(Get.height * 0.01),
-                    if (widget.item.body != '')
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: CustomText(
+                title: widget.item.repost == null
+                    ? widget.item.body!.toUpperFirstCase()
+                    : widget.item.repost!.body!.toUpperFirstCase(),
+                size: Get.height * 0.015,
+                fontFamily: 'GilroyBold',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ),
+            Gap(Get.height * 0.015),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                (widget.item.repost == null)
+                    ? Container(
+                        child: widget.item.image == null
+                            ? Container()
+                            : CachedNetworkImage(
+                                height: Get.height * 0.25,
+                                width: double.infinity,
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => Center(
+                                  child: SizedBox(
+                                    height: Get.height * 0.05,
+                                    width: Get.height * 0.05,
+                                    child: CircularProgressIndicator(
+                                        color: AppColor().primaryWhite,
+                                        value: progress.progress),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    color: AppColor().primaryWhite),
+                                imageUrl: widget.item.image!,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(widget.item.image!),
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                              ),
+                      )
+                    : Container(
+                        child: widget.item.repost!.image == null
+                            ? Container()
+                            : CachedNetworkImage(
+                                height: Get.height * 0.25,
+                                width: double.infinity,
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => Center(
+                                  child: SizedBox(
+                                    height: Get.height * 0.05,
+                                    width: Get.height * 0.05,
+                                    child: CircularProgressIndicator(
+                                        color: AppColor().primaryWhite,
+                                        value: progress.progress),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    color: AppColor().primaryWhite),
+                                imageUrl: widget.item.repost!.image!,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            widget.item.repost!.image!),
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                              ),
+                      ),
+                Positioned.fill(
+                  left: Get.height * 0.02,
+                  bottom: Get.height * 0.02,
+                  top: Get.height * 0.19,
+                  child: SizedBox(
+                    height: Get.height * 0.03,
+                    child: ListView.separated(
+                        padding: EdgeInsets.zero,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.item.tags!.length,
+                        separatorBuilder: (context, index) =>
+                            Gap(Get.height * 0.01),
+                        itemBuilder: (context, index) {
+                          var items = widget.item.tags![index];
+                          return Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: AppColor().primaryDark.withOpacity(0.7),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color:
+                                    AppColor().primaryColor.withOpacity(0.05),
+                                width: 0.5,
+                              ),
+                            ),
+                            child: Center(
+                              child: CustomText(
+                                title: items.title,
+                                color: AppColor().primaryWhite,
+                                textAlign: TextAlign.center,
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyBold',
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  profileMenu(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      LikeButton(
+                        size: Get.height * 0.025,
+                        onTap: onLikeButtonTapped,
+                        circleColor: CircleColor(
+                            start: AppColor().primaryColor,
+                            end: AppColor().primaryColor),
+                        bubblesColor: BubblesColor(
+                          dotPrimaryColor: AppColor().primaryColor,
+                          dotSecondaryColor: AppColor().primaryColor,
+                        ),
+                        likeBuilder: (bool isLiked) {
+                          return widget.item.likes!.any(
+                                  (item) => item.id == authController.user!.id)
+                              ? Icon(
+                                  isLiked
+                                      ? Icons.favorite_outline
+                                      : Icons.favorite,
+                                  color: AppColor().primaryColor,
+                                  size: Get.height * 0.025)
+                              : Icon(
+                                  isLiked
+                                      ? Icons.favorite
+                                      : Icons.favorite_outline,
+                                  color: isLiked
+                                      ? AppColor().primaryColor
+                                      : AppColor().primaryWhite,
+                                  size: Get.height * 0.025);
+                        },
+                        likeCount: widget.item.likeCount,
+                        countBuilder: (int? count, bool isLiked, String text) {
+                          var color = AppColor().primaryWhite;
+                          Widget result;
+                          if (count == 0) {
+                            result = CustomText(
+                                title: '0',
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyBold',
+                                textAlign: TextAlign.start,
+                                color: color);
+                          } else if (count == 1) {
+                            result = CustomText(
+                                title: '$text like',
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyBold',
+                                textAlign: TextAlign.start,
+                                color: color);
+                          } else {
+                            result = CustomText(
+                                title: '$text likes',
+                                size: Get.height * 0.014,
+                                fontFamily: 'GilroyBold',
+                                textAlign: TextAlign.start,
+                                color: color);
+                          }
+                          return result;
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      InkWell(
+                        child: Icon(
+                          Icons.sms_outlined,
+                          color: AppColor().primaryWhite,
+                          size: Get.height * 0.025,
+                        ),
+                        onTap: () {},
+                      ),
+                      Gap(Get.height * 0.005),
                       CustomText(
-                        title: widget.item.body!.toUpperFirstCase(),
-                        size: Get.height * 0.015,
+                        title: widget.item.comment!.length.toString(),
+                        size: Get.height * 0.014,
                         fontFamily: 'GilroyBold',
                         textAlign: TextAlign.start,
                         color: AppColor().primaryWhite,
                       ),
-                    if (widget.item.body != '') Gap(Get.height * 0.01),
-                    Divider(
-                      thickness: 0.4,
-                      color: AppColor().lightItemsColor,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                widget.item.repost == null
-                    ? Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          (widget.item.author!.profile!.profilePicture == null)
-                              ? SvgPicture.asset('assets/images/svg/people.svg',
-                                  height: Get.height * 0.035,
-                                  width: Get.height * 0.035)
-                              : InkWell(
-                                  onTap: () => Get.to(() =>
-                                      UserDetails(item: widget.item.author!)),
-                                  child: CachedNetworkImage(
-                                    height: Get.height * 0.035,
-                                    width: Get.height * 0.035,
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                    imageUrl: widget
-                                        .item.author!.profile!.profilePicture!,
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: NetworkImage(widget
-                                                .item
-                                                .author!
-                                                .profile!
-                                                .profilePicture!),
-                                            fit: BoxFit.cover),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                          Gap(Get.height * 0.01),
-                          CustomText(
-                            title:
-                                widget.item.author!.fullName!.toCapitalCase(),
-                            size: Get.height * 0.015,
-                            fontFamily: 'GilroyMedium',
-                            textAlign: TextAlign.start,
-                            color: AppColor().lightItemsColor,
-                          ),
-                          Gap(Get.height * 0.005),
-                          const SmallCircle(),
-                          Gap(Get.height * 0.005),
-                          CustomText(
-                            title: timeAgo(widget.item.createdAt!),
-                            size: Get.height * 0.015,
-                            fontFamily: 'GilroyMedium',
-                            textAlign: TextAlign.start,
-                            color: AppColor().lightItemsColor,
-                          ),
-                        ],
-                      )
-                    : Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          (widget.item.repost!.author!.profile!
-                                      .profilePicture ==
-                                  null)
-                              ? SvgPicture.asset('assets/images/svg/people.svg',
-                                  height: Get.height * 0.035,
-                                  width: Get.height * 0.035)
-                              : InkWell(
-                                  onTap: () => Get.to(() => UserDetails(
-                                      item: widget.item.repost!.author!)),
-                                  child: CachedNetworkImage(
-                                    height: Get.height * 0.035,
-                                    width: Get.height * 0.035,
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                    imageUrl: widget.item.repost!.author!
-                                        .profile!.profilePicture!,
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: NetworkImage(widget
-                                                .item
-                                                .repost!
-                                                .author!
-                                                .profile!
-                                                .profilePicture!),
-                                            fit: BoxFit.cover),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                          Gap(Get.height * 0.01),
-                          CustomText(
-                            title: widget.item.repost!.author!.fullName!
-                                .toCapitalCase(),
-                            size: Get.height * 0.015,
-                            fontFamily: 'GilroyMedium',
-                            textAlign: TextAlign.start,
-                            color: AppColor().lightItemsColor,
-                          ),
-                          Gap(Get.height * 0.005),
-                          const SmallCircle(),
-                          Gap(Get.height * 0.005),
-                          CustomText(
-                            title: timeAgo(widget.item.createdAt!),
-                            size: Get.height * 0.015,
-                            fontFamily: 'GilroyMedium',
-                            textAlign: TextAlign.start,
-                            color: AppColor().lightItemsColor,
-                          ),
-                        ],
-                      ),
-                if (widget.item.repost == null)
-                  InkWell(
-                    child: Icon(
-                      Icons.more_vert,
-                      color: AppColor().primaryWhite,
-                    ),
-                    onTap: () => postMenu(),
+                    ],
                   ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: CustomText(
-              title: widget.item.repost == null
-                  ? widget.item.body!.toUpperFirstCase()
-                  : widget.item.repost!.body!.toUpperFirstCase(),
-              size: Get.height * 0.015,
-              fontFamily: 'GilroyBold',
-              textAlign: TextAlign.start,
-              color: AppColor().primaryWhite,
-            ),
-          ),
-          Gap(Get.height * 0.015),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              (widget.item.repost == null)
-                  ? Container(
-                      child: widget.item.image == null
-                          ? Container()
-                          : CachedNetworkImage(
-                              height: Get.height * 0.25,
-                              width: double.infinity,
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => Center(
-                                child: SizedBox(
-                                  height: Get.height * 0.05,
-                                  width: Get.height * 0.05,
-                                  child: CircularProgressIndicator(
-                                      color: AppColor().primaryWhite,
-                                      value: progress.progress),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Icon(
-                                  Icons.error,
-                                  color: AppColor().primaryWhite),
-                              imageUrl: widget.item.image!,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(widget.item.image!),
-                                      fit: BoxFit.cover),
-                                ),
-                              ),
-                            ),
-                    )
-                  : Container(
-                      child: widget.item.repost!.image == null
-                          ? Container()
-                          : CachedNetworkImage(
-                              height: Get.height * 0.25,
-                              width: double.infinity,
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => Center(
-                                child: SizedBox(
-                                  height: Get.height * 0.05,
-                                  width: Get.height * 0.05,
-                                  child: CircularProgressIndicator(
-                                      color: AppColor().primaryWhite,
-                                      value: progress.progress),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Icon(
-                                  Icons.error,
-                                  color: AppColor().primaryWhite),
-                              imageUrl: widget.item.repost!.image!,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          widget.item.repost!.image!),
-                                      fit: BoxFit.cover),
-                                ),
-                              ),
-                            ),
-                    ),
-              Positioned.fill(
-                left: Get.height * 0.02,
-                bottom: Get.height * 0.02,
-                top: Get.height * 0.19,
-                child: SizedBox(
-                  height: Get.height * 0.03,
-                  child: ListView.separated(
-                      padding: EdgeInsets.zero,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: widget.item.tags!.length,
-                      separatorBuilder: (context, index) =>
-                          Gap(Get.height * 0.01),
-                      itemBuilder: (context, index) {
-                        var items = widget.item.tags![index];
-                        return Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: AppColor().primaryDark.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: AppColor().primaryColor.withOpacity(0.05),
-                              width: 0.5,
-                            ),
-                          ),
-                          child: Center(
-                            child: CustomText(
-                              title: items.title,
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.center,
-                              size: Get.height * 0.014,
-                              fontFamily: 'GilroyBold',
-                            ),
-                          ),
-                        );
-                      }),
-                ),
+                  Row(
+                    children: [
+                      InkWell(
+                        child: Icon(
+                          Icons.share_outlined,
+                          color: AppColor().primaryWhite,
+                          size: Get.height * 0.025,
+                        ),
+                        onTap: () {},
+                      ),
+                      Gap(Get.height * 0.005),
+                      CustomText(
+                        title: 'Share',
+                        size: Get.height * 0.014,
+                        fontFamily: 'GilroyBold',
+                        textAlign: TextAlign.start,
+                        color: AppColor().primaryWhite,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                profileMenu(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    LikeButton(
-                      size: Get.height * 0.025,
-                      onTap: onLikeButtonTapped,
-                      circleColor: CircleColor(
-                          start: AppColor().primaryColor,
-                          end: AppColor().primaryColor),
-                      bubblesColor: BubblesColor(
-                        dotPrimaryColor: AppColor().primaryColor,
-                        dotSecondaryColor: AppColor().primaryColor,
-                      ),
-                      likeBuilder: (bool isLiked) {
-                        return widget.item.likes!.any(
-                                (item) => item.id == authController.user!.id)
-                            ? Icon(
-                                isLiked
-                                    ? Icons.favorite_outline
-                                    : Icons.favorite,
-                                color: AppColor().primaryColor,
-                                size: Get.height * 0.025)
-                            : Icon(
-                                isLiked
-                                    ? Icons.favorite
-                                    : Icons.favorite_outline,
-                                color: isLiked
-                                    ? AppColor().primaryColor
-                                    : AppColor().primaryWhite,
-                                size: Get.height * 0.025);
-                      },
-                      likeCount: widget.item.likeCount,
-                      countBuilder: (int? count, bool isLiked, String text) {
-                        var color = AppColor().primaryWhite;
-                        Widget result;
-                        if (count == 0) {
-                          result = CustomText(
-                              title: '0',
-                              size: Get.height * 0.014,
-                              fontFamily: 'GilroyBold',
-                              textAlign: TextAlign.start,
-                              color: color);
-                        } else if (count == 1) {
-                          result = CustomText(
-                              title: '$text like',
-                              size: Get.height * 0.014,
-                              fontFamily: 'GilroyBold',
-                              textAlign: TextAlign.start,
-                              color: color);
-                        } else {
-                          result = CustomText(
-                              title: '$text likes',
-                              size: Get.height * 0.014,
-                              fontFamily: 'GilroyBold',
-                              textAlign: TextAlign.start,
-                              color: color);
-                        }
-                        return result;
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    InkWell(
-                      child: Icon(
-                        Icons.sms_outlined,
-                        color: AppColor().primaryWhite,
-                        size: Get.height * 0.025,
-                      ),
-                      onTap: () {},
-                    ),
-                    Gap(Get.height * 0.005),
-                    CustomText(
-                      title: widget.item.comment!.length.toString(),
-                      size: Get.height * 0.014,
-                      fontFamily: 'GilroyBold',
-                      textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    InkWell(
-                      child: Icon(
-                        Icons.share_outlined,
-                        color: AppColor().primaryWhite,
-                        size: Get.height * 0.025,
-                      ),
-                      onTap: () {},
-                    ),
-                    Gap(Get.height * 0.005),
-                    CustomText(
-                      title: 'Share',
-                      size: Get.height * 0.014,
-                      fontFamily: 'GilroyBold',
-                      textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
-                    ),
-                  ],
-                ),
-              ],
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   profileMenu() {
@@ -725,7 +734,7 @@ class _PostItemState extends State<PostItem> {
 
     if (selectedMenuItem == '0') {
       debugPrint('bookmark');
-      postController.bookmarkPost(widget.item.id!);
+      await postController.bookmarkPost(widget.item.id!);
     } else if (selectedMenuItem == '1') {
     } else if (selectedMenuItem == '2') {}
   }

@@ -23,15 +23,18 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   int? categoryType = 0;
   bool? isSearch = false;
   final FocusNode _searchFocusNode = FocusNode();
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
+  late TabController _tabController = TabController(length: 3, vsync: this);
   @override
   void dispose() {
     _searchFocusNode.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -149,14 +152,46 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Gap(Get.height * 0.025),
-                        categoryWidget(),
+                        TabBar(
+                            isScrollable: true,
+                            tabAlignment: TabAlignment.start,
+                            labelColor: AppColor().primaryColor,
+                            indicatorColor: AppColor().primaryColor,
+                            dividerColor: Colors.transparent,
+                            labelStyle: const TextStyle(
+                              fontFamily: 'GilroyBold',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            unselectedLabelColor: AppColor().lightItemsColor,
+                            unselectedLabelStyle: const TextStyle(
+                              fontFamily: 'GilroyMedium',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            controller: _tabController,
+                            tabs: const [
+                              Tab(text: 'For you'),
+                              Tab(text: 'Following'),
+                              Tab(text: 'Bookmark')
+                            ]),
                         Gap(Get.height * 0.02),
-                        if (categoryType == 0)
-                          PostWidget(posts: postController.allPost)
-                        else if (categoryType == 1)
-                          Container()
-                        else
-                          PostWidget(posts: postController.bookmarkedPost)
+                        SizedBox(
+                          width: double.maxFinite,
+                          height: double.maxFinite,
+                          child:
+                              TabBarView(controller: _tabController, children: [
+                            PostWidget(posts: postController.allPost),
+                            CustomText(
+                              title: 'Following',
+                              weight: FontWeight.w500,
+                              size: 10,
+                              fontFamily: 'GilroyBold',
+                              color: AppColor().primaryWhite,
+                            ),
+                            PostWidget(posts: postController.bookmarkedPost)
+                          ]),
+                        ),
                       ],
                     ),
                   )),

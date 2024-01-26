@@ -36,8 +36,6 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   @override
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,7 +183,7 @@ class _OTPScreenState extends State<OTPScreen> {
             ),
             Gap(Get.height * 0.06),
             SizedBox(
-              height: Get.height * 0.35,
+              height: Get.height * 0.4,
               child: NumPad(
                 highlightColor: AppColor().primaryWhite,
                 runSpace: Get.height * 0.03,

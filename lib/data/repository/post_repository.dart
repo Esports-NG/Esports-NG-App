@@ -228,7 +228,7 @@ class PostRepository extends GetxController {
 
   Future bookmarkPost(int postId) async {
     try {
-      EasyLoading.show(status: 'Bookmarking...');
+      EasyLoading.show(status: 'processing...');
       _bookmarkPostStatus(BookmarkPostStatus.loading);
 
       var response = await http.put(
@@ -238,18 +238,17 @@ class PostRepository extends GetxController {
           "Authorization": 'JWT ${authController.token}'
         },
       );
+
       var json = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        debugPrint(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
         EasyLoading.showInfo(json['message']).then((value) => getPosts(true));
+
         _bookmarkPostStatus(BookmarkPostStatus.success);
-         EasyLoading.dismiss();
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
             .then((value) => EasyLoading.showInfo('try again!'));
         _bookmarkPostStatus(BookmarkPostStatus.error);
-         EasyLoading.dismiss();
       }
       return response.body;
     } catch (error) {

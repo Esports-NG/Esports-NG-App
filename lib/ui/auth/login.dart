@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       isPassword = value.isNotEmpty;
                     });
                   },
-                  validate: Validator.isPassword,
+                  validate: Validator.isName,
                   suffixIcon: InkWell(
                     onTap: _togglePasswordView,
                     child: Icon(
@@ -218,4 +218,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
