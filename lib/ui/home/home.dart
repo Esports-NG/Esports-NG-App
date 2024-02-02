@@ -80,13 +80,13 @@ class _HomePageState extends State<HomePage>
                                     Get.to(() => const Messages());
                                   },
                                   child: Badge(
-                                    label: CustomText(
-                                      title: '4',
-                                      weight: FontWeight.w500,
-                                      size: 10,
-                                      fontFamily: 'GilroyBold',
-                                      color: AppColor().primaryWhite,
-                                    ),
+                                    // label: CustomText(
+                                    //   title: '4',
+                                    //   weight: FontWeight.w500,
+                                    //   size: 10,
+                                    //   fontFamily: 'GilroyBold',
+                                    //   color: AppColor().primaryWhite,
+                                    // ),
                                     child: SvgPicture.asset(
                                       'assets/images/svg/chat.svg',
                                       height: Get.height * 0.025,
@@ -109,13 +109,13 @@ class _HomePageState extends State<HomePage>
                                     Get.to(() => const NotificationPage());
                                   },
                                   child: Badge(
-                                    label: CustomText(
-                                      title: '10',
-                                      weight: FontWeight.w500,
-                                      size: 10,
-                                      fontFamily: 'GilroyBold',
-                                      color: AppColor().primaryWhite,
-                                    ),
+                                    // label: CustomText(
+                                    //   title: '10',
+                                    //   weight: FontWeight.w500,
+                                    //   size: 10,
+                                    //   fontFamily: 'GilroyBold',
+                                    //   color: AppColor().primaryWhite,
+                                    // ),
                                     child: SvgPicture.asset(
                                       'assets/images/svg/notification.svg',
                                       height: Get.height * 0.025,
@@ -182,13 +182,7 @@ class _HomePageState extends State<HomePage>
                           child:
                               TabBarView(controller: _tabController, children: [
                             PostWidget(posts: postController.allPost),
-                            CustomText(
-                              title: 'Following',
-                              weight: FontWeight.w500,
-                              size: 10,
-                              fontFamily: 'GilroyBold',
-                              color: AppColor().primaryWhite,
-                            ),
+                            PostWidget(posts: postController.followingPost),
                             PostWidget(posts: postController.bookmarkedPost)
                           ]),
                         ),

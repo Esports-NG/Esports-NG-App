@@ -55,21 +55,8 @@ class _DashboardState extends State<Dashboard> {
           resizeToAvoidBottomInset: true,
           stateManagement: true,
           hideNavigationBarWhenKeyboardShows: false,
-          decoration: NavBarDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            colorBehindNavBar: Colors.white,
-          ),
           popAllScreensOnTapOfSelectedTab: true,
           popActionScreens: PopActionScreensType.all,
-          itemAnimationProperties: const ItemAnimationProperties(
-            duration: Duration(milliseconds: 200),
-            curve: Curves.ease,
-          ),
-          screenTransitionAnimation: const ScreenTransitionAnimation(
-            animateTabTransition: true,
-            curve: Curves.ease,
-            duration: Duration(milliseconds: 200),
-          ),
           navBarStyle: NavBarStyle.style3,
         ),
         Padding(

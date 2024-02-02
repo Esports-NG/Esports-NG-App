@@ -36,10 +36,12 @@ class PostRepository extends GetxController {
   final Rx<List<PostModel>> _allPost = Rx([]);
   final Rx<List<PostModel>> _myPost = Rx([]);
   final Rx<List<PostModel>> _bookmarkedPost = Rx([]);
+  final Rx<List<PostModel>> _followingPost = Rx([]);
 
   List<PostModel> get allPost => _allPost.value;
   List<PostModel> get myPost => _myPost.value;
   List<PostModel> get bookmarkedPost => _bookmarkedPost.value;
+  List<PostModel> get followingPost => _followingPost.value;
 
   final _postStatus = PostStatus.empty.obs;
   final _bookmarkStatus = BookmarkStatus.empty.obs;
@@ -188,6 +190,45 @@ class PostRepository extends GetxController {
   }
 
   Future rePost(int postId) async {
+    try {
+      EasyLoading.show(status: 'Reposting...');
+      _postStatus(PostStatus.loading);
+      var body = {
+        "body": authController.commentController.text == ''
+            ? 'repost'
+            : authController.commentController.text
+      };
+
+      var response = await http.post(
+        Uri.parse("${ApiLink.post}$postId/repost/"),
+        // body: jsonEncode(body),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+
+      debugPrint(response.body);
+      debugPrint(response.statusCode.toString());
+      if (response.statusCode == 201) {
+        _postStatus(PostStatus.success);
+        EasyLoading.showInfo('Success').then((value) => getPosts(true));
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _postStatus(PostStatus.error);
+      }
+      return response.body;
+    } catch (error) {
+      _postStatus(PostStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("Repost error: ${error.toString()}");
+      handleError(error);
+    }
+  }
+
+  Future rePostWithQuote(int postId) async {
     try {
       EasyLoading.show(status: 'Reposting...');
       _postStatus(PostStatus.loading);
