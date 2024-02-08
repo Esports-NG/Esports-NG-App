@@ -104,9 +104,11 @@ class _PostDetailsState extends State<PostDetails> {
                                     width: Get.width * 0.25,
                                     height: Get.height * 0.04,
                                     onTap: () {
-                                      if (formKey.currentState!.validate()) {
+                                      if (formKey.currentState!.validate() &&
+                                          postController.postStatus !=
+                                              PostStatus.loading) {
                                         postController
-                                            .rePost(widget.item.id!)
+                                            .rePost(widget.item.id!, 'quote')
                                             .then((value) {
                                           setState(() {
                                             isRepostActive = false;
@@ -614,8 +616,11 @@ class _PostDetailsState extends State<PostDetails> {
                               var item = widget.item.comment![index];
                               return InkWell(
                                 onTap: () {
-                                  if (index == 0) {
-                                    postController.rePost(widget.item.id!);
+                                  if (index == 0 &&
+                                      postController.postStatus !=
+                                          PostStatus.loading) {
+                                    postController.rePost(
+                                        widget.item.id!, 'quote');
                                   } else {}
                                   Get.back();
                                 },
@@ -759,7 +764,7 @@ class _PostDetailsState extends State<PostDetails> {
                     onTap: () {
                       if (authController.chatController.text != '') {
                         postController
-                            .commentOnPost(widget.item.id!, widget.item)
+                            .commentOnPost(widget.item.id!)
                             .then((value) {
                           if (postController.postStatus == PostStatus.success) {
                             authController.chatController.clear();

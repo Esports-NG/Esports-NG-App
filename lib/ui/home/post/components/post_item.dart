@@ -704,6 +704,7 @@ class _PostItemState extends State<PostItem> {
               title: 'Follow/Unfollow @${widget.item.author!.userName}'),
         ),
         PopupMenuItem(
+          value: '3',
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
@@ -711,6 +712,7 @@ class _PostItemState extends State<PostItem> {
               title: 'Turn on/Turn off Notifications'),
         ),
         PopupMenuItem(
+          value: '4',
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
@@ -718,6 +720,7 @@ class _PostItemState extends State<PostItem> {
               title: 'Mute/Unmute @${widget.item.author!.userName}'),
         ),
         PopupMenuItem(
+          value: '5',
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
@@ -725,6 +728,7 @@ class _PostItemState extends State<PostItem> {
               title: 'Block @${widget.item.author!.userName}'),
         ),
         PopupMenuItem(
+          value: '6',
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(icon: Icons.flag, title: 'Report Post'),
@@ -732,11 +736,27 @@ class _PostItemState extends State<PostItem> {
       ],
     );
 
-    if (selectedMenuItem == '0') {
+    if (selectedMenuItem == '0' &&
+        postController.bookmarkPostStatus != BookmarkPostStatus.loading) {
       debugPrint('bookmark');
       await postController.bookmarkPost(widget.item.id!);
-    } else if (selectedMenuItem == '1') {
-    } else if (selectedMenuItem == '2') {}
+    } else if (selectedMenuItem == '1' &&
+        postController.blockPostStatus != BlockPostStatus.loading) {
+      debugPrint('uninterested post');
+      await postController.blockUserOrPost(widget.item.id!, 'uninterested');
+    } else if (selectedMenuItem == '2' &&
+        authController.followStatus != FollowStatus.loading) {
+      debugPrint('follow / unfollow user');
+      await authController.followUser(widget.item.author!.id!.toString());
+    } else if (selectedMenuItem == '3' &&
+        authController.followStatus != FollowStatus.loading) {
+      debugPrint('turning notification');
+      await authController.turnNotification(widget.item.author!.id.toString());
+    } else if (selectedMenuItem == '5' &&
+        postController.blockPostStatus != BlockPostStatus.loading) {
+      debugPrint('block user');
+      await postController.blockUserOrPost(widget.item.author!.id!, 'block');
+    }
   }
 
   Row popUpMenuItems({String? title, IconData? icon}) {

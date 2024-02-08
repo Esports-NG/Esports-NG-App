@@ -595,8 +595,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                           return InkWell(
                                             onTap: () {
                                               if (index == 0) {
-                                                postController
-                                                    .rePost(widget.item.id!);
+                                                postController.rePost(
+                                                    widget.item.id!, 'repost');
                                               } else {}
                                               Get.back();
                                             },
@@ -695,8 +695,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                       return InkWell(
                                         onTap: () {
                                           if (index == 0) {
-                                            postController
-                                                .rePost(widget.item.id!);
+                                            // postController
+                                            //     .rePost(widget.item.id!);
                                           } else {}
                                           Get.back();
                                         },
@@ -837,8 +837,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                       return InkWell(
                                         onTap: () {
                                           if (index == 0) {
-                                            postController
-                                                .rePost(widget.item.id!);
+                                            // postController
+                                            //     .rePost(widget.item.id!);
                                           } else {}
                                           Get.back();
                                         },
@@ -976,7 +976,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                   onSubmited: (_) {
                     if (authController.chatController.text != '') {
                       postController
-                          .commentOnPost(widget.item.id!, widget.item)
+                          .commentOnPost(widget.item.id!)
                           .then((value) {
                         if (postController.postStatus == PostStatus.success) {
                           authController.chatController.clear();

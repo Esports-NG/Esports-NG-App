@@ -440,12 +440,13 @@ class AuthRepository extends GetxController {
     }
   }
 
-  Future followUser(String title, userId) async {
-    _followStatus(FollowStatus.loading);
+  Future followUser(String userId) async {
     try {
+      EasyLoading.show(status: 'please wait...');
+      _followStatus(FollowStatus.loading);
       debugPrint('following user...');
       var response = await http.post(
-        Uri.parse('${ApiLink.followUser}$title/$userId/'),
+        Uri.parse('${ApiLink.followUser}$userId/'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": 'JWT $token'
@@ -457,11 +458,80 @@ class AuthRepository extends GetxController {
       }
       debugPrint(response.body);
       if (response.statusCode == 200) {
+        EasyLoading.showInfo(json['message']).then((value) async {});
         _followStatus(FollowStatus.success);
-      } else {}
+      } else {
+        _followStatus(FollowStatus.error);
+        EasyLoading.dismiss();
+      }
     } catch (error) {
       _followStatus(FollowStatus.error);
+      EasyLoading.dismiss();
       debugPrint("follow user error: $error");
+      getError(error);
+    }
+  }
+
+  Future followOthers(String userId) async {
+    try {
+      EasyLoading.show(status: 'please wait...');
+      _followStatus(FollowStatus.loading);
+      debugPrint('following user...');
+      var response = await http.post(
+        Uri.parse('${ApiLink.followUser}$userId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        EasyLoading.showInfo(json['message']).then((value) async {});
+        _followStatus(FollowStatus.success);
+      } else {
+        _followStatus(FollowStatus.error);
+        EasyLoading.dismiss();
+      }
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("follow user error: $error");
+      getError(error);
+    }
+  }
+
+  Future turnNotification(String postId) async {
+    try {
+      EasyLoading.show(status: 'please wait...');
+      _followStatus(FollowStatus.loading);
+      debugPrint('turning notification');
+      var response = await http.post(
+        Uri.parse('${ApiLink.turnNotification}?group_id=$postId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        EasyLoading.showInfo(json['message']).then((value) async {});
+        _followStatus(FollowStatus.success);
+      } else {
+        _followStatus(FollowStatus.error);
+        EasyLoading.dismiss();
+      }
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("turning notification error: $error");
       getError(error);
     }
   }

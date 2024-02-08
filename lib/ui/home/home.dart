@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage>
         body: RefreshIndicator(
           onRefresh: () async {
             return Future.delayed(const Duration(seconds: 2), () {
-              postController.getPosts(false);
+              postController.getAllPost(false);
             });
           },
           child: Stack(

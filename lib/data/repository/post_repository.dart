@@ -16,6 +16,8 @@ enum LikePostStatus { loading, success, error, empty }
 
 enum BookmarkPostStatus { loading, success, error, empty }
 
+enum BlockPostStatus { loading, success, error, empty }
+
 enum BookmarkStatus { loading, success, error, empty, available }
 
 enum CreatePostStatus { loading, success, error, empty }
@@ -49,6 +51,7 @@ class PostRepository extends GetxController {
   final _likePostStatus = LikePostStatus.empty.obs;
   final _bookmarkPostStatus = BookmarkPostStatus.empty.obs;
   final _getPostStatus = GetPostStatus.empty.obs;
+  final _blockPostStatus = BlockPostStatus.empty.obs;
 
   GetPostStatus get getPostStatus => _getPostStatus.value;
   BookmarkStatus get bookmarkStatus => _bookmarkStatus.value;
@@ -56,6 +59,7 @@ class PostRepository extends GetxController {
   BookmarkPostStatus get bookmarkPostStatus => _bookmarkPostStatus.value;
   PostStatus get postStatus => _postStatus.value;
   CreatePostStatus get createPostStatus => _createPostStatus.value;
+  BlockPostStatus get blockPostStatus => _blockPostStatus.value;
 
   Rx<File?> mPostImage = Rx(null);
   File? get postImage => mPostImage.value;
@@ -65,7 +69,8 @@ class PostRepository extends GetxController {
     super.onInit();
     authController.mToken.listen((p0) {
       if (p0 != '0') {
-        getPosts(true);
+        getAllPost(true);
+        getBookmarkedPost(true);
       }
     });
   }
@@ -92,7 +97,7 @@ class PostRepository extends GetxController {
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
         debugPrint(await response.stream.bytesToString());
-        getPosts(true);
+        getAllPost(true);
         clear();
         Get.to(() => const CreateSuccessPage(title: 'Post Created'));
       } else if (response.statusCode == 401) {
@@ -138,7 +143,7 @@ class PostRepository extends GetxController {
         _createPostStatus(CreatePostStatus.success);
         Get.to(() => const CreateSuccessPage(title: 'Post Updated'))!
             .then((value) {
-          getPosts(true);
+          getAllPost(true);
         });
       } else if (response.statusCode == 401) {
         authController
@@ -172,7 +177,7 @@ class PostRepository extends GetxController {
         EasyLoading.dismiss();
         Get.to(() => const CreateSuccessPage(title: 'Post Deleted'))!
             .then((value) {
-          getPosts(true);
+          getAllPost(true);
         });
       } else if (response.statusCode == 401) {
         authController
@@ -189,69 +194,37 @@ class PostRepository extends GetxController {
     }
   }
 
-  Future rePost(int postId) async {
+  Future rePost(int postId, String title) async {
     try {
       EasyLoading.show(status: 'Reposting...');
       _postStatus(PostStatus.loading);
-      var body = {
-        "body": authController.commentController.text == ''
-            ? 'repost'
-            : authController.commentController.text
-      };
 
-      var response = await http.post(
-        Uri.parse("${ApiLink.post}$postId/repost/"),
-        // body: jsonEncode(body),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        },
-      );
-
-      debugPrint(response.body);
-      debugPrint(response.statusCode.toString());
-      if (response.statusCode == 201) {
-        _postStatus(PostStatus.success);
-        EasyLoading.showInfo('Success').then((value) => getPosts(true));
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        _postStatus(PostStatus.error);
+      http.Response response;
+      if (title == 'quote') {
+        var body = {"body": authController.commentController.text};
+        response = await http.post(
+          Uri.parse("${ApiLink.post}$postId/quote/"),
+          body: jsonEncode(body),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": 'JWT ${authController.token}'
+          },
+        );
+      } else {
+        response = await http.post(
+          Uri.parse("${ApiLink.post}$postId/repost/"),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": 'JWT ${authController.token}'
+          },
+        );
       }
-      return response.body;
-    } catch (error) {
-      _postStatus(PostStatus.error);
-      EasyLoading.dismiss();
-      debugPrint("Repost error: ${error.toString()}");
-      handleError(error);
-    }
-  }
-
-  Future rePostWithQuote(int postId) async {
-    try {
-      EasyLoading.show(status: 'Reposting...');
-      _postStatus(PostStatus.loading);
-      var body = {
-        "body": authController.commentController.text == ''
-            ? 'repost'
-            : authController.commentController.text
-      };
-
-      var response = await http.post(
-        Uri.parse("${ApiLink.post}$postId/repost/"),
-        body: jsonEncode(body),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        },
-      );
 
       debugPrint(response.body);
       debugPrint(response.statusCode.toString());
       if (response.statusCode == 201) {
         _postStatus(PostStatus.success);
-        EasyLoading.showInfo('Success').then((value) => getPosts(true));
+        EasyLoading.showInfo('Success').then((value) => getAllPost(true));
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
@@ -282,7 +255,8 @@ class PostRepository extends GetxController {
 
       var json = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        EasyLoading.showInfo(json['message']).then((value) => getPosts(true));
+        EasyLoading.showInfo(json['message'])
+            .then((value) => getPostsWithBookmark(true));
 
         _bookmarkPostStatus(BookmarkPostStatus.success);
       } else if (response.statusCode == 401) {
@@ -300,7 +274,7 @@ class PostRepository extends GetxController {
     }
   }
 
-  Future commentOnPost(int postId, PostModel item) async {
+  Future commentOnPost(int postId) async {
     try {
       EasyLoading.show(status: 'commenting...');
       var body = {
@@ -322,11 +296,7 @@ class PostRepository extends GetxController {
       debugPrint(response.statusCode.toString());
       if (response.statusCode == 201) {
         _postStatus(PostStatus.success);
-
-        EasyLoading.showInfo('Success').then((value) async {
-          getMyPost(true);
-          Get.back();
-        });
+        EasyLoading.showInfo('Success').then((value) => getAllPost(true));
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
@@ -338,6 +308,47 @@ class PostRepository extends GetxController {
       _postStatus(PostStatus.error);
       EasyLoading.dismiss();
       debugPrint("Repost error: ${error.toString()}");
+      handleError(error);
+    }
+  }
+
+  Future blockUserOrPost(int postId, String title) async {
+    try {
+      _blockPostStatus(BlockPostStatus.loading);
+      EasyLoading.show(status: 'please wait...');
+
+      _postStatus(PostStatus.loading);
+      var response = await http.post(
+        Uri.parse(title == 'block'
+            ? "${ApiLink.post}block/?pk=$postId"
+            : "${ApiLink.post}uninterested/$postId/team/1/"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+
+      debugPrint(response.body);
+      debugPrint(response.statusCode.toString());
+      if (response.statusCode == 200) {
+        _blockPostStatus(BlockPostStatus.success);
+        EasyLoading.showInfo('Success').then((value) async {
+          getAllPost(true);
+        });
+      } else if (response.statusCode == 401) {
+        _blockPostStatus(BlockPostStatus.error);
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+      } else {
+        EasyLoading.dismiss();
+        _blockPostStatus(BlockPostStatus.error);
+      }
+      return response.body;
+    } catch (error) {
+      EasyLoading.dismiss();
+      _blockPostStatus(BlockPostStatus.error);
+      debugPrint("block error: ${error.toString()}");
       handleError(error);
     }
   }
@@ -355,7 +366,7 @@ class PostRepository extends GetxController {
       );
       var json = jsonDecode(response.body);
       if (response.statusCode == 200 && json['message'] == 'Post liked') {
-        getPosts(false);
+        getBookmarkedPost(false);
         return true;
       } else {
         return false;
@@ -503,9 +514,9 @@ class PostRepository extends GetxController {
         fontSize: Get.height * 0.015,
         msg: (error.toString().contains("esports-ng.vercel.app") ||
                 error.toString().contains("Network is unreachable"))
-            ? 'Post like: No internet connection!'
+            ? 'No internet connection!'
             : (error.toString().contains("FormatException"))
-                ? 'Post like: Internal server error, contact admin!'
+                ? 'Internal server error, contact admin!'
                 : error.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM);
@@ -515,6 +526,11 @@ class PostRepository extends GetxController {
     getAllPost(isFirstTime);
     getBookmarkedPost(isFirstTime);
     getMyPost(isFirstTime);
+  }
+
+  void getPostsWithBookmark(bool isFirstTime) {
+    getAllPost(isFirstTime);
+    getBookmarkedPost(isFirstTime);
   }
 
   void clearPhoto() {

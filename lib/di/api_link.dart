@@ -34,6 +34,7 @@ class ApiLink {
   static String likePost = "${baseurl}post/like/";
   static String post = "${baseurl}post/";
   static String comment = "${baseurl}post/comment/";
+  static String turnNotification = "${baseurl}post/on_notifs/team/";
 
   //Team
   static String createTeam = "${baseurl}team/create/";
