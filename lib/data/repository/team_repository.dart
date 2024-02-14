@@ -88,6 +88,7 @@ class TeamRepository extends GetxController {
 
   Future createTeam(TeamModel team) async {
     try {
+      debugPrint('team: ${team.toCreateTeamJson()}');
       _createTeamStatus(CreateTeamStatus.loading);
       var headers = {
         "Content-Type": "application/json",
@@ -96,13 +97,19 @@ class TeamRepository extends GetxController {
       var request =
           http.MultipartRequest("POST", Uri.parse(ApiLink.createTeam));
 
-      request.files.add(await http.MultipartFile.fromPath(
-          'profile_picture', teamProfileImage!.path));
-      request.files.add(
-          await http.MultipartFile.fromPath('cover', teamCoverImage!.path));
+      request.fields.addAll(team
+          .toCreateTeamJson()
+          .map((key, value) => MapEntry(key, value.toString())));
 
-      request.fields.addAll(
-          team.toCreateTeamJson().map((key, value) => MapEntry(key, value)));
+      if (teamProfileImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'profile_picture', teamProfileImage!.path));
+      }
+      if (teamCoverImage != null) {
+        request.files.add(
+            await http.MultipartFile.fromPath('cover', teamCoverImage!.path));
+      }
+
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
@@ -113,6 +120,8 @@ class TeamRepository extends GetxController {
             .then((value) {
           getAllTeam(false);
           clear();
+          clearCoverPhoto();
+          clearProfilePhoto();
         });
       } else if (response.statusCode == 401) {
         authController
@@ -249,9 +258,9 @@ class TeamRepository extends GetxController {
         fontSize: Get.height * 0.015,
         msg: (error.toString().contains("esports-ng.vercel.app") ||
                 error.toString().contains("Network is unreachable"))
-            ? 'Team like: No internet connection!'
+            ? 'No internet connection!'
             : (error.toString().contains("FormatException"))
-                ? 'Team like: Internal server error, contact admin!'
+                ? 'Internal server error, contact admin!'
                 : error.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM);

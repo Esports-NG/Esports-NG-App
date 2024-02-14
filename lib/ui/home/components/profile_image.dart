@@ -86,3 +86,47 @@ class _OtherImageState extends State<OtherImage> {
           );
   }
 }
+
+class CoverImage extends StatefulWidget {
+  final double? height, width;
+  final String? image;
+  const CoverImage({super.key, this.height, this.width, required this.image});
+
+  @override
+  State<CoverImage> createState() => _CoverImageState();
+}
+
+class _CoverImageState extends State<CoverImage> {
+  @override
+  Widget build(BuildContext context) {
+    return (widget.image == null)
+        ? Container(
+            height: widget.height ?? Get.height * 0.05,
+            width: widget.width ?? Get.width,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/png/team_cover.png'),
+                  fit: BoxFit.cover,
+                  opacity: 0.2),
+            ),
+            // child: SvgPicture.asset(
+            //   'assets/images/svg/people.svg',
+            // ),
+          )
+        : CachedNetworkImage(
+            height: widget.height ?? Get.height * 0.05,
+            width: widget.width ?? Get.width,
+            // placeholder: (context, url) => const CircularProgressIndicator(),
+            // errorWidget: (context, url, error) => const Icon(Icons.error),
+            imageUrl: widget.image!,
+            imageBuilder: (context, imageProvider) => Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(widget.image!),
+                    fit: BoxFit.cover,
+                    opacity: 0.2),
+              ),
+            ),
+          );
+  }
+}

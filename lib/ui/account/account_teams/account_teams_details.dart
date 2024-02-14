@@ -45,22 +45,28 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
             alignment: Alignment.bottomCenter,
             clipBehavior: Clip.none,
             children: [
-              Container(
-                height: Get.height * 0.15,
-                width: Get.width,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/png/team_cover.png'),
-                      fit: BoxFit.cover,
-                      opacity: 0.2),
-                ),
-              ),
+              widget.item.cover == null
+                  ? Container(
+                      height: Get.height * 0.15,
+                      width: Get.width,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image:
+                                AssetImage('assets/images/png/team_cover.png'),
+                            fit: BoxFit.cover,
+                            opacity: 0.2),
+                      ),
+                    )
+                  : CoverImage(
+                      height: Get.height * 0.15,
+                      width: Get.width,
+                      image: '${ApiLink.imageUrl}${widget.item.cover}'),
               Positioned(
                 top: Get.height * 0.1,
                 child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    widget.item.cover == null
+                    widget.item.profilePicture == null
                         ? Container(
                             height: Get.height * 0.1,
                             width: Get.height * 0.1,
@@ -73,7 +79,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                           )
                         : OtherImage(
                             itemSize: Get.height * 0.1,
-                            image: '${ApiLink.imageUrl}${widget.item.cover}'),
+                            image: '${widget.item.profilePicture}'),
                     Positioned(
                       child: SvgPicture.asset(
                         'assets/images/svg/check_badge.svg',

@@ -3,7 +3,7 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'team_inbox_model.dart';
 
 class TeamModel {
-  int? id;
+  int? id, igame, imembers;
   Author? owner;
   String? name;
   String? profilePicture;
@@ -16,6 +16,8 @@ class TeamModel {
 
   TeamModel({
     this.id,
+    this.igame,
+    this.imembers,
     this.owner,
     this.name,
     this.profilePicture,
@@ -59,12 +61,10 @@ class TeamModel {
       };
 
   Map<String, dynamic> toCreateTeamJson() => {
-        "id": id,
+        "igame": igame,
         "name": name,
         "bio": bio,
-        "members":
-            members == null ? [] : List<dynamic>.from(members!.map((x) => x)),
-        "members_count": membersCount,
+        "imembers": imembers,
       };
 }
 

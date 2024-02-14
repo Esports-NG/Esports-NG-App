@@ -34,7 +34,7 @@ class AccountTeamsItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          (item.cover == null)
+          (item.profilePicture == null)
               ? Container(
                   height: Get.height * 0.08,
                   width: Get.height * 0.08,
@@ -61,15 +61,14 @@ class AccountTeamsItem extends StatelessWidget {
                   ),
                   errorWidget: (context, url, error) =>
                       Icon(Icons.error, color: AppColor().primaryColor),
-                  imageUrl: '${ApiLink.imageUrl}${item.cover}',
+                  imageUrl: '${item.profilePicture}',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border:
                           Border.all(color: AppColor().primaryWhite, width: 2),
                       image: DecorationImage(
-                          image:
-                              NetworkImage('${ApiLink.imageUrl}${item.cover}'),
+                          image: NetworkImage('${item.profilePicture}'),
                           fit: BoxFit.cover),
                     ),
                   ),

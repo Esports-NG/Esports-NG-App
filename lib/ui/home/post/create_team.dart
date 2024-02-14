@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -83,9 +84,12 @@ class _CreateTeamState extends State<CreateTeamPage> {
                   debugPrint('PageCount: $pageCount');
                 });
               } else {
-                setState(() {});
-                teamController.clearCoverPhoto();
-                teamController.clearProfilePhoto();
+                setState(() {
+                  teamController.clear();
+                  teamController.clearCoverPhoto();
+                  teamController.clearProfilePhoto();
+                });
+
                 Get.back();
               }
             },
@@ -177,21 +181,21 @@ class _CreateTeamState extends State<CreateTeamPage> {
                           validate: Validator.isName,
                         ),
                         Gap(Get.height * 0.02),
-                        CustomText(
-                          title: 'Team abbreviation (Max 5 characters) *',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.017,
-                        ),
-                        Gap(Get.height * 0.01),
-                        CustomTextField(
-                          hint: "The Willywonkers",
-                          // textEditingController:
-                          //     teamController.teamBioController,
-                          validate: Validator.isName,
-                        ),
-                        Gap(Get.height * 0.02),
+                        // CustomText(
+                        //   title: 'Team abbreviation (Max 5 characters) *',
+                        //   color: AppColor().primaryWhite,
+                        //   textAlign: TextAlign.center,
+                        //   fontFamily: 'GilroyRegular',
+                        //   size: Get.height * 0.017,
+                        // ),
+                        // Gap(Get.height * 0.01),
+                        // CustomTextField(
+                        //   hint: "The Willywonkers",
+                        //   // textEditingController:
+                        //   //     teamController.teamBioController,
+                        //   validate: Validator.isName,
+                        // ),
+                        // Gap(Get.height * 0.02),
                         CustomText(
                           title: 'Team bio *',
                           color: AppColor().primaryWhite,
@@ -402,71 +406,6 @@ class _CreateTeamState extends State<CreateTeamPage> {
                             ),
                           ),
                         ),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                          title: 'Enable team chat *',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.017,
-                        ),
-                        Gap(Get.height * 0.02),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CustomText(
-                              title: 'Yes',
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.center,
-                              fontFamily: 'GilroySemiBold',
-                              size: Get.height * 0.016,
-                            ),
-                            Gap(Get.height * 0.01),
-                            IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  setState(() {
-                                    enableChat = false;
-                                  });
-                                },
-                                icon: Icon(
-                                  !enableChat
-                                      ? Icons.radio_button_checked
-                                      : Icons.radio_button_unchecked,
-                                  color: !enableChat
-                                      ? AppColor().primaryColor
-                                      : AppColor().primaryWhite,
-                                  size: 20,
-                                )),
-                            Gap(Get.height * 0.02),
-                            CustomText(
-                              title: 'No',
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.center,
-                              fontFamily: 'GilroySemiBold',
-                              size: Get.height * 0.016,
-                            ),
-                            Gap(Get.height * 0.01),
-                            IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  setState(() {
-                                    enableChat = true;
-                                  });
-                                },
-                                icon: Icon(
-                                  enableChat
-                                      ? Icons.radio_button_checked
-                                      : Icons.radio_button_unchecked,
-                                  color: enableChat
-                                      ? AppColor().primaryColor
-                                      : AppColor().primaryWhite,
-                                  size: 20,
-                                ))
-                          ],
-                        ),
                       ],
                     ),
                   ),
@@ -609,15 +548,33 @@ class _CreateTeamState extends State<CreateTeamPage> {
                   ),
                 ),
               ],
-              Gap(pageCount == 0 ? Get.height * 0.05 : Get.height * 0.3),
+              Gap(Get.height * 0.05),
               Obx(() {
                 return InkWell(
                   onTap: () {
-                    // if (_formKey.currentState!.validate()) {}
+                    TeamModel team = TeamModel(
+                        igame: 1,
+                        name: teamController.teamNameController.text.trim(),
+                        bio: teamController.teamBioController.text.trim(),
+                        imembers: 1);
+
                     if (pageCount == 0) {
-                      setState(() {
-                        pageCount = 1;
-                      });
+                      if (_formKey.currentState!.validate()) {
+                        if (teamController.teamProfileImage == null) {
+                          teamController
+                              .handleError('Select team profile image!');
+                        } else if (teamController.teamCoverImage == null) {
+                          teamController
+                              .handleError('Select team cover image!');
+                        } else {
+                          setState(() {
+                            pageCount = 1;
+                          });
+                        }
+                      }
+                    } else if (teamController.createTeamStatus !=
+                        CreateTeamStatus.loading) {
+                      teamController.createTeam(team);
                     }
                   },
                   child: Container(

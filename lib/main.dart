@@ -70,6 +70,9 @@ class _ESportAppState extends State<ESportApp> {
           appBarTheme: AppBarTheme(
             backgroundColor: AppColor().primaryBackGroundColor,
           ),
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
           scaffoldBackgroundColor: AppColor().primaryBackGroundColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           pageTransitionsTheme: const PageTransitionsTheme(
