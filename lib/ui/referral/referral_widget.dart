@@ -55,27 +55,33 @@ class _ReferralState extends State<Referral>
         bottom: TabBar(
             controller: _tabController,
             indicatorColor: AppColor().primaryColor,
-            padding: EdgeInsets.only(top: Get.height * 0.02),
+            padding: EdgeInsets.only(top: Get.height * 0.0),
             tabs: [
-              CustomText(
-                title: 'Referral Link',
-                color: _tabController.index == 0
-                    ? AppColor().primaryColor
-                    : AppColor().lightItemsColor,
-                size: 14,
-                fontFamily:
-                    _tabController.index == 0 ? 'GilroyBold' : 'GilroyMedium',
-                weight: FontWeight.w400,
+              Padding(
+                padding: EdgeInsets.only(bottom: Get.height * 0.01),
+                child: CustomText(
+                  title: 'Referral Link',
+                  color: _tabController.index == 0
+                      ? AppColor().primaryColor
+                      : AppColor().lightItemsColor,
+                  size: 14,
+                  fontFamily:
+                      _tabController.index == 0 ? 'GilroyBold' : 'GilroyMedium',
+                  weight: FontWeight.w400,
+                ),
               ),
-              CustomText(
-                title: 'Referral Code',
-                color: _tabController.index == 1
-                    ? AppColor().primaryColor
-                    : AppColor().lightItemsColor,
-                size: 14,
-                fontFamily:
-                    _tabController.index == 1 ? 'GilroyBold' : 'GilroyMedium',
-                weight: FontWeight.w400,
+              Padding(
+                padding: EdgeInsets.only(bottom: Get.height * 0.01),
+                child: CustomText(
+                  title: 'Referral Code',
+                  color: _tabController.index == 1
+                      ? AppColor().primaryColor
+                      : AppColor().lightItemsColor,
+                  size: 14,
+                  fontFamily:
+                      _tabController.index == 1 ? 'GilroyBold' : 'GilroyMedium',
+                  weight: FontWeight.w400,
+                ),
               ),
             ]),
       ),
