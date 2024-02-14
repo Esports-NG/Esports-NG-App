@@ -1,3 +1,4 @@
+import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class _ReferralState extends State<Referral>
           size: 18,
           color: AppColor().primaryWhite,
         ),
+        leading: GoBackButton(onPressed: () => Get.back()),
         actions: [
           IconButton(
             onPressed: () {},
