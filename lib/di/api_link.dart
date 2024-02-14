@@ -1,6 +1,7 @@
 class ApiLink {
   static String domain = "https://esports-ng.vercel.app";
   static String baseurl = "$domain/";
+  static String imageUrl = "http://res.cloudinary.com/dkykwpryb/";
 
   static String register = "${baseurl}user/register/";
   static String login = "${baseurl}user/login/";
@@ -17,28 +18,44 @@ class ApiLink {
   static String updateUser = "${baseurl}users/profile";
   static String deleteAcct = "${baseurl}users";
   static String changePassword = "${baseurl}users/profile";
+  static String followUser = "${baseurl}extra/followuser/";
+  static String followCommunity = "${baseurl}extra/followcomm/";
+  static String followTeam = "${baseurl}extra/followteam/";
+  static String viewUserTeam = "${baseurl}team/myteam/";
 
   //Post
   static String createPost = "${baseurl}post/create/";
   static String editPost = "${baseurl}post/edit/";
   static String deletePost = "${baseurl}post/delete/";
   static String getAllPost = "${baseurl}post/view/";
+  static String getBookmarkedPost = "${baseurl}post/viewbooked/";
+  static String getFollowingPost = "${baseurl}post/viewbooked/";
   static String getMyPost = "${baseurl}post/myposts/";
   static String likePost = "${baseurl}post/like/";
-  // static String recommendedProduct = "${baseurl}products/recommendations";
-  // static String sellerProduct = "${baseurl}products/catalog";
-  // static String uploadImage = "${baseurl}uploads/products";
-  // static String favorite = "${baseurl}favorites";
-  // static String myCart = "${baseurl}my-cart";
-  // static String checkOut = "${baseurl}checkout-session";
+  static String post = "${baseurl}post/";
+  static String comment = "${baseurl}post/comment/";
+  static String turnNotification = "${baseurl}post/on_notifs/team/";
 
-  //Transactions
-  // static String transaction = "${baseurl}transactions";
-  // static String myTransaction = "${baseurl}users/my-transactions";
+  //Team
+  static String createTeam = "${baseurl}team/create/";
+  static String getAllTeam = "${baseurl}team/view/";
+  static String team = "${baseurl}team/";
+
+  //Player
+  static String createPlayer = "${baseurl}player/register/";
+  static String getAllPlayer = "${baseurl}player/view/";
+
+  //Events
+  static String createEvent = "${baseurl}event/";
+  static String getAllEvent = "${baseurl}event/view/";
+
+  //Community
+  static String createCommunity = "${baseurl}org/register/";
+  static String getAllCommunity = "${baseurl}org/list/";
+
   // static String withdraw = "${baseurl}initiate-withdrawal";
   // static String dashboard = "${baseurl}users/dashboard";
   // static String setTransactionPin = "${baseurl}wallet/set-transaction-pin";
   // static String changeTransactionPin =
   //     "${baseurl}wallet/change-transaction-pin";
-
 }

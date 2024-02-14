@@ -52,12 +52,15 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
           const Spacer(),
           InkWell(
             onTap: () {
-              if ((widget.title != 'Post Deleted' &&
-                  widget.title != 'Post Updated')) {
+              if ((widget.title == 'Post Deleted' ||
+                  widget.title == 'Post Updated')) {
+                Get.back();
+                Get.back();
+                Get.back();
+              } else if (widget.title == 'Profile Updated') {
+                Get.back();
                 Get.back();
               } else {
-                Get.back();
-                Get.back();
                 Get.back();
               }
             },
@@ -70,10 +73,12 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
               ),
               child: Center(
                   child: CustomText(
-                title: (widget.title != 'Post Deleted' &&
-                        widget.title != 'Post Updated')
-                    ? 'Create Again'
-                    : 'My Posts',
+                title: (widget.title == 'Post Deleted' ||
+                        widget.title == 'Post Updated')
+                    ? 'My Posts'
+                    : widget.title == 'Profile Updated'
+                        ? 'My Profile'
+                        : 'Create Again',
                 color: AppColor().primaryWhite,
                 weight: FontWeight.w600,
                 size: Get.height * 0.016,

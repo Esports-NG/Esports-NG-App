@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -25,7 +26,7 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final communityController = Get.put(CommunityRepository());
   String? gameTag, seePost, engagePost;
-  bool enableChat = false;
+  bool enableChat = true;
   int pageCount = 0;
 
   Future pickImageFromGallery(String? title) async {
@@ -141,7 +142,7 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                   ),
                 ],
               ),
-              Gap(Get.height * 0.05),
+              Gap(Get.height * 0.03),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                 child: CustomText(
@@ -152,7 +153,7 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                   color: AppColor().primaryWhite,
                 ),
               ),
-              Gap(Get.height * 0.03),
+              Gap(Get.height * 0.02),
               if (pageCount == 0) ...[
                 Form(
                   key: _formKey,
@@ -171,7 +172,8 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                         Gap(Get.height * 0.01),
                         CustomTextField(
                           hint: "The Willywonkers",
-                          // textEditingController: authController.fullNameController,
+                          textEditingController:
+                              communityController.communityNameController,
                           validate: (value) {
                             if (value!.isEmpty) {
                               return 'community name must not be empty';
@@ -190,7 +192,8 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                         Gap(Get.height * 0.01),
                         CustomTextField(
                           hint: "The Willywonkers",
-                          // textEditingController: authController.fullNameController,
+                          textEditingController:
+                              communityController.communityAbbrController,
                           validate: (value) {
                             if (value!.isEmpty) {
                               return 'abbreviation must not be empty';
@@ -209,7 +212,8 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                         Gap(Get.height * 0.01),
                         CustomTextField(
                           hint: "Type text here",
-                          // textEditingController: authController.fullNameController,
+                          textEditingController:
+                              communityController.communityBioController,
                           maxLines: 5,
                           validate: (value) {
                             if (value!.isEmpty) {
@@ -435,19 +439,15 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                               size: Get.height * 0.016,
                             ),
                             Gap(Get.height * 0.01),
-                            IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  setState(() {
-                                    enableChat = false;
-                                  });
-                                },
-                                icon: Icon(
-                                  !enableChat
+                            InkWell(
+                                onTap: () => setState(() {
+                                      enableChat = true;
+                                    }),
+                                child: Icon(
+                                  enableChat
                                       ? Icons.radio_button_checked
                                       : Icons.radio_button_unchecked,
-                                  color: !enableChat
+                                  color: enableChat
                                       ? AppColor().primaryColor
                                       : AppColor().primaryWhite,
                                   size: 20,
@@ -461,19 +461,15 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                               size: Get.height * 0.016,
                             ),
                             Gap(Get.height * 0.01),
-                            IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  setState(() {
-                                    enableChat = true;
-                                  });
-                                },
-                                icon: Icon(
-                                  enableChat
+                            InkWell(
+                                onTap: () => setState(() {
+                                      enableChat = false;
+                                    }),
+                                child: Icon(
+                                  !enableChat
                                       ? Icons.radio_button_checked
                                       : Icons.radio_button_unchecked,
-                                  color: enableChat
+                                  color: !enableChat
                                       ? AppColor().primaryColor
                                       : AppColor().primaryWhite,
                                   size: 20,
@@ -610,17 +606,46 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                   ),
                 ),
               ],
-              Gap(pageCount == 0 ? Get.height * 0.05 : Get.height * 0.35),
+              Gap(Get.height * 0.05),
               Obx(() {
                 return InkWell(
                   onTap: () {
-                    // if (_formKey.currentState!.validate()) {}
+                    CommunityModel community = CommunityModel(
+                      name: communityController.communityNameController.text
+                          .trim(),
+                      bio: communityController.communityBioController.text
+                          .trim(),
+                      gamesPlayed: [],
+                      enableTeamchat: enableChat,
+                      socials: [],
+                    );
+
+                    Map<String, dynamic> body = {
+                      'name': communityController.communityNameController.text
+                          .trim(),
+                      'bio': communityController.communityBioController.text
+                          .trim(),
+                      'enable_teamchat': enableChat.toString(),
+                      'games_played': '',
+                      'logo': '',
+                      'cover': '',
+                      'isocials[0][title]': 'X',
+                      'isocials[0][link]': 'https://x.com',
+                      'isocials[1][title]': 'Discord',
+                      'isocials[1][link]': 'https://discord.com',
+                    };
+
                     if (pageCount == 0) {
-                      setState(() {
-                        pageCount = 1;
-                      });
-                    } else {
-                      Get.to(() => const CreateSuccessPage(title: 'Community Created'));
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          pageCount = 1;
+                        });
+                      }
+                    } else if (communityController.createCommunityStatus !=
+                        CreateCommunityStatus.loading) {
+                      communityController.createCommunity(body);
+                      // Get.to(() =>
+                      //     const CreateSuccessPage(title: 'Community Created'));
                     }
                   },
                   child: Container(

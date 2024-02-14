@@ -1,11 +1,23 @@
 import 'package:e_sport/data/model/account_events_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/data/repository/player_repository.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
+import 'package:e_sport/ui/account/account_events/account_events_item.dart';
+import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
+import 'package:e_sport/ui/components/account_community_detail.dart';
+import 'package:e_sport/ui/components/account_tournament_detail.dart';
+import 'package:e_sport/ui/components/error_page.dart';
+import 'package:e_sport/ui/components/games_played_details.dart';
+import 'package:e_sport/ui/components/no_item_page.dart';
+import 'package:e_sport/ui/home/community/components/community_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -13,8 +25,7 @@ import 'package:get/get.dart';
 import 'components/latest_news_item.dart';
 import 'components/social_event_item.dart';
 import 'components/suggested_profile_item.dart';
-import 'components/tournament_item.dart';
-import 'components/trending_community_item.dart';
+import 'components/trending_team_item.dart';
 import 'latest_news.dart';
 import 'social_event.dart';
 import 'suggested_profile.dart';
@@ -35,6 +46,9 @@ class _CommunityPageState extends State<CommunityPage> {
   final FocusNode _searchFocusNode = FocusNode();
   int? eventType = 0;
   final eventController = Get.put(EventRepository());
+  final communityController = Get.put(CommunityRepository());
+  final playerController = Get.put(PlayerRepository());
+  final teamController = Get.put(TeamRepository());
   @override
   void dispose() {
     _searchFocusNode.dispose();
@@ -202,10 +216,13 @@ class _CommunityPageState extends State<CommunityPage> {
                         mainAxisSpacing: 20,
                         childAspectRatio: 1 * 0.8,
                       ),
-                      itemCount: trendingGamesItems.take(2).length,
+                      itemCount: playerController.allPlayer.take(2).length,
                       itemBuilder: (context, index) {
-                        var item = trendingGamesItems[index];
-                        return TrendingGamesItem(item: item);
+                        var item = playerController.allPlayer[index];
+                        return InkWell(
+                            onTap: () =>
+                                Get.to(() => GamesPlayedDetails(item: item)),
+                            child: TrendingGamesItem(item: item));
                       }),
                 ],
               ),
@@ -226,21 +243,35 @@ class _CommunityPageState extends State<CommunityPage> {
                   ),
                 ),
                 Gap(Get.height * 0.03),
-                Container(
-                  height: Get.height * 0.42,
-                  padding: EdgeInsets.only(left: Get.height * 0.02),
-                  child: ListView.separated(
-                      physics: const ScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      separatorBuilder: (context, index) =>
-                          Gap(Get.height * 0.02),
-                      itemCount: tournamentItem.take(2).length,
-                      itemBuilder: (context, index) {
-                        var item = tournamentItem[index];
-                        return TournamentItem(item: item);
-                      }),
-                ),
+                SizedBox(
+                  height: Get.height * 0.38,
+                  child: (eventController.eventStatus == EventStatus.loading)
+                      ? LoadingWidget(color: AppColor().primaryColor)
+                      : (eventController.eventStatus == EventStatus.available)
+                          ? ListView.separated(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Get.height * 0.02),
+                              physics: const ScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount:
+                                  eventController.allEvent.take(2).length,
+                              separatorBuilder: (context, index) =>
+                                  Gap(Get.height * 0.02),
+                              itemBuilder: (context, index) {
+                                var item = eventController.allEvent[index];
+                                return InkWell(
+                                  onTap: () => Get.to(
+                                    () => AccountTournamentDetail(item: item),
+                                  ),
+                                  child: AccountEventsItem(item: item),
+                                );
+                              },
+                            )
+                          : (eventController.eventStatus == EventStatus.empty)
+                              ? const NoItemPage(title: 'Event')
+                              : const ErrorPage(),
+                )
               ],
             ),
             Gap(Get.height * 0.03),
@@ -259,20 +290,36 @@ class _CommunityPageState extends State<CommunityPage> {
                   ),
                 ),
                 Gap(Get.height * 0.03),
-                Container(
-                  padding: EdgeInsets.only(left: Get.height * 0.02),
+                SizedBox(
                   height: Get.height * 0.28,
-                  child: ListView.separated(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) =>
-                          Gap(Get.height * 0.02),
-                      itemCount: trendingCommunitiesItems.take(2).length,
-                      itemBuilder: (context, index) {
-                        var item = trendingCommunitiesItems[index];
-                        return TrendingCommunityItem(item: item);
-                      }),
+                  child: (communityController.communityStatus ==
+                          CommunityStatus.loading)
+                      ? LoadingWidget(color: AppColor().primaryColor)
+                      : (communityController.communityStatus ==
+                              CommunityStatus.available)
+                          ? ListView.separated(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Get.height * 0.02),
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              separatorBuilder: (context, index) =>
+                                  Gap(Get.height * 0.02),
+                              itemCount: communityController.allCommunity
+                                  .take(2)
+                                  .length,
+                              itemBuilder: (context, index) {
+                                var item =
+                                    communityController.allCommunity[index];
+                                return InkWell(
+                                    onTap: () => Get.to(() =>
+                                        AccountCommunityDetail(item: item)),
+                                    child: CommunityItem(item: item));
+                              })
+                          : (communityController.communityStatus ==
+                                  CommunityStatus.empty)
+                              ? const NoItemPage(title: 'Communities')
+                              : const ErrorPage(),
                 ),
               ],
             ),
@@ -325,23 +372,34 @@ class _CommunityPageState extends State<CommunityPage> {
                   ),
                 ),
                 Gap(Get.height * 0.03),
-                Container(
-                  padding: EdgeInsets.only(left: Get.height * 0.02),
-                  height: Get.height * 0.28,
-                  child: ListView.separated(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) =>
-                          Gap(Get.height * 0.02),
-                      itemCount: trendingTeamsItems.take(2).length,
-                      itemBuilder: (context, index) {
-                        var item = trendingTeamsItems[index];
-                        return TrendingCommunityItem(item: item);
-                      }),
-                ),
+                (teamController.teamStatus == TeamStatus.loading)
+                    ? LoadingWidget(color: AppColor().primaryColor)
+                    : (teamController.teamStatus == TeamStatus.available)
+                        ? Container(
+                            padding: EdgeInsets.only(left: Get.height * 0.02),
+                            height: Get.height * 0.28,
+                            child: ListView.separated(
+                                physics: const ScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                separatorBuilder: (context, index) =>
+                                    Gap(Get.height * 0.02),
+                                itemCount:
+                                    teamController.allTeam.take(2).length,
+                                itemBuilder: (context, index) {
+                                  var item = teamController.allTeam[index];
+                                  return InkWell(
+                                      onTap: () => Get.to(
+                                          () => AccountTeamsDetail(item: item)),
+                                      child: TrendingTeamsItem(item: item));
+                                }),
+                          )
+                        : (teamController.teamStatus == TeamStatus.empty)
+                            ? const NoItemPage(title: 'Teams')
+                            : const ErrorPage(),
               ],
             ),
+            Gap(Get.height * 0.03),
           ],
         ),
       ),

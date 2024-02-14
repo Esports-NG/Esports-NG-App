@@ -1,29 +1,37 @@
-import 'package:e_sport/data/model/account_events_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:change_case/change_case.dart';
+import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:number_display/number_display.dart';
 
-class AccountEventsItem extends StatelessWidget {
-  final AccountEventsModel item;
+class AccountEventsItem extends StatefulWidget {
+  final EventModel item;
   const AccountEventsItem({super.key, required this.item});
 
   @override
+  State<AccountEventsItem> createState() => _AccountEventsItemState();
+}
+
+class _AccountEventsItemState extends State<AccountEventsItem> {
+  @override
   Widget build(BuildContext context) {
-    final display = createDisplay(
-      roundingType: RoundingType.floor,
-      length: 15,
-      decimal: 10,
-    );
     return Container(
+      width: Get.width * 0.9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColor().lightItemsColor,
-          width: 0.5,
+        border: Border.all(color: AppColor().lightItemsColor, width: 0.5),
+        gradient: LinearGradient(
+          colors: [
+            AppColor().bgDark,
+            AppColor().primaryBackGroundColor,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
       ),
       child: Column(
@@ -31,65 +39,99 @@ class AccountEventsItem extends StatelessWidget {
         children: [
           Stack(
             children: [
-              Container(
-                height: Get.height * 0.22,
-                width: double.infinity,
-                padding: EdgeInsets.all(Get.height * 0.02),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10)),
-                  image: DecorationImage(
-                      image: AssetImage(item.image!), fit: BoxFit.cover),
-                ),
-              ),
-              Positioned.fill(
-                left: Get.height * 0.02,
-                bottom: Get.height * 0.16,
-                top: Get.height * 0.02,
-                child: ListView.separated(
-                    padding: EdgeInsets.zero,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: item.genre!.length,
-                    separatorBuilder: (context, index) =>
-                        Gap(Get.height * 0.01),
-                    itemBuilder: (context, index) {
-                      var items = item.genre![index];
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
+              (widget.item.banner == null)
+                  ? Container(
+                      height: Get.height * 0.22,
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image:
+                                AssetImage('assets/images/png/placeholder.png'),
+                            fit: BoxFit.cover),
+                      ),
+                    )
+                  : CachedNetworkImage(
+                      height: Get.height * 0.22,
+                      width: double.infinity,
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          Center(
+                        child: SizedBox(
+                          height: Get.height * 0.05,
+                          width: Get.height * 0.05,
+                          child: CircularProgressIndicator(
+                              color: AppColor().primaryWhite,
+                              value: progress.progress),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.error, color: AppColor().primaryColor),
+                      imageUrl: '${ApiLink.imageUrl}${widget.item.banner}',
+                      imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
-                          color: AppColor().primaryWhite,
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: AppColor().primaryColor.withOpacity(0.05),
-                            width: 0.5,
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10)),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  '${ApiLink.imageUrl}${widget.item.banner}'),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
+                    ),
+              Positioned(
+                left: Get.height * 0.02,
+                top: Get.height * 0.02,
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColor().primaryWhite,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: AppColor().primaryColor.withOpacity(0.05),
+                          width: 0.5,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/images/svg/rank.svg'),
+                          CustomText(
+                            title: widget.item.rankType,
+                            color: AppColor().pureBlackColor,
+                            textAlign: TextAlign.center,
+                            size: Get.height * 0.014,
+                            fontFamily: 'GilroyMedium',
                           ),
+                        ],
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColor().primaryWhite,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: AppColor().primaryColor.withOpacity(0.05),
+                          width: 0.5,
                         ),
-                        child: Center(
-                          child: items == 'Ranked'
-                              ? Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                        'assets/images/svg/rank.svg'),
-                                    CustomText(
-                                      title: items,
-                                      color: AppColor().pureBlackColor,
-                                      textAlign: TextAlign.center,
-                                      size: Get.height * 0.014,
-                                      fontFamily: 'GilroyMedium',
-                                    ),
-                                  ],
-                                )
-                              : CustomText(
-                                  title: items,
-                                  color: AppColor().pureBlackColor,
-                                  textAlign: TextAlign.center,
-                                  size: Get.height * 0.014,
-                                  fontFamily: 'GilroyMedium',
-                                ),
-                        ),
-                      );
-                    }),
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/images/svg/rank.svg'),
+                          CustomText(
+                            title: 'Ongoing registration',
+                            color: AppColor().pureBlackColor,
+                            textAlign: TextAlign.center,
+                            size: Get.height * 0.014,
+                            fontFamily: 'GilroyMedium',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Positioned(
                 right: Get.height * 0.02,
@@ -106,7 +148,7 @@ class AccountEventsItem extends StatelessWidget {
                   child: Center(
                     child: textItem(
                       title: 'Entry: ',
-                      subTitle: 'N${display(item.entry)}',
+                      subTitle: 'N${widget.item.entryFee}',
                       color: AppColor().secondaryGreenColor,
                       titleFamily: 'GilroyMedium',
                       subTitleFamily: 'GilroySemiBold',
@@ -127,17 +169,19 @@ class AccountEventsItem extends StatelessWidget {
               children: [
                 textItem(
                   title: 'Game: ',
-                  subTitle: item.game!.toUpperCase(),
+                  subTitle: widget.item.name!.toUpperCase(),
                 ),
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'Tournament Name: ',
-                  subTitle: item.tName!,
+                  subTitle: widget.item.gameMode!.toCapitalCase(),
                 ),
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'Tournament Type: ',
-                  subTitle: item.tType!,
+                  subTitle: widget.item.tournamentType == ''
+                      ? 'Teams'
+                      : widget.item.tournamentType!,
                 ),
                 Gap(Get.height * 0.01),
                 Divider(
@@ -148,7 +192,7 @@ class AccountEventsItem extends StatelessWidget {
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'Prize Pool: ',
-                  subTitle: 'N${display(item.prizePool)}',
+                  subTitle: 'N${widget.item.prizePool}',
                   color: AppColor().secondaryGreenColor,
                   titleFamily: 'GilroySemiBold',
                   subTitleFamily: 'GilroyBold',

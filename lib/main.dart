@@ -1,15 +1,14 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/no_internet.dart';
+import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'di/app_binding.dart';
 import 'ui/auth/splash_screen.dart';
-import 'util/pallete.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,12 +48,12 @@ class _ESportAppState extends State<ESportApp> {
         isCurrentlyOnNoInternet = true;
         authController.mNetworkAvailable.value = true;
         Get.to(() => const NoInternetScreen());
-      } else {
+      } else if (e == ConnectivityResult.wifi ||
+          e == ConnectivityResult.mobile) {
         if (isCurrentlyOnNoInternet) {
           Get.back();
           isCurrentlyOnNoInternet = false;
           authController.mNetworkAvailable.value = false;
-          Get.snackbar('Alert', 'Internet is connected.');
         }
         debugPrint('connected');
       }
@@ -67,8 +66,11 @@ class _ESportAppState extends State<ESportApp> {
         debugShowCheckedModeBanner: false,
         title: 'ESports NG',
         initialBinding: AppBinding(),
-        theme: ThemeData(
-          primarySwatch: Palette.primaryColor,
+        theme: ThemeData.light().copyWith(
+          appBarTheme: AppBarTheme(
+            backgroundColor: AppColor().primaryBackGroundColor,
+          ),
+          scaffoldBackgroundColor: AppColor().primaryBackGroundColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: {

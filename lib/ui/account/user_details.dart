@@ -1,0 +1,343 @@
+import 'package:change_case/change_case.dart';
+import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/home/components/page_header.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/custom_widgets.dart';
+import 'package:e_sport/util/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+
+class UserDetails extends StatefulWidget {
+  final Author item;
+  const UserDetails({super.key, required this.item});
+
+  @override
+  State<UserDetails> createState() => _UserDetailsState();
+}
+
+class _UserDetailsState extends State<UserDetails> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: AppColor().primaryBackGroundColor,
+        body: SingleChildScrollView(
+          child: Column(children: [
+            Stack(
+              alignment: Alignment.bottomCenter,
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  height: Get.height * 0.15,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image:
+                            AssetImage('assets/images/png/account_header.png'),
+                        opacity: 0.2),
+                  ),
+                ),
+                Positioned(
+                  top: Get.height * 0.11,
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      OtherImage(
+                        itemSize: Get.height * 0.11,
+                        image: widget.item.profile!.profilePicture,
+                      ),
+                      Positioned(
+                        child: SvgPicture.asset(
+                          'assets/images/svg/check_badge.svg',
+                          height: Get.height * 0.035,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  right: Get.height * 0.03,
+                  left: Get.height * 0.03,
+                  bottom: Get.height * 0.05,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () => Get.back(),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              color: AppColor().primaryWhite.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            Icons.arrow_back,
+                            size: 20,
+                            color: AppColor().primaryWhite,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          InkWell(
+                            // onTap: () => showPopupMenu(),
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                  color:
+                                      AppColor().primaryWhite.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Icon(
+                                Icons.notifications_outlined,
+                                size: 20,
+                                color: AppColor().primaryWhite,
+                              ),
+                            ),
+                          ),
+                          Gap(Get.height * 0.02),
+                          InkWell(
+                            // onTap: () => showPopupMenu(),
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                  color:
+                                      AppColor().primaryWhite.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Icon(
+                                Icons.more_vert,
+                                size: 20,
+                                color: AppColor().primaryWhite,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Gap(Get.height * 0.09),
+            CustomText(
+              title: '@ ${widget.item.userName}',
+              size: 16,
+              fontFamily: 'GilroyRegular',
+              textAlign: TextAlign.start,
+              color: AppColor().lightItemsColor,
+            ),
+            Gap(Get.height * 0.01),
+            CustomText(
+              title: widget.item.fullName!.toCapitalCase(),
+              size: 20,
+              fontFamily: 'GilroyBold',
+              textAlign: TextAlign.start,
+              color: AppColor().primaryWhite,
+            ),
+            Gap(Get.height * 0.02),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomText(
+                        title: '0',
+                        weight: FontWeight.w500,
+                        size: Get.height * 0.02,
+                        fontFamily: 'GilroyBold',
+                        color: AppColor().primaryWhite),
+                    Gap(Get.height * 0.01),
+                    CustomText(
+                        title: 'Following',
+                        weight: FontWeight.w400,
+                        size: Get.height * 0.017,
+                        fontFamily: 'GilroyRegular',
+                        color: AppColor().greyEight),
+                  ],
+                ),
+                Gap(Get.height * 0.04),
+                Container(
+                    height: Get.height * 0.03,
+                    width: Get.width * 0.005,
+                    color: AppColor().greyEight),
+                Gap(Get.height * 0.04),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomText(
+                        title: '0',
+                        weight: FontWeight.w500,
+                        size: Get.height * 0.02,
+                        fontFamily: 'GilroyBold',
+                        color: AppColor().primaryWhite),
+                    Gap(Get.height * 0.01),
+                    CustomText(
+                        title: 'Followers',
+                        weight: FontWeight.w400,
+                        size: Get.height * 0.017,
+                        fontFamily: 'GilroyRegular',
+                        color: AppColor().greyEight),
+                  ],
+                ),
+              ],
+            ),
+            Gap(Get.height * 0.04),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomFillOption(
+                          onTap: () {},
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                    'assets/images/svg/account_icon.svg',
+                                    height: Get.height * 0.015,
+                                    color: AppColor().primaryWhite),
+                                Gap(Get.height * 0.01),
+                                CustomText(
+                                    title: 'Follow',
+                                    weight: FontWeight.w400,
+                                    size: Get.height * 0.017,
+                                    fontFamily: 'GilroyRegular',
+                                    color: AppColor().primaryWhite),
+                              ]),
+                        ),
+                      ),
+                      Gap(Get.height * 0.02),
+                      Expanded(
+                        child: CustomFillOption(
+                          buttonColor: AppColor()
+                              .primaryBackGroundColor
+                              .withOpacity(0.7),
+                          borderColor: AppColor().greyEight,
+                          onTap: () {},
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.sms_outlined,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.015,
+                                ),
+                                Gap(Get.height * 0.01),
+                                CustomText(
+                                    title: 'Message',
+                                    weight: FontWeight.w400,
+                                    size: Get.height * 0.017,
+                                    fontFamily: 'GilroyRegular',
+                                    color: AppColor().primaryWhite),
+                                Gap(Get.height * 0.01),
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: AppColor().primaryColor,
+                                  size: Get.height * 0.015,
+                                ),
+                              ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Gap(Get.height * 0.04),
+                  CustomText(
+                      title:
+                          'I’m a gaming enthusiast and an integral part of the gaming community. With a passion for video games and a deep understanding of gaming trends...',
+                      weight: FontWeight.w400,
+                      size: Get.height * 0.015,
+                      fontFamily: 'GilroyRegular',
+                      textAlign: TextAlign.center,
+                      height: 1.5,
+                      color: AppColor().greyEight),
+                  Gap(Get.height * 0.02),
+                  CustomText(
+                      title: 'See full profile',
+                      weight: FontWeight.w400,
+                      size: Get.height * 0.017,
+                      fontFamily: 'GilroyMedium',
+                      underline: TextDecoration.underline,
+                      color: AppColor().primaryColor),
+                ],
+              ),
+            ),
+            Divider(
+              color: AppColor().lightItemsColor.withOpacity(0.3),
+              height: Get.height * 0.05,
+              thickness: 4,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: PageHeaderWidget(
+                onTap: () {},
+                title: 'Media, Links and Document',
+              ),
+            ),
+            Gap(Get.height * 0.01),
+            SizedBox(
+              height: Get.height * 0.12,
+              child: ListView.separated(
+                  physics: const ScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) => Gap(Get.height * 0.01),
+                  itemCount: mediaItems.length,
+                  itemBuilder: (context, index) {
+                    var item = mediaItems[index];
+                    return Container(
+                      padding: EdgeInsets.all(Get.height * 0.02),
+                      width: Get.width * 0.25,
+                      decoration: BoxDecoration(
+                        color: AppColor().bgDark,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AppColor().greySix,
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage(item.image!),
+                          fit: BoxFit.fitWidth,
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+            Gap(Get.height * 0.04),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    title: 'Join our Community:',
+                    fontFamily: 'GilroySemiBold',
+                    size: 16,
+                    color: AppColor().primaryWhite,
+                  ),
+                  Gap(Get.height * 0.02),
+                ],
+              ),
+            ),
+            Gap(Get.height * 0.02),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: Row(
+                children: [
+                  SvgPicture.asset('assets/images/svg/discord.svg'),
+                  Gap(Get.height * 0.01),
+                  SvgPicture.asset('assets/images/svg/twitter.svg'),
+                  Gap(Get.height * 0.01),
+                  SvgPicture.asset('assets/images/svg/telegram.svg'),
+                  Gap(Get.height * 0.01),
+                  SvgPicture.asset('assets/images/svg/meduim.svg'),
+                ],
+              ),
+            ),
+            Gap(Get.height * 0.02),
+          ]),
+        ));
+  }
+}

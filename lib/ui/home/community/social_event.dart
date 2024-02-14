@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/account_events_model.dart';
+import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class SocialEvent extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+         leading: GoBackButton(onPressed: () => Get.back()),
         centerTitle: true,
         title: CustomText(
           title: 'Social Event',

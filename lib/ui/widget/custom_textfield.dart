@@ -1,11 +1,10 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, use_key_in_widget_constructors
 
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
   const CustomTextField({
     this.hint,
     this.label,
@@ -42,6 +41,7 @@ class CustomTextField extends StatelessWidget {
     this.fontFamily,
     this.hasText = false,
     this.focusNode,
+    this.decoration,
   });
 
   final VoidCallback? onClick;
@@ -76,6 +76,7 @@ class CustomTextField extends StatelessWidget {
   final String? validatorText;
   final List<TextInputFormatter>? inputformater;
   final FocusNode? focusNode;
+  final InputDecoration? decoration;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +105,7 @@ class CustomTextField extends StatelessWidget {
       initialValue: initialValue,
       obscureText: obscure ?? false,
       style: TextStyle(
-          color:hasText 
+          color: hasText
               ? AppColor().primaryBackGroundColor
               : AppColor().lightItemsColor,
           fontSize: 13,
@@ -112,59 +113,101 @@ class CustomTextField extends StatelessWidget {
           fontFamily: fontFamily ?? 'GilroyBold',
           fontWeight: FontWeight.w400,
           height: 1.7),
-      decoration: InputDecoration(
-        fillColor: hasText ? AppColor().primaryWhite : AppColor().bgDark,
-        filled: true,
-        isDense: true,
-        prefixText: pretext,
-        prefixStyle: TextStyle(
-            color: hasText
-                ? AppColor().primaryBackGroundColor
-                : AppColor().lightItemsColor,
-            fontSize: 13,
-            fontStyle: FontStyle.normal,
-            fontFamily: fontFamily ?? 'GilroyBold',
-            fontWeight: FontWeight.w400,
-            height: 1.7),
-        suffixText: sufText,
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: colors ?? AppColor().lightItemsColor,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(radius ?? 10)),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(radius ?? 10)),
-        errorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: Colors.red,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(radius ?? 10)),
-        disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(radius ?? 10)),
-        hintText: hint,
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        labelStyle: TextStyle(
-            color: hintColor ?? Colors.black,
-            fontSize: 13,
-            fontStyle: FontStyle.normal,
-            fontFamily: fontFamily ?? 'GilroyBold',
-            fontWeight: FontWeight.w400,
-            height: 1.7),
-        hintStyle: TextStyle(
-            color: hintColor ?? AppColor().lightItemsColor,
-            fontSize: 13,
-            fontStyle: FontStyle.normal,
-            fontFamily: fontFamily ?? 'GilroyBold',
-            fontWeight: FontWeight.w400,
-            height: 1.7),
-      ),
+      decoration: decoration ??
+          InputDecoration(
+            fillColor: hasText
+                ? AppColor().primaryWhite
+                : fillColor ?? AppColor().bgDark,
+            filled: true,
+            isDense: true,
+            prefixText: pretext,
+            prefixStyle: TextStyle(
+                color: hasText
+                    ? AppColor().primaryBackGroundColor
+                    : AppColor().lightItemsColor,
+                fontSize: 13,
+                fontStyle: FontStyle.normal,
+                fontFamily: fontFamily ?? 'GilroyBold',
+                fontWeight: FontWeight.w400,
+                height: 1.7),
+            suffixText: sufText,
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: colors ?? AppColor().lightItemsColor,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(radius ?? 10)),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(radius ?? 10)),
+            errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(radius ?? 10)),
+            disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(radius ?? 10)),
+            hintText: hint,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+            labelStyle: TextStyle(
+                color: hintColor ?? Colors.black,
+                fontSize: 13,
+                fontStyle: FontStyle.normal,
+                fontFamily: fontFamily ?? 'GilroyBold',
+                fontWeight: FontWeight.w400,
+                height: 1.7),
+            hintStyle: TextStyle(
+                color: hintColor ?? AppColor().lightItemsColor,
+                fontSize: 13,
+                fontStyle: FontStyle.normal,
+                fontFamily: fontFamily ?? 'GilroyBold',
+                fontWeight: FontWeight.w400,
+                height: 1.7),
+          ),
       onFieldSubmitted: onSubmited,
       onTap: onTap,
+    );
+  }
+}
+
+class ChatCustomTextField extends StatelessWidget {
+  const ChatCustomTextField({
+    this.enabled,
+    this.keyAction,
+    this.textEditingController,
+    this.onSubmited,
+    this.validate,
+    this.decoration,
+  });
+
+  final bool? enabled;
+  final TextEditingController? textEditingController;
+  final TextInputAction? keyAction;
+  final String? Function(String?)? validate;
+  final ValueChanged<String>? onSubmited;
+  final InputDecoration? decoration;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      autofocus: false,
+      controller: textEditingController,
+      enabled: enabled,
+      minLines: 1,
+      maxLines: 5,
+      keyboardType: TextInputType.multiline,
+      textInputAction: TextInputAction.newline,
+      style: TextStyle(
+          color: AppColor().primaryWhite,
+          fontSize: 13,
+          fontStyle: FontStyle.normal,
+          fontFamily: 'GilroyBold',
+          fontWeight: FontWeight.w400),
+      decoration: decoration,
+      onFieldSubmitted: onSubmited,
     );
   }
 }

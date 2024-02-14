@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class NoPostPage extends StatelessWidget {
-  const NoPostPage({
+class NoItemPage extends StatelessWidget {
+  final String title;
+  final double? size;
+  const NoItemPage({
     super.key,
+    required this.title,
+    this.size,
   });
 
   @override
@@ -16,15 +20,15 @@ class NoPostPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Gap(Get.height * 0.1),
+          Gap(size ?? Get.height * 0.1),
           Icon(
             Icons.warning_amber,
             color: AppColor().primaryColor,
-            size: Get.height * 0.1,
+            size: size ?? Get.height * 0.1,
           ),
           Gap(Get.height * 0.02),
           CustomText(
-            title: 'No Post!',
+            title: 'No $title!',
             size: 15,
             color: AppColor().primaryWhite,
           ),

@@ -82,6 +82,13 @@ enum UserTransactionStatus {
   success,
 }
 
+enum FollowStatus {
+  empty,
+  loading,
+  error,
+  success,
+}
+
 enum AuthStatus {
   loading,
   authenticated,
@@ -116,13 +123,16 @@ class AuthRepository extends GetxController {
   late final referralController = TextEditingController();
   late final passwordController = TextEditingController();
   late final confirmPasswordController = TextEditingController();
+  late final commentController = TextEditingController();
   late final accountTypeController = TextEditingController();
   late final otpPin = TextEditingController();
   late final searchController = TextEditingController();
   late final amountController = TextEditingController();
   late final cardNoController = TextEditingController();
   late final cardExpiryController = TextEditingController();
+  late final chatController = TextEditingController();
   late final cvvController = TextEditingController();
+
   DateTime? date;
 
   final _authStatus = AuthStatus.empty.obs;
@@ -135,6 +145,7 @@ class AuthRepository extends GetxController {
   final _changePasswordStatus = ChangePasswordStatus.empty.obs;
   final _deliveryAddressStatus = DeliveryAddressStatus.empty.obs;
   final _userTransactionStatus = UserTransactionStatus.empty.obs;
+  final _followStatus = FollowStatus.empty.obs;
 
   AuthStatus get authStatus => _authStatus.value;
   SignUpStatus get signUpStatus => _signUpStatus.value;
@@ -148,6 +159,7 @@ class AuthRepository extends GetxController {
   OtpForgotVerifyStatus get otpForgotVerifyStatus =>
       _otpForgotVerifyStatus.value;
   UserTransactionStatus get transactionStatus => _userTransactionStatus.value;
+  FollowStatus get followStatus => _followStatus.value;
 
   final status = AuthStatus.uninitialized.obs;
 
@@ -162,6 +174,7 @@ class AuthRepository extends GetxController {
   RxBool mOnSelect = false.obs;
   RxBool mGetCountryCode = false.obs;
   RxBool mNetworkAvailable = false.obs;
+  RxBool isLoading = false.obs;
 
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;
@@ -176,7 +189,6 @@ class AuthRepository extends GetxController {
     await pref!.init();
     if (pref!.getFirstTimeOpen()) {
       _authStatus(AuthStatus.isFirstTime);
-
       debugPrint(authStatus.name);
       debugPrint("My first time using this app");
     } else {
@@ -193,6 +205,10 @@ class AuthRepository extends GetxController {
         _authStatus(AuthStatus.unAuthenticated);
       }
     }
+  }
+
+  void setLoading(bool value) {
+    isLoading.value = value;
   }
 
   Future signUp(UserModel user, BuildContext context) async {
@@ -251,25 +267,21 @@ class AuthRepository extends GetxController {
     try {
       debugPrint('login here...');
 
-      var response = await http.post(
-          Uri.parse(
-            ApiLink.login,
-          ),
-          headers: {
-            "Content-Type": "application/json",
-          },
+      var response = await http.post(Uri.parse(ApiLink.login),
+          headers: {"Content-Type": "application/json"},
           body: jsonEncode({
             "email": emailController.text.trim(),
             "password": passwordController.text.trim(),
           }));
-      var json = jsonDecode(response.body);
 
-      if (response.statusCode != 200) {
-        throw (
-          json['non_field_errors'] != null
-              ? json['non_field_errors'][0]
-              : json[0],
-        );
+      var json = jsonDecode(response.body);
+      debugPrint(response.body);
+      if (json.toString().contains('non_field_errors')) {
+        throw (json['non_field_errors'][0]);
+      }
+
+      if (json.toString().contains('Quota Exceeded')) {
+        throw ('${json[0]}. Contact admin!');
       }
 
       if (response.statusCode == 200) {
@@ -355,6 +367,9 @@ class AuthRepository extends GetxController {
       debugPrint(response.body);
       if (response.statusCode == 200) {
         debugPrint(response.body);
+        var userModel = UserModel.fromJson(json);
+        mUser(userModel);
+        pref!.setUser(userModel);
       }
       return response.body;
     } catch (error) {
@@ -379,13 +394,14 @@ class AuthRepository extends GetxController {
       }
       debugPrint(response.body);
       if (response.statusCode == 200) {
+        EasyLoading.dismiss();
         _updateProfileStatus(UpdateProfileStatus.success);
-        Get.to(() => const CreateSuccessPage(title: 'Profile Updated'))!
-            .then((value) {
-          EasyLoading.dismiss();
-          getUserInfo();
-          clearPhoto();
-        });
+        Get.to(() => const CreateSuccessPage(title: 'Profile Updated'));
+        EasyLoading.dismiss();
+        getUserInfo();
+        clearPhoto();
+      } else if (response.statusCode == 401) {
+        refreshToken().then((value) => EasyLoading.showInfo('try again!'));
       }
       return response.body;
     } catch (error) {
@@ -409,6 +425,7 @@ class AuthRepository extends GetxController {
 
       await request.send().then((response) {
         response.stream.transform(utf8.decoder).listen((response) {
+          EasyLoading.dismiss();
           var res = jsonDecode(response);
           debugPrint(res);
 
@@ -416,8 +433,159 @@ class AuthRepository extends GetxController {
         });
       });
     } catch (error) {
+      EasyLoading.dismiss();
       _updateProfileStatus(UpdateProfileStatus.error);
       debugPrint("Error occurred ${error.toString()}");
+      getError(error);
+    }
+  }
+
+  Future followUser(String userId) async {
+    try {
+      EasyLoading.show(status: 'please wait...');
+      _followStatus(FollowStatus.loading);
+      debugPrint('following user...');
+      var response = await http.post(
+        Uri.parse('${ApiLink.followUser}$userId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      debugPrint(response.statusCode.toString());
+      debugPrint(response.body);
+      if (response.statusCode != 200 || response.statusCode != 201) {
+        throw (json['details'] ?? json['error']);
+      }
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        EasyLoading.showInfo(json['message']).then((value) async {});
+        _followStatus(FollowStatus.success);
+      } else {
+        _followStatus(FollowStatus.error);
+        EasyLoading.dismiss();
+      }
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("follow user error: $error");
+      getError(error);
+    }
+  }
+
+  Future followOthers(String userId) async {
+    try {
+      EasyLoading.show(status: 'please wait...');
+      _followStatus(FollowStatus.loading);
+      debugPrint('following user...');
+      var response = await http.post(
+        Uri.parse('${ApiLink.followUser}$userId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        EasyLoading.showInfo(json['message']).then((value) async {});
+        _followStatus(FollowStatus.success);
+      } else {
+        _followStatus(FollowStatus.error);
+        EasyLoading.dismiss();
+      }
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("follow user error: $error");
+      getError(error);
+    }
+  }
+
+  Future turnNotification(String postId) async {
+    try {
+      EasyLoading.show(status: 'please wait...');
+      _followStatus(FollowStatus.loading);
+      debugPrint('turning notification');
+      var response = await http.post(
+        Uri.parse('${ApiLink.turnNotification}?group_id=$postId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        EasyLoading.showInfo(json['message']).then((value) async {});
+        _followStatus(FollowStatus.success);
+      } else {
+        _followStatus(FollowStatus.error);
+        EasyLoading.dismiss();
+      }
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      EasyLoading.dismiss();
+      debugPrint("turning notification error: $error");
+      getError(error);
+    }
+  }
+
+  Future followTeam(String title, userId) async {
+    _followStatus(FollowStatus.loading);
+    try {
+      debugPrint('following team...');
+      var response = await http.post(
+        Uri.parse('${ApiLink.followTeam}$title/$userId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        _followStatus(FollowStatus.success);
+      } else {}
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      debugPrint("follow team error: $error");
+      getError(error);
+    }
+  }
+
+  Future followCommunity(String title, userId) async {
+    _followStatus(FollowStatus.loading);
+    try {
+      debugPrint('following community...');
+      var response = await http.post(
+        Uri.parse('${ApiLink.followCommunity}$title/$userId/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT $token'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        _followStatus(FollowStatus.success);
+      } else {}
+    } catch (error) {
+      _followStatus(FollowStatus.error);
+      debugPrint("follow community error: $error");
       getError(error);
     }
   }

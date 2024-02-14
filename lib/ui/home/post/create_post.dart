@@ -153,9 +153,7 @@ class _CreatePostState extends State<CreatePost> {
                         ],
                       )),
                       InkWell(
-                        onTap: () {
-                          _showAccountListDialog(context);
-                        },
+                        onTap: _showAccountListDialog,
                         child: CustomText(
                           title: 'Change Account',
                           weight: FontWeight.w400,
@@ -553,7 +551,6 @@ class _CreatePostState extends State<CreatePost> {
                   InkWell(
                     onTap: () {
                       PostModel post = PostModel(
-                        title: postController.postTitleController.text.trim(),
                         body: postController.postBodyController.text.trim(),
                         iTags: '#${postController.gameTagController.text}',
                         iViewers: postController.seeController.text,
@@ -562,10 +559,7 @@ class _CreatePostState extends State<CreatePost> {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        if (postController.postImage == null) {
-                          EasyLoading.showInfo('Select post image!');
-                        } else if (postController.gameTagController.text ==
-                            '') {
+                        if (postController.gameTagController.text == '') {
                           EasyLoading.showInfo('Select game tag!');
                         } else if (postController.seeController.text == '') {
                           EasyLoading.showInfo('Select who can see post!');
@@ -605,7 +599,7 @@ class _CreatePostState extends State<CreatePost> {
     });
   }
 
-  void _showAccountListDialog(BuildContext context) {
+  void _showAccountListDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {

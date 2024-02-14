@@ -6,7 +6,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.5 <4.0.0"
+  sdk: ">=3.2.4 <4.0.0"
 
 dependencies:
   cached_network_image: ^3.3.0
@@ -28,8 +28,10 @@ dependencies:
   intl: ^0.18.0
   intl_phone_field: ^3.2.0
   like_button: ^2.0.5
+  line_icons: ^2.0.3
   number_display: ^3.0.0
   numpad_layout: ^0.0.3
+  persistent_bottom_nav_bar_v2: ^4.2.8
   pin_code_text_field: ^1.8.0
   shared_preferences: ^2.1.0
   timer_count_down: ^2.2.2

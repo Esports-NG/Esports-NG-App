@@ -4,6 +4,11 @@ class CategoryItem {
   CategoryItem({required this.title});
 }
 
+var gameStatItem = [
+  CategoryItem(title: 'Hardpoint mode'),
+  CategoryItem(title: 'Search and destroy mode'),
+];
+
 var categoryItem = [
   CategoryItem(title: 'For you'),
   CategoryItem(title: 'Following'),
@@ -24,6 +29,7 @@ var accountItem = [
   CategoryItem(title: 'Events'),
   CategoryItem(title: 'Wallet'),
   CategoryItem(title: 'Referrals'),
+  CategoryItem(title: 'Ads'),
   CategoryItem(title: 'Logout'),
 ];
 

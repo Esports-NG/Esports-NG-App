@@ -1,13 +1,18 @@
-import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
+import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
+import 'package:e_sport/ui/components/error_page.dart';
+import 'package:e_sport/ui/components/no_item_page.dart';
+import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'components/trending_community_item.dart';
+import 'components/trending_team_item.dart';
 
 class TrendingTeam extends StatefulWidget {
   const TrendingTeam({super.key});
@@ -18,6 +23,7 @@ class TrendingTeam extends StatefulWidget {
 
 class _TrendingTeamState extends State<TrendingTeam> {
   final eventController = Get.put(EventRepository());
+  final teamController = Get.put(TeamRepository());
   bool? isSearch = false;
   final FocusNode _searchFocusNode = FocusNode();
   @override
@@ -38,6 +44,7 @@ class _TrendingTeamState extends State<TrendingTeam> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
+        leading: GoBackButton(onPressed: () => Get.back()),
         title: CustomText(
           title: 'Trending Team',
           fontFamily: 'GilroySemiBold',
@@ -75,20 +82,30 @@ class _TrendingTeamState extends State<TrendingTeam> {
                 ),
               ),
               Gap(Get.height * 0.025),
-              GridView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 1 * 0.8,
-                  ),
-                  itemCount: trendingTeamsItems.length,
-                  itemBuilder: (context, index) {
-                    var item = trendingTeamsItems[index];
-                    return TrendingCommunityItem(item: item);
-                  }),
+              (teamController.teamStatus == TeamStatus.loading)
+                  ? LoadingWidget(color: AppColor().primaryColor)
+                  : (teamController.teamStatus == TeamStatus.available)
+                      ? GridView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: 1 * 0.68,
+                          ),
+                          itemCount: teamController.allTeam.length,
+                          itemBuilder: (context, index) {
+                            var item = teamController.allTeam[index];
+                            return InkWell(
+                                onTap: () => Get.to(
+                                    () => AccountTeamsDetail(item: item)),
+                                child: TrendingTeamsItem(item: item));
+                          })
+                      : (teamController.teamStatus == TeamStatus.empty)
+                          ? const NoItemPage(title: 'Teams')
+                          : const ErrorPage(),
             ],
           ),
         ),

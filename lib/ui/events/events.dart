@@ -47,63 +47,72 @@ class _EventsPageState extends State<EventsPage> {
         ),
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Divider(
-              color: AppColor().primaryWhite.withOpacity(0.7),
-              height: 1,
-            ),
-            Gap(Get.height * 0.025),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: Get.height * 0.06,
-                    child: CustomTextField(
-                      hint: "Search for gaming news, competitions...",
-                      fontFamily: 'GilroyMedium',
-                      prefixIcon: Icon(
-                        CupertinoIcons.search,
-                        color: AppColor().lightItemsColor,
-                      ),
-                      textEditingController: eventController.searchController,
-                      hasText: isSearch!,
-                      focusNode: _searchFocusNode,
-                      onTap: handleTap,
-                      onSubmited: (_) {
-                        _searchFocusNode.unfocus();
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          isSearch = value.isNotEmpty;
-                        });
-                      },
-                    ),
-                  ),
-                  Gap(Get.height * 0.025),
-                  eventsCategory(),
-                  Gap(Get.height * 0.01),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.01),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        eventFilterOption(title: 'Event Type'),
-                        eventFilterOption(title: 'Status'),
-                        eventFilterOption(title: 'Filter by Game'),
-                      ],
-                    ),
-                  ),
-                  Gap(Get.height * 0.03),
-                  const AccountEventsWidget()
-                ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          return Future.delayed(const Duration(seconds: 2), () {
+            eventController.getAllEvent(false);
+          });
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              Divider(
+                color: AppColor().primaryWhite.withOpacity(0.7),
+                height: 1,
               ),
-            ),
-          ],
+              Gap(Get.height * 0.025),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: Get.height * 0.06,
+                      child: CustomTextField(
+                        hint: "Search for gaming news, competitions...",
+                        fontFamily: 'GilroyMedium',
+                        prefixIcon: Icon(
+                          CupertinoIcons.search,
+                          color: AppColor().lightItemsColor,
+                        ),
+                        textEditingController: eventController.searchController,
+                        hasText: isSearch!,
+                        focusNode: _searchFocusNode,
+                        onTap: handleTap,
+                        onSubmited: (_) {
+                          _searchFocusNode.unfocus();
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            isSearch = value.isNotEmpty;
+                          });
+                        },
+                      ),
+                    ),
+                    Gap(Get.height * 0.025),
+                    eventsCategory(),
+                    Gap(Get.height * 0.01),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Get.height * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          eventFilterOption(title: 'Event Type'),
+                          eventFilterOption(title: 'Status'),
+                          eventFilterOption(title: 'Filter by Game'),
+                        ],
+                      ),
+                    ),
+                    Gap(Get.height * 0.03),
+                    const AccountEventsWidget(),
+                    Gap(Get.height * 0.02),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
