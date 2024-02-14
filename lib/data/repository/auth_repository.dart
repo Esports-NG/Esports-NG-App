@@ -453,11 +453,13 @@ class AuthRepository extends GetxController {
         },
       );
       var json = jsonDecode(response.body);
-      if (response.statusCode != 200) {
-        throw (json['detail']);
-      }
+      debugPrint(response.statusCode.toString());
       debugPrint(response.body);
-      if (response.statusCode == 200) {
+      if (response.statusCode != 200 || response.statusCode != 201) {
+        throw (json['details'] ?? json['error']);
+      }
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
         EasyLoading.showInfo(json['message']).then((value) async {});
         _followStatus(FollowStatus.success);
       } else {

@@ -203,7 +203,14 @@ class _PostDetailsState extends State<PostDetails> {
                                       textSize: Get.height * 0.015,
                                       width: Get.width * 0.25,
                                       height: Get.height * 0.04,
-                                      onTap: () {},
+                                      onTap: () {
+                                        if (authController.followStatus !=
+                                            FollowStatus.loading) {
+                                          authController.followUser(widget
+                                              .item.author!.id!
+                                              .toString());
+                                        }
+                                      },
                                       isLoading: false,
                                     ),
                                   if (authController.user!.id ==

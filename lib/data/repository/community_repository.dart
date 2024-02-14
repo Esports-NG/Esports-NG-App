@@ -29,11 +29,11 @@ enum CreateCommunityStatus {
 
 class CommunityRepository extends GetxController {
   final authController = Get.put(AuthRepository());
-  late final postTitleController = TextEditingController();
-  late final seeController = TextEditingController();
-  late final engageController = TextEditingController();
-  late final gameTagController = TextEditingController();
-  late final accountTypeController = TextEditingController();
+  late final communityNameController = TextEditingController();
+  late final communityAbbrController = TextEditingController();
+  late final communityBioController = TextEditingController();
+  late final communityGameController = TextEditingController();
+  late final communityChatController = TextEditingController();
   late final searchController = TextEditingController();
 
   final Rx<List<CommunityModel>> _allCommunity = Rx([]);
@@ -63,26 +63,28 @@ class CommunityRepository extends GetxController {
     });
   }
 
-  Future createCommunity(CommunityModel community) async {
+  Future createCommunity(Map<String, dynamic> community) async {
     try {
+      // debugPrint('Community: ${community()}');
       _createCommunityStatus(CreateCommunityStatus.loading);
-      var headers = {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      };
+      var headers = {"Authorization": 'JWT ${authController.token}'};
       var request =
           http.MultipartRequest("POST", Uri.parse(ApiLink.createCommunity));
 
-      request.files.add(await http.MultipartFile.fromPath(
-          'profile_picture', communityProfileImage!.path));
-      request.files.add(await http.MultipartFile.fromPath(
-          'cover', communityCoverImage!.path));
+      request.fields
+          .addAll(community.map((key, value) => MapEntry(key, value)));
 
-      request.fields.addAll(community
-          .toCreateCommunityJson()
-          .map((key, value) => MapEntry(key, value)));
+      if (communityProfileImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'logo', communityProfileImage!.path));
+      }
+
+      if (communityCoverImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'cover', communityCoverImage!.path));
+      }
+
       request.headers.addAll(headers);
-
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 201) {
         _createCommunityStatus(CreateCommunityStatus.success);
@@ -173,10 +175,10 @@ class CommunityRepository extends GetxController {
   }
 
   void clear() {
-    postTitleController.clear();
-    seeController.clear();
-    engageController.clear();
-    gameTagController.clear();
-    accountTypeController.clear();
+    communityNameController.clear();
+    communityAbbrController.clear();
+    communityBioController.clear();
+    communityGameController.clear();
+    communityChatController.clear();
   }
 }
