@@ -22,6 +22,7 @@ class ApiLink {
   static String followCommunity = "${baseurl}extra/followcomm/";
   static String followTeam = "${baseurl}extra/followteam/";
   static String viewUserTeam = "${baseurl}team/myteam/";
+  static String getAllGame = "${baseurl}games/view/";
 
   //Post
   static String createPost = "${baseurl}post/create/";

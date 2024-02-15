@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:e_sport/data/model/games_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/shared_pref.dart';
@@ -89,6 +90,14 @@ enum FollowStatus {
   success,
 }
 
+enum GameStatus {
+  empty,
+  loading,
+  error,
+  success,
+  available,
+}
+
 enum AuthStatus {
   loading,
   authenticated,
@@ -146,6 +155,7 @@ class AuthRepository extends GetxController {
   final _deliveryAddressStatus = DeliveryAddressStatus.empty.obs;
   final _userTransactionStatus = UserTransactionStatus.empty.obs;
   final _followStatus = FollowStatus.empty.obs;
+  final _gameStatus = GameStatus.empty.obs;
 
   AuthStatus get authStatus => _authStatus.value;
   SignUpStatus get signUpStatus => _signUpStatus.value;
@@ -160,11 +170,15 @@ class AuthRepository extends GetxController {
       _otpForgotVerifyStatus.value;
   UserTransactionStatus get transactionStatus => _userTransactionStatus.value;
   FollowStatus get followStatus => _followStatus.value;
+  GameStatus get gameStatus => _gameStatus.value;
 
   final status = AuthStatus.uninitialized.obs;
 
   final Rx<UserModel?> mUser = Rx(null);
+  final Rx<List<GamesModel>> _allGames = Rx([]);
+
   UserModel? get user => mUser.value;
+  List<GamesModel> get allGames => _allGames.value;
 
   SharedPref? pref;
 
@@ -197,6 +211,7 @@ class AuthRepository extends GetxController {
       if (pref!.getUser() != null) {
         mUser(pref!.getUser()!);
         mToken(pref!.read());
+        getAllGames();
         _authStatus(AuthStatus.authenticated);
         if (mToken.value == "0") {
           _authStatus(AuthStatus.unAuthenticated);
@@ -293,9 +308,10 @@ class AuthRepository extends GetxController {
         _signInStatus(SignInStatus.success);
         _authStatus(AuthStatus.authenticated);
         EasyLoading.showInfo('Login Successful',
-                duration: const Duration(seconds: 2))
+                duration: const Duration(seconds: 1))
             .then((value) async {
-          await Future.delayed(const Duration(seconds: 2));
+          getAllGames();
+          await Future.delayed(const Duration(seconds: 1));
           Get.to(() => const OTPScreen());
           clear();
         });
@@ -642,6 +658,31 @@ class AuthRepository extends GetxController {
         EasyLoading.dismiss();
       }
       debugPrint("getting country code error: ${error.toString()}");
+    }
+  }
+
+  Future getAllGames() async {
+    try {
+      debugPrint('getting all game data');
+      _gameStatus(GameStatus.loading);
+      var response = await http.get(Uri.parse(ApiLink.getAllGame), headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT $token'
+      });
+
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        var list = List.from(json);
+        var games = list.map((e) => GamesModel.fromJson(e)).toList();
+        _allGames(games);
+        debugPrint("${games.length} games found");
+        _gameStatus(GameStatus.success);
+      }
+      return response.body;
+    } catch (error) {
+      _gameStatus(GameStatus.error);
+      debugPrint("getting all games error: ${error.toString()}");
     }
   }
 

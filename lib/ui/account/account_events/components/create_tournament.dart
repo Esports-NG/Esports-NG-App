@@ -66,7 +66,7 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
 
   final FocusNode _tournamentLinkFocusNode = FocusNode();
   final FocusNode _gameFocusNode = FocusNode();
-  final FocusNode _tournamentnameFocusNode = FocusNode();
+  final FocusNode _tournamentNameFocusNode = FocusNode();
   final FocusNode _gameModeFocusNode = FocusNode();
   final FocusNode _tournamentTypeFocusNode = FocusNode();
   final FocusNode _knockoutFocusNode = FocusNode();
@@ -84,7 +84,7 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
   void dispose() {
     _tournamentLinkFocusNode.dispose();
     _gameFocusNode.dispose();
-    _tournamentnameFocusNode.dispose();
+    _tournamentNameFocusNode.dispose();
     _gameModeFocusNode.dispose();
     _tournamentTypeFocusNode.dispose();
     _knockoutFocusNode.dispose();
@@ -544,7 +544,8 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
                                   });
                                 },
                                 hint: CustomText(
-                                  title: "Communities Owned",
+                                  title:
+                                      communitiesValue ?? "Communities Owned",
                                   color: isCommunities == true
                                       ? AppColor().primaryBackGroundColor
                                       : AppColor().lightItemsColor,
@@ -569,12 +570,12 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
                             textEditingController:
                                 eventController.tournamentNameController,
                             hasText: isTournamentName,
-                            focusNode: _tournamentnameFocusNode,
+                            focusNode: _tournamentNameFocusNode,
                             onTap: () {
                               handleTap('tournamentName');
                             },
                             onSubmited: (_) {
-                              _tournamentnameFocusNode.unfocus();
+                              _tournamentNameFocusNode.unfocus();
                             },
                             onChanged: (value) {
                               setState(() {
@@ -645,8 +646,8 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
                                         : AppColor().lightItemsColor),
                                 value: gameValue,
                                 items: <String>[
-                                  '1',
-                                  '2',
+                                  'COD',
+                                  'Mortal Kombat',
                                 ].map((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
@@ -1057,6 +1058,7 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
                                 eventController.prizePoolController,
                             hasText: isPrizePool,
                             focusNode: _prizePoolFocusNode,
+                            keyType: TextInputType.phone,
                             onTap: () {
                               handleTap('prizePool');
                             },
@@ -1085,6 +1087,7 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
                                 eventController.entryFeeController,
                             hasText: isEntryFee,
                             focusNode: _entryFeeFocusNode,
+                            keyType: TextInputType.phone,
                             onTap: () => handleTap('entryFee'),
                             onSubmited: (_) {
                               _entryFeeFocusNode.unfocus();
@@ -1125,6 +1128,7 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
                                 eventController.firstPrizeController,
                             hasText: isFirstPrize,
                             focusNode: _firstPrizeFocusNode,
+                            keyType: TextInputType.phone,
                             onTap: () => handleTap('first'),
                             onSubmited: (_) {
                               _firstPrizeFocusNode.unfocus();
@@ -1151,6 +1155,7 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
                                 eventController.secondPrizeController,
                             hasText: isSecondPrize,
                             focusNode: _secondPrizeFocusNode,
+                            keyType: TextInputType.phone,
                             onTap: () => handleTap('second'),
                             onSubmited: (_) {
                               _secondPrizeFocusNode.unfocus();
@@ -1177,6 +1182,7 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
                                 eventController.thirdPrizeController,
                             hasText: isThirdPrize,
                             focusNode: _thirdPrizeFocusNode,
+                            keyType: TextInputType.phone,
                             onTap: () {
                               handleTap('third');
                             },
@@ -1384,11 +1390,11 @@ class _CreateTournamentEventState extends State<CreateTournamentEvent> {
                           textEditingController:
                               eventController.tournamentNameController,
                           // hasText: isTournamentName,
-                          // focusNode: _tournamentnameFocusNode,
+                          // focusNode: _tournamentNameFocusNode,
                           onTap: () => handleTap('tournamentSummary'),
                           maxLines: 4,
                           onSubmited: (_) {
-                            // _tournamentnameFocusNode.unfocus();
+                            // _tournamentNameFocusNode.unfocus();
                           },
                           onChanged: (value) {
                             setState(() {

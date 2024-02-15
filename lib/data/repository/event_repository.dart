@@ -100,7 +100,7 @@ class EventRepository extends GetxController {
     });
   }
 
-  Future createEvent(EventModel event) async {
+  Future createEvent(EventModel event, String title) async {
     try {
       _createEventStatus(CreateEventStatus.loading);
       var headers = {

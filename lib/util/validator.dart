@@ -46,8 +46,7 @@ class Validator {
   static String? isNumber(String? value) {
     if (value?.isEmpty ?? true) {
       return 'This field is required';
-    } else if (!GetUtils.isNumericOnly(value!.trim()) ||
-        !GetUtils.isLengthBetween(value.trim(), 1, 3)) {
+    } else if (!GetUtils.isNumericOnly(value!.trim())) {
       return 'Please enter a valid number';
     }
     return null;
