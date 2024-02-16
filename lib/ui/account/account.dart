@@ -5,6 +5,7 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/components/my_post_widget.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -134,8 +135,7 @@ class _AccountState extends State<Account> {
                         accountTab = index;
                         if (item.title == 'Logout') {
                           logOutDialog(context);
-                        } else if (item.title == 'Referrals' ||
-                            item.title == 'Ads') {
+                        } else if (item.title == 'Ads') {
                           Fluttertoast.showToast(
                               fontSize: Get.height * 0.015,
                               msg: 'Coming soon!',
@@ -143,6 +143,8 @@ class _AccountState extends State<Account> {
                               gravity: ToastGravity.BOTTOM);
                         } else if (item.title == 'Posts') {
                           Get.to(() => const MyPostWidget());
+                        } else if (item.title == "Referrals") {
+                          Get.to(() => const Referral());
                         } else {
                           Get.to(() => AccountDetails(
                                 title: item.title,

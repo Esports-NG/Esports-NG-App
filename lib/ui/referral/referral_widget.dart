@@ -1,8 +1,9 @@
+import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'component/referral_code_widget.dart';
+import 'component/referral_leaderboard_widget.dart';
 import 'component/referral_link_widget.dart';
 
 class Referral extends StatefulWidget {
@@ -35,11 +36,13 @@ class _ReferralState extends State<Referral>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: GoBackButton(onPressed: () => Get.back()),
         backgroundColor: AppColor().primaryBackGroundColor,
         centerTitle: true,
         title: CustomText(
+          textAlign: TextAlign.center,
           title: 'Referrals',
-          weight: FontWeight.w600,
+          fontFamily: "GilroySemiBold",
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -55,38 +58,49 @@ class _ReferralState extends State<Referral>
         bottom: TabBar(
             controller: _tabController,
             indicatorColor: AppColor().primaryColor,
+            dividerColor: AppColor().greyEight,
             padding: EdgeInsets.only(top: Get.height * 0.02),
             tabs: [
-              CustomText(
-                title: 'Referral Link',
-                color: _tabController.index == 0
-                    ? AppColor().primaryColor
-                    : AppColor().lightItemsColor,
-                size: 14,
-                fontFamily:
-                    _tabController.index == 0 ? 'GilroyBold' : 'GilroyMedium',
-                weight: FontWeight.w400,
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                child: CustomText(
+                  title: 'Referral Link',
+                  color: _tabController.index == 0
+                      ? AppColor().primaryColor
+                      : AppColor().lightItemsColor,
+                  size: 16,
+                  fontFamily:
+                      _tabController.index == 0 ? 'GilroyBold' : 'GilroyMedium',
+                  weight: FontWeight.w400,
+                ),
               ),
-              CustomText(
-                title: 'Referral Code',
-                color: _tabController.index == 1
-                    ? AppColor().primaryColor
-                    : AppColor().lightItemsColor,
-                size: 14,
-                fontFamily:
-                    _tabController.index == 1 ? 'GilroyBold' : 'GilroyMedium',
-                weight: FontWeight.w400,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: CustomText(
+                  title: 'Referral Leaderboard',
+                  color: _tabController.index == 1
+                      ? AppColor().primaryColor
+                      : AppColor().lightItemsColor,
+                  size: 16,
+                  fontFamily:
+                      _tabController.index == 1 ? 'GilroyBold' : 'GilroyMedium',
+                  weight: FontWeight.w400,
+                ),
               ),
             ]),
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
-      body: Padding(
-        padding: EdgeInsets.all(Get.height * 0.02),
-        child: TabBarView(controller: _tabController, children: const [
-          ReferralLinkWidget(),
-          ReferralCodeWidget(),
-        ]),
-      ),
+      body: TabBarView(controller: _tabController, children: [
+        Padding(
+          padding: EdgeInsets.all(Get.height * 0.02),
+          child: const ReferralLinkWidget(),
+        ),
+        Padding(
+          padding: EdgeInsets.all(Get.height * 0.02),
+          child: const ReferralLeaderboardWidget(),
+        ),
+      ]),
     );
   }
 }

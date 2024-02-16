@@ -5,44 +5,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    this.hint,
-    this.label,
-    this.pretext,
-    this.sufText,
-    this.maxLength,
-    this.obscure,
-    this.maxLines,
-    this.minLines,
-    this.initialValue,
-    this.hintColor,
-    this.icon,
-    this.enabled,
-    this.readOnly = false,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.keyType,
-    this.keyAction,
-    this.textEditingController,
-    this.onSubmited,
-    this.onTap,
-    this.validate,
-    this.inputformater,
-    this.onChanged,
-    this.validatorText,
-    this.onClick,
-    this.color,
-    this.fillColor,
-    this.borderColor,
-    this.colors,
-    this.enableColor,
-    this.labelSize,
-    this.radius,
-    this.fontFamily,
-    this.hasText = false,
-    this.focusNode,
-    this.decoration,
-  });
+  const CustomTextField(
+      {this.hint,
+      this.label,
+      this.pretext,
+      this.sufText,
+      this.maxLength,
+      this.obscure,
+      this.maxLines,
+      this.minLines,
+      this.initialValue,
+      this.hintColor,
+      this.icon,
+      this.enabled,
+      this.readOnly = false,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.keyType,
+      this.keyAction,
+      this.textEditingController,
+      this.onSubmited,
+      this.onTap,
+      this.validate,
+      this.inputformater,
+      this.onChanged,
+      this.validatorText,
+      this.onClick,
+      this.color,
+      this.fillColor,
+      this.borderColor,
+      this.colors,
+      this.enableColor,
+      this.labelSize,
+      this.radius,
+      this.fontFamily,
+      this.hasText = false,
+      this.focusNode,
+      this.decoration,
+      this.enabledBorder});
 
   final VoidCallback? onClick;
   final bool? obscure;
@@ -77,6 +77,7 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputformater;
   final FocusNode? focusNode;
   final InputDecoration? decoration;
+  final BorderSide? enabledBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +139,7 @@ class CustomTextField extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(radius ?? 10)),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide.none,
+                borderSide: enabledBorder ?? BorderSide.none,
                 borderRadius: BorderRadius.circular(radius ?? 10)),
             errorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
