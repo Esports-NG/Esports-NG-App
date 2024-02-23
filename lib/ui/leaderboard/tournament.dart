@@ -48,7 +48,7 @@ class Tournament extends StatelessWidget {
                           fontFamily: "GilroySemiBold",
                           size: 18,
                         ),
-                        Gap(5),
+                        const Gap(5),
                         Row(
                           children: [
                             CustomText(
@@ -57,7 +57,7 @@ class Tournament extends StatelessWidget {
                               color: AppColor().greySix,
                             ),
                             Gap(Get.height * 0.01),
-                            SmallCircle(
+                            const SmallCircle(
                               size: 5,
                             ),
                             Gap(Get.height * 0.01),
@@ -87,7 +87,7 @@ class Tournament extends StatelessWidget {
                     ),
                     const Spacer(),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           border: Border.all(color: AppColor().greySix),
                           borderRadius: BorderRadius.circular(10)),

@@ -133,8 +133,6 @@ class _AccountDetailsState extends State<AccountDetails> {
                       const AccountCommunityWidget()
                     ] else if (widget.title == 'Events') ...[
                       const AccountEventsWidget()
-                    ] else if (widget.title == 'Wallet') ...[
-                      const WalletWidget()
                     ]
                   ],
                 ),

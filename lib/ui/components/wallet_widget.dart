@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/transaction_model.dart';
+import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -17,132 +18,123 @@ class WalletWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        elevation: 0,
+        leading: GoBackButton(onPressed: () => Get.back()),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.settings,
+              color: AppColor().primaryWhite,
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SvgPicture.asset(
-              'assets/images/svg/walletBg.svg',
-              height: Get.height * 0.25,
-              width: double.infinity,
-              fit: BoxFit.fitWidth,
-            ),
-            Positioned(
-              right: Get.height * 0.09,
-              bottom: Get.height * 0.06,
-              child: Image.asset(
-                'assets/images/png/walletImage2.png',
-                opacity: const AlwaysStoppedAnimation(0.5),
+            Container(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(
+                        'assets/images/png/wallettopbg.png',
+                      ),
+                      fit: BoxFit.cover)),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: Get.height * 0.15,
+                    left: Get.height * 0.02,
+                    right: Get.height * 0.02,
+                    bottom: Get.height * 0.02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: CustomText(
+                        title: "Total Balance",
+                        size: 18,
+                        color: AppColor().greyTwo,
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    Center(
+                      child: CustomText(
+                        size: 32,
+                        fontFamily: "GilroyBold",
+                        color: AppColor().primaryWhite,
+                        title: "N3,543,090.00",
+                      ),
+                    ),
+                    Gap(Get.height * 0.04),
+                    Row(
+                      children: [
+                        options(
+                            title: 'Deposit',
+                            color: Colors.white.withOpacity(0.05),
+                            onTap: () => Get.to(() => const Deposit())),
+                        Gap(Get.height * 0.02),
+                        options(
+                          title: 'Withdraw',
+                          color: Colors.white.withOpacity(0.05),
+                        ),
+                        Gap(Get.height * 0.02),
+                        options(
+                          title: 'Transfer',
+                          color: Colors.white.withOpacity(0.05),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-            Positioned(
-              right: Get.height * 0.02,
-              bottom: Get.height * 0.02,
-              child: Image.asset(
-                'assets/images/png/walletImage1.png',
-                opacity: const AlwaysStoppedAnimation(0.5),
-              ),
-            ),
-            Positioned(
-              top: Get.height * 0.07,
-              left: Get.height * 0.06,
+            Gap(Get.height * 0.03),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    title: ' Your Balance',
-                    color: AppColor().greyEight,
+                    title: 'Transaction History',
+                    color: AppColor().greyTwo,
                     weight: FontWeight.w400,
-                    size: Get.height * 0.014,
+                    size: 18,
                     fontFamily: 'GilroySemiBold',
                   ),
-                  Gap(Get.height * 0.01),
-                  CustomText(
-                    title: 'N4,790.35',
-                    color: AppColor().primaryWhite,
-                    weight: FontWeight.w400,
-                    size: Get.height * 0.028,
-                    fontFamily: 'GilroySemiBold',
-                  ),
-                  Gap(Get.height * 0.05),
-                  Row(
-                    children: [
-                      SmallCircle(color: AppColor().greyTwo),
-                      Gap(Get.height * 0.002),
-                      SmallCircle(color: AppColor().greyTwo),
-                      Gap(Get.height * 0.002),
-                      CustomText(
-                        title: 'realmischaxyz',
-                        color: AppColor().greyTwo,
-                        weight: FontWeight.w400,
-                        size: Get.height * 0.014,
-                        fontFamily: 'GilroySemiBold',
-                      ),
-                    ],
+                  Gap(Get.height * 0.02),
+                  ListView.separated(
+                    padding: EdgeInsets.zero,
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: transactionHistory.length,
+                    separatorBuilder: (context, index) =>
+                        Gap(Get.height * 0.01),
+                    itemBuilder: (context, index) {
+                      var item = transactionHistory[index];
+                      return InkWell(
+                        onTap: () {
+                          // Get.to(
+                          //   () => PostDetails(
+                          //     item: item,
+                          //   ),
+                          // );
+                        },
+                        child: TransactionHistoryItem(item: item),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
           ],
         ),
-        Gap(Get.height * 0.02),
-        Row(
-          children: [
-            options(
-                title: 'Deposit',
-                color: AppColor().primaryColor,
-                onTap: () => Get.to(() => const Deposit())),
-            Gap(Get.height * 0.02),
-            options(
-              title: 'Withdraw',
-              color: AppColor().primaryBackGroundColor,
-              border: Border.all(
-                color: AppColor().primaryColor,
-                width: 0.5,
-              ),
-            ),
-            Gap(Get.height * 0.02),
-            options(
-              title: 'Transfer',
-              color: AppColor().primaryBackGroundColor,
-              border: Border.all(
-                color: AppColor().primaryColor,
-                width: 0.5,
-              ),
-            ),
-          ],
-        ),
-        Gap(Get.height * 0.07),
-        CustomText(
-          title: 'Transaction History',
-          color: AppColor().greyTwo,
-          weight: FontWeight.w400,
-          size: Get.height * 0.016,
-          fontFamily: 'GilroySemiBold',
-        ),
-        Gap(Get.height * 0.02),
-        ListView.separated(
-          padding: EdgeInsets.zero,
-          physics: const ScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: transactionHistory.length,
-          separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-          itemBuilder: (context, index) {
-            var item = transactionHistory[index];
-            return InkWell(
-              onTap: () {
-                // Get.to(
-                //   () => PostDetails(
-                //     item: item,
-                //   ),
-                // );
-              },
-              child: TransactionHistoryItem(item: item),
-            );
-          },
-        ),
-      ],
+      ),
     );
   }
 
@@ -154,14 +146,13 @@ class WalletWidget extends StatelessWidget {
         child: Container(
           height: Get.height * 0.06,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(90),
+              borderRadius: BorderRadius.circular(15),
               color: color,
-              border: border ?? Border.all()),
+              border: border ?? Border.all(color: AppColor().greyEight)),
           child: Center(
             child: CustomText(
               title: title,
-              color:
-                  border != null ? AppColor().primaryColor : AppColor().greyTwo,
+              color: AppColor().primaryWhite,
               weight: FontWeight.w400,
               size: Get.height * 0.016,
               fontFamily: 'GilroySemiBold',
