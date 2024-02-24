@@ -8,21 +8,21 @@ class EventModel {
   String? gameMode;
   String? tournamentType;
   String? knockoutType;
-  String? rankType;
+  String? rankType, iRegStart, iStartDate, iEndDate;
   DateTime? regStart;
   DateTime? regEnd;
   DateTime? startDate;
   DateTime? endDate;
   String? prizePool;
   String? summary;
-  String? entryFee;
+  String? entryFee, iMaxNo;
   int? maxNo;
   String? description;
   String? requirements;
   String? structure;
   List<dynamic>? teams;
   List<dynamic>? players;
-  String? rulesRegs;
+  String? rulesRegs, first, second, third;
   PrizePoolDistribution? prizePoolDistribution;
 
   EventModel({
@@ -36,6 +36,10 @@ class EventModel {
     this.tournamentType,
     this.knockoutType,
     this.rankType,
+    this.iRegStart,
+    this.iMaxNo,
+    this.iEndDate,
+    this.iStartDate,
     this.regStart,
     this.regEnd,
     this.startDate,
@@ -50,6 +54,9 @@ class EventModel {
     this.teams,
     this.players,
     this.rulesRegs,
+    this.first,
+    this.second,
+    this.third,
     this.prizePoolDistribution,
   });
 
@@ -106,14 +113,10 @@ class EventModel {
         "tournament_type": tournamentType,
         "knockout_type": knockoutType,
         "rank_type": rankType,
-        "reg_start":
-            "${regStart!.year.toString().padLeft(4, '0')}-${regStart!.month.toString().padLeft(2, '0')}-${regStart!.day.toString().padLeft(2, '0')}",
-        "reg_end":
-            "${regEnd!.year.toString().padLeft(4, '0')}-${regEnd!.month.toString().padLeft(2, '0')}-${regEnd!.day.toString().padLeft(2, '0')}",
-        "start_date":
-            "${startDate!.year.toString().padLeft(4, '0')}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}",
-        "end_date":
-            "${endDate!.year.toString().padLeft(4, '0')}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}",
+        "reg_start": regStart?.toIso8601String(),
+        "reg_end": regEnd?.toIso8601String(),
+        "start_date": startDate?.toIso8601String(),
+        "end_date": endDate?.toIso8601String(),
         "prize_pool": prizePool,
         "summary": summary,
         "entry_fee": entryFee,
@@ -129,12 +132,42 @@ class EventModel {
       };
 
   Map<String, dynamic> toCreateEventJson() => {
-        "id": id,
         "name": name,
-        // "bio": bio,
-        // "members":
-        //     members == null ? [] : List<dynamic>.from(members!.map((x) => x)),
-        // "members_count": membersCount,
+        "link_for_bracket": linkForBracket,
+        "game_mode": gameMode,
+        "knockout_type": knockoutType,
+        "rank_type": rankType,
+        "reg_start": iRegStart,
+        "start_date": iStartDate,
+        "end_date": iEndDate,
+        "prize_pool": prizePool,
+        "entry_fee": entryFee,
+        "max_no": maxNo,
+        "prize_pool_distribution": prizePoolDistribution?.toJson(),
+        "description": description,
+        "summary": summary,
+        "requirements": requirements,
+        "structure": structure,
+        "rules_regs": rulesRegs,
+      };
+
+  Map<String, dynamic> toCreateSocialEventJson() => {
+        "name": name,
+        "link_for_bracket": linkForBracket,
+        "game_mode": gameMode,
+        "knockout_type": knockoutType,
+        "rank_type": rankType,
+        "reg_start": regStart?.toIso8601String(),
+        "start_date": startDate?.toIso8601String(),
+        "end_date": endDate?.toIso8601String(),
+        "prize_pool": prizePool,
+        "entry_fee": entryFee,
+        "max_no": iMaxNo,
+        "prize_pool_distribution": prizePoolDistribution?.toJson(),
+        "summary": summary,
+        "requirements": requirements,
+        "structure": structure,
+        "rules_regs": rulesRegs,
       };
 }
 

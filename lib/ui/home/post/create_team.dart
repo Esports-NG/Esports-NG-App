@@ -579,7 +579,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    height: Get.height * 0.07,
+                    height: Get.height * 0.065,
                     width: Get.width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),

@@ -56,6 +56,7 @@ class EventRepository extends GetxController {
   late final startTimeController = TextEditingController();
   late final endTimeController = TextEditingController();
   late final tournamentDateController = TextEditingController();
+  late final tournamentEndDateController = TextEditingController();
   late final prizePoolController = TextEditingController();
   late final entryFeeController = TextEditingController();
   late final firstPrizeController = TextEditingController();
@@ -70,6 +71,10 @@ class EventRepository extends GetxController {
   late final knockoutTypeController = TextEditingController();
   late final tournamentTypeController = TextEditingController();
   late final partnersController = TextEditingController();
+  late final summaryController = TextEditingController();
+  late final requirementController = TextEditingController();
+  late final structureController = TextEditingController();
+  late final rulesAndRegulationController = TextEditingController();
   late final staffController = TextEditingController();
 
   final Rx<List<EventModel>> _allEvent = Rx([]);
@@ -102,32 +107,55 @@ class EventRepository extends GetxController {
 
   Future createEvent(EventModel event, String title) async {
     try {
+      debugPrint('tournament: ${event.toCreateEventJson()}');
       _createEventStatus(CreateEventStatus.loading);
       var headers = {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       };
-      var request =
-          http.MultipartRequest("POST", Uri.parse(ApiLink.createEvent));
+      var request = http.MultipartRequest(
+          "POST",
+          Uri.parse(
+              '${ApiLink.createEvent}${gamePlayedController.text}/create/tournament/'));
+
+      request.fields.addAll({
+        'name': '${event.name}',
+        'link_for_bracket': '${event.linkForBracket}',
+        'game_mode': '${event.gameMode}',
+        'knockout_type': '${event.knockoutType}',
+        'rank_type': '${event.rankType}',
+        'reg_start': '${event.iRegStart}',
+        'start_date': '${event.iStartDate}',
+        'end_date': '${event.iEndDate}',
+        'prize_pool': '${event.prizePool}',
+        'summary': '${event.summary}',
+        'entry_fee': '${event.entryFee}',
+        'max_no': '${event.iMaxNo}',
+        'description': '${event.description}',
+        'requirements': '${event.requirements}',
+        'structure': '${event.structure}',
+        'first': '${event.prizePoolDistribution!.first}',
+        'second': '${event.prizePoolDistribution!.second}',
+        'third': '${event.prizePoolDistribution!.third}',
+        'rules_regs': '${event.rulesRegs}',
+      });
 
       request.files.add(await http.MultipartFile.fromPath(
-          'profile_picture', eventProfileImage!.path));
+          'profile', eventProfileImage!.path));
       request.files.add(
-          await http.MultipartFile.fromPath('cover', eventCoverImage!.path));
+          await http.MultipartFile.fromPath('banner', eventCoverImage!.path));
 
-      request.fields.addAll(
-          event.toCreateEventJson().map((key, value) => MapEntry(key, value)));
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 201) {
         _createEventStatus(CreateEventStatus.success);
         debugPrint(await response.stream.bytesToString());
-        Get.to(() => const CreateSuccessPage(title: 'Event Created'))!
-            .then((value) {
-          getAllEvent(false);
-          clear();
-        });
+        // Get.to(() => const CreateSuccessPage(title: 'Event Created'))!
+        //     .then((value) {
+        //   getAllEvent(false);
+        //   clear();
+        // });
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
@@ -189,9 +217,9 @@ class EventRepository extends GetxController {
         fontSize: Get.height * 0.015,
         msg: (error.toString().contains("esports-ng.vercel.app") ||
                 error.toString().contains("Network is unreachable"))
-            ? 'Event like: No internet connection!'
+            ? 'No internet connection!'
             : (error.toString().contains("FormatException"))
-                ? 'Event like: Internal server error, contact admin!'
+                ? 'Internal server error, contact admin!'
                 : error.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM);
@@ -211,15 +239,28 @@ class EventRepository extends GetxController {
     searchController.clear();
     tournamentNameController.clear();
     tournamentLinkController.clear();
+    tournamentTypeController.clear();
     regDateController.clear();
     tournamentDateController.clear();
+    tournamentEndDateController.clear();
     prizePoolController.clear();
     entryFeeController.clear();
+    firstPrizeController.clear();
+    secondPrizeController.clear();
+    thirdPrizeController.clear();
     enableLeaderboardController.clear();
     rankTypeController.clear();
+    knockoutTypeController.clear();
     gamePlayedController.clear();
+    gameModeController.clear();
     partnersController.clear();
+    participantController.clear();
     staffController.clear();
     eventNameController.clear();
+    communitiesOwnedController.clear();
+    summaryController.clear();
+    requirementController.clear();
+    structureController.clear();
+    rulesAndRegulationController.clear();
   }
 }
