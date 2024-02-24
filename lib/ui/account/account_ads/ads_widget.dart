@@ -1,24 +1,24 @@
+import 'package:e_sport/ui/account/account_ads/components/promoted_events.dart';
+import 'package:e_sport/ui/account/account_ads/components/promoted_posts.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'component/referral_leaderboard_widget.dart';
-import 'component/referral_link_widget.dart';
 
-class Referral extends StatefulWidget {
-  const Referral({super.key});
+class AdsWidget extends StatefulWidget {
+  const AdsWidget({super.key});
 
   @override
-  State<Referral> createState() => _ReferralState();
+  State<AdsWidget> createState() => _AdsWidgetState();
 }
 
-class _ReferralState extends State<Referral>
+class _AdsWidgetState extends State<AdsWidget>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
-  void initState() {
+  initState() {
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       setState(() {});
@@ -27,7 +27,7 @@ class _ReferralState extends State<Referral>
   }
 
   @override
-  void dispose() {
+  dispose() {
     _tabController.dispose();
     super.dispose();
   }
@@ -41,12 +41,11 @@ class _ReferralState extends State<Referral>
         centerTitle: true,
         title: CustomText(
           textAlign: TextAlign.center,
-          title: 'Referrals',
+          title: 'Ads',
           fontFamily: "GilroySemiBold",
           size: 18,
           color: AppColor().primaryWhite,
         ),
-        leading: GoBackButton(onPressed: () => Get.back()),
         actions: [
           IconButton(
             onPressed: () {},
@@ -66,7 +65,7 @@ class _ReferralState extends State<Referral>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                 child: CustomText(
-                  title: 'Referral Link',
+                  title: 'Promoted Posts',
                   color: _tabController.index == 0
                       ? AppColor().primaryColor
                       : AppColor().lightItemsColor,
@@ -79,7 +78,7 @@ class _ReferralState extends State<Referral>
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: CustomText(
-                  title: 'Referral Leaderboard',
+                  title: 'Promoted Events',
                   color: _tabController.index == 1
                       ? AppColor().primaryColor
                       : AppColor().lightItemsColor,
@@ -92,16 +91,10 @@ class _ReferralState extends State<Referral>
             ]),
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
-      body: TabBarView(controller: _tabController, children: [
-        Padding(
-          padding: EdgeInsets.all(Get.height * 0.02),
-          child: const ReferralLinkWidget(),
-        ),
-        Padding(
-          padding: EdgeInsets.all(Get.height * 0.02),
-          child: const ReferralLeaderboardWidget(),
-        ),
-      ]),
+      body: TabBarView(
+        controller: _tabController,
+        children: [PromotedPosts(), PromotedEvents()],
+      ),
     );
   }
 }

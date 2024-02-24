@@ -1,3 +1,4 @@
+import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -5,7 +6,6 @@ import 'package:get/get.dart';
 import 'referral_earning_modal.dart';
 import 'referral_info.dart';
 import 'referral_item.dart';
-import 'referral_option.dart';
 
 class ReferralLinkWidget extends StatelessWidget {
   const ReferralLinkWidget({
@@ -18,21 +18,40 @@ class ReferralLinkWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const ReferralInfo(),
-        ReferralOption(
-          title: 'Copy Referral Link',
-          icon: Icons.copy,
-          color: AppColor().primaryColor,
-        ),
         Gap(Get.height * 0.02),
-        ReferralOption(
-          title: 'Share Link',
-          icon: Icons.share,
-          color: AppColor().primaryBackGroundColor,
-          textColor: AppColor().primaryColor,
-          border: Border.all(
-            color: AppColor().primaryColor,
-            width: 0.5,
-          ),
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(999),
+              color: AppColor().primaryColor),
+          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          child: Row(children: [
+            CustomText(
+              title: 'REF12345',
+              fontFamily: 'GilroySemibold',
+              size: 24,
+              color: AppColor().primaryWhite,
+            ),
+            const Spacer(),
+            IntrinsicHeight(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.copy,
+                    color: AppColor().primaryWhite,
+                  ),
+                  const Gap(10),
+                  VerticalDivider(
+                    color: AppColor().primaryWhite,
+                  ),
+                  const Gap(10),
+                  Icon(
+                    Icons.share,
+                    color: AppColor().primaryWhite,
+                  )
+                ],
+              ),
+            )
+          ]),
         ),
         Gap(Get.height * 0.04),
         ReferralItem(
@@ -52,12 +71,7 @@ class ReferralLinkWidget extends StatelessWidget {
                   return const ReferralEarningModal();
                 });
           },
-        ),
-        Gap(Get.height * 0.03),
-        ReferralItem(
-          title: 'View Referral Leader board',
-          onTap: () {},
-        ),
+        )
       ],
     );
   }

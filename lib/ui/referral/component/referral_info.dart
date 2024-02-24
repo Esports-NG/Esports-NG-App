@@ -15,31 +15,38 @@ class ReferralInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Gap(Get.height * 0.04),
-        Center(
-          child: Container(
-            height: Get.height * 0.25,
-            width: Get.height * 0.25,
-            padding: EdgeInsets.all(Get.height * 0.03),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColor().referralC,
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Center(
+              child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(blurRadius: 120, color: AppColor().greySix)
+                  ])),
             ),
-            child: Image.asset(
-              'assets/images/png/referral.png',
-              height: Get.height * 0.17,
+            Center(
+              child: Image.asset(
+                'assets/images/png/gift.png',
+                // height: Get.height * 0.17,
+              ),
             ),
-          ),
+          ],
         ),
         Gap(Get.height * 0.04),
-        CustomText(
-          title: 'Invite Friends and Earn!',
-          color: AppColor().greyTwo,
-          weight: FontWeight.w400,
-          size: Get.height * 0.018,
-          fontFamily: 'GilroySemiBold',
+        Center(
+          child: CustomText(
+            textAlign: TextAlign.center,
+            title: 'Invite Friends and Earn!',
+            color: AppColor().greyTwo,
+            size: Get.height * 0.025,
+            fontFamily: 'GilroySemiBold',
+          ),
         ),
         Gap(Get.height * 0.01),
         CustomText(
+          textAlign: TextAlign.center,
           title:
               'Refer users to Esports NG and Earn N500 every time a user you referred subscribes. You also stand a chance to win other amazing prizes.',
           color: AppColor().greySix,
