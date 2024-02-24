@@ -1,11 +1,13 @@
 import 'package:e_sport/data/model/account_teams_model.dart';
+import 'package:e_sport/ui/components/leaderboard_dropdown.dart';
+import 'package:e_sport/ui/leaderboard/ranking_card.dart';
+import 'package:e_sport/ui/leaderboard/tournament.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
 import 'team_rank_item.dart';
 
 class Leaderboard extends StatelessWidget {
@@ -20,7 +22,7 @@ class Leaderboard extends StatelessWidget {
         elevation: 0,
         title: CustomText(
           title: 'Leaderboard',
-          weight: FontWeight.w500,
+          weight: FontWeight.w600,
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -33,7 +35,16 @@ class Leaderboard extends StatelessWidget {
             color: AppColor().primaryWhite,
           ),
         ),
-        actions: [],
+        actions: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+            child: Icon(
+              Icons.info_outline,
+              color: AppColor().primaryWhite,
+              size: 30,
+            ),
+          )
+        ],
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
@@ -97,6 +108,43 @@ class Leaderboard extends StatelessWidget {
                     ),
                   ],
                 ),
+              ],
+            ),
+            Gap(Get.height * 0.02),
+            SizedBox(
+              width: Get.width,
+              height: 350,
+              child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) =>
+                    RankingCard(title: "Ranking", teamRanks: teamRankItem),
+                itemCount: 2,
+                shrinkWrap: true,
+                separatorBuilder: (context, index) => Gap(Get.width * 0.05),
+              ),
+            ),
+            Gap(Get.height * 0.02),
+            Row(
+              children: [
+                const Expanded(
+                    child: LeaderboardDropdown(
+                  title: "Game",
+                  left: true,
+                )),
+                Gap(Get.height * 0.02),
+                const Expanded(
+                    child: LeaderboardDropdown(title: "Mode", left: false))
+              ],
+            ),
+            Gap(Get.height * 0.02),
+            const Row(
+              children: [
+                Expanded(
+                    child: LeaderboardDropdown(
+                  title: "Tournament Type",
+                  left: true,
+                )),
               ],
             ),
             Gap(Get.height * 0.02),
@@ -332,13 +380,17 @@ class Leaderboard extends StatelessWidget {
                       }),
                   Gap(Get.height * 0.05),
                   Center(
-                    child: CustomText(
-                      title: 'See tournaments for this leaderboard',
-                      size: 14,
-                      fontFamily: 'GilroySemiBold',
-                      textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
-                      underline: TextDecoration.underline,
+                    child: InkWell(
+                      onTap: () => Get.to(const Tournament()),
+                      child: CustomText(
+                        title: 'See tournaments for this leaderboard',
+                        size: 14,
+                        fontFamily: 'GilroySemiBold',
+                        textAlign: TextAlign.start,
+                        color: AppColor().primaryWhite,
+                        underline: TextDecoration.underline,
+                        decorationColor: AppColor().greyEight,
+                      ),
                     ),
                   ),
                   Gap(Get.height * 0.03),

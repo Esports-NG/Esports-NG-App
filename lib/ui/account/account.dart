@@ -3,15 +3,17 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/account/account_ads/ads_widget.dart';
 import 'package:e_sport/ui/components/my_post_widget.dart';
+import 'package:e_sport/ui/components/wallet_widget.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'account_details.dart';
@@ -134,15 +136,16 @@ class _AccountState extends State<Account> {
                         accountTab = index;
                         if (item.title == 'Logout') {
                           logOutDialog(context);
-                        } else if (item.title == 'Referrals' ||
-                            item.title == 'Ads') {
-                          Fluttertoast.showToast(
-                              fontSize: Get.height * 0.015,
-                              msg: 'Coming soon!',
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM);
-                        } else if (item.title == 'Posts') {
+                        } else if (item.title == 'Ads') {
+                          Get.to(() => const AdsWidget());
+                        } else if (item.title == 'Referrals') {
+                          Get.to(() => const Referral());
+                        }  else if (item.title == 'Posts') {
                           Get.to(() => const MyPostWidget());
+                        } else if (item.title == "Referrals") {
+                          Get.to(() => const Referral());
+                        } else if (item.title == "Wallet") {
+                          Get.to(() => const WalletWidget());
                         } else {
                           Get.to(() => AccountDetails(
                                 title: item.title,

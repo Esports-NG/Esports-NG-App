@@ -10,6 +10,7 @@ class CustomText extends StatelessWidget {
   final TextAlign? textAlign;
   final TextOverflow? overflow;
   final TextDecoration? underline;
+  final Color? decorationColor;
   const CustomText({
     Key? key,
     this.title,
@@ -21,6 +22,7 @@ class CustomText extends StatelessWidget {
     this.overflow,
     this.fontFamily,
     this.underline,
+    this.decorationColor,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,7 @@ class CustomText extends StatelessWidget {
           fontWeight: weight ?? FontWeight.normal,
           overflow: overflow,
           height: height ?? 1,
+          decorationColor: decorationColor,
           decoration: underline ?? TextDecoration.none,
         ));
   }

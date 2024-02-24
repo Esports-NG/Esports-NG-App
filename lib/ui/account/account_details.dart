@@ -13,6 +13,7 @@ import 'package:e_sport/ui/components/my_post_widget.dart';
 import 'package:e_sport/ui/home/post/create_post.dart';
 import 'package:e_sport/ui/home/post/create_team.dart';
 import 'package:e_sport/ui/components/wallet_widget.dart';
+import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -132,8 +133,6 @@ class _AccountDetailsState extends State<AccountDetails> {
                       const AccountCommunityWidget()
                     ] else if (widget.title == 'Events') ...[
                       const AccountEventsWidget()
-                    ] else if (widget.title == 'Wallet') ...[
-                      const WalletWidget()
                     ]
                   ],
                 ),

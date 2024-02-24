@@ -28,6 +28,7 @@ class AppColor {
   Color lightItemsColor = const Color(0xff9B9B9B);
   Color greyOne = const Color(0xffF5F5F5);
   Color greyTwo = const Color(0xffE0E0E0);
+  Color greyFour = const Color(0xffb8b8b8);
   Color greySix = const Color(0xff8F8F8F);
   Color greyEight = const Color(0xff666666);
   Color referral = const Color(0xff1F242C);
@@ -50,4 +51,9 @@ class AppColor {
   Color profileBackground = const Color(0xffF1FFFE);
   Color greyGradient = const Color(0xff525252);
   Color chatArea = const Color(0xff161C27);
+  Color purpleColor = const Color(0xffE55BE0);
+  Color mintColor = const Color(0xff00DCB4);
+  Color goldColor = const Color(0xffFFBD1B);
+  Color silverColor = const Color(0xffBFBFBF);
+  Color bronzeColor = const Color(0xff98764E);
 }
