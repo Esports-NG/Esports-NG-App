@@ -138,7 +138,9 @@ class _AccountState extends State<Account> {
                           logOutDialog(context);
                         } else if (item.title == 'Ads') {
                           Get.to(() => const AdsWidget());
-                        } else if (item.title == 'Posts') {
+                        } else if (item.title == 'Referrals') {
+                          Get.to(() => const Referral());
+                        }  else if (item.title == 'Posts') {
                           Get.to(() => const MyPostWidget());
                         } else if (item.title == "Referrals") {
                           Get.to(() => const Referral());

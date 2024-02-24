@@ -46,6 +46,7 @@ class _ReferralState extends State<Referral>
           size: 18,
           color: AppColor().primaryWhite,
         ),
+        leading: GoBackButton(onPressed: () => Get.back()),
         actions: [
           IconButton(
             onPressed: () {},
