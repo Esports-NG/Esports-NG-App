@@ -5,6 +5,7 @@ import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/account/account_ads/components/ad_insight_widget.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
@@ -442,6 +443,7 @@ class _AdsPostItemState extends State<AdsPostItem> {
                   ),
                   Gap(Get.height * 0.02),
                   InkWell(
+                    onTap: () => Get.to(AdInsight(item: widget.item)),
                     child: Container(
                         padding: EdgeInsets.all(Get.height * 0.02),
                         decoration: BoxDecoration(
