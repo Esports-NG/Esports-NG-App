@@ -360,7 +360,7 @@ class PostRepository extends GetxController {
   Future<bool> likePost(int postId) async {
     _likePostStatus(LikePostStatus.loading);
     try {
-      debugPrint('liking post...');
+      debugPrint('liking $postId post...');
       var response = await http.post(
         Uri.parse('${ApiLink.post}$postId/like/'),
         headers: {
@@ -369,8 +369,9 @@ class PostRepository extends GetxController {
         },
       );
       var json = jsonDecode(response.body);
-      if (response.statusCode == 200 && json['message'] == 'Post liked') {
+      if (response.statusCode == 200 && json['message'] == 'success') {
         getBookmarkedPost(false);
+        getAllPost(false);
         return true;
       } else {
         return false;
