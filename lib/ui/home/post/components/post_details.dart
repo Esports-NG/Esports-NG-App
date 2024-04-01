@@ -149,14 +149,20 @@ class _PostDetailsState extends State<PostDetails> {
                                 children: [
                                   widget.item.author!.profile!.profilePicture ==
                                           null
-                                      ? SvgPicture.asset(
-                                          'assets/images/svg/people.svg',
-                                          height: Get.height * 0.05,
-                                          width: Get.height * 0.05,
+                                      ? InkWell(
+                                          onTap: () {
+                                            Get.to(() => UserDetails(
+                                                id: widget.item.author!.id!));
+                                          },
+                                          child: SvgPicture.asset(
+                                            'assets/images/svg/people.svg',
+                                            height: Get.height * 0.05,
+                                            width: Get.height * 0.05,
+                                          ),
                                         )
                                       : InkWell(
                                           onTap: () => Get.to(() => UserDetails(
-                                              item: widget.item.author!)),
+                                              id: widget.item.author!.id!)),
                                           child: CachedNetworkImage(
                                             height: Get.height * 0.05,
                                             width: Get.height * 0.05,

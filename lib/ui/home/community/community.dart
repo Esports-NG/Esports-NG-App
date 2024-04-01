@@ -1,11 +1,10 @@
 import 'package:e_sport/data/model/account_events_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
-import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
-import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/account_tournament_detail.dart';
 import 'package:e_sport/ui/components/error_page.dart';
@@ -14,6 +13,7 @@ import 'package:e_sport/ui/components/no_item_page.dart';
 import 'package:e_sport/ui/home/community/components/community_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
+import 'package:e_sport/ui/widget/coming_soon.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
@@ -22,10 +22,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'components/latest_news_item.dart';
 import 'components/social_event_item.dart';
 import 'components/suggested_profile_item.dart';
-import 'components/trending_team_item.dart';
 import 'latest_news.dart';
 import 'social_event.dart';
 import 'suggested_profile.dart';
@@ -174,20 +172,21 @@ class _CommunityPageState extends State<CommunityPage> {
                     ),
                   ),
                   Gap(Get.height * 0.03),
-                  SizedBox(
-                    height: Get.height * 0.4,
-                    child: ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            Gap(Get.height * 0.03),
-                        itemCount: latestNewsItems.take(2).length,
-                        itemBuilder: (context, index) {
-                          var item = latestNewsItems[index];
-                          return LatestNewsItem(item: item);
-                        }),
-                  ),
+                  const ComingSoonWidget()
+                  // SizedBox(
+                  //   height: Get.height * 0.4,
+                  //   child: ListView.separated(
+                  //       physics: const BouncingScrollPhysics(),
+                  //       shrinkWrap: true,
+                  //       scrollDirection: Axis.horizontal,
+                  //       separatorBuilder: (context, index) =>
+                  //           Gap(Get.height * 0.03),
+                  //       itemCount: latestNewsItems.take(2).length,
+                  //       itemBuilder: (context, index) {
+                  //         var item = latestNewsItems[index];
+                  //         return LatestNewsItem(item: item);
+                  //       }),
+                  // ),
                 ],
               ),
             ),
@@ -372,31 +371,32 @@ class _CommunityPageState extends State<CommunityPage> {
                   ),
                 ),
                 Gap(Get.height * 0.03),
-                (teamController.teamStatus == TeamStatus.loading)
-                    ? LoadingWidget(color: AppColor().primaryColor)
-                    : (teamController.teamStatus == TeamStatus.available)
-                        ? Container(
-                            padding: EdgeInsets.only(left: Get.height * 0.02),
-                            height: Get.height * 0.28,
-                            child: ListView.separated(
-                                physics: const ScrollPhysics(),
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                separatorBuilder: (context, index) =>
-                                    Gap(Get.height * 0.02),
-                                itemCount:
-                                    teamController.allTeam.take(2).length,
-                                itemBuilder: (context, index) {
-                                  var item = teamController.allTeam[index];
-                                  return InkWell(
-                                      onTap: () => Get.to(
-                                          () => AccountTeamsDetail(item: item)),
-                                      child: TrendingTeamsItem(item: item));
-                                }),
-                          )
-                        : (teamController.teamStatus == TeamStatus.empty)
-                            ? const NoItemPage(title: 'Teams')
-                            : const ErrorPage(),
+                const ComingSoonWidget(),
+                // (teamController.teamStatus == TeamStatus.loading)
+                //     ? LoadingWidget(color: AppColor().primaryColor)
+                //     : (teamController.teamStatus == TeamStatus.available)
+                //         ? Container(
+                //             padding: EdgeInsets.only(left: Get.height * 0.02),
+                //             height: Get.height * 0.28,
+                //             child: ListView.separated(
+                //                 physics: const ScrollPhysics(),
+                //                 shrinkWrap: true,
+                //                 scrollDirection: Axis.horizontal,
+                //                 separatorBuilder: (context, index) =>
+                //                     Gap(Get.height * 0.02),
+                //                 itemCount:
+                //                     teamController.allTeam.take(2).length,
+                //                 itemBuilder: (context, index) {
+                //                   var item = teamController.allTeam[index];
+                //                   return InkWell(
+                //                       onTap: () => Get.to(
+                //                           () => AccountTeamsDetail(item: item)),
+                //                       child: TrendingTeamsItem(item: item));
+                //                 }),
+                //           )
+                //         : (teamController.teamStatus == TeamStatus.empty)
+                //             ? const NoItemPage(title: 'Teams')
+                //             : const ErrorPage(),
               ],
             ),
             Gap(Get.height * 0.03),

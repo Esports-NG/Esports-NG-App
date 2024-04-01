@@ -28,13 +28,14 @@ class CustomFillButton extends StatelessWidget {
   final Color? boarderColor;
   final String? buttonText;
   final VoidCallback? onTap;
-  final BorderRadiusGeometry? borderRadius;
+  final BorderRadius? borderRadius;
   final bool isLoading;
   final Widget? child;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      borderRadius: borderRadius ?? BorderRadius.circular(30),
       child: Container(
         width: width ?? Get.width,
         height: height ?? Get.height * 0.06,
@@ -87,12 +88,13 @@ class CustomFillButtonOption extends StatelessWidget {
   final Color? boarderColor;
   final String? buttonText;
   final VoidCallback? onTap;
-  final BorderRadiusGeometry? borderRadius;
+  final BorderRadius? borderRadius;
   final bool isLoading;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      borderRadius: borderRadius ?? BorderRadius.circular(10),
       child: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -136,6 +138,7 @@ class CustomFillOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(30),
       child: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.only(

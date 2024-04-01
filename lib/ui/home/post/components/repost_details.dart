@@ -105,7 +105,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                   )
                                 : InkWell(
                                     onTap: () => Get.to(() => UserDetails(
-                                        item: widget.item.repost!.author!)),
+                                        id: widget.item.repost!.author!.id!)),
                                     child: CachedNetworkImage(
                                       height: Get.height * 0.05,
                                       width: Get.height * 0.05,

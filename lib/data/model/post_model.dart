@@ -1,9 +1,12 @@
 class PostModel {
   int? id;
   Author? author;
+  String? title;
   PostModel? repost;
   dynamic community;
-  String? body, iTags, iViewers;
+  String? body;
+  List<String>? iTags;
+  List<String>? iViewers;
   int? likeCount;
   List<Author>? likes;
   int? viewCount;
@@ -17,6 +20,7 @@ class PostModel {
   DateTime? updatedAt;
 
   PostModel({
+    this.title,
     this.id,
     this.author,
     this.repost,
@@ -39,6 +43,7 @@ class PostModel {
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         id: json["id"],
+        title: json["title"],
         author: json["author"] == null ? null : Author.fromJson(json["author"]),
         repost:
             json["repost"] == null ? null : PostModel.fromJson(json['repost']),
@@ -75,6 +80,7 @@ class PostModel {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "title": title,
         "author": author?.toJson(),
         "repost": repost?.toJson(),
         "community": community,
@@ -103,6 +109,7 @@ class PostModel {
       };
 
   Map<String, dynamic> toCreatePostJson() => {
+        "title": title,
         "body": body,
         "itags": iTags,
         "iviewers": iViewers,

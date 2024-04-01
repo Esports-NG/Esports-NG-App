@@ -902,7 +902,7 @@ class CSCPickerState extends State<CSCPicker> {
       itemStyle: widget.dropdownItemStyle,
       decoration: widget.dropdownDecoration,
       disabledDecoration: widget.disabledDropdownDecoration,
-      disabled: _country.length == 0 || widget.disableCountry ? true : false,
+      disabled: _country.isEmpty || widget.disableCountry ? true : false,
       dialogRadius: widget.dropdownDialogRadius,
       searchBarRadius: widget.searchBarRadius,
       label: widget.countrySearchPlaceholder,
@@ -926,7 +926,7 @@ class CSCPickerState extends State<CSCPicker> {
     return DropdownWithSearch(
       title: widget.stateDropdownLabel,
       placeHolder: widget.stateSearchPlaceholder,
-      disabled: _states.length == 0 ? true : false,
+      disabled: _states.isEmpty ? true : false,
       items: _states.map((String? dropDownStringItem) {
         return dropDownStringItem;
       }).toList(),
@@ -954,7 +954,7 @@ class CSCPickerState extends State<CSCPicker> {
     return DropdownWithSearch(
       title: widget.cityDropdownLabel,
       placeHolder: widget.citySearchPlaceholder,
-      disabled: _cities.length == 0 ? true : false,
+      disabled: _cities.isEmpty ? true : false,
       items: _cities.map((String? dropDownStringItem) {
         return dropDownStringItem;
       }).toList(),
@@ -1309,8 +1309,8 @@ class CustomDialog extends StatelessWidget {
               elevation: 15.0,
               color: _getColor(context),
               type: MaterialType.card,
-              child: child,
               shape: shape ?? dialogTheme.shape ?? _defaultDialogShape,
+              child: child,
             ),
           ),
         ),

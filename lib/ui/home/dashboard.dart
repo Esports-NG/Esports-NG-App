@@ -18,6 +18,7 @@ import 'home.dart';
 import 'post/create_post.dart';
 import 'post/create_post_item.dart';
 import 'post/create_team.dart';
+import 'package:heroicons/heroicons.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -79,11 +80,7 @@ class _DashboardState extends State<Dashboard> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: SvgPicture.asset(
-          'assets/images/svg/home_icon.svg',
-          height: Get.height * 0.025,
-          color: AppColor().lightItemsColor,
-        ),
+        icon: const HeroIcon(HeroIcons.home),
         title: "Home",
         activeColorPrimary: AppColor().primaryColor,
         inactiveColorPrimary: AppColor().lightItemsColor,
@@ -94,11 +91,7 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
       PersistentBottomNavBarItem(
-        icon: SvgPicture.asset(
-          'assets/images/svg/event_icon.svg',
-          height: Get.height * 0.025,
-          color: AppColor().lightItemsColor,
-        ),
+        icon: const HeroIcon(HeroIcons.calendar),
         title: "Events",
         activeColorPrimary: AppColor().primaryColor,
         inactiveColorPrimary: AppColor().lightItemsColor,
@@ -109,11 +102,7 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
       PersistentBottomNavBarItem(
-        icon: SvgPicture.asset(
-          'assets/images/svg/community_icon.svg',
-          height: Get.height * 0.025,
-          color: AppColor().lightItemsColor,
-        ),
+        icon: const HeroIcon(HeroIcons.userGroup),
         title: "Community",
         activeColorPrimary: AppColor().primaryColor,
         inactiveColorPrimary: AppColor().lightItemsColor,

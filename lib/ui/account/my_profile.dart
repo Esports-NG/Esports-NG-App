@@ -388,9 +388,17 @@ class _MyProfileState extends State<MyProfile> {
                         validate: Validator.isPhone,
                       ),
                       Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Bio',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
                       CustomTextField(
                         hint: "Bio",
-                        // textEditingController: authController,
+                        textEditingController: authController.bioController,
                         maxLines: 3,
                         hasText: isBio,
                         focusNode: _bioFocusNode,

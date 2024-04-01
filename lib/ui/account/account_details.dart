@@ -1,6 +1,6 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
-import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
@@ -12,8 +12,6 @@ import 'package:e_sport/ui/components/games_played_widget.dart';
 import 'package:e_sport/ui/components/my_post_widget.dart';
 import 'package:e_sport/ui/home/post/create_post.dart';
 import 'package:e_sport/ui/home/post/create_team.dart';
-import 'package:e_sport/ui/components/wallet_widget.dart';
-import 'package:e_sport/ui/referral/referral_widget.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -99,7 +97,8 @@ class _AccountDetailsState extends State<AccountDetails> {
             communityController.getAllCommunity(false);
             teamController.getAllTeam(false);
             playerController.getAllPlayer(false);
-            eventController.getAllEvent(false);
+            eventController.getAllTournaments(false);
+            eventController.getAllSocialEvents(false);
           });
         },
         child: SingleChildScrollView(

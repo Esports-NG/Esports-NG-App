@@ -1,5 +1,5 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
-import 'package:e_sport/ui/home/dashboard.dart';
+import 'package:e_sport/ui/home/root.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/keypad.dart';
@@ -193,7 +193,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       number += value;
                       authController.otpPin.text += value;
                     } else if (number.length == 6) {
-                      Get.offAll(() => const Dashboard());
+                      Get.offAll(() => const RootDashboard());
                     }
                   });
                 },
@@ -219,7 +219,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   ),
                   onPressed: () {
                     if (authController.otpPin.text.length == 6) {
-                      Get.offAll(() => const Dashboard());
+                      Get.offAll(() => const RootDashboard());
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

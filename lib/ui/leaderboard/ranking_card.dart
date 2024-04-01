@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
-import 'package:get/utils.dart';
 
 class RankingCard extends StatelessWidget {
   const RankingCard({super.key, required this.title, required this.teamRanks});

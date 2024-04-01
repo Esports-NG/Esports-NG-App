@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
 // import 'post_details.dart';
 
 class AdsPostItem extends StatefulWidget {
@@ -105,7 +104,7 @@ class _AdsPostItemState extends State<AdsPostItem> {
                                     )
                                   : InkWell(
                                       onTap: () => Get.to(() => UserDetails(
-                                          item: widget.item.author!)),
+                                          id: widget.item.author!.id!)),
                                       child: CachedNetworkImage(
                                         height: Get.height * 0.025,
                                         width: Get.height * 0.025,
@@ -185,8 +184,8 @@ class _AdsPostItemState extends State<AdsPostItem> {
                                     height: Get.height * 0.035,
                                     width: Get.height * 0.035)
                                 : InkWell(
-                                    onTap: () => Get.to(() =>
-                                        UserDetails(item: widget.item.author!)),
+                                    onTap: () => Get.to(() => UserDetails(
+                                        id: widget.item.author!.id!)),
                                     child: CachedNetworkImage(
                                       height: Get.height * 0.035,
                                       width: Get.height * 0.035,
@@ -244,7 +243,7 @@ class _AdsPostItemState extends State<AdsPostItem> {
                                     width: Get.height * 0.035)
                                 : InkWell(
                                     onTap: () => Get.to(() => UserDetails(
-                                        item: widget.item.repost!.author!)),
+                                        id: widget.item.repost!.author!.id!)),
                                     child: CachedNetworkImage(
                                       height: Get.height * 0.035,
                                       width: Get.height * 0.035,

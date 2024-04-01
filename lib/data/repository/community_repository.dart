@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
@@ -146,6 +147,36 @@ class CommunityRepository extends GetxController {
       _communityStatus(CommunityStatus.error);
       debugPrint("getting all community: ${error.toString()}");
     }
+  }
+
+  Future<Community> getCommunityData(int id) async {
+    var response = await http.get(
+        Uri.parse(ApiLink.getDataWithFollowers(id: id, type: "community")),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        });
+
+    print(response.body);
+
+    var json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw (json['detail']);
+    }
+
+    return Community.fromJson(json);
+  }
+
+  Future<List<Map<String, dynamic>>> getCommunityFollowers(int id) async {
+    var response =
+        await http.get(Uri.parse(ApiLink.getCommunityFollowers(id)), headers: {
+      "Content-Type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    });
+
+    List<dynamic> json = jsonDecode(response.body);
+
+    return json.map((e) => e as Map<String, dynamic>).toList();
   }
 
   void handleError(dynamic error) {

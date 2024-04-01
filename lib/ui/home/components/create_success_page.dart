@@ -1,5 +1,5 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
-import 'package:e_sport/ui/home/dashboard.dart';
+import 'package:e_sport/ui/home/root.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +87,7 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
           ),
           Gap(Get.height * 0.02),
           InkWell(
-            onTap: () => Get.off(() => const Dashboard()),
+            onTap: () => Get.off(() => const RootDashboard()),
             child: Container(
               height: Get.height * 0.07,
               width: Get.width,

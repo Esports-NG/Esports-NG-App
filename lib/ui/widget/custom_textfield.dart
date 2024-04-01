@@ -106,9 +106,7 @@ class CustomTextField extends StatelessWidget {
       initialValue: initialValue,
       obscureText: obscure ?? false,
       style: TextStyle(
-          color: hasText
-              ? AppColor().primaryBackGroundColor
-              : AppColor().lightItemsColor,
+          color: AppColor().lightItemsColor,
           fontSize: 13,
           fontStyle: FontStyle.normal,
           fontFamily: fontFamily ?? 'GilroyBold',
@@ -116,9 +114,7 @@ class CustomTextField extends StatelessWidget {
           height: 1.7),
       decoration: decoration ??
           InputDecoration(
-            fillColor: hasText
-                ? AppColor().primaryWhite
-                : fillColor ?? AppColor().bgDark,
+            fillColor: fillColor ?? AppColor().bgDark,
             filled: true,
             isDense: true,
             prefixText: pretext,
@@ -132,6 +128,13 @@ class CustomTextField extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 height: 1.7),
             suffixText: sufText,
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(radius ?? 10)),
+            focusColor: AppColor().primaryWhite,
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: colors ?? AppColor().lightItemsColor,

@@ -1,6 +1,6 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
-import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/message_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';

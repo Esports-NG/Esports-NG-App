@@ -71,6 +71,7 @@ class PostRepository extends GetxController {
       if (p0 != '0') {
         getAllPost(true);
         getBookmarkedPost(true);
+        getMyPost(true);
       }
     });
   }
@@ -82,11 +83,12 @@ class PostRepository extends GetxController {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       };
-      var request =
-          http.MultipartRequest("POST", Uri.parse(ApiLink.createPost));
+      var request = http.MultipartRequest("POST", Uri.parse(ApiLink.createPost))
+        ..fields["title"] = postTitleController.text
+        ..fields["body"] = postBodyController.text
+        ..fields["itags"] = "#COD"
+        ..fields["iviewers"] = seeController.text;
 
-      request.fields.addAll(
-          post.toCreatePostJson().map((key, value) => MapEntry(key, value)));
       if (postImage != null) {
         request.files
             .add(await http.MultipartFile.fromPath('image', postImage!.path));
@@ -94,6 +96,8 @@ class PostRepository extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
+      var res = await http.Response.fromStream(response);
+      print(res.body);
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
         debugPrint(await response.stream.bytesToString());

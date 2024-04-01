@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:e_sport/data/repository/auth_repository.dart';
-import 'package:e_sport/ui/auth/login.dart';
-import 'package:e_sport/ui/home/dashboard.dart';
+import 'package:e_sport/ui/home/root.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -44,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (authController.authStatus == AuthStatus.isFirstTime) {
       Get.off(() => const FirstScreen());
     } else if (authController.authStatus == AuthStatus.authenticated) {
-      Get.off(() => const Dashboard());
+      Get.off(() => const RootDashboard());
     } else {
       Get.off(() => const FirstScreen());
     }

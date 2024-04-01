@@ -551,10 +551,14 @@ class _CreatePostState extends State<CreatePost> {
                   InkWell(
                     onTap: () {
                       PostModel post = PostModel(
-                        body: postController.postBodyController.text.trim(),
-                        iTags: '#${postController.gameTagController.text}',
-                        iViewers: postController.seeController.text,
-                      );
+                          title: postController.postTitleController.text.trim(),
+                          body: postController.postBodyController.text.trim(),
+                          iTags: [
+                            '#${postController.gameTagController.text}'
+                          ],
+                          iViewers: [
+                            postController.seeController.text,
+                          ]);
                       debugPrint('post: ${post.toCreatePostJson()}');
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=

@@ -9,6 +9,7 @@ class UserModel {
   String? country;
   String? state;
   String? gender;
+  String? bio;
   String? dOB;
   List<String>? ipurpose;
   Profile? profile;
@@ -41,11 +42,13 @@ class UserModel {
     this.tokens,
     this.following,
     this.followers,
+    this.bio,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
         email: json["email"],
+        bio: json["bio"],
         fullName: json["full_name"],
         userName: json["user_name"],
         phoneNumber: json["phone_number"],
@@ -78,6 +81,7 @@ class UserModel {
 
   factory UserModel.fromPostJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
+        bio: json["bio"],
         userName: json["user_name"],
         fullName: json["full_name"],
         email: json["email"],
@@ -99,6 +103,7 @@ class UserModel {
         "email": email,
         "full_name": fullName,
         "user_name": userName,
+        "bio": bio,
         "phone_number": phoneNumber,
         "password": password,
         "password2": password2,
@@ -116,6 +121,7 @@ class UserModel {
         "email": email,
         "full_name": fullName,
         "user_name": userName,
+        "bio": bio,
         "phone_number": phoneNumber,
         "country": country,
         "state": state,
@@ -138,6 +144,7 @@ class UserModel {
   Map<String, dynamic> toPostUser() => {
         "id": id,
         "email": email,
+        "bio": bio,
         "full_name": fullName,
         "user_name": userName,
         "phone_number": phoneNumber,

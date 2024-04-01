@@ -1,4 +1,4 @@
-import 'package:e_sport/data/repository/event_repository.dart';
+import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -107,7 +107,7 @@ class Tournament extends StatelessWidget {
                     ),
                     Gap(Get.height * 0.02),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           border: Border.all(color: AppColor().greySix),
                           borderRadius: BorderRadius.circular(10)),

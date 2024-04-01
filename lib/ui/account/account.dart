@@ -3,17 +3,15 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
-import 'package:e_sport/ui/account/account_ads/ads_widget.dart';
 import 'package:e_sport/ui/components/my_post_widget.dart';
 import 'package:e_sport/ui/components/wallet_widget.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
-import 'package:e_sport/ui/referral/referral_widget.dart';
+import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'account_details.dart';
@@ -29,7 +27,16 @@ class Account extends StatefulWidget {
 class _AccountState extends State<Account> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
-  int? accountTab = 0;
+  int? accountTab;
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    setState(() {
+      accountTab = null;
+    });
+  }
 
   void toProfile() async {
     await Future.delayed(const Duration(milliseconds: 10));
@@ -65,12 +72,12 @@ class _AccountState extends State<Account> {
                         itemSize: Get.height * 0.13,
                         image: authController.user!.profile!.profilePicture,
                       ),
-                      Positioned(
-                        child: SvgPicture.asset(
-                          'assets/images/svg/check_badge.svg',
-                          height: Get.height * 0.035,
-                        ),
-                      ),
+                      // Positioned(
+                      //   child: SvgPicture.asset(
+                      //     'assets/images/svg/check_badge.svg',
+                      //     height: Get.height * 0.035,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -114,6 +121,14 @@ class _AccountState extends State<Account> {
                 color: AppColor().primaryWhite,
               );
             }),
+            Gap(Get.height * 0.01),
+            CustomText(
+              title: authController.user?.bio,
+              size: 16,
+              fontFamily: 'GilroyMedium',
+              textAlign: TextAlign.start,
+              color: AppColor().lightItemsColor,
+            ),
             Gap(Get.height * 0.03),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
@@ -130,6 +145,8 @@ class _AccountState extends State<Account> {
                 itemBuilder: (context, index) {
                   var item = accountItem[index];
                   return InkWell(
+                    splashColor: AppColor().primaryColor,
+                    // splashFactory: ,
                     onTap: () {
                       debugPrint(item.title);
                       setState(() {
@@ -137,13 +154,40 @@ class _AccountState extends State<Account> {
                         if (item.title == 'Logout') {
                           logOutDialog(context);
                         } else if (item.title == 'Ads') {
-                          Get.to(() => const AdsWidget());
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: AppColor().primaryBgColor,
+                              content: const ComingSoonPopup(),
+                            ),
+                          );
                         } else if (item.title == 'Posts') {
                           Get.to(() => const MyPostWidget());
                         } else if (item.title == "Referrals") {
-                          Get.to(() => const Referral());
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: AppColor().primaryBgColor,
+                              content: const ComingSoonPopup(),
+                            ),
+                          );
                         } else if (item.title == "Wallet") {
-                          Get.to(() => const WalletWidget());
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: AppColor().primaryBgColor,
+                              content: const ComingSoonPopup(),
+                            ),
+                          );
                         } else {
                           Get.to(() => AccountDetails(
                                 title: item.title,

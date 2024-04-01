@@ -25,7 +25,7 @@ class _PromotedPostsState extends State<PromotedPosts> {
             padding: EdgeInsets.all(Get.height * 0.02),
             child: Column(children: [
               ListView.separated(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) =>
                       AdsPostItem(item: postController.allPost[index]),

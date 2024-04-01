@@ -5,11 +5,6 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icon.dart';
-import 'referral_earning_modal.dart';
-import 'referral_info.dart';
-import 'referral_item.dart';
-import 'referral_option.dart';
 
 class ReferralLeaderboardWidget extends StatelessWidget {
   const ReferralLeaderboardWidget({

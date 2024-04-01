@@ -23,7 +23,7 @@ class ReferralLinkWidget extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(999),
               color: AppColor().primaryColor),
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           child: Row(children: [
             CustomText(
               title: 'REF12345',

@@ -40,7 +40,7 @@ class _AccountTeamsFullProfileState extends State<AccountTeamsFullProfile> {
               GoBackButton(onPressed: () => Get.back()),
               InkWell(
                 onTap: () =>
-                    Get.to(() => UserDetails(item: widget.item.owner!)),
+                    Get.to(() => UserDetails(id: widget.item.owner!.id!)),
                 child: widget.item.owner!.profile!.profilePicture == null
                     ? Container(
                         height: Get.height * 0.04,
@@ -79,7 +79,7 @@ class _AccountTeamsFullProfileState extends State<AccountTeamsFullProfile> {
                       color: AppColor().greyEight),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               if (widget.item.owner!.fullName != authController.user!.fullName)
                 CustomFillButton(
                   buttonText: 'Follow',

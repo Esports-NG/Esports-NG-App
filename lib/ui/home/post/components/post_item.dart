@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -27,6 +28,8 @@ class PostItem extends StatefulWidget {
 class _PostItemState extends State<PostItem> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
+  final navController = Get.put(NavRepository());
+
   int? _selectedIndex;
 
   String timeAgo(DateTime itemDate) {
@@ -73,7 +76,7 @@ class _PostItemState extends State<PostItem> {
           ),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: AppColor().lightItemsColor,
+            color: AppColor().greyEight,
             width: 0.5,
           ),
         ),
@@ -82,7 +85,9 @@ class _PostItemState extends State<PostItem> {
           children: [
             if (widget.item.repost != null)
               InkWell(
-                onTap: () => Get.to(() => PostDetails(item: widget.item)),
+                onTap: () {
+                  Get.to(() => PostDetails(item: widget.item));
+                },
                 child: Padding(
                   padding:
                       const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
@@ -104,7 +109,7 @@ class _PostItemState extends State<PostItem> {
                                     )
                                   : InkWell(
                                       onTap: () => Get.to(() => UserDetails(
-                                          item: widget.item.author!)),
+                                          id: widget.item.author!.id!)),
                                       child: CachedNetworkImage(
                                         height: Get.height * 0.025,
                                         width: Get.height * 0.025,
@@ -179,13 +184,21 @@ class _PostItemState extends State<PostItem> {
                           children: [
                             (widget.item.author!.profile!.profilePicture ==
                                     null)
-                                ? SvgPicture.asset(
-                                    'assets/images/svg/people.svg',
-                                    height: Get.height * 0.035,
-                                    width: Get.height * 0.035)
+                                ? InkWell(
+                                    onTap: () {
+                                      Get.to(() => UserDetails(
+                                          id: widget.item.author!.id!));
+                                    },
+                                    child: SvgPicture.asset(
+                                        'assets/images/svg/people.svg',
+                                        height: Get.height * 0.035,
+                                        width: Get.height * 0.035),
+                                  )
                                 : InkWell(
-                                    onTap: () => Get.to(() =>
-                                        UserDetails(item: widget.item.author!)),
+                                    onTap: () {
+                                      Get.to(() => UserDetails(
+                                          id: widget.item.author!.id!));
+                                    },
                                     child: CachedNetworkImage(
                                       height: Get.height * 0.035,
                                       width: Get.height * 0.035,
@@ -243,7 +256,7 @@ class _PostItemState extends State<PostItem> {
                                     width: Get.height * 0.035)
                                 : InkWell(
                                     onTap: () => Get.to(() => UserDetails(
-                                        item: widget.item.repost!.author!)),
+                                        id: widget.item.repost!.author!.id!)),
                                     child: CachedNetworkImage(
                                       height: Get.height * 0.035,
                                       width: Get.height * 0.035,
@@ -308,7 +321,7 @@ class _PostItemState extends State<PostItem> {
                     ? widget.item.body!.toUpperFirstCase()
                     : widget.item.repost!.body!.toUpperFirstCase(),
                 size: Get.height * 0.015,
-                fontFamily: 'GilroyBold',
+                fontFamily: 'GilroyMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -432,6 +445,8 @@ class _PostItemState extends State<PostItem> {
                       LikeButton(
                         size: Get.height * 0.025,
                         onTap: onLikeButtonTapped,
+                        isLiked: widget.item.likes!
+                            .any((item) => item.id == authController.user!.id),
                         circleColor: CircleColor(
                             start: AppColor().primaryColor,
                             end: AppColor().primaryColor),
@@ -440,22 +455,12 @@ class _PostItemState extends State<PostItem> {
                           dotSecondaryColor: AppColor().primaryColor,
                         ),
                         likeBuilder: (bool isLiked) {
-                          return widget.item.likes!.any(
-                                  (item) => item.id == authController.user!.id)
-                              ? Icon(
-                                  isLiked
-                                      ? Icons.favorite_outline
-                                      : Icons.favorite,
-                                  color: AppColor().primaryColor,
-                                  size: Get.height * 0.025)
-                              : Icon(
-                                  isLiked
-                                      ? Icons.favorite
-                                      : Icons.favorite_outline,
-                                  color: isLiked
-                                      ? AppColor().primaryColor
-                                      : AppColor().primaryWhite,
-                                  size: Get.height * 0.025);
+                          return Icon(
+                              isLiked ? Icons.favorite : Icons.favorite_outline,
+                              color: isLiked
+                                  ? AppColor().primaryColor
+                                  : AppColor().primaryWhite,
+                              size: Get.height * 0.025);
                         },
                         likeCount: widget.item.likeCount,
                         countBuilder: (int? count, bool isLiked, String text) {

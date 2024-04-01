@@ -3,11 +3,16 @@
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
+import 'package:e_sport/ui/account/account_events/components/tournament_details.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/coming_soon.dart';
+import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
@@ -15,8 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
-import 'no_item_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountTournamentDetail extends StatefulWidget {
   final EventModel item;
@@ -28,6 +32,34 @@ class AccountTournamentDetail extends StatefulWidget {
 }
 
 class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
+  final authController = Get.put(AuthRepository());
+  final communityController = Get.put(CommunityRepository());
+
+  List<Map<String, dynamic>>? _communityFollowers;
+  bool _isFollowing = false;
+  bool _isLoading = true;
+
+  Future getCommunityFollowers() async {
+    var followers = await communityController
+        .getCommunityFollowers(widget.item.community!.id!);
+    setState(() {
+      _communityFollowers = followers;
+      if (followers.any(
+          (element) => element["user_id"]["id"] == authController.user!.id)) {
+        _isFollowing = true;
+      } else {
+        _isFollowing = false;
+      }
+      _isLoading = false;
+    });
+  }
+
+  @override
+  initState() {
+    getCommunityFollowers();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,12 +87,6 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                       OtherImage(
                           itemSize: Get.height * 0.1,
                           image: '${ApiLink.imageUrl}${widget.item.profile}'),
-                      Positioned(
-                        child: SvgPicture.asset(
-                          'assets/images/svg/check_badge.svg',
-                          height: Get.height * 0.03,
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -95,9 +121,13 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                       fontFamily: 'GilroyBold',
                       color: AppColor().primaryWhite),
                   Gap(Get.height * 0.02),
-                  AccountEventsItem(item: widget.item),
+                  AccountEventsItem(
+                    item: widget.item,
+                    onDetailsPage: true,
+                  ),
                   Gap(Get.height * 0.05),
                   InkWell(
+                    borderRadius: BorderRadius.circular(30),
                     onTap: () {},
                     child: Container(
                       height: Get.height * 0.06,
@@ -130,22 +160,39 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                   .primaryBackGroundColor
                                   .withOpacity(0.7),
                               borderColor: AppColor().greyEight,
-                              onTap: () {},
+                              onTap: () async {
+                                bool success =
+                                    await authController.followCommunity(
+                                        widget.item.community!.id!);
+                                if (success) {
+                                  setState(() {
+                                    _isFollowing = false;
+                                  });
+                                }
+                              },
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                        'assets/images/svg/account_icon.svg',
-                                        height: Get.height * 0.015,
-                                        color: AppColor().primaryWhite),
-                                    Gap(Get.height * 0.01),
-                                    CustomText(
-                                        title: 'Follow Community',
-                                        weight: FontWeight.w400,
-                                        size: Get.height * 0.017,
-                                        fontFamily: 'GilroyRegular',
-                                        color: AppColor().primaryWhite),
-                                  ]),
+                                  children: _isLoading
+                                      ? [
+                                          CircularProgressIndicator(
+                                            color: AppColor().primaryColor,
+                                          )
+                                        ]
+                                      : [
+                                          SvgPicture.asset(
+                                              'assets/images/svg/account_icon.svg',
+                                              height: Get.height * 0.015,
+                                              color: AppColor().primaryWhite),
+                                          Gap(Get.height * 0.01),
+                                          CustomText(
+                                              title: _isFollowing
+                                                  ? "Unfollow"
+                                                  : "Follow Community",
+                                              weight: FontWeight.w400,
+                                              size: Get.height * 0.017,
+                                              fontFamily: 'GilroyRegular',
+                                              color: AppColor().primaryWhite),
+                                        ]),
                             ),
                           ),
                           Gap(Get.height * 0.02),
@@ -155,7 +202,16 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                   .primaryBackGroundColor
                                   .withOpacity(0.7),
                               borderColor: AppColor().greyEight,
-                              onTap: () {},
+                              onTap: () => showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  backgroundColor: AppColor().primaryBgColor,
+                                  content: const ComingSoonPopup(),
+                                ),
+                              ),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -194,19 +250,22 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                               underline: TextDecoration.underline,
                               color: AppColor().primaryWhite),
                           Gap(Get.height * 0.01),
-                          CustomText(
-                              title: 'https://bit.ly232sjfis',
-                              weight: FontWeight.w400,
-                              size: Get.height * 0.017,
-                              fontFamily: 'GilroyMedium',
-                              underline: TextDecoration.underline,
-                              color: AppColor().primaryColor),
+                          InkWell(
+                            onTap: () => launchUrl(
+                                Uri.parse(widget.item.linkForBracket!)),
+                            child: CustomText(
+                                title: widget.item.linkForBracket,
+                                weight: FontWeight.w400,
+                                size: Get.height * 0.017,
+                                fontFamily: 'GilroyMedium',
+                                underline: TextDecoration.underline,
+                                color: AppColor().primaryColor),
+                          ),
                         ],
                       ),
                       Gap(Get.height * 0.02),
                       CustomText(
-                          title:
-                              'This is the most prestigious gaming tournament in the whole of West Africa. Covering a wide range of players with profound specialities from different games',
+                          title: widget.item.summary,
                           weight: FontWeight.w400,
                           size: Get.height * 0.015,
                           fontFamily: 'GilroyRegular',
@@ -214,13 +273,17 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                           height: 1.5,
                           color: AppColor().greyEight),
                       Gap(Get.height * 0.02),
-                      CustomText(
-                          title: 'See tournament details',
-                          weight: FontWeight.w400,
-                          size: Get.height * 0.017,
-                          fontFamily: 'GilroyMedium',
-                          underline: TextDecoration.underline,
-                          color: AppColor().primaryColor),
+                      InkWell(
+                        onTap: () =>
+                            Get.to(() => TournamentDetails(item: widget.item)),
+                        child: CustomText(
+                            title: 'See tournament details',
+                            weight: FontWeight.w400,
+                            size: Get.height * 0.017,
+                            fontFamily: 'GilroyMedium',
+                            underline: TextDecoration.underline,
+                            color: AppColor().primaryColor),
+                      ),
                     ],
                   ),
                 ],
@@ -382,7 +445,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 title: 'Fixtures and Results',
               ),
             ),
-            NoItemPage(title: 'Fixtures', size: Get.height * 0.04),
+            const ComingSoonWidget(),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -444,7 +507,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 title: 'Tournament Staff',
               ),
             ),
-            NoItemPage(title: 'Staff', size: Get.height * 0.04),
+            const ComingSoonWidget(),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -457,7 +520,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 title: 'Announcement',
               ),
             ),
-            NoItemPage(title: 'Announcement', size: Get.height * 0.04),
+            const ComingSoonWidget(),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -470,7 +533,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 title: 'Tournament Leaderboard',
               ),
             ),
-            NoItemPage(title: 'Active tournament', size: Get.height * 0.04),
+            const ComingSoonWidget(),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -483,7 +546,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 title: 'Other Tournaments',
               ),
             ),
-            NoItemPage(title: 'Tournament', size: Get.height * 0.04),
+            const ComingSoonWidget(),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -496,7 +559,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 title: 'Badges',
               ),
             ),
-            NoItemPage(title: 'Badges', size: Get.height * 0.04),
+            const ComingSoonWidget(),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -510,35 +573,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
               ),
             ),
             Gap(Get.height * 0.02),
-            SizedBox(
-              height: Get.height * 0.12,
-              child: ListView.separated(
-                  physics: const ScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, index) => Gap(Get.height * 0.01),
-                  itemCount: mediaItems.length,
-                  itemBuilder: (context, index) {
-                    var item = mediaItems[index];
-                    return Container(
-                      padding: EdgeInsets.all(Get.height * 0.02),
-                      width: Get.width * 0.25,
-                      decoration: BoxDecoration(
-                        color: AppColor().bgDark,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: AppColor().greySix,
-                        ),
-                        image: DecorationImage(
-                          image: AssetImage(item.image!),
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.topCenter,
-                        ),
-                      ),
-                    );
-                  }),
-            ),
+            const ComingSoonWidget(),
             Gap(Get.height * 0.04),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),

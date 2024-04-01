@@ -19,7 +19,7 @@ class ApiLink {
   static String deleteAcct = "${baseurl}users";
   static String changePassword = "${baseurl}users/profile";
   static String followUser = "${baseurl}extra/followuser/";
-  static String followCommunity = "${baseurl}extra/followcomm/";
+  // static String followCommunity = "${baseurl}extra/followcomm/";
   static String followTeam = "${baseurl}extra/followteam/";
   static String viewUserTeam = "${baseurl}team/myteam/";
 
@@ -46,12 +46,25 @@ class ApiLink {
   static String getAllPlayer = "${baseurl}player/view/";
 
   //Events
-  static String createEvent = "${baseurl}event/";
+  static String createTournament = "${baseurl}event/1/create/tournament/";
+  static String createSocialEvent = "${baseurl}event/1/create/socialevent/";
   static String getAllEvent = "${baseurl}event/view/";
+  static String getAllSocialEvents = "${baseurl}event/view/socialevent";
 
   //Community
   static String createCommunity = "${baseurl}org/register/";
   static String getAllCommunity = "${baseurl}org/list/";
+  static String followCommunity(int id) => "${baseurl}extra/followcomm/$id/";
+  static String getCommunityFollowers(int id) =>
+      "${baseurl}extra/followers/comm/view/?group_id=$id";
+
+  //Profile
+  static String getDataWithFollowers({required int id, required String type}) =>
+      "${baseurl}extra/$type/$id/data/";
+
+  //Author Profile
+  static String getUserDataWithFollowers({required int id}) =>
+      "${baseurl}extra/user/$id/data/";
 
   // static String withdraw = "${baseurl}initiate-withdrawal";
   // static String dashboard = "${baseurl}users/dashboard";

@@ -45,7 +45,7 @@ class _LeaderboardDropdownState extends State<LeaderboardDropdown> {
                 ? AlignmentDirectional.topStart
                 : AlignmentDirectional.topEnd,
             child: Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.only(top: 10),
               height: 280,
               width: 250,
               decoration: BoxDecoration(

@@ -2,11 +2,14 @@
 
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
-import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
@@ -17,9 +20,52 @@ import 'package:get/get.dart';
 
 import 'no_item_page.dart';
 
-class AccountCommunityDetail extends StatelessWidget {
+class AccountCommunityDetail extends StatefulWidget {
   final CommunityModel item;
   const AccountCommunityDetail({super.key, required this.item});
+
+  @override
+  State<AccountCommunityDetail> createState() => _AccountCommunityDetailState();
+}
+
+class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
+  final authController = Get.put(AuthRepository());
+  final communityController = Get.put(CommunityRepository());
+
+  List<Map<String, dynamic>>? _communityFollowers;
+  bool _isFollowing = false;
+  bool _isLoading = true;
+  Community? details;
+
+  Future getCommunityFollowers() async {
+    var followers =
+        await communityController.getCommunityFollowers(details!.id!);
+    setState(() {
+      _communityFollowers = followers;
+      if (followers.any(
+          (element) => element["user_id"]["id"] == authController.user!.id)) {
+        _isFollowing = true;
+      } else {
+        _isFollowing = false;
+      }
+      _isLoading = false;
+    });
+  }
+
+  Future getDetails() async {
+    var communityDetails =
+        await communityController.getCommunityData(widget.item.id!);
+    setState(() {
+      details = communityDetails;
+    });
+  }
+
+  @override
+  initState() {
+    getCommunityFollowers();
+    getDetails();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +93,7 @@ class AccountCommunityDetail extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      item.logo == null
+                      details!.logo == null
                           ? Container(
                               height: Get.height * 0.1,
                               width: Get.height * 0.1,
@@ -57,7 +103,7 @@ class AccountCommunityDetail extends StatelessWidget {
                                   'assets/images/svg/people.svg'),
                             )
                           : OtherImage(
-                              itemSize: Get.height * 0.1, image: item.logo),
+                              itemSize: Get.height * 0.1, image: details!.logo),
                       Positioned(
                         child: SvgPicture.asset(
                             'assets/images/svg/check_badge.svg',
@@ -85,7 +131,7 @@ class AccountCommunityDetail extends StatelessWidget {
             ),
             Gap(Get.height * 0.07),
             CustomText(
-                title: item.name,
+                title: details!.name,
                 weight: FontWeight.w500,
                 size: Get.height * 0.02,
                 fontFamily: 'GilroyBold',
@@ -179,7 +225,16 @@ class AccountCommunityDetail extends StatelessWidget {
                               .primaryBackGroundColor
                               .withOpacity(0.7),
                           borderColor: AppColor().greyEight,
-                          onTap: () {},
+                          onTap: () => showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: AppColor().primaryBgColor,
+                              content: const ComingSoonPopup(),
+                            ),
+                          ),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -211,7 +266,16 @@ class AccountCommunityDetail extends StatelessWidget {
                     buttonColor:
                         AppColor().primaryBackGroundColor.withOpacity(0.7),
                     borderColor: AppColor().greyEight,
-                    onTap: () {},
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        backgroundColor: AppColor().primaryBgColor,
+                        content: const ComingSoonPopup(),
+                      ),
+                    ),
                     child: CustomText(
                         title: 'Apply as a staff',
                         weight: FontWeight.w400,
@@ -277,7 +341,7 @@ class AccountCommunityDetail extends StatelessWidget {
                         Stack(
                           alignment: Alignment.bottomRight,
                           children: [
-                            item.owner!.profile!.profilePicture == null
+                            details!.owner!.profile!.profilePicture == null
                                 ? Container(
                                     height: Get.height * 0.04,
                                     width: Get.height * 0.04,
@@ -290,7 +354,8 @@ class AccountCommunityDetail extends StatelessWidget {
                                   )
                                 : OtherImage(
                                     itemSize: Get.height * 0.04,
-                                    image: item.owner!.profile!.profilePicture),
+                                    image: widget
+                                        .item.owner!.profile!.profilePicture),
                             Positioned(
                               child: SvgPicture.asset(
                                 'assets/images/svg/check_badge.svg',
@@ -301,7 +366,7 @@ class AccountCommunityDetail extends StatelessWidget {
                         ),
                         Gap(Get.height * 0.015),
                         CustomText(
-                            title: item.owner!.fullName!.toCapitalCase(),
+                            title: details!.owner!.fullName!.toCapitalCase(),
                             weight: FontWeight.w400,
                             size: Get.height * 0.017,
                             fontFamily: 'GilroyMedium',

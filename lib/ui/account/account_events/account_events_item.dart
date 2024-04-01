@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -8,10 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class AccountEventsItem extends StatefulWidget {
   final EventModel item;
-  const AccountEventsItem({super.key, required this.item});
+  final bool? onDetailsPage;
+  const AccountEventsItem({super.key, required this.item, this.onDetailsPage});
 
   @override
   State<AccountEventsItem> createState() => _AccountEventsItemState();
@@ -24,7 +28,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
       width: Get.width * 0.9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColor().lightItemsColor, width: 0.5),
+        border: Border.all(color: AppColor().greyEight, width: 0.5),
         gradient: LinearGradient(
           colors: [
             AppColor().bgDark,
@@ -171,10 +175,17 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                   title: 'Game: ',
                   subTitle: widget.item.name!.toUpperCase(),
                 ),
-                Gap(Get.height * 0.01),
-                textItem(
-                  title: 'Tournament Name: ',
-                  subTitle: widget.item.gameMode!.toCapitalCase(),
+                Visibility(
+                  visible: widget.onDetailsPage == null,
+                  child: Column(
+                    children: [
+                      Gap(Get.height * 0.01),
+                      textItem(
+                        title: 'Tournament Name: ',
+                        subTitle: widget.item.name!.toUpperCase(),
+                      ),
+                    ],
+                  ),
                 ),
                 Gap(Get.height * 0.01),
                 textItem(
@@ -182,6 +193,32 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                   subTitle: widget.item.tournamentType == ''
                       ? 'Teams'
                       : widget.item.tournamentType!,
+                ),
+                Visibility(
+                  visible: widget.onDetailsPage != null,
+                  child: Column(
+                    children: [
+                      Gap(Get.height * 0.01),
+                      textItem(
+                        title: 'Registration Date: ',
+                        subTitle:
+                            "${DateFormat.MMM().format(widget.item.regStart!)} ${widget.item.regStart!.day}, ${widget.item.regStart!.year} - ${DateFormat.MMM().format(widget.item.regEnd!)} ${widget.item.regEnd!.day}, ${widget.item.regEnd!.year}",
+                      ),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: widget.onDetailsPage != null,
+                  child: Column(
+                    children: [
+                      Gap(Get.height * 0.01),
+                      textItem(
+                        title: 'Tournament Date: ',
+                        subTitle:
+                            "${DateFormat.MMM().format(widget.item.startDate!)} ${widget.item.startDate!.day}, ${widget.item.startDate!.year} - ${DateFormat.MMM().format(widget.item.endDate!)} ${widget.item.endDate!.day}, ${widget.item.endDate!.year}",
+                      ),
+                    ],
+                  ),
                 ),
                 Gap(Get.height * 0.01),
                 Divider(

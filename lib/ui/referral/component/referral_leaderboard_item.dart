@@ -44,7 +44,7 @@ class ReferralLeaderboardItem extends StatelessWidget {
                           "assets/images/svg/trophy.svg",
                           height: 15,
                         )
-                      : SmallCircle(
+                      : const SmallCircle(
                           size: 10,
                         ))),
           Expanded(

@@ -3,6 +3,7 @@ class EventModel {
   String? profile;
   String? banner;
   String? name;
+  String? type;
   Community? community;
   String? linkForBracket;
   String? gameMode;
@@ -51,6 +52,7 @@ class EventModel {
     this.players,
     this.rulesRegs,
     this.prizePoolDistribution,
+    this.type,
   });
 
   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
@@ -58,6 +60,7 @@ class EventModel {
         profile: json["profile"],
         banner: json["banner"],
         name: json["name"],
+        type: json["type"],
         community: json["community"] == null
             ? null
             : Community.fromJson(json["community"]),
@@ -100,6 +103,7 @@ class EventModel {
         "profile": profile,
         "banner": banner,
         "name": name,
+        "type": type,
         "community": community?.toJson(),
         "link_for_bracket": linkForBracket,
         "game_mode": gameMode,
@@ -150,20 +154,23 @@ class Community {
   bool? enableTeamchat;
   List<Social>? socials;
   List<dynamic>? commStaffs;
+  int? followers;
+  int? following;
 
-  Community({
-    this.id,
-    this.name,
-    this.logo,
-    this.cover,
-    this.bio,
-    this.owner,
-    this.gamesPlayed,
-    this.createdAt,
-    this.enableTeamchat,
-    this.socials,
-    this.commStaffs,
-  });
+  Community(
+      {this.id,
+      this.name,
+      this.logo,
+      this.cover,
+      this.bio,
+      this.owner,
+      this.gamesPlayed,
+      this.createdAt,
+      this.enableTeamchat,
+      this.socials,
+      this.commStaffs,
+      this.followers,
+      this.following});
 
   factory Community.fromJson(Map<String, dynamic> json) => Community(
         id: json["id"],
@@ -178,6 +185,8 @@ class Community {
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
+        followers: json["followers"],
+        following: json["following"],
         enableTeamchat: json["enable_teamchat"],
         socials: json["socials"] == null
             ? []
@@ -203,6 +212,8 @@ class Community {
         "socials": socials == null
             ? []
             : List<dynamic>.from(socials!.map((x) => x.toJson())),
+        "following": following,
+        "followers": followers,
         "comm_staffs": commStaffs == null
             ? []
             : List<dynamic>.from(commStaffs!.map((x) => x)),

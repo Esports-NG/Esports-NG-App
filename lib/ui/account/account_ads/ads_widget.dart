@@ -93,7 +93,7 @@ class _AdsWidgetState extends State<AdsWidget>
       backgroundColor: AppColor().primaryBackGroundColor,
       body: TabBarView(
         controller: _tabController,
-        children: [PromotedPosts(), PromotedEvents()],
+        children: const [PromotedPosts(), PromotedEvents()],
       ),
     );
   }

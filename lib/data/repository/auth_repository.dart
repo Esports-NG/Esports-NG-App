@@ -9,7 +9,7 @@ import 'package:e_sport/ui/auth/first_screen.dart';
 import 'package:e_sport/ui/auth/login.dart';
 import 'package:e_sport/ui/auth/otp_screen.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
-import 'package:e_sport/ui/home/dashboard.dart';
+import 'package:e_sport/ui/home/root.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -132,6 +132,7 @@ class AuthRepository extends GetxController {
   late final cardExpiryController = TextEditingController();
   late final chatController = TextEditingController();
   late final cvvController = TextEditingController();
+  late final bioController = TextEditingController();
 
   DateTime? date;
 
@@ -197,6 +198,7 @@ class AuthRepository extends GetxController {
       if (pref!.getUser() != null) {
         mUser(pref!.getUser()!);
         mToken(pref!.read());
+        getUserInfo();
         _authStatus(AuthStatus.authenticated);
         if (mToken.value == "0") {
           _authStatus(AuthStatus.unAuthenticated);
@@ -341,7 +343,7 @@ class AuthRepository extends GetxController {
         EasyLoading.showInfo('Success', duration: const Duration(seconds: 3))
             .then((value) async {
           await Future.delayed(const Duration(seconds: 3));
-          Get.off(() => const Dashboard());
+          Get.off(() => const RootDashboard());
         });
       }
       return response.body;
@@ -366,7 +368,7 @@ class AuthRepository extends GetxController {
       }
       debugPrint(response.body);
       if (response.statusCode == 200) {
-        debugPrint(response.body);
+        print(response.body);
         var userModel = UserModel.fromJson(json);
         mUser(userModel);
         pref!.setUser(userModel);
@@ -383,7 +385,13 @@ class AuthRepository extends GetxController {
       _updateProfileStatus(UpdateProfileStatus.loading);
       var response = await http.put(
           Uri.parse('${ApiLink.user}${user!.id}/update/'),
-          body: jsonEncode({"full_name": fullNameController.text.trim()}),
+          body: jsonEncode({
+            "full_name": fullNameController.text.trim(),
+            "user_name": userNameController.text.trim(),
+            "phone_number": phoneNoController.text.trim(),
+            "email": emailController.text.trim(),
+            "bio": bioController.text.trim()
+          }),
           headers: {
             "Content-Type": "application/json",
             'Authorization': 'JWT $token'
@@ -562,29 +570,28 @@ class AuthRepository extends GetxController {
     }
   }
 
-  Future followCommunity(String title, userId) async {
+  Future<bool> followCommunity(int communityId) async {
     _followStatus(FollowStatus.loading);
-    try {
-      debugPrint('following community...');
-      var response = await http.post(
-        Uri.parse('${ApiLink.followCommunity}$title/$userId/'),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT $token'
-        },
-      );
-      var json = jsonDecode(response.body);
-      if (response.statusCode != 200) {
-        throw (json['detail']);
-      }
-      debugPrint(response.body);
-      if (response.statusCode == 200) {
-        _followStatus(FollowStatus.success);
-      } else {}
-    } catch (error) {
-      _followStatus(FollowStatus.error);
-      debugPrint("follow community error: $error");
-      getError(error);
+
+    debugPrint('following community...');
+    var response = await http.post(
+      Uri.parse('${ApiLink.followCommunity(communityId)}'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT $token'
+      },
+    );
+    print(response.statusCode);
+    var json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw (json['detail']);
+    }
+    debugPrint(response.body);
+    if (response.statusCode == 200) {
+      _followStatus(FollowStatus.success);
+      return true;
+    } else {
+      return false;
     }
   }
 
