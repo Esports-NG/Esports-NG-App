@@ -162,16 +162,20 @@ class CustomTile extends StatelessWidget {
             width: 1),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CustomText(
-            title: value,
-            size: Get.height * 0.016,
-            fontFamily: 'GilroyMedium',
-            textAlign: TextAlign.start,
-            color: AppColor().primaryWhite,
+          Flexible(
+            child: CustomText(
+              title: value,
+              size: Get.height * 0.016,
+              fontFamily: 'GilroyMedium',
+              textAlign: TextAlign.start,
+              overflow: TextOverflow.ellipsis,
+              color: AppColor().primaryWhite,
+            ),
           ),
-          const Spacer(),
+          // const Spacer(),
           SmallCircle(
             size: 10,
             color: eventController.renderFilter(title: title) == value

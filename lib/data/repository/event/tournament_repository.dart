@@ -315,6 +315,8 @@ class TournamentRepository extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
+      var res = await http.Response.fromStream(response);
+      print(res.body);
       if (response.statusCode == 201) {
         eventController.createEventStatus(CreateEventStatus.success);
         debugPrint(await response.stream.bytesToString());

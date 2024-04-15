@@ -226,6 +226,7 @@ class Owner {
   String? fullName;
   String? email;
   String? phoneNumber;
+  String? bio;
   String? country;
   String? state;
   String? gender;
@@ -234,23 +235,24 @@ class Owner {
   List<Purpose>? purpose;
   Profile? profile;
 
-  Owner({
-    this.id,
-    this.userName,
-    this.fullName,
-    this.email,
-    this.phoneNumber,
-    this.country,
-    this.state,
-    this.gender,
-    this.dOB,
-    this.referralCode,
-    this.purpose,
-    this.profile,
-  });
+  Owner(
+      {this.id,
+      this.userName,
+      this.fullName,
+      this.email,
+      this.phoneNumber,
+      this.country,
+      this.state,
+      this.gender,
+      this.dOB,
+      this.referralCode,
+      this.purpose,
+      this.profile,
+      this.bio});
 
   factory Owner.fromJson(Map<String, dynamic> json) => Owner(
         id: json["id"],
+        bio: json["bio"],
         userName: json["user_name"],
         fullName: json["full_name"],
         email: json["email"],
@@ -270,6 +272,7 @@ class Owner {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "bio": bio,
         "user_name": userName,
         "full_name": fullName,
         "email": email,

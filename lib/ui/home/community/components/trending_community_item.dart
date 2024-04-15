@@ -25,7 +25,7 @@ class CommunityItem extends StatelessWidget {
             color: AppColor().bgDark,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: AppColor().greySix,
+              color: AppColor().greyEight,
             ),
           ),
           child: Column(
@@ -65,7 +65,6 @@ class CommunityItem extends StatelessWidget {
                 color: AppColor().greySix,
               ),
               Gap(Get.height * 0.02),
-              
               Padding(
                 padding: EdgeInsets.all(Get.height * 0.02),
                 child: Container(
@@ -116,13 +115,6 @@ class CommunityItem extends StatelessWidget {
                       ),
                     ),
                   ),
-            Positioned(
-              child: SvgPicture.asset(
-                'assets/images/svg/check_badge.svg',
-                height: Get.height * 0.025,
-                width: Get.height * 0.025,
-              ),
-            ),
           ],
         ),
       ],

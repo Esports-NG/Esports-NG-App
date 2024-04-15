@@ -262,12 +262,15 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
           textAlign: TextAlign.start,
           color: color ?? AppColor().greyTwo,
         ),
-        CustomText(
-          title: subTitle,
-          size: subTitleSize ?? 14,
-          fontFamily: subTitleFamily ?? 'GilroySemiBold',
-          textAlign: TextAlign.start,
-          color: color ?? AppColor().greyTwo,
+        Flexible(
+          child: CustomText(
+            overflow: TextOverflow.ellipsis,
+            title: subTitle,
+            size: subTitleSize ?? 14,
+            fontFamily: subTitleFamily ?? 'GilroySemiBold',
+            textAlign: TextAlign.start,
+            color: color ?? AppColor().greyTwo,
+          ),
         ),
       ],
     );

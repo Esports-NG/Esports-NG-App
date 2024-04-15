@@ -448,37 +448,30 @@ class AuthRepository extends GetxController {
     }
   }
 
-  Future followUser(String userId) async {
-    try {
-      EasyLoading.show(status: 'please wait...');
-      _followStatus(FollowStatus.loading);
-      debugPrint('following user...');
-      var response = await http.post(
-        Uri.parse('${ApiLink.followUser}$userId/'),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT $token'
-        },
-      );
-      var json = jsonDecode(response.body);
-      debugPrint(response.statusCode.toString());
-      debugPrint(response.body);
-      if (response.statusCode != 200 || response.statusCode != 201) {
-        throw (json['details'] ?? json['error']);
-      }
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        EasyLoading.showInfo(json['message']).then((value) async {});
-        _followStatus(FollowStatus.success);
+  Future followUser(int userId) async {
+    _followStatus(FollowStatus.loading);
+    debugPrint('following user...');
+    var response = await http.post(
+      Uri.parse('${ApiLink.followUser}$userId/'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT $token'
+      },
+    );
+    var json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw (json['detail']);
+    }
+    debugPrint(response.body);
+    if (response.statusCode == 200) {
+      _followStatus(FollowStatus.success);
+      if (json["message"].toString().contains("unfollowed")) {
+        return "unfollowed";
       } else {
-        _followStatus(FollowStatus.error);
-        EasyLoading.dismiss();
+        return "followed";
       }
-    } catch (error) {
-      _followStatus(FollowStatus.error);
-      EasyLoading.dismiss();
-      debugPrint("follow user error: $error");
-      getError(error);
+    } else {
+      return "error";
     }
   }
 
@@ -572,17 +565,18 @@ class AuthRepository extends GetxController {
     }
   }
 
-  Future<bool> followCommunity(int communityId) async {
+  Future followCommunity(int communityId) async {
     _followStatus(FollowStatus.loading);
 
     debugPrint('following community...');
     var response = await http.post(
-      Uri.parse('${ApiLink.followCommunity(communityId)}'),
+      Uri.parse(ApiLink.followCommunity(communityId)),
       headers: {
         "Content-Type": "application/json",
         "Authorization": 'JWT $token'
       },
     );
+    print(response.body);
     print(response.statusCode);
     var json = jsonDecode(response.body);
     if (response.statusCode != 200) {
@@ -591,10 +585,28 @@ class AuthRepository extends GetxController {
     debugPrint(response.body);
     if (response.statusCode == 200) {
       _followStatus(FollowStatus.success);
-      return true;
+      if (json["message"].toString().contains("unfollowed")) {
+        return "unfollowed";
+      } else {
+        return "followed";
+      }
     } else {
-      return false;
+      return "error";
     }
+  }
+
+  Future getProfileFollowerList(int id) async {
+    var response = await http
+        .get(Uri.parse(ApiLink.getProfileFollowersList(id: id)), headers: {
+      "Content-Type": "application/json",
+      "Authorization": 'JWT $token'
+    });
+
+    print(response.body);
+
+    List<dynamic> json = jsonDecode(response.body);
+
+    return json.map((e) => e as Map<String, dynamic>).toList();
   }
 
   Future refreshToken() async {

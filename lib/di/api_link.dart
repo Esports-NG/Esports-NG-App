@@ -60,8 +60,9 @@ class ApiLink {
 
   //Profile
   static String getDataWithFollowers({required int id, required String type}) =>
-      "${baseurl}extra/$type/$id/data/";
-
+      "${baseurl}extra/$type/$id/data/?commpk=$id";
+  static String getProfileFollowersList({required int id}) =>
+      "${baseurl}extra/followers/user/view/?group_id=$id";
   //Author Profile
   static String getUserDataWithFollowers({required int id}) =>
       "${baseurl}extra/user/$id/data/";

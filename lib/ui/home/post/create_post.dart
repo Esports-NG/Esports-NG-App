@@ -35,24 +35,18 @@ class _CreatePostState extends State<CreatePost> {
       isSeePost = false,
       isEngagePost = false;
 
-  final FocusNode postTitleFocusNode = FocusNode();
   final FocusNode postBodyFocusNode = FocusNode();
   final FocusNode gameTagFocusNode = FocusNode();
 
   @override
   void dispose() {
-    postTitleFocusNode.dispose();
     postBodyFocusNode.dispose();
     gameTagFocusNode.dispose();
     super.dispose();
   }
 
   void handleTap(String? title) {
-    if (title == 'postTitle') {
-      setState(() {
-        isPostTitle = true;
-      });
-    } else if (title == 'postBody') {
+    if (title == 'postBody') {
       setState(() {
         isPostBody = true;
       });
@@ -175,35 +169,7 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   Gap(Get.height * 0.03),
                   CustomText(
-                    title: 'Post title *',
-                    color: AppColor().primaryWhite,
-                    textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
-                    size: Get.height * 0.017,
-                  ),
-                  Gap(Get.height * 0.01),
-                  CustomTextField(
-                    hint: "Type text here",
-                    textEditingController: postController.postTitleController,
-                    hasText: isPostTitle!,
-                    focusNode: postTitleFocusNode,
-                    onTap: () {
-                      handleTap('postTitle');
-                    },
-                    onSubmited: (_) {
-                      postTitleFocusNode.unfocus();
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        isPostTitle = value.isNotEmpty;
-                      });
-                    },
-                    maxLines: 2,
-                    validate: Validator.isName,
-                  ),
-                  Gap(Get.height * 0.02),
-                  CustomText(
-                    title: 'Post body *',
+                    title: 'Post text *',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
                     fontFamily: 'GilroyRegular',
@@ -551,7 +517,6 @@ class _CreatePostState extends State<CreatePost> {
                   InkWell(
                     onTap: () {
                       PostModel post = PostModel(
-                          title: postController.postTitleController.text.trim(),
                           body: postController.postBodyController.text.trim(),
                           iTags: [
                             '#${postController.gameTagController.text}'

@@ -104,15 +104,34 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   final authController = Get.find<AuthRepository>();
-  int? followers;
-  int? following;
-  bool isFollowing = false;
+  int? followersCount;
+  int? followingCount;
+  bool _isLoading = false;
+  bool _isFollowing = false;
+
+  Future<void> getFollowersList() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var followersList =
+        await authController.getProfileFollowerList(widget.userData.id!);
+    setState(() {
+      if (followersList.any(
+          (element) => element["user_id"]["id"] == authController.user!.id)) {
+        _isFollowing = true;
+      } else {
+        _isFollowing = false;
+      }
+      _isLoading = false;
+    });
+  }
 
   @override
   initState() {
+    getFollowersList();
     setState(() {
-      followers = widget.userData.followers;
-      following = widget.userData.following;
+      followersCount = widget.userData.followers;
+      followingCount = widget.userData.following;
     });
     super.initState();
   }
@@ -227,7 +246,7 @@ class _UserProfileState extends State<UserProfile> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomText(
-                  title: '${widget.userData.following}',
+                  title: followingCount.toString(),
                   weight: FontWeight.w500,
                   size: Get.height * 0.02,
                   fontFamily: 'GilroyBold',
@@ -251,7 +270,7 @@ class _UserProfileState extends State<UserProfile> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomText(
-                  title: '${widget.userData.followers}',
+                  title: followersCount.toString(),
                   weight: FontWeight.w500,
                   size: Get.height * 0.02,
                   fontFamily: 'GilroyBold',
@@ -267,89 +286,127 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ],
       ),
-      Gap(Get.height * 0.04),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
         child: Column(
           children: [
             Visibility(
               visible: widget.userData.id != authController.user!.id!,
-              child: Row(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: CustomFillOption(
-                      onTap: () {},
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                                'assets/images/svg/account_icon.svg',
-                                height: Get.height * 0.015,
-                                color: AppColor().primaryWhite),
-                            Gap(Get.height * 0.01),
-                            CustomText(
-                                title: 'Follow',
-                                weight: FontWeight.w400,
-                                size: Get.height * 0.017,
-                                fontFamily: 'GilroyRegular',
-                                color: AppColor().primaryWhite),
-                          ]),
-                    ),
-                  ),
-                  Gap(Get.height * 0.02),
-                  Expanded(
-                    child: CustomFillOption(
-                      buttonColor:
-                          AppColor().primaryBackGroundColor.withOpacity(0.7),
-                      borderColor: AppColor().greyEight,
-                      onTap: () => showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: AppColor().primaryBgColor,
-                          content: const ComingSoonPopup(),
+                  Gap(Get.height * 0.04),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomFillOption(
+                          buttonColor: _isLoading ? Colors.transparent : null,
+                          onTap: () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            var message = await authController
+                                .followUser(widget.userData.id!);
+
+                            if (message != "error") {
+                              setState(() {
+                                _isFollowing = !_isFollowing;
+                                if (message == "unfollowed") {
+                                  followersCount = followersCount! - 1;
+                                } else {
+                                  followersCount = followersCount! + 1;
+                                }
+                              });
+                            }
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          },
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: _isLoading
+                                  ? [
+                                      SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          color: AppColor().primaryColor,
+                                          strokeCap: StrokeCap.round,
+                                          strokeWidth: 2,
+                                        ),
+                                      ),
+                                    ]
+                                  : [
+                                      SvgPicture.asset(
+                                          'assets/images/svg/account_icon.svg',
+                                          height: Get.height * 0.015,
+                                          color: AppColor().primaryWhite),
+                                      Gap(Get.height * 0.01),
+                                      CustomText(
+                                          title: _isFollowing
+                                              ? "Unfollow"
+                                              : 'Follow',
+                                          weight: FontWeight.w400,
+                                          size: Get.height * 0.017,
+                                          fontFamily: 'GilroyRegular',
+                                          color: AppColor().primaryWhite),
+                                    ]),
                         ),
                       ),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.sms_outlined,
-                              color: AppColor().primaryWhite,
-                              size: Get.height * 0.015,
+                      Gap(Get.height * 0.02),
+                      Expanded(
+                        child: CustomFillOption(
+                          buttonColor: AppColor()
+                              .primaryBackGroundColor
+                              .withOpacity(0.7),
+                          borderColor: AppColor().greyEight,
+                          onTap: () => showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: AppColor().primaryBgColor,
+                              content: const ComingSoonPopup(),
                             ),
-                            Gap(Get.height * 0.01),
-                            CustomText(
-                                title: 'Message',
-                                weight: FontWeight.w400,
-                                size: Get.height * 0.017,
-                                fontFamily: 'GilroyRegular',
-                                color: AppColor().primaryWhite),
-                            Gap(Get.height * 0.01),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: AppColor().primaryColor,
-                              size: Get.height * 0.015,
-                            ),
-                          ]),
-                    ),
+                          ),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.sms_outlined,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.015,
+                                ),
+                                Gap(Get.height * 0.01),
+                                CustomText(
+                                    title: 'Message',
+                                    weight: FontWeight.w400,
+                                    size: Get.height * 0.017,
+                                    fontFamily: 'GilroyRegular',
+                                    color: AppColor().primaryWhite),
+                                Gap(Get.height * 0.01),
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: AppColor().primaryColor,
+                                  size: Get.height * 0.015,
+                                ),
+                              ]),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            Visibility(
-                visible: widget.userData.id != authController.user!.id,
-                child: Gap(Get.height * 0.04)),
+            Gap(Get.height * 0.02),
             CustomText(
                 title: widget.userData.bio ?? "",
                 weight: FontWeight.w400,
-                size: Get.height * 0.015,
+                size: 14,
                 fontFamily: 'GilroyRegular',
                 textAlign: TextAlign.center,
                 height: 1.5,
-                color: AppColor().greyEight),
+                color: AppColor().greyFour),
             Visibility(
                 visible: widget.userData.id != authController.user!.id,
                 child: Gap(Get.height * 0.02)),
@@ -425,7 +482,7 @@ class _UserProfileState extends State<UserProfile> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomText(
-              title: 'Join our Community:',
+              title: 'Follow my socials:',
               fontFamily: 'GilroySemiBold',
               size: 16,
               color: AppColor().primaryWhite,

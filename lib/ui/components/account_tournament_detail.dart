@@ -166,7 +166,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                         widget.item.community!.id!);
                                 if (success) {
                                   setState(() {
-                                    _isFollowing = false;
+                                    _isFollowing = !_isFollowing;
                                   });
                                 }
                               },

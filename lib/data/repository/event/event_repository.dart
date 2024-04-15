@@ -64,8 +64,8 @@ class EventRepository extends GetxController
 
   final RxList<String> typeFilterList =
       ["All", "Tournament", "Social Event"].obs;
-  final RxList<String> gameFilterList = ["All", "Ongoing", "Concluded"].obs;
-  final RxList<String> statusFilterList =
+  final RxList<String> statusFilterList = ["All", "Ongoing", "Concluded"].obs;
+  final RxList<String> gameFilterList =
       ["All", "CODM", "MLBB", "Brawl Stars"].obs;
 
   var maxTabs = 3.obs, eventTypeCount = 0.obs, participantCount = 0.obs;

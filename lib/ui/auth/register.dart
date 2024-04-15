@@ -931,6 +931,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         fullName: authController.fullNameController.text.trim(),
                         email: authController.emailController.text.trim(),
                         password: authController.passwordController.text.trim(),
+                        bio: "Test Bio",
                         password2:
                             authController.passwordController.text.trim(),
                         phoneNumber:
@@ -1078,12 +1079,6 @@ var eventTypeCard = [
 ];
 
 var categoryCard = [
-  UserPreference(title: 'Puzzle', isSelected: false),
-  UserPreference(title: 'Warfare', isSelected: false),
-  UserPreference(title: 'RPG', isSelected: false),
-  UserPreference(title: 'Sports', isSelected: false),
-  UserPreference(title: 'Apocalypse', isSelected: false),
-  UserPreference(title: 'Board', isSelected: false),
   UserPreference(title: 'Puzzle', isSelected: false),
   UserPreference(title: 'Warfare', isSelected: false),
   UserPreference(title: 'RPG', isSelected: false),

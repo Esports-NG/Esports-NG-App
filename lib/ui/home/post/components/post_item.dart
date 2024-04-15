@@ -752,7 +752,7 @@ class _PostItemState extends State<PostItem> {
     } else if (selectedMenuItem == '2' &&
         authController.followStatus != FollowStatus.loading) {
       debugPrint('follow / unfollow user');
-      await authController.followUser(widget.item.author!.id!.toString());
+      await authController.followUser(widget.item.author!.id!);
     } else if (selectedMenuItem == '3' &&
         authController.followStatus != FollowStatus.loading) {
       debugPrint('turning notification');

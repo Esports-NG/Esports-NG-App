@@ -28,7 +28,6 @@ enum GetPostStatus { loading, success, error, empty, available }
 
 class PostRepository extends GetxController {
   final authController = Get.put(AuthRepository());
-  late final postTitleController = TextEditingController();
   late final postBodyController = TextEditingController();
   late final seeController = TextEditingController();
   late final engageController = TextEditingController();
@@ -84,10 +83,8 @@ class PostRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       };
       var request = http.MultipartRequest("POST", Uri.parse(ApiLink.createPost))
-        ..fields["title"] = postTitleController.text
         ..fields["body"] = postBodyController.text
-        ..fields["itags"] = "#COD"
-        ..fields["iviewers"] = seeController.text;
+        ..fields["itags[0]"] = "#COD";
 
       if (postImage != null) {
         request.files
@@ -125,10 +122,7 @@ class PostRepository extends GetxController {
   Future editPost(int postId) async {
     try {
       debugPrint('editing post...');
-      var body = {
-        "title": postTitleController.text.trim(),
-        "body": postBodyController.text.trim()
-      };
+      var body = {"body": postBodyController.text.trim()};
       _createPostStatus(CreatePostStatus.loading);
       var response = await http.put(
         Uri.parse("${ApiLink.editPost}$postId/"),
@@ -544,7 +538,6 @@ class PostRepository extends GetxController {
   }
 
   void clear() {
-    postTitleController.clear();
     postBodyController.clear();
     gameTagController.clear();
     seeController.clear();

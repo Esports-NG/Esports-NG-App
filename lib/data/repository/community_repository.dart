@@ -60,13 +60,15 @@ class CommunityRepository extends GetxController {
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
         getAllCommunity(true);
+      } else {
+        getAllCommunity(false);
       }
     });
   }
 
   Future createCommunity(Map<String, dynamic> community) async {
     try {
-      // debugPrint('Community: ${community()}');
+      print(community);
       _createCommunityStatus(CreateCommunityStatus.loading);
       var headers = {"Authorization": 'JWT ${authController.token}'};
       var request =
@@ -87,6 +89,8 @@ class CommunityRepository extends GetxController {
 
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
+      var res = await http.Response.fromStream(response);
+      print(res.body);
       if (response.statusCode == 201) {
         _createCommunityStatus(CreateCommunityStatus.success);
         debugPrint(await response.stream.bytesToString());
@@ -175,6 +179,8 @@ class CommunityRepository extends GetxController {
       "Content-Type": "application/json",
       "Authorization": 'JWT ${authController.token}'
     });
+
+    print(response.body);
 
     List<dynamic> json = jsonDecode(response.body);
 

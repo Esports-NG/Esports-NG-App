@@ -39,12 +39,38 @@ class _PostDetailsState extends State<PostDetails> {
   final postController = Get.put(PostRepository());
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isRepostActive = false;
+  bool _isLoading = false;
+  bool _isFollowing = false;
+
+  Future<void> getFollowersList() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var followersList =
+        await authController.getProfileFollowerList(widget.item.author!.id!);
+    setState(() {
+      if (followersList.any(
+          (element) => element["user_id"]["id"] == authController.user!.id)) {
+        _isFollowing = true;
+      } else {
+        _isFollowing = false;
+      }
+      _isLoading = false;
+    });
+  }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
     if (postController.postStatus != PostStatus.loading) {
       postController.likePost(widget.item.id!);
     }
     return !isLiked;
+  }
+
+  @override
+  initState() {
+    getFollowersList();
+    print(widget.item.toString());
+    super.initState();
   }
 
   @override
@@ -204,20 +230,59 @@ class _PostDetailsState extends State<PostDetails> {
                                 children: [
                                   if (widget.item.author!.fullName !=
                                       authController.user!.fullName)
-                                    CustomFillButton(
-                                      buttonText: 'Follow',
-                                      textSize: Get.height * 0.015,
-                                      width: Get.width * 0.25,
+                                    CustomFillOption(
+                                      width: Get.height * 0.12,
                                       height: Get.height * 0.04,
-                                      onTap: () {
-                                        if (authController.followStatus !=
-                                            FollowStatus.loading) {
-                                          authController.followUser(widget
-                                              .item.author!.id!
-                                              .toString());
+                                      buttonColor: _isLoading
+                                          ? Colors.transparent
+                                          : null,
+                                      onTap: () async {
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
+                                        var message =
+                                            await authController.followUser(
+                                                widget.item.author!.id!);
+
+                                        if (message != "error") {
+                                          setState(() {
+                                            _isFollowing = !_isFollowing;
+                                          });
                                         }
+                                        setState(() {
+                                          _isLoading = false;
+                                        });
                                       },
-                                      isLoading: false,
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: _isLoading
+                                              ? [
+                                                  SizedBox(
+                                                    height: Get.height * 0.02,
+                                                    width: Get.height * 0.02,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      color: AppColor()
+                                                          .primaryColor,
+                                                      strokeCap:
+                                                          StrokeCap.round,
+                                                      strokeWidth: 2,
+                                                    ),
+                                                  ),
+                                                ]
+                                              : [
+                                                  CustomText(
+                                                      title: _isFollowing
+                                                          ? "Unfollow"
+                                                          : 'Follow',
+                                                      weight: FontWeight.w400,
+                                                      size: 12,
+                                                      fontFamily:
+                                                          'GilroyMedium',
+                                                      color: AppColor()
+                                                          .primaryWhite),
+                                                ]),
                                     ),
                                   if (authController.user!.id ==
                                       widget.item.author!.id)
@@ -627,108 +692,94 @@ class _PostDetailsState extends State<PostDetails> {
                                 Gap(Get.height * 0.025),
                             itemBuilder: (context, index) {
                               var item = widget.item.comment![index];
-                              return InkWell(
-                                onTap: () {
-                                  if (index == 0 &&
-                                      postController.postStatus !=
-                                          PostStatus.loading) {
-                                    postController.rePost(
-                                        widget.item.id!, 'quote');
-                                  } else {}
-                                  Get.back();
-                                },
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      padding:
-                                          EdgeInsets.all(Get.height * 0.015),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColor().primaryColor),
-                                      child: CustomText(
-                                        title: item.name![0].toCapitalCase(),
-                                        color: AppColor().greyTwo,
-                                        weight: FontWeight.w600,
-                                        fontFamily: 'GilroyMedium',
-                                        size: Get.height * 0.025,
-                                      ),
-                                    ),
-                                    Gap(Get.height * 0.02),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          title: item.name,
-                                          color: AppColor().greySix,
-                                          weight: FontWeight.w400,
-                                          fontFamily: 'GilroyMedium',
-                                          size: Get.height * 0.015,
-                                        ),
-                                        Gap(Get.height * 0.01),
-                                        CustomText(
-                                          title: item.body!,
-                                          color: AppColor().primaryWhite,
-                                          weight: FontWeight.w400,
-                                          fontFamily: 'GilroyBold',
-                                          size: Get.height * 0.015,
-                                        ),
-                                        Gap(Get.height * 0.01),
-                                        Row(
-                                          children: [
-                                            CustomText(
-                                                title: item.likes == 0
-                                                    ? 'Like'
-                                                    : item.likes == 1
-                                                        ? '1Like'
-                                                        : '${item.likes}Like',
-                                                color: AppColor().greySix,
-                                                weight: FontWeight.w400,
-                                                fontFamily: 'GilroyMedium',
-                                                size: Get.height * 0.01),
-                                            Gap(Get.height * 0.01),
-                                            CustomText(
-                                                title: 'Reply',
-                                                color: AppColor().greySix,
-                                                weight: FontWeight.w400,
-                                                fontFamily: 'GilroyMedium',
-                                                size: Get.height * 0.01),
-                                            Gap(Get.height * 0.01),
-                                            CustomText(
-                                                title: 'Repost',
-                                                color: AppColor().greySix,
-                                                weight: FontWeight.w400,
-                                                fontFamily: 'GilroyMedium',
-                                                size: Get.height * 0.01),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    LikeButton(
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(Get.height * 0.015),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColor().primaryColor),
+                                    child: CustomText(
+                                      title: item.name![0].toCapitalCase(),
+                                      color: AppColor().greyTwo,
+                                      weight: FontWeight.w600,
+                                      fontFamily: 'GilroyMedium',
                                       size: Get.height * 0.025,
-                                      onTap: onLikeButtonTapped,
-                                      circleColor: CircleColor(
-                                          start: AppColor().primaryColor,
-                                          end: AppColor().primaryColor),
-                                      bubblesColor: BubblesColor(
-                                        dotPrimaryColor:
-                                            AppColor().primaryColor,
-                                        dotSecondaryColor:
-                                            AppColor().primaryColor,
-                                      ),
-                                      likeBuilder: (bool isLiked) {
-                                        return Icon(
-                                            isLiked
-                                                ? Icons.favorite
-                                                : Icons.favorite_outline,
-                                            color: AppColor().primaryWhite,
-                                            size: Get.height * 0.015);
-                                      },
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Gap(Get.height * 0.02),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CustomText(
+                                        title: item.name,
+                                        color: AppColor().greySix,
+                                        weight: FontWeight.w400,
+                                        fontFamily: 'GilroyMedium',
+                                        size: Get.height * 0.015,
+                                      ),
+                                      Gap(Get.height * 0.01),
+                                      CustomText(
+                                        title: item.body!,
+                                        color: AppColor().primaryWhite,
+                                        weight: FontWeight.w400,
+                                        fontFamily: 'GilroyBold',
+                                        size: Get.height * 0.015,
+                                      ),
+                                      Gap(Get.height * 0.01),
+                                      Row(
+                                        children: [
+                                          CustomText(
+                                              title: item.likes == 0
+                                                  ? 'Like'
+                                                  : item.likes == 1
+                                                      ? '1 Like'
+                                                      : '${item.likes} Like',
+                                              color: AppColor().greySix,
+                                              weight: FontWeight.w400,
+                                              fontFamily: 'GilroyMedium',
+                                              size: 12),
+                                          Gap(Get.height * 0.02),
+                                          CustomText(
+                                              title: 'Reply',
+                                              color: AppColor().greySix,
+                                              weight: FontWeight.w400,
+                                              fontFamily: 'GilroyMedium',
+                                              size: 12),
+                                          Gap(Get.height * 0.02),
+                                          CustomText(
+                                              title: 'Repost',
+                                              color: AppColor().greySix,
+                                              weight: FontWeight.w400,
+                                              fontFamily: 'GilroyMedium',
+                                              size: 12),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  LikeButton(
+                                    onTap: onLikeButtonTapped,
+                                    circleColor: CircleColor(
+                                        start: AppColor().primaryColor,
+                                        end: AppColor().primaryColor),
+                                    bubblesColor: BubblesColor(
+                                      dotPrimaryColor: AppColor().primaryColor,
+                                      dotSecondaryColor:
+                                          AppColor().primaryColor,
+                                    ),
+                                    likeBuilder: (bool isLiked) {
+                                      return Icon(
+                                          isLiked
+                                              ? Icons.favorite
+                                              : Icons.favorite_outline,
+                                          color: AppColor().primaryWhite,
+                                          size: 20);
+                                    },
+                                  ),
+                                ],
                               );
                             },
                           ),

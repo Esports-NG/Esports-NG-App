@@ -610,16 +610,6 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
               Obx(() {
                 return InkWell(
                   onTap: () {
-                    CommunityModel community = CommunityModel(
-                      name: communityController.communityNameController.text
-                          .trim(),
-                      bio: communityController.communityBioController.text
-                          .trim(),
-                      gamesPlayed: [],
-                      enableTeamchat: enableChat,
-                      socials: [],
-                    );
-
                     Map<String, dynamic> body = {
                       'name': communityController.communityNameController.text
                           .trim(),
@@ -627,12 +617,10 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                           .trim(),
                       'enable_teamchat': enableChat.toString(),
                       'games_played': '',
-                      'logo': '',
-                      'cover': '',
-                      'isocials[0][title]': 'X',
-                      'isocials[0][link]': 'https://x.com',
-                      'isocials[1][title]': 'Discord',
-                      'isocials[1][link]': 'https://discord.com',
+                      // "isocials[0]['title']": 'X',
+                      // "isocials[0]['link']": 'https://x.com',
+                      // "isocials[1]['title']": 'Discord',
+                      // "isocials[1]['link']": 'https://discord.com',
                     };
 
                     if (pageCount == 0) {

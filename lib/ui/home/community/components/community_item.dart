@@ -24,7 +24,8 @@ class CommunityItem extends StatelessWidget {
         color: AppColor().bgDark,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: AppColor().greySix,
+          width: 0.5,
+          color: AppColor().greyEight,
         ),
       ),
       child: Stack(
@@ -187,9 +188,7 @@ class AllCommunityItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColor().bgDark,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColor().greySix,
-        ),
+        border: Border.all(color: AppColor().greyEight, width: 0.5),
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -259,8 +258,7 @@ class AllCommunityItem extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                 child: CustomText(
-                    title:
-                        'This team is made up of skilled gamers who are passionate about the Attack on Titan series.',
+                    title: item.bio,
                     size: 12,
                     fontFamily: 'GilroyMedium',
                     weight: FontWeight.w400,
@@ -268,23 +266,26 @@ class AllCommunityItem extends StatelessWidget {
                     height: 1.5,
                     textAlign: TextAlign.center),
               ),
-              Container(
-                padding: EdgeInsets.all(Get.height * 0.015),
-                margin: EdgeInsets.all(Get.height * 0.02),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  border: Border.all(
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  padding: EdgeInsets.all(Get.height * 0.015),
+                  margin: EdgeInsets.all(Get.height * 0.02),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
                     color: AppColor().primaryColor,
+                    borderRadius: BorderRadius.circular(40),
+                    border: Border.all(
+                      color: AppColor().primaryColor,
+                    ),
                   ),
-                ),
-                child: Center(
-                  child: CustomText(
-                    title: 'Follow',
-                    size: 14,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
-                    color: AppColor().primaryColor,
+                  child: Center(
+                    child: CustomText(
+                        title: 'Follow',
+                        size: 14,
+                        fontFamily: 'GilroyMedium',
+                        weight: FontWeight.w400,
+                        color: AppColor().primaryWhite),
                   ),
                 ),
               ),
@@ -321,26 +322,18 @@ class AllCommunityItem extends StatelessWidget {
                         ),
                         errorWidget: (context, url, error) =>
                             Icon(Icons.error, color: AppColor().primaryColor),
-                        imageUrl: '${ApiLink.imageUrl}${item.logo}',
+                        imageUrl: '${item.logo}',
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
                                 color: AppColor().primaryWhite, width: 2),
                             image: DecorationImage(
-                                image: NetworkImage(
-                                    '${ApiLink.imageUrl}${item.logo}'),
+                                image: NetworkImage('${item.logo}'),
                                 fit: BoxFit.cover),
                           ),
                         ),
                       ),
-                Positioned(
-                  child: SvgPicture.asset(
-                    'assets/images/svg/check_badge.svg',
-                    height: Get.height * 0.025,
-                    width: Get.height * 0.025,
-                  ),
-                ),
               ],
             ),
           ),

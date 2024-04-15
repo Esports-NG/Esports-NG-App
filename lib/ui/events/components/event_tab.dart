@@ -38,7 +38,7 @@ class _EventTabState extends State<EventTab> {
                 child: EventFilter(
                     extreme: true,
                     title: "Game",
-                    values: eventController.typeFilterList)),
+                    values: eventController.gameFilterList)),
           ],
         ),
         Gap(Get.height * 0.02),

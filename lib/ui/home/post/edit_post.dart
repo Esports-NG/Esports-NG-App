@@ -247,35 +247,7 @@ class _EditPostState extends State<EditPost> {
                   // ),
                   // Gap(Get.height * 0.03),
                   CustomText(
-                    title: 'Post title *',
-                    color: AppColor().primaryWhite,
-                    textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
-                    size: Get.height * 0.017,
-                  ),
-                  Gap(Get.height * 0.01),
-                  CustomTextField(
-                    hint: "Type text here",
-                    textEditingController: postController.postTitleController,
-                    hasText: isPostTitle!,
-                    focusNode: postTitleFocusNode,
-                    onTap: () {
-                      handleTap('postTitle');
-                    },
-                    onSubmited: (_) {
-                      postTitleFocusNode.unfocus();
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        isPostTitle = value.isNotEmpty;
-                      });
-                    },
-                    maxLines: 2,
-                    validate: Validator.isName,
-                  ),
-                  Gap(Get.height * 0.02),
-                  CustomText(
-                    title: 'Post body *',
+                    title: 'Post text *',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
                     fontFamily: 'GilroyRegular',
