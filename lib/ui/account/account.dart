@@ -250,7 +250,7 @@ class _AccountState extends State<Account> {
         PopupMenuItem(
           value: 'ScreenA',
           height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
+          padding: const EdgeInsets.only(bottom: 10, left: 20, top: 10),
           child: Row(
             children: [
               Icon(
@@ -258,7 +258,7 @@ class _AccountState extends State<Account> {
                 color: AppColor().primaryWhite,
                 size: Get.height * 0.016,
               ),
-              Gap(Get.height * 0.02),
+              Gap(Get.height * 0.015),
               CustomText(
                 title: 'Edit Profile',
                 size: Get.height * 0.014,
@@ -272,15 +272,19 @@ class _AccountState extends State<Account> {
         PopupMenuItem(
           value: 'ScreenB',
           height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          padding: const EdgeInsets.only(
+            bottom: 10,
+            left: 20,
+            top: 10,
+          ),
           child: Row(
             children: [
               Icon(
-                Icons.edit,
+                Icons.alternate_email,
                 color: AppColor().primaryWhite,
                 size: Get.height * 0.016,
               ),
-              Gap(Get.height * 0.02),
+              Gap(Get.height * 0.015),
               CustomText(
                 title: 'Edit Socials',
                 size: Get.height * 0.014,
@@ -294,7 +298,7 @@ class _AccountState extends State<Account> {
         PopupMenuItem(
           value: 'ScreenC',
           height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
+          padding: const EdgeInsets.only(bottom: 10, left: 20, top: 10),
           child: Row(
             children: [
               Icon(
@@ -302,7 +306,7 @@ class _AccountState extends State<Account> {
                 color: AppColor().primaryWhite,
                 size: Get.height * 0.016,
               ),
-              Gap(Get.height * 0.02),
+              Gap(Get.height * 0.015),
               CustomText(
                 title: 'Privacy and Security',
                 size: Get.height * 0.014,

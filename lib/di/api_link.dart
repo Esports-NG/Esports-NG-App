@@ -28,6 +28,7 @@ class ApiLink {
   static String editPost = "${baseurl}post/edit/";
   static String deletePost = "${baseurl}post/delete/";
   static String getAllPost = "${baseurl}post/view/";
+  static String getPostsForYou = "${baseurl}post/for_you";
   static String getBookmarkedPost = "${baseurl}post/viewbooked/";
   static String getFollowingPost = "${baseurl}post/viewbooked/";
   static String getMyPost = "${baseurl}post/myposts/";
@@ -35,6 +36,7 @@ class ApiLink {
   static String post = "${baseurl}post/";
   static String comment = "${baseurl}post/comment/";
   static String turnNotification = "${baseurl}post/on_notifs/team/";
+  static String getPostDetails(int id) => "${baseurl}post/view/$id";
 
   //Team
   static String createTeam = "${baseurl}team/create/";
@@ -46,10 +48,13 @@ class ApiLink {
   static String getAllPlayer = "${baseurl}player/view/";
 
   //Events
-  static String createTournament = "${baseurl}event/1/create/tournament/";
-  static String createSocialEvent = "${baseurl}event/1/create/socialevent/";
+  static String createTournament = "${baseurl}event/1/create/";
+  static String createSocialEvent = "${baseurl}event/1/create/";
   static String getAllEvent = "${baseurl}event/view/";
-  static String getAllSocialEvents = "${baseurl}event/view/socialevent";
+  static String getAllSocialEvents = "${baseurl}event/view/social";
+  static String getAllTournaments = "${baseurl}event/view/tournament";
+  static String registerForTournament(int id) => "${baseurl}event/$id/join/";
+  static String filterEvents = "event/search";
 
   //Community
   static String createCommunity = "${baseurl}org/register/";
@@ -66,6 +71,10 @@ class ApiLink {
   //Author Profile
   static String getUserDataWithFollowers({required int id}) =>
       "${baseurl}extra/user/$id/data/";
+
+  // Games
+  static String getAllGames = "${baseurl}/games/view/";
+  static String getGame(int id) => "${baseurl}/games/view/?pk=$id";
 
   // static String withdraw = "${baseurl}initiate-withdrawal";
   // static String dashboard = "${baseurl}users/dashboard";

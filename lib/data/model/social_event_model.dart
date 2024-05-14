@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:e_sport/data/model/events_model.dart';
+
 SocialEventModel socialEventModelFromJson(String str) =>
     SocialEventModel.fromJson(json.decode(str));
 
@@ -12,7 +14,7 @@ String socialEventModelToJson(SocialEventModel data) =>
 
 class SocialEventModel {
   final int? id;
-  final Creator? creator;
+  final Community? community;
   final DateTime? createdAt;
   final String? name;
   final String? description;
@@ -22,13 +24,13 @@ class SocialEventModel {
   final DateTime? registrationEnd;
   final DateTime? start;
   final DateTime? end;
-  final String? image;
+  final String? banner;
   final String? venue;
   final String? link;
 
   SocialEventModel({
     this.id,
-    this.creator,
+    this.community,
     this.createdAt,
     this.name,
     this.description,
@@ -38,7 +40,7 @@ class SocialEventModel {
     this.registrationEnd,
     this.start,
     this.end,
-    this.image,
+    this.banner,
     this.venue,
     this.link,
   });
@@ -46,8 +48,9 @@ class SocialEventModel {
   factory SocialEventModel.fromJson(Map<String, dynamic> json) =>
       SocialEventModel(
         id: json["id"],
-        creator:
-            json["creator"] == null ? null : Creator.fromJson(json["creator"]),
+        community: json["community"] == null
+            ? null
+            : Community.fromJson(json["community"]),
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -58,22 +61,23 @@ class SocialEventModel {
             ? []
             : List<GamesCovered>.from(
                 json["games_covered"]!.map((x) => GamesCovered.fromJson(x))),
-        registrationStart: json["registration_start"] == null
+        registrationStart: json["reg_start"] == null
             ? null
-            : DateTime.parse(json["registration_start"]),
-        registrationEnd: json["registration_end"] == null
+            : DateTime.parse(json["reg_start"]),
+        registrationEnd:
+            json["reg_end"] == null ? null : DateTime.parse(json["reg_end"]),
+        start: json["start_date"] == null
             ? null
-            : DateTime.parse(json["registration_end"]),
-        start: json["start"] == null ? null : DateTime.parse(json["start"]),
-        end: json["end"] == null ? null : DateTime.parse(json["end"]),
-        image: json["image"],
+            : DateTime.parse(json["start_date"]),
+        end: json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
+        banner: json["banner"],
         venue: json["venue"],
         link: json["link"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "creator": creator?.toJson(),
+        "community": community?.toJson(),
         "created_at": createdAt?.toIso8601String(),
         "name": name,
         "description": description,
@@ -81,11 +85,11 @@ class SocialEventModel {
         "games_covered": gamesCovered == null
             ? []
             : List<dynamic>.from(gamesCovered!.map((x) => x.toJson())),
-        "registration_start": registrationStart?.toIso8601String(),
-        "registration_end": registrationEnd?.toIso8601String(),
-        "start": start?.toIso8601String(),
-        "end": end?.toIso8601String(),
-        "image": image,
+        "reg_start": registrationStart?.toIso8601String(),
+        "reg_end": registrationEnd?.toIso8601String(),
+        "start_date": start?.toIso8601String(),
+        "end_date": end?.toIso8601String(),
+        "image": banner,
         "venue": venue,
         "link": link,
       };

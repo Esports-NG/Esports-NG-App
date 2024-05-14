@@ -53,6 +53,18 @@ class CommunityRepository extends GetxController {
   Rx<File?> mCommunityCoverImage = Rx(null);
   File? get communityProfileImage => mCommunityProfileImage.value;
   File? get communityCoverImage => mCommunityCoverImage.value;
+  final RxList<OverlayPortalController> currentOverlay =
+      <OverlayPortalController>[].obs;
+  Rx<String> typeFilter = RxString("All");
+
+  void hideAllOverlays() {
+    if (currentOverlay.isNotEmpty) {
+      currentOverlay.forEach((element) {
+        element.hide();
+      });
+      currentOverlay.clear();
+    }
+  }
 
   @override
   void onInit() {

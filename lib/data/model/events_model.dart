@@ -2,6 +2,7 @@ class EventModel {
   int? id;
   String? profile;
   String? banner;
+  String? venue;
   String? name;
   String? type;
   Community? community;
@@ -26,45 +27,46 @@ class EventModel {
   String? rulesRegs;
   PrizePoolDistribution? prizePoolDistribution;
 
-  EventModel({
-    this.id,
-    this.profile,
-    this.banner,
-    this.name,
-    this.community,
-    this.linkForBracket,
-    this.gameMode,
-    this.tournamentType,
-    this.knockoutType,
-    this.rankType,
-    this.regStart,
-    this.regEnd,
-    this.startDate,
-    this.endDate,
-    this.prizePool,
-    this.summary,
-    this.entryFee,
-    this.maxNo,
-    this.description,
-    this.requirements,
-    this.structure,
-    this.teams,
-    this.players,
-    this.rulesRegs,
-    this.prizePoolDistribution,
-    this.type,
-  });
+  EventModel(
+      {this.id,
+      this.profile,
+      this.banner,
+      this.name,
+      this.community,
+      this.linkForBracket,
+      this.gameMode,
+      this.tournamentType,
+      this.knockoutType,
+      this.rankType,
+      this.regStart,
+      this.regEnd,
+      this.startDate,
+      this.endDate,
+      this.prizePool,
+      this.summary,
+      this.entryFee,
+      this.maxNo,
+      this.description,
+      this.requirements,
+      this.structure,
+      this.teams,
+      this.players,
+      this.rulesRegs,
+      this.prizePoolDistribution,
+      this.type,
+      this.venue});
 
   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
         id: json["id"],
         profile: json["profile"],
         banner: json["banner"],
         name: json["name"],
-        type: json["type"],
+        type: json["event_type"],
+        venue: json["venue"],
         community: json["community"] == null
             ? null
             : Community.fromJson(json["community"]),
-        linkForBracket: json["link_for_bracket"],
+        linkForBracket: json["link"],
         gameMode: json["game_mode"],
         tournamentType: json["tournament_type"],
         knockoutType: json["knockout_type"],
@@ -103,9 +105,10 @@ class EventModel {
         "profile": profile,
         "banner": banner,
         "name": name,
-        "type": type,
+        "event_type": type,
         "community": community?.toJson(),
-        "link_for_bracket": linkForBracket,
+        "link": linkForBracket,
+        "venue": venue,
         "game_mode": gameMode,
         "tournament_type": tournamentType,
         "knockout_type": knockoutType,

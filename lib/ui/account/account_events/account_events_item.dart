@@ -1,8 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
-import 'package:e_sport/data/repository/auth_repository.dart';
-import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -82,84 +79,90 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         ),
                       ),
                     ),
-              Positioned(
-                left: Get.height * 0.02,
-                top: Get.height * 0.02,
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: AppColor().primaryWhite,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: AppColor().primaryColor.withOpacity(0.05),
-                          width: 0.5,
-                        ),
-                      ),
+              widget.item.type == "Tournament"
+                  ? Positioned(
+                      left: Get.height * 0.02,
+                      top: Get.height * 0.02,
                       child: Row(
                         children: [
-                          SvgPicture.asset('assets/images/svg/rank.svg'),
-                          CustomText(
-                            title: widget.item.rankType,
-                            color: AppColor().pureBlackColor,
-                            textAlign: TextAlign.center,
-                            size: Get.height * 0.014,
-                            fontFamily: 'GilroyMedium',
+                          Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: AppColor().primaryWhite,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color:
+                                    AppColor().primaryColor.withOpacity(0.05),
+                                width: 0.5,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/images/svg/rank.svg'),
+                                CustomText(
+                                  title: widget.item.rankType,
+                                  color: AppColor().pureBlackColor,
+                                  textAlign: TextAlign.center,
+                                  size: Get.height * 0.014,
+                                  fontFamily: 'GilroyMedium',
+                                ),
+                              ],
+                            ),
+                          ),
+                          Gap(Get.height * 0.02),
+                          Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: AppColor().primaryWhite,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color:
+                                    AppColor().primaryColor.withOpacity(0.05),
+                                width: 0.5,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/images/svg/rank.svg'),
+                                CustomText(
+                                  title: 'Ongoing registration',
+                                  color: AppColor().pureBlackColor,
+                                  textAlign: TextAlign.center,
+                                  size: Get.height * 0.014,
+                                  fontFamily: 'GilroyMedium',
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    Gap(Get.height * 0.02),
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: AppColor().primaryWhite,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: AppColor().primaryColor.withOpacity(0.05),
-                          width: 0.5,
+                    )
+                  : const SizedBox(),
+              widget.item.type == "Tournament"
+                  ? Positioned(
+                      right: Get.height * 0.02,
+                      bottom: Get.height * 0.02,
+                      top: Get.height * 0.16,
+                      child: Container(
+                        padding: EdgeInsets.all(Get.height * 0.005),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
+                            color: AppColor().secondaryGreenColor,
+                          ),
+                        ),
+                        child: Center(
+                          child: textItem(
+                            title: 'Entry: ',
+                            subTitle: 'N${widget.item.entryFee}',
+                            color: AppColor().secondaryGreenColor,
+                            titleFamily: 'GilroyMedium',
+                            subTitleFamily: 'GilroySemiBold',
+                          ),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset('assets/images/svg/rank.svg'),
-                          CustomText(
-                            title: 'Ongoing registration',
-                            color: AppColor().pureBlackColor,
-                            textAlign: TextAlign.center,
-                            size: Get.height * 0.014,
-                            fontFamily: 'GilroyMedium',
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: Get.height * 0.02,
-                bottom: Get.height * 0.02,
-                top: Get.height * 0.16,
-                child: Container(
-                  padding: EdgeInsets.all(Get.height * 0.005),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: AppColor().secondaryGreenColor,
-                    ),
-                  ),
-                  child: Center(
-                    child: textItem(
-                      title: 'Entry: ',
-                      subTitle: 'N${widget.item.entryFee}',
-                      color: AppColor().secondaryGreenColor,
-                      titleFamily: 'GilroyMedium',
-                      subTitleFamily: 'GilroySemiBold',
-                    ),
-                  ),
-                ),
-              ),
+                    )
+                  : const SizedBox(),
             ],
           ),
           Divider(
@@ -170,30 +173,47 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
           Padding(
             padding: EdgeInsets.all(Get.height * 0.02),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                textItem(
-                  title: 'Game: ',
-                  subTitle: widget.item.name!.toUpperCase(),
-                ),
-                Visibility(
-                  visible: widget.onDetailsPage == null,
-                  child: Column(
-                    children: [
-                      Gap(Get.height * 0.01),
-                      textItem(
-                        title: 'Tournament Name: ',
+                widget.item.type == "Tournament"
+                    ? textItem(
+                        title: 'Game: ',
                         subTitle: widget.item.name!.toUpperCase(),
-                      ),
-                    ],
-                  ),
-                ),
-                Gap(Get.height * 0.01),
-                textItem(
-                  title: 'Tournament Type: ',
-                  subTitle: widget.item.tournamentType == ''
-                      ? 'Teams'
-                      : widget.item.tournamentType!,
-                ),
+                      )
+                    : const SizedBox(),
+                widget.item.type == "Tournament"
+                    ? Visibility(
+                        visible: widget.onDetailsPage == null,
+                        child: Column(
+                          children: [
+                            Gap(Get.height * 0.01),
+                            textItem(
+                              title: 'Tournament Name: ',
+                              subTitle: widget.item.name!.toUpperCase(),
+                            ),
+                          ],
+                        ),
+                      )
+                    : const SizedBox(),
+                widget.item.type == "Social"
+                    ? CustomText(
+                        title: widget.item.name,
+                        color: AppColor().primaryWhite,
+                        fontFamily: "GilroySemiBold",
+                        size: 18,
+                      )
+                    : const SizedBox(),
+                widget.item.type == "Tournament"
+                    ? Gap(Get.height * 0.01)
+                    : const SizedBox(),
+                widget.item.type == "Tournament"
+                    ? textItem(
+                        title: 'Tournament type: ',
+                        subTitle: widget.item.tournamentType == ''
+                            ? 'Teams'
+                            : widget.item.tournamentType!,
+                      )
+                    : const SizedBox(),
                 Visibility(
                   visible: widget.onDetailsPage != null,
                   child: Column(
@@ -227,15 +247,53 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                   thickness: 0.5,
                 ),
                 Gap(Get.height * 0.01),
-                textItem(
-                  title: 'Prize Pool: ',
-                  subTitle: 'N${widget.item.prizePool}',
-                  color: AppColor().secondaryGreenColor,
-                  titleFamily: 'GilroySemiBold',
-                  subTitleFamily: 'GilroyBold',
-                  titleSize: 14.0,
-                  subTitleSize: 16.0,
+                Visibility(
+                  visible: widget.item.type == "Tournament",
+                  child: textItem(
+                    title: 'Prize Pool: ',
+                    subTitle: 'N${widget.item.prizePool}',
+                    color: AppColor().secondaryGreenColor,
+                    titleFamily: 'GilroySemiBold',
+                    subTitleFamily: 'GilroyBold',
+                    titleSize: 14.0,
+                    subTitleSize: 16.0,
+                  ),
                 ),
+                widget.item.type == "Social"
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          textItem(
+                            title: 'Date: ',
+                            subTitle:
+                                "${DateFormat.MMM().format(widget.item.startDate!)} ${widget.item.startDate!.day}, ${widget.item.startDate!.year}",
+                          ),
+                          Visibility(
+                            child: Column(
+                              children: [
+                                Gap(Get.height * 0.01),
+                                textItem(
+                                  title: 'Registration: ',
+                                  subTitle:
+                                      "${DateFormat.MMM().format(widget.item.regStart!)} ${widget.item.regStart!.day}, ${widget.item.regStart!.year} - ${DateFormat.MMM().format(widget.item.regEnd!)} ${widget.item.regEnd!.day}, ${widget.item.regEnd!.year}",
+                                ),
+                              ],
+                            ),
+                          ),
+                          Gap(Get.height * 0.01),
+                          textItem(
+                            title: 'Venue: ',
+                            subTitle: widget.item.venue!,
+                          ),
+                          Gap(Get.height * 0.01),
+                          textItem(
+                            title: 'Event link: ',
+                            subTitle: 'https://spaces.twitter.com/coc...',
+                          ),
+                          Gap(Get.height * 0.01),
+                        ],
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),

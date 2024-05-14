@@ -24,27 +24,30 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
-      child: Column(
-        children: [
-          if (widget.posts!.isEmpty)
-            const NoItemPage(title: 'Post')
-          else if (widget.posts!.isNotEmpty)
-            ListView.separated(
-              padding: EdgeInsets.zero,
-              physics: const ScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: widget.posts!.length,
-              separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-              itemBuilder: (context, index) {
-                var item = widget.posts![index];
-                return InkWell(
-                    onTap: () => Get.to(() => PostDetails(item: item)),
-                    child: PostItem(item: item));
-              },
-            )
-          else
-            LoadingWidget(color: AppColor().primaryColor)
-        ],
+      child: Padding(
+        padding: EdgeInsets.only(bottom: Get.height * 0.04),
+        child: Column(
+          children: [
+            if (widget.posts!.isEmpty)
+              const NoItemPage(title: 'Post')
+            else if (widget.posts!.isNotEmpty)
+              ListView.separated(
+                padding: EdgeInsets.zero,
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: widget.posts!.length,
+                separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+                itemBuilder: (context, index) {
+                  var item = widget.posts![index];
+                  return InkWell(
+                      onTap: () => Get.to(() => PostDetails(item: item)),
+                      child: PostItem(item: item));
+                },
+              )
+            else
+              LoadingWidget(color: AppColor().primaryColor)
+          ],
+        ),
       ),
     );
   }

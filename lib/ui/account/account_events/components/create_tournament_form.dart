@@ -4,6 +4,8 @@ import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
+import 'package:e_sport/ui/widget/game_list_dropdown.dart';
+import 'package:e_sport/ui/widget/game_mode_dropdown.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -267,64 +269,11 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
-            InputDecorator(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: tournamentController.isGame.value == true
-                    ? AppColor().primaryWhite
-                    : AppColor().bgDark,
-                focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColor().lightItemsColor, width: 1),
-                    borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(10)),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  icon: Icon(Icons.keyboard_arrow_down,
-                      color: tournamentController.isGame.value == true
-                          ? AppColor().primaryBackGroundColor
-                          : AppColor().lightItemsColor),
-                  value: tournamentController.gameValue.value,
-                  items: <String>[
-                    '1',
-                    '2',
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: CustomText(
-                        title: value,
-                        color: tournamentController.isGame.value == true
-                            ? AppColor().primaryBackGroundColor
-                            : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
-                        size: 13,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    tournamentController.gameValue.value = value;
-                    debugPrint(value);
-                    tournamentController.gamePlayedController.text = value!;
-                    tournamentController.handleTap('game');
-                  },
-                  hint: CustomText(
-                    title: "Game",
-                    color: tournamentController.isGame.value == true
-                        ? AppColor().primaryBackGroundColor
-                        : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyBold',
-                    weight: FontWeight.w400,
-                    size: 13,
-                  ),
-                ),
-              ),
-            ),
+            GameDropdown(
+                gamePlayedController: tournamentController.gamePlayedController,
+                enableFill: tournamentController.isGame.value,
+                gameValue: tournamentController.gameValue,
+                handleTap: () => tournamentController.handleTap('game')),
             Gap(Get.height * 0.02),
             CustomText(
               title: 'Game Mode',
@@ -334,64 +283,12 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
-            InputDecorator(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: tournamentController.isGameMode.value == true
-                    ? AppColor().primaryWhite
-                    : AppColor().bgDark,
-                focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColor().lightItemsColor, width: 1),
-                    borderRadius: BorderRadius.circular(10)),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(10)),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  icon: Icon(Icons.keyboard_arrow_down,
-                      color: tournamentController.isGameMode.value == true
-                          ? AppColor().primaryBackGroundColor
-                          : AppColor().lightItemsColor),
-                  value: tournamentController.gameModeValue.value,
-                  items: <String>[
-                    '1',
-                    '2',
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: CustomText(
-                        title: value,
-                        color: tournamentController.isGameMode.value == true
-                            ? AppColor().primaryBackGroundColor
-                            : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
-                        size: 13,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    tournamentController.gameModeValue.value = value;
-                    debugPrint(value);
-                    tournamentController.gameModeController.text = value!;
-                    tournamentController.handleTap('gameMode');
-                  },
-                  hint: CustomText(
-                    title: "Game Mode",
-                    color: tournamentController.isGameMode.value == true
-                        ? AppColor().primaryBackGroundColor
-                        : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyBold',
-                    weight: FontWeight.w400,
-                    size: 13,
-                  ),
-                ),
-              ),
-            ),
+            GameModeDropDown(
+                gameModeController: tournamentController.gameModeController,
+                gameValue: tournamentController.gameValue,
+                gameModeValue: tournamentController.gameModeValue,
+                enableFill: tournamentController.isGameMode.value,
+                handleTap: () => tournamentController.handleTap('gameMode')),
             Gap(Get.height * 0.02),
             CustomText(
               title: 'Tournament Type',
@@ -436,7 +333,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                             tournamentController.isTournamentType.value == true
                                 ? AppColor().primaryBackGroundColor
                                 : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
+                        fontFamily: 'GilroyMedium',
                         weight: FontWeight.w400,
                         size: 13,
                       ),
@@ -453,7 +350,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     color: tournamentController.isTournamentType.value == true
                         ? AppColor().primaryBackGroundColor
                         : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyBold',
+                    fontFamily: 'GilroyMedium',
                     weight: FontWeight.w400,
                     size: 13,
                   ),
@@ -505,7 +402,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         color: tournamentController.isKnockout.value == true
                             ? AppColor().primaryBackGroundColor
                             : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
+                        fontFamily: 'GilroyMedium',
                         weight: FontWeight.w400,
                         size: 13,
                       ),
@@ -522,7 +419,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     color: tournamentController.isKnockout.value == true
                         ? AppColor().primaryBackGroundColor
                         : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyBold',
+                    fontFamily: 'GilroyMedium',
                     weight: FontWeight.w400,
                     size: 13,
                   ),
@@ -572,7 +469,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         color: tournamentController.isRankType.value == true
                             ? AppColor().primaryBackGroundColor
                             : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
+                        fontFamily: 'GilroyMedium',
                         weight: FontWeight.w400,
                         size: 13,
                       ),
@@ -589,7 +486,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     color: tournamentController.isRankType.value == true
                         ? AppColor().primaryBackGroundColor
                         : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyBold',
+                    fontFamily: 'GilroyMedium',
                     weight: FontWeight.w400,
                     size: 13,
                   ),

@@ -83,6 +83,9 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       inputFormatters: inputformater ?? [],
+      onTapOutside: (event) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       autofocus: false,
       onChanged: onChanged,
       maxLength: maxLength,
@@ -109,7 +112,7 @@ class CustomTextField extends StatelessWidget {
           color: AppColor().lightItemsColor,
           fontSize: 13,
           fontStyle: FontStyle.normal,
-          fontFamily: fontFamily ?? 'GilroyBold',
+          fontFamily: fontFamily ?? 'GilroyMedium',
           fontWeight: FontWeight.w400,
           height: 1.7),
       decoration: decoration ??
@@ -119,14 +122,13 @@ class CustomTextField extends StatelessWidget {
             isDense: true,
             prefixText: pretext,
             prefixStyle: TextStyle(
-                color: hasText
-                    ? AppColor().primaryBackGroundColor
-                    : AppColor().lightItemsColor,
-                fontSize: 13,
-                fontStyle: FontStyle.normal,
-                fontFamily: fontFamily ?? 'GilroyBold',
-                fontWeight: FontWeight.w400,
-                height: 1.7),
+              color: AppColor().lightItemsColor,
+              fontSize: 13,
+              fontStyle: FontStyle.normal,
+              fontFamily: fontFamily ?? 'GilroyMedium',
+              fontWeight: FontWeight.w400,
+              height: 1.7,
+            ),
             suffixText: sufText,
             focusedErrorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
@@ -160,14 +162,14 @@ class CustomTextField extends StatelessWidget {
                 color: hintColor ?? Colors.black,
                 fontSize: 13,
                 fontStyle: FontStyle.normal,
-                fontFamily: fontFamily ?? 'GilroyBold',
+                fontFamily: fontFamily ?? 'GilroyMedium',
                 fontWeight: FontWeight.w400,
                 height: 1.7),
             hintStyle: TextStyle(
                 color: hintColor ?? AppColor().lightItemsColor,
                 fontSize: 13,
                 fontStyle: FontStyle.normal,
-                fontFamily: fontFamily ?? 'GilroyBold',
+                fontFamily: fontFamily ?? 'GilroyMedium',
                 fontWeight: FontWeight.w400,
                 height: 1.7),
           ),
@@ -208,7 +210,7 @@ class ChatCustomTextField extends StatelessWidget {
           color: AppColor().primaryWhite,
           fontSize: 13,
           fontStyle: FontStyle.normal,
-          fontFamily: 'GilroyBold',
+          fontFamily: 'GilroyMedium',
           fontWeight: FontWeight.w400),
       decoration: decoration,
       onFieldSubmitted: onSubmited,

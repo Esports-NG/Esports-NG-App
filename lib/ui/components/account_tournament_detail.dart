@@ -1,10 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/account/account_events/components/tournament_details.dart';
@@ -34,10 +36,13 @@ class AccountTournamentDetail extends StatefulWidget {
 class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   final authController = Get.put(AuthRepository());
   final communityController = Get.put(CommunityRepository());
+  final tournamentController = Get.put(TournamentRepository());
 
   List<Map<String, dynamic>>? _communityFollowers;
   bool _isFollowing = false;
   bool _isLoading = true;
+  bool _isRegistered = false;
+  bool _isRegisterLoading = false;
 
   Future getCommunityFollowers() async {
     var followers = await communityController
@@ -56,6 +61,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
 
   @override
   initState() {
+    print(widget.item.toJson());
     getCommunityFollowers();
     super.initState();
   }
@@ -70,15 +76,44 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
               alignment: Alignment.bottomCenter,
               clipBehavior: Clip.none,
               children: [
-                Container(
-                  height: Get.height * 0.15,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(
-                            'assets/images/png/tournament_cover.png'),
-                        opacity: 0.2),
-                  ),
-                ),
+                widget.item.banner == null
+                    ? Container(
+                        height: Get.height * 0.15,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/png/tournament_cover.png'),
+                              opacity: 0.2),
+                        ),
+                      )
+                    : CachedNetworkImage(
+                        height: Get.height * 0.15,
+                        width: double.infinity,
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: SizedBox(
+                            height: Get.height * 0.05,
+                            width: Get.height * 0.05,
+                            child: CircularProgressIndicator(
+                                color: AppColor().primaryWhite,
+                                value: progress.progress),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.error, color: AppColor().primaryColor),
+                        imageUrl: '${ApiLink.imageUrl}${widget.item.banner}',
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10)),
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    '${ApiLink.imageUrl}${widget.item.banner}'),
+                                fit: BoxFit.cover),
+                          ),
+                        ),
+                      ),
                 Positioned(
                   top: Get.height * 0.1,
                   child: Stack(
@@ -86,7 +121,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                     children: [
                       OtherImage(
                           itemSize: Get.height * 0.1,
-                          image: '${ApiLink.imageUrl}${widget.item.profile}'),
+                          image: '${widget.item.profile}'),
                     ],
                   ),
                 ),
@@ -128,25 +163,46 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                   Gap(Get.height * 0.05),
                   InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () {},
+                    onTap: () async {
+                      setState(() {
+                        _isRegisterLoading = true;
+                      });
+                      await tournamentController
+                          .registerForTournament(widget.item.id!);
+                      setState(() {
+                        _isRegisterLoading = false;
+                      });
+                    },
                     child: Container(
                       height: Get.height * 0.06,
                       width: Get.width,
                       decoration: BoxDecoration(
+                        border: _isRegisterLoading
+                            ? null
+                            : Border.all(color: AppColor().primaryColor),
                         borderRadius: BorderRadius.circular(30),
-                        color: AppColor().primaryColor,
+                        color: _isRegisterLoading
+                            ? Colors.transparent
+                            : AppColor().primaryColor,
                       ),
-                      child:
-                          // (authController.signInStatus == SignInStatus.loading)
-                          //     ? const LoadingWidget()
-                          //     :
-                          Center(
+                      child: _isRegisterLoading
+                          ? Center(
+                              child: SizedBox(
+                                width: Get.height * 0.03,
+                                height: Get.height * 0.03,
+                                child: CircularProgressIndicator(
+                                  color: AppColor().primaryColor,
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            )
+                          : Center(
                               child: CustomText(
-                        title: 'Register Now',
-                        color: AppColor().primaryWhite,
-                        size: Get.height * 0.018,
-                        fontFamily: 'GilroyMedium',
-                      )),
+                              title: 'Register Now',
+                              color: AppColor().primaryWhite,
+                              size: Get.height * 0.018,
+                              fontFamily: 'GilroyMedium',
+                            )),
                     ),
                   ),
                   Gap(Get.height * 0.02),
@@ -161,21 +217,34 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                   .withOpacity(0.7),
                               borderColor: AppColor().greyEight,
                               onTap: () async {
-                                bool success =
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                String message =
                                     await authController.followCommunity(
                                         widget.item.community!.id!);
-                                if (success) {
-                                  setState(() {
-                                    _isFollowing = !_isFollowing;
-                                  });
-                                }
+                                setState(() {
+                                  if (message == "followed") {
+                                    _isFollowing = true;
+                                  } else if (message == "unfollowed") {
+                                    _isFollowing = false;
+                                  }
+                                  _isLoading = false;
+                                });
                               },
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: _isLoading
                                       ? [
-                                          CircularProgressIndicator(
-                                            color: AppColor().primaryColor,
+                                          Center(
+                                            child: SizedBox(
+                                              width: Get.height * 0.03,
+                                              height: Get.height * 0.03,
+                                              child: CircularProgressIndicator(
+                                                color: AppColor().primaryColor,
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
                                           )
                                         ]
                                       : [
@@ -250,17 +319,17 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                               underline: TextDecoration.underline,
                               color: AppColor().primaryWhite),
                           Gap(Get.height * 0.01),
-                          InkWell(
-                            onTap: () => launchUrl(
-                                Uri.parse(widget.item.linkForBracket!)),
-                            child: CustomText(
-                                title: widget.item.linkForBracket,
-                                weight: FontWeight.w400,
-                                size: Get.height * 0.017,
-                                fontFamily: 'GilroyMedium',
-                                underline: TextDecoration.underline,
-                                color: AppColor().primaryColor),
-                          ),
+                          // InkWell(
+                          //   onTap: () => launchUrl(
+                          //       Uri.parse(widget.item.linkForBracket!)),
+                          //   child: CustomText(
+                          //       title: widget.item.linkForBracket,
+                          //       weight: FontWeight.w400,
+                          //       size: Get.height * 0.017,
+                          //       fontFamily: 'GilroyMedium',
+                          //       underline: TextDecoration.underline,
+                          //       color: AppColor().primaryColor),
+                          // ),
                         ],
                       ),
                       Gap(Get.height * 0.02),
@@ -271,19 +340,19 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                           fontFamily: 'GilroyRegular',
                           textAlign: TextAlign.center,
                           height: 1.5,
-                          color: AppColor().greyEight),
-                      Gap(Get.height * 0.02),
-                      InkWell(
-                        onTap: () =>
-                            Get.to(() => TournamentDetails(item: widget.item)),
-                        child: CustomText(
-                            title: 'See tournament details',
-                            weight: FontWeight.w400,
-                            size: Get.height * 0.017,
-                            fontFamily: 'GilroyMedium',
-                            underline: TextDecoration.underline,
-                            color: AppColor().primaryColor),
-                      ),
+                          color: AppColor().greyFour),
+                      // Gap(Get.height * 0.02),
+                      // InkWell(
+                      //   onTap: () =>
+                      //       Get.to(() => TournamentDetails(item: widget.item)),
+                      //   child: CustomText(
+                      //       title: 'See tournament details',
+                      //       weight: FontWeight.w400,
+                      //       size: Get.height * 0.017,
+                      //       fontFamily: 'GilroyMedium',
+                      //       underline: TextDecoration.underline,
+                      //       color: AppColor().primaryColor),
+                      // ),
                     ],
                   ),
                 ],
@@ -469,22 +538,28 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                     child: Column(
                       children: [
                         tournamentDetails(
-                            onTap: () {}, title: 'Tournament Structure'),
+                            onTap: () => Get.to(() => TournamentDetails(
+                                title: "Tournament Structure",
+                                value: widget.item.structure!)),
+                            title: 'Tournament Structure'),
                         Divider(
                             color: AppColor().lightItemsColor.withOpacity(0.3),
-                            height: Get.height * 0.05,
                             thickness: 0.5),
                         tournamentDetails(
-                            onTap: () {}, title: 'Rules and regulations'),
+                            onTap: () => Get.to(() => TournamentDetails(
+                                title: "Rules and Regulations",
+                                value: widget.item.rulesRegs!)),
+                            title: 'Rules and regulations'),
                         Divider(
                             color: AppColor().lightItemsColor.withOpacity(0.3),
-                            height: Get.height * 0.05,
                             thickness: 0.5),
                         tournamentDetails(
-                            onTap: () {}, title: 'Tournament Requirements'),
+                            onTap: () => Get.to(() => TournamentDetails(
+                                title: "Tournament Requirements",
+                                value: widget.item.requirements!)),
+                            title: 'Tournament Requirements'),
                         Divider(
                             color: AppColor().lightItemsColor.withOpacity(0.3),
-                            height: Get.height * 0.05,
                             thickness: 0.5),
                         tournamentDetails(
                             onTap: () {}, title: 'Participant List'),
@@ -615,22 +690,24 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   tournamentDetails({String? title, VoidCallback? onTap}) {
     return InkWell(
       onTap: onTap,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CustomText(
-              title: title,
-              weight: FontWeight.w400,
-              size: Get.height * 0.017,
-              fontFamily: 'GilroyMedium',
-              underline: TextDecoration.underline,
-              color: AppColor().greySix),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: AppColor().primaryColor,
-            size: Get.height * 0.018,
-          ),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomText(
+                title: title,
+                weight: FontWeight.w400,
+                size: Get.height * 0.017,
+                fontFamily: 'GilroyMedium',
+                color: AppColor().greySix),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: AppColor().primaryColor,
+              size: Get.height * 0.018,
+            ),
+          ],
+        ),
       ),
     );
   }

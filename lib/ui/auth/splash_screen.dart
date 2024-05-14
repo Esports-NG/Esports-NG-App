@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'first_screen.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
+
+// final shorebirdCodePush = ShorebirdCodePush();
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,6 +22,17 @@ class _SplashScreenState extends State<SplashScreen> {
   Timer? timer;
   bool displaySwitch = true;
 
+  // Future<void> _checkForUpdates() async {
+  //
+  //   final isUpdateAvailable =
+  //       await shorebirdCodePush.isNewPatchAvailableForDownload();
+
+  //   if (isUpdateAvailable) {
+  //
+  //     await shorebirdCodePush.downloadUpdateIfAvailable();
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -27,6 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   startTime() async {
+    // await _checkForUpdates();
     var duration = const Duration(seconds: 5);
     return Timer(duration, route);
   }

@@ -40,147 +40,108 @@ class _EventsPageState extends State<EventsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Scaffold(
-        body: SafeArea(
-          child: NestedScrollView(
-            floatHeaderSlivers: true,
-            physics: const AlwaysScrollableScrollPhysics(),
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverAppBar(
-                elevation: 0,
-                centerTitle: true,
-                title: CustomText(
-                  title: 'Events',
-                  fontFamily: 'GilroySemiBold',
-                  size: 18,
-                  color: AppColor().primaryWhite,
-                ),
+    return Scaffold(
+      body: SafeArea(
+        child: NestedScrollView(
+          floatHeaderSlivers: true,
+          physics: const AlwaysScrollableScrollPhysics(),
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              elevation: 0,
+              centerTitle: true,
+              title: CustomText(
+                title: 'Events',
+                fontFamily: 'GilroySemiBold',
+                size: 18,
+                color: AppColor().primaryWhite,
               ),
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    Divider(
-                      color: AppColor().primaryWhite.withOpacity(0.5),
-                      height: 1,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(Get.height * 0.02),
-                      child: SizedBox(
-                        height: Get.height * 0.06,
-                        child: CustomTextField(
-                          hint: "Search for gaming news, competitions...",
-                          fontFamily: 'GilroyMedium',
-                          prefixIcon: Icon(
-                            CupertinoIcons.search,
-                            color: AppColor().lightItemsColor,
-                          ),
-                          textEditingController:
-                              eventController.searchController,
-                          hasText: isSearch!,
-                          focusNode: _searchFocusNode,
-                          onTap: handleTap,
-                          onSubmited: (_) {
-                            _searchFocusNode.unfocus();
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              isSearch = value.isNotEmpty;
-                            });
-                          },
+            ),
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  Divider(
+                    color: AppColor().primaryWhite.withOpacity(0.5),
+                    height: 1,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(Get.height * 0.02),
+                    child: SizedBox(
+                      height: Get.height * 0.06,
+                      child: CustomTextField(
+                        hint: "Search for gaming news, competitions...",
+                        fontFamily: 'GilroyMedium',
+                        prefixIcon: Icon(
+                          CupertinoIcons.search,
+                          color: AppColor().lightItemsColor,
                         ),
+                        textEditingController: eventController.searchController,
+                        hasText: isSearch!,
+                        focusNode: _searchFocusNode,
+                        onTap: handleTap,
+                        onSubmited: (_) {
+                          _searchFocusNode.unfocus();
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            isSearch = value.isNotEmpty;
+                          });
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              SliverPersistentHeader(
-                  pinned: true,
-                  delegate: _SliverAppBarDelegate(
-                      minHeight: 45,
-                      maxHeight: 45,
-                      child: Container(
-                        color: AppColor().primaryBackGroundColor,
-                        child: TabBar(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Get.height * 0.02),
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            labelStyle:
-                                const TextStyle(fontFamily: "GilroySemiBold"),
-                            // dividerColor: AppColor().primaryBackGroundColor,
-                            dividerHeight: 0,
-                            indicatorColor: AppColor().primaryColor,
-                            labelColor: AppColor().primaryColor,
-                            unselectedLabelColor: AppColor().lightItemsColor,
-                            controller: eventController.tabController,
-                            tabs: const [
-                              Tab(
-                                text: "Active Events",
-                              ),
-                              Tab(text: "My Events"),
-                              Tab(text: "All Events")
-                            ]),
-                      )))
-            ],
-            // backgroundColor: AppColor().primaryBackGroundColor,
-            body: RefreshIndicator(
-                notificationPredicate: (notification) =>
-                    notification.depth == 1,
-                onRefresh: () async {
-                  return Future.delayed(const Duration(seconds: 2), () {
-                    eventController.getAllSocialEvents(false);
-                    eventController.getAllTournaments(false);
-                  });
-                },
-                child: TabBarView(
-                  controller: eventController.tabController,
-                  children: [
-                    SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: EventTab(
-                          events: eventController.allEvent,
-                        )),
-                    SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: EventTab(
-                          events: eventController.myEvent,
-                        )),
-                    SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: EventTab(
-                          events: eventController.allEvent,
-                        )),
-                  ],
-                )),
-          ),
-        ),
-      ),
-    );
-  }
-
-  eventFilterOption({String? title}) {
-    return InkWell(
-      child: Container(
-        padding: EdgeInsets.all(Get.height * 0.01),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColor().primaryWhite, width: 0.8)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomText(
-              title: title,
-              fontFamily: 'GilroyMedium',
-              size: 12,
-              color: AppColor().primaryWhite,
             ),
-            Gap(Get.height * 0.01),
-            Icon(
-              Icons.keyboard_arrow_down,
-              color: AppColor().primaryColor,
-              size: 15,
-            )
+            SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverAppBarDelegate(
+                    minHeight: 45,
+                    maxHeight: 45,
+                    child: Container(
+                      color: AppColor().primaryBackGroundColor,
+                      child: TabBar(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Get.height * 0.02),
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          labelStyle:
+                              const TextStyle(fontFamily: "GilroySemiBold"),
+                          // dividerColor: AppColor().primaryBackGroundColor,
+                          dividerHeight: 0,
+                          indicatorColor: AppColor().primaryColor,
+                          labelColor: AppColor().primaryColor,
+                          unselectedLabelColor: AppColor().lightItemsColor,
+                          controller: eventController.tabController,
+                          tabs: const [
+                            Tab(
+                              text: "Active Events",
+                            ),
+                            Tab(text: "My Events"),
+                            Tab(text: "All Events")
+                          ]),
+                    )))
           ],
+          // backgroundColor: AppColor().primaryBackGroundColor,
+          body: RefreshIndicator(
+              notificationPredicate: (notification) => notification.depth == 1,
+              onRefresh: () async {
+                await eventController.getAllEvents();
+                await eventController.getAllSocialEvents(false);
+                await eventController.getAllTournaments(false);
+              },
+              child: TabBarView(
+                controller: eventController.tabController,
+                children: const [
+                  SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: EventTab()),
+                  SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: EventTab()),
+                  SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: EventTab()),
+                ],
+              )),
         ),
       ),
     );

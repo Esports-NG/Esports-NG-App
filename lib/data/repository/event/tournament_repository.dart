@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -53,7 +56,7 @@ class TournamentRepository extends GetxController {
   late final staffController = TextEditingController();
 
   Rx<String?> communitiesValue = Rx(null);
-  Rx<String?> gameValue = Rx(null);
+  Rx<GamePlayed?> gameValue = Rx(null);
   Rx<String?> gameModeValue = Rx(null);
   Rx<String?> knockoutValue = Rx(null);
   Rx<String?> rankTypeValue = Rx(null);
@@ -303,7 +306,8 @@ class TournamentRepository extends GetxController {
             ..fields["first"] = firstPrizeController.text
             ..fields["second"] = secondPrizeController.text
             ..fields["third"] = thirdPrizeController.text
-            ..fields["rules_regs"] = tournamentRegulationsController.text;
+            ..fields["rules_regs"] = tournamentRegulationsController.text
+            ..fields["event_type"] = "Tournament";
 
       request.files.add(await http.MultipartFile.fromPath(
           'profile', eventProfileImage!.path));
@@ -339,6 +343,25 @@ class TournamentRepository extends GetxController {
       eventController.createEventStatus(CreateEventStatus.error);
       debugPrint("Error occurred ${error.toString()}");
       handleError(error);
+    }
+  }
+
+  Future registerForTournament(int id) async {
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    };
+
+    var response = await http.put(Uri.parse(ApiLink.registerForTournament(id)),
+        headers: headers);
+
+    print(response.body);
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      debugPrint("success");
+    } else {
+      Helpers().showCustomSnackbar(message: json['error']);
     }
   }
 

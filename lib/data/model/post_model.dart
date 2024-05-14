@@ -1,3 +1,5 @@
+import 'package:e_sport/data/model/user_model.dart';
+
 class PostModel {
   int? id;
   Author? author;
@@ -246,25 +248,18 @@ class Purpose {
 
 class Comment {
   int? id;
-  String? name;
   String? body;
   int? likes;
   List<Tag>? tags;
   dynamic image;
+  UserModel? user;
 
-  Comment({
-    this.id,
-    this.name,
-    this.body,
-    this.likes,
-    this.tags,
-    this.image,
-  });
+  Comment({this.id, this.body, this.likes, this.tags, this.image, this.user});
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         id: json["id"],
-        name: json["name"],
         body: json["body"],
+        user: UserModel.fromJson(json["user"]),
         likes: json["likes"],
         tags: json["tags"] == null
             ? []
@@ -274,9 +269,9 @@ class Comment {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "name": name,
         "body": body,
         "likes": likes,
+        "user": user,
         "tags": tags == null
             ? []
             : List<dynamic>.from(tags!.map((x) => x.toJson())),

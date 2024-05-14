@@ -10,6 +10,7 @@ import 'package:e_sport/ui/auth/login.dart';
 import 'package:e_sport/ui/auth/otp_screen.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/home/root.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -216,13 +217,35 @@ class AuthRepository extends GetxController {
   Future signUp(UserModel user, BuildContext context) async {
     try {
       _signUpStatus(SignUpStatus.loading);
-      var response = await http.post(Uri.parse(ApiLink.register),
-          body: jsonEncode(user.toJson()),
-          headers: {
-            "Content-Type": "application/json",
-          });
+      var headers = {
+        "Content-Type": "application/json",
+      };
+
+      var request = http.MultipartRequest("POST", Uri.parse(ApiLink.register));
+
+      request.headers.addAll(headers);
+      request.fields.addAll(user.toRequestJson());
+      for (int i = 0; i < user.profile!.igameType!.length; i++) {
+        request.fields['profile.igame_type[$i]'] = user.profile!.igameType![i];
+      }
+      for (int i = 0; i < user.ipurpose!.length; i++) {
+        request.fields['ipurpose[$i]'] = user.ipurpose![i];
+      }
+      if (userImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            "profile.profile_picture", userImage!.path));
+      }
+
+      http.StreamedResponse res = await request.send();
+      var response = await http.Response.fromStream(res);
+
+      // var response = await http.post(Uri.parse(ApiLink.register),
+      //     body: jsonEncode(user.toJson()),
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     });
+      debugPrint(response.body);
       var json = jsonDecode(response.body);
-      debugPrint(response.statusCode.toString() + response.body);
 
       if (response.statusCode != 201) {
         throw (json['profile'] != null
@@ -276,10 +299,10 @@ class AuthRepository extends GetxController {
             "password": passwordController.text.trim(),
           }));
 
-      var json = jsonDecode(response.body);
       debugPrint(response.body);
+      var json = jsonDecode(response.body);
       if (json.toString().contains('non_field_errors')) {
-        throw (json['non_field_errors'][0]);
+        throw (json["error"]['non_field_errors'][0]);
       }
 
       if (json.toString().contains('Quota Exceeded')) {
@@ -294,13 +317,16 @@ class AuthRepository extends GetxController {
         pref!.setUser(userModel);
         _signInStatus(SignInStatus.success);
         _authStatus(AuthStatus.authenticated);
-        EasyLoading.showInfo('Login Successful',
-                duration: const Duration(seconds: 2))
-            .then((value) async {
-          await Future.delayed(const Duration(seconds: 2));
-          Get.to(() => const OTPScreen());
-          clear();
-        });
+        Helpers().showCustomSnackbar(message: "Login Successfull");
+        await Future.delayed(const Duration(seconds: 1));
+        Get.offAll(() => const RootDashboard());
+        // EasyLoading.showInfo('Login Successful',
+        //         duration: const Duration(seconds: 2))
+        //     .then((value) async {
+        //   await Future.delayed(const Duration(seconds: 2));
+        //   Get.to(() => const OTPScreen());
+        //   clear();
+        // });
       }
 
       return response.body;
@@ -434,9 +460,6 @@ class AuthRepository extends GetxController {
       await request.send().then((response) {
         response.stream.transform(utf8.decoder).listen((response) {
           EasyLoading.dismiss();
-          var res = jsonDecode(response);
-          debugPrint(res);
-
           updateUser();
         });
       });
@@ -601,9 +624,6 @@ class AuthRepository extends GetxController {
       "Content-Type": "application/json",
       "Authorization": 'JWT $token'
     });
-
-    print(response.body);
-
     List<dynamic> json = jsonDecode(response.body);
 
     return json.map((e) => e as Map<String, dynamic>).toList();
@@ -665,14 +685,13 @@ class AuthRepository extends GetxController {
   }
 
   void getError(var error) {
-    EasyLoading.showInfo(
-      (error.toString().contains("esports-ng.vercel.app") ||
-              error.toString().contains("Network is unreachable"))
-          ? 'No internet connection!'
-          : (error.toString().contains("FormatException"))
-              ? 'Internal server error, contact admin!'
-              : error.toString().replaceAll('(', '').replaceAll(')', ''),
-    );
+    Helpers().showCustomSnackbar(
+        message: (error.toString().contains("esports-ng.vercel.app") ||
+                error.toString().contains("Network is unreachable"))
+            ? 'No internet connection!'
+            : (error.toString().contains("FormatException"))
+                ? 'Internal server error, contact admin!'
+                : error.toString().replaceAll('(', '').replaceAll(')', ''));
   }
 
   void clearPhoto() {

@@ -99,6 +99,23 @@ class UserModel {
             json["profile"] == null ? null : Profile.fromJson(json["profile"]),
       );
 
+  Map<String, String> toRequestJson() => {
+        "email": email!,
+        "full_name": fullName!,
+        "user_name": userName!,
+        "bio": bio!,
+        "phone_number": phoneNumber!,
+        "password": password!,
+        "password2": password2!,
+        "country": country!,
+        "state": state!,
+        "gender": gender!,
+        "d_o_b": dOB!,
+        // "ipurpose":
+        //     ipurpose == null ? [] : List<dynamic>.from(ipurpose!.map((x) => x)),
+        // "profile": profile?.toJson()
+      };
+
   Map<String, dynamic> toJson() => {
         "email": email,
         "full_name": fullName,

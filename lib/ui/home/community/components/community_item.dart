@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/community_model.dart';
-import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +8,14 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class CommunityItem extends StatelessWidget {
-  final CommunityModel item;
   const CommunityItem({
     super.key,
     required this.item,
+    this.onFilterPage,
   });
+
+  final CommunityModel item;
+  final bool? onFilterPage;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class CommunityItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           width: 0.5,
-          color: AppColor().greyEight,
+          color: AppColor().darkGrey,
         ),
       ),
       child: Stack(
@@ -37,7 +39,9 @@ class CommunityItem extends StatelessWidget {
             children: [
               (item.cover == null)
                   ? Container(
-                      height: Get.height * 0.12,
+                      height: onFilterPage == true
+                          ? Get.height * 0.1
+                          : Get.height * 0.12,
                       width: double.infinity,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
@@ -50,7 +54,9 @@ class CommunityItem extends StatelessWidget {
                       ),
                     )
                   : CachedNetworkImage(
-                      height: Get.height * 0.12,
+                      height: onFilterPage == true
+                          ? Get.height * 0.1
+                          : Get.height * 0.12,
                       width: double.infinity,
                       progressIndicatorBuilder: (context, url, progress) =>
                           Center(
@@ -86,16 +92,23 @@ class CommunityItem extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               Gap(Get.height * 0.01),
-              CustomText(
-                title: 'No Member',
-                size: 12,
-                fontFamily: 'GilroyRegular',
-                weight: FontWeight.w400,
-                color: AppColor().greySix,
+              Visibility(
+                visible: onFilterPage != true,
+                child: CustomText(
+                  title: 'No Member',
+                  size: 12,
+                  fontFamily: 'GilroyRegular',
+                  weight: FontWeight.w400,
+                  color: AppColor().greySix,
+                ),
               ),
               Container(
                 padding: EdgeInsets.all(Get.height * 0.015),
-                margin: EdgeInsets.all(Get.height * 0.02),
+                margin: EdgeInsets.only(
+                    top: onFilterPage != true ? Get.height * 0.01 : 0,
+                    bottom: Get.height * 0.02,
+                    left: Get.height * 0.02,
+                    right: Get.height * 0.02),
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
@@ -157,14 +170,7 @@ class CommunityItem extends StatelessWidget {
                                 fit: BoxFit.cover),
                           ),
                         ),
-                      ),
-                Positioned(
-                  child: SvgPicture.asset(
-                    'assets/images/svg/check_badge.svg',
-                    height: Get.height * 0.025,
-                    width: Get.height * 0.025,
-                  ),
-                ),
+                      )
               ],
             ),
           ),

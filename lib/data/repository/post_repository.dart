@@ -38,11 +38,13 @@ class PostRepository extends GetxController {
   final Rx<List<PostModel>> _myPost = Rx([]);
   final Rx<List<PostModel>> _bookmarkedPost = Rx([]);
   final Rx<List<PostModel>> _followingPost = Rx([]);
+  final Rx<List<PostModel>> _forYouPosts = Rx([]);
 
   List<PostModel> get allPost => _allPost.value;
   List<PostModel> get myPost => _myPost.value;
   List<PostModel> get bookmarkedPost => _bookmarkedPost.value;
   List<PostModel> get followingPost => _followingPost.value;
+  List<PostModel> get forYouPosts => _forYouPosts.value;
 
   final _postStatus = PostStatus.empty.obs;
   final _bookmarkStatus = BookmarkStatus.empty.obs;
@@ -71,8 +73,36 @@ class PostRepository extends GetxController {
         getAllPost(true);
         getBookmarkedPost(true);
         getMyPost(true);
+        getPostForYou(true);
       }
     });
+  }
+
+  Future getPostDetails(int postId) async {
+    try {
+      var response = await http.get(
+        Uri.parse(ApiLink.getPostDetails(postId)),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+
+      debugPrint(response.body);
+      var json = jsonDecode(response.body);
+      print(json['comment']);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+      }
+      return response.body;
+    } catch (error) {
+      debugPrint("get post details error: ${error.toString()}");
+      handleError(error);
+    }
   }
 
   Future createPost(PostModel post) async {
@@ -93,8 +123,6 @@ class PostRepository extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
-      var res = await http.Response.fromStream(response);
-      print(res.body);
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
         debugPrint(await response.stream.bytesToString());
@@ -460,6 +488,50 @@ class PostRepository extends GetxController {
       _postStatus(PostStatus.error);
       authController.setLoading(false);
       debugPrint("getting all post: ${error.toString()}");
+    }
+  }
+
+  Future getPostForYou(bool isFirstTime) async {
+    try {
+      if (isFirstTime == true) {
+        authController.setLoading(true);
+        _bookmarkStatus(BookmarkStatus.loading);
+      }
+
+      debugPrint('getting all for post...');
+      var response =
+          await http.get(Uri.parse(ApiLink.getPostsForYou), headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode != 200) {
+        throw (json['detail']);
+      }
+
+      if (response.statusCode == 200) {
+        var list = List.from(json);
+        var posts = list.map((e) => PostModel.fromJson(e)).toList();
+        debugPrint("${posts.length} for you posts found");
+        _forYouPosts(posts.reversed.toList());
+        // _bookmarkStatus(BookmarkStatus.success);
+        // posts.isNotEmpty
+        //     ? _bookmarkStatus(BookmarkStatus.available)
+        //     : _bookmarkStatus(BookmarkStatus.empty);
+        authController.setLoading(false);
+      } else if (response.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        // _bookmarkStatus(BookmarkStatus.error);
+        authController.setLoading(false);
+      }
+      return response.body;
+    } catch (error) {
+      // _bookmarkStatus(BookmarkStatus.error);
+      authController.setLoading(false);
+      debugPrint("getting for you post: ${error.toString()}");
     }
   }
 

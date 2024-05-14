@@ -109,7 +109,7 @@ class _EventFilterState extends State<EventFilter> {
               padding:
                   const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 10),
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColor().greyEight),
+                  border: Border.all(color: AppColor().darkGrey),
                   borderRadius: BorderRadius.circular(10)),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,7 +158,7 @@ class CustomTile extends StatelessWidget {
         border: Border.all(
             color: eventController.renderFilter(title: title) == value
                 ? AppColor().primaryColor
-                : AppColor().greySix,
+                : AppColor().darkGrey,
             width: 1),
       ),
       child: Row(

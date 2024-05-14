@@ -15,6 +15,11 @@ void main() {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const ESportApp());
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance.indicatorType = EasyLoadingIndicatorType.ring;
 }
 
 class ESportApp extends StatefulWidget {
@@ -66,7 +71,8 @@ class _ESportAppState extends State<ESportApp> {
         debugShowCheckedModeBanner: false,
         title: 'ESports NG',
         initialBinding: AppBinding(),
-        theme: ThemeData.light().copyWith(
+        theme: ThemeData(
+          fontFamily: "GilroyMedium",
           appBarTheme: AppBarTheme(
             backgroundColor: AppColor().primaryBackGroundColor,
           ),

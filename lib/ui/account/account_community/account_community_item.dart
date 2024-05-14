@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/community_model.dart';
-import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -39,13 +39,11 @@ class AccountCommunityItem extends StatelessWidget {
               ? Container(
                   height: Get.height * 0.08,
                   width: Get.height * 0.08,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    border:
-                        Border.all(color: AppColor().primaryWhite, width: 2),
-                    image: const DecorationImage(
-                        image: AssetImage('assets/images/png/placeholder.png'),
-                        fit: BoxFit.cover),
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/images/svg/people.svg',
                   ),
                 )
               : CachedNetworkImage(
@@ -62,16 +60,14 @@ class AccountCommunityItem extends StatelessWidget {
                   ),
                   errorWidget: (context, url, error) =>
                       Icon(Icons.error, color: AppColor().primaryColor),
-                  imageUrl: '${ApiLink.imageUrl}${item.cover}',
+                  imageUrl: item.logo!,
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border:
                           Border.all(color: AppColor().primaryWhite, width: 2),
                       image: DecorationImage(
-                          image:
-                              NetworkImage('${ApiLink.imageUrl}${item.cover}'),
-                          fit: BoxFit.cover),
+                          image: NetworkImage(item.logo!), fit: BoxFit.cover),
                     ),
                   ),
                 ),
@@ -87,7 +83,6 @@ class AccountCommunityItem extends StatelessWidget {
                   textAlign: TextAlign.start,
                   color: AppColor().greyOne,
                 ),
-               
                 Divider(
                   color: AppColor().lightItemsColor.withOpacity(0.3),
                   height: Get.height * 0.03,

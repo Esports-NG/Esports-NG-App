@@ -21,6 +21,7 @@ class GamesPlayedDetails extends StatefulWidget {
 
 class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
   int? categoryType = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,6 +149,25 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                     Row(
                       children: [
                         CustomText(
+                          title: 'ESports NG: ',
+                          size: 14,
+                          fontFamily: 'GilroyRegular',
+                          textAlign: TextAlign.start,
+                          color: AppColor().greyOne,
+                        ),
+                        CustomText(
+                          title: widget.item.player!.userName,
+                          size: 14,
+                          fontFamily: 'GilroySemiBold',
+                          textAlign: TextAlign.start,
+                          color: AppColor().greyOne,
+                        ),
+                      ],
+                    ),
+                    Gap(Get.height * 0.005),
+                    Row(
+                      children: [
+                        CustomText(
                           title: 'IGN: ',
                           size: 14,
                           fontFamily: 'GilroyRegular',
@@ -155,7 +175,7 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                           color: AppColor().greyOne,
                         ),
                         CustomText(
-                          title: widget.item.inGameName!.toCapitalCase(),
+                          title: widget.item.inGameName!,
                           size: 14,
                           fontFamily: 'GilroySemiBold',
                           textAlign: TextAlign.start,

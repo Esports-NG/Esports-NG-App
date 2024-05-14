@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
@@ -11,6 +12,7 @@ import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/coming_soon.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
@@ -86,17 +88,44 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                     alignment: Alignment.bottomCenter,
                     clipBehavior: Clip.none,
                     children: [
-                      Container(
-                        height: Get.height * 0.15,
-                        width: Get.width,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/images/png/community_cover.png'),
-                              fit: BoxFit.cover,
-                              opacity: 0.2),
-                        ),
-                      ),
+                      details!.cover == null
+                          ? Container(
+                              height: Get.height * 0.15,
+                              width: Get.width,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/png/community_cover.png'),
+                                    fit: BoxFit.cover,
+                                    opacity: 0.2),
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              height: Get.height * 0.15,
+                              width: Get.width,
+                              progressIndicatorBuilder:
+                                  (context, url, progress) => Center(
+                                child: SizedBox(
+                                  height: Get.height * 0.02,
+                                  width: Get.height * 0.02,
+                                  child: CircularProgressIndicator(
+                                      color: AppColor().primaryColor,
+                                      value: progress.progress),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Icon(
+                                  Icons.error,
+                                  color: AppColor().primaryColor),
+                              imageUrl: details!.cover!,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(details!.cover!),
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                            ),
                       Positioned(
                         top: Get.height * 0.1,
                         child: Stack(
@@ -371,14 +400,6 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                             textAlign: TextAlign.center,
                             height: 1.5,
                             color: AppColor().greyEight),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                            title: 'See full profile',
-                            weight: FontWeight.w400,
-                            size: Get.height * 0.017,
-                            fontFamily: 'GilroyMedium',
-                            underline: TextDecoration.underline,
-                            color: AppColor().primaryColor),
                       ],
                     ),
                   ),
@@ -567,38 +588,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                       title: 'Media, Links and Document',
                     ),
                   ),
-                  Gap(Get.height * 0.01),
-                  SizedBox(
-                    height: Get.height * 0.12,
-                    child: ListView.separated(
-                        physics: const ScrollPhysics(),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            Gap(Get.height * 0.01),
-                        itemCount: mediaItems.length,
-                        itemBuilder: (context, index) {
-                          var item = mediaItems[index];
-                          return Container(
-                            padding: EdgeInsets.all(Get.height * 0.02),
-                            width: Get.width * 0.25,
-                            decoration: BoxDecoration(
-                              color: AppColor().bgDark,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: AppColor().greySix,
-                              ),
-                              image: DecorationImage(
-                                image: AssetImage(item.image!),
-                                fit: BoxFit.fitWidth,
-                                alignment: Alignment.topCenter,
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
+                  Gap(Get.height * 0.02),
+                  const ComingSoonWidget(),
                   Gap(Get.height * 0.04),
                   Padding(
                     padding:

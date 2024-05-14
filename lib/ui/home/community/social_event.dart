@@ -5,7 +5,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'components/social_event_item.dart';
+import '../../events/components/social_event_item.dart';
 
 class SocialEvent extends StatelessWidget {
   const SocialEvent({super.key});
@@ -15,7 +15,7 @@ class SocialEvent extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-         leading: GoBackButton(onPressed: () => Get.back()),
+        leading: GoBackButton(onPressed: () => Get.back()),
         centerTitle: true,
         title: CustomText(
           title: 'Social Event',
@@ -30,15 +30,15 @@ class SocialEvent extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ListView.separated(
-                  physics: const ScrollPhysics(),
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => Gap(Get.height * 0.03),
-                  itemCount: socialEventItem.length,
-                  itemBuilder: (context, index) {
-                    var item = socialEventItem[index];
-                    return SocialEventItem(item: item);
-                  }),
+              // ListView.separated(
+              //     physics: const ScrollPhysics(),
+              //     shrinkWrap: true,
+              //     separatorBuilder: (context, index) => Gap(Get.height * 0.03),
+              //     itemCount: socialEventItem.length,
+              //     itemBuilder: (context, index) {
+              //       var item = socialEventItem[index];
+              //       return SocialEventItem(item: item);
+              //     }),
             ],
           ),
         ),

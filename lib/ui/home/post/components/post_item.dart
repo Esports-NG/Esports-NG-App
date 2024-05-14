@@ -138,7 +138,7 @@ class _PostItemState extends State<PostItem> {
                               Gap(Get.height * 0.01),
                               CustomText(
                                 title:
-                                    '${widget.item.author!.fullName!.toCapitalCase()} Reposted this',
+                                    '${widget.item.author!.userName!} Reposted this',
                                 size: Get.height * 0.015,
                                 fontFamily: 'GilroyMedium',
                                 textAlign: TextAlign.start,
@@ -225,8 +225,7 @@ class _PostItemState extends State<PostItem> {
                                   ),
                             Gap(Get.height * 0.01),
                             CustomText(
-                              title:
-                                  widget.item.author!.fullName!.toCapitalCase(),
+                              title: widget.item.author!.userName!,
                               size: Get.height * 0.015,
                               fontFamily: 'GilroyMedium',
                               textAlign: TextAlign.start,
@@ -284,8 +283,7 @@ class _PostItemState extends State<PostItem> {
                                   ),
                             Gap(Get.height * 0.01),
                             CustomText(
-                              title: widget.item.repost!.author!.fullName!
-                                  .toCapitalCase(),
+                              title: widget.item.repost!.author!.userName!,
                               size: Get.height * 0.015,
                               fontFamily: 'GilroyMedium',
                               textAlign: TextAlign.start,
@@ -581,6 +579,7 @@ class _PostItemState extends State<PostItem> {
       },
       itemBuilder: (context) => [
         PopupMenuItem(
+          enabled: false,
           height: 20,
           padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
           child: CustomText(
@@ -609,20 +608,20 @@ class _PostItemState extends State<PostItem> {
                           const CircularProgressIndicator(),
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
-                      imageUrl: widget.item.author!.profile!.profilePicture!,
+                      imageUrl: authController.user!.profile!.profilePicture!,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                              image: NetworkImage(
-                                  widget.item.author!.profile!.profilePicture!),
+                              image: NetworkImage(authController
+                                  .user!.profile!.profilePicture!),
                               fit: BoxFit.cover),
                         ),
                       ),
                     ),
               Gap(Get.height * 0.02),
               CustomText(
-                title: widget.item.author!.fullName,
+                title: authController.user!.fullName,
                 size: Get.height * 0.014,
                 fontFamily: 'GilroyMedium',
                 textAlign: TextAlign.start,
@@ -661,10 +660,17 @@ class _PostItemState extends State<PostItem> {
       ],
       child: Row(
         children: [
-          Image.asset(
-            'assets/images/png/drop.png',
+          Container(
             height: Get.height * 0.02,
             width: Get.height * 0.02,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(
+                      authController.user!.profile!.profilePicture!),
+                  fit: BoxFit.cover,
+                ),
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColor().primaryWhite, width: 1)),
           ),
           Icon(
             Icons.keyboard_arrow_down,

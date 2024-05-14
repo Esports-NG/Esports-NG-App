@@ -59,7 +59,7 @@ class PlayerModel {
       };
 
   Map<String, dynamic> toCreatePlayerJson() => {
-        "id": id,
+        // "id": id,
         "in_game_id": inGameId,
         "in_game_name": inGameName,
       };

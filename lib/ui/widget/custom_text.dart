@@ -11,24 +11,27 @@ class CustomText extends StatelessWidget {
   final TextOverflow? overflow;
   final TextDecoration? underline;
   final Color? decorationColor;
-  const CustomText({
-    Key? key,
-    this.title,
-    this.size,
-    this.color,
-    this.weight,
-    this.height,
-    this.textAlign,
-    this.overflow,
-    this.fontFamily,
-    this.underline,
-    this.decorationColor,
-  }) : super(key: key);
+  final int? maxLines;
+  const CustomText(
+      {Key? key,
+      this.title,
+      this.size,
+      this.color,
+      this.weight,
+      this.height,
+      this.textAlign,
+      this.overflow,
+      this.fontFamily,
+      this.underline,
+      this.decorationColor,
+      this.maxLines})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(title!,
         textAlign: textAlign ?? TextAlign.left,
+        maxLines: maxLines ?? null,
         style: TextStyle(
           color: color ?? Colors.black,
           fontFamily: fontFamily ?? 'GilroyRegular',

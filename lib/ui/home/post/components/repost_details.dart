@@ -704,34 +704,34 @@ class _RepostDetailsState extends State<RepostDetails> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Container(
-                                              padding: EdgeInsets.all(
-                                                  Get.height * 0.015),
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color:
-                                                      AppColor().primaryColor),
-                                              child: CustomText(
-                                                title: item.name![0]
-                                                    .toCapitalCase(),
-                                                color: AppColor().greyTwo,
-                                                weight: FontWeight.w600,
-                                                fontFamily: 'GilroyMedium',
-                                                size: Get.height * 0.025,
-                                              ),
-                                            ),
+                                            // Container(
+                                            //   padding: EdgeInsets.all(
+                                            //       Get.height * 0.015),
+                                            //   decoration: BoxDecoration(
+                                            //       shape: BoxShape.circle,
+                                            //       color:
+                                            //           AppColor().primaryColor),
+                                            //   child: CustomText(
+                                            //     title: item.name![0]
+                                            //         .toCapitalCase(),
+                                            //     color: AppColor().greyTwo,
+                                            //     weight: FontWeight.w600,
+                                            //     fontFamily: 'GilroyMedium',
+                                            //     size: Get.height * 0.025,
+                                            //   ),
+                                            // ),
                                             Gap(Get.height * 0.02),
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                CustomText(
-                                                  title: item.name,
-                                                  color: AppColor().greySix,
-                                                  weight: FontWeight.w400,
-                                                  fontFamily: 'GilroyMedium',
-                                                  size: Get.height * 0.015,
-                                                ),
+                                                // CustomText(
+                                                //   title: item.name,
+                                                //   color: AppColor().greySix,
+                                                //   weight: FontWeight.w400,
+                                                //   fontFamily: 'GilroyMedium',
+                                                //   size: Get.height * 0.015,
+                                                // ),
                                                 Gap(Get.height * 0.01),
                                                 CustomText(
                                                   title: item.body!,
@@ -846,34 +846,34 @@ class _RepostDetailsState extends State<RepostDetails> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Container(
-                                              padding: EdgeInsets.all(
-                                                  Get.height * 0.015),
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color:
-                                                      AppColor().primaryColor),
-                                              child: CustomText(
-                                                title: item.name![0]
-                                                    .toCapitalCase(),
-                                                color: AppColor().greyTwo,
-                                                weight: FontWeight.w600,
-                                                fontFamily: 'GilroyMedium',
-                                                size: Get.height * 0.025,
-                                              ),
-                                            ),
+                                            // Container(
+                                            //   padding: EdgeInsets.all(
+                                            //       Get.height * 0.015),
+                                            //   decoration: BoxDecoration(
+                                            //       shape: BoxShape.circle,
+                                            //       color:
+                                            //           AppColor().primaryColor),
+                                            //   child: CustomText(
+                                            //     title: item.name![0]
+                                            //         .toCapitalCase(),
+                                            //     color: AppColor().greyTwo,
+                                            //     weight: FontWeight.w600,
+                                            //     fontFamily: 'GilroyMedium',
+                                            //     size: Get.height * 0.025,
+                                            //   ),
+                                            // ),
                                             Gap(Get.height * 0.02),
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                CustomText(
-                                                  title: item.name,
-                                                  color: AppColor().greySix,
-                                                  weight: FontWeight.w400,
-                                                  fontFamily: 'GilroyMedium',
-                                                  size: Get.height * 0.015,
-                                                ),
+                                                // CustomText(
+                                                //   title: item.name,
+                                                //   color: AppColor().greySix,
+                                                //   weight: FontWeight.w400,
+                                                //   fontFamily: 'GilroyMedium',
+                                                //   size: Get.height * 0.015,
+                                                // ),
                                                 Gap(Get.height * 0.01),
                                                 CustomText(
                                                   title: item.body!,

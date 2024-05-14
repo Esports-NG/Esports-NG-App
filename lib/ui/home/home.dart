@@ -60,158 +60,167 @@ class _HomePageState extends State<HomePage>
                 physics: const AlwaysScrollableScrollPhysics(),
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
                       SliverToBoxAdapter(
-                        child: Column(children: [
-                          Gap(Get.height * 0.06),
-                          Row(
+                        child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  Get.to(() => UserDetails(
-                                      id: authController.user!.id!));
-                                },
-                                child: OtherImage(
-                                    image: authController
-                                        .user!.profile!.profilePicture),
-                              ),
+                              Gap(Get.height * 0.06),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      // Get.to(() => const Messages());
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          backgroundColor:
-                                              AppColor().primaryBgColor,
-                                          content: const ComingSoonPopup(),
-                                        ),
-                                      );
+                                      Get.to(() => UserDetails(
+                                          id: authController.user!.id!));
                                     },
-                                    child: SvgPicture.asset(
-                                      'assets/images/svg/chat.svg',
-                                      height: Get.height * 0.025,
-                                    ),
+                                    child: OtherImage(
+                                        image: authController
+                                            .user!.profile!.profilePicture),
                                   ),
-                                  Gap(Get.height * 0.04),
-                                  InkWell(
-                                    onTap: () {
-                                      // Get.to(() => const Leaderboard());
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          backgroundColor:
-                                              AppColor().primaryBgColor,
-                                          content: const ComingSoonPopup(),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          // Get.to(() => const Messages());
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              elevation: 0,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              backgroundColor:
+                                                  AppColor().primaryBgColor,
+                                              content: const ComingSoonPopup(),
+                                            ),
+                                          );
+                                        },
+                                        child: SvgPicture.asset(
+                                          'assets/images/svg/chat.svg',
+                                          height: Get.height * 0.025,
                                         ),
-                                      );
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/images/svg/leaderboard.svg',
-                                      height: Get.height * 0.025,
-                                    ),
-                                  ),
-                                  Gap(Get.height * 0.04),
-                                  InkWell(
-                                    onTap: () {
-                                      // Get.to(() => const NotificationPage());
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          backgroundColor:
-                                              AppColor().primaryBgColor,
-                                          content: const ComingSoonPopup(),
+                                      ),
+                                      Gap(Get.height * 0.04),
+                                      InkWell(
+                                        onTap: () {
+                                          // Get.to(() => const Leaderboard());
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              elevation: 0,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              backgroundColor:
+                                                  AppColor().primaryBgColor,
+                                              content: const ComingSoonPopup(),
+                                            ),
+                                          );
+                                        },
+                                        child: SvgPicture.asset(
+                                          'assets/images/svg/leaderboard.svg',
+                                          height: Get.height * 0.025,
                                         ),
-                                      );
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/images/svg/notification.svg',
-                                      height: Get.height * 0.025,
-                                    ),
+                                      ),
+                                      Gap(Get.height * 0.04),
+                                      InkWell(
+                                        onTap: () {
+                                          // Get.to(() => const NotificationPage());
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              elevation: 0,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              backgroundColor:
+                                                  AppColor().primaryBgColor,
+                                              content: const ComingSoonPopup(),
+                                            ),
+                                          );
+                                        },
+                                        child: SvgPicture.asset(
+                                          'assets/images/svg/notification.svg',
+                                          height: Get.height * 0.025,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          Gap(Get.height * 0.025),
-                          SizedBox(
-                            height: Get.height * 0.06,
-                            child: CustomTextField(
-                              hint: "Search for gaming news, competitions...",
-                              fontFamily: 'GilroyMedium',
-                              prefixIcon: Icon(
-                                CupertinoIcons.search,
-                                color: AppColor().lightItemsColor,
+                              Gap(Get.height * 0.025),
+                              SizedBox(
+                                height: Get.height * 0.06,
+                                child: CustomTextField(
+                                  hint:
+                                      "Search for gaming news, competitions...",
+                                  fontFamily: 'GilroyMedium',
+                                  prefixIcon: Icon(
+                                    CupertinoIcons.search,
+                                    color: AppColor().lightItemsColor,
+                                  ),
+                                  textEditingController:
+                                      authController.searchController,
+                                  hasText: isSearch!,
+                                  focusNode: _searchFocusNode,
+                                  onTap: handleTap,
+                                  onSubmited: (_) {
+                                    _searchFocusNode.unfocus();
+                                  },
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isSearch = value.isNotEmpty;
+                                    });
+                                  },
+                                ),
                               ),
-                              textEditingController:
-                                  authController.searchController,
-                              hasText: isSearch!,
-                              focusNode: _searchFocusNode,
-                              onTap: handleTap,
-                              onSubmited: (_) {
-                                _searchFocusNode.unfocus();
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  isSearch = value.isNotEmpty;
-                                });
-                              },
-                            ),
-                          ),
-                          Gap(Get.height * 0.025),
-                          TabBar(
-                              isScrollable: true,
-                              tabAlignment: TabAlignment.start,
-                              labelColor: AppColor().primaryColor,
-                              indicatorColor: AppColor().primaryColor,
-                              dividerColor: Colors.transparent,
-                              labelStyle: const TextStyle(
-                                fontFamily: 'GilroyBold',
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              unselectedLabelColor: AppColor().lightItemsColor,
-                              unselectedLabelStyle: const TextStyle(
-                                fontFamily: 'GilroyMedium',
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              controller: _tabController,
-                              tabs: const [
-                                Tab(text: 'For you'),
-                                Tab(text: 'Following'),
-                                Tab(text: 'Bookmark'),
-                              ]),
-                          Gap(Get.height * 0.02)
-                        ]),
+                              Gap(Get.height * 0.025),
+                              TabBar(
+                                  isScrollable: true,
+                                  tabAlignment: TabAlignment.start,
+                                  labelColor: AppColor().primaryColor,
+                                  indicatorColor: AppColor().primaryColor,
+                                  dividerColor: Colors.transparent,
+                                  labelStyle: const TextStyle(
+                                    fontFamily: 'GilroyBold',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  unselectedLabelColor:
+                                      AppColor().lightItemsColor,
+                                  unselectedLabelStyle: const TextStyle(
+                                    fontFamily: 'GilroyMedium',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  controller: _tabController,
+                                  tabs: const [
+                                    Tab(text: 'For you'),
+                                    Tab(text: 'Following'),
+                                    Tab(text: 'Bookmark'),
+                                  ]),
+                              Gap(Get.height * 0.02)
+                            ]),
                       )
                     ],
                 body: RefreshIndicator(
                   notificationPredicate: (notification) =>
                       notification.depth == 1,
                   onRefresh: () async {
-                    return Future.delayed(const Duration(seconds: 2), () {
-                      postController.getAllPost(false);
-                    });
+                    await postController.getAllPost(false);
+                    await postController.getBookmarkedPost(false);
+                    await postController.getPostForYou(false);
                   },
                   child: TabBarView(controller: _tabController, children: [
-                    PostWidget(posts: postController.allPost),
+                    PostWidget(posts: postController.forYouPosts),
                     PostWidget(posts: postController.followingPost),
                     PostWidget(posts: postController.bookmarkedPost)
                   ]),

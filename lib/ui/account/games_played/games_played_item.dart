@@ -29,7 +29,6 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        
           (widget.item.profile == null)
               ? Container(
                   height: Get.height * 0.15,
@@ -75,7 +74,7 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
               children: [
                 textItem(
                     title: 'Game Name: ',
-                    subTitle: widget.item.inGameName!.toCapitalCase()),
+                    subTitle: widget.item.gamePlayed!.name!),
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'Game ID: ',

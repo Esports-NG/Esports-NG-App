@@ -81,71 +81,71 @@ class _FirstScreenState extends State<FirstScreen> {
                     },
                     isLoading: false,
                   ),
-                  Gap(Get.height * 0.05),
-                  Center(
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Divider(
-                          color: AppColor().primaryWhite.withOpacity(0.7),
-                        )),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Get.height * 0.01),
-                          child: CustomText(
-                            title: 'OR',
-                            color: AppColor().primaryWhite.withOpacity(0.7),
-                            textAlign: TextAlign.center,
-                            fontFamily: 'GilroyMedium',
-                            size: Get.height * 0.018,
-                          ),
-                        ),
-                        Expanded(
-                            child: Divider(
-                          color: AppColor().primaryWhite.withOpacity(0.7),
-                        )),
-                      ],
-                    ),
-                  ),
-                  Gap(Get.height * 0.05),
-                  CustomFillButton(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: CustomText(
-                            title: 'Coming soon!',
-                            size: Get.height * 0.02,
-                            color: AppColor().primaryWhite,
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      );
-                    },
-                    buttonText: '',
-                    textColor: AppColor().primaryColor,
-                    boarderColor: AppColor().primaryWhite,
-                    fontWeight: FontWeight.w600,
-                    buttonColor:
-                        AppColor().primaryBackGroundColor.withOpacity(0.7),
-                    textSize: Get.height * 0.021,
-                    isLoading: false,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/png/google.png',
-                        ),
-                        Gap(Get.height * 0.01),
-                        CustomText(
-                          title: 'Continue with Google',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyMedium',
-                          size: Get.height * 0.018,
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Gap(Get.height * 0.05),
+                  // Center(
+                  //   child: Row(
+                  //     children: [
+                  //       Expanded(
+                  //           child: Divider(
+                  //         color: AppColor().primaryWhite.withOpacity(0.7),
+                  //       )),
+                  //       Padding(
+                  //         padding: EdgeInsets.symmetric(
+                  //             horizontal: Get.height * 0.01),
+                  //         child: CustomText(
+                  //           title: 'OR',
+                  //           color: AppColor().primaryWhite.withOpacity(0.7),
+                  //           textAlign: TextAlign.center,
+                  //           fontFamily: 'GilroyMedium',
+                  //           size: Get.height * 0.018,
+                  //         ),
+                  //       ),
+                  //       Expanded(
+                  //           child: Divider(
+                  //         color: AppColor().primaryWhite.withOpacity(0.7),
+                  //       )),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Gap(Get.height * 0.05),
+                  // CustomFillButton(
+                  //   onTap: () {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(
+                  //         content: CustomText(
+                  //           title: 'Coming soon!',
+                  //           size: Get.height * 0.02,
+                  //           color: AppColor().primaryWhite,
+                  //           textAlign: TextAlign.start,
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  //   buttonText: '',
+                  //   textColor: AppColor().primaryColor,
+                  //   boarderColor: AppColor().primaryWhite,
+                  //   fontWeight: FontWeight.w600,
+                  //   buttonColor:
+                  //       AppColor().primaryBackGroundColor.withOpacity(0.7),
+                  //   textSize: Get.height * 0.021,
+                  //   isLoading: false,
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Image.asset(
+                  //         'assets/images/png/google.png',
+                  //       ),
+                  //       Gap(Get.height * 0.01),
+                  //       CustomText(
+                  //         title: 'Continue with Google',
+                  //         color: AppColor().primaryWhite,
+                  //         textAlign: TextAlign.center,
+                  //         fontFamily: 'GilroyMedium',
+                  //         size: Get.height * 0.018,
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),

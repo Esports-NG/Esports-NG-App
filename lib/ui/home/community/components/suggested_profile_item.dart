@@ -21,7 +21,7 @@ class SuggestedProfileItem extends StatelessWidget {
         color: AppColor().bgDark,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: AppColor().greySix,
+          color: AppColor().darkGrey,
         ),
         image: DecorationImage(
           image: AssetImage(item.image!),
@@ -49,14 +49,7 @@ class SuggestedProfileItem extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                 ),
-              ),
-              Positioned(
-                child: SvgPicture.asset(
-                  'assets/images/svg/check_badge.svg',
-                  height: Get.height * 0.025,
-                  width: Get.height * 0.025,
-                ),
-              ),
+              )
             ],
           ),
           Gap(Get.height * 0.01),

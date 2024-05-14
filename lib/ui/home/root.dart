@@ -3,7 +3,9 @@ import 'package:e_sport/ui/account/account.dart';
 import 'package:e_sport/ui/events/events.dart';
 import 'package:e_sport/ui/home/community/community.dart';
 import 'package:e_sport/ui/home/home.dart';
+import 'package:e_sport/ui/widget/actionButton.dart';
 import 'package:e_sport/ui/widget/bottom_nav.dart';
+import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,9 +23,11 @@ class RootDashboard extends StatelessWidget {
     ];
     return Obx(
       () => Scaffold(
-        body: pages[navController.currentIndex.value],
-        bottomNavigationBar: const BottomNavigation(),
-      ),
+          body: pages[navController.currentIndex.value],
+          bottomNavigationBar: const BottomNavigation(),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: const ActionButton()),
     );
   }
 }

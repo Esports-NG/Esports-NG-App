@@ -6,11 +6,17 @@ import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
+import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/util/colors.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gap/gap.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 enum PlayerStatus {
   loading,
@@ -70,14 +76,18 @@ class PlayerRepository extends GetxController {
       request.fields.addAll(player
           .toCreatePlayerJson()
           .map((key, value) => MapEntry(key, value)));
-      request.files.add(await http.MultipartFile.fromPath(
-          'profile', playerProfileImage!.path));
-      request.headers.addAll(headers);
-
+      request.fields['igames'] = player.gamePlayed!.id.toString();
+      if (playerProfileImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'profile', playerProfileImage!.path));
+        request.headers.addAll(headers);
+      }
+      EasyLoading.show();
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 201) {
         _createPlayerStatus(CreatePlayerStatus.success);
         debugPrint(await response.stream.bytesToString());
+        EasyLoading.showSuccess("Player Created");
         Get.to(() => const CreateSuccessPage(title: 'Player Created'))!
             .then((value) {
           getAllPlayer(false);
@@ -152,12 +162,90 @@ class PlayerRepository extends GetxController {
         gravity: ToastGravity.BOTTOM);
   }
 
+  Widget pickProfileImage({VoidCallback? onTap}) {
+    return Obx(
+      () => Container(
+        padding: EdgeInsets.all(Get.height * 0.04),
+        decoration: BoxDecoration(
+            color: AppColor().bgDark, borderRadius: BorderRadius.circular(10)),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              playerProfileImage == null
+                  ? SvgPicture.asset(
+                      'assets/images/svg/photo.svg',
+                      height: Get.height * 0.08,
+                    )
+                  : Container(
+                      height: Get.height * 0.08,
+                      width: Get.height * 0.08,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image: FileImage(playerProfileImage!),
+                            fit: BoxFit.cover),
+                      ),
+                    ),
+              Gap(Get.height * 0.01),
+              InkWell(
+                onTap: onTap,
+                child: CustomText(
+                  title:
+                      playerProfileImage == null ? 'Click to upload' : 'Cancel',
+                  weight: FontWeight.w400,
+                  size: 15,
+                  fontFamily: 'GilroyMedium',
+                  color: AppColor().primaryColor,
+                  underline: TextDecoration.underline,
+                ),
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Max file size: 4MB',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.014,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future pickImageFromCamera(String? title) async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      mPlayerProfileImage(imageTemporary);
+    } on PlatformException catch (e) {
+      debugPrint('$e');
+    }
+  }
+
+  Future pickImageFromGallery(String? title) async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+
+      mPlayerProfileImage(imageTemporary);
+    } on PlatformException catch (e) {
+      debugPrint('$e');
+    }
+  }
+
   void clearProfilePhoto() {
     debugPrint('image cleared');
     mPlayerProfileImage.value = null;
   }
 
   void clear() {
+    clearProfilePhoto();
     gameIdController.clear();
     gameNameController.clear();
   }

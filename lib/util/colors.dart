@@ -13,7 +13,7 @@ class AppColor {
   Color bgDark = const Color(0xff1F252F);
   Color walletColor = const Color(0xffA381FF);
   Color dashboardColor = const Color(0xff050B15);
-  Color primaryWhite = const Color(0xffffffff);
+  Color primaryWhite = const Color(0xffF5F5F5);
   Color primaryYellow = const Color(0xffF29528);
   Color primaryRed = const Color(0xffFF2E2E);
   Color primaryGreen = const Color(0xff00AD45);

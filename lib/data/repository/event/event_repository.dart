@@ -54,13 +54,24 @@ class EventRepository extends GetxController
   late TabController tabController;
 
   final Rx<List<EventModel>> _allEvent = Rx([]);
+  final Rx<List<EventModel>> _filteredEvent = Rx([]);
   final Rx<List<EventModel>> _myEvent = Rx([]);
-  final Rx<List<SocialEventModel>> _allSocialEvent = Rx([]);
-  final Rx<List<SocialEventModel>> _mySocialEvent = Rx([]);
+  final Rx<List<EventModel>> _allTournaments = Rx([]);
+  final Rx<List<EventModel>> _myTournaments = Rx([]);
+  final Rx<List<EventModel>> _allSocialEvent = Rx([]);
+  final Rx<List<EventModel>> _mySocialEvent = Rx([]);
 
-  final Rx<String?> typeFilter = Rx(null);
-  final Rx<String?> gameFilter = Rx(null);
-  final Rx<String?> statusFilter = Rx(null);
+  List<EventModel> get allEvent => _allEvent.value;
+  List<EventModel> get filteredEvent => _filteredEvent.value;
+  List<EventModel> get myEvent => _myEvent.value;
+  List<EventModel> get allSocialEvent => _allSocialEvent.value;
+  List<EventModel> get mySocialEvent => _mySocialEvent.value;
+  List<EventModel> get allTournaments => _allTournaments.value;
+  List<EventModel> get myTournaments => _myTournaments.value;
+
+  final Rx<String?> typeFilter = Rx("All");
+  final Rx<String?> gameFilter = Rx("All");
+  final Rx<String?> statusFilter = Rx("All");
 
   final RxList<String> typeFilterList =
       ["All", "Tournament", "Social Event"].obs;
@@ -70,13 +81,9 @@ class EventRepository extends GetxController
 
   var maxTabs = 3.obs, eventTypeCount = 0.obs, participantCount = 0.obs;
 
-  List<EventModel> get allEvent => _allEvent.value;
-  List<EventModel> get myEvent => _myEvent.value;
-  List<SocialEventModel> get allSocialEvent => _allSocialEvent.value;
-  List<SocialEventModel> get mySocialEvent => _mySocialEvent.value;
-
   final eventStatus = EventStatus.empty.obs;
   final createEventStatus = CreateEventStatus.empty.obs;
+  RxMap<dynamic, dynamic> eventFilter = {}.obs;
 
   // EventStatus get eventStatus => eventStatus.value;
   // CreateEventStatus get createEventStatus => createEventStatus.value;
@@ -102,6 +109,7 @@ class EventRepository extends GetxController
       statusFilter.value = value;
     } else if (title == "Game") {
       gameFilter.value = value;
+      eventFilter.update("games__name", (val) => value, ifAbsent: () => value);
     } else {
       typeFilter.value = value;
     }
@@ -140,26 +148,31 @@ class EventRepository extends GetxController
     tabController = TabController(length: 3, vsync: this);
 
     tabController.addListener(() {
-      typeFilter.value = null;
-      gameFilter.value = null;
-      statusFilter.value = null;
+      typeFilter.value = "All";
+      gameFilter.value = "All";
+      statusFilter.value = "All";
 
       if (tabController.index == 2) {
+        statusFilterList.value = ["All", "Ongoing", "Concluded"];
+      } else {
         statusFilterList.value = [
           "All",
           "Ongoing Registration",
           "Registration Ended"
         ];
-      } else {
-        statusFilterList.value = ["All", "Ongoing", "Concluded"];
       }
     });
 
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
+        getAllEvents();
         getAllTournaments(true);
         getAllSocialEvents(true);
       }
+    });
+
+    eventFilter.listen((p0) async {
+      await filterEvents();
     });
   }
 
@@ -169,6 +182,24 @@ class EventRepository extends GetxController
     super.dispose();
   }
 
+  Future getAllEvents() async {
+    var response = await http.get(Uri.parse(ApiLink.getAllEvent), headers: {
+      "Content-type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    });
+
+    print(response.body);
+
+    var json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      throw (json['detail']);
+    } else {
+      var list = List.from(json);
+      var events = list.map((e) => EventModel.fromJson(e)).toList();
+      _allEvent(events);
+    }
+  }
+
   Future getAllTournaments(bool isFirstTime) async {
     try {
       if (isFirstTime == true) {
@@ -176,7 +207,8 @@ class EventRepository extends GetxController
       }
 
       debugPrint('getting all event...');
-      var response = await http.get(Uri.parse(ApiLink.getAllEvent), headers: {
+      var response =
+          await http.get(Uri.parse(ApiLink.getAllTournaments), headers: {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       });
@@ -184,12 +216,13 @@ class EventRepository extends GetxController
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
+      print(response.body);
 
       if (response.statusCode == 200) {
         var list = List.from(json);
         var events = list.map((e) => EventModel.fromJson(e)).toList();
         debugPrint("${events.length} events found");
-        _allEvent(events);
+        _allTournaments(events);
         eventStatus(EventStatus.success);
         events.isNotEmpty
             ? eventStatus(EventStatus.available)
@@ -228,7 +261,7 @@ class EventRepository extends GetxController
 
       if (response.statusCode == 200) {
         var list = List.from(json);
-        var events = list.map((e) => SocialEventModel.fromJson(e)).toList();
+        var events = list.map((e) => EventModel.fromJson(e)).toList();
         debugPrint("${events.length} events found");
         _allSocialEvent(events);
         eventStatus(EventStatus.success);
@@ -246,5 +279,17 @@ class EventRepository extends GetxController
       eventStatus(EventStatus.error);
       debugPrint("getting all event: ${error.toString()}");
     }
+  }
+
+  Future filterEvents() async {
+    print("filtering");
+    var response = await http.get(
+        Uri.https("esports-ng.vercel.app", "/event/search",
+            eventFilter.cast<String, dynamic>()),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        });
+    print(response.body);
   }
 }

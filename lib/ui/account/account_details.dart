@@ -5,6 +5,7 @@ import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/account/account_events/create_event.dart';
+import 'package:e_sport/ui/account/games_played/create_player_profile.dart';
 import 'package:e_sport/ui/components/account_community_widget.dart';
 import 'package:e_sport/ui/components/account_event_widget.dart';
 import 'package:e_sport/ui/components/account_team_widget.dart';
@@ -82,7 +83,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                       if (widget.title == 'Posts') {
                         Get.to(() => const CreatePost());
                       } else if (widget.title == 'Player Profile') {
-                        // Get.to(()=> const CreatePlayer());
+                        Get.to(() => const CreatePlayerProfile());
                       } else if (widget.title == 'Teams') {
                         Get.to(() => const CreateTeamPage());
                       }

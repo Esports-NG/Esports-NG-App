@@ -647,6 +647,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   }
                                 : null,
                             child: CustomTextField(
+                              maxLength: 10,
                               hint: "phone",
                               textEditingController:
                                   authController.phoneNoController,
