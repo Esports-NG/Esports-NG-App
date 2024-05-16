@@ -8,7 +8,7 @@ class TeamModel {
   String? name;
   String? profilePicture;
   String? cover;
-  dynamic gamePlayed;
+  GamePlayed? gamePlayed;
   String? bio;
   dynamic manager;
   List<Member>? members;
@@ -33,7 +33,9 @@ class TeamModel {
         name: json["name"],
         profilePicture: json["profile_picture"],
         cover: json["cover"],
-        gamePlayed: json["game_played"],
+        gamePlayed: json["game_played"] == null
+            ? null
+            : GamePlayed.fromJson(json["game_played"]),
         bio: json["bio"],
         manager: json["manager"],
         members: json["members"] == null

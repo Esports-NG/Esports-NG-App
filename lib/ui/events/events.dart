@@ -59,10 +59,6 @@ class _EventsPageState extends State<EventsPage>
             SliverToBoxAdapter(
               child: Column(
                 children: [
-                  Divider(
-                    color: AppColor().primaryWhite.withOpacity(0.5),
-                    height: 1,
-                  ),
                   Padding(
                     padding: EdgeInsets.all(Get.height * 0.02),
                     child: SizedBox(

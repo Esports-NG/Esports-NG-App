@@ -562,12 +562,12 @@ class AuthRepository extends GetxController {
     }
   }
 
-  Future followTeam(String title, userId) async {
+  Future followTeam(int id) async {
     _followStatus(FollowStatus.loading);
     try {
       debugPrint('following team...');
       var response = await http.post(
-        Uri.parse('${ApiLink.followTeam}$title/$userId/'),
+        Uri.parse(ApiLink.followTeam(id)),
         headers: {
           "Content-Type": "application/json",
           "Authorization": 'JWT $token'
@@ -580,7 +580,14 @@ class AuthRepository extends GetxController {
       debugPrint(response.body);
       if (response.statusCode == 200) {
         _followStatus(FollowStatus.success);
-      } else {}
+        if (json["message"].toString().contains("unfollowed")) {
+          return "unfollowed";
+        } else {
+          return "followed";
+        }
+      } else {
+        return "error";
+      }
     } catch (error) {
       _followStatus(FollowStatus.error);
       debugPrint("follow team error: $error");

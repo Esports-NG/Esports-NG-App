@@ -2,11 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:e_sport/ui/account/account_community/edit_community_profile.dart';
 
 class AccountCommunityItem extends StatelessWidget {
   final CommunityModel item;
@@ -76,24 +78,53 @@ class AccountCommunityItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(
-                  title: item.name,
-                  size: 16,
-                  fontFamily: 'GilroyBold',
-                  textAlign: TextAlign.start,
-                  color: AppColor().greyOne,
-                ),
-                Divider(
-                  color: AppColor().lightItemsColor.withOpacity(0.3),
-                  height: Get.height * 0.03,
-                  thickness: 0.5,
-                ),
-                CustomText(
-                  title: item.bio!.toSentenceCase(),
-                  size: 12,
-                  fontFamily: 'GilroyMedium',
-                  textAlign: TextAlign.start,
-                  color: AppColor().greySix,
+                Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: CustomFillButton(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) => EditCommunityPage()));
+                        },
+                        buttonText: 'Edit',
+                        width: 80,
+                        height: 40,
+                      ),
+                    ),
+                    Positioned(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              title: item.name,
+                              size: 16,
+                              fontFamily: 'GilroyBold',
+                              textAlign: TextAlign.start,
+                              color: AppColor().greyOne,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Divider(
+                              color:
+                                  AppColor().lightItemsColor.withOpacity(0.3),
+                              height: Get.height * 0.03,
+                              thickness: 0.5,
+                            ),
+                            CustomText(
+                              title: item.bio!.toSentenceCase(),
+                              size: 12,
+                              fontFamily: 'GilroyMedium',
+                              textAlign: TextAlign.start,
+                              color: AppColor().greySix,
+                            ),
+                          ]),
+                    ),
+                  ],
                 ),
               ],
             ),

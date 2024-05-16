@@ -127,26 +127,28 @@ class Author {
   String? country;
   String? state;
   String? gender;
+  String? bio;
   DateTime? dOB;
   List<Purpose>? purpose;
   Profile? profile;
 
-  Author({
-    this.id,
-    this.email,
-    this.fullName,
-    this.userName,
-    this.phoneNumber,
-    this.country,
-    this.state,
-    this.gender,
-    this.dOB,
-    this.purpose,
-    this.profile,
-  });
+  Author(
+      {this.id,
+      this.email,
+      this.fullName,
+      this.userName,
+      this.phoneNumber,
+      this.country,
+      this.state,
+      this.gender,
+      this.dOB,
+      this.purpose,
+      this.profile,
+      this.bio});
 
   factory Author.fromJson(Map<String, dynamic> json) => Author(
         id: json["id"],
+        bio: json["bio"],
         email: json["email"],
         fullName: json["full_name"],
         userName: json["user_name"],
@@ -170,6 +172,7 @@ class Author {
         "user_name": userName,
         "phone_number": phoneNumber,
         "country": country,
+        "bio": bio,
         "state": state,
         "gender": gender,
         "d_o_b":

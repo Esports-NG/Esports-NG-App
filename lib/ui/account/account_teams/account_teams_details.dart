@@ -1,13 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:change_case/change_case.dart';
-import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/home/components/page_header.dart';
+import 'package:e_sport/ui/account/account_teams/team_players_list.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:e_sport/util/helpers.dart';
 
 import 'account_teams_full_profile.dart';
 
@@ -28,10 +30,33 @@ class AccountTeamsDetail extends StatefulWidget {
 
 class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
   final teamController = Get.put(TeamRepository());
+  final authController = Get.put(AuthRepository());
+
+  List<Map<String, dynamic>>? _teamFollowers;
+  bool _isFollowing = false;
+  bool _isLoading = true;
+  int? _followerCount;
+
+  Future getTeamFollowers() async {
+    var followers = await teamController.getTeamFollowers(widget.item.id!);
+    setState(() {
+      _teamFollowers = followers;
+      _followerCount = followers.length;
+      if (followers.any(
+          (element) => element["user_id"]["id"] == authController.user!.id)) {
+        _isFollowing = true;
+      } else {
+        _isFollowing = false;
+      }
+      _isLoading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    teamController.getTeamInbox(true, widget.item.id!);
+    getTeamFollowers();
+    // teamController.getTeamInbox(true, widget.item.id!);
   }
 
   @override
@@ -149,12 +174,14 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CustomText(
-                      title: '0',
-                      weight: FontWeight.w500,
-                      size: Get.height * 0.02,
-                      fontFamily: 'GilroyBold',
-                      color: AppColor().primaryWhite),
+                  _teamFollowers != null
+                      ? CustomText(
+                          title: _followerCount.toString(),
+                          weight: FontWeight.w500,
+                          size: Get.height * 0.02,
+                          fontFamily: 'GilroyBold',
+                          color: AppColor().primaryWhite)
+                      : const ButtonLoader(),
                   Gap(Get.height * 0.01),
                   CustomText(
                       title: 'Followers',
@@ -175,22 +202,45 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   children: [
                     Expanded(
                       child: CustomFillOption(
-                        onTap: () {},
+                        buttonColor: _isLoading ? Colors.transparent : null,
+                        onTap: () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          var message =
+                              await authController.followTeam(widget.item.id!);
+                          print(message);
+
+                          setState(() {
+                            if (message == "unfollowed") {
+                              _isFollowing = false;
+                              _followerCount = _followerCount! - 1;
+                            } else if (message == "followed") {
+                              _isFollowing = true;
+                              _followerCount = _followerCount! + 1;
+                            }
+                            _isLoading = false;
+                          });
+                        },
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                  'assets/images/svg/account_icon.svg',
-                                  height: Get.height * 0.015,
-                                  color: AppColor().primaryWhite),
-                              Gap(Get.height * 0.01),
-                              CustomText(
-                                  title: 'Follow',
-                                  weight: FontWeight.w400,
-                                  size: Get.height * 0.017,
-                                  fontFamily: 'GilroyRegular',
-                                  color: AppColor().primaryWhite),
-                            ]),
+                            children: _isLoading
+                                ? [const ButtonLoader()]
+                                : [
+                                    SvgPicture.asset(
+                                        'assets/images/svg/account_icon.svg',
+                                        height: Get.height * 0.015,
+                                        color: AppColor().primaryWhite),
+                                    Gap(Get.height * 0.01),
+                                    CustomText(
+                                        title: _isFollowing
+                                            ? 'Unfollow'
+                                            : 'Follow',
+                                        weight: FontWeight.w400,
+                                        size: Get.height * 0.017,
+                                        fontFamily: 'GilroyRegular',
+                                        color: AppColor().primaryWhite),
+                                  ]),
                       ),
                     ),
                     Gap(Get.height * 0.02),
@@ -198,8 +248,10 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                       child: CustomFillOption(
                         buttonColor:
                             AppColor().primaryBackGroundColor.withOpacity(0.7),
-                        borderColor: AppColor().greyEight,
-                        onTap: () {},
+                        borderColor: AppColor().darkGrey,
+                        onTap: () {
+                          Helpers().showComingSoonDialog(context);
+                        },
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -230,7 +282,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                 CustomFillOption(
                   buttonColor:
                       AppColor().primaryBackGroundColor.withOpacity(0.7),
-                  borderColor: AppColor().greyEight,
+                  borderColor: AppColor().darkGrey,
                   onTap: () {},
                   child: CustomText(
                       title: 'Apply to team',
@@ -279,7 +331,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   CustomText(
                       title: 'Team Owner',
                       weight: FontWeight.w400,
-                      size: Get.height * 0.019,
+                      size: 18,
                       fontFamily: 'GilroySemiBold',
                       color: AppColor().primaryWhite),
                   Gap(Get.height * 0.02),
@@ -322,8 +374,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   ),
                   Gap(Get.height * 0.01),
                   CustomText(
-                      title:
-                          'I’m a gaming enthusiast and an integral part of the gaming community. With a passion for video games and a deep understanding of gaming trends...',
+                      title: widget.item.owner!.bio!,
                       weight: FontWeight.w400,
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyRegular',
@@ -352,40 +403,58 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-            child: PageHeaderWidget(
-              onTap: () {},
-              title: 'Media, Links and Document',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  title: "Personnel List",
+                  size: 18,
+                  color: AppColor().primaryWhite,
+                  fontFamily: "GilroySemiBold",
+                ),
+                Gap(Get.height * 0.02),
+                GestureDetector(
+                  onTap: () => Get.to(TeamPlayersList(item: widget.item)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          title: "Players",
+                          size: 14,
+                          color: AppColor().primaryWhite,
+                        ),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: AppColor().primaryColor,
+                        )
+                      ]),
+                ),
+                Divider(
+                  thickness: 0.1,
+                  height: Get.height * 0.03,
+                ),
+                GestureDetector(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          title: "Staff List",
+                          size: 14,
+                          color: AppColor().primaryWhite,
+                        ),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: AppColor().primaryColor,
+                        )
+                      ]),
+                ),
+              ],
             ),
           ),
-          Gap(Get.height * 0.01),
-          SizedBox(
-            height: Get.height * 0.12,
-            child: ListView.separated(
-                physics: const ScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (context, index) => Gap(Get.height * 0.01),
-                itemCount: mediaItems.length,
-                itemBuilder: (context, index) {
-                  var item = mediaItems[index];
-                  return Container(
-                    padding: EdgeInsets.all(Get.height * 0.02),
-                    width: Get.width * 0.25,
-                    decoration: BoxDecoration(
-                      color: AppColor().bgDark,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: AppColor().greySix,
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage(item.image!),
-                        fit: BoxFit.fitWidth,
-                        alignment: Alignment.topCenter,
-                      ),
-                    ),
-                  );
-                }),
+          Divider(
+            color: AppColor().lightItemsColor.withOpacity(0.3),
+            height: Get.height * 0.05,
+            thickness: 4,
           ),
           Gap(Get.height * 0.04),
           Padding(

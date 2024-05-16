@@ -20,7 +20,6 @@ class ApiLink {
   static String changePassword = "${baseurl}users/profile";
   static String followUser = "${baseurl}extra/followuser/";
   // static String followCommunity = "${baseurl}extra/followcomm/";
-  static String followTeam = "${baseurl}extra/followteam/";
   static String viewUserTeam = "${baseurl}team/myteam/";
 
   //Post
@@ -42,6 +41,9 @@ class ApiLink {
   static String createTeam = "${baseurl}team/create/";
   static String getAllTeam = "${baseurl}team/view/";
   static String team = "${baseurl}team/";
+  static String getTeamFollowers(int id) =>
+      "${baseurl}extra/followers/team/view/?group_id=$id";
+  static String followTeam(int id) => "${baseurl}extra/followteam/$id/";
 
   //Player
   static String createPlayer = "${baseurl}player/register/";

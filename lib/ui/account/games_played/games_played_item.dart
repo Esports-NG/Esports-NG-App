@@ -2,10 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:e_sport/ui/account/games_played/edit_player_profile.dart';
 
 class GamesPlayedItem extends StatefulWidget {
   final PlayerModel item;
@@ -70,20 +73,43 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
                 ),
           Padding(
             padding: EdgeInsets.all(Get.height * 0.02),
-            child: Column(
+            child: Stack(
               children: [
-                textItem(
-                    title: 'Game Name: ',
-                    subTitle: widget.item.gamePlayed!.name!),
-                Gap(Get.height * 0.01),
-                textItem(
-                  title: 'Game ID: ',
-                  subTitle: widget.item.inGameId!,
+                Column(
+                  children: [
+                    textItem(
+                        title: 'Game Name: ',
+                        subTitle: widget.item.gamePlayed!.name!),
+                    Gap(Get.height * 0.01),
+                    textItem(
+                      title: 'Game ID: ',
+                      subTitle: widget.item.inGameId!,
+                    ),
+                    Gap(Get.height * 0.01),
+                    textItem(
+                      title: 'IGN: ',
+                      subTitle: widget.item.inGameName!,
+                    ),
+                  ],
                 ),
-                Gap(Get.height * 0.01),
-                textItem(
-                  title: 'IGN: ',
-                  subTitle: widget.item.inGameName!,
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Column(
+                    children: [
+                      CustomFillButton(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) => const EditPlayerProfile()));
+                        },
+                        buttonText: 'Edit',
+                        width: 80,
+                        height: 40,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

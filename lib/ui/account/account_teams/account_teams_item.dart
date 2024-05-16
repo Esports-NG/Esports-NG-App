@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/account/account_teams/edit_team_profile.dart';
+import 'package:e_sport/ui/account/games_played/edit_player_profile.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -79,36 +83,62 @@ class AccountTeamsItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(
-                  title: item.name,
-                  size: 16,
-                  fontFamily: 'GilroyBold',
-                  textAlign: TextAlign.start,
-                  color: AppColor().greyOne,
-                ),
-                Gap(Get.height * 0.01),
-                CustomText(
-                  title: item.members!.isEmpty
-                      ? 'No member'
-                      : item.membersCount == '1'
-                          ? '${item.membersCount} member'
-                          : '${item.membersCount} members',
-                  size: 12,
-                  fontFamily: 'GilroyRegular',
-                  textAlign: TextAlign.start,
-                  color: AppColor().greySix,
-                ),
-                Divider(
-                  color: AppColor().lightItemsColor.withOpacity(0.3),
-                  height: Get.height * 0.03,
-                  thickness: 0.5,
-                ),
-                CustomText(
-                  title: item.bio,
-                  size: 12,
-                  fontFamily: 'GilroyMedium',
-                  textAlign: TextAlign.start,
-                  color: AppColor().greySix,
+                Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: CustomFillButton(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) => const EditTeamPage()));
+                        },
+                        buttonText: 'Edit',
+                        width: 80,
+                        height: 40,
+                      ),
+                    ),
+                    Positioned(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            title: item.name,
+                            size: 16,
+                            fontFamily: 'GilroyBold',
+                            textAlign: TextAlign.start,
+                            color: AppColor().greyOne,
+                          ),
+                          Gap(Get.height * 0.01),
+                          CustomText(
+                            title: item.members!.isEmpty
+                                ? 'No member'
+                                : item.membersCount == '1'
+                                    ? '${item.membersCount} member'
+                                    : '${item.membersCount} members',
+                            size: 12,
+                            fontFamily: 'GilroyRegular',
+                            textAlign: TextAlign.start,
+                            color: AppColor().greySix,
+                          ),
+                          Divider(
+                            color: AppColor().lightItemsColor.withOpacity(0.3),
+                            height: Get.height * 0.03,
+                            thickness: 0.5,
+                          ),
+                          CustomText(
+                            title: item.bio,
+                            size: 12,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.start,
+                            color: AppColor().greySix,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -143,6 +143,7 @@ class TeamRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       });
       var json = jsonDecode(response.body);
+      print(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
@@ -206,6 +207,19 @@ class TeamRepository extends GetxController {
       debugPrint("getting my team: ${error.toString()}");
       _myTeamStatus(MyTeamStatus.error);
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getTeamFollowers(int id) async {
+    var response =
+        await http.get(Uri.parse(ApiLink.getTeamFollowers(id)), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+
+    print(response.body);
+    List<dynamic> json = jsonDecode(response.body);
+
+    return json.map((e) => e as Map<String, dynamic>).toList();
   }
 
   Future getTeamInbox(bool isFirstTime, int teamId) async {

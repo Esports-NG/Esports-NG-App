@@ -316,7 +316,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                 buttonColor: AppColor()
                                     .primaryBackGroundColor
                                     .withOpacity(0.7),
-                                borderColor: AppColor().greyEight,
+                                borderColor: AppColor().darkGrey,
                                 onTap: () => showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -359,7 +359,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                           buttonColor: AppColor()
                               .primaryBackGroundColor
                               .withOpacity(0.7),
-                          borderColor: AppColor().greyEight,
+                          borderColor: AppColor().darkGrey,
                           onTap: () => showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -382,7 +382,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                           buttonColor: AppColor()
                               .primaryBackGroundColor
                               .withOpacity(0.7),
-                          borderColor: AppColor().greyEight,
+                          borderColor: AppColor().darkGrey,
                           onTap: () {},
                           child: CustomText(
                               title: 'Join community',

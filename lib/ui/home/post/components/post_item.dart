@@ -10,6 +10,7 @@ import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -332,29 +333,34 @@ class _PostItemState extends State<PostItem> {
                     ? Container(
                         child: widget.item.image == null
                             ? Container()
-                            : CachedNetworkImage(
-                                height: Get.height * 0.25,
-                                width: double.infinity,
-                                progressIndicatorBuilder:
-                                    (context, url, progress) => Center(
-                                  child: SizedBox(
-                                    height: Get.height * 0.05,
-                                    width: Get.height * 0.05,
-                                    child: CircularProgressIndicator(
-                                        color: AppColor().primaryWhite,
-                                        value: progress.progress),
+                            : GestureDetector(
+                                onTap: () => Helpers().showImagePopup(
+                                    context, widget.item.image!),
+                                child: CachedNetworkImage(
+                                  height: Get.height * 0.25,
+                                  width: double.infinity,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Center(
+                                    child: SizedBox(
+                                      height: Get.height * 0.05,
+                                      width: Get.height * 0.05,
+                                      child: CircularProgressIndicator(
+                                          color: AppColor().primaryWhite,
+                                          value: progress.progress),
+                                    ),
                                   ),
-                                ),
-                                errorWidget: (context, url, error) => Icon(
-                                    Icons.error,
-                                    color: AppColor().primaryWhite),
-                                imageUrl: widget.item.image!,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(widget.item.image!),
-                                        fit: BoxFit.cover),
+                                  errorWidget: (context, url, error) => Icon(
+                                      Icons.error,
+                                      color: AppColor().primaryWhite),
+                                  imageUrl: widget.item.image!,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image:
+                                              NetworkImage(widget.item.image!),
+                                          fit: BoxFit.cover),
+                                    ),
                                   ),
                                 ),
                               ),
