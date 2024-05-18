@@ -61,6 +61,13 @@ class TeamRepository extends GetxController {
   List<TeamModel> get myTeam => _myTeam.value;
   TeamInboxModel? get teamInbox => _teamInbox.value;
 
+  // apply to team controller
+  TextEditingController teamRole = TextEditingController();
+  TextEditingController teamJoinReason = TextEditingController();
+  RxBool includeGamerProfile = true.obs;
+  RxBool shareTeamHistory = false.obs;
+  RxList<GamePlayed> gamesPlayed = <GamePlayed>[].obs;
+
   final _teamStatus = TeamStatus.empty.obs;
   final _teamInboxStatus = TeamInboxStatus.empty.obs;
   final _myTeamStatus = MyTeamStatus.empty.obs;

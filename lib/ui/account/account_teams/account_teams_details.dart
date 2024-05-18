@@ -5,6 +5,7 @@ import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/account/account_teams/apply_as_player.dart';
 import 'package:e_sport/ui/account/account_teams/team_players_list.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
@@ -283,7 +284,11 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   buttonColor:
                       AppColor().primaryBackGroundColor.withOpacity(0.7),
                   borderColor: AppColor().darkGrey,
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(ApplyAsPlayer(
+                      item: widget.item,
+                    ));
+                  },
                   child: CustomText(
                       title: 'Apply to team',
                       weight: FontWeight.w400,

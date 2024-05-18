@@ -61,6 +61,8 @@ class EventRepository extends GetxController
   final Rx<List<EventModel>> _allSocialEvent = Rx([]);
   final Rx<List<EventModel>> _mySocialEvent = Rx([]);
 
+  RxBool isFiltering = true.obs;
+
   List<EventModel> get allEvent => _allEvent.value;
   List<EventModel> get filteredEvent => _filteredEvent.value;
   List<EventModel> get myEvent => _myEvent.value;
@@ -109,7 +111,11 @@ class EventRepository extends GetxController
       statusFilter.value = value;
     } else if (title == "Game") {
       gameFilter.value = value;
-      eventFilter.update("games__name", (val) => value, ifAbsent: () => value);
+      if (value == "All") {
+        eventFilter.remove("games_name");
+      } else {
+        eventFilter.update("games_name", (val) => value, ifAbsent: () => value);
+      }
     } else {
       typeFilter.value = value;
     }
@@ -168,6 +174,7 @@ class EventRepository extends GetxController
         getAllEvents();
         getAllTournaments(true);
         getAllSocialEvents(true);
+        filterEvents();
       }
     });
 
@@ -282,14 +289,22 @@ class EventRepository extends GetxController
   }
 
   Future filterEvents() async {
-    print("filtering");
-    var response = await http.get(
-        Uri.https("esports-ng.vercel.app", "/event/search",
-            eventFilter.cast<String, dynamic>()),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        });
-    print(response.body);
+    try {
+      print("filtering");
+      isFiltering(true);
+      var response = await http.get(
+          Uri.https(
+              "esports-ng.vercel.app", "/event/search/", eventFilter.cast()),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": 'JWT ${authController.token}'
+          });
+      print(response.body);
+      var json = jsonDecode(response.body);
+      var list = List.from(json);
+      var filteredEvents = list.map((e) => EventModel.fromJson(e)).toList();
+      _filteredEvent(filteredEvents);
+    } catch (err) {}
+    isFiltering(false);
   }
 }

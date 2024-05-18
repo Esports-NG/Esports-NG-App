@@ -31,8 +31,13 @@ class Helpers {
     showDialog(
         context: context,
         builder: (context) => Dialog(
+              backgroundColor: Colors.transparent,
               elevation: 0,
-              child: Image.network(imageUrl),
+              child: Image.network(
+                imageUrl,
+                width: Get.width,
+                fit: BoxFit.cover,
+              ),
             ));
   }
 }

@@ -121,8 +121,9 @@ class _EventsPageState extends State<EventsPage>
               notificationPredicate: (notification) => notification.depth == 1,
               onRefresh: () async {
                 await eventController.getAllEvents();
-                await eventController.getAllSocialEvents(false);
-                await eventController.getAllTournaments(false);
+                // await eventController.getAllSocialEvents(false);
+                // await eventController.getAllTournaments(false);
+                await eventController.filterEvents();
               },
               child: TabBarView(
                 controller: eventController.tabController,

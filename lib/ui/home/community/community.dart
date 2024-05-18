@@ -121,28 +121,6 @@ class _CommunityPageState extends State<CommunityPage> {
                   thickness: 4,
                 ),
                 Gap(Get.height * 0.03),
-                Padding(
-                  padding: EdgeInsets.only(left: Get.height * 0.02),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: Get.height * 0.02),
-                        child: PageHeaderWidget(
-                          onTap: () => Get.to(() => const LatestNews()),
-                          title: 'Latest News',
-                        ),
-                      ),
-                      Gap(Get.height * 0.03),
-                      const ComingSoonWidget()
-                    ],
-                  ),
-                ),
-                Gap(Get.height * 0.03),
-                Divider(
-                  color: AppColor().primaryWhite.withOpacity(0.1),
-                  thickness: 4,
-                ),
-                Gap(Get.height * 0.03),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -184,6 +162,28 @@ class _CommunityPageState extends State<CommunityPage> {
                               }),
                     )
                   ],
+                ),
+                Gap(Get.height * 0.03),
+                Divider(
+                  color: AppColor().primaryWhite.withOpacity(0.1),
+                  thickness: 4,
+                ),
+                Gap(Get.height * 0.03),
+                Padding(
+                  padding: EdgeInsets.only(left: Get.height * 0.02),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: Get.height * 0.02),
+                        child: PageHeaderWidget(
+                          onTap: () => Get.to(() => const LatestNews()),
+                          title: 'Latest News',
+                        ),
+                      ),
+                      Gap(Get.height * 0.03),
+                      const ComingSoonWidget()
+                    ],
+                  ),
                 ),
                 Gap(Get.height * 0.03),
                 Divider(

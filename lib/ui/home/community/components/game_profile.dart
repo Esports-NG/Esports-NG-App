@@ -9,6 +9,7 @@ import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -66,33 +67,38 @@ class _GameProfileState extends State<GameProfile> {
                                     opacity: 0.2),
                               ),
                             )
-                          : CachedNetworkImage(
-                              height: Get.height * 0.15,
-                              width: double.infinity,
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => Center(
-                                child: SizedBox(
-                                  height: Get.height * 0.05,
-                                  width: Get.height * 0.05,
-                                  child: CircularProgressIndicator(
-                                      color: AppColor().primaryColor,
-                                      value: progress.progress),
+                          : GestureDetector(
+                              onTap: () => Helpers().showImagePopup(context,
+                                  "${ApiLink.imageUrl}${details!.cover!}"),
+                              child: CachedNetworkImage(
+                                height: Get.height * 0.15,
+                                width: double.infinity,
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => Center(
+                                  child: SizedBox(
+                                    height: Get.height * 0.05,
+                                    width: Get.height * 0.05,
+                                    child: CircularProgressIndicator(
+                                        color: AppColor().primaryColor,
+                                        value: progress.progress),
+                                  ),
                                 ),
-                              ),
-                              errorWidget: (context, url, error) => Icon(
-                                  Icons.error,
-                                  color: AppColor().primaryColor),
-                              imageUrl: "${ApiLink.imageUrl}${details!.cover!}",
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10)),
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          "${ApiLink.imageUrl}${details!.cover!}"),
-                                      fit: BoxFit.cover),
+                                errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    color: AppColor().primaryColor),
+                                imageUrl:
+                                    "${ApiLink.imageUrl}${details!.cover!}",
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10)),
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                        opacity: 0.5),
+                                  ),
                                 ),
                               ),
                             ),
@@ -110,32 +116,37 @@ class _GameProfileState extends State<GameProfile> {
                                     child: SvgPicture.asset(
                                         'assets/images/svg/people.svg'),
                                   )
-                                : CachedNetworkImage(
-                                    height: Get.height * 0.1,
-                                    width: Get.height * 0.1,
-                                    progressIndicatorBuilder:
-                                        (context, url, progress) => Center(
-                                      child: SizedBox(
-                                        height: Get.height * 0.02,
-                                        width: Get.height * 0.02,
-                                        child: CircularProgressIndicator(
-                                            color: AppColor().primaryColor,
-                                            value: progress.progress),
+                                : GestureDetector(
+                                    onTap: () => Helpers().showImagePopup(
+                                        context,
+                                        "${ApiLink.imageUrl}${details!.profilePicture!}"),
+                                    child: CachedNetworkImage(
+                                      height: Get.height * 0.1,
+                                      width: Get.height * 0.1,
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) => Center(
+                                        child: SizedBox(
+                                          height: Get.height * 0.02,
+                                          width: Get.height * 0.02,
+                                          child: CircularProgressIndicator(
+                                              color: AppColor().primaryColor,
+                                              value: progress.progress),
+                                        ),
                                       ),
-                                    ),
-                                    errorWidget: (context, url, error) => Icon(
-                                        Icons.error,
-                                        color: AppColor().primaryColor),
-                                    imageUrl:
-                                        "${ApiLink.imageUrl}${details!.profilePicture!}",
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                "${ApiLink.imageUrl}${details!.profilePicture!}"),
-                                            fit: BoxFit.cover),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error,
+                                              color: AppColor().primaryColor),
+                                      imageUrl:
+                                          "${ApiLink.imageUrl}${details!.profilePicture!}",
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  "${ApiLink.imageUrl}${details!.profilePicture!}"),
+                                              fit: BoxFit.cover),
+                                        ),
                                       ),
                                     ),
                                   )

@@ -4,6 +4,7 @@ import 'package:e_sport/ui/events/components/event_filter_dropdown.dart';
 import 'package:e_sport/ui/events/components/event_game_filter.dart';
 import 'package:e_sport/ui/events/components/social_events_list.dart';
 import 'package:e_sport/ui/events/components/tournament_list.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -73,11 +74,21 @@ class _EventTabState extends State<EventTab> {
             ],
           ),
           Gap(Get.height * 0.02),
-          eventController.typeFilter.value == "All"
-              ? const AllEventList()
-              : eventController.typeFilter.value == "Tournament"
-                  ? const TournamentList()
-                  : const SocialEventsList()
+          eventController.isFiltering.value
+              ? Container(
+                  margin: EdgeInsets.only(top: Get.height * 0.04),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor().primaryColor,
+                      strokeWidth: 3,
+                    ),
+                  ),
+                )
+              : eventController.typeFilter.value == "All"
+                  ? const AllEventList()
+                  : eventController.typeFilter.value == "Tournament"
+                      ? const TournamentList()
+                      : const SocialEventsList()
         ]),
       ),
     );
