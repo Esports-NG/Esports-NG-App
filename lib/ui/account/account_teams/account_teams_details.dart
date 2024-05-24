@@ -38,7 +38,7 @@ class AccountTeamsDetail extends StatefulWidget {
 class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
   final teamController = Get.put(TeamRepository());
   final authController = Get.put(AuthRepository());
-   final gamesController = Get.put(GamesRepository());
+  final gamesController = Get.put(GamesRepository());
 
   List<Map<String, dynamic>>? _teamFollowers;
   bool _isFollowing = false;
@@ -92,8 +92,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
               Positioned(
                 top: Get.height * 0.1,
                 child: GestureDetector(
-                  onTap: () => Helpers().showImagePopup(context,
-                                  "${widget.item.cover}"),
+                  onTap: () =>
+                      Helpers().showImagePopup(context, "${widget.item.cover}"),
                   child: Stack(
                     alignment: Alignment.bottomRight,
                     children: [
@@ -370,8 +370,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   Row(
                     children: [
                       InkWell(
-                        onTap: () =>
-                    Get.to(() => UserDetails(id: widget.item.owner!.id!)),
+                        onTap: () => Get.to(
+                            () => UserDetails(id: widget.item.owner!.id!)),
                         child: Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -401,8 +401,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                       ),
                       Gap(Get.height * 0.015),
                       InkWell(
-                        onTap: () =>
-                    Get.to(() => UserDetails(id: widget.item.owner!.id!)),
+                        onTap: () => Get.to(
+                            () => UserDetails(id: widget.item.owner!.id!)),
                         child: CustomText(
                             title: widget.item.owner!.fullName!.toCapitalCase(),
                             weight: FontWeight.w400,
@@ -424,7 +424,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   Gap(Get.height * 0.02),
                   InkWell(
                     onTap: () =>
-                    Get.to(() => UserDetails(id: widget.item.owner!.id!)),
+                        Get.to(() => UserDetails(id: widget.item.owner!.id!)),
                     child: Center(
                       child: CustomText(
                           title: 'See full profile',
@@ -462,43 +462,42 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   child: Column(
                     children: [
                       GestureDetector(
-                      onTap: () => Get.to(TeamPlayersList(item: widget.item)),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomText(
-                              title: "Players",
-                              size: 14,
-                              color: AppColor().primaryWhite,
-                            ),
-                            Icon(
-                              Icons.chevron_right_rounded,
-                              color: AppColor().primaryColor,
-                            )
-                          ]),
-                    ),
-                    Divider(
-                  thickness: 0.1,
-                  height: Get.height * 0.03,
-                ),
-                GestureDetector(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomText(
-                          title: "Staff List",
-                          size: 14,
-                          color: AppColor().primaryWhite,
-                        ),
-                        Icon(
-                          Icons.chevron_right_rounded,
-                          color: AppColor().primaryColor,
-                        )
-                      ]),
-                ),
+                        onTap: () => Get.to(TeamPlayersList(item: widget.item)),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText(
+                                title: "Players",
+                                size: 14,
+                                color: AppColor().primaryWhite,
+                              ),
+                              Icon(
+                                Icons.chevron_right_rounded,
+                                color: AppColor().primaryColor,
+                              )
+                            ]),
+                      ),
+                      Divider(
+                        thickness: 0.1,
+                        height: Get.height * 0.03,
+                      ),
+                      GestureDetector(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomText(
+                                title: "Staff List",
+                                size: 14,
+                                color: AppColor().primaryWhite,
+                              ),
+                              Icon(
+                                Icons.chevron_right_rounded,
+                                color: AppColor().primaryColor,
+                              )
+                            ]),
+                      ),
                     ],
                   ),
-                  
                 ),
               ],
             ),
@@ -522,93 +521,94 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Column(
-                    children: [ExpansionPanelList(
-                      expansionCallback: (panelIndex, isExpanded) => setState(() {
+                  child: Column(children: [
+                    ExpansionPanelList(
+                      expansionCallback: (panelIndex, isExpanded) =>
+                          setState(() {
                         _isOpen[panelIndex] = isExpanded;
                       }),
                       expandIconColor: AppColor().primaryColor,
                       children: [
                         ExpansionPanel(
-                        isExpanded: _isOpen[0],
-                        backgroundColor: AppColor().primaryBackGroundColor,
-                        headerBuilder: (context, isExpanded) =>Row(
+                          isExpanded: _isOpen[0],
+                          backgroundColor: AppColor().primaryBackGroundColor,
+                          headerBuilder: (context, isExpanded) => Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomText(
+                                  title: "Games Played",
+                                  size: 14,
+                                  color: AppColor().primaryWhite,
+                                ),
+                              ]),
+                          body: SizedBox(
+                            height: Get.height * 0.17,
+                            child: gamesController.isLoading.value
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : ListView.separated(
+                                    physics: const ScrollPhysics(),
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    separatorBuilder: (context, index) =>
+                                        Gap(Get.height * 0.02),
+                                    itemCount:
+                                        gamesController.allGames.take(5).length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                          onTap: () {
+                                            Get.to(() => GameProfile(
+                                                game: gamesController
+                                                    .allGames[index]));
+                                          },
+                                          child: TeamsGamesPlayedItem(
+                                            game:
+                                                gamesController.allGames[index],
+                                          ));
+                                    }),
+                          ),
+                        )
+                      ],
+                    ),
+                    Gap(Get.height * 0.02),
+                    InkWell(
+                      onTap: () =>
+                          Get.to(() => UserDetails(id: widget.item.owner!.id!)),
+                      child: Center(
+                        child: CustomText(
+                            title: 'See all games',
+                            weight: FontWeight.w400,
+                            size: Get.height * 0.017,
+                            fontFamily: 'GilroyMedium',
+                            underline: TextDecoration.underline,
+                            color: AppColor().primaryColor),
+                      ),
+                    ),
+                    Divider(
+                      thickness: 0.1,
+                      height: Get.height * 0.03,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomText(
-                              title: "Games Played",
+                              title: "Tournament History",
                               size: 14,
                               color: AppColor().primaryWhite,
                             ),
-                        ]),
-                        body: SizedBox(
-                          height: Get.height * 0.17,
-                          child: gamesController.isLoading.value
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : ListView.separated(
-                                  physics: const ScrollPhysics(),
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  separatorBuilder: (context, index) =>
-                                      Gap(Get.height * 0.02),
-                                  itemCount:
-                                      gamesController.allGames.take(5).length,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                        onTap: () {
-                                          Get.to(() => GameProfile(
-                                              game:
-                                                  gamesController.allGames[index]));
-                                        },
-                                        child: TeamsGamesPlayedItem(
-                                          game: gamesController.allGames[index],
-                                        ));
-                                  }
-                                  ),
-                      ),
-                    )],
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              color: AppColor().primaryColor,
+                            )
+                          ]),
                     ),
-                    const SizedBox(height: 20,),
-                    InkWell(
-                      onTap: () =>
-                      Get.to(() => UserDetails(id: widget.item.owner!.id!)),
-                      child: Center(
-                        child: CustomText(
-                          title: 'See all games',
-                          weight: FontWeight.w400,
-                          size: Get.height * 0.017,
-                          fontFamily: 'GilroyMedium',
-                          underline: TextDecoration.underline,
-                          color: AppColor().primaryColor),
-                      ),
-                    ),
-                    const SizedBox(height: 20,),
-                Divider(
-                  thickness: 0.1,
-                  height: Get.height * 0.03,
+                  ]),
                 ),
-                const SizedBox(height: 20,),
-                GestureDetector(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomText(
-                          title: "Tournament History",
-                          size: 14,
-                          color: AppColor().primaryWhite,
-                        ),
-                        Icon(
-                          Icons.chevron_right_rounded,
-                          color: AppColor().primaryColor,
-                        )
-                      ]),
-                ),
-                    ]
-                  ),
-                ),
-                
               ],
             ),
           ),
