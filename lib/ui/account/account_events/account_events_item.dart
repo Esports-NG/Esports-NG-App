@@ -15,6 +15,7 @@ class AccountEventsItem extends StatefulWidget {
   final EventModel item;
   final bool? onDetailsPage;
   const AccountEventsItem({super.key, required this.item, this.onDetailsPage});
+  
 
   @override
   State<AccountEventsItem> createState() => _AccountEventsItemState();
