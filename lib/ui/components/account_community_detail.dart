@@ -8,9 +8,14 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/home/community/components/game_profile.dart';
+import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/profiles/components/community_games_covered_item.dart';
+import 'package:e_sport/ui/profiles/components/team_games_played_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
@@ -37,6 +42,7 @@ class AccountCommunityDetail extends StatefulWidget {
 class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
   final authController = Get.put(AuthRepository());
   final communityController = Get.put(CommunityRepository());
+  final gamesController = Get.put(GamesRepository());
 
   List<Map<String, dynamic>>? _communityFollowers;
   bool _isFollowing = false;
@@ -528,7 +534,36 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                       title: 'Games Covered',
                     ),
                   ),
-                  NoItemPage(title: 'Games covered', size: Get.height * 0.05),
+                  Gap(Get.height * 0.02),
+                  SizedBox(
+                      height: Get.height * 0.17,
+                      child: gamesController.isLoading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : ListView.separated(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Get.height * 0.02),
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              separatorBuilder: (context, index) =>
+                                  Gap(Get.height * 0.02),
+                              itemCount:
+                                  gamesController.allGames.take(5).length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                    onTap: () {
+                                      Get.to(() => GameProfile(
+                                          game:
+                                              gamesController.allGames[index]));
+                                    },
+                                    child: CommunityGamesCoveredItem(
+                                      game: gamesController.allGames[index],
+                                    ));
+                              }
+                              ),
+                  ),
                   Divider(
                     color: AppColor().lightItemsColor.withOpacity(0.3),
                     height: Get.height * 0.05,
