@@ -1,3 +1,4 @@
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 
 import 'team_inbox_model.dart';

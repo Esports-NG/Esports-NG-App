@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:e_sport/data/model/games_played_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/team_inbox_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
@@ -67,6 +69,21 @@ class TeamRepository extends GetxController {
   RxBool includeGamerProfile = true.obs;
   RxBool shareTeamHistory = false.obs;
   RxList<GamePlayed> gamesPlayed = <GamePlayed>[].obs;
+  OverlayPortalController gameChipOverlayController = OverlayPortalController();
+  TextEditingController gameSearchController = TextEditingController();
+
+  void hideGameChip() {
+    gameChipOverlayController.hide();
+  }
+
+  void addToGamesPlayed(GamePlayed game) {
+    if (gamesPlayed.contains(game)) {
+      gamesPlayed.remove(game);
+    } else {
+      gamesPlayed.add(game);
+    }
+    print("added game ${game.abbrev}");
+  }
 
   final _teamStatus = TeamStatus.empty.obs;
   final _teamInboxStatus = TeamInboxStatus.empty.obs;

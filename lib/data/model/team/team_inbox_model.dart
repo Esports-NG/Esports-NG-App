@@ -1,3 +1,5 @@
+import 'package:e_sport/data/model/player_model.dart';
+
 class TeamInboxModel {
   int? id;
   Team? team;
@@ -115,77 +117,6 @@ class Team {
             ? []
             : List<dynamic>.from(teamStaffs!.map((x) => x)),
         "members_count": membersCount,
-      };
-}
-
-class GamePlayed {
-  int? id;
-  String? name;
-  String? abbrev;
-  String? profilePicture;
-  String? cover;
-  int? communities;
-  int? teams;
-  int? players;
-  List<Category>? categories;
-  List<GameMode>? gameModes;
-  List<Owner>? contributors;
-
-  GamePlayed({
-    this.id,
-    this.name,
-    this.abbrev,
-    this.profilePicture,
-    this.cover,
-    this.communities,
-    this.teams,
-    this.players,
-    this.categories,
-    this.gameModes,
-    this.contributors,
-  });
-
-  factory GamePlayed.fromJson(Map<String, dynamic> json) => GamePlayed(
-        id: json["id"],
-        name: json["name"],
-        abbrev: json["abbrev"],
-        profilePicture: json["profile_picture"],
-        cover: json["cover"],
-        communities: json["communities"],
-        teams: json["teams"],
-        players: json["players"],
-        categories: json["categories"] == null
-            ? []
-            : List<Category>.from(
-                json["categories"]!.map((x) => Category.fromJson(x))),
-        gameModes: json["game_modes"] == null
-            ? []
-            : List<GameMode>.from(
-                json["game_modes"]!.map((x) => GameMode.fromJson(x))),
-        contributors: json["contributors"] == null
-            ? []
-            : List<Owner>.from(
-                json["contributors"]!.map((x) => Owner.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "abbrev": abbrev,
-        "profile_picture": profilePicture,
-        "cover": cover,
-        "communities": communities,
-        "teams": teams,
-        "players": players,
-        "categories": categories == null
-            ? []
-            : List<dynamic>.from(categories!.map((x) => x.toJson())),
-        "game_modes": gameModes == null
-            ? []
-            : List<dynamic>.from(gameModes!.map((x) => x.toJson())),
-        "contributors": contributors == null
-            ? []
-            : List<dynamic>.from(contributors!.map((x) => x.toJson())),
       };
 }
 

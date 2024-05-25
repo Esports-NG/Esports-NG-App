@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
+import 'package:e_sport/ui/account/account_teams/game_selection_chip.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -54,19 +55,9 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                     ),
                     Gap(Get.height * 0.03),
                     formControl(
-                        "Which games do you play?*",
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: AppColor().bgDark),
-                          child: CustomText(
-                            title: "Tap here to add games",
-                            color: AppColor().primaryWhite.withOpacity(0.6),
-                          ),
-                        )),
+                      "Which games do you play?*",
+                      GameSelectionChip(),
+                    ),
                     Gap(Get.height * 0.02),
                     formControl(
                         "What role would you play in our team?*",
