@@ -453,10 +453,10 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: PageHeaderWidget(
                       onTap: () {},
-                      title: 'Recent Post',
+                      title: 'Recent Posts',
                     ),
                   ),
-          NoItemPage(title: 'Recent post', size: Get.height * 0.05),
+          NoItemPage(title: 'Recent posts', size: Get.height * 0.05),
           Gap(Get.height * 0.01),
           Divider(
                     color: AppColor().lightItemsColor.withOpacity(0.3),
