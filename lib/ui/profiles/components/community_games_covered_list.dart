@@ -13,6 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+
+// There are 2 classes in this folder namely "CommunityGamesCoveredItem" For Scrollable
+// and "CommunityGamesCoveredItemForList" For List
+
 class CommunityGamesCoveredList extends StatefulWidget {
   final CommunityModel community;
   const CommunityGamesCoveredList({super.key, required this.community});
