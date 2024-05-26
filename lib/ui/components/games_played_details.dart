@@ -4,6 +4,7 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -95,12 +96,15 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                   textAlign: TextAlign.start,
                   color: AppColor().greyOne,
                 ),
-                CustomText(
-                  title: widget.item.gamePlayed!.name!.toCapitalCase(),
-                  size: 14,
-                  fontFamily: 'GilroySemiBold',
-                  textAlign: TextAlign.start,
-                  color: AppColor().greyOne,
+                InkWell(
+                  onTap: () => Get.to(() => GameProfile(game: widget.item.gamePlayed!)),
+                  child: CustomText(
+                    title: widget.item.gamePlayed!.name!.toCapitalCase(),
+                    size: 14,
+                    fontFamily: 'GilroySemiBold',
+                    textAlign: TextAlign.start,
+                    color: AppColor().greyOne,
+                  ),
                 ),
               ],
             ),
