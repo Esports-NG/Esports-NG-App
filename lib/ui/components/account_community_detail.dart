@@ -15,6 +15,7 @@ import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/profiles/components/community_games_covered_item.dart';
+import 'package:e_sport/ui/profiles/components/community_games_covered_list.dart';
 import 'package:e_sport/ui/profiles/components/team_games_played_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
@@ -517,10 +518,10 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: PageHeaderWidget(
                       onTap: () {},
-                      title: 'Recent Post',
+                      title: 'Recent Posts',
                     ),
                   ),
-                  NoItemPage(title: 'Recent post', size: Get.height * 0.05),
+                  NoItemPage(title: 'Recent posts', size: Get.height * 0.05),
                   Divider(
                     color: AppColor().lightItemsColor.withOpacity(0.3),
                     height: Get.height * 0.05,
@@ -530,7 +531,9 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                     padding:
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: PageHeaderWidget(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => CommunityGamesCoveredList(community: widget.item,));
+                      },
                       title: 'Games Covered',
                     ),
                   ),
@@ -574,10 +577,10 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: PageHeaderWidget(
                       onTap: () {},
-                      title: 'Tournament',
+                      title: 'Tournaments',
                     ),
                   ),
-                  NoItemPage(title: 'Tournament', size: Get.height * 0.05),
+                  NoItemPage(title: 'Tournaments', size: Get.height * 0.05),
                   Divider(
                     color: AppColor().lightItemsColor.withOpacity(0.3),
                     height: Get.height * 0.05,
@@ -588,10 +591,10 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: PageHeaderWidget(
                       onTap: () {},
-                      title: 'Social Event',
+                      title: 'Social Events',
                     ),
                   ),
-                  NoItemPage(title: 'Social event', size: Get.height * 0.05),
+                  NoItemPage(title: 'Social events', size: Get.height * 0.05),
                   Divider(
                     color: AppColor().lightItemsColor.withOpacity(0.3),
                     height: Get.height * 0.05,
@@ -630,7 +633,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: PageHeaderWidget(
                       onTap: () {},
-                      title: 'Media, Links and Document',
+                      title: 'Media, Links and Documents',
                     ),
                   ),
                   Gap(Get.height * 0.02),
