@@ -143,7 +143,7 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                                   color: AppColor().primaryColor,
                                   value: progress.progress),
                             ),
-                          ),
+                          ), 
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error, color: AppColor().primaryColor),
                           imageUrl: widget.item.profile,
