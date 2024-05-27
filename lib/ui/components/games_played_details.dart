@@ -60,34 +60,37 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                           'assets/images/svg/people.svg',
                         ),
                       )
-                    : CachedNetworkImage(
-                        height: Get.height * 0.06,
-                        width: Get.height * 0.06,
-                        progressIndicatorBuilder: (context, url, progress) =>
-                            Center(
-                          child: SizedBox(
-                            height: Get.height * 0.015,
-                            width: Get.height * 0.015,
-                            child: CircularProgressIndicator(
-                                color: AppColor().primaryColor,
-                                value: progress.progress),
+                    : InkWell(
+                      onTap: () => Get.to(() => GameProfile(game: widget.item.gamePlayed!)),
+                      child: CachedNetworkImage(
+                          height: Get.height * 0.06,
+                          width: Get.height * 0.06,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: SizedBox(
+                              height: Get.height * 0.015,
+                              width: Get.height * 0.015,
+                              child: CircularProgressIndicator(
+                                  color: AppColor().primaryColor,
+                                  value: progress.progress),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error, color: AppColor().primaryColor),
+                          imageUrl:
+                              '${ApiLink.imageUrl}${widget.item.gamePlayed!.profilePicture}',
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: AppColor().primaryWhite),
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      '${ApiLink.imageUrl}${widget.item.gamePlayed!.profilePicture}'),
+                                  fit: BoxFit.cover),
+                            ),
                           ),
                         ),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.error, color: AppColor().primaryColor),
-                        imageUrl:
-                            '${ApiLink.imageUrl}${widget.item.gamePlayed!.profilePicture}',
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColor().primaryWhite),
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    '${ApiLink.imageUrl}${widget.item.gamePlayed!.profilePicture}'),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                      ),
+                    ),
                 Gap(Get.height * 0.015),
                 CustomText(
                   title: 'Title: ',
