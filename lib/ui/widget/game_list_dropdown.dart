@@ -1,9 +1,11 @@
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class GameDropdown extends StatefulWidget {
@@ -25,81 +27,114 @@ class GameDropdown extends StatefulWidget {
 }
 
 class _GameDropdownState extends State<GameDropdown> {
-  final TextEditingController gameSearchController = TextEditingController();
   final gameController = Get.put(GamesRepository());
+  final eventController = Get.put(EventRepository());
+  LayerLink _link = LayerLink();
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => InputDecorator(
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: widget.enableFill == true
-              ? AppColor().primaryWhite
-              : AppColor().bgDark,
-          focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: AppColor().lightItemsColor, width: 1),
-              borderRadius: BorderRadius.circular(10)),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(10)),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<GamePlayed>(
-            isExpanded: true,
-            elevation: 0,
-            icon: Icon(Icons.keyboard_arrow_down,
-                color: widget.toggleArrow == true
-                    ? AppColor().primaryBackGroundColor
-                    : AppColor().lightItemsColor),
-            value: widget.gameValue.value,
-            dropdownColor: AppColor().darkGrey,
-            borderRadius: BorderRadius.circular(10),
-            items: [
-              DropdownMenuItem<GamePlayed>(
-                enabled: false,
-                child: SizedBox(
-                  // height: Get.height * 0.05,
-                  // width: Get.width,
-                  child: CustomTextField(
-                    prefixIcon: Icon(
-                      Icons.search_rounded,
-                      color: AppColor().greySix,
+      () => CompositedTransformTarget(
+        link: _link,
+        child: OverlayPortal(
+            controller: gameController.gameDropdownOverlayController,
+            overlayChildBuilder: (context) => Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () => gameController.hideGameDropdown(),
+                      child: SizedBox(
+                        height: Get.height,
+                        width: Get.width,
+                        child: CustomText(title: ""),
+                      ),
                     ),
-                    hint: "Search Games",
-                    textEditingController: gameSearchController,
-                  ),
+                    CompositedTransformFollower(
+                      offset: const Offset(0, 5),
+                      targetAnchor: Alignment.bottomLeft,
+                      followerAnchor: Alignment.topLeft,
+                      link: _link,
+                      child: Container(
+                        width: Get.width - Get.height * 0.04,
+                        padding: EdgeInsets.all(Get.height * 0.01),
+                        decoration: BoxDecoration(
+                            color: AppColor().primaryDark,
+                            border: Border.all(color: AppColor().darkGrey),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextField(
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: AppColor().greyEight,
+                              ),
+                              fillColor: Colors.transparent,
+                              borderColor: AppColor().greyEight,
+                              enabled: true,
+                              enabledBorder: BorderSide(
+                                  width: 0.5, color: AppColor().greyEight),
+                              textEditingController:
+                                  gameController.gameSearchText,
+                              hint: "Search For Game",
+                            ),
+                            Gap(Get.height * 0.02),
+                            Obx(
+                              () => ListView.separated(
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) =>
+                                      GestureDetector(
+                                        onTap: () {
+                                          widget.gameValue.value =
+                                              gameController
+                                                  .filteredGames[index];
+                                          gameController.hideGameDropdown();
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: Get.height * 0.015,
+                                              horizontal: Get.height * 0.01),
+                                          child: CustomText(
+                                              title: gameController
+                                                  .filteredGames[index].name,
+                                              color: AppColor()
+                                                  .primaryWhite
+                                                  .withOpacity(0.6)),
+                                        ),
+                                      ),
+                                  separatorBuilder: (context, index) => Divider(
+                                        thickness: 0.5,
+                                        color: AppColor().darkGrey,
+                                        height: 0,
+                                      ),
+                                  itemCount:
+                                      gameController.filteredGames.length),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              ...gameController.allGames
-                  .map((element) => DropdownMenuItem<GamePlayed>(
-                      value: element,
-                      child: CustomText(
-                        title: element.name,
-                        color: AppColor().primaryWhite,
-                        size: 12,
-                      )))
-                  .toList()
-            ],
-            onChanged: (value) {
-              widget.gameValue.value = value!;
-              widget.gamePlayedController.text = value.id.toString();
-              widget.handleTap;
-            },
-            hint: CustomText(
-              title: "Game",
-              color: widget.enableFill == true
-                  ? AppColor().primaryBackGroundColor
-                  : AppColor().lightItemsColor,
-              fontFamily: 'GilroyMedium',
-              weight: FontWeight.w400,
-              size: 13,
-            ),
-          ),
-        ),
+            child: GestureDetector(
+                onTap: () =>
+                    gameController.gameDropdownOverlayController.toggle(),
+                child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColor().primaryDark),
+                    child: widget.gameValue.value == null
+                        ? CustomText(
+                            title: "Search For Game",
+                            color: AppColor().primaryWhite.withOpacity(0.6),
+                          )
+                        : CustomText(
+                            title: widget.gameValue.value!.name,
+                            color: AppColor().primaryWhite,
+                          )))),
       ),
     );
   }

@@ -1,13 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:change_case/change_case.dart';
-import 'package:e_sport/data/model/post_model.dart';
-import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/model/user_profile.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/account/account.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
@@ -31,7 +26,7 @@ class UserDetails extends StatelessWidget {
       Uri.parse(ApiLink.getUserDataWithFollowers(id: id)),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": 'JWT ${token}'
+        "Authorization": 'JWT $token'
       },
     );
 
@@ -39,8 +34,6 @@ class UserDetails extends StatelessWidget {
     if (response.statusCode != 200) {
       throw (json['detail']);
     } else {
-      print(response.body.runtimeType);
-
       return userDataWithFollowersFromJson(response.body);
     }
   }
@@ -155,8 +148,8 @@ class _UserProfileState extends State<UserProfile> {
           Positioned(
             top: Get.height * 0.11,
             child: GestureDetector(
-              onTap: () => Helpers().showImagePopup(context,
-                                  "${widget.userData.profile!.profilePicture}"),
+              onTap: () => Helpers().showImagePopup(
+                  context, "${widget.userData.profile!.profilePicture}"),
               child: Stack(
                 alignment: Alignment.bottomRight,
                 children: [

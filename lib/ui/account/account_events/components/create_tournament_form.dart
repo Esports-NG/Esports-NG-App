@@ -154,7 +154,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 filled: true,
                 fillColor: tournamentController.isCommunities.value == true
                     ? AppColor().primaryWhite
-                    : AppColor().bgDark,
+                    : AppColor().primaryDark,
                 focusedBorder: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: AppColor().lightItemsColor, width: 1),
@@ -184,7 +184,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                             : AppColor().lightItemsColor,
                         fontFamily: 'GilroyBold',
                         weight: FontWeight.w400,
-                        size: 13,
+                        size: 15,
                       ),
                     );
                   }).toList(),
@@ -203,7 +203,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         : AppColor().lightItemsColor,
                     fontFamily: 'GilroyBold',
                     weight: FontWeight.w400,
-                    size: 13,
+                    size: 15,
                   ),
                 ),
               ),
@@ -303,7 +303,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 filled: true,
                 fillColor: tournamentController.isTournamentType.value == true
                     ? AppColor().primaryWhite
-                    : AppColor().bgDark,
+                    : AppColor().primaryDark,
                 focusedBorder: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: AppColor().lightItemsColor, width: 1),
@@ -335,7 +335,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                                 : AppColor().lightItemsColor,
                         fontFamily: 'GilroyMedium',
                         weight: FontWeight.w400,
-                        size: 13,
+                        size: 15,
                       ),
                     );
                   }).toList(),
@@ -352,7 +352,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         : AppColor().lightItemsColor,
                     fontFamily: 'GilroyMedium',
                     weight: FontWeight.w400,
-                    size: 13,
+                    size: 15,
                   ),
                 ),
               ),
@@ -371,7 +371,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 filled: true,
                 fillColor: tournamentController.isKnockout.value == true
                     ? AppColor().primaryWhite
-                    : AppColor().bgDark,
+                    : AppColor().primaryDark,
                 focusedBorder: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: AppColor().lightItemsColor, width: 1),
@@ -404,7 +404,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                             : AppColor().lightItemsColor,
                         fontFamily: 'GilroyMedium',
                         weight: FontWeight.w400,
-                        size: 13,
+                        size: 15,
                       ),
                     );
                   }).toList(),
@@ -421,7 +421,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         : AppColor().lightItemsColor,
                     fontFamily: 'GilroyMedium',
                     weight: FontWeight.w400,
-                    size: 13,
+                    size: 15,
                   ),
                 ),
               ),
@@ -440,7 +440,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 filled: true,
                 fillColor: tournamentController.isRankType.value == true
                     ? AppColor().primaryWhite
-                    : AppColor().bgDark,
+                    : AppColor().primaryDark,
                 focusedBorder: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: AppColor().lightItemsColor, width: 1),
@@ -471,7 +471,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                             : AppColor().lightItemsColor,
                         fontFamily: 'GilroyMedium',
                         weight: FontWeight.w400,
-                        size: 13,
+                        size: 15,
                       ),
                     );
                   }).toList(),
@@ -488,7 +488,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         : AppColor().lightItemsColor,
                     fontFamily: 'GilroyMedium',
                     weight: FontWeight.w400,
-                    size: 13,
+                    size: 15,
                   ),
                 ),
               ),
@@ -763,7 +763,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 borderRadius: BorderRadius.circular(10),
                 color: tournamentController.isParticipant.value == true
                     ? AppColor().primaryWhite
-                    : AppColor().bgDark,
+                    : AppColor().primaryDark,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -777,7 +777,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         : AppColor().lightItemsColor,
                     fontFamily: 'GilroyBold',
                     weight: FontWeight.w400,
-                    size: 13,
+                    size: 15,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -117,7 +117,7 @@ class CustomTextField extends StatelessWidget {
           height: 1.7),
       decoration: decoration ??
           InputDecoration(
-            fillColor: fillColor ?? AppColor().bgDark,
+            fillColor: fillColor ?? AppColor().primaryDark,
             filled: true,
             isDense: true,
             prefixText: pretext,

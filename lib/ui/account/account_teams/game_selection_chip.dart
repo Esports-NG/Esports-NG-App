@@ -25,11 +25,11 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
       () => CompositedTransformTarget(
         link: _link,
         child: OverlayPortal(
-            controller: teamController.gameChipOverlayController,
+            controller: gameController.gameChipOverlayController,
             overlayChildBuilder: (context) => Stack(
                   children: [
                     GestureDetector(
-                      onTap: () => teamController.hideGameChip(),
+                      onTap: () => gameController.hideGameChip(),
                       child: SizedBox(
                         height: Get.height,
                         width: Get.width,
@@ -63,35 +63,38 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                               enabledBorder: BorderSide(
                                   width: 0.5, color: AppColor().greyEight),
                               textEditingController:
-                                  teamController.gameSearchController,
+                                  gameController.gameSearchText,
                               hint: "Search For Game",
                             ),
                             Gap(Get.height * 0.02),
-                            ListView.separated(
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) =>
-                                    GestureDetector(
-                                      onTap: () =>
-                                          teamController.addToGamesPlayed(
-                                              gameController.allGames[index]),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: Get.height * 0.015,
-                                            horizontal: Get.height * 0.01),
-                                        child: CustomText(
-                                            title: gameController
-                                                .allGames[index].name,
-                                            color: AppColor()
-                                                .primaryWhite
-                                                .withOpacity(0.6)),
+                            Obx(
+                              () => ListView.separated(
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) =>
+                                      GestureDetector(
+                                        onTap: () => teamController
+                                            .addToGamesPlayed(gameController
+                                                .filteredGames[index]),
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: Get.height * 0.015,
+                                              horizontal: Get.height * 0.01),
+                                          child: CustomText(
+                                              title: gameController
+                                                  .filteredGames[index].name,
+                                              color: AppColor()
+                                                  .primaryWhite
+                                                  .withOpacity(0.6)),
+                                        ),
                                       ),
-                                    ),
-                                separatorBuilder: (context, index) => Divider(
-                                      thickness: 0.5,
-                                      color: AppColor().darkGrey,
-                                      height: 0,
-                                    ),
-                                itemCount: gameController.allGames.length)
+                                  separatorBuilder: (context, index) => Divider(
+                                        thickness: 0.5,
+                                        color: AppColor().darkGrey,
+                                        height: 0,
+                                      ),
+                                  itemCount:
+                                      gameController.filteredGames.length),
+                            )
                           ],
                         ),
                       ),
@@ -99,7 +102,7 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                   ],
                 ),
             child: GestureDetector(
-              onTap: () => teamController.gameChipOverlayController.toggle(),
+              onTap: () => gameController.gameChipOverlayController.toggle(),
               child: Container(
                   width: double.infinity,
                   padding:
@@ -134,7 +137,7 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                                               fontFamily: "GilroyMedium",
                                               title: element.abbrev,
                                             ),
-                                            Gap(5),
+                                            const Gap(5),
                                             GestureDetector(
                                               onTap: () => teamController
                                                   .addToGamesPlayed(element),

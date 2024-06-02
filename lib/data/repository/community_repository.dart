@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
@@ -42,6 +43,8 @@ class CommunityRepository extends GetxController {
   List<CommunityModel> get allCommunity => _allCommunity.value;
   List<CommunityModel> get myCommunity => _myCommunity.value;
 
+  RxList<UserModel> suggestedProfiles = RxList([]);
+
   final _communityStatus = CommunityStatus.empty.obs;
   final _createCommunityStatus = CreateCommunityStatus.empty.obs;
 
@@ -76,6 +79,7 @@ class CommunityRepository extends GetxController {
         getAllCommunity(false);
       }
     });
+    getSuggestedProfiles();
   }
 
   Future createCommunity(Map<String, dynamic> community) async {
@@ -197,6 +201,19 @@ class CommunityRepository extends GetxController {
     List<dynamic> json = jsonDecode(response.body);
 
     return json.map((e) => e as Map<String, dynamic>).toList();
+  }
+
+  Future getSuggestedProfiles() async {
+    var response =
+        await http.get(Uri.parse(ApiLink.getSuggestedUsers), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+    var json = jsonDecode(response.body);
+    var list = List.from(json);
+
+    suggestedProfiles
+        .assignAll(list.map((e) => UserModel.fromJson(e)).toList());
   }
 
   void handleError(dynamic error) {

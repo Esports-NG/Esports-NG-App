@@ -30,7 +30,10 @@ import 'trending_games.dart';
 import 'trending_team.dart';
 
 class CommunityPage extends StatefulWidget {
-  const CommunityPage({super.key, this.onFilterPage,});
+  const CommunityPage({
+    super.key,
+    this.onFilterPage,
+  });
 
   final bool? onFilterPage;
 
@@ -79,6 +82,7 @@ class _CommunityPageState extends State<CommunityPage> {
       backgroundColor: AppColor().primaryBackGroundColor,
       body: RefreshIndicator(
         onRefresh: () async {
+          await communityController.getSuggestedProfiles();
           await communityController.getAllCommunity(false);
           await eventController.getAllTournaments(false);
           await postController.getAllPost(false);
@@ -89,16 +93,19 @@ class _CommunityPageState extends State<CommunityPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                  child: Column(
-                    children: [
-                      const CommunityFilter(
-                        title: "All Categories",
-                      ),
-                      Gap(Get.height * 0.03),
-                      PageHeaderWidget(
-                        onTap: () {
+                Column(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                      child: Column(
+                        children: [
+                          const CommunityFilter(
+                            title: "All Categories",
+                          ),
+                          Gap(Get.height * 0.03),
+                          PageHeaderWidget(
+                            onTap: () {
                               communityController.typeFilter.value =
                                   "Suggested Profiles";
                               if (widget.onFilterPage != true) {
@@ -106,26 +113,33 @@ class _CommunityPageState extends State<CommunityPage> {
                               }
                               _overlayController.hide();
                             },
-                        title: 'Suggested profiles',
+                            title: 'Suggested profiles',
+                          ),
+                          Gap(Get.height * 0.03),
+                        ],
                       ),
-                      Gap(Get.height * 0.03),
-                      GridView.builder(
+                    ),
+                    SizedBox(
+                      height: Get.height * 0.28,
+                      child: ListView.separated(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Get.height * 0.02),
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20,
-                            childAspectRatio: 1 * 0.8,
-                          ),
-                          itemCount: suggestedProfileItems.take(2).length,
+                          scrollDirection: Axis.horizontal,
+                          separatorBuilder: (context, index) =>
+                              Gap(Get.height * 0.02),
+                          itemCount: communityController.suggestedProfiles
+                              .take(5)
+                              .length,
                           itemBuilder: (context, index) {
-                            var item = suggestedProfileItems[index];
-                            return SuggestedProfileItem(item: item);
+                            var item =
+                                communityController.suggestedProfiles[index];
+                            return SizedBox(
+                                child: SuggestedProfileItem(item: item));
                           }),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 Gap(Get.height * 0.03),
                 Divider(
@@ -141,13 +155,13 @@ class _CommunityPageState extends State<CommunityPage> {
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                       child: PageHeaderWidget(
                         onTap: () {
-                              communityController.typeFilter.value =
-                                  "Trending Games";
-                              if (widget.onFilterPage != true) {
-                                Get.to(() => CommunityFilterPage());
-                              }
-                              _overlayController.hide();
-                            },
+                          communityController.typeFilter.value =
+                              "Trending Games";
+                          if (widget.onFilterPage != true) {
+                            Get.to(() => CommunityFilterPage());
+                          }
+                          _overlayController.hide();
+                        },
                         title: 'Trending Games',
                       ),
                     ),
@@ -197,18 +211,15 @@ class _CommunityPageState extends State<CommunityPage> {
                         child: PageHeaderWidget(
                           onTap: () {
                             showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              backgroundColor:
-                                                  AppColor().primaryBgColor,
-                                              content: const ComingSoonPopup(),
-                                            ),
-                                          );
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: AppColor().primaryBgColor,
+                                content: const ComingSoonPopup(),
+                              ),
+                            );
                           },
                           title: 'Latest News',
                         ),
@@ -231,13 +242,13 @@ class _CommunityPageState extends State<CommunityPage> {
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                       child: PageHeaderWidget(
                         onTap: () {
-                              communityController.typeFilter.value =
-                                  "Trending Communities";
-                              if (widget.onFilterPage != true) {
-                                Get.to(() => CommunityFilterPage());
-                              }
-                              _overlayController.hide();
-                            },
+                          communityController.typeFilter.value =
+                              "Trending Communities";
+                          if (widget.onFilterPage != true) {
+                            Get.to(() => CommunityFilterPage());
+                          }
+                          _overlayController.hide();
+                        },
                         title: 'Trending Communities',
                       ),
                     ),
@@ -309,13 +320,13 @@ class _CommunityPageState extends State<CommunityPage> {
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                       child: PageHeaderWidget(
                         onTap: () {
-                              communityController.typeFilter.value =
-                                  "Trending Teams";
-                              if (widget.onFilterPage != true) {
-                                Get.to(() => CommunityFilterPage());
-                              }
-                              _overlayController.hide();
-                            },
+                          communityController.typeFilter.value =
+                              "Trending Teams";
+                          if (widget.onFilterPage != true) {
+                            Get.to(() => CommunityFilterPage());
+                          }
+                          _overlayController.hide();
+                        },
                         title: 'Trending Teams',
                       ),
                     ),

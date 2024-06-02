@@ -4,7 +4,9 @@ import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/home/community/components/community_filter.dart';
 import 'package:e_sport/ui/home/community/components/community_item.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
+import 'package:e_sport/ui/home/community/components/suggested_profile_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
+import 'package:e_sport/ui/home/community/suggested_profile.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -65,7 +67,10 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                   itemCount:
                       communityController.typeFilter.value == "Trending Games"
                           ? gameController.allGames.length
-                          : communityController.allCommunity.length,
+                          : communityController.typeFilter.value ==
+                                  "Suggested Profiles"
+                              ? communityController.suggestedProfiles.length
+                              : communityController.allCommunity.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                         onTap: () {
@@ -83,9 +88,15 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                             ? TrendingGamesItem(
                                 isOnTrendingPage: true,
                                 game: gameController.allGames[index])
-                            : CommunityItem(
-                                onFilterPage: true,
-                                item: communityController.allCommunity[index]));
+                            : communityController.typeFilter.value ==
+                                    "Suggested Profiles"
+                                ? SuggestedProfileItem(
+                                    item: communityController
+                                        .suggestedProfiles[index])
+                                : CommunityItem(
+                                    onFilterPage: true,
+                                    item: communityController
+                                        .allCommunity[index]));
                   })
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -22,6 +23,7 @@ class _SuggestedProfileState extends State<SuggestedProfile> {
   final FocusNode _searchFocusNode = FocusNode();
   int? eventType = 0;
   final eventController = Get.put(EventRepository());
+  final communityController = Get.put(CommunityRepository());
   @override
   void dispose() {
     _searchFocusNode.dispose();
@@ -89,7 +91,7 @@ class _SuggestedProfileState extends State<SuggestedProfile> {
                   ),
                   itemCount: suggestedProfileItems.length,
                   itemBuilder: (context, index) {
-                    var item = suggestedProfileItems[index];
+                    var item = communityController.suggestedProfiles[index];
                     return SuggestedProfileItem(item: item);
                   }),
             ],

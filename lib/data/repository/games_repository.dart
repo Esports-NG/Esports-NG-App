@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,11 +13,42 @@ class GamesRepository extends GetxController {
   Rx<GamePlayed?> selectedGame = Rx(null);
   RxString selectedGameName = "".obs;
   RxBool isLoading = false.obs;
+  TextEditingController gameSearchText = TextEditingController();
+  RxList<GamePlayed> filteredGames = <GamePlayed>[].obs;
 
   @override
   onInit() {
     super.onInit();
     getAllGames();
+    gameSearchText.addListener(() {
+      filterList(gameSearchText.text);
+    });
+  }
+
+  void filterList(String query) {
+    if (query.isEmpty) {
+      filteredGames.assignAll(allGames);
+    } else {
+      filteredGames.assignAll(allGames.where(
+          (item) => item.name!.toLowerCase().contains(query.toLowerCase())));
+    }
+  }
+
+  OverlayPortalController gameDropdownOverlayController =
+      OverlayPortalController();
+  OverlayPortalController gameChipOverlayController =
+      OverlayPortalController();
+
+
+  void hideGameDropdown() {
+    // gameSearchText.text = "";
+    filteredGames.assignAll(allGames);
+    gameDropdownOverlayController.hide();
+  }
+  void hideGameChip() {
+    // gameSearchText.text = "";
+    filteredGames.assignAll(allGames);
+    gameChipOverlayController.hide();
   }
 
   Future<void> getAllGames() async {
@@ -33,6 +64,7 @@ class GamesRepository extends GetxController {
         var list = List.from(jsonDecode(response.body));
         var games = list.map((e) => GamePlayed.fromJson(e)).toList();
         allGames.assignAll(games);
+        filteredGames.assignAll(games);
       }
     } catch (error) {
       debugPrint("getting all games: ${error.toString()}");

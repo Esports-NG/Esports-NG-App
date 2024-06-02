@@ -64,6 +64,7 @@ class ApiLink {
   static String followCommunity(int id) => "${baseurl}extra/followcomm/$id/";
   static String getCommunityFollowers(int id) =>
       "${baseurl}extra/followers/comm/view/?group_id=$id";
+  static String getSuggestedUsers = "${baseurl}extra/suggest/users/";
 
   //Profile
   static String getDataWithFollowers({required int id, required String type}) =>
