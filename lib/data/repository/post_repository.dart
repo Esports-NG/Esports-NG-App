@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -34,6 +35,8 @@ class PostRepository extends GetxController {
   late final gameTagController = TextEditingController();
   late final accountTypeController = TextEditingController();
 
+  RxList gameTags = <GamePlayed>[].obs;
+
   final Rx<List<PostModel>> _allPost = Rx([]);
   final Rx<List<PostModel>> _myPost = Rx([]);
   final Rx<List<PostModel>> _bookmarkedPost = Rx([]);
@@ -64,6 +67,15 @@ class PostRepository extends GetxController {
 
   Rx<File?> mPostImage = Rx(null);
   File? get postImage => mPostImage.value;
+
+  void addToGameTags(GamePlayed game) {
+    if (gameTags.contains(game)) {
+      gameTags.remove(game);
+    } else {
+      gameTags.add(game);
+    }
+    print("added game ${game.abbrev}");
+  }
 
   @override
   void onInit() {

@@ -1,11 +1,13 @@
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/home/community/components/community_filter.dart';
 import 'package:e_sport/ui/home/community/components/community_item.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/home/community/components/suggested_profile_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
+import 'package:e_sport/ui/home/community/components/trending_team_item.dart';
 import 'package:e_sport/ui/home/community/suggested_profile.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -24,6 +26,7 @@ class CommunityFilterPage extends StatefulWidget {
 class _CommunityFilterPageState extends State<CommunityFilterPage> {
   final communityController = Get.put(CommunityRepository());
   final gameController = Get.put(GamesRepository());
+  final teamController = Get.put(TeamRepository());
 
   @override
   void dispose() {
@@ -62,7 +65,7 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
-                    childAspectRatio: 1 * 0.8,
+                    childAspectRatio: 1 * 0.75,
                   ),
                   itemCount:
                       communityController.typeFilter.value == "Trending Games"
@@ -70,7 +73,10 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                           : communityController.typeFilter.value ==
                                   "Suggested Profiles"
                               ? communityController.suggestedProfiles.length
-                              : communityController.allCommunity.length,
+                              : communityController.typeFilter.value ==
+                                      "Trending Teams"
+                                  ? teamController.allTeam.length
+                                  : communityController.allCommunity.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                         onTap: () {
@@ -78,6 +84,8 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                               "Trending Games") {
                             Get.to(() => GameProfile(
                                 game: gameController.allGames[index]));
+                          } else if (communityController.typeFilter.value ==
+                              "Suggested Profiles") {
                           } else {
                             Get.to(() => AccountCommunityDetail(
                                 item: communityController.allCommunity[index]));
@@ -93,10 +101,15 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                                 ? SuggestedProfileItem(
                                     item: communityController
                                         .suggestedProfiles[index])
-                                : CommunityItem(
-                                    onFilterPage: true,
-                                    item: communityController
-                                        .allCommunity[index]));
+                                : communityController.typeFilter.value ==
+                                        "Trending Teams"
+                                    ? TrendingTeamsItem(
+                                        onFilterPage: true,
+                                        item: teamController.allTeam[index])
+                                    : CommunityItem(
+                                        onFilterPage: true,
+                                        item: communityController
+                                            .allCommunity[index]));
                   })
             ],
           ),

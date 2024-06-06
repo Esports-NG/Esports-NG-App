@@ -11,10 +11,8 @@ import 'package:get/get.dart';
 
 class TrendingTeamsItem extends StatelessWidget {
   final TeamModel item;
-  const TrendingTeamsItem({
-    super.key,
-    required this.item,
-  });
+  final bool? onFilterPage;
+  const TrendingTeamsItem({super.key, required this.item, this.onFilterPage});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +23,7 @@ class TrendingTeamsItem extends StatelessWidget {
         color: AppColor().bgDark,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: AppColor().greyEight,
+          color: AppColor().darkGrey,
         ),
       ),
       child: Stack(
@@ -78,44 +76,56 @@ class TrendingTeamsItem extends StatelessWidget {
                       ),
                     ),
               const Spacer(),
-              CustomText(
-                title: item.name!.toCapitalCase(),
-                size: 14,
-                fontFamily: 'GilroySemiBold',
-                weight: FontWeight.w400,
-                color: AppColor().primaryWhite,
-                textAlign: TextAlign.center,
-              ),
-              Gap(Get.height * 0.01),
-              CustomText(
-                title: item.members!.isEmpty
-                    ? 'No Member'
-                    : item.members!.length == 1
-                        ? '1 Member'
-                        : '${item.members!.length.toString()} Members',
-                size: 12,
-                fontFamily: 'GilroyRegular',
-                weight: FontWeight.w400,
-                color: AppColor().greySix,
-              ),
-              Container(
-                padding: EdgeInsets.all(Get.height * 0.015),
-                margin: EdgeInsets.all(Get.height * 0.02),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  border: Border.all(
-                    color: AppColor().primaryColor,
-                  ),
-                ),
-                child: Center(
-                  child: CustomText(
-                    title: 'Follow',
-                    size: 14,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
-                    color: AppColor().primaryColor,
-                  ),
+              Padding(
+                padding: EdgeInsets.all(Get.height * 0.02),
+                child: Column(
+                  children: [
+                    CustomText(
+                      title: item.name!.toCapitalCase(),
+                      size: 16,
+                      fontFamily: 'GilroySemiBold',
+                      weight: FontWeight.w400,
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    // Gap(Get.height * 0.005),
+                    Visibility(
+                      visible: onFilterPage == null,
+                      child: CustomText(
+                        title: item.members!.isEmpty
+                            ? 'No Member'
+                            : item.members!.length == 1
+                                ? '1 Member'
+                                : '${item.members!.length.toString()} Members',
+                        size: 12,
+                        fontFamily: 'GilroyRegular',
+                        weight: FontWeight.w400,
+                        color: AppColor().greyFour,
+                      ),
+                    ),
+                    Gap(Get.height * 0.01),
+                    Container(
+                      padding: EdgeInsets.all(Get.height * 0.015),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        border: Border.all(
+                          color: AppColor().primaryColor,
+                        ),
+                      ),
+                      child: Center(
+                        child: CustomText(
+                          title: 'Follow',
+                          size: 14,
+                          fontFamily: 'GilroyMedium',
+                          weight: FontWeight.w400,
+                          color: AppColor().primaryColor,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               )
             ],

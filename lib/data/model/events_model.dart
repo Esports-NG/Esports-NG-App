@@ -1,3 +1,5 @@
+import 'package:e_sport/data/model/community_model.dart';
+
 class EventModel {
   int? id;
   String? profile;
@@ -5,7 +7,7 @@ class EventModel {
   String? venue;
   String? name;
   String? type;
-  Community? community;
+  CommunityModel? community;
   String? linkForBracket;
   String? gameMode;
   String? tournamentType;
@@ -65,7 +67,7 @@ class EventModel {
         venue: json["venue"],
         community: json["community"] == null
             ? null
-            : Community.fromJson(json["community"]),
+            : CommunityModel.fromJson(json["community"]),
         linkForBracket: json["link"],
         gameMode: json["game_mode"],
         tournamentType: json["tournament_type"],

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/account/account_teams/game_selection_chip.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
@@ -204,64 +205,8 @@ class _CreatePostState extends State<CreatePost> {
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
-                  InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: isGameTag == true
-                          ? AppColor().primaryWhite
-                          : AppColor().bgDark,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: AppColor().lightItemsColor, width: 1),
-                          borderRadius: BorderRadius.circular(10)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: gameTag,
-                        icon: Icon(
-                          Icons.expand_more,
-                          color: AppColor().primaryWhite,
-                        ),
-                        items: <String>[
-                          'COD',
-                          'Others',
-                        ].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: CustomText(
-                              title: value,
-                              color: isGameTag == true
-                                  ? AppColor().primaryBackGroundColor
-                                  : AppColor().lightItemsColor,
-                              fontFamily: 'GilroyBold',
-                              weight: FontWeight.w400,
-                              size: 13,
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            gameTag = value;
-                            postController.gameTagController.text = gameTag!;
-                            handleTap('gameTag');
-                          });
-                        },
-                        hint: CustomText(
-                          title: "Game Tag",
-                          color: isGameTag == true
-                              ? AppColor().primaryBackGroundColor
-                              : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyBold',
-                          weight: FontWeight.w400,
-                          size: 13,
-                        ),
-                      ),
-                    ),
+                  const GameSelectionChip(
+                    postCreation: true,
                   ),
                   Gap(Get.height * 0.02),
                   CustomText(
@@ -381,138 +326,6 @@ class _CreatePostState extends State<CreatePost> {
                       ],
                     ),
                   ),
-                  Gap(Get.height * 0.02),
-                  CustomText(
-                    title: 'Who can see this post *',
-                    color: AppColor().primaryWhite,
-                    textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
-                    size: Get.height * 0.017,
-                  ),
-                  Gap(Get.height * 0.01),
-                  InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: isSeePost == true
-                          ? AppColor().primaryWhite
-                          : AppColor().bgDark,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: AppColor().lightItemsColor, width: 1),
-                          borderRadius: BorderRadius.circular(10)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: seePost,
-                        icon: Icon(
-                          Icons.expand_more,
-                          color: AppColor().primaryWhite,
-                        ),
-                        items: <String>['Everyone', 'My Followers', 'Just Me']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: CustomText(
-                              title: value,
-                              color: isSeePost == true
-                                  ? AppColor().primaryBackGroundColor
-                                  : AppColor().lightItemsColor,
-                              fontFamily: 'GilroyBold',
-                              weight: FontWeight.w400,
-                              size: 13,
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            seePost = value;
-                            postController.seeController.text = seePost!;
-                            handleTap('seePost');
-                          });
-                        },
-                        hint: CustomText(
-                          title: "Everyone",
-                          color: isSeePost == true
-                              ? AppColor().primaryBackGroundColor
-                              : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyBold',
-                          weight: FontWeight.w400,
-                          size: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Gap(Get.height * 0.02),
-                  CustomText(
-                    title: 'Who can engage with this post *',
-                    color: AppColor().primaryWhite,
-                    textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
-                    size: Get.height * 0.017,
-                  ),
-                  Gap(Get.height * 0.01),
-                  InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: isEngagePost == true
-                          ? AppColor().primaryWhite
-                          : AppColor().bgDark,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: AppColor().lightItemsColor, width: 1),
-                          borderRadius: BorderRadius.circular(10)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: engagePost,
-                        icon: Icon(
-                          Icons.expand_more,
-                          color: AppColor().primaryWhite,
-                        ),
-                        items: <String>['Everyone', 'My Followers', 'Just Me']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: CustomText(
-                              title: value,
-                              color: isEngagePost == true
-                                  ? AppColor().primaryBackGroundColor
-                                  : AppColor().lightItemsColor,
-                              fontFamily: 'GilroyBold',
-                              weight: FontWeight.w400,
-                              size: 13,
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            engagePost = value;
-                            postController.engageController.text = engagePost!;
-                            handleTap('engagePost');
-                          });
-                        },
-                        hint: CustomText(
-                          title: "Everyone",
-                          color: isEngagePost == true
-                              ? AppColor().primaryBackGroundColor
-                              : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyBold',
-                          weight: FontWeight.w400,
-                          size: 13,
-                        ),
-                      ),
-                    ),
-                  ),
                   Gap(Get.height * 0.05),
                   InkWell(
                     onTap: () {
@@ -528,15 +341,7 @@ class _CreatePostState extends State<CreatePost> {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        if (postController.gameTagController.text == '') {
-                          EasyLoading.showInfo('Select game tag!');
-                        } else if (postController.seeController.text == '') {
-                          EasyLoading.showInfo('Select who can see post!');
-                        } else if (postController.engageController.text == '') {
-                          EasyLoading.showInfo('Select who can engage post!');
-                        } else {
-                          postController.createPost(post);
-                        }
+                        postController.createPost(post);
                       }
                     },
                     child: Container(

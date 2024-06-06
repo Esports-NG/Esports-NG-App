@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
-import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
@@ -36,6 +35,7 @@ class TournamentRepository extends GetxController {
   late final tournamentStructureController = TextEditingController();
   late final eventLinkController = TextEditingController();
   late final regDateController = TextEditingController();
+  late final regEndDateController = TextEditingController();
   late final startDateController = TextEditingController();
   late final endDateController = TextEditingController();
   // late final tournamentDateController = TextEditingController();
@@ -83,6 +83,7 @@ class TournamentRepository extends GetxController {
   var isCommunities = false.obs;
   var isRankType = false.obs;
   var isRegistrationDate = false.obs;
+  var isRegistrationEndDate = false.obs;
   var isStartDate = false.obs;
   var isEndDate = false.obs;
   var isPrizePool = false.obs;
@@ -113,6 +114,8 @@ class TournamentRepository extends GetxController {
       isCommunities.value = true;
     } else if (title == 'rankType') {
       isRankType.value = true;
+    } else if (title == 'regEndDate') {
+      isRegistrationEndDate.value = true;
     } else if (title == 'regDate') {
       isRegistrationDate.value = true;
     } else if (title == 'endDate') {
@@ -296,6 +299,7 @@ class TournamentRepository extends GetxController {
             ..fields["knockout_type"] = knockoutTypeController.text
             ..fields["rank_type"] = rankTypeController.text
             ..fields["reg_start"] = regDateController.text
+            ..fields["reg_end"] = regEndDateController.text
             ..fields["start_date"] = startDateController.text
             ..fields["end_date"] = endDateController.text
             ..fields["prize_pool"] = prizePoolController.text

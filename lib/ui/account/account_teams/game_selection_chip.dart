@@ -1,5 +1,7 @@
 import 'package:e_sport/data/repository/games_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
@@ -9,7 +11,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class GameSelectionChip extends StatefulWidget {
-  const GameSelectionChip({super.key});
+  const GameSelectionChip({super.key, this.postCreation});
+  final bool? postCreation;
 
   @override
   State<GameSelectionChip> createState() => _GameSelectionChipState();
@@ -18,6 +21,8 @@ class GameSelectionChip extends StatefulWidget {
 class _GameSelectionChipState extends State<GameSelectionChip> {
   final teamController = Get.put(TeamRepository());
   final gameController = Get.put(GamesRepository());
+  final postController = Get.put(PostRepository());
+
   LayerLink _link = LayerLink();
   @override
   Widget build(BuildContext context) {
@@ -67,34 +72,52 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                               hint: "Search For Game",
                             ),
                             Gap(Get.height * 0.02),
-                            Obx(
-                              () => ListView.separated(
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) =>
-                                      GestureDetector(
-                                        onTap: () => teamController
-                                            .addToGamesPlayed(gameController
-                                                .filteredGames[index]),
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: Get.height * 0.015,
-                                              horizontal: Get.height * 0.01),
-                                          child: CustomText(
-                                              title: gameController
-                                                  .filteredGames[index].name,
-                                              color: AppColor()
-                                                  .primaryWhite
-                                                  .withOpacity(0.6)),
-                                        ),
-                                      ),
-                                  separatorBuilder: (context, index) => Divider(
-                                        thickness: 0.5,
-                                        color: AppColor().darkGrey,
-                                        height: 0,
-                                      ),
-                                  itemCount:
-                                      gameController.filteredGames.length),
-                            )
+                            gameController.isLoading.value
+                                ? const Center(child: ButtonLoader())
+                                : Obx(
+                                    () => ListView.separated(
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) =>
+                                            GestureDetector(
+                                              onTap: () {
+                                                if (widget.postCreation ==
+                                                    true) {
+                                                  postController.addToGameTags(
+                                                      gameController
+                                                              .filteredGames[
+                                                          index]);
+                                                } else {
+                                                  teamController
+                                                      .addToGamesPlayed(
+                                                          gameController
+                                                                  .filteredGames[
+                                                              index]);
+                                                }
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical:
+                                                        Get.height * 0.015,
+                                                    horizontal:
+                                                        Get.height * 0.01),
+                                                child: CustomText(
+                                                    title: gameController
+                                                        .filteredGames[index]
+                                                        .name,
+                                                    color: AppColor()
+                                                        .primaryWhite
+                                                        .withOpacity(0.6)),
+                                              ),
+                                            ),
+                                        separatorBuilder: (context, index) =>
+                                            Divider(
+                                              thickness: 0.5,
+                                              color: AppColor().darkGrey,
+                                              height: 0,
+                                            ),
+                                        itemCount: gameController
+                                            .filteredGames.length),
+                                  )
                           ],
                         ),
                       ),
@@ -110,7 +133,10 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: AppColor().bgDark),
-                  child: !teamController.gamesPlayed.isNotEmpty
+                  child: (widget.postCreation == true
+                              ? postController.gameTags
+                              : teamController.gamesPlayed)
+                          .isEmpty
                       ? CustomText(
                           title: "Tap here to add games",
                           color: AppColor().primaryWhite.withOpacity(0.6),
@@ -120,7 +146,9 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                             Expanded(
                               child: Wrap(
                                 spacing: 10,
-                                children: teamController.gamesPlayed
+                                children: (widget.postCreation == true
+                                        ? postController.gameTags
+                                        : teamController.gamesPlayed)
                                     .map(
                                       (element) => Container(
                                         padding: const EdgeInsets.symmetric(
@@ -139,8 +167,17 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                                             ),
                                             const Gap(5),
                                             GestureDetector(
-                                              onTap: () => teamController
-                                                  .addToGamesPlayed(element),
+                                              onTap: () {
+                                                if (widget.postCreation ==
+                                                    true) {
+                                                  postController
+                                                      .addToGameTags(element);
+                                                } else {
+                                                  teamController
+                                                      .addToGamesPlayed(
+                                                          element);
+                                                }
+                                              },
                                               child: const Icon(
                                                 Icons.close,
                                                 size: 16,

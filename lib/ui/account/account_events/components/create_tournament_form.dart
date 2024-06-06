@@ -42,6 +42,11 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
           DateFormat("yyyy-MM-dd").format(newDate).toString();
       tournamentController.date.value = newDate;
       debugPrint('Reg Date: ${tournamentController.regDateController.text}');
+    } else if (title == 'registrationEnd') {
+      tournamentController.regEndDateController.text =
+          DateFormat("yyyy-MM-dd").format(newDate).toString();
+      tournamentController.date.value = newDate;
+      debugPrint('Reg Date: ${tournamentController.regEndDateController.text}');
     } else if (title == "startDate") {
       tournamentController.startDateController.text =
           DateFormat("yyyy-MM-dd").format(newDate).toString();
@@ -65,6 +70,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
   final FocusNode _communitiesFocusNode = FocusNode();
   final FocusNode _rankTypeFocusNode = FocusNode();
   final FocusNode _registrationDateFocusNode = FocusNode();
+  final FocusNode _registrationEndDateFocusNode = FocusNode();
   final FocusNode _tournamentDateFocusNode = FocusNode();
   final FocusNode _prizePoolFocusNode = FocusNode();
   final FocusNode _entryFeeFocusNode = FocusNode();
@@ -167,6 +173,8 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<CommunityModel>(
+                  dropdownColor: AppColor().primaryDark,
+                  borderRadius: BorderRadius.circular(10),
                   value: tournamentController.selectedCommunity.value,
                   icon: Icon(
                     Icons.keyboard_arrow_down,
@@ -182,7 +190,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         color: tournamentController.isCommunities.value == true
                             ? AppColor().primaryBackGroundColor
                             : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
+                        fontFamily: 'GilroyMedium',
                         weight: FontWeight.w400,
                         size: 15,
                       ),
@@ -201,7 +209,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     color: tournamentController.isCommunities.value == true
                         ? AppColor().primaryBackGroundColor
                         : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyBold',
+                    fontFamily: 'GilroyMedium',
                     weight: FontWeight.w400,
                     size: 15,
                   ),
@@ -316,6 +324,8 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
+                  dropdownColor: AppColor().primaryDark,
+                  borderRadius: BorderRadius.circular(10),
                   icon: Icon(Icons.keyboard_arrow_down,
                       color: tournamentController.isTournamentType.value == true
                           ? AppColor().primaryBackGroundColor
@@ -384,6 +394,8 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
+                  dropdownColor: AppColor().primaryDark,
+                  borderRadius: BorderRadius.circular(10),
                   icon: Icon(Icons.keyboard_arrow_down,
                       color: tournamentController.isKnockout.value == true
                           ? AppColor().primaryBackGroundColor
@@ -453,6 +465,8 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
+                  dropdownColor: AppColor().primaryDark,
+                  borderRadius: BorderRadius.circular(10),
                   icon: Icon(Icons.keyboard_arrow_down,
                       color: tournamentController.isRankType.value == true
                           ? AppColor().primaryBackGroundColor
@@ -495,7 +509,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
             ),
             Gap(Get.height * 0.02),
             CustomText(
-              title: 'Registration dates *',
+              title: 'Registration start date *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
               fontFamily: 'GilroyRegular',
@@ -525,6 +539,43 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                   color: tournamentController.isRegistrationDate.value == true
                       ? AppColor().primaryBackGroundColor
                       : AppColor().lightItemsColor,
+                ),
+              ),
+            ),
+            Gap(Get.height * 0.02),
+            CustomText(
+              title: 'Registration end date *',
+              color: AppColor().primaryWhite,
+              textAlign: TextAlign.center,
+              fontFamily: 'GilroyRegular',
+              size: Get.height * 0.017,
+            ),
+            Gap(Get.height * 0.01),
+            InkWell(
+              onTap: () {
+                pickDate('registrationEnd');
+                tournamentController.handleTap('regEndDate');
+              },
+              child: CustomTextField(
+                hint: "DD/MM/YY",
+                enabled: false,
+                textEditingController:
+                    tournamentController.regEndDateController,
+                hasText: tournamentController.isRegistrationEndDate.value,
+                focusNode: _registrationEndDateFocusNode,
+                onSubmited: (_) {
+                  _registrationEndDateFocusNode.unfocus();
+                },
+                onChanged: (value) {
+                  tournamentController.isRegistrationDate.value =
+                      value.isNotEmpty;
+                },
+                suffixIcon: Icon(
+                  CupertinoIcons.calendar,
+                  color:
+                      tournamentController.isRegistrationEndDate.value == true
+                          ? AppColor().primaryBackGroundColor
+                          : AppColor().lightItemsColor,
                 ),
               ),
             ),
