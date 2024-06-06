@@ -4,9 +4,11 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -59,34 +61,37 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                           'assets/images/svg/people.svg',
                         ),
                       )
-                    : CachedNetworkImage(
-                        height: Get.height * 0.06,
-                        width: Get.height * 0.06,
-                        progressIndicatorBuilder: (context, url, progress) =>
-                            Center(
-                          child: SizedBox(
-                            height: Get.height * 0.015,
-                            width: Get.height * 0.015,
-                            child: CircularProgressIndicator(
-                                color: AppColor().primaryColor,
-                                value: progress.progress),
+                    : InkWell(
+                      onTap: () => Get.to(() => GameProfile(game: widget.item.gamePlayed!)),
+                      child: CachedNetworkImage(
+                          height: Get.height * 0.06,
+                          width: Get.height * 0.06,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: SizedBox(
+                              height: Get.height * 0.015,
+                              width: Get.height * 0.015,
+                              child: CircularProgressIndicator(
+                                  color: AppColor().primaryColor,
+                                  value: progress.progress),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error, color: AppColor().primaryColor),
+                          imageUrl:
+                              '${ApiLink.imageUrl}${widget.item.gamePlayed!.profilePicture}',
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: AppColor().primaryWhite),
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      '${ApiLink.imageUrl}${widget.item.gamePlayed!.profilePicture}'),
+                                  fit: BoxFit.cover),
+                            ),
                           ),
                         ),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.error, color: AppColor().primaryColor),
-                        imageUrl:
-                            '${ApiLink.imageUrl}${widget.item.gamePlayed!.profilePicture}',
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColor().primaryWhite),
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    '${ApiLink.imageUrl}${widget.item.gamePlayed!.profilePicture}'),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                      ),
+                    ),
                 Gap(Get.height * 0.015),
                 CustomText(
                   title: 'Title: ',
@@ -95,12 +100,15 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                   textAlign: TextAlign.start,
                   color: AppColor().greyOne,
                 ),
-                CustomText(
-                  title: widget.item.gamePlayed!.name!.toCapitalCase(),
-                  size: 14,
-                  fontFamily: 'GilroySemiBold',
-                  textAlign: TextAlign.start,
-                  color: AppColor().greyOne,
+                InkWell(
+                  onTap: () => Get.to(() => GameProfile(game: widget.item.gamePlayed!)),
+                  child: CustomText(
+                    title: widget.item.gamePlayed!.name!.toCapitalCase(),
+                    size: 14,
+                    fontFamily: 'GilroySemiBold',
+                    textAlign: TextAlign.start,
+                    color: AppColor().greyOne,
+                  ),
                 ),
               ],
             ),
@@ -121,32 +129,35 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                           'assets/images/svg/people.svg',
                         ),
                       )
-                    : CachedNetworkImage(
-                        height: Get.height * 0.06,
-                        width: Get.height * 0.06,
-                        progressIndicatorBuilder: (context, url, progress) =>
-                            Center(
-                          child: SizedBox(
-                            height: Get.height * 0.015,
-                            width: Get.height * 0.015,
-                            child: CircularProgressIndicator(
-                                color: AppColor().primaryColor,
-                                value: progress.progress),
+                    : GestureDetector(
+                      onTap: () => Helpers().showImagePopup(context, widget.item.profile),
+                      child: CachedNetworkImage(
+                          height: Get.height * 0.06,
+                          width: Get.height * 0.06,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: SizedBox(
+                              height: Get.height * 0.015,
+                              width: Get.height * 0.015,
+                              child: CircularProgressIndicator(
+                                  color: AppColor().primaryColor,
+                                  value: progress.progress),
+                            ),
+                          ), 
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error, color: AppColor().primaryColor),
+                          imageUrl: widget.item.profile,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: AppColor().primaryWhite),
+                              image: DecorationImage(
+                                  image: NetworkImage(widget.item.profile),
+                                  fit: BoxFit.cover),
+                            ),
                           ),
                         ),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.error, color: AppColor().primaryColor),
-                        imageUrl: widget.item.profile,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColor().primaryWhite),
-                            image: DecorationImage(
-                                image: NetworkImage(widget.item.profile),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                      ),
+                    ),
                 Gap(Get.height * 0.015),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
