@@ -198,18 +198,6 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   Gap(Get.height * 0.02),
                   CustomText(
-                    title: 'Add game tags *',
-                    color: AppColor().primaryWhite,
-                    textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
-                    size: Get.height * 0.017,
-                  ),
-                  Gap(Get.height * 0.01),
-                  const GameSelectionChip(
-                    postCreation: true,
-                  ),
-                  Gap(Get.height * 0.02),
-                  CustomText(
                     title: 'Upload an image (Optional)',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
@@ -325,6 +313,18 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ],
                     ),
+                  ),
+                  Gap(Get.height * 0.02),
+                  CustomText(
+                    title: 'Add game tags',
+                    color: AppColor().primaryWhite,
+                    textAlign: TextAlign.center,
+                    fontFamily: 'GilroyRegular',
+                    size: Get.height * 0.017,
+                  ),
+                  Gap(Get.height * 0.01),
+                  const GameSelectionChip(
+                    postCreation: true,
                   ),
                   Gap(Get.height * 0.05),
                   InkWell(

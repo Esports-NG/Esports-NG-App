@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:e_sport/data/repository/auth_repository.dart';
@@ -6,6 +7,7 @@ import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -203,6 +205,22 @@ class SocialEventRepository extends GetxController {
       eventController.createEventStatus(CreateEventStatus.error);
       debugPrint("Error occurred ${error.toString()}");
       handleError(error);
+    }
+  }
+
+  Future registerForSocialEvent(int id) async {
+    var response =
+        await http.put(Uri.parse(ApiLink.registerForEvent(id)), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      Helpers().showCustomSnackbar(message: json['message']);
+    } else {
+      Helpers().showCustomSnackbar(message: json['error']);
     }
   }
 }

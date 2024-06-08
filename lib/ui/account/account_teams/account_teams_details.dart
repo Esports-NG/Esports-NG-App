@@ -114,12 +114,6 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                           : OtherImage(
                               itemSize: Get.height * 0.1,
                               image: '${ApiLink.imageUrl}${widget.item.cover}'),
-                      Positioned(
-                        child: SvgPicture.asset(
-                          'assets/images/svg/check_badge.svg',
-                          height: Get.height * 0.03,
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -449,19 +443,18 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
             thickness: 4,
           ),
           Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Recent Posts',
-                    ),
-                  ),
+            padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+            child: PageHeaderWidget(
+              onTap: () {},
+              title: 'Recent Posts',
+            ),
+          ),
           NoItemPage(title: 'Recent posts', size: Get.height * 0.05),
           Gap(Get.height * 0.01),
           Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
+            color: AppColor().lightItemsColor.withOpacity(0.3),
+            height: Get.height * 0.05,
+            thickness: 4,
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
@@ -592,8 +585,9 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                     ),
                     Gap(Get.height * 0.02),
                     InkWell(
-                      onTap: () =>
-                          Get.to(() => TeamsGamesPlayedList(team: widget.item,)),
+                      onTap: () => Get.to(() => TeamsGamesPlayedList(
+                            team: widget.item,
+                          )),
                       child: Center(
                         child: CustomText(
                             title: 'See all games',
@@ -638,34 +632,32 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
             thickness: 4,
           ),
           Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Social Events',
-                    ),
-                  ),
+            padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+            child: PageHeaderWidget(
+              onTap: () {},
+              title: 'Social Events',
+            ),
+          ),
           NoItemPage(title: 'Social Events', size: Get.height * 0.05),
           Gap(Get.height * 0.01),
           Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
+            color: AppColor().lightItemsColor.withOpacity(0.3),
+            height: Get.height * 0.05,
+            thickness: 4,
           ),
           Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Achievements',
-                    ),
-                  ),
+            padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+            child: PageHeaderWidget(
+              onTap: () {},
+              title: 'Achievements',
+            ),
+          ),
           NoItemPage(title: 'Achievements', size: Get.height * 0.05),
           Gap(Get.height * 0.01),
           Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
+            color: AppColor().lightItemsColor.withOpacity(0.3),
+            height: Get.height * 0.05,
+            thickness: 4,
           ),
           Gap(Get.height * 0.04),
           Padding(

@@ -356,7 +356,7 @@ class TournamentRepository extends GetxController {
       "Authorization": 'JWT ${authController.token}'
     };
 
-    var response = await http.put(Uri.parse(ApiLink.registerForTournament(id)),
+    var response = await http.put(Uri.parse(ApiLink.registerForEvent(id)),
         headers: headers);
 
     print(response.body);
@@ -364,6 +364,7 @@ class TournamentRepository extends GetxController {
 
     if (response.statusCode == 200) {
       debugPrint("success");
+      Helpers().showCustomSnackbar(message: json['message']);
     } else {
       Helpers().showCustomSnackbar(message: json['error']);
     }

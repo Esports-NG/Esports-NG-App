@@ -5,10 +5,12 @@ import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/event/social_event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
@@ -31,10 +33,12 @@ class SocialEventDetails extends StatefulWidget {
 class _SocialEventDetailsState extends State<SocialEventDetails> {
   final authController = Get.put(AuthRepository());
   final communityController = Get.put(CommunityRepository());
+  final socialEventController = Get.put(SocialEventRepository());
 
   List<Map<String, dynamic>>? _communityFollowers;
   bool _isFollowing = false;
   bool _isLoading = true;
+  bool _isRegistering = false;
 
   Future getCommunityFollowers() async {
     var followers = await communityController
@@ -65,8 +69,8 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
         child: Column(
           children: [
             GestureDetector(
-              onTap: () => Helpers().showImagePopup(context,
-                                  "${ApiLink.imageUrl}${widget.item.banner}"),
+              onTap: () => Helpers().showImagePopup(
+                  context, "${ApiLink.imageUrl}${widget.item.banner}"),
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 clipBehavior: Clip.none,
@@ -98,7 +102,8 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error, color: AppColor().primaryColor),
                           imageUrl: '${ApiLink.imageUrl}${widget.item.banner}',
-                          imageBuilder: (context, imageProvider) => Image.network(
+                          imageBuilder: (context, imageProvider) =>
+                              Image.network(
                                 '${ApiLink.imageUrl}${widget.item.banner}',
                                 opacity: const AlwaysStoppedAnimation(0.5),
                                 fit: BoxFit.cover,
@@ -136,7 +141,8 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -221,25 +227,39 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                   Gap(Get.height * 0.02),
                   InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () {},
+                    onTap: () async {
+                      setState(() {
+                        _isRegistering = true;
+                      });
+                      await socialEventController
+                          .registerForSocialEvent(widget.item.id!);
+                      setState(() {
+                        _isRegistering = false;
+                      });
+                    },
                     child: Container(
                       height: Get.height * 0.06,
                       width: Get.width,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: AppColor().primaryColor,
+                        border: _isRegistering
+                            ? Border.all(
+                                color: AppColor().primaryColor.withOpacity(0.4),
+                                width: 1)
+                            : null,
+                        color: _isRegistering
+                            ? Colors.transparent
+                            : AppColor().primaryColor,
                       ),
-                      child:
-                          // (authController.signInStatus == SignInStatus.loading)
-                          //     ? const LoadingWidget()
-                          //     :
-                          Center(
-                              child: CustomText(
-                        title: 'Register Now',
-                        color: AppColor().primaryWhite,
-                        size: Get.height * 0.018,
-                        fontFamily: 'GilroyMedium',
-                      )),
+                      child: Center(
+                          child: _isRegistering
+                              ? const ButtonLoader()
+                              : CustomText(
+                                  title: 'Register Now',
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.018,
+                                  fontFamily: 'GilroyMedium',
+                                )),
                     ),
                   ),
                 ],
@@ -279,11 +299,11 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                                   ),
                                 )
                               : InkWell(
-                                onTap: () => Get.to(()),
-                                child: OtherImage(
-                                    itemSize: Get.height * 0.04,
-                                    image: widget.item.community!.logo),
-                              ),
+                                  onTap: () => Get.to(()),
+                                  child: OtherImage(
+                                      itemSize: Get.height * 0.04,
+                                      image: widget.item.community!.logo),
+                                ),
                         ],
                       ),
                       Gap(Get.height * 0.015),

@@ -12,6 +12,7 @@ import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/account/account_events/components/tournament_details.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
+import 'package:e_sport/ui/components/choose_team_dialog.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
@@ -177,22 +178,33 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                   InkWell(
                     borderRadius: BorderRadius.circular(30),
                     onTap: () async {
-                      setState(() {
-                        _isRegisterLoading = true;
-                      });
-                      await tournamentController
-                          .registerForTournament(widget.item.id!);
-                      setState(() {
-                        _isRegisterLoading = false;
-                      });
+                      if (widget.item.tournamentType == "Team") {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              ChooseTeamDialog(id: widget.item.id!),
+                        );
+                      } else {
+                        setState(() {
+                          _isRegisterLoading = true;
+                        });
+                        await tournamentController
+                            .registerForTournament(widget.item.id!);
+                        setState(() {
+                          _isRegisterLoading = false;
+                        });
+                      }
                     },
                     child: Container(
                       height: Get.height * 0.06,
                       width: Get.width,
                       decoration: BoxDecoration(
-                        border: _isRegisterLoading
+                        border: !_isRegisterLoading
                             ? null
-                            : Border.all(color: AppColor().primaryColor),
+                            : Border.all(
+                                width: 1,
+                                color:
+                                    AppColor().primaryColor.withOpacity(0.4)),
                         borderRadius: BorderRadius.circular(30),
                         color: _isRegisterLoading
                             ? Colors.transparent
@@ -261,11 +273,6 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                           )
                                         ]
                                       : [
-                                          SvgPicture.asset(
-                                              'assets/images/svg/account_icon.svg',
-                                              height: Get.height * 0.015,
-                                              color: AppColor().primaryWhite),
-                                          Gap(Get.height * 0.01),
                                           CustomText(
                                               title: _isFollowing
                                                   ? "Unfollow"

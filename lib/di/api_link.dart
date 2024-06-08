@@ -55,7 +55,7 @@ class ApiLink {
   static String getAllEvent = "${baseurl}event/view/";
   static String getAllSocialEvents = "${baseurl}event/view/social";
   static String getAllTournaments = "${baseurl}event/view/tournament";
-  static String registerForTournament(int id) => "${baseurl}event/$id/join/";
+  static String registerForEvent(int id) => "${baseurl}event/$id/join/";
   static String filterEvents = "event/search";
 
   //Community

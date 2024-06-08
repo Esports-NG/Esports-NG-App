@@ -35,7 +35,7 @@ class PostRepository extends GetxController {
   late final gameTagController = TextEditingController();
   late final accountTypeController = TextEditingController();
 
-  RxList gameTags = <GamePlayed>[].obs;
+  RxList<GamePlayed> gameTags = <GamePlayed>[].obs;
 
   final Rx<List<PostModel>> _allPost = Rx([]);
   final Rx<List<PostModel>> _myPost = Rx([]);
@@ -125,8 +125,10 @@ class PostRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       };
       var request = http.MultipartRequest("POST", Uri.parse(ApiLink.createPost))
-        ..fields["body"] = postBodyController.text
-        ..fields["itags[0]"] = "#COD";
+        ..fields["body"] = postBodyController.text;
+      for (int i = 0; i < gameTags.length; i++) {
+        request.fields['itags[$i]'] = '${gameTags[i].abbrev}';
+      }
 
       if (postImage != null) {
         request.files
