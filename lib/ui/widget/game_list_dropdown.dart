@@ -9,17 +9,16 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class GameDropdown extends StatefulWidget {
-  const GameDropdown(
-      {super.key,
-      this.enableFill,
-      this.toggleArrow,
-      required this.gameValue,
-      this.handleTap,
-      required this.gamePlayedController});
+  const GameDropdown({
+    super.key,
+    this.enableFill,
+    this.toggleArrow,
+    required this.gameValue,
+    this.handleTap,
+  });
   final bool? enableFill;
   final bool? toggleArrow;
   final Rx<GamePlayed?> gameValue;
-  final TextEditingController gamePlayedController;
   final dynamic handleTap;
 
   @override

@@ -44,6 +44,8 @@ class ApiLink {
   static String getTeamFollowers(int id) =>
       "${baseurl}extra/followers/team/view/?group_id=$id";
   static String followTeam(int id) => "${baseurl}extra/followteam/$id/";
+  static String addGameToTeam(int teamId, int gameId) =>
+      "${baseurl}team/$teamId/addgame/$gameId/";
 
   //Player
   static String createPlayer = "${baseurl}player/register/";

@@ -83,6 +83,7 @@ class _CommunityPageState extends State<CommunityPage> {
           await eventController.getAllTournaments(false);
           await postController.getAllPost(false);
           await gamesController.getAllGames();
+          await teamController.getAllTeam(false);
         },
         child: Obx(
           () => SingleChildScrollView(

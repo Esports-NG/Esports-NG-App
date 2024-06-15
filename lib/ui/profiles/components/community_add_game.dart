@@ -43,40 +43,36 @@ class _CommunityAddGameState extends State<CommunityAddGame> {
         // ],
       ),
       body: Obx(() => Form(
-        key: formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Container(
-          decoration: BoxDecoration(
-                    color: AppColor().primaryBackGroundColor,
-                    borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.all(Get.height * 0.02),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Game to be covered *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                GameDropdown(
-                    gamePlayedController: tournamentController.gamePlayedController,
-                    enableFill: tournamentController.isGame.value,
-                    gameValue: tournamentController.gameValue,
-                    handleTap: () => tournamentController.handleTap('game')),
-                Gap(Get.height * 0.05),
-                CustomFillButton(
-                          buttonText: "Add Game",
-                          onTap: () {
-                            tournamentController.createTournament();
-                          })
-              ]
-          ),
-        )
-      )),
+          key: formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Container(
+            decoration: BoxDecoration(
+                color: AppColor().primaryBackGroundColor,
+                borderRadius: BorderRadius.circular(10)),
+            padding: EdgeInsets.all(Get.height * 0.02),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Game to be covered *',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.017,
+              ),
+              Gap(Get.height * 0.01),
+              GameDropdown(
+                  enableFill: tournamentController.isGame.value,
+                  gameValue: tournamentController.gameValue,
+                  handleTap: () => tournamentController.handleTap('game')),
+              Gap(Get.height * 0.05),
+              CustomFillButton(
+                  buttonText: "Add Game",
+                  onTap: () {
+                    tournamentController.createTournament();
+                  })
+            ]),
+          ))),
     );
   }
 }

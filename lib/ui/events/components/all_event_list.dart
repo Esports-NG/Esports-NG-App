@@ -23,7 +23,7 @@ class _AllEventListState extends State<AllEventList> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) => InkWell(
               onTap: () {
-                if (eventController.filteredEvent[index].type == "Tournament") {
+                if (eventController.filteredEvent[index].type == "tournament") {
                   Get.to(() => AccountTournamentDetail(
                       item: eventController.filteredEvent[index]));
                 } else {

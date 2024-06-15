@@ -23,6 +23,8 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
   final gameController = Get.put(GamesRepository());
   final postController = Get.put(PostRepository());
 
+  bool _isShowing = false;
+
   LayerLink _link = LayerLink();
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,12 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
             overlayChildBuilder: (context) => Stack(
                   children: [
                     GestureDetector(
-                      onTap: () => gameController.hideGameChip(),
+                      onTap: () {
+                        gameController.hideGameChip();
+                        setState(() {
+                          _isShowing = false;
+                        });
+                      },
                       child: SizedBox(
                         height: Get.height,
                         width: Get.width,
@@ -51,7 +58,8 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                         padding: EdgeInsets.all(Get.height * 0.01),
                         decoration: BoxDecoration(
                             color: AppColor().primaryDark,
-                            border: Border.all(color: AppColor().darkGrey),
+                            border: Border.all(
+                                color: AppColor().secondaryGreenColor),
                             borderRadius: BorderRadius.circular(10)),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -125,14 +133,22 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                   ],
                 ),
             child: GestureDetector(
-              onTap: () => gameController.gameChipOverlayController.toggle(),
+              onTap: () {
+                gameController.gameChipOverlayController.toggle();
+                setState(() {
+                  _isShowing = !_isShowing;
+                });
+              },
               child: Container(
                   width: double.infinity,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                   decoration: BoxDecoration(
+                      border: _isShowing
+                          ? Border.all(color: AppColor().secondaryGreenColor)
+                          : null,
                       borderRadius: BorderRadius.circular(10),
-                      color: AppColor().bgDark),
+                      color: AppColor().primaryDark),
                   child: (widget.postCreation == true
                               ? postController.gameTags
                               : teamController.gamesPlayed)

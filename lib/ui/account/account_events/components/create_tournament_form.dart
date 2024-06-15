@@ -278,7 +278,6 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
             ),
             Gap(Get.height * 0.01),
             GameDropdown(
-                gamePlayedController: tournamentController.gamePlayedController,
                 enableFill: tournamentController.isGame.value,
                 gameValue: tournamentController.gameValue,
                 handleTap: () => tournamentController.handleTap('game')),

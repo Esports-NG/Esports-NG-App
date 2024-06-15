@@ -1,6 +1,7 @@
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
+import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/home/community/components/community_filter.dart';
 import 'package:e_sport/ui/home/community/components/community_item.dart';
@@ -86,6 +87,10 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                                 game: gameController.allGames[index]));
                           } else if (communityController.typeFilter.value ==
                               "Suggested Profiles") {
+                          } else if (communityController.typeFilter.value ==
+                              "Trending Teams") {
+                            Get.to(() => AccountTeamsDetail(
+                                item: teamController.allTeam[index]));
                           } else {
                             Get.to(() => AccountCommunityDetail(
                                 item: communityController.allCommunity[index]));

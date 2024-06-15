@@ -1,14 +1,15 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-import 'package:e_sport/data/model/games_played_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/team_inbox_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -71,6 +72,7 @@ class TeamRepository extends GetxController {
   RxList<GamePlayed> gamesPlayed = <GamePlayed>[].obs;
   OverlayPortalController gameChipOverlayController = OverlayPortalController();
   TextEditingController gameSearchController = TextEditingController();
+  Rx<GamePlayed?> addToGamesPlayedValue = Rx(null);
 
   void hideGameChip() {
     gameChipOverlayController.hide();
@@ -82,7 +84,6 @@ class TeamRepository extends GetxController {
     } else {
       gamesPlayed.add(game);
     }
-    print("added game ${game.abbrev}");
   }
 
   final _teamStatus = TeamStatus.empty.obs;
@@ -167,7 +168,7 @@ class TeamRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       });
       var json = jsonDecode(response.body);
-      print(response.body);
+      log(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
@@ -199,8 +200,6 @@ class TeamRepository extends GetxController {
       if (isFirstTime == true) {
         _myTeamStatus(MyTeamStatus.loading);
       }
-
-      debugPrint('getting my team...');
       var response =
           await http.get(Uri.parse('${ApiLink.viewUserTeam}$teamId'), headers: {
         "Content-Type": "application/json",
@@ -239,8 +238,6 @@ class TeamRepository extends GetxController {
       "Content-type": "application/json",
       "Authorization": "JWT ${authController.token}"
     });
-
-    print(response.body);
     List<dynamic> json = jsonDecode(response.body);
 
     return json.map((e) => e as Map<String, dynamic>).toList();
@@ -278,6 +275,29 @@ class TeamRepository extends GetxController {
     } catch (error) {
       debugPrint("getting team inbox: ${error.toString()}");
       _teamInboxStatus(TeamInboxStatus.error);
+    }
+  }
+
+  Future addGameToTeam(int teamId) async {
+    try {
+      var response = await http.post(
+          Uri.parse(
+              ApiLink.addGameToTeam(teamId, addToGamesPlayedValue.value!.id!)),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "JWT ${authController.token}"
+          });
+      log(response.body);
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        Helpers().showCustomSnackbar(
+            message: json['message'] != null
+                ? "Game added successfully"
+                : json['error']);
+      }
+    } catch (err) {
+      debugPrint("adding game to team error: ${err.toString()}");
     }
   }
 
