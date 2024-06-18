@@ -362,9 +362,9 @@ class _PostDetailsState extends State<PostDetails> {
                                     },
                                     child: RepostItem(item: _postDetails!))
                                 : GestureDetector(
-                                  onTap: () => Helpers().showImagePopup(context,
-                                  "${_postDetails!.image}"),
-                                  child: Stack(
+                                    onTap: () => Helpers().showImagePopup(
+                                        context, "${_postDetails!.image}"),
+                                    child: Stack(
                                       children: [
                                         _postDetails!.image == null
                                             ? Container()
@@ -386,20 +386,22 @@ class _PostDetailsState extends State<PostDetails> {
                                                   ),
                                                 ),
                                                 errorWidget:
-                                                    (context, url, error) => Icon(
-                                                        Icons.error,
-                                                        color: AppColor()
-                                                            .primaryWhite),
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error,
+                                                            color: AppColor()
+                                                                .primaryWhite),
                                                 imageUrl: _postDetails!.image!,
                                                 imageBuilder:
                                                     (context, imageProvider) =>
                                                         Container(
                                                   decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                     image: DecorationImage(
                                                         image: NetworkImage(
-                                                            _postDetails!.image!),
+                                                            _postDetails!
+                                                                .image!),
                                                         fit: BoxFit.cover),
                                                   ),
                                                 ),
@@ -412,15 +414,16 @@ class _PostDetailsState extends State<PostDetails> {
                                             height: Get.height * 0.03,
                                             child: ListView.separated(
                                                 padding: EdgeInsets.zero,
-                                                scrollDirection: Axis.horizontal,
+                                                scrollDirection:
+                                                    Axis.horizontal,
                                                 itemCount:
                                                     _postDetails!.tags!.length,
                                                 separatorBuilder:
                                                     (context, index) =>
                                                         Gap(Get.height * 0.01),
                                                 itemBuilder: (context, index) {
-                                                  var items =
-                                                      _postDetails!.tags![index];
+                                                  var items = _postDetails!
+                                                      .tags![index];
                                                   return Container(
                                                     padding:
                                                         const EdgeInsets.all(6),
@@ -445,8 +448,10 @@ class _PostDetailsState extends State<PostDetails> {
                                                             .primaryWhite,
                                                         textAlign:
                                                             TextAlign.center,
-                                                        size: Get.height * 0.014,
-                                                        fontFamily: 'GilroyBold',
+                                                        size:
+                                                            Get.height * 0.014,
+                                                        fontFamily:
+                                                            'GilroyBold',
                                                       ),
                                                     ),
                                                   );
@@ -455,7 +460,7 @@ class _PostDetailsState extends State<PostDetails> {
                                         ),
                                       ],
                                     ),
-                                ),
+                                  ),
                             Gap(Get.height * 0.015),
                             Padding(
                               padding:
@@ -599,6 +604,7 @@ class _PostDetailsState extends State<PostDetails> {
                                     size: Get.height * 0.03,
                                   ),
                                   onPressed: () {
+                                    print('repost pressed');
                                     if (_postDetails!.author!.fullName !=
                                         authController.user!.fullName) {
                                       showModalBottomSheet(

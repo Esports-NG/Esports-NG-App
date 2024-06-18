@@ -15,6 +15,8 @@ import 'package:get/get.dart';
 
 enum LikePostStatus { loading, success, error, empty }
 
+enum RepostPostStatus { loading, success, error, empty }
+
 enum BookmarkPostStatus { loading, success, error, empty }
 
 enum BlockPostStatus { loading, success, error, empty }
@@ -53,6 +55,7 @@ class PostRepository extends GetxController {
   final _bookmarkStatus = BookmarkStatus.empty.obs;
   final _createPostStatus = CreatePostStatus.empty.obs;
   final _likePostStatus = LikePostStatus.empty.obs;
+  final _repostPostStatus = RepostPostStatus.empty.obs;
   final _bookmarkPostStatus = BookmarkPostStatus.empty.obs;
   final _getPostStatus = GetPostStatus.empty.obs;
   final _blockPostStatus = BlockPostStatus.empty.obs;
@@ -60,6 +63,7 @@ class PostRepository extends GetxController {
   GetPostStatus get getPostStatus => _getPostStatus.value;
   BookmarkStatus get bookmarkStatus => _bookmarkStatus.value;
   LikePostStatus get likePostStatus => _likePostStatus.value;
+  RepostPostStatus get repostPostStatus => _repostPostStatus.value;
   BookmarkPostStatus get bookmarkPostStatus => _bookmarkPostStatus.value;
   PostStatus get postStatus => _postStatus.value;
   CreatePostStatus get createPostStatus => _createPostStatus.value;
@@ -420,6 +424,33 @@ class PostRepository extends GetxController {
     }
   }
 
+  Future<bool> repostPost(int postId) async {
+    _repostPostStatus(RepostPostStatus.loading);
+    try {
+      debugPrint('reposting $postId post...');
+      var response = await http.post(
+        Uri.parse('${ApiLink.post}$postId/repost/'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'JWT ${authController.token}'
+        },
+      );
+      var json = jsonDecode(response.body);
+      if (response.statusCode == 200 && json['message'] == 'success') {
+        getBookmarkedPost(false);
+        getAllPost(false);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      _repostPostStatus(RepostPostStatus.error);
+      debugPrint("repost post error: $error");
+      handleError(error);
+      return false;
+    }
+  }
+
   Future getMyPost(bool isFirstTime) async {
     try {
       authController.setLoading(true);
@@ -501,7 +532,7 @@ class PostRepository extends GetxController {
     } catch (error) {
       _postStatus(PostStatus.error);
       authController.setLoading(false);
-      debugPrint("getting all post: ${error.toString()}");
+      debugPrint("getting all posts: ${error.toString()}");
     }
   }
 
@@ -529,6 +560,7 @@ class PostRepository extends GetxController {
         var posts = list.map((e) => PostModel.fromJson(e)).toList();
         debugPrint("${posts.length} for you posts found");
         _forYouPosts(posts.reversed.toList());
+
         // _bookmarkStatus(BookmarkStatus.success);
         // posts.isNotEmpty
         //     ? _bookmarkStatus(BookmarkStatus.available)

@@ -28,9 +28,9 @@ class _PostWidgetState extends State<PostWidget> {
         padding: EdgeInsets.only(bottom: Get.height * 0.04),
         child: Column(
           children: [
-            if (widget.posts!.isEmpty)
+            if (widget.posts?.isEmpty ?? true)
               const NoItemPage(title: 'Post')
-            else if (widget.posts!.isNotEmpty)
+            else if (widget.posts?.isNotEmpty ?? false)
               ListView.separated(
                 padding: EdgeInsets.zero,
                 physics: const ScrollPhysics(),

@@ -203,17 +203,38 @@ class CommunityRepository extends GetxController {
     return json.map((e) => e as Map<String, dynamic>).toList();
   }
 
+  // Future getSuggestedProfiles() async {
+  //   var response =
+  //       await http.get(Uri.parse(ApiLink.getSuggestedUsers), headers: {
+  //     "Content-type": "application/json",
+  //     "Authorization": "JWT ${authController.token}"
+  //   });
+  //   var json = jsonDecode(response.body);
+  //   var list = List.from(json);
+
+  //   suggestedProfiles
+  //       .assignAll(list.map((e) => UserModel.fromJson(e)).toList());
+  // }
+
   Future getSuggestedProfiles() async {
     var response =
         await http.get(Uri.parse(ApiLink.getSuggestedUsers), headers: {
       "Content-type": "application/json",
       "Authorization": "JWT ${authController.token}"
     });
-    var json = jsonDecode(response.body);
-    var list = List.from(json);
 
-    suggestedProfiles
-        .assignAll(list.map((e) => UserModel.fromJson(e)).toList());
+    var jsonResponse = jsonDecode(response.body);
+
+    // Check if the response has a key that contains a list of users.
+    // Replace 'users' with the actual key if it's different in your response.
+    if (jsonResponse.containsKey('users')) {
+      List<dynamic> usersData = jsonResponse['users'];
+      suggestedProfiles
+          .assignAll(usersData.map((e) => UserModel.fromJson(e)).toList());
+    } else {
+      // Handle the case where the expected key is not found
+      throw Exception("User data not found in response");
+    }
   }
 
   void handleError(dynamic error) {
