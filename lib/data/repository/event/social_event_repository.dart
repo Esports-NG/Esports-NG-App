@@ -177,7 +177,8 @@ class SocialEventRepository extends GetxController {
             ..fields["end"] =
                 "${eventDateController.text}T${DateFormat("HH:mm").format(endTime)}"
             ..fields["venue"] = eventVenueController.text
-            ..fields["link"] = eventLinkController.text;
+            ..fields["link"] = eventLinkController.text
+            ..fields["event_type"] = "social";
 
       request.files.add(
           await http.MultipartFile.fromPath('image', eventCoverImage!.path));
@@ -210,7 +211,7 @@ class SocialEventRepository extends GetxController {
 
   Future registerForSocialEvent(int id) async {
     var response =
-        await http.put(Uri.parse(ApiLink.registerForEvent(id)), headers: {
+        await http.put(Uri.parse(ApiLink.registerForSocialEvent(id)), headers: {
       "Content-type": "application/json",
       "Authorization": "JWT ${authController.token}"
     });
@@ -218,9 +219,11 @@ class SocialEventRepository extends GetxController {
     var json = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      Helpers().showCustomSnackbar(message: json['message']);
+      Helpers().showCustomSnackbar(
+          message: toBeginningOfSentenceCase(json['message'])!);
     } else {
-      Helpers().showCustomSnackbar(message: json['error']);
+      Helpers().showCustomSnackbar(
+          message: toBeginningOfSentenceCase(json['error'])!);
     }
   }
 }

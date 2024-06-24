@@ -1,13 +1,16 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -60,6 +63,8 @@ class CommunityRepository extends GetxController {
       <OverlayPortalController>[].obs;
   Rx<String> typeFilter = RxString("All");
 
+  Rx<GamePlayed?> addToGamesPlayedValue = Rx(null);
+
   void hideAllOverlays() {
     if (currentOverlay.isNotEmpty) {
       currentOverlay.forEach((element) {
@@ -75,11 +80,12 @@ class CommunityRepository extends GetxController {
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
         getAllCommunity(true);
+        getSuggestedProfiles();
       } else {
         getAllCommunity(false);
+        getSuggestedProfiles();
       }
     });
-    getSuggestedProfiles();
   }
 
   Future createCommunity(Map<String, dynamic> community) async {
@@ -171,7 +177,7 @@ class CommunityRepository extends GetxController {
     }
   }
 
-  Future<Community> getCommunityData(int id) async {
+  Future<CommunityModel> getCommunityData(int id) async {
     var response = await http.get(
         Uri.parse(ApiLink.getDataWithFollowers(id: id, type: "community")),
         headers: {
@@ -186,7 +192,7 @@ class CommunityRepository extends GetxController {
       throw (json['detail']);
     }
 
-    return Community.fromJson(json);
+    return CommunityModel.fromJson(json);
   }
 
   Future<List<Map<String, dynamic>>> getCommunityFollowers(int id) async {
@@ -214,6 +220,29 @@ class CommunityRepository extends GetxController {
 
     suggestedProfiles
         .assignAll(list.map((e) => UserModel.fromJson(e)).toList());
+  }
+
+  Future addGameToCommunity(int commId) async {
+    try {
+      var response = await http.post(
+          Uri.parse(ApiLink.addGameToCommunity(
+              commId, addToGamesPlayedValue.value!.id!)),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "JWT ${authController.token}"
+          });
+
+      log(response.body);
+      var json = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Helpers().showCustomSnackbar(
+            message: json['message'] != null
+                ? "Game added to community"
+                : json['error']);
+      } else {}
+    } catch (err) {
+      debugPrint('adding game to community error: $err');
+    }
   }
 
   void handleError(dynamic error) {

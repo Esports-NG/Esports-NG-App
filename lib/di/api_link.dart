@@ -46,18 +46,27 @@ class ApiLink {
   static String followTeam(int id) => "${baseurl}extra/followteam/$id/";
   static String addGameToTeam(int teamId, int gameId) =>
       "${baseurl}team/$teamId/addgame/$gameId/";
+  static String sendTeamApplication = "${baseurl}team/application/create/";
+  static String respondToApplication(int playerId, int teamId, String action) =>
+      "${baseurl}team/application/edit/$playerId/$teamId/$action/";
+  static String getTeamApplications(int id) =>
+      "${baseurl}team/application/view/";
 
   //Player
   static String createPlayer = "${baseurl}player/register/";
   static String getAllPlayer = "${baseurl}player/view/";
 
   //Events
-  static String createTournament = "${baseurl}event/1/create/";
-  static String createSocialEvent = "${baseurl}event/1/create/";
+  static String createTournament = "${baseurl}event/1/create/event/";
+  static String createSocialEvent = "${baseurl}event/1/create/socialevent/";
   static String getAllEvent = "${baseurl}event/view/";
   static String getAllSocialEvents = "${baseurl}event/view/social";
   static String getAllTournaments = "${baseurl}event/view/tournament";
   static String registerForEvent(int id) => "${baseurl}event/$id/join/";
+  static String registerForSocialEvent(int id) =>
+      "${baseurl}event/social/$id/join/";
+  static String registerForTeamEvent(int id, int teamId) =>
+      "${baseurl}event/$id/join/?teampk=$teamId";
   static String filterEvents = "event/search";
 
   //Community
@@ -67,6 +76,8 @@ class ApiLink {
   static String getCommunityFollowers(int id) =>
       "${baseurl}extra/followers/comm/view/?group_id=$id";
   static String getSuggestedUsers = "${baseurl}extra/suggest/users/";
+  static String addGameToCommunity(int commId, int gameId) =>
+      "${baseurl}org/$commId/addgame/$gameId/";
 
   //Profile
   static String getDataWithFollowers({required int id, required String type}) =>

@@ -178,7 +178,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                   InkWell(
                     borderRadius: BorderRadius.circular(30),
                     onTap: () async {
-                      if (widget.item.tournamentType == "Team") {
+                      if (widget.item.tournamentType == "team") {
                         showDialog(
                           context: context,
                           builder: (context) =>

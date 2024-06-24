@@ -50,7 +50,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
   bool _isLoading = true;
   int? followerCount;
   int? followingCount;
-  Community? details;
+  CommunityModel? details;
 
   Future getCommunityFollowers() async {
     print(widget.item.id);
@@ -94,8 +94,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
             ? Column(
                 children: [
                   GestureDetector(
-                    onTap: () => Helpers().showImagePopup(context,
-                                  "${details!.cover}"),
+                    onTap: () =>
+                        Helpers().showImagePopup(context, "${details!.cover}"),
                     child: Stack(
                       alignment: Alignment.bottomCenter,
                       clipBehavior: Clip.none,
@@ -141,8 +141,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                         Positioned(
                           top: Get.height * 0.1,
                           child: GestureDetector(
-                            onTap: () => Helpers().showImagePopup(context,
-                                  "${details!.logo}"),
+                            onTap: () => Helpers()
+                                .showImagePopup(context, "${details!.logo}"),
                             child: Stack(
                               alignment: Alignment.bottomRight,
                               children: [
@@ -532,40 +532,45 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: PageHeaderWidget(
                       onTap: () {
-                        Get.to(() => CommunityGamesCoveredList(community: widget.item,));
+                        Get.to(() => CommunityGamesCoveredList(
+                              community: widget.item,
+                            ));
                       },
                       title: 'Games Covered',
                     ),
                   ),
                   Gap(Get.height * 0.02),
                   SizedBox(
-                      height: Get.height * 0.17,
-                      child: gamesController.isLoading.value
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : ListView.separated(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: Get.height * 0.02),
-                              physics: const ScrollPhysics(),
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              separatorBuilder: (context, index) =>
-                                  Gap(Get.height * 0.02),
-                              itemCount:
-                                  gamesController.allGames.take(5).length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                    onTap: () {
-                                      Get.to(() => GameProfile(
-                                          game:
-                                              gamesController.allGames[index]));
-                                    },
-                                    child: CommunityGamesCoveredItem(
-                                      game: gamesController.allGames[index],
-                                    ));
-                              }
-                              ),
+                    height: Get.height * 0.17,
+                    width: double.infinity,
+                    child: details!.gamesPlayed!.isEmpty
+                        ? Center(
+                            child: CustomText(
+                              title: "No game added yet",
+                              color: AppColor().primaryWhite,
+                              // fontFamily: "GilroyMedium",
+                              size: 16,
+                            ),
+                          )
+                        : ListView.separated(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Get.height * 0.02),
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            separatorBuilder: (context, index) =>
+                                Gap(Get.height * 0.02),
+                            itemCount: details!.gamesPlayed!.take(5).length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                  onTap: () {
+                                    Get.to(() => GameProfile(
+                                        game: details!.gamesPlayed![index]));
+                                  },
+                                  child: CommunityGamesCoveredItem(
+                                    game: details!.gamesPlayed![index],
+                                  ));
+                            }),
                   ),
                   Divider(
                     color: AppColor().lightItemsColor.withOpacity(0.3),

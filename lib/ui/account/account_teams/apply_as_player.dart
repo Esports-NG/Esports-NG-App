@@ -2,6 +2,7 @@ import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/account/account_teams/game_selection_chip.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
@@ -22,6 +23,7 @@ class ApplyAsPlayer extends StatefulWidget {
 class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
   final _formKey = GlobalKey<FormState>();
   final teamController = Get.put(TeamRepository());
+  bool _isSubmitting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +85,36 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                     formControl("Would you like to share your team history?*",
                         checkRadio(teamController.shareTeamHistory)),
                     Gap(Get.height * 0.02),
-                    CustomFillButton(
-                      buttonText: "Submit",
-                      onTap: () {},
+                    InkWell(
+                      onTap: () async {
+                        setState(() {
+                          _isSubmitting = true;
+                        });
+                        await teamController.applyAsPlayer(widget.item.id!);
+                        setState(() {
+                          _isSubmitting = false;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                            color: _isSubmitting
+                                ? Colors.transparent
+                                : AppColor().primaryColor,
+                            borderRadius: BorderRadius.circular(99),
+                            border: _isSubmitting
+                                ? Border.all(color: AppColor().primaryColor)
+                                : null),
+                        child: Center(
+                          child: _isSubmitting
+                              ? const ButtonLoader()
+                              : CustomText(
+                                  title: "Submit",
+                                  color: AppColor().primaryWhite,
+                                  fontFamily: "GilroySemiBold",
+                                ),
+                        ),
+                      ),
                     )
                   ]),
             ),

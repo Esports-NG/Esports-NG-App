@@ -506,47 +506,48 @@ class PostRepository extends GetxController {
   }
 
   Future getPostForYou(bool isFirstTime) async {
-    try {
-      if (isFirstTime == true) {
-        authController.setLoading(true);
-        _bookmarkStatus(BookmarkStatus.loading);
-      }
+    // try {
+    if (isFirstTime == true) {
+      authController.setLoading(true);
+      _bookmarkStatus(BookmarkStatus.loading);
+    }
 
-      debugPrint('getting all for post...');
-      var response =
-          await http.get(Uri.parse(ApiLink.getPostsForYou), headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      });
-      var json = jsonDecode(response.body);
+    debugPrint('getting all for you post...');
+    var response = await http.get(Uri.parse(ApiLink.getPostsForYou), headers: {
+      "Content-Type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    });
 
-      if (response.statusCode != 200) {
-        throw (json['detail']);
-      }
+    print(response.body);
+    var json = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
-        var list = List.from(json);
-        var posts = list.map((e) => PostModel.fromJson(e)).toList();
-        debugPrint("${posts.length} for you posts found");
-        _forYouPosts(posts.reversed.toList());
-        // _bookmarkStatus(BookmarkStatus.success);
-        // posts.isNotEmpty
-        //     ? _bookmarkStatus(BookmarkStatus.available)
-        //     : _bookmarkStatus(BookmarkStatus.empty);
-        authController.setLoading(false);
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        // _bookmarkStatus(BookmarkStatus.error);
-        authController.setLoading(false);
-      }
-      return response.body;
-    } catch (error) {
+    if (response.statusCode != 200) {
+      throw (json['detail']);
+    }
+
+    if (response.statusCode == 200) {
+      var list = List.from(json);
+      var posts = list.map((e) => PostModel.fromJson(e)).toList();
+      debugPrint("${posts.length} for you posts found");
+      _forYouPosts(posts.reversed.toList());
+      // _bookmarkStatus(BookmarkStatus.success);
+      // posts.isNotEmpty
+      //     ? _bookmarkStatus(BookmarkStatus.available)
+      //     : _bookmarkStatus(BookmarkStatus.empty);
+      authController.setLoading(false);
+    } else if (response.statusCode == 401) {
+      authController
+          .refreshToken()
+          .then((value) => EasyLoading.showInfo('try again!'));
       // _bookmarkStatus(BookmarkStatus.error);
       authController.setLoading(false);
-      debugPrint("getting for you post: ${error.toString()}");
     }
+    return response.body;
+    // } catch (error) {
+    //   // _bookmarkStatus(BookmarkStatus.error);
+    //   authController.setLoading(false);
+    //   debugPrint("getting for you post: ${error.toString()}");
+    // }
   }
 
   Future getBookmarkedPost(bool isFirstTime) async {

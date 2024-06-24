@@ -8,6 +8,7 @@ import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_teams/apply_as_player.dart';
+import 'package:e_sport/ui/account/account_teams/player_application_list.dart';
 import 'package:e_sport/ui/account/account_teams/team_players_list.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/no_item_page.dart';
@@ -631,6 +632,27 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                               children: [
                                 CustomText(
                                   title: "Tournament History",
+                                  size: 14,
+                                  color: AppColor().primaryWhite,
+                                ),
+                                Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: AppColor().primaryColor,
+                                )
+                              ]),
+                        ),
+                        Divider(
+                          thickness: 0.1,
+                          height: Get.height * 0.03,
+                        ),
+                        GestureDetector(
+                          onTap: () => Get.to(
+                              () => PlayerApplicationList(item: widget.item)),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomText(
+                                  title: "Player Applications",
                                   size: 14,
                                   color: AppColor().primaryWhite,
                                 ),

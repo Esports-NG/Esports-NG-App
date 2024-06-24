@@ -301,6 +301,48 @@ class TeamRepository extends GetxController {
     }
   }
 
+  Future applyAsPlayer(int teamId) async {
+    try {
+      Map<String, dynamic> body = {
+        "iteam": teamId,
+        "igames": gamesPlayed.map((e) => e.id!).toList(),
+        "message": teamJoinReason.text,
+        "role": teamRole.text
+      };
+
+      var response = await http.post(Uri.parse(ApiLink.sendTeamApplication),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "JWT ${authController.token}"
+          },
+          body: jsonEncode(body));
+
+      log(response.body);
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        Helpers().showCustomSnackbar(message: "Application sent");
+      }
+    } catch (error) {
+      debugPrint("team application error: $error");
+    }
+  }
+
+  Future<List<TeamApplicationModel>?> getTeamApplications(int id) async {
+    try {
+      var response =
+          await http.get(Uri.parse(ApiLink.getTeamApplications(id)), headers: {
+        "Content-type": "application/json",
+        "Authorization": "JWT ${authController.token}"
+      });
+
+      log(response.body);
+      var teamApplications = teamApplicationModelFromJson(response.body);
+
+      return teamApplications;
+    } catch (error) {}
+  }
+
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(

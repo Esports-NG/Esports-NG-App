@@ -252,7 +252,7 @@ class Purpose {
 class Comment {
   int? id;
   String? body;
-  int? likes;
+  List<UserModel>? likes;
   List<Tag>? tags;
   dynamic image;
   UserModel? user;
@@ -263,7 +263,10 @@ class Comment {
         id: json["id"],
         body: json["body"],
         user: UserModel.fromJson(json["user"]),
-        likes: json["likes"],
+        likes: json["likes"] == null
+            ? []
+            : List<UserModel>.from(
+                json["likes"]!.map((x) => UserModel.fromJson(x))),
         tags: json["tags"] == null
             ? []
             : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),

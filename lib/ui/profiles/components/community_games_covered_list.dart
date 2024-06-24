@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-
 // There are 2 classes in this folder namely "CommunityGamesCoveredItem" For Scrollable
 // and "CommunityGamesCoveredItemForList" For List
 
@@ -22,7 +21,8 @@ class CommunityGamesCoveredList extends StatefulWidget {
   const CommunityGamesCoveredList({super.key, required this.community});
 
   @override
-  State<CommunityGamesCoveredList> createState() => _CommunityGamesCoveredListState();
+  State<CommunityGamesCoveredList> createState() =>
+      _CommunityGamesCoveredListState();
 }
 
 class _CommunityGamesCoveredListState extends State<CommunityGamesCoveredList> {
@@ -31,66 +31,83 @@ class _CommunityGamesCoveredListState extends State<CommunityGamesCoveredList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        title: CustomText(
-          title: 'Games Covered',
-          fontFamily: 'GilroySemiBold',
-          size: 18,
-          color: AppColor().primaryWhite,
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
+          title: CustomText(
+            title: 'Games Covered',
+            fontFamily: 'GilroySemiBold',
+            size: 18,
+            color: AppColor().primaryWhite,
+          ),
+          leading: GoBackButton(onPressed: () => Get.back()),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.settings,
+                color: AppColor().primaryWhite,
+              ),
+            ),
+          ],
         ),
-        leading: GoBackButton(onPressed: () => Get.back()),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.settings,
-              color: AppColor().primaryWhite,
-            ),
-          ),
-        ],
-      ),
-      backgroundColor: AppColor().primaryBackGroundColor,
-      floatingActionButton: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: AppColor().primaryColor),
-                  child: IconButton(
-                    onPressed: () {
-                        Get.to(() => const CommunityAddGame());
-                    },
-                    icon: const Icon(Icons.add, color: Colors.white),
-                  ),
-                ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: Get.height * 0.02, top: Get.height * 0.02, bottom: Get.height * 0.01),
-            child: CustomText(
-              title: 'Games Covered By ${widget.community.name}:',
-              size: 14,
-              fontFamily: 'GilroyBold',
-              textAlign: TextAlign.start,
-              color: AppColor().greyTwo,
-            ),
-          ),
-          ListView.separated(
-            padding: EdgeInsets.all(Get.height * 0.02),
-            physics: const ScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              var item = gamesController.allGames[index];
-              return InkWell(
-                onTap: () => Get.to(() => GameProfile(game: item)),
-                child: CommunityGamesCoveredItemForList(game: item, community: CommunityModel(),),
-              );
+        backgroundColor: AppColor().primaryBackGroundColor,
+        floatingActionButton: Container(
+          decoration: BoxDecoration(
+              shape: BoxShape.circle, color: AppColor().primaryColor),
+          child: IconButton(
+            onPressed: () {
+              Get.to(() => CommunityAddGame(community: widget.community));
             },
-            separatorBuilder: (context, index) => Gap(Get.height * 0.02), 
-            itemCount: gamesController.allGames.length,
+            icon: const Icon(Icons.add, color: Colors.white),
+          ),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  left: Get.height * 0.02,
+                  top: Get.height * 0.02,
+                  bottom: Get.height * 0.01),
+              child: CustomText(
+                title: 'Games Covered By ${widget.community.name}:',
+                size: 14,
+                fontFamily: 'GilroyBold',
+                textAlign: TextAlign.start,
+                color: AppColor().greyTwo,
+              ),
             ),
-        ],
-      )
-    );
+            widget.community.gamesPlayed!.isEmpty
+                ? Expanded(
+                    child: Center(
+                      child: CustomText(
+                        title: "No games added yet",
+                        color: AppColor().primaryWhite,
+                        // fontFamily: "GilroyMedium",
+                        size: 16,
+                      ),
+                    ),
+                  )
+                : ListView.separated(
+                    padding: EdgeInsets.all(Get.height * 0.02),
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      var item = widget.community.gamesPlayed![index];
+                      return InkWell(
+                        onTap: () => Get.to(() => GameProfile(game: item)),
+                        child: CommunityGamesCoveredItemForList(
+                          game: item,
+                          community: CommunityModel(),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        Gap(Get.height * 0.02),
+                    itemCount: widget.community.gamesPlayed!.length,
+                  ),
+          ],
+        ));
   }
 }

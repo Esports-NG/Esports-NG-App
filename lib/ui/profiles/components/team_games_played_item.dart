@@ -104,6 +104,106 @@ class TeamsGamesPlayedItem extends StatelessWidget {
   }
 }
 
+class TeamsGamesPlayedItemWithIGN extends StatelessWidget {
+  const TeamsGamesPlayedItemWithIGN(
+      {super.key, required this.game, required this.ign});
+  final String ign;
+  final GamePlayed game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: Get.width * 0.55,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColor().bgDark,
+            AppColor().primaryBackGroundColor,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: AppColor().darkGrey,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          game.cover == null
+              ? Container(
+                  height: Get.height * 0.1,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/png/placeholder.png'),
+                        fit: BoxFit.cover),
+                  ),
+                )
+              : CachedNetworkImage(
+                  height: Get.height * 0.12,
+                  width: double.infinity,
+                  progressIndicatorBuilder: (context, url, progress) => Center(
+                    child: SizedBox(
+                      height: Get.height * 0.05,
+                      width: Get.height * 0.05,
+                      child: CircularProgressIndicator(
+                          color: AppColor().primaryColor,
+                          value: progress.progress),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) =>
+                      Icon(Icons.error, color: AppColor().primaryColor),
+                  imageUrl: "${ApiLink.imageUrl}${game.cover!}",
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10)),
+                      image: DecorationImage(
+                          image:
+                              NetworkImage("${ApiLink.imageUrl}${game.cover!}"),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                ),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, bottom: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  title: 'IGN: $ign',
+                  size: 15,
+                  fontFamily: 'GilroyMedium',
+                  weight: FontWeight.w400,
+                  color: AppColor().primaryWhite,
+                  textAlign: TextAlign.left,
+                ),
+                Gap(Get.height * 0.005),
+                CustomText(
+                  title: game.name!.toCapitalCase(),
+                  size: 15,
+                  fontFamily: 'GilroyMedium',
+                  color: AppColor().greyTwo.withOpacity(0.7),
+                  textAlign: TextAlign.left,
+                )
+              ],
+            ),
+          ),
+          Gap(Get.height * 0.005),
+        ],
+      ),
+    );
+  }
+}
+
 //Games Played Item For List
 
 class TeamsGamesPlayedItemForList extends StatelessWidget {
