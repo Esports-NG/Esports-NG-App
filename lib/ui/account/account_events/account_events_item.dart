@@ -15,7 +15,6 @@ class AccountEventsItem extends StatefulWidget {
   final EventModel item;
   final bool? onDetailsPage;
   const AccountEventsItem({super.key, required this.item, this.onDetailsPage});
-  
 
   @override
   State<AccountEventsItem> createState() => _AccountEventsItemState();
@@ -42,8 +41,8 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () => Helpers().showImagePopup(context,
-                                  "${ApiLink.imageUrl}${widget.item.banner}"),
+            onTap: () => Helpers().showImagePopup(
+                context, "${ApiLink.imageUrl}${widget.item.banner}"),
             child: Stack(
               children: [
                 (widget.item.banner == null)
@@ -52,8 +51,8 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         width: double.infinity,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/png/placeholder.png'),
+                              image: AssetImage(
+                                  'assets/images/png/placeholder.png'),
                               fit: BoxFit.cover),
                         ),
                       )
@@ -85,7 +84,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                           ),
                         ),
                       ),
-                widget.item.type == "Tournament"
+                widget.item.type == "tournament"
                     ? Positioned(
                         left: Get.height * 0.02,
                         top: Get.height * 0.02,
@@ -104,7 +103,8 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                               ),
                               child: Row(
                                 children: [
-                                  SvgPicture.asset('assets/images/svg/rank.svg'),
+                                  SvgPicture.asset(
+                                      'assets/images/svg/rank.svg'),
                                   CustomText(
                                     title: widget.item.type,
                                     color: AppColor().pureBlackColor,
@@ -129,7 +129,8 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                               ),
                               child: Row(
                                 children: [
-                                  SvgPicture.asset('assets/images/svg/rank.svg'),
+                                  SvgPicture.asset(
+                                      'assets/images/svg/rank.svg'),
                                   CustomText(
                                     title: 'Ongoing registration',
                                     color: AppColor().pureBlackColor,
@@ -144,7 +145,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         ),
                       )
                     : const SizedBox(),
-                    widget.item.type == "Social"
+                widget.item.type == "social"
                     ? Positioned(
                         left: Get.height * 0.02,
                         top: Get.height * 0.02,
@@ -163,7 +164,8 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                               ),
                               child: Row(
                                 children: [
-                                  SvgPicture.asset('assets/images/svg/rank.svg'),
+                                  SvgPicture.asset(
+                                      'assets/images/svg/rank.svg'),
                                   CustomText(
                                     title: "${widget.item.type} Event",
                                     color: AppColor().pureBlackColor,
@@ -188,7 +190,8 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                               ),
                               child: Row(
                                 children: [
-                                  SvgPicture.asset('assets/images/svg/rank.svg'),
+                                  SvgPicture.asset(
+                                      'assets/images/svg/rank.svg'),
                                   CustomText(
                                     title: 'Ongoing registration',
                                     color: AppColor().pureBlackColor,
@@ -204,8 +207,8 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                       )
                     : const SizedBox(),
 
-                //Entry Fee Widget    
-                widget.item.type == "Tournament"
+                //Entry Fee Widget
+                widget.item.type == "tournament"
                     ? Positioned(
                         right: Get.height * 0.02,
                         bottom: Get.height * 0.02,
@@ -219,12 +222,12 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                           ),
                           child: Center(
                             child: CustomText(
-                                    title: 'Entry Fee: N${widget.item.entryFee}',
-                                    color: AppColor().secondaryGreenColor,
-                                    textAlign: TextAlign.center,
-                                    size: Get.height * 0.014,
-                                    fontFamily: 'GilroyMedium',
-                                  ),
+                              title: 'Entry Fee: N${widget.item.entryFee}',
+                              color: AppColor().secondaryGreenColor,
+                              textAlign: TextAlign.center,
+                              size: Get.height * 0.014,
+                              fontFamily: 'GilroyMedium',
+                            ),
                           ),
                         ),
                       )
@@ -242,13 +245,13 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                widget.item.type == "Tournament"
+                widget.item.type == "tournament"
                     ? textItem(
                         title: 'Game: ',
                         subTitle: widget.item.name!.toUpperCase(),
                       )
                     : const SizedBox(),
-                widget.item.type == "Tournament"
+                widget.item.type == "tournament"
                     ? Visibility(
                         visible: widget.onDetailsPage == null,
                         child: Column(
@@ -262,7 +265,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         ),
                       )
                     : const SizedBox(),
-                widget.item.type == "Social"
+                widget.item.type == "social"
                     ? CustomText(
                         title: widget.item.name,
                         color: AppColor().primaryWhite,
@@ -270,10 +273,10 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         size: 18,
                       )
                     : const SizedBox(),
-                widget.item.type == "Tournament"
+                widget.item.type == "tournament"
                     ? Gap(Get.height * 0.01)
                     : const SizedBox(),
-                widget.item.type == "Tournament"
+                widget.item.type == "tournament"
                     ? textItem(
                         title: 'Tournament type: ',
                         subTitle: widget.item.tournamentType == ''
@@ -315,7 +318,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                 ),
                 Gap(Get.height * 0.01),
                 Visibility(
-                  visible: widget.item.type == "Tournament",
+                  visible: widget.item.type == "tournament",
                   child: textItem(
                     title: 'Prize Pool: ',
                     subTitle: 'N${widget.item.prizePool}',
@@ -326,7 +329,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                     subTitleSize: 16.0,
                   ),
                 ),
-                widget.item.type == "Social"
+                widget.item.type == "social"
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

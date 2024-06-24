@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
-import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
@@ -36,6 +35,7 @@ class TournamentRepository extends GetxController {
   late final tournamentStructureController = TextEditingController();
   late final eventLinkController = TextEditingController();
   late final regDateController = TextEditingController();
+  late final regEndDateController = TextEditingController();
   late final startDateController = TextEditingController();
   late final endDateController = TextEditingController();
   // late final tournamentDateController = TextEditingController();
@@ -83,6 +83,7 @@ class TournamentRepository extends GetxController {
   var isCommunities = false.obs;
   var isRankType = false.obs;
   var isRegistrationDate = false.obs;
+  var isRegistrationEndDate = false.obs;
   var isStartDate = false.obs;
   var isEndDate = false.obs;
   var isPrizePool = false.obs;
@@ -113,6 +114,8 @@ class TournamentRepository extends GetxController {
       isCommunities.value = true;
     } else if (title == 'rankType') {
       isRankType.value = true;
+    } else if (title == 'regEndDate') {
+      isRegistrationEndDate.value = true;
     } else if (title == 'regDate') {
       isRegistrationDate.value = true;
     } else if (title == 'endDate') {
@@ -288,26 +291,28 @@ class TournamentRepository extends GetxController {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       };
-      var request =
-          http.MultipartRequest("POST", Uri.parse(ApiLink.createTournament))
-            ..fields["name"] = tournamentNameController.text
-            ..fields["link_for_bracket"] = tournamentLinkController.text
-            ..fields["game_mode"] = gameModeController.text
-            ..fields["knockout_type"] = knockoutTypeController.text
-            ..fields["rank_type"] = rankTypeController.text
-            ..fields["reg_start"] = regDateController.text
-            ..fields["start_date"] = startDateController.text
-            ..fields["end_date"] = endDateController.text
-            ..fields["prize_pool"] = prizePoolController.text
-            ..fields["summary"] = tournamentSummaryController.text
-            ..fields["entry_fee"] = entryFeeController.text
-            ..fields["requirements"] = tournamentRequirementsController.text
-            ..fields["structure"] = tournamentStructureController.text
-            ..fields["first"] = firstPrizeController.text
-            ..fields["second"] = secondPrizeController.text
-            ..fields["third"] = thirdPrizeController.text
-            ..fields["rules_regs"] = tournamentRegulationsController.text
-            ..fields["event_type"] = "Tournament";
+      var request = http.MultipartRequest(
+          "POST", Uri.parse(ApiLink.createTournament))
+        ..fields["name"] = tournamentNameController.text
+        ..fields["link_for_bracket"] = tournamentLinkController.text
+        ..fields["game_mode"] = gameModeController.text
+        ..fields["knockout_type"] = knockoutTypeController.text
+        ..fields["rank_type"] = rankTypeController.text
+        ..fields["reg_start"] = regDateController.text
+        ..fields["reg_end"] = regEndDateController.text
+        ..fields["start_date"] = startDateController.text
+        ..fields["end_date"] = endDateController.text
+        ..fields["prize_pool"] = prizePoolController.text
+        ..fields["summary"] = tournamentSummaryController.text
+        ..fields["entry_fee"] = entryFeeController.text
+        ..fields["requirements"] = tournamentRequirementsController.text
+        ..fields["structure"] = tournamentStructureController.text
+        ..fields["first"] = firstPrizeController.text
+        ..fields["second"] = secondPrizeController.text
+        ..fields["third"] = thirdPrizeController.text
+        ..fields["rules_regs"] = tournamentRegulationsController.text
+        ..fields["event_type"] = "tournament"
+        ..fields["igames"] = gameValue.value!.id.toString();
 
       request.files.add(await http.MultipartFile.fromPath(
           'profile', eventProfileImage!.path));
@@ -352,7 +357,7 @@ class TournamentRepository extends GetxController {
       "Authorization": 'JWT ${authController.token}'
     };
 
-    var response = await http.put(Uri.parse(ApiLink.registerForTournament(id)),
+    var response = await http.put(Uri.parse(ApiLink.registerForEvent(id)),
         headers: headers);
 
     print(response.body);
@@ -360,6 +365,28 @@ class TournamentRepository extends GetxController {
 
     if (response.statusCode == 200) {
       debugPrint("success");
+      Helpers().showCustomSnackbar(message: json['message']);
+    } else {
+      Helpers().showCustomSnackbar(message: json['error']);
+    }
+  }
+
+  Future registerForTeamTournament(int id, int teamId) async {
+    var headers = {
+      "Content-Type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    };
+
+    var response = await http.put(
+        Uri.parse(ApiLink.registerForTeamEvent(id, teamId)),
+        headers: headers);
+
+    print(response.body);
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      debugPrint("success");
+      Helpers().showCustomSnackbar(message: json['message']);
     } else {
       Helpers().showCustomSnackbar(message: json['error']);
     }

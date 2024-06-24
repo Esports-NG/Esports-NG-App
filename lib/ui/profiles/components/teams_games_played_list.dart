@@ -19,71 +19,76 @@ class TeamsGamesPlayedList extends StatefulWidget {
 }
 
 class _TeamsGamesPlayedListState extends State<TeamsGamesPlayedList> {
-  final gamesController = Get.put(GamesRepository());
+  // final gamesController = Get.put(GamesRepository());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        title: CustomText(
-          title: 'Games Played',
-          fontFamily: 'GilroySemiBold',
-          size: 18,
-          color: AppColor().primaryWhite,
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
+          title: CustomText(
+            title: 'Games Played',
+            fontFamily: 'GilroySemiBold',
+            size: 18,
+            color: AppColor().primaryWhite,
+          ),
+          leading: GoBackButton(onPressed: () => Get.back()),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.settings,
+                color: AppColor().primaryWhite,
+              ),
+            ),
+          ],
         ),
-        leading: GoBackButton(onPressed: () => Get.back()),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.settings,
-              color: AppColor().primaryWhite,
-            ),
-          ),
-        ],
-      ),
-      backgroundColor: AppColor().primaryBackGroundColor,
-      floatingActionButton: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: AppColor().primaryColor),
-                  child: IconButton(
-                    onPressed: () {
-                        Get.to(() => const TeamAddGame());
-                    },
-                    icon: const Icon(Icons.add, color: Colors.white),
-                  ),
-                ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: Get.height * 0.02, top: Get.height * 0.02, bottom: Get.height * 0.01),
-            child: CustomText(
-              title: 'Games Played By ${widget.team.name}:',
-              size: 14,
-              fontFamily: 'GilroyBold',
-              textAlign: TextAlign.start,
-              color: AppColor().greyTwo,
-            ),
-          ),
-          ListView.separated(
-            padding: EdgeInsets.all(Get.height * 0.02),
-            physics: const ScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              var item = gamesController.allGames[index];
-              return InkWell(
-                onTap: () => Get.to(() => GameProfile(game: item)),
-                child: TeamsGamesPlayedItemForList(game: item, team: TeamModel(),),
-              );
+        backgroundColor: AppColor().primaryBackGroundColor,
+        floatingActionButton: Container(
+          decoration: BoxDecoration(
+              shape: BoxShape.circle, color: AppColor().primaryColor),
+          child: IconButton(
+            onPressed: () {
+              Get.to(() => TeamAddGame(team: widget.team));
             },
-            separatorBuilder: (context, index) => Gap(Get.height * 0.02), 
-            itemCount: gamesController.allGames.length,
+            icon: const Icon(Icons.add, color: Colors.white),
+          ),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  left: Get.height * 0.02,
+                  top: Get.height * 0.02,
+                  bottom: Get.height * 0.01),
+              child: CustomText(
+                title: 'Games Played By ${widget.team.name}:',
+                size: 14,
+                fontFamily: 'GilroyBold',
+                textAlign: TextAlign.start,
+                color: AppColor().greyTwo,
+              ),
             ),
-        ],
-      )
-    );
+            ListView.separated(
+              padding: EdgeInsets.all(Get.height * 0.02),
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                var item = widget.team.gamesPlayed![index];
+                return InkWell(
+                  onTap: () => Get.to(() => GameProfile(game: item)),
+                  child: TeamsGamesPlayedItemForList(
+                    game: item,
+                    team: TeamModel(),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+              itemCount: widget.team.gamesPlayed!.length,
+            ),
+          ],
+        ));
   }
 }

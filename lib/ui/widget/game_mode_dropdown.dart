@@ -33,7 +33,7 @@ class _GameModeDropDownState extends State<GameModeDropDown> {
           filled: true,
           fillColor: widget.enableFill == true
               ? AppColor().primaryWhite
-              : AppColor().bgDark,
+              : AppColor().primaryDark,
           focusedBorder: OutlineInputBorder(
               borderSide:
                   BorderSide(color: AppColor().lightItemsColor, width: 1),
@@ -52,6 +52,8 @@ class _GameModeDropDownState extends State<GameModeDropDown> {
                           ? AppColor().primaryBackGroundColor
                           : AppColor().lightItemsColor),
                   value: widget.gameModeValue.value,
+                  dropdownColor: AppColor().primaryDark,
+                  borderRadius: BorderRadius.circular(10),
                   items: widget.gameValue.value!.gameModes!.map((element) {
                     return DropdownMenuItem<String>(
                       value: element.name,

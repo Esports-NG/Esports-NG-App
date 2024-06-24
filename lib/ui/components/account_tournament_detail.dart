@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
@@ -10,6 +11,8 @@ import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/account/account_events/components/tournament_details.dart';
+import 'package:e_sport/ui/components/account_community_detail.dart';
+import 'package:e_sport/ui/components/choose_team_dialog.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
@@ -76,8 +79,8 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
         child: Column(
           children: [
             GestureDetector(
-              onTap: () => Helpers().showImagePopup(context,
-                                  "${ApiLink.imageUrl}${widget.item.banner}"),
+              onTap: () => Helpers().showImagePopup(
+                  context, "${ApiLink.imageUrl}${widget.item.banner}"),
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 clipBehavior: Clip.none,
@@ -123,8 +126,8 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                   Positioned(
                     top: Get.height * 0.1,
                     child: GestureDetector(
-                      onTap: () => Helpers().showImagePopup(context,
-                                  "${widget.item.profile}"),
+                      onTap: () => Helpers()
+                          .showImagePopup(context, "${widget.item.profile}"),
                       child: Stack(
                         alignment: Alignment.bottomRight,
                         children: [
@@ -175,22 +178,33 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                   InkWell(
                     borderRadius: BorderRadius.circular(30),
                     onTap: () async {
-                      setState(() {
-                        _isRegisterLoading = true;
-                      });
-                      await tournamentController
-                          .registerForTournament(widget.item.id!);
-                      setState(() {
-                        _isRegisterLoading = false;
-                      });
+                      if (widget.item.tournamentType == "team") {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              ChooseTeamDialog(id: widget.item.id!),
+                        );
+                      } else {
+                        setState(() {
+                          _isRegisterLoading = true;
+                        });
+                        await tournamentController
+                            .registerForTournament(widget.item.id!);
+                        setState(() {
+                          _isRegisterLoading = false;
+                        });
+                      }
                     },
                     child: Container(
                       height: Get.height * 0.06,
                       width: Get.width,
                       decoration: BoxDecoration(
-                        border: _isRegisterLoading
+                        border: !_isRegisterLoading
                             ? null
-                            : Border.all(color: AppColor().primaryColor),
+                            : Border.all(
+                                width: 1,
+                                color:
+                                    AppColor().primaryColor.withOpacity(0.4)),
                         borderRadius: BorderRadius.circular(30),
                         color: _isRegisterLoading
                             ? Colors.transparent
@@ -259,11 +273,6 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                           )
                                         ]
                                       : [
-                                          SvgPicture.asset(
-                                              'assets/images/svg/account_icon.svg',
-                                              height: Get.height * 0.015,
-                                              color: AppColor().primaryWhite),
-                                          Gap(Get.height * 0.01),
                                           CustomText(
                                               title: _isFollowing
                                                   ? "Unfollow"
@@ -386,56 +395,60 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                       fontFamily: 'GilroySemiBold',
                       color: AppColor().primaryWhite),
                   Gap(Get.height * 0.02),
-                  Row(
-                    children: [
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          widget.item.community!.logo == null
-                              ? Container(
-                                  height: Get.height * 0.04,
-                                  width: Get.height * 0.04,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: SvgPicture.asset(
-                                    'assets/images/svg/people.svg',
-                                  ),
-                                )
-                              : OtherImage(
-                                  itemSize: Get.height * 0.04,
-                                  image: widget.item.community!.logo),
-                          Positioned(
-                            child: SvgPicture.asset(
-                              'assets/images/svg/check_badge.svg',
-                              height: Get.height * 0.015,
+                  GestureDetector(
+                    onTap: () => Get.to(
+                        AccountCommunityDetail(item: widget.item.community!)),
+                    child: Row(
+                      children: [
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            widget.item.community!.logo == null
+                                ? Container(
+                                    height: Get.height * 0.04,
+                                    width: Get.height * 0.04,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/images/svg/people.svg',
+                                    ),
+                                  )
+                                : OtherImage(
+                                    itemSize: Get.height * 0.04,
+                                    image: widget.item.community!.logo),
+                            Positioned(
+                              child: SvgPicture.asset(
+                                'assets/images/svg/check_badge.svg',
+                                height: Get.height * 0.015,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Gap(Get.height * 0.015),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                              title:
-                                  widget.item.community!.name!.toCapitalCase(),
-                              weight: FontWeight.w400,
-                              size: Get.height * 0.017,
-                              fontFamily: 'GilroyMedium',
-                              color: AppColor().primaryWhite),
-                          Gap(Get.height * 0.005),
-                          CustomText(
-                              title: 'No members',
-                              weight: FontWeight.w400,
-                              size: Get.height * 0.015,
-                              fontFamily: 'GilroyRegular',
-                              textAlign: TextAlign.left,
-                              height: 1.5,
-                              color: AppColor().greyEight),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        Gap(Get.height * 0.015),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                                title: widget.item.community!.name!
+                                    .toCapitalCase(),
+                                weight: FontWeight.w400,
+                                size: Get.height * 0.017,
+                                fontFamily: 'GilroyMedium',
+                                color: AppColor().primaryWhite),
+                            Gap(Get.height * 0.005),
+                            CustomText(
+                                title: 'No members',
+                                weight: FontWeight.w400,
+                                size: Get.height * 0.015,
+                                fontFamily: 'GilroyRegular',
+                                textAlign: TextAlign.left,
+                                height: 1.5,
+                                color: AppColor().greyEight),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   Gap(Get.height * 0.01),
                   CustomText(
@@ -449,14 +462,18 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                       height: 1.5,
                       color: AppColor().greyEight),
                   Gap(Get.height * 0.02),
-                  Center(
-                    child: CustomText(
-                        title: 'See full profile',
-                        weight: FontWeight.w400,
-                        size: Get.height * 0.017,
-                        fontFamily: 'GilroyMedium',
-                        underline: TextDecoration.underline,
-                        color: AppColor().primaryColor),
+                  GestureDetector(
+                    onTap: () => Get.to(
+                        AccountCommunityDetail(item: widget.item.community!)),
+                    child: Center(
+                      child: CustomText(
+                          title: 'See full profile',
+                          weight: FontWeight.w400,
+                          size: Get.height * 0.017,
+                          fontFamily: 'GilroyMedium',
+                          underline: TextDecoration.underline,
+                          color: AppColor().primaryColor),
+                    ),
                   ),
                   Divider(
                     color: AppColor().lightItemsColor.withOpacity(0.3),

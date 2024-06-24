@@ -1,6 +1,9 @@
+import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/game_list_dropdown.dart';
@@ -10,7 +13,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class CommunityAddGame extends StatefulWidget {
-  const CommunityAddGame({super.key});
+  const CommunityAddGame({super.key, required this.community});
+  final CommunityModel community;
 
   @override
   State<CommunityAddGame> createState() => _CommunityAddGameState();
@@ -18,7 +22,8 @@ class CommunityAddGame extends StatefulWidget {
 
 class _CommunityAddGameState extends State<CommunityAddGame> {
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final tournamentController = Get.put(TournamentRepository());
+  final communityController = Get.put(CommunityRepository());
+  bool _isAdding = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +31,7 @@ class _CommunityAddGameState extends State<CommunityAddGame> {
         centerTitle: true,
         elevation: 0,
         title: CustomText(
-          title: 'Add Game To Your Community',
+          title: 'Add Game To Community',
           fontFamily: 'GilroySemiBold',
           size: 18,
           color: AppColor().primaryWhite,
@@ -42,41 +47,65 @@ class _CommunityAddGameState extends State<CommunityAddGame> {
         //   ),
         // ],
       ),
-      body: Obx(() => Form(
-        key: formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Container(
-          decoration: BoxDecoration(
-                    color: AppColor().primaryBackGroundColor,
-                    borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.all(Get.height * 0.02),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Game to be covered *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'GilroyRegular',
-                  size: Get.height * 0.017,
+      body: Form(
+          key: formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Container(
+            decoration: BoxDecoration(
+                color: AppColor().primaryBackGroundColor,
+                borderRadius: BorderRadius.circular(10)),
+            padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Game to be covered *',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.017,
+              ),
+              Gap(Get.height * 0.01),
+              GameDropdown(
+                enableFill: true,
+                gameValue: communityController.addToGamesPlayedValue,
+              ),
+              Gap(Get.height * 0.02),
+              InkWell(
+                onTap: () async {
+                  setState(() {
+                    _isAdding = true;
+                  });
+                  await communityController
+                      .addGameToCommunity(widget.community.id!);
+                  setState(() {
+                    _isAdding = false;
+                  });
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  decoration: BoxDecoration(
+                      color: _isAdding
+                          ? Colors.transparent
+                          : AppColor().primaryColor,
+                      borderRadius: BorderRadius.circular(90),
+                      border: _isAdding
+                          ? Border.all(
+                              color: AppColor().primaryColor.withOpacity(0.4))
+                          : null),
+                  child: _isAdding
+                      ? const Center(child: ButtonLoader())
+                      : Center(
+                          child: CustomText(
+                              title: "Add Game",
+                              fontFamily: "GilroySemibold",
+                              color: AppColor().primaryWhite),
+                        ),
                 ),
-                Gap(Get.height * 0.01),
-                GameDropdown(
-                    gamePlayedController: tournamentController.gamePlayedController,
-                    enableFill: tournamentController.isGame.value,
-                    gameValue: tournamentController.gameValue,
-                    handleTap: () => tournamentController.handleTap('game')),
-                Gap(Get.height * 0.05),
-                CustomFillButton(
-                          buttonText: "Add Game",
-                          onTap: () {
-                            tournamentController.createTournament();
-                          })
-              ]
-          ),
-        )
-      )),
+              )
+            ]),
+          )),
     );
   }
 }

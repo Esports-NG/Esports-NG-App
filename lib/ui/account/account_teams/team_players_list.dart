@@ -18,7 +18,13 @@ class TeamPlayersList extends StatefulWidget {
 }
 
 class _TeamPlayersListState extends State<TeamPlayersList> {
-  List<bool> _isOpen = [false];
+  late List<bool> _isOpen;
+
+  @override
+  initState() {
+    _isOpen = List.filled(widget.item.gamesPlayed!.length, false);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,97 +76,96 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                 _isOpen[panelIndex] = isExpanded;
               }),
               expandIconColor: AppColor().primaryColor,
-              children: [
-                ExpansionPanel(
-                    isExpanded: _isOpen[0],
-                    backgroundColor: AppColor().primaryBackGroundColor,
-                    headerBuilder: (context, isExpanded) => Row(
-                          children: [
-                            CachedNetworkImage(
-                              imageUrl: ApiLink.imageUrl +
-                                  widget.item.gamePlayed!.profilePicture!,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(999),
-                                    border: Border.all(
-                                        color: AppColor()
-                                            .primaryWhite
-                                            .withOpacity(0.5)),
-                                    image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover)),
-                              ),
-                            ),
-                            Gap(Get.height * 0.02),
-                            CustomText(
-                              title: widget.item.gamePlayed!.name!,
-                              color: AppColor().primaryWhite,
-                              fontFamily: "GilroySemiBold",
-                              size: 16,
-                            )
-                          ],
-                        ),
-                    body: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: CustomText(
-                                title: "S/N",
-                                color: AppColor().primaryWhite,
-                                fontFamily: "GilroyMedium",
-                              ),
-                            ),
-                            Expanded(
-                                flex: 4,
-                                child: Center(
-                                  child: CustomText(
-                                    title: "PP",
-                                    color: AppColor().primaryWhite,
-                                  ),
-                                )),
-                            Expanded(
-                              flex: 8,
-                              child: CustomText(
-                                title: "PlayerName",
-                                color: AppColor().primaryWhite,
-                                fontFamily: "GilroyMedium",
-                              ),
-                            ),
-                            Expanded(
-                              flex: 0,
-                              child: GestureDetector(
-                                child: Icon(
-                                  Icons.edit_square,
-                                  color: AppColor().primaryColor,
+              children: widget.item.gamesPlayed!
+                  .map((e) => ExpansionPanel(
+                      isExpanded: _isOpen[widget.item.gamesPlayed!.indexOf(e)],
+                      backgroundColor: AppColor().primaryBackGroundColor,
+                      headerBuilder: (context, isExpanded) => Row(
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: ApiLink.imageUrl + e.profilePicture!,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(999),
+                                      border: Border.all(
+                                          color: AppColor()
+                                              .primaryWhite
+                                              .withOpacity(0.5)),
+                                      image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover)),
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                        Divider(
-                          thickness: 0.3,
-                          color: AppColor().darkGrey,
-                        ),
-                        PlayerRow(),
-                        Gap(Get.height * 0.01),
-                        PlayerRow(),
-                        Gap(Get.height * 0.01),
-                        PlayerRow(),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                          title: "See more",
-                          underline: TextDecoration.underline,
-                          color: AppColor().primaryColor,
-                          decorationColor: AppColor().primaryColor,
-                        )
-                      ],
-                    ))
-              ],
+                              Gap(Get.height * 0.02),
+                              CustomText(
+                                title: e.name!,
+                                color: AppColor().primaryWhite,
+                                fontFamily: "GilroySemiBold",
+                                size: 16,
+                              )
+                            ],
+                          ),
+                      body: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: CustomText(
+                                  title: "S/N",
+                                  color: AppColor().primaryWhite,
+                                  fontFamily: "GilroyMedium",
+                                ),
+                              ),
+                              Expanded(
+                                  flex: 4,
+                                  child: Center(
+                                    child: CustomText(
+                                      title: "PP",
+                                      color: AppColor().primaryWhite,
+                                    ),
+                                  )),
+                              Expanded(
+                                flex: 8,
+                                child: CustomText(
+                                  title: "PlayerName",
+                                  color: AppColor().primaryWhite,
+                                  fontFamily: "GilroyMedium",
+                                ),
+                              ),
+                              Expanded(
+                                flex: 0,
+                                child: GestureDetector(
+                                  child: Icon(
+                                    Icons.edit_square,
+                                    color: AppColor().primaryColor,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Divider(
+                            thickness: 0.3,
+                            color: AppColor().darkGrey,
+                          ),
+                          PlayerRow(),
+                          Gap(Get.height * 0.01),
+                          PlayerRow(),
+                          Gap(Get.height * 0.01),
+                          PlayerRow(),
+                          Gap(Get.height * 0.02),
+                          CustomText(
+                            title: "See more",
+                            underline: TextDecoration.underline,
+                            color: AppColor().primaryColor,
+                            decorationColor: AppColor().primaryColor,
+                          )
+                        ],
+                      )))
+                  .toList(),
             )
           ],
         ),

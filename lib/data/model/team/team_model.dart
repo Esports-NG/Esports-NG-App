@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'dart:convert';
 
 import 'team_inbox_model.dart';
 
@@ -9,7 +10,7 @@ class TeamModel {
   String? name;
   String? profilePicture;
   String? cover;
-  GamePlayed? gamePlayed;
+  List<GamePlayed>? gamesPlayed;
   String? bio;
   dynamic manager;
   List<Member>? members;
@@ -21,7 +22,7 @@ class TeamModel {
     this.name,
     this.profilePicture,
     this.cover,
-    this.gamePlayed,
+    this.gamesPlayed,
     this.bio,
     this.manager,
     this.members,
@@ -34,9 +35,10 @@ class TeamModel {
         name: json["name"],
         profilePicture: json["profile_picture"],
         cover: json["cover"],
-        gamePlayed: json["game_played"] == null
-            ? null
-            : GamePlayed.fromJson(json["game_played"]),
+        gamesPlayed: json["games_played"] == null
+            ? []
+            : List<GamePlayed>.from(
+                json["games_played"]!.map((x) => GamePlayed.fromJson(x))),
         bio: json["bio"],
         manager: json["manager"],
         members: json["members"] == null
@@ -52,7 +54,7 @@ class TeamModel {
         "name": name,
         "profile_picture": profilePicture,
         "cover": cover,
-        "game_played": gamePlayed,
+        "games_played": gamesPlayed,
         "bio": bio,
         "manager": manager,
         "members": members == null
@@ -200,5 +202,50 @@ class Purpose {
   Map<String, dynamic> toJson() => {
         "id": id,
         "purpose": purpose,
+      };
+}
+
+List<TeamApplicationModel> teamApplicationModelFromJson(String str) =>
+    List<TeamApplicationModel>.from(
+        json.decode(str).map((x) => TeamApplicationModel.fromJson(x)));
+
+String teamApplicationModelToJson(List<TeamApplicationModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class TeamApplicationModel {
+  final int? id;
+  final Team? team;
+  final String? message;
+  final List<PlayerModel>? playerProfiles;
+  final String? role;
+
+  TeamApplicationModel({
+    this.id,
+    this.team,
+    this.message,
+    this.playerProfiles,
+    this.role,
+  });
+
+  factory TeamApplicationModel.fromJson(Map<String, dynamic> json) =>
+      TeamApplicationModel(
+        id: json["id"],
+        team: json["team"] == null ? null : Team.fromJson(json["team"]),
+        message: json["message"],
+        playerProfiles: json["player_profiles"] == null
+            ? []
+            : List<PlayerModel>.from(
+                json["player_profiles"]!.map((x) => PlayerModel.fromJson(x))),
+        role: json["role"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "team": team?.toJson(),
+        "message": message,
+        "player_profiles": playerProfiles == null
+            ? []
+            : List<dynamic>.from(playerProfiles!.map((x) => x.toJson())),
+        "role": role,
       };
 }
