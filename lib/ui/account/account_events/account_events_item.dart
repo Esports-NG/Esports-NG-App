@@ -106,7 +106,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                                   SvgPicture.asset(
                                       'assets/images/svg/rank.svg'),
                                   CustomText(
-                                    title: widget.item.type,
+                                    title: widget.item.type!.capitalize,
                                     color: AppColor().pureBlackColor,
                                     textAlign: TextAlign.center,
                                     size: Get.height * 0.014,
@@ -167,7 +167,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                                   SvgPicture.asset(
                                       'assets/images/svg/rank.svg'),
                                   CustomText(
-                                    title: "${widget.item.type} Event",
+                                    title: "${widget.item.type} Event".capitalize,
                                     color: AppColor().pureBlackColor,
                                     textAlign: TextAlign.center,
                                     size: Get.height * 0.014,
