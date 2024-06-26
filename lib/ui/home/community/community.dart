@@ -133,7 +133,7 @@ class _CommunityPageState extends State<CommunityPage> {
                             var item =
                                 communityController.suggestedProfiles[index];
                             return SizedBox(
-                                child: SuggestedProfileItem(item: item));
+                                child: SuggestedProfileList(item: item));
                           }),
                     ),
                   ],

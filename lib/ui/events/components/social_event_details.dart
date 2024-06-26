@@ -153,7 +153,7 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                             fontFamily: 'GilroySemiBold',
                             color: AppColor().primaryWhite),
                         CustomText(
-                          title: "2000 Registered",
+                          title: "${widget.item.maxNo} Registered",
                           color: AppColor().primaryWhite,
                         )
                       ],

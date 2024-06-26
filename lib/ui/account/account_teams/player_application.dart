@@ -25,7 +25,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
           onPressed: () => Get.back(),
         ),
         title: CustomText(
-          title: "Team Application",
+          title: "#Username's Application",
           color: AppColor().primaryWhite,
           size: 20,
           fontFamily: 'GilroyMedium',
