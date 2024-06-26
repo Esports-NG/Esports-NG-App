@@ -81,76 +81,80 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
       body: SingleChildScrollView(
           child: Column(
         children: [
-          Stack(
-            alignment: Alignment.bottomCenter,
-            clipBehavior: Clip.none,
-            children: [
-              widget.item.cover == null
-                  ? Container(
-                      height: Get.height * 0.15,
-                      width: Get.width,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image:
-                                AssetImage('assets/images/png/team_cover.png'),
-                            fit: BoxFit.cover,
-                            opacity: 0.2),
-                      ),
-                    )
-                  : CachedNetworkImage(
-                      imageUrl: "${ApiLink.imageUrl}${widget.item.cover}",
-                      imageBuilder: (context, imageProvider) => Container(
-                            height: Get.height * 0.15,
-                            width: Get.width,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                  opacity: 0.2),
-                            ),
-                          )),
-              Positioned(
-                top: Get.height * 0.1,
-                child: GestureDetector(
-                  onTap: () =>
-                      Helpers().showImagePopup(context, "${widget.item.cover}"),
-                  child: Stack(
-                    alignment: Alignment.bottomRight,
+          GestureDetector(
+            onTap: () =>
+                        Helpers().showImagePopup(context, "${widget.item.cover}"),
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              clipBehavior: Clip.none,
+              children: [
+                widget.item.cover == null
+                    ? Container(
+                        height: Get.height * 0.15,
+                        width: Get.width,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage('assets/images/png/team_cover.png'),
+                              fit: BoxFit.cover,
+                              opacity: 0.2),
+                        ),
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: "${ApiLink.imageUrl}${widget.item.cover}",
+                        imageBuilder: (context, imageProvider) => Container(
+                              height: Get.height * 0.15,
+                              width: Get.width,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    opacity: 0.2),
+                              ),
+                            )),
+                Positioned(
+                  top: Get.height * 0.1,
+                  child: GestureDetector(
+                    onTap: () =>
+                        Helpers().showImagePopup(context, "${widget.item.profilePicture}"),
+                    child: Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        widget.item.profilePicture == null
+                            ? Container(
+                                height: Get.height * 0.1,
+                                width: Get.height * 0.1,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: SvgPicture.asset(
+                                  'assets/images/svg/people.svg',
+                                ),
+                              )
+                            : OtherImage(
+                                itemSize: Get.height * 0.1,
+                                image: widget.item.profilePicture),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      widget.item.profilePicture == null
-                          ? Container(
-                              height: Get.height * 0.1,
-                              width: Get.height * 0.1,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(
-                                'assets/images/svg/people.svg',
-                              ),
-                            )
-                          : OtherImage(
-                              itemSize: Get.height * 0.1,
-                              image: widget.item.profilePicture),
+                      GoBackButton(onPressed: () => Get.back()),
+                      Padding(
+                        padding: EdgeInsets.only(right: Get.height * 0.02),
+                        child: InkWell(
+                          child: Icon(Icons.settings,
+                              color: AppColor().primaryWhite),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              Positioned.fill(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GoBackButton(onPressed: () => Get.back()),
-                    Padding(
-                      padding: EdgeInsets.only(right: Get.height * 0.02),
-                      child: InkWell(
-                        child: Icon(Icons.settings,
-                            color: AppColor().primaryWhite),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           Gap(Get.height * 0.07),
           CustomText(
@@ -524,6 +528,27 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                               )
                             ]),
                       ),
+                      Divider(
+                          thickness: 0.1,
+                          height: Get.height * 0.03,
+                        ),
+                        GestureDetector(
+                          onTap: () => Get.to(
+                              () => PlayerApplicationList(item: widget.item)),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomText(
+                                  title: "Player Applications",
+                                  size: 14,
+                                  color: AppColor().primaryWhite,
+                                ),
+                                Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: AppColor().primaryColor,
+                                )
+                              ]),
+                        ),
                     ],
                   ),
                 ),
@@ -632,27 +657,6 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                               children: [
                                 CustomText(
                                   title: "Tournament History",
-                                  size: 14,
-                                  color: AppColor().primaryWhite,
-                                ),
-                                Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: AppColor().primaryColor,
-                                )
-                              ]),
-                        ),
-                        Divider(
-                          thickness: 0.1,
-                          height: Get.height * 0.03,
-                        ),
-                        GestureDetector(
-                          onTap: () => Get.to(
-                              () => PlayerApplicationList(item: widget.item)),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                CustomText(
-                                  title: "Player Applications",
                                   size: 14,
                                   color: AppColor().primaryWhite,
                                 ),

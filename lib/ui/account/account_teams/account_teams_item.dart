@@ -38,7 +38,7 @@ class AccountTeamsItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          (item.cover == null)
+          (item.profilePicture == null)
               ? Container(
                   height: Get.height * 0.08,
                   width: Get.height * 0.08,
@@ -52,32 +52,31 @@ class AccountTeamsItem extends StatelessWidget {
                   ),
                 )
               : CachedNetworkImage(
-                  height: Get.height * 0.08,
-                  width: Get.height * 0.08,
-                  progressIndicatorBuilder: (context, url, progress) => Center(
-                    child: SizedBox(
-                      height: Get.height * 0.02,
-                      width: Get.height * 0.02,
-                      child: CircularProgressIndicator(
-                          color: AppColor().primaryColor,
-                          value: progress.progress),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) =>
-                      Icon(Icons.error, color: AppColor().primaryColor),
-                  imageUrl: '${ApiLink.imageUrl}${item.cover}',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border:
-                          Border.all(color: AppColor().primaryWhite, width: 2),
-                      image: DecorationImage(
-                          image:
-                              NetworkImage('${ApiLink.imageUrl}${item.cover}'),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                ),
+                        height: Get.height * 0.08,
+                        width: Get.height * 0.08,
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: SizedBox(
+                            height: Get.height * 0.02,
+                            width: Get.height * 0.02,
+                            child: CircularProgressIndicator(
+                                color: AppColor().primaryColor,
+                                value: progress.progress),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.error, color: AppColor().primaryColor),
+                        imageUrl: item.profilePicture!,
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColor().primaryWhite),
+                            image: DecorationImage(
+                                image: NetworkImage(item.profilePicture!),
+                                fit: BoxFit.cover),
+                          ),
+                        ),
+                      ),
           Gap(Get.height * 0.02),
           Expanded(
             child: Column(
