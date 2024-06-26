@@ -291,10 +291,10 @@ class TournamentRepository extends GetxController {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       };
-      var request = http.MultipartRequest(
-          "POST", Uri.parse(ApiLink.createTournament))
+      var request = http.MultipartRequest("POST",
+          Uri.parse(ApiLink.createTournament(selectedCommunity.value!.id!)))
         ..fields["name"] = tournamentNameController.text
-        ..fields["link_for_bracket"] = tournamentLinkController.text
+        ..fields["link"] = tournamentLinkController.text
         ..fields["game_mode"] = gameModeController.text
         ..fields["knockout_type"] = knockoutTypeController.text
         ..fields["rank_type"] = rankTypeController.text
@@ -312,6 +312,7 @@ class TournamentRepository extends GetxController {
         ..fields["third"] = thirdPrizeController.text
         ..fields["rules_regs"] = tournamentRegulationsController.text
         ..fields["event_type"] = "tournament"
+        ..fields["tournament_type"] = tournamentTypeValue.value!
         ..fields["igames"] = gameValue.value!.id.toString();
 
       request.files.add(await http.MultipartFile.fromPath(

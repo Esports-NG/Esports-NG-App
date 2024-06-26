@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
@@ -10,16 +11,19 @@ import 'package:http/http.dart' as http;
 class GamesRepository extends GetxController {
   final authController = Get.put(AuthRepository());
   RxList<GamePlayed> allGames = <GamePlayed>[].obs;
+  RxList<GamePlayed> userGames = <GamePlayed>[].obs;
   Rx<GamePlayed?> selectedGame = Rx(null);
   RxString selectedGameName = "".obs;
   RxBool isLoading = false.obs;
   TextEditingController gameSearchText = TextEditingController();
   RxList<GamePlayed> filteredGames = <GamePlayed>[].obs;
+  RxList<GamePlayed> filteredUserGames = <GamePlayed>[].obs;
 
   @override
   onInit() {
     super.onInit();
     getAllGames();
+    getUserGames();
     gameSearchText.addListener(() {
       filterList(gameSearchText.text);
     });
@@ -27,8 +31,12 @@ class GamesRepository extends GetxController {
 
   void filterList(String query) {
     if (query.isEmpty) {
+      filteredUserGames.assignAll(userGames);
+
       filteredGames.assignAll(allGames);
     } else {
+      filteredUserGames.assignAll(userGames.where(
+          (item) => item.name!.toLowerCase().contains(query.toLowerCase())));
       filteredGames.assignAll(allGames.where(
           (item) => item.name!.toLowerCase().contains(query.toLowerCase())));
     }
@@ -36,18 +44,18 @@ class GamesRepository extends GetxController {
 
   OverlayPortalController gameDropdownOverlayController =
       OverlayPortalController();
-  OverlayPortalController gameChipOverlayController =
-      OverlayPortalController();
-
+  OverlayPortalController gameChipOverlayController = OverlayPortalController();
 
   void hideGameDropdown() {
     // gameSearchText.text = "";
     filteredGames.assignAll(allGames);
     gameDropdownOverlayController.hide();
   }
+
   void hideGameChip() {
     // gameSearchText.text = "";
     filteredGames.assignAll(allGames);
+    filteredUserGames.assignAll(userGames);
     gameChipOverlayController.hide();
   }
 
@@ -70,6 +78,23 @@ class GamesRepository extends GetxController {
       debugPrint("getting all games: ${error.toString()}");
     }
     isLoading.value = false;
+  }
+
+  Future getUserGames() async {
+    var response = await http.get(Uri.parse(ApiLink.getUserGames), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+
+    log(response.body);
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      var list = List.from(jsonDecode(response.body));
+      var games = list.map((e) => GamePlayed.fromJson(e)).toList();
+      userGames.assignAll(games);
+      filteredUserGames.assignAll(games);
+    }
   }
 
   Future getGameDetails(int id) async {
