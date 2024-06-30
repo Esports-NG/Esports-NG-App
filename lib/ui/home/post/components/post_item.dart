@@ -78,7 +78,7 @@ class _PostItemState extends State<PostItem> {
           ),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: AppColor().greyEight,
+            color: AppColor().greyEight.withOpacity(0.4),
             width: 0.5,
           ),
         ),
@@ -87,6 +87,7 @@ class _PostItemState extends State<PostItem> {
           children: [
             if (widget.item.repost != null)
               InkWell(
+                borderRadius: BorderRadius.circular(10),
                 onTap: () {
                   Get.to(() => PostDetails(item: widget.item));
                 },
@@ -328,8 +329,8 @@ class _PostItemState extends State<PostItem> {
             ),
             Gap(Get.height * 0.015),
             GestureDetector(
-              onTap: () => Helpers().showImagePopup(context,
-                                  "${widget.item.repost!.image}"),
+              onTap: () => Helpers()
+                  .showImagePopup(context, "${widget.item.repost!.image}"),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -361,8 +362,8 @@ class _PostItemState extends State<PostItem> {
                                         Container(
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                            image:
-                                                NetworkImage(widget.item.image!),
+                                            image: NetworkImage(
+                                                widget.item.image!),
                                             fit: BoxFit.cover),
                                       ),
                                     ),

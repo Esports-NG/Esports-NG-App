@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
@@ -366,7 +368,7 @@ class TournamentRepository extends GetxController {
 
     if (response.statusCode == 200) {
       debugPrint("success");
-      Helpers().showCustomSnackbar(message: json['message']);
+      Helpers().showCustomSnackbar(message: "Successfully registered");
     } else {
       Helpers().showCustomSnackbar(message: json['error']);
     }
@@ -391,6 +393,18 @@ class TournamentRepository extends GetxController {
     } else {
       Helpers().showCustomSnackbar(message: json['error']);
     }
+  }
+
+  Future getTournamentParticipants(int id) async {
+    var response =
+        await http.get(Uri.parse(ApiLink.getEventParticipants(id)), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+
+    log(response.body);
+
+    return participantModelFromJson(response.body);
   }
 
   void handleError(dynamic error) {

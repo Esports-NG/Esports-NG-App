@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
@@ -22,6 +23,7 @@ import 'package:intl/intl.dart';
 class SocialEventRepository extends GetxController {
   final eventController = Get.put(EventRepository());
   final authController = Get.put(AuthRepository());
+  final Rx<CommunityModel?> organizingCommunity = null.obs;
 
   final TextEditingController startTimeController = TextEditingController();
   final TextEditingController endTimeController = TextEditingController();
@@ -164,21 +166,21 @@ class SocialEventRepository extends GetxController {
       var startTime = DateFormat.jm().parse(startTimeController.text);
       var endTime = DateFormat.jm().parse(endTimeController.text);
 
-      var request =
-          http.MultipartRequest("POST", Uri.parse(ApiLink.createSocialEvent))
-            ..fields["name"] = eventNameController.text
-            ..fields["description"] = eventDescController.text
-            ..fields["entry_fee"] = entryFeeController.text
-            ..fields["igames"] = gameCoveredController.text
-            ..fields["registration_start"] = regStartDateController.text
-            ..fields["registration_end"] = regEndDateController.text
-            ..fields["start"] =
-                "${eventDateController.text}T${DateFormat("HH:mm").format(startTime)}"
-            ..fields["end"] =
-                "${eventDateController.text}T${DateFormat("HH:mm").format(endTime)}"
-            ..fields["venue"] = eventVenueController.text
-            ..fields["link"] = eventLinkController.text
-            ..fields["event_type"] = "social";
+      var request = http.MultipartRequest("POST",
+          Uri.parse(ApiLink.createSocialEvent(organizingCommunity.value!.id!)))
+        ..fields["name"] = eventNameController.text
+        ..fields["description"] = eventDescController.text
+        ..fields["entry_fee"] = entryFeeController.text
+        ..fields["igames"] = gameCoveredController.text
+        ..fields["registration_start"] = regStartDateController.text
+        ..fields["registration_end"] = regEndDateController.text
+        ..fields["start"] =
+            "${eventDateController.text}T${DateFormat("HH:mm").format(startTime)}"
+        ..fields["end"] =
+            "${eventDateController.text}T${DateFormat("HH:mm").format(endTime)}"
+        ..fields["venue"] = eventVenueController.text
+        ..fields["link"] = eventLinkController.text
+        ..fields["event_type"] = "social";
 
       request.files.add(
           await http.MultipartFile.fromPath('image', eventCoverImage!.path));

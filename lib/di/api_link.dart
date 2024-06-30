@@ -70,6 +70,8 @@ class ApiLink {
   static String registerForTeamEvent(int id, int teamId) =>
       "${baseurl}event/$id/join/?teampk=$teamId";
   static String filterEvents = "event/search";
+  static String getEventParticipants(int id) =>
+      "${baseurl}event/participants/$id";
 
   //Community
   static String createCommunity = "${baseurl}org/register/";

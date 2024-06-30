@@ -349,9 +349,9 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        communitiesValue = value!.name;
+                        socialEventController.organizingCommunity.value = value;
                         socialEventController.communitiesOwnedController.text =
-                            value.name!;
+                            value!.name!;
                         debugPrint(communitiesValue);
                         handleTap('communities');
                       });
