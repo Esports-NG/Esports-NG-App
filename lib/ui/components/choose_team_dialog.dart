@@ -28,10 +28,16 @@ class _ChooseTeamDialogState extends State<ChooseTeamDialog> {
   Widget build(BuildContext context) {
     return SimpleDialog(
       backgroundColor: AppColor().primaryDark,
-      title: Text(
-        "Select Team",
-        style: TextStyle(
-            color: AppColor().primaryWhite, fontFamily: "GilroySemiBold"),
+      title: Row(
+        children: [
+          Text(
+            "Select Team",
+            style: TextStyle(
+                color: AppColor().primaryWhite, fontFamily: "GilroySemiBold"),
+          ),
+          const Spacer(),
+          Visibility(visible: _isRegisterLoading, child: const ButtonLoader())
+        ],
       ),
       children: teamController.allTeam
           .map((e) => SimpleDialogOption(
@@ -57,10 +63,6 @@ class _ChooseTeamDialogState extends State<ChooseTeamDialog> {
                       size: 16,
                       fontFamily: "GilroyMedium",
                     ),
-                    const Spacer(),
-                    Visibility(
-                        visible: _isRegisterLoading,
-                        child: const ButtonLoader())
                   ],
                 ),
               ))

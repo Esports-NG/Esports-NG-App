@@ -343,6 +343,25 @@ class TeamRepository extends GetxController {
     } catch (error) {}
   }
 
+  Future takeActionOnApplication(String action, int teamId) async {
+    try {
+      var response = await http.put(
+          Uri.parse(ApiLink.respondToApplication(
+              authController.user!.id!, teamId, action)),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "JWT ${authController.token}"
+          });
+
+      log(response.body);
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        Helpers().showCustomSnackbar(message: json['message']);
+      }
+    } catch (err) {}
+  }
+
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(

@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/user_model.dart';
 
 class EventModel {
   int? id;
@@ -390,5 +394,64 @@ class PrizePoolDistribution {
         "first": first,
         "second": second,
         "third": third,
+      };
+}
+
+List<ParticipantModel> participantModelFromJson(String str) =>
+    List<ParticipantModel>.from(
+        json.decode(str).map((x) => ParticipantModel.fromJson(x)));
+
+String participantModelToJson(List<ParticipantModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class ParticipantModel {
+  final int? id;
+  final UserModel? player;
+  final String? profile;
+  final List<dynamic>? statistics;
+  final GamePlayed? gamePlayed;
+  final String? inGameId;
+  final String? inGameName;
+  final bool? isCaptain;
+
+  ParticipantModel({
+    this.id,
+    this.player,
+    this.profile,
+    this.statistics,
+    this.gamePlayed,
+    this.inGameId,
+    this.inGameName,
+    this.isCaptain,
+  });
+
+  factory ParticipantModel.fromJson(Map<String, dynamic> json) =>
+      ParticipantModel(
+        id: json["id"],
+        player:
+            json["player"] == null ? null : UserModel.fromJson(json["player"]),
+        profile: json["profile"],
+        statistics: json["statistics"] == null
+            ? []
+            : List<dynamic>.from(json["statistics"]!.map((x) => x)),
+        gamePlayed: json["game_played"] == null
+            ? null
+            : GamePlayed.fromJson(json["game_played"]),
+        inGameId: json["in_game_id"],
+        inGameName: json["in_game_name"],
+        isCaptain: json["is_captain"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "player": player?.toJson(),
+        "profile": profile,
+        "statistics": statistics == null
+            ? []
+            : List<dynamic>.from(statistics!.map((x) => x)),
+        "game_played": gamePlayed?.toJson(),
+        "in_game_id": inGameId,
+        "in_game_name": inGameName,
+        "is_captain": isCaptain,
       };
 }

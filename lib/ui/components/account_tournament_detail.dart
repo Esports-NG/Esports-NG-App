@@ -13,6 +13,7 @@ import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/account/account_events/components/tournament_details.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/choose_team_dialog.dart';
+import 'package:e_sport/ui/components/participant_list.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
@@ -590,7 +591,12 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                             color: AppColor().lightItemsColor.withOpacity(0.3),
                             thickness: 0.5),
                         tournamentDetails(
-                            onTap: () {}, title: 'Participant List'),
+                            onTap: () {
+                              Get.to(() => ParticipantList(
+                                    event: widget.item,
+                                  ));
+                            },
+                            title: 'Participant List'),
                         Gap(Get.height * 0.01),
                       ],
                     ),
@@ -716,7 +722,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   }
 
   tournamentDetails({String? title, VoidCallback? onTap}) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),

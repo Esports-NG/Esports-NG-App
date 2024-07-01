@@ -1,7 +1,9 @@
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/profiles/components/team_games_played_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,9 @@ class PlayerApplication extends StatefulWidget {
 }
 
 class _PlayerApplicationState extends State<PlayerApplication> {
+  bool _isTakingAction = false;
+  final teamController = Get.put(TeamRepository());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,33 +94,67 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                 children: [
                   Expanded(
                       child: InkWell(
+                    borderRadius: BorderRadius.circular(99),
+                    onTap: () async {
+                      if (!_isTakingAction) {
+                        setState(() {
+                          _isTakingAction = true;
+                        });
+                        await teamController.takeActionOnApplication(
+                            "accept", widget.application.team!.id!);
+                      }
+                      setState(() {
+                        _isTakingAction = false;
+                      });
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
                           color: AppColor().secondaryGreenColor,
                           borderRadius: BorderRadius.circular(99)),
                       child: Center(
-                          child: CustomText(
-                        title: "Accept",
-                        color: AppColor().primaryDark,
-                        fontFamily: "GilroySemiBold",
-                      )),
+                          child: _isTakingAction
+                              ? const ButtonLoader(
+                                  color: Colors.black,
+                                )
+                              : CustomText(
+                                  title: "Accept",
+                                  color: AppColor().primaryDark,
+                                  fontFamily: "GilroySemiBold",
+                                )),
                     ),
                   )),
                   Gap(Get.height * 0.01),
                   Expanded(
                       child: InkWell(
+                    borderRadius: BorderRadius.circular(99),
+                    onTap: () async {
+                      if (!_isTakingAction) {
+                        setState(() {
+                          _isTakingAction = true;
+                        });
+                        await teamController.takeActionOnApplication(
+                            "reject", widget.application.team!.id!);
+                      }
+                      setState(() {
+                        _isTakingAction = false;
+                      });
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
                           color: AppColor().primaryRed,
                           borderRadius: BorderRadius.circular(99)),
                       child: Center(
-                          child: CustomText(
-                        title: "Reject",
-                        color: AppColor().primaryWhite,
-                        fontFamily: "GilroySemiBold",
-                      )),
+                          child: _isTakingAction
+                              ? ButtonLoader(
+                                  color: AppColor().primaryWhite,
+                                )
+                              : CustomText(
+                                  title: "Reject",
+                                  color: AppColor().primaryWhite,
+                                  fontFamily: "GilroySemiBold",
+                                )),
                     ),
                   ))
                 ],

@@ -58,7 +58,9 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                     Gap(Get.height * 0.03),
                     formControl(
                       "Which games would you like to play?*",
-                      const GameSelectionChip(),
+                      const GameSelectionChip(
+                        teamApplication: true,
+                      ),
                     ),
                     Gap(Get.height * 0.02),
                     formControl(

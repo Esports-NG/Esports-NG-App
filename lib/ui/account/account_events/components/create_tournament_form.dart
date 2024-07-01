@@ -335,7 +335,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     'Teams',
                   ].map((String value) {
                     return DropdownMenuItem<String>(
-                      value: value,
+                      value: value == "Single Player" ? "solo" : "team",
                       child: CustomText(
                         title: value,
                         color:

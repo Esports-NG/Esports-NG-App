@@ -57,8 +57,10 @@ class ApiLink {
   static String getAllPlayer = "${baseurl}player/view/";
 
   //Events
-  static String createTournament = "${baseurl}event/1/create/event/";
-  static String createSocialEvent = "${baseurl}event/1/create/socialevent/";
+  static String createTournament(int communityId) =>
+      "${baseurl}event/${communityId}/create/event/";
+  static String createSocialEvent(int communityId) =>
+      "${baseurl}event/${communityId}/create/socialevent/";
   static String getAllEvent = "${baseurl}event/view/";
   static String getAllSocialEvents = "${baseurl}event/view/social";
   static String getAllTournaments = "${baseurl}event/view/tournament";
@@ -68,6 +70,8 @@ class ApiLink {
   static String registerForTeamEvent(int id, int teamId) =>
       "${baseurl}event/$id/join/?teampk=$teamId";
   static String filterEvents = "event/search";
+  static String getEventParticipants(int id) =>
+      "${baseurl}event/participants/$id";
 
   //Community
   static String createCommunity = "${baseurl}org/register/";
@@ -91,6 +95,7 @@ class ApiLink {
   // Games
   static String getAllGames = "${baseurl}/games/view/";
   static String getGame(int id) => "${baseurl}/games/view/?pk=$id";
+  static String getUserGames = "${baseurl}/player/games";
 
   // static String withdraw = "${baseurl}initiate-withdrawal";
   // static String dashboard = "${baseurl}users/dashboard";

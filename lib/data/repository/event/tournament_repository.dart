@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
@@ -291,10 +293,10 @@ class TournamentRepository extends GetxController {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       };
-      var request = http.MultipartRequest(
-          "POST", Uri.parse(ApiLink.createTournament))
+      var request = http.MultipartRequest("POST",
+          Uri.parse(ApiLink.createTournament(selectedCommunity.value!.id!)))
         ..fields["name"] = tournamentNameController.text
-        ..fields["link_for_bracket"] = tournamentLinkController.text
+        ..fields["link"] = tournamentLinkController.text
         ..fields["game_mode"] = gameModeController.text
         ..fields["knockout_type"] = knockoutTypeController.text
         ..fields["rank_type"] = rankTypeController.text
@@ -312,6 +314,7 @@ class TournamentRepository extends GetxController {
         ..fields["third"] = thirdPrizeController.text
         ..fields["rules_regs"] = tournamentRegulationsController.text
         ..fields["event_type"] = "tournament"
+        ..fields["tournament_type"] = tournamentTypeValue.value!
         ..fields["igames"] = gameValue.value!.id.toString();
 
       request.files.add(await http.MultipartFile.fromPath(
@@ -365,7 +368,7 @@ class TournamentRepository extends GetxController {
 
     if (response.statusCode == 200) {
       debugPrint("success");
-      Helpers().showCustomSnackbar(message: json['message']);
+      Helpers().showCustomSnackbar(message: "Successfully registered");
     } else {
       Helpers().showCustomSnackbar(message: json['error']);
     }
@@ -390,6 +393,18 @@ class TournamentRepository extends GetxController {
     } else {
       Helpers().showCustomSnackbar(message: json['error']);
     }
+  }
+
+  Future getTournamentParticipants(int id) async {
+    var response =
+        await http.get(Uri.parse(ApiLink.getEventParticipants(id)), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+
+    log(response.body);
+
+    return participantModelFromJson(response.body);
   }
 
   void handleError(dynamic error) {

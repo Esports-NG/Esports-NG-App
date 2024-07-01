@@ -11,8 +11,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class GameSelectionChip extends StatefulWidget {
-  const GameSelectionChip({super.key, this.postCreation});
+  const GameSelectionChip({super.key, this.postCreation, this.teamApplication});
   final bool? postCreation;
+  final bool? teamApplication;
 
   @override
   State<GameSelectionChip> createState() => _GameSelectionChipState();
@@ -91,15 +92,20 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                                                 if (widget.postCreation ==
                                                     true) {
                                                   postController.addToGameTags(
-                                                      gameController
-                                                              .filteredGames[
-                                                          index]);
+                                                      (widget.teamApplication ==
+                                                              true
+                                                          ? gameController
+                                                              .filteredUserGames
+                                                          : gameController
+                                                              .filteredGames)[index]);
                                                 } else {
-                                                  teamController
-                                                      .addToGamesPlayed(
-                                                          gameController
-                                                                  .filteredGames[
-                                                              index]);
+                                                  teamController.addToGamesPlayed(
+                                                      (widget.teamApplication ==
+                                                              true
+                                                          ? gameController
+                                                              .filteredUserGames
+                                                          : gameController
+                                                              .filteredGames)[index]);
                                                 }
                                               },
                                               child: Container(
@@ -109,8 +115,13 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                                                     horizontal:
                                                         Get.height * 0.01),
                                                 child: CustomText(
-                                                    title: gameController
-                                                        .filteredGames[index]
+                                                    title: (widget.teamApplication ==
+                                                                    true
+                                                                ? gameController
+                                                                    .filteredUserGames
+                                                                : gameController
+                                                                    .filteredGames)[
+                                                            index]
                                                         .name,
                                                     color: AppColor()
                                                         .primaryWhite
@@ -123,8 +134,13 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                                               color: AppColor().darkGrey,
                                               height: 0,
                                             ),
-                                        itemCount: gameController
-                                            .filteredGames.length),
+                                        itemCount:
+                                            (widget.teamApplication == true
+                                                    ? gameController
+                                                        .filteredUserGames
+                                                    : gameController
+                                                        .filteredGames)
+                                                .length),
                                   )
                           ],
                         ),
