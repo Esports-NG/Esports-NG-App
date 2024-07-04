@@ -480,7 +480,7 @@ class _UserProfileState extends State<UserProfile> {
                                   children: [
                                     SizedBox(
                                       width: double.infinity,
-                                      height: Get.height * 0.22,
+                                      height: Get.height * 0.215,
                                       child: ListView.separated(
                                           physics: const ScrollPhysics(),
                                           shrinkWrap: true,
