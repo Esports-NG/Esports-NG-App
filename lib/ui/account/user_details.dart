@@ -1,10 +1,17 @@
 import 'dart:convert';
 import 'package:change_case/change_case.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/user_profile.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/account/account_details.dart';
+import 'package:e_sport/ui/account/games_played/games_played_item.dart';
+import 'package:e_sport/ui/components/games_played_details.dart';
+import 'package:e_sport/ui/components/games_played_widget.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/profiles/components/user_game_played_item.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -102,6 +109,9 @@ class _UserProfileState extends State<UserProfile> {
   int? followingCount;
   bool _isLoading = false;
   bool _isFollowing = false;
+  List<bool> _isOpen = [true];
+  List<bool> _isOpen2 = [false];
+  final playerItem = Get.put(PlayerRepository()); 
 
   Future<void> getFollowersList() async {
     setState(() {
@@ -407,29 +417,222 @@ class _UserProfileState extends State<UserProfile> {
                 color: AppColor().greyFour),
             Visibility(
                 visible: widget.userData.id != authController.user!.id,
-                child: Gap(Get.height * 0.02)),
-            GestureDetector(
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  backgroundColor: AppColor().primaryBgColor,
-                  content: const ComingSoonPopup(),
-                ),
-              ),
-              child: CustomText(
-                  title: 'See full profile',
-                  weight: FontWeight.w400,
-                  size: Get.height * 0.017,
-                  fontFamily: 'GilroyMedium',
-                  underline: TextDecoration.underline,
-                  color: AppColor().primaryColor),
-            ),
+                child: Gap(Get.height * 0.02)), 
           ],
         ),
       ),
+      Divider(
+        color: AppColor().lightItemsColor.withOpacity(0.3),
+        height: Get.height * 0.05,
+        thickness: 4,
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+        child: PageHeaderWidget(
+          onTap: () {},
+          title: 'Recent Posts',
+        ),
+      ),
+      Gap(Get.height * 0.02),
+      const ComingSoonWidget(),
+      Divider(
+        color: AppColor().lightItemsColor.withOpacity(0.3),
+        height: Get.height * 0.05,
+        thickness: 4,
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          title: "Player Profile",
+                          size: 16,
+                          color: AppColor().primaryWhite,
+                          fontFamily: "GilroySemiBold",
+                        ),
+                        Gap(Get.height * 0.02),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: ExpansionPanelList(
+                            expansionCallback: (panelIndex, isExpanded) =>
+                                setState(() {
+                              _isOpen[panelIndex] = isExpanded;
+                            }),
+                            expandIconColor: AppColor().primaryColor,
+                            children: [
+                              ExpansionPanel(
+                                isExpanded: _isOpen[0],
+                                backgroundColor:
+                                    AppColor().primaryBackGroundColor,
+                                headerBuilder: (context, isExpanded) => Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      CustomText(
+                                        title: "Games Played",
+                                        size: 14,
+                                        color: AppColor().primaryWhite,
+                                      ),
+                                    ]),
+                                body: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: Get.height * 0.22,
+                                      child: ListView.separated(
+                                          physics: const ScrollPhysics(),
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          separatorBuilder: (context, index) =>
+                                              Gap(Get.height * 0.02),
+                                          itemCount: 5,
+                                          itemBuilder: (context, index) {
+                                            var item = playerItem.allPlayer[index];
+                                            return InkWell(
+                                              onTap: () => Get.to(() => GamesPlayedDetails(item: item)),
+                                              child: UserGamesPlayedItem(player: item),
+                                            );
+                                          },),
+                                    ),
+                                    Gap(Get.height * 0.02),
+                                    InkWell(
+                                      onTap: ()  => Get.to(() => const AccountDetails(title: 'Player Profile',)),
+                                      child: Center(
+                                        child: CustomText(
+                                            title: 'See all',
+                                            weight: FontWeight.w400,
+                                            size: Get.height * 0.017,
+                                            fontFamily: 'GilroyMedium',
+                                            underline: TextDecoration.underline,
+                                            color: AppColor().primaryColor),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 0.1,
+                          height: Get.height * 0.03,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: ExpansionPanelList(
+                            expansionCallback: (panelIndex, isExpanded) =>
+                                setState(() {
+                              _isOpen2[panelIndex] = isExpanded;
+                            }),
+                            expandIconColor: AppColor().primaryColor,
+                            children: [
+                              ExpansionPanel(
+                                isExpanded: _isOpen2[0],
+                                backgroundColor:
+                                    AppColor().primaryBackGroundColor,
+                                headerBuilder: (context, isExpanded) => Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      CustomText(
+                                        title: "Team History",
+                                        size: 14,
+                                        color: AppColor().primaryWhite,
+                                      ),
+                                    ]),
+                                body: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: Get.height * 0.17,
+                                      // child: ListView.separated(
+                                      //     physics: const ScrollPhysics(),
+                                      //     shrinkWrap: true,
+                                      //     scrollDirection: Axis.horizontal,
+                                      //     separatorBuilder: (context, index) =>
+                                      //         Gap(Get.height * 0.02),
+                                      //     itemCount:
+                                      //         widget.item.gamesPlayed!.length,
+                                      //     itemBuilder: (context, index) {
+                                      //       return InkWell(
+                                      //           onTap: () {
+                                      //             Get.to(() => GameProfile(
+                                      //                 game: widget.item
+                                      //                     .gamesPlayed![index]));
+                                      //           },
+                                      //           child: TeamsGamesPlayedItem(
+                                      //             game: widget
+                                      //                 .item.gamesPlayed![index],
+                                      //             team: TeamModel(),
+                                      //           ));
+                                      //     }),
+                                    ),
+                                    Gap(Get.height * 0.02),
+                                    InkWell(
+                                      onTap: () {},
+                                      child: Center(
+                                        child: CustomText(
+                                            title: 'See all',
+                                            weight: FontWeight.w400,
+                                            size: Get.height * 0.017,
+                                            fontFamily: 'GilroyMedium',
+                                            underline: TextDecoration.underline,
+                                            color: AppColor().primaryColor),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ]),
+      ),
+      Divider(
+        color: AppColor().lightItemsColor.withOpacity(0.3),
+        height: Get.height * 0.05,
+        thickness: 4,
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+        child: PageHeaderWidget(
+          onTap: () {},
+          title: 'Qualifications',
+        ),
+      ),
+      Gap(Get.height * 0.02),
+      const ComingSoonWidget(),
+      Divider(
+        color: AppColor().lightItemsColor.withOpacity(0.3),
+        height: Get.height * 0.05,
+        thickness: 4,
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+        child: PageHeaderWidget(
+          onTap: () {},
+          title: 'Ownerships',
+        ),
+      ),
+      Gap(Get.height * 0.02),
+      const ComingSoonWidget(),
+      Divider(
+        color: AppColor().lightItemsColor.withOpacity(0.3),
+        height: Get.height * 0.05,
+        thickness: 4,
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+        child: PageHeaderWidget(
+          onTap: () {},
+          title: 'Social Events',
+        ),
+      ),
+      Gap(Get.height * 0.02),
+      const ComingSoonWidget(),
       Divider(
         color: AppColor().lightItemsColor.withOpacity(0.3),
         height: Get.height * 0.05,
@@ -444,6 +647,14 @@ class _UserProfileState extends State<UserProfile> {
       ),
       Gap(Get.height * 0.02),
       const ComingSoonWidget(),
+      Divider(
+        color: AppColor().lightItemsColor.withOpacity(0.3),
+        height: Get.height * 0.05,
+        thickness: 4,
+      ),
+      
+      
+      
       // SizedBox(
       //   height: Get.height * 0.12,
       //   child: ListView.separated(
@@ -473,7 +684,6 @@ class _UserProfileState extends State<UserProfile> {
       //         );
       //       }),
       // ),
-      Gap(Get.height * 0.04),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
         child: Row(

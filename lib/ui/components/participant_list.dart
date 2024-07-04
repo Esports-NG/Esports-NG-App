@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
+import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/choose_team_dialog.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
@@ -23,6 +25,7 @@ class ParticipantList extends StatefulWidget {
 
 class _ParticipantListState extends State<ParticipantList> {
   final tournamentController = Get.put(TournamentRepository());
+  final playerController = Get.put(PlayerRepository());
   final authController = Get.put(AuthRepository());
   bool _isRegisterLoading = false;
   List<ParticipantModel>? _participantList;
@@ -202,7 +205,7 @@ class _ParticipantListState extends State<ParticipantList> {
                               Expanded(
                                 flex: 5,
                                 child: CustomText(
-                                    title: "Player name",
+                                    title: "${widget.event.gameMode} IGN",
                                     color: AppColor()
                                         .primaryWhite
                                         .withOpacity(0.8),
@@ -212,7 +215,7 @@ class _ParticipantListState extends State<ParticipantList> {
                               Expanded(
                                 flex: 6,
                                 child: CustomText(
-                                    title: "Esports NG name",
+                                    title: "Username",
                                     color: AppColor()
                                         .primaryWhite
                                         .withOpacity(0.8),
@@ -299,10 +302,13 @@ class PlayerRow extends StatelessWidget {
         const Spacer(),
         Expanded(
           flex: 6,
-          child: CustomText(
-            title: participant.player!.userName,
-            color: AppColor().primaryWhite,
-            overflow: TextOverflow.ellipsis,
+          child: InkWell(
+            onTap: () => Get.to(UserDetails(id: participant.player!.id!)),
+            child: CustomText(
+              title: participant.player!.userName,
+              color: AppColor().primaryWhite,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         )
       ],

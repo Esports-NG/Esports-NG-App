@@ -567,6 +567,16 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                     child: Column(
                       children: [
                         tournamentDetails(
+                            onTap: () {
+                              Get.to(() => ParticipantList(
+                                    event: widget.item,
+                                  ));
+                            },
+                            title: 'Participants List'),
+                        Divider(
+                            color: AppColor().lightItemsColor.withOpacity(0.3),
+                            thickness: 0.5),
+                        tournamentDetails(
                             onTap: () => Get.to(() => TournamentDetails(
                                 title: "Tournament Structure",
                                 value: widget.item.structure!)),
@@ -587,16 +597,6 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                 title: "Tournament Requirements",
                                 value: widget.item.requirements!)),
                             title: 'Tournament Requirements'),
-                        Divider(
-                            color: AppColor().lightItemsColor.withOpacity(0.3),
-                            thickness: 0.5),
-                        tournamentDetails(
-                            onTap: () {
-                              Get.to(() => ParticipantList(
-                                    event: widget.item,
-                                  ));
-                            },
-                            title: 'Participant List'),
                         Gap(Get.height * 0.01),
                       ],
                     ),

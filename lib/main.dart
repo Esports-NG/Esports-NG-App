@@ -69,7 +69,7 @@ class _ESportAppState extends State<ESportApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'ESports NG',
+        title: 'Esports NG',
         initialBinding: AppBinding(),
         theme: ThemeData(
           fontFamily: "GilroyMedium",
