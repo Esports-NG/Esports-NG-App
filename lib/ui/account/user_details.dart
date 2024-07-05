@@ -450,8 +450,7 @@ class _UserProfileState extends State<UserProfile> {
                           size: 16,
                           color: AppColor().primaryWhite,
                           fontFamily: "GilroySemiBold",
-                        ),
-                        Gap(Get.height * 0.02),
+                        ),                       
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: ExpansionPanelList(
