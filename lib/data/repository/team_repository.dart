@@ -291,10 +291,21 @@ class TeamRepository extends GetxController {
       var json = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        Helpers().showCustomSnackbar(
-            message: json['message'] != null
-                ? "Game added successfully"
-                : json['error']);
+        var body = {"game_id": addToGamesPlayedValue.value!.id};
+
+        var rosterResponse =
+            await http.post(Uri.parse(ApiLink.createRosterForGame(teamId)),
+                headers: {
+                  "Content-type": "application/json",
+                  "Authorization": "JWT ${authController.token}"
+                },
+                body: jsonEncode(body));
+
+        log(rosterResponse.body);
+        if (rosterResponse.statusCode == 200) {
+          Helpers()
+              .showCustomSnackbar(message: "Successfully added game to team");
+        }
       }
     } catch (err) {
       debugPrint("adding game to team error: ${err.toString()}");

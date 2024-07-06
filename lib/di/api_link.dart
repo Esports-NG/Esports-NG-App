@@ -51,6 +51,7 @@ class ApiLink {
       "${baseurl}team/application/edit/$playerId/$teamId/$action/";
   static String getTeamApplications(int id) =>
       "${baseurl}team/application/view/";
+  static String createRosterForGame(int teamId) => '${baseurl}team/create/roster/${teamId}/';
 
   //Player
   static String createPlayer = "${baseurl}player/register/";
