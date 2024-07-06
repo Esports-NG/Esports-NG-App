@@ -83,7 +83,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
         children: [
           GestureDetector(
             onTap: () =>
-                        Helpers().showImagePopup(context, "${widget.item.cover}"),
+                        Helpers().showImagePopup(context, "${ApiLink.imageUrl}${widget.item.cover}"),
             child: Stack(
               alignment: Alignment.bottomCenter,
               clipBehavior: Clip.none,
