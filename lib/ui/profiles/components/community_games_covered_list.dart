@@ -62,52 +62,54 @@ class _CommunityGamesCoveredListState extends State<CommunityGamesCoveredList> {
             icon: const Icon(Icons.add, color: Colors.white),
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  left: Get.height * 0.02,
-                  top: Get.height * 0.02,
-                  bottom: Get.height * 0.01),
-              child: CustomText(
-                title: 'Games Covered By ${widget.community.name}:',
-                size: 14,
-                fontFamily: 'GilroyBold',
-                textAlign: TextAlign.start,
-                color: AppColor().greyTwo,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    left: Get.height * 0.02,
+                    top: Get.height * 0.02,
+                    bottom: Get.height * 0.01),
+                child: CustomText(
+                  title: 'Games Covered By ${widget.community.name}:',
+                  size: 14,
+                  fontFamily: 'GilroyBold',
+                  textAlign: TextAlign.start,
+                  color: AppColor().greyTwo,
+                ),
               ),
-            ),
-            widget.community.gamesPlayed!.isEmpty
-                ? Expanded(
-                    child: Center(
-                      child: CustomText(
-                        title: "No games added yet",
-                        color: AppColor().primaryWhite,
-                        // fontFamily: "GilroyMedium",
-                        size: 16,
-                      ),
-                    ),
-                  )
-                : ListView.separated(
-                    padding: EdgeInsets.all(Get.height * 0.02),
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      var item = widget.community.gamesPlayed![index];
-                      return InkWell(
-                        onTap: () => Get.to(() => GameProfile(game: item)),
-                        child: CommunityGamesCoveredItemForList(
-                          game: item,
-                          community: CommunityModel(),
+              widget.community.gamesPlayed!.isEmpty
+                  ? Expanded(
+                      child: Center(
+                        child: CustomText(
+                          title: "No games added yet",
+                          color: AppColor().primaryWhite,
+                          // fontFamily: "GilroyMedium",
+                          size: 16,
                         ),
-                      );
-                    },
-                    separatorBuilder: (context, index) =>
-                        Gap(Get.height * 0.02),
-                    itemCount: widget.community.gamesPlayed!.length,
-                  ),
-          ],
+                      ),
+                    )
+                  : ListView.separated(
+                      padding: EdgeInsets.all(Get.height * 0.02),
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        var item = widget.community.gamesPlayed![index];
+                        return InkWell(
+                          onTap: () => Get.to(() => GameProfile(game: item)),
+                          child: CommunityGamesCoveredItemForList(
+                            game: item,
+                            community: CommunityModel(),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          Gap(Get.height * 0.02),
+                      itemCount: widget.community.gamesPlayed!.length,
+                    ),
+            ],
+          ),
         ));
   }
 }

@@ -248,7 +248,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                 widget.item.type == "tournament"
                     ? textItem(
                         title: 'Game: ',
-                        subTitle: widget.item.name!.toUpperCase(),
+                        subTitle: widget.item.gameMode!.toUpperCase(),
                       )
                     : const SizedBox(),
                 widget.item.type == "tournament"
@@ -281,7 +281,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         title: 'Tournament type: ',
                         subTitle: widget.item.tournamentType == ''
                             ? 'Teams'
-                            : widget.item.tournamentType!,
+                            : widget.item.tournamentType!.capitalize,
                       )
                     : const SizedBox(),
                 Visibility(

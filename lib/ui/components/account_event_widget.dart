@@ -1,5 +1,6 @@
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
+import 'package:e_sport/ui/events/components/social_event_details.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,15 @@ class _AccountEventsWidgetState extends State<AccountEventsWidget> {
           itemBuilder: (context, index) {
             var item = eventController.allEvent[index];
             return InkWell(
-              onTap: () => Get.to(
-                () => AccountTournamentDetail(item: item),
-              ),
+              onTap: () {
+                if (eventController.filteredEvent[index].type == "tournament") {
+                  Get.to(() => AccountTournamentDetail(
+                      item: eventController.filteredEvent[index]));
+                } else {
+                  Get.to(() => SocialEventDetails(
+                      item: eventController.filteredEvent[index]));
+                }
+              },
               child: AccountEventsItem(item: item),
             );
           },
