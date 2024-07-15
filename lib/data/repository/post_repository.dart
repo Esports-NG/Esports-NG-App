@@ -594,6 +594,18 @@ class PostRepository extends GetxController {
     }
   }
 
+  Future likeComment(int commentId) async {
+    try {
+      var response =
+          await http.put(Uri.parse(ApiLink.likeComment(commentId)), headers: {
+        "Content-type": "application/json",
+        "Authorization": "JWT ${authController.token}"
+      });
+
+      print(response.body);
+    } catch (err) {}
+  }
+
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(

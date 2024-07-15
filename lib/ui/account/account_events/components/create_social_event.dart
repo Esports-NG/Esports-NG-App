@@ -326,6 +326,8 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<CommunityModel>(
+                    dropdownColor: AppColor().primaryDark,
+                    borderRadius: BorderRadius.circular(10),
                     value: selectedItem,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
@@ -333,7 +335,10 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                           ? AppColor().primaryBackGroundColor
                           : AppColor().lightItemsColor,
                     ),
-                    items: communityController.allCommunity.map((value) {
+                    items: communityController.allCommunity
+                        .where((e) => e.owner!.id! == authController.user!.id!)
+                        .toList()
+                        .map((value) {
                       return DropdownMenuItem<CommunityModel>(
                         value: value,
                         child: CustomText(
@@ -866,74 +871,6 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   isEventLink = value.isNotEmpty;
                 }),
                 validate: Validator.isLink,
-              ),
-              Gap(Get.height * 0.02),
-              CustomText(
-                title: 'Event partners *',
-                color: AppColor().primaryWhite,
-                textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
-                size: Get.height * 0.017,
-              ),
-              Gap(Get.height * 0.01),
-              InputDecorator(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: isPartner == true
-                      ? AppColor().primaryWhite
-                      : AppColor().bgDark,
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: AppColor().lightItemsColor, width: 1),
-                      borderRadius: BorderRadius.circular(10)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10)),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    icon: Icon(Icons.keyboard_arrow_down,
-                        color: isPartner == true
-                            ? AppColor().primaryBackGroundColor
-                            : AppColor().lightItemsColor),
-                    value: partnerValue,
-                    items: <String>[
-                      'EASPORTS',
-                      'ESportsNG',
-                      'Others',
-                    ].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: CustomText(
-                          title: value,
-                          color: isPartner == true
-                              ? AppColor().primaryBackGroundColor
-                              : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyBold',
-                          weight: FontWeight.w400,
-                          size: 13,
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) => setState(() {
-                      partnerValue = value;
-                      debugPrint(value);
-                      socialEventController.partnersController.text = value!;
-                      handleTap('partner');
-                    }),
-                    hint: CustomText(
-                      title: "Partners",
-                      color: isPartner == true
-                          ? AppColor().primaryBackGroundColor
-                          : AppColor().lightItemsColor,
-                      fontFamily: 'GilroyBold',
-                      weight: FontWeight.w400,
-                      size: 13,
-                    ),
-                  ),
-                ),
               ),
               Gap(Get.height * 0.02),
               CustomFillButton(

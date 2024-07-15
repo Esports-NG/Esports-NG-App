@@ -275,72 +275,72 @@ class TeamsGamesPlayedItemForList extends StatelessWidget {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: () {
-                        Get.defaultDialog(
-                          title: "Remove Game From Team",
-                          backgroundColor: AppColor().primaryLightColor,
-                          titlePadding: const EdgeInsets.only(top: 30),
-                          contentPadding: const EdgeInsets.only(
-                              top: 5, bottom: 30, left: 25, right: 25),
-                          middleText:
-                              "Are you sure? \n Data of your team, players and statistics for this game will still be stored",
-                          titleStyle: TextStyle(
-                            color: AppColor().primaryWhite,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'GilroyRegular',
-                          ),
-                          radius: 10,
-                          confirm: Column(
-                            children: [
-                              CustomFillButton(
-                                onTap: () {
-                                  //teamController.deleteTeam(widget.item.id!);
-                                  Get.back();
-                                },
-                                height: 45,
-                                width: Get.width * 0.5,
-                                buttonText: 'Yes',
-                                textColor: AppColor().primaryWhite,
-                                buttonColor: AppColor().primaryColor,
-                                boarderColor: AppColor().primaryColor,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              const Gap(10),
-                              CustomFillButton(
-                                onTap: () {
-                                  Get.back();
-                                },
-                                height: 45,
-                                width: Get.width * 0.5,
-                                buttonText: 'No',
-                                textColor: AppColor().primaryWhite,
-                                buttonColor: AppColor().primaryColor,
-                                boarderColor: AppColor().primaryColor,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                            ],
-                          ),
-                          middleTextStyle: TextStyle(
-                            color: AppColor().primaryWhite,
-                            fontFamily: 'GilroyRegular',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.delete_outline,
-                        color: AppColor().primaryWhite,
-                      ),
-                    ),
-                  )
+                  //   Positioned(
+                  //     bottom: 0,
+                  //     right: 0,
+                  //     child: IconButton(
+                  //       padding: EdgeInsets.zero,
+                  //       constraints: const BoxConstraints(),
+                  //       onPressed: () {
+                  //         Get.defaultDialog(
+                  //           title: "Remove Game From Team",
+                  //           backgroundColor: AppColor().primaryLightColor,
+                  //           titlePadding: const EdgeInsets.only(top: 30),
+                  //           contentPadding: const EdgeInsets.only(
+                  //               top: 5, bottom: 30, left: 25, right: 25),
+                  //           middleText:
+                  //               "Are you sure? \n Data of your team, players and statistics for this game will still be stored",
+                  //           titleStyle: TextStyle(
+                  //             color: AppColor().primaryWhite,
+                  //             fontSize: 15,
+                  //             fontWeight: FontWeight.w600,
+                  //             fontFamily: 'GilroyRegular',
+                  //           ),
+                  //           radius: 10,
+                  //           confirm: Column(
+                  //             children: [
+                  //               CustomFillButton(
+                  //                 onTap: () {
+                  //                   //teamController.deleteTeam(widget.item.id!);
+                  //                   Get.back();
+                  //                 },
+                  //                 height: 45,
+                  //                 width: Get.width * 0.5,
+                  //                 buttonText: 'Yes',
+                  //                 textColor: AppColor().primaryWhite,
+                  //                 buttonColor: AppColor().primaryColor,
+                  //                 boarderColor: AppColor().primaryColor,
+                  //                 borderRadius: BorderRadius.circular(25),
+                  //               ),
+                  //               const Gap(10),
+                  //               CustomFillButton(
+                  //                 onTap: () {
+                  //                   Get.back();
+                  //                 },
+                  //                 height: 45,
+                  //                 width: Get.width * 0.5,
+                  //                 buttonText: 'No',
+                  //                 textColor: AppColor().primaryWhite,
+                  //                 buttonColor: AppColor().primaryColor,
+                  //                 boarderColor: AppColor().primaryColor,
+                  //                 borderRadius: BorderRadius.circular(25),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //           middleTextStyle: TextStyle(
+                  //             color: AppColor().primaryWhite,
+                  //             fontFamily: 'GilroyRegular',
+                  //             fontSize: 14,
+                  //             fontWeight: FontWeight.w400,
+                  //           ),
+                  //         );
+                  //       },
+                  //       icon: Icon(
+                  //         Icons.delete_outline,
+                  //         color: AppColor().primaryWhite,
+                  //       ),
+                  //     ),
+                  //   )
                 ],
               ),
             ],

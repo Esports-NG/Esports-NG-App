@@ -84,6 +84,7 @@ class _CommunityPageState extends State<CommunityPage> {
           await postController.getAllPost(false);
           await gamesController.getAllGames();
           await teamController.getAllTeam(false);
+          await teamController.getMyTeam(false);
         },
         child: Obx(
           () => SingleChildScrollView(
@@ -350,7 +351,7 @@ class _CommunityPageState extends State<CommunityPage> {
                         CustomText(
                           title: "Leaderboard",
                           color: AppColor().primaryWhite,
-                          fontFamily: "GilroySemiBold",
+                          weight: FontWeight.w600,
                           size: 16,
                         ),
                         Gap(Get.height * 0.02),

@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/user_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/home/community/components/contributor_item.dart';
 import 'package:e_sport/ui/home/community/components/game_modes_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
@@ -27,17 +30,39 @@ class GameProfile extends StatefulWidget {
 class _GameProfileState extends State<GameProfile> {
   GamePlayed? details;
   final gameController = Get.put(GamesRepository());
+  final authController = Get.put(AuthRepository());
+  bool _isFollowing = true;
+  int? _followersCount;
+  bool _isFollowingGame = false;
+  List<UserModel>? _gameFollowers;
+
+  Future<void> getGameFollowers() async {
+    var followersJson = await gameController.getGameFollower(widget.game.id!);
+    List<UserModel> followers =
+        List.from(followersJson).map((e) => UserModel.fromJson(e)).toList();
+    setState(() {
+      _isFollowing = false;
+      _gameFollowers = followers;
+      var inList =
+          followers.where((e) => e.id! == authController.user?.id!).toList();
+      if (inList.length != 0) {
+        _isFollowingGame = true;
+      }
+    });
+  }
 
   Future<void> getGameDetails() async {
     var response = await gameController.getGameDetails(widget.game.id!);
     setState(() {
       details = response;
+      _followersCount = response.followers!;
     });
   }
 
   @override
   void initState() {
     getGameDetails();
+    getGameFollowers();
     super.initState();
   }
 
@@ -205,14 +230,52 @@ class _GameProfileState extends State<GameProfile> {
                         color: AppColor().greyEight),
                     Gap(Get.height * 0.03),
                     ProfileMetric(
-                        title: "Followers",
-                        value: details!.communities.toString()),
+                        title: "Followers", value: _followersCount.toString()),
                   ]),
                   Gap(Get.height * 0.03),
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: const CustomFillButton(buttonText: "Follow"),
+                    child: InkWell(
+                        onTap: () async {
+                          setState(() {
+                            _isFollowing = true;
+                          });
+
+                          var message =
+                              await gameController.followGame(widget.game.id!);
+
+                          setState(() {
+                            if (message == "followed") {
+                              _followersCount = _followersCount! + 1;
+                              _isFollowingGame = true;
+                            } else {
+                              _followersCount = _followersCount! - 1;
+                              _isFollowingGame = false;
+                            }
+                          });
+
+                          setState(() {
+                            _isFollowing = false;
+                          });
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(90),
+                                color: _isFollowing
+                                    ? Colors.transparent
+                                    : AppColor().primaryColor),
+                            child: Center(
+                                child: _isFollowing
+                                    ? const ButtonLoader()
+                                    : CustomText(
+                                        size: 14,
+                                        color: AppColor().primaryWhite,
+                                        weight: FontWeight.w600,
+                                        title: _isFollowingGame
+                                            ? "Unfollow"
+                                            : "Follow")))),
                   ),
                   Gap(Get.height * 0.03),
                   // Padding(
@@ -240,12 +303,13 @@ class _GameProfileState extends State<GameProfile> {
                     children: [
                       CustomText(
                         title: "Categories",
-                        fontFamily: "GilroySemiBold",
+                        weight: FontWeight.w600,
                         size: 18,
                         color: AppColor().primaryWhite,
                       ),
                       Gap(Get.height * 0.02),
                       Wrap(
+                        runSpacing: Get.height * 0.01,
                         spacing: Get.height * 0.01,
                         children: details!.categories!
                             .map((category) => Container(
@@ -264,7 +328,6 @@ class _GameProfileState extends State<GameProfile> {
                     ]),
               ),
               Gap(Get.height * 0.02),
-              Gap(Get.height * 0.02),
               Divider(
                 color: AppColor().darkGrey,
                 thickness: 4,
@@ -281,7 +344,7 @@ class _GameProfileState extends State<GameProfile> {
                       ),
                       Gap(Get.height * 0.02),
                       SizedBox(
-                        height: Get.height * 0.26,
+                        height: Get.height * 0.205,
                         child: ListView.separated(
                             physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
@@ -291,7 +354,10 @@ class _GameProfileState extends State<GameProfile> {
                             itemCount: 5,
                             itemBuilder: (context, index) {
                               return InkWell(
-                                  onTap: () {}, child: const GameModeItem());
+                                  onTap: () {},
+                                  child: GameModeItem(
+                                    mode: details!.gameModes![index].name!,
+                                  ));
                             }),
                       )
                     ]),
@@ -365,7 +431,7 @@ class LinkHeader extends StatelessWidget {
         CustomText(
           title: title,
           size: 18,
-          fontFamily: "GilroySemibold",
+          weight: FontWeight.w600,
           color: AppColor().primaryWhite,
         ),
         InkWell(

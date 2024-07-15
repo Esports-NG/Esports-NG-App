@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+List<UserModel> userModelListFromJson(String str) =>
+    List<UserModel>.from(json.decode(str).map((x) => UserModel.fromJson(x)));
+
 class UserModel {
   int? id;
   String? email;
@@ -180,18 +185,20 @@ class UserModel {
 class Profile {
   List<String>? igameType;
   dynamic profilePicture;
+  dynamic cover;
 
   Profile({
     this.igameType,
     this.profilePicture,
+    this.cover,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        igameType: json["igame_type"] == null
-            ? []
-            : List<String>.from(json["igame_type"]!.map((x) => x)),
-        profilePicture: json["profile_picture"],
-      );
+      igameType: json["igame_type"] == null
+          ? []
+          : List<String>.from(json["igame_type"]!.map((x) => x)),
+      profilePicture: json["profile_picture"],
+      cover: json["cover"]);
 
   Map<String, dynamic> toJson() => {
         "igame_type": igameType == null

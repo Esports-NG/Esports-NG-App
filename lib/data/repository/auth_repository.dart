@@ -182,7 +182,9 @@ class AuthRepository extends GetxController {
   String get fcmToken => mFcmToken.value;
 
   Rx<File?> mUserImage = Rx(null);
+  Rx<File?> mCoverImage = Rx(null);
   File? get userImage => mUserImage.value;
+  File? get coverImage => mCoverImage.value;
 
   @override
   void onInit() async {
@@ -471,6 +473,58 @@ class AuthRepository extends GetxController {
     }
   }
 
+  void updateCoverImage() async {
+    try {
+      EasyLoading.show(status: 'Updating user info');
+      _updateProfileStatus(UpdateProfileStatus.loading);
+      var headers = {'Authorization': 'JWT $token'};
+      var request = http.MultipartRequest(
+          "PUT", Uri.parse('${ApiLink.user}${user!.id}/update/'));
+      request.files.add(
+          await http.MultipartFile.fromPath('profile.cover', coverImage!.path));
+      request.headers.addAll(headers);
+
+      await request.send().then((response) {
+        response.stream.transform(utf8.decoder).listen((response) {
+          EasyLoading.dismiss();
+          updateUser();
+        });
+      });
+    } catch (error) {
+      EasyLoading.dismiss();
+      _updateProfileStatus(UpdateProfileStatus.error);
+      debugPrint("Error occurred ${error.toString()}");
+      getError(error);
+    }
+  }
+
+  void updateBothImages() async {
+    try {
+      EasyLoading.show(status: 'Updating user info');
+      _updateProfileStatus(UpdateProfileStatus.loading);
+      var headers = {'Authorization': 'JWT $token'};
+      var request = http.MultipartRequest(
+          "PUT", Uri.parse('${ApiLink.user}${user!.id}/update/'));
+      request.files.add(await http.MultipartFile.fromPath(
+          'profile.profile_picture', userImage!.path));
+      request.files.add(
+          await http.MultipartFile.fromPath('profile.cover', coverImage!.path));
+      request.headers.addAll(headers);
+
+      await request.send().then((response) {
+        response.stream.transform(utf8.decoder).listen((response) {
+          EasyLoading.dismiss();
+          updateUser();
+        });
+      });
+    } catch (error) {
+      EasyLoading.dismiss();
+      _updateProfileStatus(UpdateProfileStatus.error);
+      debugPrint("Error occurred ${error.toString()}");
+      getError(error);
+    }
+  }
+
   Future followUser(int userId) async {
     _followStatus(FollowStatus.loading);
     debugPrint('following user...');
@@ -704,6 +758,7 @@ class AuthRepository extends GetxController {
   void clearPhoto() {
     debugPrint('image cleared');
     mUserImage.value = null;
+    mCoverImage.value = null;
   }
 
   void clear() {

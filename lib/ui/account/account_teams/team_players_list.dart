@@ -1,7 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/account/account_teams/add_to_roster.dart';
+import 'package:e_sport/ui/components/participant_list.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +24,21 @@ class TeamPlayersList extends StatefulWidget {
 
 class _TeamPlayersListState extends State<TeamPlayersList> {
   late List<bool> _isOpen;
+  List<RoasterModel>? _roasterList;
+  final teamController = Get.put(TeamRepository());
+
+  Future getTeamRoster() async {
+    List<RoasterModel> roasterList =
+        await teamController.getTeamRoster(widget.item.id!);
+    setState(() {
+      _roasterList = roasterList;
+      _isOpen = List.filled(roasterList.length, false);
+    });
+  }
 
   @override
   initState() {
-    _isOpen = List.filled(widget.item.gamesPlayed!.length, false);
+    getTeamRoster();
     super.initState();
   }
 
@@ -50,13 +66,13 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                 CustomText(
                   title: widget.item.name,
                   color: AppColor().primaryWhite,
-                  fontFamily: "GilroySemiBold",
+                  weight: FontWeight.w600,
                   size: 16,
                 ),
                 CustomText(
                   title: "Players",
                   color: AppColor().primaryWhite.withOpacity(0.5),
-                  // fontFamily: "GilroySemiBold",
+                  // weight: FontWeight.w600,
                   size: 14,
                 )
               ],
@@ -65,161 +81,141 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
           leading: GoBackButton(
             onPressed: () => Get.back(),
           )),
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(90)),
+        backgroundColor: AppColor().primaryColor,
+        onPressed: () {
+          Get.to(() => AddToRoster(
+                team: widget.item,
+                roasterList: _roasterList!,
+              ));
+        },
+        child: Icon(
+          Icons.add,
+          color: AppColor().primaryWhite,
+        ),
+      ),
       body: SingleChildScrollView(
           child: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: Get.height * 0.02, vertical: Get.height * 0.02),
-        child: Column(
-          children: [
-            ExpansionPanelList(
-              expansionCallback: (panelIndex, isExpanded) => setState(() {
-                _isOpen[panelIndex] = isExpanded;
-              }),
-              expandIconColor: AppColor().primaryColor,
-              children: widget.item.gamesPlayed!
-                  .map((e) => ExpansionPanel(
-                      isExpanded: _isOpen[widget.item.gamesPlayed!.indexOf(e)],
-                      backgroundColor: AppColor().primaryBackGroundColor,
-                      headerBuilder: (context, isExpanded) => Row(
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl: ApiLink.imageUrl + e.profilePicture!,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(999),
-                                      border: Border.all(
-                                          color: AppColor()
-                                              .primaryWhite
-                                              .withOpacity(0.5)),
-                                      image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover)),
-                                ),
-                              ),
-                              Gap(Get.height * 0.02),
-                              CustomText(
-                                title: e.name!,
-                                color: AppColor().primaryWhite,
-                                fontFamily: "GilroySemiBold",
-                                size: 16,
-                              )
-                            ],
-                          ),
-                      body: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: CustomText(
-                                  title: "S/N",
-                                  color: AppColor().primaryWhite,
-                                  fontFamily: "GilroyMedium",
-                                ),
-                              ),
-                              Expanded(
-                                  flex: 4,
-                                  child: Center(
-                                    child: CustomText(
-                                      title: "PP",
-                                      color: AppColor().primaryWhite,
-                                    ),
-                                  )),
-                              Expanded(
-                                flex: 8,
-                                child: CustomText(
-                                  title: "PlayerName",
-                                  color: AppColor().primaryWhite,
-                                  fontFamily: "GilroyMedium",
-                                ),
-                              ),
-                              Expanded(
-                                flex: 0,
-                                child: GestureDetector(
-                                  child: Icon(
-                                    Icons.edit_square,
-                                    color: AppColor().primaryColor,
+        child: _roasterList == null
+            ? const SizedBox(height: 50, child: Center(child: ButtonLoader()))
+            : Column(
+                children: [
+                  ExpansionPanelList(
+                    dividerColor: AppColor().primaryDark,
+                    expansionCallback: (panelIndex, isExpanded) => setState(() {
+                      _isOpen[panelIndex] = isExpanded;
+                    }),
+                    expandIconColor: AppColor().primaryColor,
+                    children: _roasterList!
+                        .map((e) => ExpansionPanel(
+                            isExpanded: _isOpen[_roasterList!.indexOf(e)],
+                            backgroundColor: AppColor().primaryBackGroundColor,
+                            headerBuilder: (context, isExpanded) => Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  child: Row(
+                                    children: [
+                                      CachedNetworkImage(
+                                        imageUrl: ApiLink.imageUrl +
+                                            e.game!.profilePicture!,
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(999),
+                                              border: Border.all(
+                                                  color: AppColor()
+                                                      .primaryWhite
+                                                      .withOpacity(0.5)),
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover)),
+                                        ),
+                                      ),
+                                      Gap(Get.height * 0.02),
+                                      CustomText(
+                                        title: e.game!.name!,
+                                        color: AppColor().primaryWhite,
+                                        weight: FontWeight.w600,
+                                        size: 16,
+                                      )
+                                    ],
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
-                          Divider(
-                            thickness: 0.3,
-                            color: AppColor().darkGrey,
-                          ),
-                          PlayerRow(),
-                          Gap(Get.height * 0.01),
-                          PlayerRow(),
-                          Gap(Get.height * 0.01),
-                          PlayerRow(),
-                          Gap(Get.height * 0.02),
-                          CustomText(
-                            title: "See more",
-                            underline: TextDecoration.underline,
-                            color: AppColor().primaryColor,
-                            decorationColor: AppColor().primaryColor,
-                          )
-                        ],
-                      )))
-                  .toList(),
-            )
-          ],
-        ),
+                            body: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: CustomText(
+                                          title: "S/N",
+                                          color: AppColor()
+                                              .primaryWhite
+                                              .withOpacity(0.8),
+                                          fontFamily: "GilroyMedium"),
+                                    ),
+                                    const Spacer(),
+                                    Expanded(
+                                      flex: 2,
+                                      child: CustomText(
+                                          title: "PP",
+                                          color: AppColor()
+                                              .primaryWhite
+                                              .withOpacity(0.8),
+                                          fontFamily: "GilroyMedium"),
+                                    ),
+                                    const Spacer(),
+                                    Expanded(
+                                      flex: 5,
+                                      child: CustomText(
+                                          title: "${e.game!.abbrev} IGN",
+                                          color: AppColor()
+                                              .primaryWhite
+                                              .withOpacity(0.8),
+                                          fontFamily: "GilroyMedium"),
+                                    ),
+                                    const Spacer(),
+                                    Expanded(
+                                      flex: 6,
+                                      child: CustomText(
+                                          title: "Username",
+                                          color: AppColor()
+                                              .primaryWhite
+                                              .withOpacity(0.8),
+                                          fontFamily: "GilroyMedium"),
+                                    )
+                                  ],
+                                ),
+                                Divider(
+                                  height: 30,
+                                  thickness: 0.5,
+                                  color: AppColor().primaryDark,
+                                ),
+                                ListView.separated(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) => PlayerRow(
+                                        participant: e.players![index],
+                                        index: index),
+                                    separatorBuilder: (ctx, index) =>
+                                        const Gap(20),
+                                    itemCount: e.players!.length)
+                              ],
+                            )))
+                        .toList(),
+                  )
+                ],
+              ),
       )),
-    );
-  }
-}
-
-class PlayerRow extends StatelessWidget {
-  const PlayerRow({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: CustomText(
-            title: 1.toString(),
-            color: AppColor().primaryWhite,
-            fontFamily: "GilroyMedium",
-          ),
-        ),
-        Expanded(
-          flex: 4,
-          child: Container(
-            // width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                // borderRadius: BorderRadius.circular(99),
-                color: AppColor().greySix),
-          ),
-        ),
-        Expanded(
-          flex: 8,
-          child: CustomText(
-            title: "Alucard234",
-            color: AppColor().primaryWhite,
-            fontFamily: "GilroyMedium",
-          ),
-        ),
-        Expanded(
-          flex: 0,
-          child: GestureDetector(
-            child: Icon(
-              Icons.edit_square,
-              color: AppColor().primaryColor,
-            ),
-          ),
-        )
-      ],
     );
   }
 }

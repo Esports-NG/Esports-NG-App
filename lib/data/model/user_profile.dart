@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:e_sport/data/model/user_model.dart';
+
 UserDataWithFollowers userDataWithFollowersFromJson(String str) =>
     UserDataWithFollowers.fromJson(json.decode(str));
 
@@ -91,31 +93,6 @@ class UserDataWithFollowers {
         "is_verified": isVerified,
         "followers": followers,
         "following": following,
-      };
-}
-
-class Profile {
-  final List<GameType>? gameType;
-  final dynamic profilePicture;
-
-  Profile({
-    this.gameType,
-    this.profilePicture,
-  });
-
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        gameType: json["game_type"] == null
-            ? []
-            : List<GameType>.from(
-                json["game_type"]!.map((x) => GameType.fromJson(x))),
-        profilePicture: json["profile_picture"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "game_type": gameType == null
-            ? []
-            : List<dynamic>.from(gameType!.map((x) => x.toJson())),
-        "profile_picture": profilePicture,
       };
 }
 

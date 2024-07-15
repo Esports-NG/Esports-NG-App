@@ -5,7 +5,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class GameModeItem extends StatelessWidget {
-  const GameModeItem({super.key});
+  const GameModeItem({super.key, required this.mode});
+
+  final String mode;
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +34,9 @@ class GameModeItem extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             CustomText(
-              title: "MP Mode",
+              title: mode,
               color: AppColor().primaryWhite,
-              fontFamily: "GilroySemiBold",
-            ),
-            Gap(Get.height * 0.005),
-            CustomText(
-              title:
-                  "Domination, Search and Destroy, Hardpoint, Control, Team Deathmatch Mode",
-              color: AppColor().greyFour,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
+              weight: FontWeight.w600,
             ),
           ]),
         )

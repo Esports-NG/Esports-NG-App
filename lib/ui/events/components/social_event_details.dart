@@ -1,11 +1,16 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/social_event_repository.dart';
+import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
@@ -15,6 +20,7 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -34,11 +40,37 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
   final authController = Get.put(AuthRepository());
   final communityController = Get.put(CommunityRepository());
   final socialEventController = Get.put(SocialEventRepository());
+  final tournamentController = Get.put(TournamentRepository());
 
   List<Map<String, dynamic>>? _communityFollowers;
+  List<UserModel>? _participantList;
   bool _isFollowing = false;
   bool _isLoading = true;
   bool _isRegistering = false;
+  bool _isRegistered = false;
+
+  Future getParticipantList() async {
+    setState(() {
+      _isRegistering = true;
+    });
+    var response = await http.get(
+        Uri.parse(ApiLink.getEventParticipants(widget.item.id!)),
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "JWT ${authController.token}"
+        });
+
+    log(response.body);
+    setState(() {
+      _isRegistering = false;
+      _participantList = userModelListFromJson(response.body);
+      if (userModelListFromJson(response.body)
+          .where((e) => e.id! == authController.user!.id!)
+          .isNotEmpty) {
+        _isRegistered = true;
+      }
+    });
+  }
 
   Future getCommunityFollowers() async {
     var followers = await communityController
@@ -57,8 +89,9 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
 
   @override
   initState() {
-    print(widget.item.toJson());
+    // print(widget.item.toJson());
     getCommunityFollowers();
+    getParticipantList();
     super.initState();
   }
 
@@ -152,10 +185,16 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                             size: 24,
                             fontFamily: 'GilroySemiBold',
                             color: AppColor().primaryWhite),
-                        CustomText(
-                          title: "${widget.item.maxNo} Registered",
-                          color: AppColor().primaryWhite,
-                        )
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                              color: AppColor().primaryBackGroundColor),
+                          child: CustomText(
+                            title: "${_participantList?.length} Registered",
+                            color: AppColor().primaryWhite,
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -180,7 +219,7 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                   CustomText(
                     title: "Event Details",
                     color: AppColor().primaryWhite,
-                    fontFamily: "GilroyBold",
+                    weight: FontWeight.w600,
                     size: 20,
                   ),
                   Gap(Get.height * 0.01),
@@ -231,8 +270,19 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                       setState(() {
                         _isRegistering = true;
                       });
-                      await socialEventController
-                          .registerForSocialEvent(widget.item.id!);
+                      if (_isRegistered) {
+                        await tournamentController.unregisterForEvent(
+                            widget.item.id!, "user", authController.user!.id!);
+                        setState(() {
+                          _isRegistered = false;
+                        });
+                      } else {
+                        await socialEventController
+                            .registerForSocialEvent(widget.item.id!);
+                        setState(() {
+                          _isRegistered = true;
+                        });
+                      }
                       setState(() {
                         _isRegistering = false;
                       });
@@ -255,7 +305,9 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                           child: _isRegistering
                               ? const ButtonLoader()
                               : CustomText(
-                                  title: 'Register Now',
+                                  title: _isRegistered
+                                      ? "Unregister"
+                                      : 'Register Now',
                                   color: AppColor().primaryWhite,
                                   size: Get.height * 0.018,
                                   fontFamily: 'GilroyMedium',
@@ -282,53 +334,54 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                       fontFamily: 'GilroySemiBold',
                       color: AppColor().primaryWhite),
                   Gap(Get.height * 0.02),
-                  Row(
-                    children: [
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          widget.item.community!.logo == null
-                              ? Container(
-                                  height: Get.height * 0.04,
-                                  width: Get.height * 0.04,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: SvgPicture.asset(
-                                    'assets/images/svg/people.svg',
-                                  ),
-                                )
-                              : InkWell(
-                                  onTap: () => Get.to(()),
-                                  child: OtherImage(
-                                      itemSize: Get.height * 0.04,
-                                      image: widget.item.community!.logo),
-                                ),
-                        ],
-                      ),
-                      Gap(Get.height * 0.015),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                              title:
-                                  widget.item.community!.name!.toCapitalCase(),
-                              weight: FontWeight.w400,
-                              size: Get.height * 0.017,
-                              fontFamily: 'GilroyMedium',
-                              color: AppColor().primaryWhite),
-                          Gap(Get.height * 0.005),
-                          CustomText(
-                              title: 'No members',
-                              weight: FontWeight.w400,
-                              size: Get.height * 0.015,
-                              fontFamily: 'GilroyRegular',
-                              textAlign: TextAlign.left,
-                              height: 1.5,
-                              color: AppColor().greyEight),
-                        ],
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: () => Get.to(
+                        AccountCommunityDetail(item: widget.item.community!)),
+                    child: Row(
+                      children: [
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            widget.item.community!.logo == null
+                                ? Container(
+                                    height: Get.height * 0.04,
+                                    width: Get.height * 0.04,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/images/svg/people.svg',
+                                    ),
+                                  )
+                                : OtherImage(
+                                    itemSize: Get.height * 0.04,
+                                    image: widget.item.community!.logo),
+                          ],
+                        ),
+                        Gap(Get.height * 0.015),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                                title: widget.item.community!.name!
+                                    .toCapitalCase(),
+                                weight: FontWeight.w400,
+                                size: Get.height * 0.017,
+                                fontFamily: 'GilroyMedium',
+                                color: AppColor().primaryWhite),
+                            Gap(Get.height * 0.005),
+                            CustomText(
+                                title: 'No members',
+                                weight: FontWeight.w400,
+                                size: Get.height * 0.015,
+                                fontFamily: 'GilroyRegular',
+                                textAlign: TextAlign.left,
+                                height: 1.5,
+                                color: AppColor().greyEight),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   Gap(Get.height * 0.01),
                   CustomText(
@@ -342,7 +395,9 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                       height: 1.5,
                       color: AppColor().greyEight),
                   Gap(Get.height * 0.02),
-                  InkWell(
+                  GestureDetector(
+                    onTap: () => Get.to(
+                        AccountCommunityDetail(item: widget.item.community!)),
                     child: Center(
                       child: CustomText(
                           title: 'See full profile',

@@ -1,8 +1,12 @@
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/model/user_model.dart';
 import 'dart:convert';
 
 import 'team_inbox_model.dart';
+
+List<TeamModel> teamModelListFromJson(String str) =>
+    List<TeamModel>.from(json.decode(str).map((x) => TeamModel.fromJson(x)));
 
 class TeamModel {
   int? id;
@@ -14,39 +18,45 @@ class TeamModel {
   String? bio;
   dynamic manager;
   List<Member>? members;
+  List<UserModel>? players;
   String? membersCount;
+  int? playersCount;
 
-  TeamModel({
-    this.id,
-    this.owner,
-    this.name,
-    this.profilePicture,
-    this.cover,
-    this.gamesPlayed,
-    this.bio,
-    this.manager,
-    this.members,
-    this.membersCount,
-  });
+  TeamModel(
+      {this.id,
+      this.owner,
+      this.name,
+      this.profilePicture,
+      this.cover,
+      this.gamesPlayed,
+      this.bio,
+      this.manager,
+      this.members,
+      this.playersCount,
+      this.membersCount,
+      this.players});
 
   factory TeamModel.fromJson(Map<String, dynamic> json) => TeamModel(
-        id: json["id"],
-        owner: json["owner"] == null ? null : Author.fromJson(json["owner"]),
-        name: json["name"],
-        profilePicture: json["profile_picture"],
-        cover: json["cover"],
-        gamesPlayed: json["games_played"] == null
-            ? []
-            : List<GamePlayed>.from(
-                json["games_played"]!.map((x) => GamePlayed.fromJson(x))),
-        bio: json["bio"],
-        manager: json["manager"],
-        members: json["members"] == null
-            ? []
-            : List<Member>.from(
-                json["members"]!.map((x) => Member.fromJson(x))),
-        membersCount: json["members_count"],
-      );
+      id: json["id"],
+      owner: json["owner"] == null ? null : Author.fromJson(json["owner"]),
+      name: json["name"],
+      profilePicture: json["profile_picture"],
+      cover: json["cover"],
+      gamesPlayed: json["games_played"] == null
+          ? []
+          : List<GamePlayed>.from(
+              json["games_played"]!.map((x) => GamePlayed.fromJson(x))),
+      bio: json["bio"],
+      manager: json["manager"],
+      players: json["players"] == null
+          ? []
+          : List<UserModel>.from(
+              json["players"]!.map((x) => UserModel.fromJson(x))),
+      members: json["members"] == null
+          ? []
+          : List<Member>.from(json["members"]!.map((x) => Member.fromJson(x))),
+      membersCount: json["members_count"],
+      playersCount: json["players_count"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -218,26 +228,32 @@ class TeamApplicationModel {
   final String? message;
   final List<PlayerModel>? playerProfiles;
   final String? role;
+  final bool? accepted;
+  final UserModel? applicant;
 
-  TeamApplicationModel({
-    this.id,
-    this.team,
-    this.message,
-    this.playerProfiles,
-    this.role,
-  });
+  TeamApplicationModel(
+      {this.id,
+      this.team,
+      this.message,
+      this.playerProfiles,
+      this.role,
+      this.accepted,
+      this.applicant});
 
   factory TeamApplicationModel.fromJson(Map<String, dynamic> json) =>
       TeamApplicationModel(
-        id: json["id"],
-        team: json["team"] == null ? null : Team.fromJson(json["team"]),
-        message: json["message"],
-        playerProfiles: json["player_profiles"] == null
-            ? []
-            : List<PlayerModel>.from(
-                json["player_profiles"]!.map((x) => PlayerModel.fromJson(x))),
-        role: json["role"],
-      );
+          id: json["id"],
+          team: json["team"] == null ? null : Team.fromJson(json["team"]),
+          message: json["message"],
+          playerProfiles: json["player_profiles"] == null
+              ? []
+              : List<PlayerModel>.from(
+                  json["player_profiles"]!.map((x) => PlayerModel.fromJson(x))),
+          role: json["role"],
+          applicant: json["applicant"] == null
+              ? null
+              : UserModel.fromJson(json["applicant"]),
+          accepted: json['accepted']);
 
   Map<String, dynamic> toJson() => {
         "id": id,

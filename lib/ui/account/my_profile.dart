@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -115,26 +116,34 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
-  Future pickImageFromGallery() async {
+  Future pickImageFromGallery(bool isCover) async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
       final imageTemporary = File(image.path);
       setState(() {
-        authController.mUserImage(imageTemporary);
+        if (isCover) {
+          authController.mCoverImage(imageTemporary);
+        } else {
+          authController.mUserImage(imageTemporary);
+        }
       });
     } on PlatformException catch (e) {
       debugPrint('$e');
     }
   }
 
-  Future pickImageFromCamera() async {
+  Future pickImageFromCamera(bool isCover) async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
       if (image == null) return;
       final imageTemporary = File(image.path);
       setState(() {
-        authController.mUserImage(imageTemporary);
+        if (isCover) {
+          authController.mCoverImage(imageTemporary);
+        } else {
+          authController.mUserImage(imageTemporary);
+        }
       });
     } on PlatformException catch (e) {
       debugPrint('$e');
@@ -180,15 +189,16 @@ class _MyProfileState extends State<MyProfile> {
                         authController.userImage == null
                             ? OtherImage(
                                 itemSize: Get.height * 0.13,
-                                image:
-                                    authController.user!.profile!.profilePicture)
+                                image: authController
+                                    .user!.profile!.profilePicture)
                             : Container(
                                 height: Get.height * 0.13,
                                 width: Get.height * 0.13,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                      image: FileImage(authController.userImage!),
+                                      image:
+                                          FileImage(authController.userImage!),
                                       fit: BoxFit.cover),
                                 ),
                               ),
@@ -214,7 +224,7 @@ class _MyProfileState extends State<MyProfile> {
                                   children: [
                                     CustomFillButton(
                                       onTap: () {
-                                        pickImageFromGallery();
+                                        pickImageFromGallery(false);
                                         Get.back();
                                       },
                                       height: 45,
@@ -228,7 +238,7 @@ class _MyProfileState extends State<MyProfile> {
                                     const Gap(10),
                                     CustomFillButton(
                                       onTap: () {
-                                        pickImageFromCamera();
+                                        pickImageFromCamera(false);
                                         Get.back();
                                       },
                                       height: 45,
@@ -282,6 +292,117 @@ class _MyProfileState extends State<MyProfile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      CustomText(
+                        title: 'Cover Image',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                      Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          authController.coverImage == null
+                              ? OtherImage(
+                                  isCover: true,
+                                  asset: "assets/images/png/placeholder.png",
+                                  height: 200,
+                                  width: double.infinity,
+                                  image: authController.user!.profile!.cover)
+                              : Container(
+                                  height: 200,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                          image: FileImage(
+                                              authController.coverImage!),
+                                          fit: BoxFit.cover)),
+                                ),
+                          Positioned(
+                            bottom: 0,
+                            child: InkWell(
+                              onTap: () {
+                                Get.defaultDialog(
+                                  title: "Select your image",
+                                  backgroundColor: AppColor().primaryLightColor,
+                                  titlePadding: const EdgeInsets.only(top: 30),
+                                  contentPadding: const EdgeInsets.only(
+                                      top: 5, bottom: 30, left: 25, right: 25),
+                                  middleText: "Upload your cover photo",
+                                  titleStyle: TextStyle(
+                                    color: AppColor().primaryWhite,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'GilroyRegular',
+                                  ),
+                                  radius: 10,
+                                  confirm: Column(
+                                    children: [
+                                      CustomFillButton(
+                                        onTap: () {
+                                          pickImageFromGallery(true);
+                                          Get.back();
+                                        },
+                                        height: 45,
+                                        width: Get.width * 0.5,
+                                        buttonText: 'Upload from gallery',
+                                        textColor: AppColor().primaryWhite,
+                                        buttonColor: AppColor().primaryColor,
+                                        boarderColor: AppColor().primaryColor,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      const Gap(10),
+                                      CustomFillButton(
+                                        onTap: () {
+                                          pickImageFromCamera(true);
+                                          Get.back();
+                                        },
+                                        height: 45,
+                                        width: Get.width * 0.5,
+                                        buttonText: 'Upload from camera',
+                                        textColor: AppColor().primaryWhite,
+                                        buttonColor: AppColor().primaryColor,
+                                        boarderColor: AppColor().primaryColor,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                    ],
+                                  ),
+                                  middleTextStyle: TextStyle(
+                                    color: AppColor().primaryWhite,
+                                    fontFamily: 'GilroyRegular',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                );
+                              },
+                              child: authController.userImage == null
+                                  ? SvgPicture.asset(
+                                      'assets/images/svg/camera.svg',
+                                      height: Get.height * 0.05,
+                                    )
+                                  : InkWell(
+                                      onTap: () {
+                                        authController.clearPhoto();
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                            color: AppColor().primaryColor,
+                                            border: Border.all(
+                                                width: 2,
+                                                color: AppColor().primaryWhite),
+                                            shape: BoxShape.circle),
+                                        child: Icon(Icons.close,
+                                            color: AppColor().primaryWhite),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Gap(Get.height * 0.02),
                       CustomText(
                         title: 'Username',
                         color: AppColor().primaryWhite,
@@ -425,10 +546,20 @@ class _MyProfileState extends State<MyProfile> {
                           onTap: () {
                             if (authController.updateProfileStatus !=
                                 UpdateProfileStatus.loading) {
-                              if (authController.userImage == null) {
+                              if (authController.userImage == null &&
+                                  authController.coverImage == null) {
                                 debugPrint("updating user only");
                                 authController.updateUser();
-                              } else {
+                              } else if (authController.userImage != null &&
+                                  authController.coverImage != null) {
+                                debugPrint("updating user");
+                                authController.updateBothImages();
+                              } else if (authController.userImage == null &&
+                                  authController.coverImage != null) {
+                                debugPrint("updating user");
+                                authController.updateCoverImage();
+                              } else if (authController.userImage != null &&
+                                  authController.coverImage == null) {
                                 debugPrint("updating user");
                                 authController.updateProfileImage();
                               }

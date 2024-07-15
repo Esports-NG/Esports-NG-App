@@ -4,16 +4,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/account/account_events/components/tournament_details.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/choose_team_dialog.dart';
 import 'package:e_sport/ui/components/participant_list.dart';
+import 'package:e_sport/ui/components/team_participant_list.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
@@ -44,12 +48,48 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   final authController = Get.put(AuthRepository());
   final communityController = Get.put(CommunityRepository());
   final tournamentController = Get.put(TournamentRepository());
+  final teamController = Get.put(TeamRepository());
 
   List<Map<String, dynamic>>? _communityFollowers;
   bool _isFollowing = false;
   bool _isLoading = true;
+  bool _isRegisterLoading = true;
+  List<PlayerModel>? _participantList;
+  List<TeamModel>? _teamParticipantList;
   bool _isRegistered = false;
-  bool _isRegisterLoading = false;
+  PlayerModel? _participantProfile;
+
+  Future getParticipants() async {
+    if (widget.item.tournamentType == "team") {
+      List<TeamModel> teamParticipantList = await tournamentController
+          .getTeamTournamentParticipants(widget.item.id!);
+      setState(() {
+        _teamParticipantList = teamParticipantList;
+        if (teamParticipantList
+            .where((e) => e.id == teamController.myTeam.id!)
+            .isNotEmpty) {
+          _isRegistered = true;
+        }
+        _isRegisterLoading = false;
+      });
+    } else {
+      List<PlayerModel> participantList =
+          await tournamentController.getTournamentParticipants(widget.item.id!);
+      setState(() {
+        _participantList = participantList;
+        if (participantList
+            .where((element) => element.player!.id! == authController.user!.id!)
+            .isNotEmpty) {
+          _isRegistered = true;
+          _participantProfile = participantList
+              .where(
+                  (element) => element.player!.id! == authController.user!.id!)
+              .toList()[0];
+        }
+        _isRegisterLoading = false;
+      });
+    }
+  }
 
   Future getCommunityFollowers() async {
     var followers = await communityController
@@ -70,6 +110,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   initState() {
     print(widget.item.toJson());
     getCommunityFollowers();
+    getParticipants();
     super.initState();
   }
 
@@ -180,17 +221,44 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                     borderRadius: BorderRadius.circular(30),
                     onTap: () async {
                       if (widget.item.tournamentType == "team") {
-                        showDialog(
-                          context: context,
-                          builder: (context) =>
-                              ChooseTeamDialog(id: widget.item.id!),
-                        );
+                        setState(() {
+                          _isRegisterLoading = true;
+                        });
+                        if (_isRegistered) {
+                          await tournamentController.unregisterForEvent(
+                              widget.item.id!,
+                              "team",
+                              teamController.myTeam.id!);
+                          setState(() {
+                            _isRegistered = false;
+                          });
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) =>
+                                ChooseTeamDialog(id: widget.item.id!),
+                          );
+                        }
+                        setState(() {
+                          _isRegisterLoading = false;
+                        });
                       } else {
                         setState(() {
                           _isRegisterLoading = true;
                         });
-                        await tournamentController
-                            .registerForTournament(widget.item.id!);
+                        if (_isRegistered) {
+                          await tournamentController.unregisterForEvent(
+                              widget.item.id!,
+                              "player",
+                              _participantProfile!.id!);
+                          _isRegistered = true;
+                        } else {
+                          await tournamentController
+                              .registerForTournament(widget.item.id!);
+                          setState(() {
+                            _isRegistered = true;
+                          });
+                        }
                         setState(() {
                           _isRegisterLoading = false;
                         });
@@ -224,7 +292,8 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                             )
                           : Center(
                               child: CustomText(
-                              title: 'Register Now',
+                              title:
+                                  _isRegistered ? "Unregister" : 'Register Now',
                               color: AppColor().primaryWhite,
                               size: Get.height * 0.018,
                               fontFamily: 'GilroyMedium',
@@ -568,9 +637,11 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                       children: [
                         tournamentDetails(
                             onTap: () {
-                              Get.to(() => ParticipantList(
-                                    event: widget.item,
-                                  ));
+                              Get.to(() => widget.item.tournamentType == "team"
+                                  ? TeamParticipantList(event: widget.item)
+                                  : ParticipantList(
+                                      event: widget.item,
+                                    ));
                             },
                             title: 'Participants List'),
                         Divider(

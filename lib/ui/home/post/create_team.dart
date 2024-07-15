@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:e_sport/data/repository/team_repository.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
+import 'package:e_sport/ui/widget/game_list_dropdown.dart';
 import 'package:e_sport/ui/widget/page_indicator.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
@@ -24,6 +26,7 @@ class CreateTeamPage extends StatefulWidget {
 class _CreateTeamState extends State<CreateTeamPage> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final teamController = Get.put(TeamRepository());
+  bool _isCreating = false;
   String? gameTag, seePost, engagePost;
   bool enableChat = false;
   int pageCount = 0;
@@ -68,7 +71,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
           backgroundColor: AppColor().primaryBackGroundColor,
           centerTitle: true,
           title: CustomText(
-            title: 'Create Team Page',
+            title: 'Create Team',
             weight: FontWeight.w600,
             size: 18,
             color: AppColor().primaryWhite,
@@ -94,54 +97,13 @@ class _CreateTeamState extends State<CreateTeamPage> {
               color: AppColor().primaryWhite,
             ),
           ),
-          actions: [
-            Center(
-              child: Text.rich(TextSpan(
-                text: '${pageCount + 1}',
-                style: TextStyle(
-                  color: AppColor().primaryWhite,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'GilroyBold',
-                  fontSize: Get.height * 0.017,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "/2",
-                    style: TextStyle(
-                      color: AppColor().primaryWhite.withOpacity(0.5),
-                    ),
-                  ),
-                ],
-              )),
-            ),
-            Gap(Get.height * 0.02),
-          ],
         ),
         backgroundColor: AppColor().primaryBackGroundColor,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  PageIndicator(
-                    pageCount,
-                    0,
-                    0.5,
-                    Get.width / 2,
-                    AppColor().primaryColor,
-                  ),
-                  PageIndicator(
-                    pageCount,
-                    1,
-                    0.5,
-                    Get.width / 2,
-                    AppColor().primaryColor,
-                  ),
-                ],
-              ),
-              Gap(Get.height * 0.05),
+              Gap(Get.height * 0.02),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                 child: CustomText(
@@ -152,473 +114,236 @@ class _CreateTeamState extends State<CreateTeamPage> {
                   color: AppColor().primaryWhite,
                 ),
               ),
-              Gap(Get.height * 0.03),
-              if (pageCount == 0) ...[
-                Form(
-                  key: _formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: Padding(
-                    padding: EdgeInsets.all(Get.height * 0.02),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          title: 'Team name *',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.017,
-                        ),
-                        Gap(Get.height * 0.01),
-                        CustomTextField(
-                          hint: "The Willywonkers",
-                          textEditingController:
-                              teamController.teamNameController,
-                          validate: Validator.isName,
-                        ),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                          title: 'Team abbreviation (Max 5 characters) *',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.017,
-                        ),
-                        Gap(Get.height * 0.01),
-                        const CustomTextField(
-                          hint: "The Willywonkers",
-                          // textEditingController:
-                          //     teamController.teamBioController,
-                          validate: Validator.isName,
-                        ),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                          title: 'Team bio *',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.017,
-                        ),
-                        Gap(Get.height * 0.01),
-                        CustomTextField(
-                          hint: "Type text here",
-                          textEditingController:
-                              teamController.teamBioController,
-                          maxLines: 5,
-                          validate: Validator.isName,
-                        ),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                          title: 'Team profile picture *',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.017,
-                        ),
-                        Gap(Get.height * 0.01),
-                        pickProfileImage(onTap: () {
-                          if (teamController.teamProfileImage == null) {
-                            debugPrint('pick image');
-                            Get.defaultDialog(
-                              title: "Select your image",
-                              backgroundColor: AppColor().primaryLightColor,
-                              titlePadding: const EdgeInsets.only(top: 30),
-                              contentPadding: const EdgeInsets.only(
-                                  top: 5, bottom: 30, left: 25, right: 25),
-                              middleText: "Upload your team profile picture",
-                              titleStyle: TextStyle(
-                                color: AppColor().primaryWhite,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'GilroyRegular',
-                              ),
-                              radius: 10,
-                              confirm: Column(
-                                children: [
-                                  CustomFillButton(
-                                    onTap: () {
-                                      pickImageFromGallery('profile');
-                                      Get.back();
-                                    },
-                                    height: 45,
-                                    width: Get.width * 0.5,
-                                    buttonText: 'Upload from gallery',
-                                    textColor: AppColor().primaryWhite,
-                                    buttonColor: AppColor().primaryColor,
-                                    boarderColor: AppColor().primaryColor,
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  const Gap(10),
-                                  CustomFillButton(
-                                    onTap: () {
-                                      pickImageFromCamera('profile');
-                                      Get.back();
-                                    },
-                                    height: 45,
-                                    width: Get.width * 0.5,
-                                    buttonText: 'Upload from camera',
-                                    textColor: AppColor().primaryWhite,
-                                    buttonColor: AppColor().primaryColor,
-                                    boarderColor: AppColor().primaryColor,
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                ],
-                              ),
-                              middleTextStyle: TextStyle(
-                                color: AppColor().primaryWhite,
-                                fontFamily: 'GilroyRegular',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            );
-                          } else {
-                            teamController.clearProfilePhoto();
-                          }
-                        }),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                          title: 'Team cover photo *',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.017,
-                        ),
-                        Gap(Get.height * 0.01),
-                        pickCoverImage(onTap: () {
-                          if (teamController.teamCoverImage == null) {
-                            debugPrint('pick image');
-                            Get.defaultDialog(
-                              title: "Select your image",
-                              backgroundColor: AppColor().primaryLightColor,
-                              titlePadding: const EdgeInsets.only(top: 30),
-                              contentPadding: const EdgeInsets.only(
-                                  top: 5, bottom: 30, left: 25, right: 25),
-                              middleText: "Upload your team cover picture",
-                              titleStyle: TextStyle(
-                                color: AppColor().primaryWhite,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'GilroyRegular',
-                              ),
-                              radius: 10,
-                              confirm: Column(
-                                children: [
-                                  CustomFillButton(
-                                    onTap: () {
-                                      pickImageFromGallery('cover');
-                                      Get.back();
-                                    },
-                                    height: 45,
-                                    width: Get.width * 0.5,
-                                    buttonText: 'Upload from gallery',
-                                    textColor: AppColor().primaryWhite,
-                                    buttonColor: AppColor().primaryColor,
-                                    boarderColor: AppColor().primaryColor,
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  const Gap(10),
-                                  CustomFillButton(
-                                    onTap: () {
-                                      pickImageFromCamera('cover');
-                                      Get.back();
-                                    },
-                                    height: 45,
-                                    width: Get.width * 0.5,
-                                    buttonText: 'Upload from camera',
-                                    textColor: AppColor().primaryWhite,
-                                    buttonColor: AppColor().primaryColor,
-                                    boarderColor: AppColor().primaryColor,
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                ],
-                              ),
-                              middleTextStyle: TextStyle(
-                                color: AppColor().primaryWhite,
-                                fontFamily: 'GilroyRegular',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            );
-                          } else {
-                            teamController.clearCoverPhoto();
-                          }
-                        }),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                          title: 'Games Covered *',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.017,
-                        ),
-                        Gap(Get.height * 0.01),
-                        InputDecorator(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: AppColor().bgDark,
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: AppColor().lightItemsColor,
-                                    width: 1),
-                                borderRadius: BorderRadius.circular(10)),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10)),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: seePost,
-                              icon: Icon(
-                                Icons.expand_more,
-                                color: AppColor().primaryWhite,
-                              ),
-                              items:
-                                  <String>['COD', 'Others'].map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: CustomText(
-                                    title: value,
-                                    color: AppColor().lightItemsColor,
-                                    fontFamily: 'GilroyBold',
-                                    weight: FontWeight.w400,
-                                    size: 13,
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  seePost = value;
-                                });
-                              },
-                              hint: CustomText(
-                                title: "Games Covered",
-                                color: AppColor().lightItemsColor,
-                                fontFamily: 'GilroyBold',
-                                weight: FontWeight.w400,
-                                size: 13,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Gap(Get.height * 0.02),
-                        CustomText(
-                          title: 'Enable team chat *',
-                          color: AppColor().primaryWhite,
-                          textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
-                          size: Get.height * 0.017,
-                        ),
-                        Gap(Get.height * 0.02),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CustomText(
-                              title: 'Yes',
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.center,
-                              fontFamily: 'GilroySemiBold',
-                              size: Get.height * 0.016,
-                            ),
-                            Gap(Get.height * 0.01),
-                            IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  setState(() {
-                                    enableChat = false;
-                                  });
-                                },
-                                icon: Icon(
-                                  !enableChat
-                                      ? Icons.radio_button_checked
-                                      : Icons.radio_button_unchecked,
-                                  color: !enableChat
-                                      ? AppColor().primaryColor
-                                      : AppColor().primaryWhite,
-                                  size: 20,
-                                )),
-                            Gap(Get.height * 0.02),
-                            CustomText(
-                              title: 'No',
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.center,
-                              fontFamily: 'GilroySemiBold',
-                              size: Get.height * 0.016,
-                            ),
-                            Gap(Get.height * 0.01),
-                            IconButton(
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  setState(() {
-                                    enableChat = true;
-                                  });
-                                },
-                                icon: Icon(
-                                  enableChat
-                                      ? Icons.radio_button_checked
-                                      : Icons.radio_button_unchecked,
-                                  color: enableChat
-                                      ? AppColor().primaryColor
-                                      : AppColor().primaryWhite,
-                                  size: 20,
-                                ))
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ] else ...[
-                Padding(
+              Gap(Get.height * 0.01),
+              Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Padding(
                   padding: EdgeInsets.all(Get.height * 0.02),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                        title: 'Add staff to your team *',
+                        title: 'Team name *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
                         fontFamily: 'GilroyRegular',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
-                      InputDecorator(
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColor().bgDark,
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: AppColor().lightItemsColor, width: 1),
-                              borderRadius: BorderRadius.circular(10)),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10)),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: seePost,
-                            icon: Icon(
-                              Icons.expand_more,
-                              color: AppColor().primaryWhite,
-                            ),
-                            items:
-                                <String>['COD', 'Others'].map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: CustomText(
-                                  title: value,
-                                  color: AppColor().lightItemsColor,
-                                  fontFamily: 'GilroyBold',
-                                  weight: FontWeight.w400,
-                                  size: 13,
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                seePost = value;
-                              });
-                            },
-                            hint: CustomText(
-                              title: "COD",
-                              color: AppColor().lightItemsColor,
-                              fontFamily: 'GilroyBold',
-                              weight: FontWeight.w400,
-                              size: 13,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Gap(Get.height * 0.02),
-                      CustomText(
-                        title: 'Add secondary team manager *',
-                        color: AppColor().primaryWhite,
-                        textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
-                        size: Get.height * 0.017,
-                      ),
-                      Gap(Get.height * 0.01),
-                      InputDecorator(
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColor().bgDark,
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: AppColor().lightItemsColor, width: 1),
-                              borderRadius: BorderRadius.circular(10)),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10)),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: seePost,
-                            icon: Icon(
-                              Icons.expand_more,
-                              color: AppColor().primaryWhite,
-                            ),
-                            items:
-                                <String>['COD', 'Others'].map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: CustomText(
-                                  title: value,
-                                  color: AppColor().lightItemsColor,
-                                  fontFamily: 'GilroyBold',
-                                  weight: FontWeight.w400,
-                                  size: 13,
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                seePost = value;
-                              });
-                            },
-                            hint: CustomText(
-                              title: "COD",
-                              color: AppColor().lightItemsColor,
-                              fontFamily: 'GilroyBold',
-                              weight: FontWeight.w400,
-                              size: 13,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Gap(Get.height * 0.02),
-                      CustomText(
-                        title: 'Add team manager (Optional)',
-                        color: AppColor().primaryWhite,
-                        textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
-                        size: Get.height * 0.017,
-                      ),
-                      Gap(Get.height * 0.01),
-                      const CustomTextField(
+                      CustomTextField(
                         hint: "The Willywonkers",
-                        // textEditingController: authController.fullNameController,
+                        textEditingController:
+                            teamController.teamNameController,
+                        validate: Validator.isName,
                       ),
+                      Gap(Get.height * 0.02),
+                      // CustomText(
+                      //   title: 'Team abbreviation (Max 5 characters) *',
+                      //   color: AppColor().primaryWhite,
+                      //   textAlign: TextAlign.center,
+                      //   fontFamily: 'GilroyRegular',
+                      //   size: Get.height * 0.017,
+                      // ),
+                      // Gap(Get.height * 0.01),
+                      // const CustomTextField(
+                      //   hint: "The Willywonkers",
+                      //   // textEditingController:
+                      //   //     teamController.teamBioController,
+                      //   validate: Validator.isName,
+                      // ),
+                      // Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Team bio *',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                      CustomTextField(
+                        hint: "Type text here",
+                        textEditingController: teamController.teamBioController,
+                        maxLines: 5,
+                        validate: Validator.isName,
+                      ),
+                      Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Team profile picture *',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                      pickProfileImage(onTap: () {
+                        if (teamController.teamProfileImage == null) {
+                          debugPrint('pick image');
+                          Get.defaultDialog(
+                            title: "Select your image",
+                            backgroundColor: AppColor().primaryLightColor,
+                            titlePadding: const EdgeInsets.only(top: 30),
+                            contentPadding: const EdgeInsets.only(
+                                top: 5, bottom: 30, left: 25, right: 25),
+                            middleText: "Upload your team profile picture",
+                            titleStyle: TextStyle(
+                              color: AppColor().primaryWhite,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'GilroyRegular',
+                            ),
+                            radius: 10,
+                            confirm: Column(
+                              children: [
+                                CustomFillButton(
+                                  onTap: () {
+                                    pickImageFromGallery('profile');
+                                    Get.back();
+                                  },
+                                  height: 45,
+                                  width: Get.width * 0.5,
+                                  buttonText: 'Upload from gallery',
+                                  textColor: AppColor().primaryWhite,
+                                  buttonColor: AppColor().primaryColor,
+                                  boarderColor: AppColor().primaryColor,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                const Gap(10),
+                                CustomFillButton(
+                                  onTap: () {
+                                    pickImageFromCamera('profile');
+                                    Get.back();
+                                  },
+                                  height: 45,
+                                  width: Get.width * 0.5,
+                                  buttonText: 'Upload from camera',
+                                  textColor: AppColor().primaryWhite,
+                                  buttonColor: AppColor().primaryColor,
+                                  boarderColor: AppColor().primaryColor,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                              ],
+                            ),
+                            middleTextStyle: TextStyle(
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'GilroyRegular',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          );
+                        } else {
+                          teamController.clearProfilePhoto();
+                        }
+                      }),
+                      Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Team cover photo *',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                      pickCoverImage(onTap: () {
+                        if (teamController.teamCoverImage == null) {
+                          debugPrint('pick image');
+                          Get.defaultDialog(
+                            title: "Select your image",
+                            backgroundColor: AppColor().primaryLightColor,
+                            titlePadding: const EdgeInsets.only(top: 30),
+                            contentPadding: const EdgeInsets.only(
+                                top: 5, bottom: 30, left: 25, right: 25),
+                            middleText: "Upload your team cover picture",
+                            titleStyle: TextStyle(
+                              color: AppColor().primaryWhite,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'GilroyRegular',
+                            ),
+                            radius: 10,
+                            confirm: Column(
+                              children: [
+                                CustomFillButton(
+                                  onTap: () {
+                                    pickImageFromGallery('cover');
+                                    Get.back();
+                                  },
+                                  height: 45,
+                                  width: Get.width * 0.5,
+                                  buttonText: 'Upload from gallery',
+                                  textColor: AppColor().primaryWhite,
+                                  buttonColor: AppColor().primaryColor,
+                                  boarderColor: AppColor().primaryColor,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                const Gap(10),
+                                CustomFillButton(
+                                  onTap: () {
+                                    pickImageFromCamera('cover');
+                                    Get.back();
+                                  },
+                                  height: 45,
+                                  width: Get.width * 0.5,
+                                  buttonText: 'Upload from camera',
+                                  textColor: AppColor().primaryWhite,
+                                  buttonColor: AppColor().primaryColor,
+                                  boarderColor: AppColor().primaryColor,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                              ],
+                            ),
+                            middleTextStyle: TextStyle(
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'GilroyRegular',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          );
+                        } else {
+                          teamController.clearCoverPhoto();
+                        }
+                      }),
+                      // Gap(Get.height * 0.02),
+                      // CustomText(
+                      //   title: 'Games Covered *',
+                      //   color: AppColor().primaryWhite,
+                      //   textAlign: TextAlign.center,
+                      //   fontFamily: 'GilroyRegular',
+                      //   size: Get.height * 0.017,
+                      // ),
+                      // Gap(Get.height * 0.01),
+                      // GameDropdown(gameValue: gameValue)
                     ],
                   ),
                 ),
-              ],
-              Gap(pageCount == 0 ? Get.height * 0.05 : Get.height * 0.3),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    bottom: Get.height * 0.02,
+                    left: Get.height * 0.02,
+                    right: Get.height * 0.02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      title: 'Add team manager (Optional)',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'GilroyRegular',
+                      size: Get.height * 0.017,
+                    ),
+                    Gap(Get.height * 0.01),
+                    const CustomTextField(
+                      hint: "The Willywonkers",
+                      // textEditingController: authController.fullNameController,
+                    ),
+                  ],
+                ),
+              ),
               Obx(() {
-                return InkWell(
-                  onTap: () {
-                    // if (_formKey.currentState!.validate()) {}
-                    if (pageCount == 0) {
-                      setState(() {
-                        pageCount = 1;
-                      });
-                    }
+                return GestureDetector(
+                  onTap: () async {
+                    await teamController.createTeam();
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
@@ -626,18 +351,21 @@ class _CreateTeamState extends State<CreateTeamPage> {
                     width: Get.width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-                      color: AppColor().primaryColor,
+                      color: teamController.createTeamStatus ==
+                              CreateTeamStatus.loading
+                          ? null
+                          : AppColor().primaryColor,
                     ),
-                    child: (teamController.createTeamStatus ==
-                            CreateTeamStatus.loading)
-                        ? const LoadingWidget()
-                        : Center(
-                            child: CustomText(
-                            title: pageCount == 0 ? 'Next' : 'Submit',
-                            color: AppColor().primaryWhite,
-                            weight: FontWeight.w600,
-                            size: Get.height * 0.018,
-                          )),
+                    child: Center(
+                        child: teamController.createTeamStatus ==
+                                CreateTeamStatus.loading
+                            ? const ButtonLoader()
+                            : CustomText(
+                                title: 'Submit',
+                                color: AppColor().primaryWhite,
+                                weight: FontWeight.w600,
+                                size: Get.height * 0.018,
+                              )),
                   ),
                 );
               }),
@@ -680,7 +408,8 @@ class _CreateTeamState extends State<CreateTeamPage> {
     return Container(
       padding: EdgeInsets.all(Get.height * 0.04),
       decoration: BoxDecoration(
-          color: AppColor().bgDark, borderRadius: BorderRadius.circular(10)),
+          color: AppColor().primaryDark,
+          borderRadius: BorderRadius.circular(10)),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -733,7 +462,8 @@ class _CreateTeamState extends State<CreateTeamPage> {
     return Container(
       padding: EdgeInsets.all(Get.height * 0.04),
       decoration: BoxDecoration(
-          color: AppColor().bgDark, borderRadius: BorderRadius.circular(10)),
+          color: AppColor().primaryDark,
+          borderRadius: BorderRadius.circular(10)),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -30,8 +30,8 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
     var teamApplications =
         await teamController.getTeamApplications(widget.item.id!);
     setState(() {
-      _teamApplications = teamApplications;
       _isLoading = false;
+      _teamApplications = teamApplications;
     });
   }
 
@@ -65,13 +65,13 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
                 CustomText(
                   title: widget.item.name,
                   color: AppColor().primaryWhite,
-                  fontFamily: "GilroySemiBold",
+                  weight: FontWeight.w600,
                   size: 16,
                 ),
                 CustomText(
                   title: "Player Applications",
                   color: AppColor().primaryWhite.withOpacity(0.5),
-                  // fontFamily: "GilroySemiBold",
+                  // weight: FontWeight.w600,
                   size: 14,
                 )
               ],
@@ -108,10 +108,9 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
                                     application: _teamApplications.reversed
                                         .toList()[index])),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Flexible(
+                                      flex: 0,
                                       child: CustomText(
                                         title: _teamApplications.reversed
                                             .toList()[index]
@@ -122,6 +121,42 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
+                                    const Spacer(),
+                                    Visibility(
+                                        visible: _teamApplications.reversed
+                                                .toList()[index]
+                                                .accepted ==
+                                            false,
+                                        child: Chip(
+                                            backgroundColor: Colors.red,
+                                            elevation: 0,
+                                            shape: RoundedRectangleBorder(
+                                                side: BorderSide.none,
+                                                borderRadius:
+                                                    BorderRadius.circular(99)),
+                                            label: CustomText(
+                                              title: "Rejected",
+                                              weight: FontWeight.w600,
+                                              size: 12,
+                                              color: AppColor().primaryWhite,
+                                            ))),
+                                    Visibility(
+                                        visible: _teamApplications.reversed
+                                                .toList()[index]
+                                                .accepted ==
+                                            true,
+                                        child: Chip(
+                                            backgroundColor:
+                                                AppColor().secondaryGreenColor,
+                                            shape: RoundedRectangleBorder(
+                                                side: BorderSide.none,
+                                                borderRadius:
+                                                    BorderRadius.circular(99)),
+                                            label: CustomText(
+                                              title: "Accepted",
+                                              weight: FontWeight.w600,
+                                              size: 12,
+                                            ))),
                                     Icon(
                                       Icons.chevron_right,
                                       color: AppColor()

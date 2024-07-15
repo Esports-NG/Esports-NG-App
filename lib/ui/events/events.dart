@@ -100,7 +100,7 @@ class _EventsPageState extends State<EventsPage>
                               horizontal: Get.height * 0.02),
                           indicatorSize: TabBarIndicatorSize.tab,
                           labelStyle:
-                              const TextStyle(fontFamily: "GilroySemiBold"),
+                              const TextStyle(fontWeight: FontWeight.w600),
                           // dividerColor: AppColor().primaryBackGroundColor,
                           dividerHeight: 0,
                           indicatorColor: AppColor().primaryColor,

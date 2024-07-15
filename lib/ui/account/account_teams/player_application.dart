@@ -30,7 +30,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
           onPressed: () => Get.back(),
         ),
         title: CustomText(
-          title: "#Username's Application",
+          title: "${widget.application.applicant?.userName}'s Application",
           color: AppColor().primaryWhite,
           size: 20,
           fontFamily: 'GilroyMedium',
@@ -120,7 +120,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                               : CustomText(
                                   title: "Accept",
                                   color: AppColor().primaryDark,
-                                  fontFamily: "GilroySemiBold",
+                                  weight: FontWeight.w600,
                                 )),
                     ),
                   )),
@@ -153,7 +153,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                               : CustomText(
                                   title: "Reject",
                                   color: AppColor().primaryWhite,
-                                  fontFamily: "GilroySemiBold",
+                                  weight: FontWeight.w600,
                                 )),
                     ),
                   ))

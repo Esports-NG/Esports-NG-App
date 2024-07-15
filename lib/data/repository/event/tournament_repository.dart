@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
@@ -327,8 +328,8 @@ class TournamentRepository extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
-      var res = await http.Response.fromStream(response);
-      print(res.body);
+      // var res = await response.stream.bytesToString();
+      // print(res);
       if (response.statusCode == 201) {
         eventController.createEventStatus(CreateEventStatus.success);
         debugPrint(await response.stream.bytesToString());
@@ -402,9 +403,34 @@ class TournamentRepository extends GetxController {
       "Authorization": "JWT ${authController.token}"
     });
 
-    log(response.body);
+    return playerModelListFromJson(response.body);
+  }
 
-    return participantModelFromJson(response.body);
+  Future getTeamTournamentParticipants(int id) async {
+    var response =
+        await http.get(Uri.parse(ApiLink.getEventParticipants(id)), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+
+    return teamModelListFromJson(response.body);
+  }
+
+  Future unregisterForEvent(int eventId, String role, int roleId) async {
+    try {
+      var response = await http.put(
+          Uri.parse(ApiLink.unregisterForEvent(eventId, role, roleId)),
+          headers: {
+            'Content-type': "application/json",
+            "Authorization": "JWT ${authController.token}"
+          });
+      log(response.body);
+
+      var json = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Helpers().showCustomSnackbar(message: json['message']);
+      }
+    } catch (err) {}
   }
 
   void handleError(dynamic error) {

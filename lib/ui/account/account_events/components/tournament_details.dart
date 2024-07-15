@@ -55,7 +55,7 @@ class TournamentDetailsItem extends StatelessWidget {
           title: title,
           color: AppColor().primaryWhite,
           size: 20,
-          fontFamily: "GilroySemiBold",
+          weight: FontWeight.w600,
         ),
         Gap(Get.height * 0.01),
         CustomText(

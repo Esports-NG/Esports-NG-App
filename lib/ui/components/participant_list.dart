@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/choose_team_dialog.dart';
+import 'package:e_sport/ui/components/games_played_details.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -28,11 +30,11 @@ class _ParticipantListState extends State<ParticipantList> {
   final playerController = Get.put(PlayerRepository());
   final authController = Get.put(AuthRepository());
   bool _isRegisterLoading = false;
-  List<ParticipantModel>? _participantList;
+  List<PlayerModel>? _participantList;
   bool _isRegistered = false;
 
   Future getParticipants() async {
-    List<ParticipantModel> participantList =
+    List<PlayerModel> participantList =
         await tournamentController.getTournamentParticipants(widget.event.id!);
     setState(() {
       _participantList = participantList;
@@ -69,24 +71,27 @@ class _ParticipantListState extends State<ParticipantList> {
               ),
             ),
             Gap(Get.height * 0.01),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(
-                  title: widget.event.name,
-                  color: AppColor().primaryWhite,
-                  fontFamily: "GilroySemiBold",
-                  size: 16,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                CustomText(
-                  title:
-                      "${_participantList != null ? _participantList!.length : " "} Participants",
-                  color: AppColor().primaryWhite.withOpacity(0.5),
-                  // fontFamily: "GilroySemiBold",
-                  size: 14,
-                )
-              ],
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomText(
+                    title: widget.event.name,
+                    color: AppColor().primaryWhite,
+                    weight: FontWeight.w600,
+                    size: 16,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  CustomText(
+                    title:
+                        "${_participantList != null ? _participantList!.length : " "} Participants",
+                    color: AppColor().primaryWhite.withOpacity(0.5),
+                    // weight: FontWeight.w600,
+                    size: 14,
+                  )
+                ],
+              ),
             )
           ]),
           leading: GoBackButton(
@@ -163,7 +168,7 @@ class _ParticipantListState extends State<ParticipantList> {
                 CustomText(
                   title: "Participant List",
                   color: AppColor().secondaryGreenColor,
-                  fontFamily: "GilroySemiBold",
+                  weight: FontWeight.w600,
                   size: 20,
                 ),
                 CustomText(
@@ -205,7 +210,8 @@ class _ParticipantListState extends State<ParticipantList> {
                               Expanded(
                                 flex: 5,
                                 child: CustomText(
-                                    title: "${widget.event.gameMode} IGN",
+                                    title:
+                                        "${widget.event.games![0].abbrev} IGN",
                                     color: AppColor()
                                         .primaryWhite
                                         .withOpacity(0.8),
@@ -247,7 +253,7 @@ class _ParticipantListState extends State<ParticipantList> {
 
 class PlayerRow extends StatelessWidget {
   const PlayerRow({super.key, required this.participant, required this.index});
-  final ParticipantModel participant;
+  final PlayerModel participant;
   final int index;
 
   @override
@@ -265,38 +271,43 @@ class PlayerRow extends StatelessWidget {
         const Spacer(),
         Expanded(
           flex: 2,
-          child: participant.player!.profile!.profilePicture != null
-              ? Row(
-                  children: [
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(participant
-                                  .player!.profile!.profilePicture))),
-                    ),
-                  ],
-                )
-              : Row(
-                  children: [
-                    SvgPicture.asset(
-                      "assets/images/svg/people.svg",
-                      width: 30,
-                      height: 30,
-                    ),
-                  ],
-                ),
+          child: InkWell(
+            onTap: () => Get.to(GamesPlayedDetails(item: participant)),
+            child: participant.profile != null
+                ? Row(
+                    children: [
+                      Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(participant.profile!))),
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/images/svg/people.svg",
+                        width: 30,
+                        height: 30,
+                      ),
+                    ],
+                  ),
+          ),
         ),
         const Spacer(),
         Expanded(
           flex: 5,
-          child: CustomText(
-            title: participant.inGameName,
-            color: AppColor().primaryWhite,
+          child: InkWell(
+            onTap: () => Get.to(GamesPlayedDetails(item: participant)),
+            child: CustomText(
+              title: participant.inGameName,
+              color: AppColor().primaryWhite,
+            ),
           ),
         ),
         const Spacer(),

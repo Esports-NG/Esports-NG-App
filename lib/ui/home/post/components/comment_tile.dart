@@ -1,4 +1,6 @@
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -7,10 +9,31 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 
-class CommentTile extends StatelessWidget {
+class CommentTile extends StatefulWidget {
   const CommentTile({super.key, required this.item});
 
   final Comment item;
+
+  @override
+  State<CommentTile> createState() => _CommentTileState();
+}
+
+class _CommentTileState extends State<CommentTile> {
+  final postController = Get.put(PostRepository());
+  final authController = Get.put(AuthRepository());
+  int? _likeCount;
+  bool _isLiked = false;
+
+  @override
+  initState() {
+    _likeCount = widget.item.likes!.length;
+    if (widget.item.likes!
+        .where((e) => e.id! == authController.user!.id!)
+        .isNotEmpty) {
+      _isLiked = true;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +42,13 @@ class CommentTile extends StatelessWidget {
       children: [
         InkWell(
           borderRadius: BorderRadius.circular(999),
-          onTap: () => Get.to(() => UserDetails(id: item.user!.id!)),
+          onTap: () => Get.to(() => UserDetails(id: widget.item.user!.id!)),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(item.user!.profile!.profilePicture!),
+                  image:
+                      NetworkImage(widget.item.user!.profile!.profilePicture!),
                   fit: BoxFit.cover),
               shape: BoxShape.circle,
             ),
@@ -35,7 +59,7 @@ class CommentTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomText(
-              title: item.user!.userName!,
+              title: widget.item.user!.userName!,
               color: AppColor().greySix,
               weight: FontWeight.w400,
               fontFamily: 'GilroyMedium',
@@ -43,7 +67,7 @@ class CommentTile extends StatelessWidget {
             ),
             Gap(Get.height * 0.01),
             CustomText(
-              title: item.body!,
+              title: widget.item.body!,
               color: AppColor().primaryWhite,
               weight: FontWeight.w400,
               fontFamily: 'GilroyBold',
@@ -53,11 +77,11 @@ class CommentTile extends StatelessWidget {
             Row(
               children: [
                 CustomText(
-                    title: item.likes == 0
+                    title: _likeCount == 0
                         ? 'Like'
-                        : item.likes == 1
+                        : _likeCount == 1
                             ? '1 Like'
-                            : '${item.likes} Like',
+                            : '$_likeCount Like',
                     color: AppColor().greySix,
                     weight: FontWeight.w400,
                     fontFamily: 'GilroyMedium',
@@ -82,7 +106,18 @@ class CommentTile extends StatelessWidget {
         ),
         const Spacer(),
         LikeButton(
-          // onTap: onLikeButtonTapped,
+          isLiked: _isLiked,
+          onTap: (isLiked) async {
+            setState(() {
+              if (isLiked) {
+                _likeCount = _likeCount! - 1;
+              } else {
+                _likeCount = _likeCount! + 1;
+              }
+              _isLiked = !isLiked;
+            });
+            await postController.likeComment(widget.item.id!);
+          },
           circleColor: CircleColor(
               start: AppColor().primaryColor, end: AppColor().primaryColor),
           bubblesColor: BubblesColor(

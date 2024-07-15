@@ -99,7 +99,7 @@ class _TeamAddGameState extends State<TeamAddGame> {
                       : Center(
                           child: CustomText(
                               title: "Add Game",
-                              fontFamily: "GilroySemibold",
+                              weight: FontWeight.w600,
                               color: AppColor().primaryWhite),
                         ),
                 ),

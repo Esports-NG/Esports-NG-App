@@ -1,3 +1,4 @@
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/ui/account/games_played/games_played_item.dart';
 import 'package:e_sport/util/colors.dart';
@@ -20,6 +21,7 @@ class GamesPlayedWidget extends StatefulWidget {
 
 class _GamesPlayedWidgetState extends State<GamesPlayedWidget> {
   final playerController = Get.put(PlayerRepository());
+  final authController = Get.put(AuthRepository());
   @override
   Widget build(BuildContext context) {
     if (playerController.playerStatus == PlayerStatus.loading) {
@@ -29,10 +31,15 @@ class _GamesPlayedWidgetState extends State<GamesPlayedWidget> {
         padding: EdgeInsets.zero,
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        itemCount: playerController.allPlayer.length,
+        itemCount: playerController.allPlayer
+            .where((e) => e.player!.id! == authController.user!.id!)
+            .toList()
+            .length,
         separatorBuilder: (context, index) => Gap(Get.height * 0.02),
         itemBuilder: (context, index) {
-          var item = playerController.allPlayer[index];
+          var item = playerController.allPlayer
+              .where((e) => e.player!.id! == authController.user!.id!)
+              .toList()[index];
           return InkWell(
             onTap: () => Get.to(() => GamesPlayedDetails(item: item)),
             child: GamesPlayedItem(item: item),
