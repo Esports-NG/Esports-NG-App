@@ -317,8 +317,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         image: authController.userImage == null
                                             ? const DecorationImage(
                                                 image: AssetImage(
-                                                    'assets/images/png/photo.png'),
-                                                fit: BoxFit.contain)
+                                                    'assets/images/png/placeholder.png'),
+                                                fit: BoxFit.cover)
                                             : DecorationImage(
                                                 image: FileImage(
                                                     authController.userImage!),

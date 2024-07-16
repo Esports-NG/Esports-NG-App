@@ -149,7 +149,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                 ),
                 CustomText(
                   title:
-                      "${_participantList != null ? _participantList!.length : "0"}, Team(s) ${_participantList != null ? _participantList!.fold(0, (sum, next) => sum + next.playersCount!) : "0"} Players",
+                      "${_participantList != null ? _participantList!.length : "0"} Team(s), ${_participantList != null ? _participantList!.fold(0, (sum, next) => sum + next.playersCount!) : "0"} Players",
                   color: AppColor().primaryWhite,
                   size: 16,
                 ),
@@ -235,8 +235,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                           Expanded(
                                             flex: 12,
                                             child: CustomText(
-                                                title:
-                                                    "${widget.event.games![0].abbrev} Name",
+                                                title: "IGN",
                                                 color: AppColor()
                                                     .primaryWhite
                                                     .withOpacity(0.8),

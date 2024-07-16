@@ -58,11 +58,11 @@ class TeamRepository extends GetxController {
   late final accountTypeController = TextEditingController();
 
   final Rx<List<TeamModel>> _allTeam = Rx([]);
-  final Rx<TeamModel?> _myTeam = Rx(null);
+  final Rx<List<TeamModel>?> _myTeam = Rx([]);
   final Rx<TeamInboxModel?> _teamInbox = Rx(null);
 
   List<TeamModel> get allTeam => _allTeam.value;
-  TeamModel get myTeam => _myTeam.value!;
+  List<TeamModel> get myTeam => _myTeam.value!;
   TeamInboxModel? get teamInbox => _teamInbox.value;
 
   // apply to team controller
@@ -217,8 +217,14 @@ class TeamRepository extends GetxController {
       }
 
       if (response.statusCode == 200) {
-        var team = TeamModel.fromJson(json);
-        _myTeam(team);
+        var list = List.from(json);
+        var teams = list.map((e) => TeamModel.fromJson(e)).toList();
+        debugPrint("${teams.length} teams found");
+        _myTeam(teams);
+        _teamStatus(TeamStatus.success);
+        teams.isNotEmpty
+            ? _myTeamStatus(MyTeamStatus.available)
+            : _myTeamStatus(MyTeamStatus.empty);
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()

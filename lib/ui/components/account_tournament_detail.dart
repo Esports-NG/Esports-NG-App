@@ -57,6 +57,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   List<PlayerModel>? _participantList;
   List<TeamModel>? _teamParticipantList;
   bool _isRegistered = false;
+  TeamModel? _registeredTeam;
   PlayerModel? _participantProfile;
 
   Future getParticipants() async {
@@ -66,9 +67,17 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
       setState(() {
         _teamParticipantList = teamParticipantList;
         if (teamParticipantList
-            .where((e) => e.id == teamController.myTeam.id!)
+            .where((e) => teamController.myTeam
+                .where((item) => item.id == e.id)
+                .isNotEmpty)
             .isNotEmpty) {
           _isRegistered = true;
+          _registeredTeam ==
+              teamParticipantList
+                  .where((e) => teamController.myTeam
+                      .where((item) => item.id == e.id)
+                      .isNotEmpty)
+                  .toList()[0];
         }
         _isRegisterLoading = false;
       });
@@ -226,9 +235,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                         });
                         if (_isRegistered) {
                           await tournamentController.unregisterForEvent(
-                              widget.item.id!,
-                              "team",
-                              teamController.myTeam.id!);
+                              widget.item.id!, "team", _registeredTeam!.id!);
                           setState(() {
                             _isRegistered = false;
                           });

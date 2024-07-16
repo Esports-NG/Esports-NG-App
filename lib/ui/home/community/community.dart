@@ -323,7 +323,7 @@ class _CommunityPageState extends State<CommunityPage> {
                                     separatorBuilder: (context, index) =>
                                         Gap(Get.height * 0.02),
                                     itemCount:
-                                        teamController.allTeam.take(2).length,
+                                        teamController.allTeam.take(5).length,
                                     itemBuilder: (context, index) {
                                       var item = teamController.allTeam[index];
                                       return InkWell(

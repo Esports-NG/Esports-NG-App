@@ -5,6 +5,7 @@ import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_teams/add_to_roster.dart';
 import 'package:e_sport/ui/components/participant_list.dart';
+import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -116,36 +117,40 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                             headerBuilder: (context, isExpanded) => Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16),
-                                  child: Row(
-                                    children: [
-                                      CachedNetworkImage(
-                                        imageUrl: ApiLink.imageUrl +
-                                            e.game!.profilePicture!,
-                                        imageBuilder:
-                                            (context, imageProvider) =>
-                                                Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(999),
-                                              border: Border.all(
-                                                  color: AppColor()
-                                                      .primaryWhite
-                                                      .withOpacity(0.5)),
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover)),
+                                  child: GestureDetector(
+                                    onTap: () => Get.to(
+                                        () => GameProfile(game: e.game!)),
+                                    child: Row(
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl: ApiLink.imageUrl +
+                                              e.game!.profilePicture!,
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(999),
+                                                border: Border.all(
+                                                    color: AppColor()
+                                                        .primaryWhite
+                                                        .withOpacity(0.5)),
+                                                image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover)),
+                                          ),
                                         ),
-                                      ),
-                                      Gap(Get.height * 0.02),
-                                      CustomText(
-                                        title: e.game!.name!,
-                                        color: AppColor().primaryWhite,
-                                        weight: FontWeight.w600,
-                                        size: 16,
-                                      )
-                                    ],
+                                        Gap(Get.height * 0.02),
+                                        CustomText(
+                                          title: e.game!.name!,
+                                          color: AppColor().primaryWhite,
+                                          weight: FontWeight.w600,
+                                          size: 16,
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                             body: Column(
