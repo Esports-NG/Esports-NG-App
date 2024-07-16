@@ -6,6 +6,7 @@ import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
@@ -55,14 +56,14 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   bool _isLoading = true;
   bool _isRegisterLoading = true;
   List<PlayerModel>? _participantList;
-  List<TeamModel>? _teamParticipantList;
+  List<RoasterModel>? _teamParticipantList;
   bool _isRegistered = false;
   TeamModel? _registeredTeam;
   PlayerModel? _participantProfile;
 
   Future getParticipants() async {
     if (widget.item.tournamentType == "team") {
-      List<TeamModel> teamParticipantList = await tournamentController
+      List<RoasterModel> teamParticipantList = await tournamentController
           .getTeamTournamentParticipants(widget.item.id!);
       setState(() {
         _teamParticipantList = teamParticipantList;
@@ -233,19 +234,14 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                         setState(() {
                           _isRegisterLoading = true;
                         });
-                        if (_isRegistered) {
-                          await tournamentController.unregisterForEvent(
-                              widget.item.id!, "team", _registeredTeam!.id!);
-                          setState(() {
-                            _isRegistered = false;
-                          });
-                        } else {
-                          showDialog(
-                            context: context,
-                            builder: (context) =>
-                                ChooseTeamDialog(id: widget.item.id!),
-                          );
-                        }
+                        showDialog(
+                          context: context,
+                          builder: (context) => ChooseTeamDialog(
+                            id: widget.item.id!,
+                            isRegistered: _isRegistered,
+                          ),
+                        );
+
                         setState(() {
                           _isRegisterLoading = false;
                         });
@@ -258,7 +254,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                               widget.item.id!,
                               "player",
                               _participantProfile!.id!);
-                          _isRegistered = true;
+                          _isRegistered = false;
                         } else {
                           await tournamentController
                               .registerForTournament(widget.item.id!);
@@ -299,8 +295,11 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                             )
                           : Center(
                               child: CustomText(
-                              title:
-                                  _isRegistered ? "Unregister" : 'Register Now',
+                              title: widget.item.tournamentType == "team"
+                                  ? "Pick Team"
+                                  : _isRegistered
+                                      ? "Unregister"
+                                      : 'Register Now',
                               color: AppColor().primaryWhite,
                               size: Get.height * 0.018,
                               fontFamily: 'GilroyMedium',

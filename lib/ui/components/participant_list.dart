@@ -102,11 +102,6 @@ class _ParticipantListState extends State<ParticipantList> {
               borderRadius: BorderRadius.circular(30),
               onTap: () async {
                 if (widget.event.tournamentType == "team") {
-                  showDialog(
-                    context: context,
-                    builder: (context) =>
-                        ChooseTeamDialog(id: widget.event.id!),
-                  );
                 } else {
                   setState(() {
                     _isRegisterLoading = true;

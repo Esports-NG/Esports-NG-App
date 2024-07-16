@@ -52,6 +52,7 @@ class TeamRepository extends GetxController {
   final authController = Get.put(AuthRepository());
   late final teamNameController = TextEditingController();
   late final teamBioController = TextEditingController();
+  final teamAbbrevController = TextEditingController();
   late final seeController = TextEditingController();
   late final engageController = TextEditingController();
   late final gameTagController = TextEditingController();
@@ -123,7 +124,8 @@ class TeamRepository extends GetxController {
       };
       var request = http.MultipartRequest("POST", Uri.parse(ApiLink.createTeam))
         ..fields["name"] = teamNameController.text
-        ..fields["bio"] = teamBioController.text;
+        ..fields["bio"] = teamBioController.text
+        ..fields["abbrev"] = teamAbbrevController.text;
 
       if (teamProfileImage != null) {
         request.files.add(await http.MultipartFile.fromPath(

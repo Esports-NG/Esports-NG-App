@@ -138,21 +138,21 @@ class _CreateTeamState extends State<CreateTeamPage> {
                         validate: Validator.isName,
                       ),
                       Gap(Get.height * 0.02),
-                      // CustomText(
-                      //   title: 'Team abbreviation (Max 5 characters) *',
-                      //   color: AppColor().primaryWhite,
-                      //   textAlign: TextAlign.center,
-                      //   fontFamily: 'GilroyRegular',
-                      //   size: Get.height * 0.017,
-                      // ),
-                      // Gap(Get.height * 0.01),
-                      // const CustomTextField(
-                      //   hint: "The Willywonkers",
-                      //   // textEditingController:
-                      //   //     teamController.teamBioController,
-                      //   validate: Validator.isName,
-                      // ),
-                      // Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Team abbreviation (Max 5 characters) *',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'GilroyRegular',
+                        size: Get.height * 0.017,
+                      ),
+                      Gap(Get.height * 0.01),
+                       CustomTextField(
+                        hint: "The Willywonkers",
+                        textEditingController:
+                            teamController.teamAbbrevController,
+                        validate: Validator.isName,
+                      ),
+                      Gap(Get.height * 0.02),
                       CustomText(
                         title: 'Team bio *',
                         color: AppColor().primaryWhite,

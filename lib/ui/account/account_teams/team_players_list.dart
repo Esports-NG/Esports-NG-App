@@ -11,6 +11,7 @@ import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -48,18 +49,29 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
     return Scaffold(
       appBar: AppBar(
           title: Row(children: [
-            CachedNetworkImage(
-              imageUrl: widget.item.profilePicture!,
-              imageBuilder: (context, imageProvider) => Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
+            (widget.item.profilePicture == null)
+                ? Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColor().primaryWhite)),
+                    child: SvgPicture.asset(
+                      'assets/images/svg/people.svg',
                     ),
-                    borderRadius: BorderRadius.circular(999)),
-              ),
-            ),
+                  )
+                : CachedNetworkImage(
+                    imageUrl: widget.item.profilePicture!,
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                          ),
+                          borderRadius: BorderRadius.circular(999)),
+                    ),
+                  ),
             Gap(Get.height * 0.01),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
