@@ -11,6 +11,7 @@ class EventModel {
   String? venue;
   String? name;
   String? type;
+  List<GamePlayed>? games;
   CommunityModel? community;
   String? linkForBracket;
   String? gameMode;
@@ -60,7 +61,8 @@ class EventModel {
       this.rulesRegs,
       this.prizePoolDistribution,
       this.type,
-      this.venue});
+      this.venue,
+      this.games});
 
   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
         id: json["id"],
@@ -94,6 +96,10 @@ class EventModel {
         description: json["description"],
         requirements: json["requirements"],
         structure: json["structure"],
+        games: json["games"] == null
+            ? []
+            : List<GamePlayed>.from(
+                json["games"]!.map((x) => GamePlayed.fromJson(x))),
         teams: json["teams"] == null
             ? []
             : List<dynamic>.from(json["teams"]!.map((x) => x)),
@@ -397,61 +403,154 @@ class PrizePoolDistribution {
       };
 }
 
-List<ParticipantModel> participantModelFromJson(String str) =>
-    List<ParticipantModel>.from(
-        json.decode(str).map((x) => ParticipantModel.fromJson(x)));
+List<TeamParticipantModel> teamParticipantModelFromJson(String str) =>
+    List<TeamParticipantModel>.from(
+        json.decode(str).map((x) => TeamParticipantModel.fromJson(x)));
 
-String participantModelToJson(List<ParticipantModel> data) =>
+String teamParticipantModelToJson(List<TeamParticipantModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class ParticipantModel {
+class TeamParticipantModel {
   final int? id;
-  final UserModel? player;
-  final String? profile;
-  final List<dynamic>? statistics;
-  final GamePlayed? gamePlayed;
-  final String? inGameId;
-  final String? inGameName;
-  final bool? isCaptain;
+  final UserModel? owner;
+  final String? name;
+  final String? profilePicture;
+  final String? cover;
+  final List<GamePlayed>? gamesPlayed;
+  final String? bio;
+  final UserModel? manager;
+  final List<UserModel>? players;
+  final List<dynamic>? teamStaffs;
+  final int? playersCount;
 
-  ParticipantModel({
+  TeamParticipantModel({
     this.id,
-    this.player,
-    this.profile,
-    this.statistics,
-    this.gamePlayed,
-    this.inGameId,
-    this.inGameName,
-    this.isCaptain,
+    this.owner,
+    this.name,
+    this.profilePicture,
+    this.cover,
+    this.gamesPlayed,
+    this.bio,
+    this.manager,
+    this.players,
+    this.teamStaffs,
+    this.playersCount,
   });
 
-  factory ParticipantModel.fromJson(Map<String, dynamic> json) =>
-      ParticipantModel(
+  factory TeamParticipantModel.fromJson(Map<String, dynamic> json) =>
+      TeamParticipantModel(
         id: json["id"],
-        player:
-            json["player"] == null ? null : UserModel.fromJson(json["player"]),
-        profile: json["profile"],
-        statistics: json["statistics"] == null
+        owner: json["owner"] == null ? null : UserModel.fromJson(json["owner"]),
+        name: json["name"],
+        profilePicture: json["profile_picture"],
+        cover: json["cover"],
+        gamesPlayed: json["games_played"] == null
             ? []
-            : List<dynamic>.from(json["statistics"]!.map((x) => x)),
-        gamePlayed: json["game_played"] == null
+            : List<GamePlayed>.from(
+                json["games_played"]!.map((x) => GamePlayed.fromJson(x))),
+        bio: json["bio"],
+        manager: json["manager"] == null
             ? null
-            : GamePlayed.fromJson(json["game_played"]),
-        inGameId: json["in_game_id"],
-        inGameName: json["in_game_name"],
-        isCaptain: json["is_captain"],
+            : UserModel.fromJson(json["manager"]),
+        players: json["players"] == null
+            ? []
+            : List<UserModel>.from(
+                json["players"]!.map((x) => UserModel.fromJson(x))),
+        teamStaffs: json["team_staffs"] == null
+            ? []
+            : List<dynamic>.from(json["team_staffs"]!.map((x) => x)),
+        playersCount: json["players_count"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "player": player?.toJson(),
-        "profile": profile,
-        "statistics": statistics == null
+        "owner": owner?.toJson(),
+        "name": name,
+        "profile_picture": profilePicture,
+        "cover": cover,
+        "games_played": gamesPlayed == null
             ? []
-            : List<dynamic>.from(statistics!.map((x) => x)),
-        "game_played": gamePlayed?.toJson(),
-        "in_game_id": inGameId,
-        "in_game_name": inGameName,
-        "is_captain": isCaptain,
+            : List<dynamic>.from(gamesPlayed!.map((x) => x.toJson())),
+        "bio": bio,
+        "manager": manager?.toJson(),
+        "players": players == null
+            ? []
+            : List<dynamic>.from(players!.map((x) => x.toJson())),
+        "team_staffs": teamStaffs == null
+            ? []
+            : List<dynamic>.from(teamStaffs!.map((x) => x)),
+        "players_count": playersCount,
       };
+}
+
+class PurposeElement {
+  final int? id;
+  final PurposeEnum? purpose;
+
+  PurposeElement({
+    this.id,
+    this.purpose,
+  });
+
+  factory PurposeElement.fromJson(Map<String, dynamic> json) => PurposeElement(
+        id: json["id"],
+        purpose: purposeEnumValues.map[json["purpose"]]!,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "purpose": purposeEnumValues.reverse[purpose],
+      };
+}
+
+enum PurposeEnum { COMMUNITIES, COMPETITIONS, GAMING_NEWS }
+
+final purposeEnumValues = EnumValues({
+  "Communities": PurposeEnum.COMMUNITIES,
+  "Competitions": PurposeEnum.COMPETITIONS,
+  "Gaming News": PurposeEnum.GAMING_NEWS
+});
+
+class GameMode {
+  final int? id;
+  final String? banner;
+  final String? name;
+  final String? subCategories;
+  final int? game;
+
+  GameMode({
+    this.id,
+    this.banner,
+    this.name,
+    this.subCategories,
+    this.game,
+  });
+
+  factory GameMode.fromJson(Map<String, dynamic> json) => GameMode(
+        id: json["id"],
+        banner: json["banner"],
+        name: json["name"],
+        subCategories: json["sub_categories"],
+        game: json["game"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "banner": banner,
+        "name": name,
+        "sub_categories": subCategories,
+        "game": game,
+      };
+}
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
@@ -55,20 +56,53 @@ class _AccountState extends State<Account> {
               alignment: Alignment.bottomCenter,
               clipBehavior: Clip.none,
               children: [
-                Container(
-                  height: Get.height * 0.15,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image:
-                            AssetImage('assets/images/png/account_header.png'),
-                        opacity: 0.2),
-                  ),
-                ),
+                authController.user!.profile!.cover == null
+                    ? Container(
+                        height: Get.height * 0.15,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/png/account_header.png'),
+                              opacity: 0.2),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () => Helpers().showImagePopup(
+                            context, "${authController.user!.profile!.cover}"),
+                        child: CachedNetworkImage(
+                          height: Get.height * 0.15,
+                          width: double.infinity,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: SizedBox(
+                              height: Get.height * 0.05,
+                              width: Get.height * 0.05,
+                              child: CircularProgressIndicator(
+                                  color: AppColor().primaryWhite,
+                                  value: progress.progress),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error, color: AppColor().primaryColor),
+                          imageUrl: '${authController.user!.profile!.cover}',
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10)),
+                              image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                  opacity: 0.6),
+                            ),
+                          ),
+                        ),
+                      ),
                 Positioned(
                   top: Get.height * 0.1,
                   child: GestureDetector(
                     onTap: () => Helpers().showImagePopup(context,
-                                  "${authController.user!.profile!.profilePicture}"),
+                        "${authController.user!.profile!.profilePicture}"),
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [

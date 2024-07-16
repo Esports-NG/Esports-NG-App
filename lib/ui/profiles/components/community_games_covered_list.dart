@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/profiles/components/community_add_game.dart';
@@ -27,6 +28,7 @@ class CommunityGamesCoveredList extends StatefulWidget {
 
 class _CommunityGamesCoveredListState extends State<CommunityGamesCoveredList> {
   final gamesController = Get.put(GamesRepository());
+  final authController = Get.put(AuthRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +54,19 @@ class _CommunityGamesCoveredListState extends State<CommunityGamesCoveredList> {
           ],
         ),
         backgroundColor: AppColor().primaryBackGroundColor,
-        floatingActionButton: Container(
-          decoration: BoxDecoration(
-              shape: BoxShape.circle, color: AppColor().primaryColor),
-          child: IconButton(
-            onPressed: () {
-              Get.to(() => CommunityAddGame(community: widget.community));
-            },
-            icon: const Icon(Icons.add, color: Colors.white),
-          ),
-        ),
+        floatingActionButton: authController.user!.id ==
+                widget.community.owner!.id
+            ? FloatingActionButton(
+                shape: const CircleBorder(),
+                backgroundColor: AppColor().primaryColor,
+                onPressed: () =>
+                    Get.to(() => CommunityAddGame(community: widget.community)),
+                child: Icon(
+                  Icons.add,
+                  color: AppColor().primaryWhite,
+                ),
+              )
+            : null,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

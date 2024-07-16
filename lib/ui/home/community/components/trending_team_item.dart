@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +12,42 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class TrendingTeamsItem extends StatelessWidget {
+class TrendingTeamsItem extends StatefulWidget {
   final TeamModel item;
   final bool? onFilterPage;
   const TrendingTeamsItem({super.key, required this.item, this.onFilterPage});
+
+  @override
+  State<TrendingTeamsItem> createState() => _TrendingTeamsItemState();
+}
+
+class _TrendingTeamsItemState extends State<TrendingTeamsItem> {
+  final teamController = Get.put(TeamRepository());
+  final authController = Get.put(AuthRepository());
+
+  List<Map<String, dynamic>>? _teamFollowers;
+  bool _isFollowing = false;
+  bool _isLoading = true;
+
+  Future getTeamFollowers() async {
+    var followers = await teamController.getTeamFollowers(widget.item.id!);
+    setState(() {
+      _teamFollowers = followers;
+      if (followers.any(
+          (element) => element["user_id"]["id"] == authController.user!.id)) {
+        _isFollowing = true;
+      } else {
+        _isFollowing = false;
+      }
+      _isLoading = false;
+    });
+  }
+
+  @override
+  initState() {
+    getTeamFollowers();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +68,7 @@ class TrendingTeamsItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              (item.cover == null)
+              (widget.item.cover == null)
                   ? Container(
                       height: Get.height * 0.12,
                       width: double.infinity,
@@ -62,7 +97,7 @@ class TrendingTeamsItem extends StatelessWidget {
                       ),
                       errorWidget: (context, url, error) =>
                           Icon(Icons.error, color: AppColor().primaryColor),
-                      imageUrl: '${ApiLink.imageUrl}${item.cover}',
+                      imageUrl: '${ApiLink.imageUrl}${widget.item.cover}',
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
@@ -70,7 +105,7 @@ class TrendingTeamsItem extends StatelessWidget {
                               topRight: Radius.circular(10)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  '${ApiLink.imageUrl}${item.cover}'),
+                                  '${ApiLink.imageUrl}${widget.item.cover}'),
                               fit: BoxFit.cover),
                         ),
                       ),
@@ -81,7 +116,7 @@ class TrendingTeamsItem extends StatelessWidget {
                 child: Column(
                   children: [
                     CustomText(
-                      title: item.name!.toCapitalCase(),
+                      title: widget.item.name!.toCapitalCase(),
                       size: 16,
                       fontFamily: 'GilroySemiBold',
                       weight: FontWeight.w400,
@@ -92,13 +127,13 @@ class TrendingTeamsItem extends StatelessWidget {
                     ),
                     // Gap(Get.height * 0.005),
                     Visibility(
-                      visible: onFilterPage == null,
+                      visible: widget.onFilterPage == null,
                       child: CustomText(
-                        title: item.members!.isEmpty
+                        title: widget.item.members!.isEmpty
                             ? 'No Member'
-                            : item.members!.length == 1
+                            : widget.item.members!.length == 1
                                 ? '1 Member'
-                                : '${item.members!.length.toString()} Members',
+                                : '${widget.item.members!.length.toString()} Members',
                         size: 12,
                         fontFamily: 'GilroyRegular',
                         weight: FontWeight.w400,
@@ -106,23 +141,50 @@ class TrendingTeamsItem extends StatelessWidget {
                       ),
                     ),
                     Gap(Get.height * 0.01),
-                    Container(
-                      padding: EdgeInsets.all(Get.height * 0.015),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        border: Border.all(
-                          color: AppColor().primaryColor,
+                    InkWell(
+                      onTap: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        var message =
+                            await authController.followTeam(widget.item.id!);
+                        print(message);
+
+                        setState(() {
+                          if (message == "unfollowed") {
+                            _isFollowing = false;
+                          } else if (message == "followed") {
+                            _isFollowing = true;
+                          }
+                          _isLoading = false;
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(Get.height * 0.015),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: _isFollowing || _isLoading
+                              ? null
+                              : AppColor().primaryColor,
+                          borderRadius: BorderRadius.circular(40),
+                          border: _isFollowing
+                              ? Border.all(
+                                  color: AppColor().primaryColor,
+                                )
+                              : null,
                         ),
-                      ),
-                      child: Center(
-                        child: CustomText(
-                          title: 'Follow',
-                          size: 14,
-                          fontFamily: 'GilroyMedium',
-                          weight: FontWeight.w400,
-                          color: AppColor().primaryColor,
-                        ),
+                        child: Center(
+                            child: _isLoading
+                                ? const ButtonLoader()
+                                : CustomText(
+                                    title: _isFollowing ? "Unfollow" : 'Follow',
+                                    size: 14,
+                                    fontFamily: 'GilroyMedium',
+                                    weight: FontWeight.w400,
+                                    color: _isFollowing
+                                        ? AppColor().primaryColor
+                                        : AppColor().primaryWhite,
+                                  )),
                       ),
                     ),
                   ],
@@ -135,7 +197,7 @@ class TrendingTeamsItem extends StatelessWidget {
             child: Stack(
               alignment: Alignment.bottomRight,
               children: [
-                (item.profilePicture == null)
+                (widget.item.profilePicture == null)
                     ? Container(
                         height: Get.height * 0.08,
                         width: Get.height * 0.08,
@@ -161,13 +223,14 @@ class TrendingTeamsItem extends StatelessWidget {
                         ),
                         errorWidget: (context, url, error) =>
                             Icon(Icons.error, color: AppColor().primaryColor),
-                        imageUrl: item.profilePicture!,
+                        imageUrl: widget.item.profilePicture!,
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: AppColor().primaryWhite),
                             image: DecorationImage(
-                                image: NetworkImage(item.profilePicture!),
+                                image:
+                                    NetworkImage(widget.item.profilePicture!),
                                 fit: BoxFit.cover),
                           ),
                         ),

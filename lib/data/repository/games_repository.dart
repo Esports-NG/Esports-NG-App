@@ -112,4 +112,44 @@ class GamesRepository extends GetxController {
       debugPrint("getting game: ${error.toString()}");
     }
   }
+
+  Future getGameFollower(int id) async {
+    try {
+      var response =
+          await http.get(Uri.parse(ApiLink.getGameFollowers(id)), headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+      log(response.body);
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return json;
+      }
+    } catch (error) {
+      debugPrint("getting game error: ${error.toString()}");
+    }
+  }
+
+  Future followGame(int id) async {
+    try {
+      var response =
+          await http.put(Uri.parse(ApiLink.followGame(id)), headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+
+      log(response.body);
+      var json = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        if (json["message"].toString().contains("unfollowed")) {
+          return "unfollowed";
+        } else {
+          return "followed";
+        }
+      } else {
+        return "error";
+      }
+    } catch (err) {}
+  }
 }

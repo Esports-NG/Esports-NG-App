@@ -45,7 +45,7 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
           title: CustomText(
             title: communityController.typeFilter.value,
             color: AppColor().primaryWhite,
-            fontFamily: "GilroySemiBold",
+            weight: FontWeight.w600,
             size: 18,
           ),
         ),

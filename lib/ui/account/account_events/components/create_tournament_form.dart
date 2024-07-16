@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 // import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
@@ -25,6 +26,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final communityController = Get.put(CommunityRepository());
   final tournamentController = Get.put(TournamentRepository());
+  final authController = Get.put(AuthRepository());
 
   Future pickDate(String title) async {
     final initialDate = DateTime.now();
@@ -182,7 +184,10 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         ? AppColor().primaryBackGroundColor
                         : AppColor().lightItemsColor,
                   ),
-                  items: communityController.allCommunity.map((value) {
+                  items: communityController.allCommunity
+                      .where((e) => e.owner!.id! == authController.user!.id!)
+                      .toList()
+                      .map((value) {
                     return DropdownMenuItem<CommunityModel>(
                       value: value,
                       child: CustomText(
@@ -778,24 +783,6 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 tournamentController.isThirdPrize.value = value.isNotEmpty;
               },
               validate: Validator.isNumber,
-            ),
-            Gap(Get.height * 0.02),
-            Row(
-              children: [
-                Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: AppColor().primaryColor),
-                    child: Icon(Icons.add,
-                        size: 15, color: AppColor().primaryBackGroundColor)),
-                Gap(Get.height * 0.01),
-                CustomText(
-                  title: 'Add Others',
-                  size: 14,
-                  fontFamily: 'GilroyMeduim',
-                  textAlign: TextAlign.start,
-                  color: AppColor().primaryColor,
-                ),
-              ],
             ),
             Gap(Get.height * 0.02),
             CustomText(

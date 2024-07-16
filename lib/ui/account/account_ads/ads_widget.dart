@@ -42,7 +42,7 @@ class _AdsWidgetState extends State<AdsWidget>
         title: CustomText(
           textAlign: TextAlign.center,
           title: 'Ads',
-          fontFamily: "GilroySemiBold",
+          weight: FontWeight.w600,
           size: 18,
           color: AppColor().primaryWhite,
         ),

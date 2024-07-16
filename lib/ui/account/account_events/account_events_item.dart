@@ -167,7 +167,8 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                                   SvgPicture.asset(
                                       'assets/images/svg/rank.svg'),
                                   CustomText(
-                                    title: "${widget.item.type} Event".capitalize,
+                                    title:
+                                        "${widget.item.type} Event".capitalize,
                                     color: AppColor().pureBlackColor,
                                     textAlign: TextAlign.center,
                                     size: Get.height * 0.014,
@@ -248,7 +249,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                 widget.item.type == "tournament"
                     ? textItem(
                         title: 'Game: ',
-                        subTitle: widget.item.gameMode!.toUpperCase(),
+                        subTitle: widget.item.games![0].name!,
                       )
                     : const SizedBox(),
                 widget.item.type == "tournament"
@@ -259,7 +260,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                             Gap(Get.height * 0.01),
                             textItem(
                               title: 'Tournament Name: ',
-                              subTitle: widget.item.name!.toUpperCase(),
+                              subTitle: widget.item.name,
                             ),
                           ],
                         ),
@@ -269,7 +270,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                     ? CustomText(
                         title: widget.item.name,
                         color: AppColor().primaryWhite,
-                        fontFamily: "GilroySemiBold",
+                        weight: FontWeight.w600,
                         size: 18,
                       )
                     : const SizedBox(),

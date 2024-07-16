@@ -1,3 +1,4 @@
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/events/components/social_event_details.dart';
@@ -21,6 +22,8 @@ class AccountEventsWidget extends StatefulWidget {
 
 class _AccountEventsWidgetState extends State<AccountEventsWidget> {
   final eventController = Get.put(EventRepository());
+  final authController = Get.put(AuthRepository());
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -31,10 +34,17 @@ class _AccountEventsWidgetState extends State<AccountEventsWidget> {
           padding: EdgeInsets.zero,
           physics: const ScrollPhysics(),
           shrinkWrap: true,
-          itemCount: eventController.allEvent.length,
+          itemCount: eventController.allEvent
+              .where((event) =>
+                  event.community!.owner!.id == authController.user!.id)
+              .toList()
+              .length,
           separatorBuilder: (context, index) => Gap(Get.height * 0.02),
           itemBuilder: (context, index) {
-            var item = eventController.allEvent[index];
+            var item = eventController.allEvent
+                .where((event) =>
+                    event.community!.owner!.id == authController.user!.id)
+                .toList()[index];
             return InkWell(
               onTap: () {
                 if (eventController.filteredEvent[index].type == "tournament") {

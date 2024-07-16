@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_inbox_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
@@ -57,11 +58,11 @@ class TeamRepository extends GetxController {
   late final accountTypeController = TextEditingController();
 
   final Rx<List<TeamModel>> _allTeam = Rx([]);
-  final Rx<List<TeamModel>> _myTeam = Rx([]);
+  final Rx<List<TeamModel>?> _myTeam = Rx([]);
   final Rx<TeamInboxModel?> _teamInbox = Rx(null);
 
   List<TeamModel> get allTeam => _allTeam.value;
-  List<TeamModel> get myTeam => _myTeam.value;
+  List<TeamModel> get myTeam => _myTeam.value!;
   TeamInboxModel? get teamInbox => _teamInbox.value;
 
   // apply to team controller
@@ -69,6 +70,7 @@ class TeamRepository extends GetxController {
   TextEditingController teamJoinReason = TextEditingController();
   RxBool includeGamerProfile = true.obs;
   RxBool shareTeamHistory = false.obs;
+  Rx<GamePlayed?> addToRosterGame = null.obs;
   RxList<GamePlayed> gamesPlayed = <GamePlayed>[].obs;
   OverlayPortalController gameChipOverlayController = OverlayPortalController();
   TextEditingController gameSearchController = TextEditingController();
@@ -107,30 +109,34 @@ class TeamRepository extends GetxController {
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
         getAllTeam(true);
+        getMyTeam(true);
       }
     });
   }
 
-  Future createTeam(TeamModel team) async {
+  Future createTeam() async {
     try {
       _createTeamStatus(CreateTeamStatus.loading);
       var headers = {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       };
-      var request =
-          http.MultipartRequest("POST", Uri.parse(ApiLink.createTeam));
+      var request = http.MultipartRequest("POST", Uri.parse(ApiLink.createTeam))
+        ..fields["name"] = teamNameController.text
+        ..fields["bio"] = teamBioController.text;
 
-      request.files.add(await http.MultipartFile.fromPath(
-          'profile_picture', teamProfileImage!.path));
-      request.files.add(
-          await http.MultipartFile.fromPath('cover', teamCoverImage!.path));
-
-      request.fields.addAll(
-          team.toCreateTeamJson().map((key, value) => MapEntry(key, value)));
+      if (teamProfileImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'profile_picture', teamProfileImage!.path));
+      }
+      if (teamCoverImage != null) {
+        request.files.add(
+            await http.MultipartFile.fromPath('cover', teamCoverImage!.path));
+      }
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
+
       if (response.statusCode == 201) {
         _createTeamStatus(CreateTeamStatus.success);
         debugPrint(await response.stream.bytesToString());
@@ -195,16 +201,16 @@ class TeamRepository extends GetxController {
     }
   }
 
-  Future getMyTeam(bool isFirstTime, int teamId) async {
+  Future getMyTeam(bool isFirstTime) async {
     try {
       if (isFirstTime == true) {
         _myTeamStatus(MyTeamStatus.loading);
       }
-      var response =
-          await http.get(Uri.parse('${ApiLink.viewUserTeam}$teamId'), headers: {
+      var response = await http.get(Uri.parse(ApiLink.getMyTeam), headers: {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       });
+      log("my team ${response.body}");
       var json = jsonDecode(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
@@ -212,13 +218,13 @@ class TeamRepository extends GetxController {
 
       if (response.statusCode == 200) {
         var list = List.from(json);
-        // var teams = list.map((e) => TeamModel.fromJson(e)).toList();
-        // debugPrint("${teams.length} teams found");
-        // _allTeam(teams);
-        // _myTeamStatus(MyTeamStatus.success);
-        // teams.isNotEmpty
-        //     ? _myTeamStatus(MyTeamStatus.available)
-        //     : _myTeamStatus(MyTeamStatus.empty);
+        var teams = list.map((e) => TeamModel.fromJson(e)).toList();
+        debugPrint("${teams.length} teams found");
+        _myTeam(teams);
+        _teamStatus(TeamStatus.success);
+        teams.isNotEmpty
+            ? _myTeamStatus(MyTeamStatus.available)
+            : _myTeamStatus(MyTeamStatus.empty);
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
@@ -291,15 +297,34 @@ class TeamRepository extends GetxController {
       var json = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        Helpers().showCustomSnackbar(
-            message: json['message'] != null
-                ? "Game added successfully"
-                : json['error']);
+        var body = {"game_id": addToGamesPlayedValue.value!.id};
+
+        var rosterResponse =
+            await http.post(Uri.parse(ApiLink.createRosterForGame(teamId)),
+                headers: {
+                  "Content-type": "application/json",
+                  "Authorization": "JWT ${authController.token}"
+                },
+                body: jsonEncode(body));
+
+        log(rosterResponse.body);
+        if (rosterResponse.statusCode == 200) {
+          Helpers()
+              .showCustomSnackbar(message: "Successfully added game to team");
+        }
       }
     } catch (err) {
       debugPrint("adding game to team error: ${err.toString()}");
     }
   }
+
+  // Future getMyTeams() async {
+  //   var response = await http.get(Uri.parse(ApiLink.getMyTeam), headers: {
+  //     "Content-type": "application/json",
+  //     "Authorization": "JWT ${authController.token}"
+  //   });
+
+  // }
 
   Future applyAsPlayer(int teamId) async {
     try {
@@ -360,6 +385,32 @@ class TeamRepository extends GetxController {
         Helpers().showCustomSnackbar(message: json['message']);
       }
     } catch (err) {}
+  }
+
+  Future<List<RoasterModel>> getTeamRoster(int teamId) async {
+    var response =
+        await http.get(Uri.parse(ApiLink.getRosters(teamId)), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+
+    return roasterModelFromJson(response.body);
+  }
+
+  Future addPlayerToRoster(teamId, playerId, rosterId) async {
+    var response = await http.put(
+        Uri.parse(ApiLink.addToRoster(teamId, playerId, rosterId)),
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "JWT ${authController.token}"
+        });
+    log(response.body);
+    var json = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Helpers().showCustomSnackbar(message: json['message']);
+    } else {
+      Helpers().showCustomSnackbar(message: json['error']);
+    }
   }
 
   void handleError(dynamic error) {

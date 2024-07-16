@@ -29,7 +29,7 @@ class _AdInsightState extends State<AdInsight> {
         title: CustomText(
           textAlign: TextAlign.center,
           title: 'Ad Insight',
-          fontFamily: "GilroySemiBold",
+          weight: FontWeight.w600,
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -141,7 +141,7 @@ class _AdInsightState extends State<AdInsight> {
                 CustomText(
                   title: "September 27th - October 3rd 2023",
                   color: AppColor().primaryWhite,
-                  fontFamily: "GilroySemiBold",
+                  weight: FontWeight.w600,
                   size: 18,
                 ),
                 Gap(Get.height * 0.02),
@@ -222,7 +222,7 @@ class _AdInsightState extends State<AdInsight> {
                           borderRadius: BorderRadius.circular(999)),
                       child: CustomText(
                         title: "Notification",
-                        fontFamily: "GilroySemiBold",
+                        weight: FontWeight.w600,
                         color: AppColor().primaryGreen,
                       ),
                     ),
@@ -234,7 +234,7 @@ class _AdInsightState extends State<AdInsight> {
                           borderRadius: BorderRadius.circular(999)),
                       child: CustomText(
                         title: "Messages",
-                        fontFamily: "GilroySemiBold",
+                        weight: FontWeight.w600,
                         color: AppColor().primaryGreen,
                       ),
                     ),
@@ -246,7 +246,7 @@ class _AdInsightState extends State<AdInsight> {
                           borderRadius: BorderRadius.circular(999)),
                       child: CustomText(
                         title: "Comments",
-                        fontFamily: "GilroySemiBold",
+                        weight: FontWeight.w600,
                         color: AppColor().primaryGreen,
                       ),
                     ),
@@ -280,7 +280,7 @@ class _AdInsightState extends State<AdInsight> {
                             child: Center(
                               child: CustomText(
                                   title: "Yes",
-                                  fontFamily: "GilroySemibold",
+                                  weight: FontWeight.w600,
                                   size: 18,
                                   color: AppColor().primaryWhite),
                             )),
@@ -298,7 +298,7 @@ class _AdInsightState extends State<AdInsight> {
                             child: Center(
                               child: CustomText(
                                   title: "No",
-                                  fontFamily: "GilroySemibold",
+                                  weight: FontWeight.w600,
                                   size: 18,
                                   color: AppColor().primaryColor),
                             )),

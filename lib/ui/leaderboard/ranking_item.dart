@@ -40,7 +40,7 @@ class Rankingitem extends StatelessWidget {
             CustomText(
               title: "${team.points}",
               color: AppColor().primaryWhite,
-              fontFamily: "GilroySemiBold",
+              weight: FontWeight.w600,
               size: 18,
             )
           ]),

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
@@ -27,46 +28,45 @@ class _ChooseTeamDialogState extends State<ChooseTeamDialog> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      backgroundColor: AppColor().primaryDark,
-      title: Row(
-        children: [
-          Text(
-            "Select Team",
-            style: TextStyle(
-                color: AppColor().primaryWhite, fontFamily: "GilroySemiBold"),
-          ),
-          const Spacer(),
-          Visibility(visible: _isRegisterLoading, child: const ButtonLoader())
-        ],
-      ),
-      children: teamController.allTeam
-          .map((e) => SimpleDialogOption(
-                onPressed: () async {
-                  setState(() {
-                    _isRegisterLoading = true;
-                  });
-                  await tournamentController.registerForTeamTournament(
-                      widget.id, e.id!);
-                  setState(() {
-                    _isRegisterLoading = false;
-                  });
-                },
-                child: Row(
-                  children: [
-                    OtherImage(
-                        itemSize: Get.height * 0.05,
-                        image: '${ApiLink.imageUrl}${e.cover}'),
-                    const Gap(10),
-                    CustomText(
-                      title: e.name,
-                      color: AppColor().primaryWhite,
-                      size: 16,
-                      fontFamily: "GilroyMedium",
-                    ),
-                  ],
-                ),
-              ))
-          .toList(),
-    );
+        backgroundColor: AppColor().primaryDark,
+        title: Row(
+          children: [
+            Text(
+              "Select Team",
+              style: TextStyle(
+                  color: AppColor().primaryWhite, fontWeight: FontWeight.w600),
+            ),
+            const Spacer(),
+            Visibility(visible: _isRegisterLoading, child: const ButtonLoader())
+          ],
+        ),
+        children: teamController.myTeam
+            .map((e) => SimpleDialogOption(
+                  onPressed: () async {
+                    setState(() {
+                      _isRegisterLoading = true;
+                    });
+                    await tournamentController.registerForTeamTournament(
+                        widget.id, e.id!);
+                    setState(() {
+                      _isRegisterLoading = false;
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      OtherImage(
+                          itemSize: Get.height * 0.05,
+                          image: '${ApiLink.imageUrl}${e.cover}'),
+                      const Gap(10),
+                      CustomText(
+                        title: e.name,
+                        color: AppColor().primaryWhite,
+                        size: 16,
+                        fontFamily: "GilroyMedium",
+                      ),
+                    ],
+                  ),
+                ))
+            .toList());
   }
 }

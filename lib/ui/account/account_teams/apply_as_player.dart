@@ -36,7 +36,7 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
             title: "Apply as Player",
             color: AppColor().primaryWhite,
             size: 18,
-            fontFamily: "GilroySemiBold",
+            weight: FontWeight.w600,
           ),
         ),
         body: SingleChildScrollView(
@@ -113,7 +113,7 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                               : CustomText(
                                   title: "Submit",
                                   color: AppColor().primaryWhite,
-                                  fontFamily: "GilroySemiBold",
+                                  weight: FontWeight.w600,
                                 ),
                         ),
                       ),

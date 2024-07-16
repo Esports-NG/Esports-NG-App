@@ -6,6 +6,7 @@ import 'package:e_sport/ui/account/account_events/components/create_tournament_f
 import 'package:e_sport/ui/account/account_events/components/create_tournament_next.dart';
 // import 'package:e_sport/ui/auth/register.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
@@ -84,7 +85,7 @@ class _CreateEventState extends State<CreateEvent>
             title:
                 "Create ${eventController.eventTypeController.text != "" ? eventController.eventTypeController.text : "Event"}",
             size: 18,
-            fontFamily: "GilroySemiBold",
+            weight: FontWeight.w600,
             color: AppColor().primaryWhite,
           ),
           centerTitle: true,
@@ -131,8 +132,7 @@ class _CreateEventState extends State<CreateEvent>
                           : 0),
                       Visibility(
                         visible: eventController.eventTypeCount.value == 0,
-                        child: CustomFillButton(
-                          buttonText: "Next",
+                        child: GestureDetector(
                           onTap: () {
                             _pageViewController.animateToPage(
                               _currentPageIndex + 1,
@@ -140,6 +140,21 @@ class _CreateEventState extends State<CreateEvent>
                               curve: Curves.linear,
                             );
                           },
+                          child: Container(
+                            height: Get.height * 0.07,
+                            width: Get.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: AppColor().primaryColor,
+                            ),
+                            child: Center(
+                                child: CustomText(
+                              title: 'Next',
+                              color: AppColor().primaryWhite,
+                              weight: FontWeight.w600,
+                              size: Get.height * 0.018,
+                            )),
+                          ),
                         ),
                       )
                     ],
@@ -152,11 +167,36 @@ class _CreateEventState extends State<CreateEvent>
                     children: [
                       const CreateTournamentNext(),
                       Gap(Get.height * 0.02),
-                      CustomFillButton(
-                          buttonText: "Create Tournament",
-                          onTap: () {
-                            tournamentController.createTournament();
-                          })
+                      Obx(() {
+                        return GestureDetector(
+                          onTap: () async {
+                            await tournamentController.createTournament();
+                          },
+                          child: Container(
+                            height: Get.height * 0.07,
+                            width: Get.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: eventController.createEventStatus.value ==
+                                      CreateEventStatus.loading
+                                  ? null
+                                  : AppColor().primaryColor,
+                            ),
+                            child: Center(
+                                child:
+                                    eventController.createEventStatus.value ==
+                                            CreateEventStatus.loading
+                                        ? const ButtonLoader()
+                                        : CustomText(
+                                            title: 'Submit',
+                                            color: AppColor().primaryWhite,
+                                            weight: FontWeight.w600,
+                                            size: Get.height * 0.018,
+                                          )),
+                          ),
+                        );
+                      }),
+                      Gap(Get.height * 0.02),
                     ],
                   ),
                 )),

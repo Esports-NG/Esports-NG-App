@@ -94,11 +94,10 @@ class CommunityRepository extends GetxController {
       _createCommunityStatus(CreateCommunityStatus.loading);
       var headers = {"Authorization": 'JWT ${authController.token}'};
       var request =
-          http.MultipartRequest("POST", Uri.parse(ApiLink.createCommunity));
-
-      request.fields
-          .addAll(community.map((key, value) => MapEntry(key, value)));
-
+          http.MultipartRequest("POST", Uri.parse(ApiLink.createCommunity))
+            ..fields["name"] = communityNameController.text
+            ..fields["bio"] = communityBioController.text
+            ..fields["abbrev"] = communityAbbrController.text;
       if (communityProfileImage != null) {
         request.files.add(await http.MultipartFile.fromPath(
             'logo', communityProfileImage!.path));
@@ -111,8 +110,8 @@ class CommunityRepository extends GetxController {
 
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
-      var res = await http.Response.fromStream(response);
-      print(res.body);
+      // var res = await response.stream.bytesToString();
+      // print(res);
       if (response.statusCode == 201) {
         _createCommunityStatus(CreateCommunityStatus.success);
         debugPrint(await response.stream.bytesToString());

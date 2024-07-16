@@ -7,6 +7,9 @@ import 'dart:convert';
 PlayerModel playerModelFromJson(String str) =>
     PlayerModel.fromJson(json.decode(str));
 
+List<PlayerModel> playerModelListFromJson(String str) => List<PlayerModel>.from(
+    json.decode(str).map((x) => PlayerModel.fromJson(x)));
+
 String playerModelToJson(PlayerModel data) => json.encode(data.toJson());
 
 class PlayerModel {
@@ -74,6 +77,7 @@ class GamePlayed {
   int? communities;
   int? teams;
   int? players;
+  int? followers;
   List<Category>? categories;
   List<GameMode>? gameModes;
   List<Player>? contributors;
@@ -90,6 +94,7 @@ class GamePlayed {
     this.categories,
     this.gameModes,
     this.contributors,
+    this.followers,
   });
 
   factory GamePlayed.fromJson(Map<String, dynamic> json) => GamePlayed(
@@ -101,6 +106,7 @@ class GamePlayed {
         communities: json["communities"],
         teams: json["teams"],
         players: json["players"],
+        followers: json['followers'],
         categories: json["categories"] == null
             ? []
             : List<Category>.from(

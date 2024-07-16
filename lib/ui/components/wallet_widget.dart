@@ -64,7 +64,7 @@ class WalletWidget extends StatelessWidget {
                     Center(
                       child: CustomText(
                         size: 32,
-                        fontFamily: "GilroyBold",
+                        weight: FontWeight.w600,
                         color: AppColor().primaryWhite,
                         title: "N3,543,090.00",
                       ),

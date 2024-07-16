@@ -1,3 +1,4 @@
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/account/account_teams/account_teams_item.dart';
@@ -20,6 +21,8 @@ class AccountTeamsWidget extends StatefulWidget {
 
 class _AccountTeamsWidgetState extends State<AccountTeamsWidget> {
   final teamController = Get.put(TeamRepository());
+  final authController = Get.put(AuthRepository());
+
   @override
   Widget build(BuildContext context) {
     if (teamController.teamStatus == TeamStatus.loading) {
@@ -29,10 +32,15 @@ class _AccountTeamsWidgetState extends State<AccountTeamsWidget> {
         padding: EdgeInsets.zero,
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        itemCount: teamController.allTeam.length,
+        itemCount: teamController.allTeam
+            .where((team) => team.owner!.id == authController.user!.id)
+            .toList()
+            .length,
         separatorBuilder: (context, index) => Gap(Get.height * 0.02),
         itemBuilder: (context, index) {
-          var item = teamController.allTeam[index];
+          var item = teamController.allTeam
+              .where((team) => team.owner!.id == authController.user!.id)
+              .toList()[index];
           return InkWell(
             onTap: () => Get.to(() => AccountTeamsDetail(item: item)),
             child: AccountTeamsItem(item: item),

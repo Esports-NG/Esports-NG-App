@@ -21,7 +21,7 @@ class Overview extends StatelessWidget {
             title: "Overview",
             color: AppColor().primaryWhite,
             size: 20,
-            fontFamily: "GilroySemiBold",
+            weight: FontWeight.w600,
           ),
         ),
         Gap(Get.height * 0.02),

@@ -45,7 +45,7 @@ class Tournament extends StatelessWidget {
                         CustomText(
                           title: "Call of Duty Mobile",
                           color: AppColor().primaryWhite,
-                          fontFamily: "GilroySemiBold",
+                          weight: FontWeight.w600,
                           size: 18,
                         ),
                         const Gap(5),
@@ -82,7 +82,7 @@ class Tournament extends StatelessWidget {
                     CustomText(
                       title: "Teams Ranking",
                       color: AppColor().primaryWhite,
-                      fontFamily: "GilroySemiBold",
+                      weight: FontWeight.w600,
                       size: 18,
                     ),
                     const Spacer(),

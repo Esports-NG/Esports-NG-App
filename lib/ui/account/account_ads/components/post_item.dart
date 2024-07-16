@@ -434,7 +434,7 @@ class _AdsPostItemState extends State<AdsPostItem> {
                           children: [
                             CustomText(
                               title: "Promote Again",
-                              fontFamily: "GilRoySemiBold",
+                              weight: FontWeight.w600,
                               color: AppColor().primaryWhite,
                             )
                           ],
@@ -453,7 +453,7 @@ class _AdsPostItemState extends State<AdsPostItem> {
                           children: [
                             CustomText(
                               title: "Ad Insight",
-                              fontFamily: "GilRoySemiBold",
+                              weight: FontWeight.w600,
                               color: AppColor().primaryColor,
                             )
                           ],

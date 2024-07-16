@@ -1,3 +1,4 @@
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/ui/account/account_community/account_community_item.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
@@ -20,6 +21,8 @@ class AccountCommunityWidget extends StatefulWidget {
 
 class _AccountCommunityWidgetState extends State<AccountCommunityWidget> {
   final communityController = Get.put(CommunityRepository());
+  final authController = Get.put(AuthRepository());
+
   @override
   Widget build(BuildContext context) {
     if (communityController.communityStatus == CommunityStatus.loading) {
@@ -30,10 +33,17 @@ class _AccountCommunityWidgetState extends State<AccountCommunityWidget> {
         padding: EdgeInsets.zero,
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        itemCount: communityController.allCommunity.length,
+        itemCount: communityController.allCommunity
+            .where(
+                (community) => community.owner!.id == authController.user!.id)
+            .toList()
+            .length,
         separatorBuilder: (context, index) => Gap(Get.height * 0.02),
         itemBuilder: (context, index) {
-          var item = communityController.allCommunity[index];
+          var item = communityController.allCommunity
+              .where(
+                  (community) => community.owner!.id == authController.user!.id)
+              .toList()[index];
           return InkWell(
             onTap: () => Get.to(() => AccountCommunityDetail(item: item)),
             child: AccountCommunityItem(item: item),

@@ -41,7 +41,7 @@ class _ReferralState extends State<Referral>
         title: CustomText(
           textAlign: TextAlign.center,
           title: 'Referrals',
-          fontFamily: "GilroySemiBold",
+          weight: FontWeight.w600,
           size: 18,
           color: AppColor().primaryWhite,
         ),

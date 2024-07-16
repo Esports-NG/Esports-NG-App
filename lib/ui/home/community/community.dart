@@ -84,6 +84,7 @@ class _CommunityPageState extends State<CommunityPage> {
           await postController.getAllPost(false);
           await gamesController.getAllGames();
           await teamController.getAllTeam(false);
+          await teamController.getMyTeam(false);
         },
         child: Obx(
           () => SingleChildScrollView(
@@ -322,7 +323,7 @@ class _CommunityPageState extends State<CommunityPage> {
                                     separatorBuilder: (context, index) =>
                                         Gap(Get.height * 0.02),
                                     itemCount:
-                                        teamController.allTeam.take(2).length,
+                                        teamController.allTeam.take(5).length,
                                     itemBuilder: (context, index) {
                                       var item = teamController.allTeam[index];
                                       return InkWell(
@@ -350,7 +351,7 @@ class _CommunityPageState extends State<CommunityPage> {
                         CustomText(
                           title: "Leaderboard",
                           color: AppColor().primaryWhite,
-                          fontFamily: "GilroySemiBold",
+                          weight: FontWeight.w600,
                           size: 16,
                         ),
                         Gap(Get.height * 0.02),

@@ -82,8 +82,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
           child: Column(
         children: [
           GestureDetector(
-            onTap: () =>
-                        Helpers().showImagePopup(context, "${ApiLink.imageUrl}${widget.item.cover}"),
+            onTap: () => Helpers().showImagePopup(
+                context, "${ApiLink.imageUrl}${widget.item.cover}"),
             child: Stack(
               alignment: Alignment.bottomCenter,
               clipBehavior: Clip.none,
@@ -94,8 +94,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                         width: Get.width,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/png/team_cover.png'),
+                              image: AssetImage(
+                                  'assets/images/png/team_cover.png'),
                               fit: BoxFit.cover,
                               opacity: 0.2),
                         ),
@@ -115,8 +115,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                 Positioned(
                   top: Get.height * 0.1,
                   child: GestureDetector(
-                    onTap: () =>
-                        Helpers().showImagePopup(context, "${widget.item.profilePicture}"),
+                    onTap: () => Helpers().showImagePopup(
+                        context, "${widget.item.profilePicture}"),
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
@@ -233,7 +233,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                 children: [
                   _teamFollowers != null
                       ? CustomText(
-                          title: _followerCount.toString(),
+                          title: widget.item.playersCount.toString(),
                           weight: FontWeight.w500,
                           size: Get.height * 0.02,
                           fontFamily: 'GilroyBold',
@@ -486,7 +486,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   title: "Personnel List",
                   size: 18,
                   color: AppColor().primaryWhite,
-                  fontFamily: "GilroySemiBold",
+                  weight: FontWeight.w600,
                 ),
                 Gap(Get.height * 0.02),
                 Padding(
@@ -528,27 +528,38 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                               )
                             ]),
                       ),
-                      Divider(
-                          thickness: 0.1,
-                          height: Get.height * 0.03,
+                      Visibility(
+                        visible:
+                            widget.item.owner!.id == authController.user!.id,
+                        child: Column(
+                          children: [
+                            Divider(
+                              thickness: 0.1,
+                              height: Get.height * 0.03,
+                            ),
+                            Visibility(
+                              child: GestureDetector(
+                                onTap: () => Get.to(() =>
+                                    PlayerApplicationList(item: widget.item)),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      CustomText(
+                                        title: "Player Applications",
+                                        size: 14,
+                                        color: AppColor().primaryWhite,
+                                      ),
+                                      Icon(
+                                        Icons.chevron_right_rounded,
+                                        color: AppColor().primaryColor,
+                                      )
+                                    ]),
+                              ),
+                            ),
+                          ],
                         ),
-                        GestureDetector(
-                          onTap: () => Get.to(
-                              () => PlayerApplicationList(item: widget.item)),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                CustomText(
-                                  title: "Player Applications",
-                                  size: 14,
-                                  color: AppColor().primaryWhite,
-                                ),
-                                Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: AppColor().primaryColor,
-                                )
-                              ]),
-                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -570,7 +581,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   title: "Team Records",
                   size: 18,
                   color: AppColor().primaryWhite,
-                  fontFamily: "GilroySemiBold",
+                  weight: FontWeight.w600,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),

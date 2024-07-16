@@ -95,7 +95,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                             color: navController.currentIndex.value == 0
                                 ? AppColor().primaryColor
                                 : AppColor().lightItemsColor,
-                            fontFamily: "GilroySemiBold",
+                            weight: FontWeight.w600,
                           )
                         ],
                       ),
@@ -132,7 +132,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                             color: navController.currentIndex.value == 1
                                 ? AppColor().primaryColor
                                 : AppColor().lightItemsColor,
-                            fontFamily: "GilroySemiBold",
+                            weight: FontWeight.w600,
                           )
                         ],
                       ),
@@ -169,7 +169,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                             color: navController.currentIndex.value == 2
                                 ? AppColor().primaryColor
                                 : AppColor().lightItemsColor,
-                            fontFamily: "GilroySemiBold",
+                            weight: FontWeight.w600,
                           )
                         ],
                       ),
@@ -208,7 +208,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                             color: navController.currentIndex.value == 3
                                 ? AppColor().primaryColor
                                 : AppColor().lightItemsColor,
-                            fontFamily: "GilroySemiBold",
+                            weight: FontWeight.w600,
                           )
                         ],
                       ),
