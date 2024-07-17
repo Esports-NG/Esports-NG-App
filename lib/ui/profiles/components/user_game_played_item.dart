@@ -90,7 +90,7 @@ class UserGamesPlayedItem extends StatelessWidget {
             child: Column(
               children: [
                     textItem(
-                        title: 'Game Name: ',
+                        title: 'Game: ',
                         subTitle: player.gamePlayed!.name!),
                     Gap(Get.height * 0.01),
                     textItem(
