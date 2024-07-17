@@ -404,29 +404,31 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                           ),
                         ],
                       ),
-                      Gap(Get.height * 0.02),
-                      Row(
+                      Gap(Get.height * 0.03),
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CustomText(
-                              title: 'Tournament Link - ',
+                              title: 'Tournament/Bracket Link: ',
                               weight: FontWeight.w400,
                               size: Get.height * 0.017,
                               fontFamily: 'GilroyMedium',
                               underline: TextDecoration.underline,
                               color: AppColor().primaryWhite),
                           Gap(Get.height * 0.01),
-                          // InkWell(
-                          //   onTap: () => launchUrl(
-                          //       Uri.parse(widget.item.linkForBracket!)),
-                          //   child: CustomText(
-                          //       title: widget.item.linkForBracket,
-                          //       weight: FontWeight.w400,
-                          //       size: Get.height * 0.017,
-                          //       fontFamily: 'GilroyMedium',
-                          //       underline: TextDecoration.underline,
-                          //       color: AppColor().primaryColor),
-                          // ),
+                          InkWell(
+                            onTap: () => launchUrl(
+                                Uri.parse(widget.item.linkForBracket!)),
+                            child: CustomText(
+                                title: widget.item.linkForBracket,
+                                weight: FontWeight.w400,
+                                size: Get.height * 0.017,
+                                fontFamily: 'GilroyMedium',
+                                underline: TextDecoration.underline,
+                                color: AppColor().primaryColor,
+                                textAlign: TextAlign.center,
+                                ),
+                          ),
                         ],
                       ),
                       Gap(Get.height * 0.02),
