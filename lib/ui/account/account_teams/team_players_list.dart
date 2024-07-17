@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_teams/add_to_roster.dart';
@@ -11,6 +12,7 @@ import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +29,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
   late List<bool> _isOpen;
   List<RoasterModel>? _roasterList;
   final teamController = Get.put(TeamRepository());
+  final authController = Get.put(AuthRepository());
 
   Future getTeamRoster() async {
     List<RoasterModel> roasterList =
@@ -48,18 +51,29 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
     return Scaffold(
       appBar: AppBar(
           title: Row(children: [
-            CachedNetworkImage(
-              imageUrl: widget.item.profilePicture!,
-              imageBuilder: (context, imageProvider) => Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
+            (widget.item.profilePicture == null)
+                ? Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColor().primaryWhite)),
+                    child: SvgPicture.asset(
+                      'assets/images/svg/people.svg',
                     ),
-                    borderRadius: BorderRadius.circular(999)),
-              ),
-            ),
+                  )
+                : CachedNetworkImage(
+                    imageUrl: widget.item.profilePicture!,
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                          ),
+                          borderRadius: BorderRadius.circular(999)),
+                    ),
+                  ),
             Gap(Get.height * 0.01),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,20 +96,23 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
           leading: GoBackButton(
             onPressed: () => Get.back(),
           )),
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(90)),
-        backgroundColor: AppColor().primaryColor,
-        onPressed: () {
-          Get.to(() => AddToRoster(
-                team: widget.item,
-                roasterList: _roasterList!,
-              ));
-        },
-        child: Icon(
-          Icons.add,
-          color: AppColor().primaryWhite,
-        ),
-      ),
+      floatingActionButton: authController.user!.id == widget.item.owner!.id
+          ? FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(90)),
+              backgroundColor: AppColor().primaryColor,
+              onPressed: () {
+                Get.to(() => AddToRoster(
+                      team: widget.item,
+                      roasterList: _roasterList!,
+                    ));
+              },
+              child: Icon(
+                Icons.add,
+                color: AppColor().primaryWhite,
+              ),
+            )
+          : null,
       body: SingleChildScrollView(
           child: Padding(
         padding: EdgeInsets.symmetric(

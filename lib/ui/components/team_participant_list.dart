@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/components/participant_list.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -26,11 +28,11 @@ class TeamParticipantList extends StatefulWidget {
 class _TeamParticipantListState extends State<TeamParticipantList> {
   final tournamentController = Get.put(TournamentRepository());
   bool _isRegisterLoading = false;
-  List<TeamModel>? _participantList;
+  List<RoasterModel>? _participantList;
   bool _isRegistered = false;
 
   Future getParticipants() async {
-    List<TeamModel> participantList = await tournamentController
+    List<RoasterModel> participantList = await tournamentController
         .getTeamTournamentParticipants(widget.event.id!);
     setState(() {
       _participantList = participantList;
@@ -149,7 +151,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                 ),
                 CustomText(
                   title:
-                      "${_participantList != null ? _participantList!.length : "0"} Team(s), ${_participantList != null ? _participantList!.fold(0, (sum, next) => sum + next.playersCount!) : "0"} Players",
+                      "${_participantList != null ? _participantList!.length : "0"} Team(s), ${_participantList != null ? _participantList!.fold(0, (sum, next) => sum + next.team!.playersCount!) : "0"} Players",
                   color: AppColor().primaryWhite,
                   size: 16,
                 ),
@@ -166,7 +168,8 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                     children: [
                                       GestureDetector(
                                         onTap: () => Get.to(AccountTeamsDetail(
-                                            item: _participantList![index])),
+                                            item: _participantList![index]
+                                                .team!)),
                                         child: Row(
                                           children: [
                                             Container(
@@ -177,6 +180,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                                       image: NetworkImage(
                                                           _participantList![
                                                                   index]
+                                                              .team!
                                                               .profilePicture!)),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -190,6 +194,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                                 CustomText(
                                                   title:
                                                       _participantList![index]
+                                                          .team!
                                                           .name!
                                                           .toUpperCase(),
                                                   color:
@@ -233,14 +238,25 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                           ),
                                           const Spacer(),
                                           Expanded(
-                                            flex: 12,
+                                            flex: 5,
                                             child: CustomText(
-                                                title: "IGN",
+                                                title:
+                                                    "${_participantList![0].game!.abbrev!} IGN",
                                                 color: AppColor()
                                                     .primaryWhite
                                                     .withOpacity(0.8),
                                                 fontFamily: "GilroyMedium"),
                                           ),
+                                          const Spacer(),
+                                          Expanded(
+                                            flex: 6,
+                                            child: CustomText(
+                                                title: "Username",
+                                                color: AppColor()
+                                                    .primaryWhite
+                                                    .withOpacity(0.8),
+                                                fontFamily: "GilroyMedium"),
+                                          )
                                         ],
                                       ),
                                       Divider(
@@ -272,80 +288,5 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
             ),
           ),
         ));
-  }
-}
-
-class PlayerRow extends StatelessWidget {
-  const PlayerRow({super.key, required this.participant, required this.index});
-  final UserModel participant;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => Get.to(UserDetails(
-        id: participant.id!,
-      )),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: CustomText(
-              title: (index + 1).toString(),
-              color: AppColor().primaryWhite,
-              fontFamily: "GilroyMedium",
-            ),
-          ),
-          const Spacer(),
-          Expanded(
-            flex: 2,
-            child: participant.profile!.profilePicture != null
-                ? Row(
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    participant.profile!.profilePicture!))),
-                      ),
-                    ],
-                  )
-                : Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/images/svg/people.svg",
-                        width: 30,
-                        height: 30,
-                      ),
-                    ],
-                  ),
-          ),
-          const Spacer(),
-          Expanded(
-            flex: 12,
-            child: CustomText(
-              title: participant.userName,
-              color: AppColor().primaryWhite,
-            ),
-          ),
-          //   Expanded(
-          //   flex: 6,
-          //   child: InkWell(
-          //     onTap: () => Get.to(UserDetails(id: participant.id!)),
-          //     child: CustomText(
-          //       title: participant!.userName,
-          //       color: AppColor().primaryWhite,
-          //       overflow: TextOverflow.ellipsis,
-          //     ),
-          //   ),
-          // )
-        ],
-      ),
-    );
   }
 }

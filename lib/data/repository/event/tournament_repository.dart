@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
@@ -412,8 +413,8 @@ class TournamentRepository extends GetxController {
       "Content-type": "application/json",
       "Authorization": "JWT ${authController.token}"
     });
-
-    return teamModelListFromJson(response.body);
+    log(response.body);
+    return roasterModelFromJson(response.body);
   }
 
   Future unregisterForEvent(int eventId, String role, int roleId) async {
