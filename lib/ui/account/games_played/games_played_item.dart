@@ -78,7 +78,7 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
                 Column(
                   children: [
                     textItem(
-                        title: 'Game Name: ',
+                        title: 'Game: ',
                         subTitle: widget.item.gamePlayed!.name!),
                     Gap(Get.height * 0.01),
                     textItem(

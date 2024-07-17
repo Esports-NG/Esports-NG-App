@@ -35,11 +35,47 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
         title: InkWell(
           onTap: () =>
                     Get.to(() => UserDetails(id: widget.item.player!.id!.toInt())),
-          child: CustomText(
-            title: 'User: ${widget.item.player!.userName}',
-            fontFamily: 'GilroySemiBold',
-            size: 18,
-            color: AppColor().primaryWhite,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            
+            children: [
+              CachedNetworkImage(
+                          height: Get.height * 0.04,
+                          width: Get.height * 0.04,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: SizedBox(
+                              height: Get.height * 0.015,
+                              width: Get.height * 0.015,
+                              child: CircularProgressIndicator(
+                                  color: AppColor().primaryColor,
+                                  value: progress.progress),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error, color: AppColor().primaryColor),
+                          imageUrl:
+                              '${widget.item.player!.profile!.profilePicture}',
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: AppColor().primaryWhite),
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      '${widget.item.player!.profile!.profilePicture}'),
+                                  fit: BoxFit.cover),
+                            ),
+                          ),
+                        ),
+              const SizedBox(width: 10,),
+              CustomText(
+                title: '${widget.item.player!.userName}',
+                fontFamily: 'GilroySemiBold',
+                size: 18,
+                color: AppColor().primaryWhite,
+              ),
+              SizedBox(width: Get.height *0.08,),
+            ],
           ),
         ),
       ),
@@ -94,7 +130,7 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                     ),
                 Gap(Get.height * 0.015),
                 CustomText(
-                  title: 'Title: ',
+                  title: 'Game: ',
                   size: 14,
                   fontFamily: 'GilroyRegular',
                   textAlign: TextAlign.start,
