@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_teams/add_to_roster.dart';
@@ -28,6 +29,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
   late List<bool> _isOpen;
   List<RoasterModel>? _roasterList;
   final teamController = Get.put(TeamRepository());
+  final authController = Get.put(AuthRepository());
 
   Future getTeamRoster() async {
     List<RoasterModel> roasterList =
@@ -94,20 +96,23 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
           leading: GoBackButton(
             onPressed: () => Get.back(),
           )),
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(90)),
-        backgroundColor: AppColor().primaryColor,
-        onPressed: () {
-          Get.to(() => AddToRoster(
-                team: widget.item,
-                roasterList: _roasterList!,
-              ));
-        },
-        child: Icon(
-          Icons.add,
-          color: AppColor().primaryWhite,
-        ),
-      ),
+      floatingActionButton: authController.user!.id == widget.item.owner!.id
+          ? FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(90)),
+              backgroundColor: AppColor().primaryColor,
+              onPressed: () {
+                Get.to(() => AddToRoster(
+                      team: widget.item,
+                      roasterList: _roasterList!,
+                    ));
+              },
+              child: Icon(
+                Icons.add,
+                color: AppColor().primaryWhite,
+              ),
+            )
+          : null,
       body: SingleChildScrollView(
           child: Padding(
         padding: EdgeInsets.symmetric(
