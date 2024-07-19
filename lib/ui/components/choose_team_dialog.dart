@@ -112,7 +112,7 @@ class _TeamItemState extends State<TeamItem> {
         children: [
           OtherImage(
               itemSize: Get.height * 0.05,
-              image: '${ApiLink.imageUrl}${widget.team.cover}'),
+              image: '${widget.team.profilePicture}'),
           const Gap(10),
           CustomText(
             title: widget.team.name,
@@ -120,7 +120,7 @@ class _TeamItemState extends State<TeamItem> {
             size: 16,
             fontFamily: "GilroyMedium",
           ),
-          Spacer(),
+          const Spacer(),
           GestureDetector(
               child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
