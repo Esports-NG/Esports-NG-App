@@ -112,7 +112,7 @@ class _TeamItemState extends State<TeamItem> {
         children: [
           OtherImage(
               itemSize: Get.height * 0.05,
-              image: '${ApiLink.imageUrl}${widget.team.cover}'),
+              image: '${widget.team.profilePicture}'),
           const Gap(10),
           CustomText(
             title: widget.team.name,
