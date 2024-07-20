@@ -670,19 +670,20 @@ class _PostDetailsState extends State<PostDetails> {
                                                     return InkWell(
                                                       onTap: () {
                                                         if (index == 0) {
-                                                          Fluttertoast.showToast(
-                                                              fontSize:
-                                                                  Get.height *
-                                                                      0.015,
-                                                              msg:
-                                                                  'Not available, try again later!',
-                                                              toastLength: Toast
-                                                                  .LENGTH_SHORT,
-                                                              gravity:
-                                                                  ToastGravity
-                                                                      .BOTTOM);
-                                                          // postController
-                                                          //     .rePost(_postDetails!.id!);
+                                                          // Fluttertoast.showToast(
+                                                          //     fontSize:
+                                                          //         Get.height *
+                                                          //             0.015,
+                                                          //     msg:
+                                                          //         'Not available, try again later!',
+                                                          //     toastLength: Toast
+                                                          //         .LENGTH_SHORT,
+                                                          //     gravity:
+                                                          //         ToastGravity
+                                                          //             .BOTTOM);
+                                                          postController.rePost(
+                                                              _postDetails!.id!,
+                                                              "repost");
                                                         } else {
                                                           setState(() {
                                                             isRepostActive =
