@@ -160,8 +160,7 @@ class _HomePageState extends State<HomePage>
                               SizedBox(
                                 height: Get.height * 0.06,
                                 child: CustomTextField(
-                                  hint:
-                                      "Search recent posts...",
+                                  hint: "Search recent posts...",
                                   fontFamily: 'GilroyMedium',
                                   prefixIcon: Icon(
                                     CupertinoIcons.search,
@@ -215,9 +214,9 @@ class _HomePageState extends State<HomePage>
                   notificationPredicate: (notification) =>
                       notification.depth == 1,
                   onRefresh: () async {
-                    await postController.getAllPost(false);
-                    await postController.getBookmarkedPost(false);
+                    // await postController.getAllPost(false);
                     await postController.getPostForYou(false);
+                    await postController.getBookmarkedPost(false);
                   },
                   child: TabBarView(controller: _tabController, children: [
                     PostWidget(posts: postController.forYouPosts),
