@@ -779,6 +779,53 @@ class _PostItemState extends State<PostItem> {
         postController.blockPostStatus != BlockPostStatus.loading) {
       debugPrint('block user');
       await postController.blockUserOrPost(widget.item.author!.id!, 'block');
+    } else if (selectedMenuItem == '6') {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        backgroundColor: AppColor().primaryBgColor,
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomText(
+                                title:
+                                    'Report Post by ${widget.item.author!.userName}',
+                                // Additional fields after this should be Comment details, Reason for reporting etc
+                                color: AppColor().primaryWhite,
+                                weight: FontWeight.w400,
+                                fontFamily: 'GilroyBold',
+                                size: Get.height * 0.015,
+                              ),
+                              Gap(Get.height * 0.03),
+                              CustomText(
+                                title:
+                                    'Report ${widget.item.author!.userName}',
+                                // Additional fields after this should be Comment details, Reason for reporting etc
+                                color: AppColor().primaryWhite,
+                                weight: FontWeight.w400,
+                                fontFamily: 'GilroyBold',
+                                size: Get.height * 0.015,
+                              ),
+                              Gap(Get.height * 0.03),
+                              CustomText(
+                                title:
+                                    'Block ${widget.item.author!.userName}',
+                                // Additional fields after this should be Comment details, Reason for reporting etc
+                                color: AppColor().primaryWhite,
+                                weight: FontWeight.w400,
+                                fontFamily: 'GilroyBold',
+                                size: Get.height * 0.015,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
     }
   }
 
