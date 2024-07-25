@@ -2,6 +2,7 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -100,6 +101,63 @@ class _CommentTileState extends State<CommentTile> {
                     weight: FontWeight.w400,
                     fontFamily: 'GilroyMedium',
                     size: 12),
+                Gap(Get.height * 0.03),
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        backgroundColor: AppColor().primaryBgColor,
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomText(
+                                title:
+                                    'Report comment by ${widget.item.user!.userName}',
+                                // Additional fields after this should be Comment details, Reason for reporting etc
+                                color: AppColor().primaryWhite,
+                                weight: FontWeight.w400,
+                                fontFamily: 'GilroyBold',
+                                size: Get.height * 0.015,
+                              ),
+                              Gap(Get.height * 0.03),
+                              CustomText(
+                                title:
+                                    'Report ${widget.item.user!.userName}',
+                                // Additional fields after this should be Comment details, Reason for reporting etc
+                                color: AppColor().primaryWhite,
+                                weight: FontWeight.w400,
+                                fontFamily: 'GilroyBold',
+                                size: Get.height * 0.015,
+                              ),
+                              Gap(Get.height * 0.03),
+                              CustomText(
+                                title:
+                                    'Block ${widget.item.user!.userName}',
+                                // Additional fields after this should be Comment details, Reason for reporting etc
+                                color: AppColor().primaryWhite,
+                                weight: FontWeight.w400,
+                                fontFamily: 'GilroyBold',
+                                size: Get.height * 0.015,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: CustomText(
+                      title: 'Report',
+                      color: AppColor().primaryRed,
+                      weight: FontWeight.w400,
+                      fontFamily: 'GilroyMedium',
+                      size: 12),
+                ),
               ],
             ),
           ],

@@ -4,6 +4,7 @@ import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/all_post_widget.dart';
+import 'package:e_sport/ui/components/news_widget.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage>
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   late final TabController _tabController =
-      TabController(length: 3, vsync: this);
+      TabController(length: 4, vsync: this);
   @override
   void dispose() {
     _searchFocusNode.dispose();
@@ -204,7 +205,8 @@ class _HomePageState extends State<HomePage>
                                   tabs: const [
                                     Tab(text: 'For you'),
                                     Tab(text: 'Following'),
-                                    Tab(text: 'Bookmark'),
+                                    Tab(text: 'Bookmarks'),
+                                    Tab(text: 'News'),
                                   ]),
                               Gap(Get.height * 0.02)
                             ]),
@@ -221,7 +223,8 @@ class _HomePageState extends State<HomePage>
                   child: TabBarView(controller: _tabController, children: [
                     PostWidget(posts: postController.forYouPosts),
                     PostWidget(posts: postController.followingPost),
-                    PostWidget(posts: postController.bookmarkedPost)
+                    PostWidget(posts: postController.bookmarkedPost),
+                    NewsWidget(posts: postController.forYouPosts),
                   ]),
                 )),
           ),
