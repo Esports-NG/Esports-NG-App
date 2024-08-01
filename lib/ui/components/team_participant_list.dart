@@ -1,19 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
-import 'package:e_sport/data/model/team/team_model.dart';
-import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
-import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/participant_list.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -27,9 +23,9 @@ class TeamParticipantList extends StatefulWidget {
 
 class _TeamParticipantListState extends State<TeamParticipantList> {
   final tournamentController = Get.put(TournamentRepository());
-  bool _isRegisterLoading = false;
+  final bool _isRegisterLoading = false;
   List<RoasterModel>? _participantList;
-  bool _isRegistered = false;
+  final bool _isRegistered = false;
 
   Future getParticipants() async {
     List<RoasterModel> participantList = await tournamentController
@@ -272,7 +268,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                                       .players![i],
                                               index: i),
                                           separatorBuilder: (ctx, index) =>
-                                              Gap(10),
+                                              const Gap(10),
                                           itemCount: _participantList![index]
                                               .players!
                                               .length)

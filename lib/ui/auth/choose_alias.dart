@@ -112,9 +112,9 @@ class _ChooseAliasState extends State<ChooseAlias> {
                     ),
                   );
                 } else {
-                  if (authController.signUpStatus != SignUpStatus.loading) {
-                    authController.signUp(widget.user, context);
-                  }
+                    if (authController.signUpStatus != SignUpStatus.loading) {
+                      authController.signUp(widget.user, context);
+                    }
                 }
               },
               child: Container(

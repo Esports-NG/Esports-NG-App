@@ -15,6 +15,7 @@ import 'package:e_sport/ui/components/no_item_page.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/home/post/components/report_page.dart';
 import 'package:e_sport/ui/profiles/components/team_games_played_item.dart';
 import 'package:e_sport/ui/profiles/components/teams_games_played_list.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
@@ -22,16 +23,12 @@ import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:e_sport/util/helpers.dart';
 
-import 'account_teams_full_profile.dart';
 
 class AccountTeamsDetail extends StatefulWidget {
   final TeamModel item;
@@ -50,7 +47,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
   bool _isFollowing = false;
   bool _isLoading = true;
   int? _followerCount;
-  List<bool> _isOpen = [true];
+  final List<bool> _isOpen = [true];
 
   Future getTeamFollowers() async {
     var followers = await teamController.getTeamFollowers(widget.item.id!);
@@ -146,7 +143,59 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                       Padding(
                         padding: EdgeInsets.only(right: Get.height * 0.02),
                         child: InkWell(
-                          child: Icon(Icons.settings,
+                          onTap: () async {
+                            await showMenu(
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide.none),
+                              constraints: const BoxConstraints(),
+                              color: AppColor().primaryMenu,
+                              position:
+                                  const RelativeRect.fromLTRB(100, 100, 0, 0),
+                              items: [
+                                PopupMenuItem(
+                                  onTap: () async {
+                                    await teamController
+                                        .blockTeam(widget.item.id!);
+                                  },
+                                  value: '2',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.block,
+                                          color: AppColor().primaryWhite),
+                                      const Gap(10),
+                                      CustomText(
+                                        title: 'Block Team',
+                                        color: AppColor().primaryWhite,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  onTap: () {
+                                    Get.to(ReportPage(
+                                        id: widget.item.id!, type: "team"));
+                                  },
+                                  value: '3',
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.report,
+                                        color: AppColor().primaryWhite,
+                                      ),
+                                      const Gap(10),
+                                      CustomText(
+                                        title: 'Report Team',
+                                        color: AppColor().primaryWhite,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                          child: Icon(Icons.more_vert,
                               color: AppColor().primaryWhite),
                         ),
                       ),

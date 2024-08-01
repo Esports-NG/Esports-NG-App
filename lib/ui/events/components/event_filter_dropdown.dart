@@ -186,6 +186,5 @@ class CustomTile extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

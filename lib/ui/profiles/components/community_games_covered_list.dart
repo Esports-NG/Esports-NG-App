@@ -1,12 +1,9 @@
 import 'package:e_sport/data/model/community_model.dart';
-import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/profiles/components/community_add_game.dart';
 import 'package:e_sport/ui/profiles/components/community_games_covered_item.dart';
-import 'package:e_sport/ui/profiles/components/team_add_game.dart';
-import 'package:e_sport/ui/profiles/components/team_games_played_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';

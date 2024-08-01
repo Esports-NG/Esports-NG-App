@@ -7,12 +7,12 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/home/post/components/report_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -592,8 +592,6 @@ class _PostItemState extends State<PostItem> {
       itemBuilder: (context) => [
         PopupMenuItem(
           enabled: false,
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
           child: CustomText(
             title: 'Like, Comment and Repost as:',
             size: Get.height * 0.014,
@@ -603,8 +601,6 @@ class _PostItemState extends State<PostItem> {
           ),
         ),
         PopupMenuItem(
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: Row(
             children: [
               widget.item.author!.profile!.profilePicture == null
@@ -643,8 +639,6 @@ class _PostItemState extends State<PostItem> {
           ),
         ),
         PopupMenuItem(
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: Row(
             children: [
               Icon(
@@ -705,55 +699,41 @@ class _PostItemState extends State<PostItem> {
       items: [
         PopupMenuItem(
           value: '0',
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20, top: 20),
           child:
               popUpMenuItems(icon: Icons.bookmark_outline, title: 'Bookmark'),
         ),
         PopupMenuItem(
           value: '1',
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
               icon: Icons.thumb_down_alt_outlined,
               title: 'Not interested in this post'),
         ),
         PopupMenuItem(
           value: '2',
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
               icon: Icons.person_add_alt_outlined,
               title: 'Follow/Unfollow @${widget.item.author!.userName}'),
         ),
         PopupMenuItem(
           value: '3',
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
               icon: Icons.notifications_off_outlined,
               title: 'Turn on/Turn off Notifications'),
         ),
         PopupMenuItem(
           value: '4',
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
               icon: Icons.volume_off_outlined,
               title: 'Mute/Unmute @${widget.item.author!.userName}'),
         ),
         PopupMenuItem(
           value: '5',
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(
               icon: Icons.block_outlined,
               title: 'Block @${widget.item.author!.userName}'),
         ),
         PopupMenuItem(
           value: '6',
-          height: 20,
-          padding: const EdgeInsets.only(bottom: 20, left: 20),
           child: popUpMenuItems(icon: Icons.flag, title: 'Report Post'),
         ),
       ],
@@ -780,52 +760,69 @@ class _PostItemState extends State<PostItem> {
       debugPrint('block user');
       await postController.blockUserOrPost(widget.item.author!.id!, 'block');
     } else if (selectedMenuItem == '6') {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        backgroundColor: AppColor().primaryBgColor,
-                        content: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CustomText(
-                                title:
-                                    'Report Post by ${widget.item.author!.userName}',
-                                // Additional fields after this should be Comment details, Reason for reporting etc
-                                color: AppColor().primaryWhite,
-                                weight: FontWeight.w400,
-                                fontFamily: 'GilroyBold',
-                                size: Get.height * 0.015,
-                              ),
-                              Gap(Get.height * 0.03),
-                              CustomText(
-                                title:
-                                    'Report ${widget.item.author!.userName}',
-                                // Additional fields after this should be Comment details, Reason for reporting etc
-                                color: AppColor().primaryWhite,
-                                weight: FontWeight.w400,
-                                fontFamily: 'GilroyBold',
-                                size: Get.height * 0.015,
-                              ),
-                              Gap(Get.height * 0.03),
-                              CustomText(
-                                title:
-                                    'Block ${widget.item.author!.userName}',
-                                // Additional fields after this should be Comment details, Reason for reporting etc
-                                color: AppColor().primaryWhite,
-                                weight: FontWeight.w400,
-                                fontFamily: 'GilroyBold',
-                                size: Get.height * 0.015,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          elevation: 0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          backgroundColor: AppColor().primaryBgColor,
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.to(() => ReportPage(type: "post", id: widget.item.id!));
+                  },
+                  child: CustomText(
+                    title: 'Report Post by ${widget.item.author!.userName}',
+                    // Additional fields after this should be Comment details, Reason for reporting etc
+                    color: AppColor().primaryWhite,
+                    weight: FontWeight.w400,
+                    fontFamily: 'GilroyBold',
+                    size: Get.height * 0.015,
+                  ),
+                ),
+                Gap(Get.height * 0.03),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.to(() =>
+                        ReportPage(type: "user", id: widget.item.author!.id!));
+                  },
+                  child: CustomText(
+                    title: 'Report ${widget.item.author!.userName}',
+                    // Additional fields after this should be Comment details, Reason for reporting etc
+                    color: AppColor().primaryWhite,
+                    weight: FontWeight.w400,
+                    fontFamily: 'GilroyBold',
+                    size: Get.height * 0.015,
+                  ),
+                ),
+                Gap(Get.height * 0.03),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    postController.blockUserOrPost(
+                        widget.item.author!.id!, "block");
+                  },
+                  child: CustomText(
+                    title: 'Block ${widget.item.author!.userName}',
+                    // Additional fields after this should be Comment details, Reason for reporting etc
+                    color: AppColor().primaryWhite,
+                    weight: FontWeight.w400,
+                    fontFamily: 'GilroyBold',
+                    size: Get.height * 0.015,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     }
   }
 

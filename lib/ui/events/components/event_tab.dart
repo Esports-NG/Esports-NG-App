@@ -4,7 +4,6 @@ import 'package:e_sport/ui/events/components/event_filter_dropdown.dart';
 import 'package:e_sport/ui/events/components/event_game_filter.dart';
 import 'package:e_sport/ui/events/components/social_events_list.dart';
 import 'package:e_sport/ui/events/components/tournament_list.dart';
-import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';

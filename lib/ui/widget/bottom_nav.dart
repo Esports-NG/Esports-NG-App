@@ -1,10 +1,4 @@
-import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
-import 'package:e_sport/ui/account/account_events/create_event.dart';
-import 'package:e_sport/ui/home/post/create_community_page.dart';
-import 'package:e_sport/ui/home/post/create_post.dart';
-import 'package:e_sport/ui/home/post/create_post_item.dart';
-import 'package:e_sport/ui/home/post/create_team.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +49,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                 width: 70,
                 duration: const Duration(milliseconds: 500),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(99),
                         bottomRight: Radius.circular(99)),
                     color: AppColor().primaryColor),

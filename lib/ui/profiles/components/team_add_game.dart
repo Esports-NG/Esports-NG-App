@@ -1,11 +1,8 @@
 import 'package:e_sport/data/model/team/team_model.dart';
-import 'package:e_sport/data/repository/event/tournament_repository.dart';
-import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/game_list_dropdown.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +92,7 @@ class _TeamAddGameState extends State<TeamAddGame> {
                               color: AppColor().primaryColor.withOpacity(0.4))
                           : null),
                   child: _isAdding
-                      ? Center(child: ButtonLoader())
+                      ? const Center(child: ButtonLoader())
                       : Center(
                           child: CustomText(
                               title: "Add Game",

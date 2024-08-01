@@ -6,7 +6,6 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/privacy_policy.dart';
 import 'package:e_sport/ui/components/my_post_widget.dart';
-import 'package:e_sport/ui/components/wallet_widget.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';

@@ -1,10 +1,14 @@
 // ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
+import 'package:change_case/change_case.dart';
+import 'package:e_sport/data/model/news_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -42,12 +46,14 @@ class PostRepository extends GetxController {
   final Rx<List<PostModel>> _bookmarkedPost = Rx([]);
   final Rx<List<PostModel>> _followingPost = Rx([]);
   final Rx<List<PostModel>> _forYouPosts = Rx([]);
+  final Rx<List<NewsModel>> _news = Rx([]);
 
   List<PostModel> get allPost => _allPost.value;
   List<PostModel> get myPost => _myPost.value;
   List<PostModel> get bookmarkedPost => _bookmarkedPost.value;
   List<PostModel> get followingPost => _followingPost.value;
   List<PostModel> get forYouPosts => _forYouPosts.value;
+  List<NewsModel> get news => _news.value;
 
   final _postStatus = PostStatus.empty.obs;
   final _bookmarkStatus = BookmarkStatus.empty.obs;
@@ -86,6 +92,7 @@ class PostRepository extends GetxController {
         getBookmarkedPost(true);
         getMyPost(true);
         getPostForYou(true);
+        getNews();
       }
     });
   }
@@ -604,6 +611,51 @@ class PostRepository extends GetxController {
 
       print(response.body);
     } catch (err) {}
+  }
+
+  Future reportPost(
+      int reportee,
+      int reported,
+      String offenseTitle,
+      String offenseDescription,
+      String reportedTitle,
+      String reporteeTitle) async {
+    try {
+      var body = {
+        "title": offenseTitle,
+        "offense": offenseDescription,
+        "reported_title": reportedTitle,
+        "reported_id": reported,
+        "reportee_title": reporteeTitle,
+        "reportee_id": reportee
+      };
+
+      var response = await http.post(Uri.parse(ApiLink.report),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "JWT ${authController.token}"
+          },
+          body: jsonEncode(body));
+
+      if (response.statusCode == 200) {
+        Get.back(closeOverlays: true);
+        Helpers().showCustomSnackbar(
+            message: "${reportedTitle.toCapitalCase()} reported");
+      } else {
+        print(response.body);
+      }
+    } catch (err) {}
+  }
+
+  Future getNews() async {
+    var response = await http.get(Uri.parse(ApiLink.getNews), headers: {
+      "Authorization":
+          "Basic ${base64.encode(utf8.encode("zillalikestogame:zillalikesnexal"))}"
+    });
+
+    log(response.body);
+    var newsFromJson = newsModelFromJson(response.body);
+    _news.value = newsFromJson;
   }
 
   void handleError(dynamic error) {

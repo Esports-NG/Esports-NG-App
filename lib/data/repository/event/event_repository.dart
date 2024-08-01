@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:e_sport/data/model/events_model.dart';
-import 'package:e_sport/data/model/social_event_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/auth/register.dart';
@@ -99,9 +98,9 @@ class EventRepository extends GetxController
 
   void hideAllOverlays() {
     if (currentOverlay.isNotEmpty) {
-      currentOverlay.forEach((element) {
+      for (var element in currentOverlay) {
         element.hide();
-      });
+      }
       currentOverlay.clear();
     }
   }

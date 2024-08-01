@@ -9,7 +9,6 @@ import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/home/community/components/suggested_profile_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_team_item.dart';
-import 'package:e_sport/ui/home/community/suggested_profile.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';

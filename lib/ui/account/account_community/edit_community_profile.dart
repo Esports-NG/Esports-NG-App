@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
-import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';

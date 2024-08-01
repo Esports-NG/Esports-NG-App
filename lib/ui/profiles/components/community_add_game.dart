@@ -1,11 +1,8 @@
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
-import 'package:e_sport/data/repository/event/tournament_repository.dart';
-import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/game_list_dropdown.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';

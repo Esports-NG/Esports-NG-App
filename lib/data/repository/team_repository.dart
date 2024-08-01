@@ -368,6 +368,7 @@ class TeamRepository extends GetxController {
 
       return teamApplications;
     } catch (error) {}
+    return null;
   }
 
   Future takeActionOnApplication(String action, int teamId) async {
@@ -410,6 +411,19 @@ class TeamRepository extends GetxController {
     var json = jsonDecode(response.body);
     if (response.statusCode == 200) {
       Helpers().showCustomSnackbar(message: json['message']);
+    } else {
+      Helpers().showCustomSnackbar(message: json['error']);
+    }
+  }
+
+  Future blockTeam(int id) async {
+    var response = await http.post(Uri.parse(ApiLink.blockTeam(id)), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+    var json = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Helpers().showCustomSnackbar(message: "Team blocked");
     } else {
       Helpers().showCustomSnackbar(message: json['error']);
     }

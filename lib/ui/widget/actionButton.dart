@@ -6,7 +6,6 @@ import 'package:e_sport/ui/home/post/create_post_item.dart';
 import 'package:e_sport/ui/home/post/create_team.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';

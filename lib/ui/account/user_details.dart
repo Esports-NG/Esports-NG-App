@@ -1,17 +1,15 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
-import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/user_profile.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/account/account_details.dart';
-import 'package:e_sport/ui/account/games_played/games_played_item.dart';
 import 'package:e_sport/ui/components/games_played_details.dart';
-import 'package:e_sport/ui/components/games_played_widget.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/home/post/components/report_page.dart';
 import 'package:e_sport/ui/profiles/components/user_game_played_item.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
@@ -59,7 +57,7 @@ class UserDetails extends StatelessWidget {
                 future: fetchUserProfile(authController.mToken.value),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(
+                    return SizedBox(
                       height: Get.height,
                       child: Center(
                         child: CircularProgressIndicator(
@@ -106,12 +104,13 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   final authController = Get.find<AuthRepository>();
+  final postController = Get.put(PostRepository());
   int? followersCount;
   int? followingCount;
   bool _isLoading = false;
   bool _isFollowing = false;
-  List<bool> _isOpen = [true];
-  List<bool> _isOpen2 = [false];
+  final List<bool> _isOpen = [true];
+  final List<bool> _isOpen2 = [false];
   final playerItem = Get.put(PlayerRepository());
 
   Future<void> getFollowersList() async {
@@ -139,6 +138,69 @@ class _UserProfileState extends State<UserProfile> {
       followingCount = widget.userData.following;
     });
     super.initState();
+  }
+
+  Row popUpMenuItems({String? title, IconData? icon}) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: AppColor().primaryWhite,
+          size: Get.height * 0.016,
+        ),
+        Gap(Get.height * 0.02),
+        CustomText(
+          title: title,
+          size: Get.height * 0.014,
+          fontFamily: 'GilroyMedium',
+          textAlign: TextAlign.start,
+          color: AppColor().primaryWhite,
+        ),
+      ],
+    );
+  }
+
+  showPopUpMenu() async {
+    String? selectedMenuItem = await showMenu(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide.none,
+      ),
+      constraints: const BoxConstraints(),
+      color: AppColor().primaryMenu,
+      position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+      items: [
+        PopupMenuItem(
+          value: '4',
+          height: 20,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: popUpMenuItems(
+              icon: Icons.volume_off_outlined,
+              title: 'Mute/Unmute @${widget.userData.userName}'),
+        ),
+        PopupMenuItem(
+          value: '5',
+          height: 20,
+          onTap: () async {
+            await postController.blockUserOrPost(widget.userData.id!, "block");
+          },
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: popUpMenuItems(
+              icon: Icons.block_outlined,
+              title: 'Block @${widget.userData.userName}'),
+        ),
+        PopupMenuItem(
+          onTap: () =>
+              Get.to(() => ReportPage(id: widget.userData.id!, type: "user")),
+          value: '6',
+          height: 20,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: popUpMenuItems(
+              icon: Icons.flag, title: 'Report @${widget.userData.userName}'),
+        ),
+      ],
+    );
   }
 
   @override
@@ -227,38 +289,26 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    InkWell(
-                      // onTap: () => showPopupMenu(),
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                            color: AppColor().primaryWhite.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Icon(
-                          Icons.notifications_outlined,
-                          size: 20,
-                          color: AppColor().primaryWhite,
+                Visibility(
+                  visible: widget.userData.id != authController.user!.id,
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () => showPopUpMenu(),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              color: AppColor().primaryWhite.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            Icons.more_vert,
+                            size: 20,
+                            color: AppColor().primaryWhite,
+                          ),
                         ),
                       ),
-                    ),
-                    Gap(Get.height * 0.02),
-                    InkWell(
-                      // onTap: () => showPopupMenu(),
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                            color: AppColor().primaryWhite.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Icon(
-                          Icons.more_vert,
-                          size: 20,
-                          color: AppColor().primaryWhite,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

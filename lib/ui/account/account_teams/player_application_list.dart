@@ -152,7 +152,7 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
                                                 side: BorderSide.none,
                                                 borderRadius:
                                                     BorderRadius.circular(99)),
-                                            label: CustomText(
+                                            label: const CustomText(
                                               title: "Accepted",
                                               weight: FontWeight.w600,
                                               size: 12,

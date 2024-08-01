@@ -6,7 +6,6 @@ import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/user_details.dart';
-import 'package:e_sport/ui/components/choose_team_dialog.dart';
 import 'package:e_sport/ui/components/games_played_details.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';

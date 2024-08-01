@@ -5,7 +5,6 @@ import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -26,7 +25,7 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
 
   bool _isShowing = false;
 
-  LayerLink _link = LayerLink();
+  final LayerLink _link = LayerLink();
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -46,7 +45,7 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                       child: SizedBox(
                         height: Get.height,
                         width: Get.width,
-                        child: CustomText(title: ""),
+                        child: const CustomText(title: ""),
                       ),
                     ),
                     CompositedTransformFollower(

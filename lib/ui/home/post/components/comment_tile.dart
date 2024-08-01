@@ -2,7 +2,7 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
-import 'package:e_sport/ui/widget/coming_soon_popup.dart';
+import 'package:e_sport/ui/home/post/components/report_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -116,34 +116,53 @@ class _CommentTileState extends State<CommentTile> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              CustomText(
-                                title:
-                                    'Report comment by ${widget.item.user!.userName}',
-                                // Additional fields after this should be Comment details, Reason for reporting etc
-                                color: AppColor().primaryWhite,
-                                weight: FontWeight.w400,
-                                fontFamily: 'GilroyBold',
-                                size: Get.height * 0.015,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Get.to(() => ReportPage(
+                                      type: "comment", id: widget.item.id!));
+                                },
+                                child: CustomText(
+                                  title:
+                                      'Report Comment by ${widget.item.user!.userName}',
+                                  // Additional fields after this should be Comment details, Reason for reporting etc
+                                  color: AppColor().primaryWhite,
+                                  weight: FontWeight.w400,
+                                  fontFamily: 'GilroyBold',
+                                  size: Get.height * 0.015,
+                                ),
                               ),
                               Gap(Get.height * 0.03),
-                              CustomText(
-                                title:
-                                    'Report ${widget.item.user!.userName}',
-                                // Additional fields after this should be Comment details, Reason for reporting etc
-                                color: AppColor().primaryWhite,
-                                weight: FontWeight.w400,
-                                fontFamily: 'GilroyBold',
-                                size: Get.height * 0.015,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Get.to(() => ReportPage(
+                                      type: "user", id: widget.item.user!.id!));
+                                },
+                                child: CustomText(
+                                  title: 'Report ${widget.item.user!.userName}',
+                                  // Additional fields after this should be Comment details, Reason for reporting etc
+                                  color: AppColor().primaryWhite,
+                                  weight: FontWeight.w400,
+                                  fontFamily: 'GilroyBold',
+                                  size: Get.height * 0.015,
+                                ),
                               ),
                               Gap(Get.height * 0.03),
-                              CustomText(
-                                title:
-                                    'Block ${widget.item.user!.userName}',
-                                // Additional fields after this should be Comment details, Reason for reporting etc
-                                color: AppColor().primaryWhite,
-                                weight: FontWeight.w400,
-                                fontFamily: 'GilroyBold',
-                                size: Get.height * 0.015,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  postController.blockUserOrPost(
+                                      widget.item.user!.id!, "block");
+                                },
+                                child: CustomText(
+                                  title: 'Block ${widget.item.user!.userName}',
+                                  // Additional fields after this should be Comment details, Reason for reporting etc
+                                  color: AppColor().primaryWhite,
+                                  weight: FontWeight.w400,
+                                  fontFamily: 'GilroyBold',
+                                  size: Get.height * 0.015,
+                                ),
                               ),
                             ],
                           ),
@@ -175,6 +194,7 @@ class _CommentTileState extends State<CommentTile> {
               _isLiked = !isLiked;
             });
             await postController.likeComment(widget.item.id!);
+            return null;
           },
           circleColor: CircleColor(
               start: AppColor().primaryColor, end: AppColor().primaryColor),
@@ -189,6 +209,5 @@ class _CommentTileState extends State<CommentTile> {
         ),
       ],
     );
-    ;
   }
 }
