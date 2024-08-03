@@ -8,6 +8,7 @@ import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
@@ -17,6 +18,9 @@ import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/choose_team_dialog.dart';
 import 'package:e_sport/ui/components/participant_list.dart';
 import 'package:e_sport/ui/components/team_participant_list.dart';
+import 'package:e_sport/ui/events/components/fixture_item.dart';
+import 'package:e_sport/ui/events/components/fixtures_and_results.dart';
+import 'package:e_sport/ui/events/components/social_event_details.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
@@ -46,6 +50,27 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   final communityController = Get.put(CommunityRepository());
   final tournamentController = Get.put(TournamentRepository());
   final teamController = Get.put(TeamRepository());
+  var eventController = Get.put(EventRepository());
+
+  final _colors = [
+    LinearGradient(
+      colors: [
+        AppColor().fixturePurple,
+        AppColor().fixturePurple,
+      ],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    ),
+    LinearGradient(
+      colors: [
+        AppColor().darkGrey.withOpacity(0.8),
+        AppColor().bgDark.withOpacity(0.005),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomCenter,
+    ),
+  ];
+
 
   List<Map<String, dynamic>>? _communityFollowers;
   bool _isFollowing = false;
@@ -613,10 +638,54 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
               padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
               child: PageHeaderWidget(
                 onTap: () {},
-                title: 'Fixtures and Results',
+                title: 'Announcements',
               ),
             ),
             const ComingSoonWidget(),
+            Divider(
+              color: AppColor().lightItemsColor.withOpacity(0.3),
+              height: Get.height * 0.05,
+              thickness: 4,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: PageHeaderWidget(
+                onTap: () {
+                  Get.to(() => FixturesAndResults(
+                          event: widget.item,
+                        ));
+                },
+                title: 'Fixtures and Results',
+              ),
+            ),
+            Gap(Get.height * 0.02),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: SizedBox(
+                width: double.infinity,
+                height: Get.height * 0.25,
+                child: ListView.separated(
+                  physics: const ScrollPhysics(),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+                  itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        if (eventController.filteredEvent[index].type ==
+                            "tournament") {
+                          Get.to(() => AccountTournamentDetail(
+                              item: eventController.filteredEvent[index]));
+                        } else {
+                          Get.to(() => SocialEventDetails(
+                              item: eventController.filteredEvent[index]));
+                        }
+                      },
+                      child: FixtureCardScrollable(
+                          backgroundColor: _colors[index % _colors.length])),
+                  itemCount: eventController.filteredEvent.length),
+                ),
+            ),
+            Gap(Get.height * 0.005),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -689,19 +758,6 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
               child: PageHeaderWidget(
                 onTap: () {},
                 title: 'Tournament Staff',
-              ),
-            ),
-            const ComingSoonWidget(),
-            Divider(
-              color: AppColor().lightItemsColor.withOpacity(0.3),
-              height: Get.height * 0.05,
-              thickness: 4,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-              child: PageHeaderWidget(
-                onTap: () {},
-                title: 'Announcement',
               ),
             ),
             const ComingSoonWidget(),

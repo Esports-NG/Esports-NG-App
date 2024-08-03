@@ -56,4 +56,5 @@ class AppColor {
   Color goldColor = const Color(0xffFFBD1B);
   Color silverColor = const Color(0xffBFBFBF);
   Color bronzeColor = const Color(0xff98764E);
+  Color fixturePurple = const Color(0xff5D0A5A);
 }
