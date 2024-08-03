@@ -28,7 +28,7 @@ class GameDropdown extends StatefulWidget {
 class _GameDropdownState extends State<GameDropdown> {
   final gameController = Get.put(GamesRepository());
   final eventController = Get.put(EventRepository());
-  LayerLink _link = LayerLink();
+  final LayerLink _link = LayerLink();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _GameDropdownState extends State<GameDropdown> {
                       child: SizedBox(
                         height: Get.height,
                         width: Get.width,
-                        child: CustomText(title: ""),
+                        child: const CustomText(title: ""),
                       ),
                     ),
                     CompositedTransformFollower(

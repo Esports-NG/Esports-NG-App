@@ -8,7 +8,6 @@ import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 // import '../components/account_event_widget.dart';
 
@@ -163,7 +162,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new SizedBox.expand(child: child);
+    return SizedBox.expand(child: child);
   }
 
   @override

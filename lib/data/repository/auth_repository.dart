@@ -7,7 +7,6 @@ import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/shared_pref.dart';
 import 'package:e_sport/ui/auth/first_screen.dart';
 import 'package:e_sport/ui/auth/login.dart';
-import 'package:e_sport/ui/auth/otp_screen.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/home/root.dart';
 import 'package:e_sport/util/helpers.dart';

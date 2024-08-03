@@ -88,7 +88,7 @@ class AccountCommunityItem extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (ctx) => EditCommunityPage()));
+                                  builder: (ctx) => const EditCommunityPage()));
                         },
                         buttonText: 'Edit',
                         width: 80,

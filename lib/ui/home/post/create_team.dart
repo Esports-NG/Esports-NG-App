@@ -4,10 +4,7 @@ import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
-import 'package:e_sport/ui/widget/game_list_dropdown.dart';
-import 'package:e_sport/ui/widget/page_indicator.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:e_sport/util/loading.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +23,7 @@ class CreateTeamPage extends StatefulWidget {
 class _CreateTeamState extends State<CreateTeamPage> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final teamController = Get.put(TeamRepository());
-  bool _isCreating = false;
+  final bool _isCreating = false;
   String? gameTag, seePost, engagePost;
   bool enableChat = false;
   int pageCount = 0;

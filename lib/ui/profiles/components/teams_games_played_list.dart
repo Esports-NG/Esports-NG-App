@@ -1,6 +1,5 @@
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
-import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/profiles/components/team_add_game.dart';
 import 'package:e_sport/ui/profiles/components/team_games_played_item.dart';

@@ -37,7 +37,8 @@ class ApiLink {
   static String turnNotification = "${baseurl}post/on_notifs/team/";
   static String getPostDetails(int id) => "${baseurl}post/view/$id";
   static String likeComment(int commentId) =>
-      "${baseurl}post/comment/${commentId}/like/";
+      "${baseurl}post/comment/$commentId/like/";
+  static String report = "${baseurl}extra/report/";
 
   //Team
   static String createTeam = "${baseurl}team/create/";
@@ -60,6 +61,7 @@ class ApiLink {
       "${baseurl}team/bygame/$teamId/roasters/";
   static String addToRoster(int teamId, int playerId, int rosterId) =>
       "${baseurl}team/$teamId/addplayer/$playerId/roster/$rosterId/";
+  static String blockTeam(id) => "${baseurl}post/block/?team_pk=$id";
 
   //Player
   static String createPlayer = "${baseurl}player/register/";
@@ -93,6 +95,7 @@ class ApiLink {
   static String getSuggestedUsers = "${baseurl}extra/suggest/users/";
   static String addGameToCommunity(int commId, int gameId) =>
       "${baseurl}org/$commId/addgame/$gameId/";
+  static String blockCommunity(id) => "${baseurl}post/block/?comm_pk=$id";
 
   //Profile
   static String getDataWithFollowers({required int id, required String type}) =>
@@ -111,6 +114,9 @@ class ApiLink {
   static String getGameFollowers(int gameId) =>
       "${baseurl}games/followers/$gameId/users/";
 
+  // News
+  static String getNews =
+      "https://nexalgamingcommunity.com/wp-json/wp/v2/posts?_fields=author,id,content,title,link,featured_media,date&nocache=1";
   // static String withdraw = "${baseurl}initiate-withdrawal";
   // static String dashboard = "${baseurl}users/dashboard";
   // static String setTransactionPin = "${baseurl}wallet/set-transaction-pin";

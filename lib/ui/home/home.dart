@@ -224,7 +224,7 @@ class _HomePageState extends State<HomePage>
                     PostWidget(posts: postController.forYouPosts),
                     PostWidget(posts: postController.followingPost),
                     PostWidget(posts: postController.bookmarkedPost),
-                    NewsWidget(posts: postController.forYouPosts),
+                    NewsWidget(posts: postController.news),
                   ]),
                 )),
           ),

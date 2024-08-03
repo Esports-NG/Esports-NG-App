@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'first_screen.dart';
-import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 // final shorebirdCodePush = ShorebirdCodePush();
 

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
@@ -7,7 +6,6 @@ import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';

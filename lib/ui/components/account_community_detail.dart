@@ -3,20 +3,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/community_model.dart';
-import 'package:e_sport/data/model/events_model.dart';
-import 'package:e_sport/data/model/post_model.dart';
-import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
-import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/home/post/components/report_page.dart';
 import 'package:e_sport/ui/profiles/components/community_games_covered_item.dart';
 import 'package:e_sport/ui/profiles/components/community_games_covered_list.dart';
-import 'package:e_sport/ui/profiles/components/team_games_played_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
@@ -25,7 +21,6 @@ import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -171,7 +166,63 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                 padding:
                                     EdgeInsets.only(right: Get.height * 0.02),
                                 child: InkWell(
-                                  child: Icon(Icons.settings,
+                                  onTap: () async {
+                                    await showMenu(
+                                      context: context,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          side: BorderSide.none),
+                                      constraints: const BoxConstraints(),
+                                      color: AppColor().primaryMenu,
+                                      position: const RelativeRect.fromLTRB(
+                                          100, 100, 0, 0),
+                                      items: [
+                                        PopupMenuItem(
+                                          onTap: () async {
+                                            await communityController
+                                                .blockCommunity(
+                                                    widget.item.id!);
+                                          },
+                                          value: '2',
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.block,
+                                                  color:
+                                                      AppColor().primaryWhite),
+                                              const Gap(10),
+                                              CustomText(
+                                                title: 'Block Community',
+                                                color: AppColor().primaryWhite,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          onTap: () {
+                                            Get.to(ReportPage(
+                                                id: widget.item.id!,
+                                                type: "community"));
+                                          },
+                                          value: '3',
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.report,
+                                                color: AppColor().primaryWhite,
+                                              ),
+                                              const Gap(10),
+                                              CustomText(
+                                                title: 'Report Community',
+                                                color: AppColor().primaryWhite,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  child: Icon(Icons.more_vert,
                                       color: AppColor().primaryWhite),
                                 ),
                               ),

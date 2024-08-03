@@ -4,13 +4,10 @@ import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import '../../../data/model/team/team_model.dart';
 
 class CommunityGamesCoveredItem extends StatelessWidget {
   const CommunityGamesCoveredItem({

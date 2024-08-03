@@ -1,11 +1,8 @@
-import 'package:e_sport/data/model/account_events_model.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import '../../events/components/social_event_item.dart';
 
 class SocialEvent extends StatelessWidget {
   const SocialEvent({super.key});
@@ -27,7 +24,7 @@ class SocialEvent extends StatelessWidget {
       backgroundColor: AppColor().primaryBackGroundColor,
       body: Padding(
         padding: EdgeInsets.all(Get.height * 0.02),
-        child: SingleChildScrollView(
+        child: const SingleChildScrollView(
           child: Column(
             children: [
               // ListView.separated(

@@ -1,6 +1,5 @@
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
-import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/profiles/components/team_games_played_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';

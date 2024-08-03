@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:e_sport/data/model/community_model.dart';
-import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
@@ -67,9 +66,9 @@ class CommunityRepository extends GetxController {
 
   void hideAllOverlays() {
     if (currentOverlay.isNotEmpty) {
-      currentOverlay.forEach((element) {
+      for (var element in currentOverlay) {
         element.hide();
-      });
+      }
       currentOverlay.clear();
     }
   }
@@ -241,6 +240,20 @@ class CommunityRepository extends GetxController {
       } else {}
     } catch (err) {
       debugPrint('adding game to community error: $err');
+    }
+  }
+
+  Future blockCommunity(int id) async {
+    var response =
+        await http.post(Uri.parse(ApiLink.blockCommunity(id)), headers: {
+      "Content-type": "application/json",
+      "Authorization": "JWT ${authController.token}"
+    });
+    var json = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      Helpers().showCustomSnackbar(message: "Community blocked");
+    } else {
+      Helpers().showCustomSnackbar(message: json['error']);
     }
   }
 

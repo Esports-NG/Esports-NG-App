@@ -10,7 +10,6 @@ import 'package:e_sport/ui/home/community/components/game_modes_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,7 @@ class _GameProfileState extends State<GameProfile> {
       _gameFollowers = followers;
       var inList =
           followers.where((e) => e.id! == authController.user?.id!).toList();
-      if (inList.length != 0) {
+      if (inList.isNotEmpty) {
         _isFollowingGame = true;
       }
     });

@@ -1,6 +1,4 @@
 import 'package:e_sport/data/repository/community_repository.dart';
-import 'package:e_sport/data/repository/event/event_repository.dart';
-import 'package:e_sport/ui/home/community/community.dart';
 import 'package:e_sport/ui/home/community/components/community_filter_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
@@ -99,7 +97,7 @@ class _CommunityFilterState extends State<CommunityFilter> {
                               communityController.typeFilter.value =
                                   "Suggested Profiles";
                               if (widget.onFilterPage != true) {
-                                Get.to(() => CommunityFilterPage());
+                                Get.to(() => const CommunityFilterPage());
                               }
                               _overlayController.hide();
                             },
@@ -113,7 +111,7 @@ class _CommunityFilterState extends State<CommunityFilter> {
                               communityController.typeFilter.value =
                                   "Trending Games";
                               if (widget.onFilterPage != true) {
-                                Get.to(() => CommunityFilterPage());
+                                Get.to(() => const CommunityFilterPage());
                               }
                               _overlayController.hide();
                             },
@@ -127,7 +125,7 @@ class _CommunityFilterState extends State<CommunityFilter> {
                               communityController.typeFilter.value =
                                   "Trending Communities";
                               if (widget.onFilterPage != true) {
-                                Get.to(() => CommunityFilterPage());
+                                Get.to(() => const CommunityFilterPage());
                               }
                               _overlayController.hide();
                             },
@@ -141,7 +139,7 @@ class _CommunityFilterState extends State<CommunityFilter> {
                               communityController.typeFilter.value =
                                   "Trending Teams";
                               if (widget.onFilterPage != true) {
-                                Get.to(() => CommunityFilterPage());
+                                Get.to(() => const CommunityFilterPage());
                               }
                               _overlayController.hide();
                             },

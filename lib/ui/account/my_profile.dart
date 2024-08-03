@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';

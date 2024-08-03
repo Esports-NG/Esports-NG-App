@@ -40,7 +40,7 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
       _gameFollowers = followers;
       var inList =
           followers.where((e) => e.id! == authController.user?.id!).toList();
-      if (inList.length != 0) {
+      if (inList.isNotEmpty) {
         _isFollowingGame = true;
       }
     });

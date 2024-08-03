@@ -67,7 +67,7 @@ class _EventGameFilterState extends State<EventGameFilter> {
                               size: 16,
                             ),
                             Gap(Get.height * 0.01),
-                            CustomTextField(
+                            const CustomTextField(
                               hint: "Search for Games",
                             ),
                             Gap(Get.height * 0.02),
@@ -77,7 +77,7 @@ class _EventGameFilterState extends State<EventGameFilter> {
                                       title: "Game", value: "All");
                                   _overlayController.hide();
                                 },
-                                child: CustomTile(title: "Game", value: "All")),
+                                child: const CustomTile(title: "Game", value: "All")),
                             Gap(Get.height * 0.01),
                             ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
@@ -191,6 +191,5 @@ class CustomTile extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

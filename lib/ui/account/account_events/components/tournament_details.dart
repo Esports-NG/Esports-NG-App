@@ -1,11 +1,9 @@
-import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class TournamentDetails extends StatelessWidget {
   const TournamentDetails(

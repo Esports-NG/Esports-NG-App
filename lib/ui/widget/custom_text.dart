@@ -1,4 +1,7 @@
+import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomText extends StatelessWidget {
   final String? title;
@@ -29,9 +32,23 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(title!,
+    return Linkify(
+        onOpen: (link) async {
+          await launchUrl(Uri.parse(link.url));
+        },
+        linkStyle: TextStyle(
+          color: AppColor().primaryColor,
+          fontFamily: fontFamily ?? 'GilroyRegular',
+          fontSize: size,
+          fontWeight: weight ?? FontWeight.normal,
+          overflow: overflow,
+          height: height ?? 1.2,
+          decorationColor: decorationColor,
+          decoration: underline ?? TextDecoration.none,
+        ),
+        text: title!,
         textAlign: textAlign ?? TextAlign.left,
-        maxLines: maxLines ?? null,
+        maxLines: maxLines,
         style: TextStyle(
           color: color ?? Colors.black,
           fontFamily: fontFamily ?? 'GilroyRegular',

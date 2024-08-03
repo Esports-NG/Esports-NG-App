@@ -1,14 +1,10 @@
 import 'dart:io';
-import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
-import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
-import 'package:e_sport/ui/widget/page_indicator.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
