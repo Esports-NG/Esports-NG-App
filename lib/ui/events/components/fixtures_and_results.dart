@@ -109,6 +109,7 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
           padding: EdgeInsets.all(Get.height * 0.02),
           child: Column(
             children: [
+              Gap(Get.height * 0.01),
               CustomText(
                   title: 'Tournament/Bracket Link: ',
                   weight: FontWeight.w400,
