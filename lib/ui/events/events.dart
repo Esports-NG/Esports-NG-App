@@ -54,6 +54,14 @@ class _EventsPageState extends State<EventsPage>
                 size: 18,
                 color: AppColor().primaryWhite,
               ),
+              actions: [Padding(
+                padding: EdgeInsets.only(right: Get.width * 0.05),
+                child: Icon(
+                  Icons.tv_outlined,
+                  color: AppColor().primaryWhite,
+                  ),
+              ),
+              ]
             ),
             SliverToBoxAdapter(
               child: Column(
