@@ -10,6 +10,7 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
@@ -23,6 +24,8 @@ import 'package:e_sport/ui/events/components/fixtures_and_results.dart';
 import 'package:e_sport/ui/events/components/social_event_details.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/home/post/components/post_details.dart';
+import 'package:e_sport/ui/profiles/components/recent_posts.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
@@ -51,6 +54,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   final tournamentController = Get.put(TournamentRepository());
   final teamController = Get.put(TeamRepository());
   var eventController = Get.put(EventRepository());
+  final postController = Get.put(PostRepository());
 
   final _colors = [
     LinearGradient(
@@ -70,7 +74,6 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
       end: Alignment.bottomCenter,
     ),
   ];
-
 
   List<Map<String, dynamic>>? _communityFollowers;
   bool _isFollowing = false;
@@ -440,14 +443,14 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                             onTap: () => launchUrl(
                                 Uri.parse(widget.item.linkForBracket!)),
                             child: CustomText(
-                                title: widget.item.linkForBracket,
-                                weight: FontWeight.w400,
-                                size: Get.height * 0.017,
-                                fontFamily: 'GilroyMedium',
-                                underline: TextDecoration.underline,
-                                color: AppColor().primaryColor,
-                                textAlign: TextAlign.center,
-                                ),
+                              title: widget.item.linkForBracket,
+                              weight: FontWeight.w400,
+                              size: Get.height * 0.017,
+                              fontFamily: 'GilroyMedium',
+                              underline: TextDecoration.underline,
+                              color: AppColor().primaryColor,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ],
                       ),
@@ -641,7 +644,30 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 title: 'Announcements',
               ),
             ),
-            const ComingSoonWidget(),
+            Gap(Get.height * 0.02),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: SizedBox(
+                width: double.infinity,
+                height: Get.height * 0.46,
+                child: ListView.separated(
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    separatorBuilder: (context, index) =>
+                        Gap(Get.height * 0.02),
+                    itemBuilder: (context, index) => InkWell(
+                        onTap: () {
+                          Get.to(() => PostDetails(
+                              item: postController.forYouPosts[index]));
+                        },
+                        child: SizedBox(
+                            width: Get.height * 0.35,
+                            child: PostItemForProfile(
+                                item: postController.forYouPosts[index]))),
+                    itemCount: postController.forYouPosts.length),
+              ),
+            ),
             Divider(
               color: AppColor().lightItemsColor.withOpacity(0.3),
               height: Get.height * 0.05,
@@ -652,8 +678,8 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
               child: PageHeaderWidget(
                 onTap: () {
                   Get.to(() => FixturesAndResults(
-                          event: widget.item,
-                        ));
+                        event: widget.item,
+                      ));
                 },
                 title: 'Fixtures and Results',
               ),
@@ -665,25 +691,26 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 width: double.infinity,
                 height: Get.height * 0.25,
                 child: ListView.separated(
-                  physics: const ScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-                  itemBuilder: (context, index) => InkWell(
-                      onTap: () {
-                        if (eventController.filteredEvent[index].type ==
-                            "tournament") {
-                          Get.to(() => AccountTournamentDetail(
-                              item: eventController.filteredEvent[index]));
-                        } else {
-                          Get.to(() => SocialEventDetails(
-                              item: eventController.filteredEvent[index]));
-                        }
-                      },
-                      child: FixtureCardScrollable(
-                          backgroundColor: _colors[index % _colors.length])),
-                  itemCount: eventController.filteredEvent.length),
-                ),
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    separatorBuilder: (context, index) =>
+                        Gap(Get.height * 0.02),
+                    itemBuilder: (context, index) => InkWell(
+                        onTap: () {
+                          if (eventController.filteredEvent[index].type ==
+                              "tournament") {
+                            Get.to(() => AccountTournamentDetail(
+                                item: eventController.filteredEvent[index]));
+                          } else {
+                            Get.to(() => SocialEventDetails(
+                                item: eventController.filteredEvent[index]));
+                          }
+                        },
+                        child: FixtureCardScrollable(
+                            backgroundColor: _colors[index % _colors.length])),
+                    itemCount: eventController.filteredEvent.length),
+              ),
             ),
             Gap(Get.height * 0.005),
             Divider(

@@ -9,7 +9,9 @@ import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/components/games_played_details.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:e_sport/ui/home/post/components/report_page.dart';
+import 'package:e_sport/ui/profiles/components/recent_posts.dart';
 import 'package:e_sport/ui/profiles/components/user_game_played_item.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
@@ -47,6 +49,7 @@ class UserDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authController = Get.put(AuthRepository());
+      final postController = Get.put(PostRepository());
 
     return Obx(
       () => Scaffold(
@@ -519,7 +522,30 @@ class _UserProfileState extends State<UserProfile> {
         ),
       ),
       Gap(Get.height * 0.02),
-      const ComingSoonWidget(),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+        child: SizedBox(
+          width: double.infinity,
+          height: Get.height * 0.46,
+          child: ListView.separated(
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+              itemBuilder: (context, index) => InkWell(
+                  onTap: () {
+                      Get.to(() => PostDetails(
+                          item: postController.forYouPosts[index]));
+                  }, 
+                  child: SizedBox(
+                    width: Get.height * 0.35,
+                    child: PostItemForProfile(item: postController.forYouPosts[index])
+                  )
+              ),
+              itemCount: postController.forYouPosts.length),
+        ),
+      ),
+      Gap(Get.height * 0.005),
       Divider(
         color: AppColor().lightItemsColor.withOpacity(0.3),
         height: Get.height * 0.05,

@@ -5,6 +5,7 @@ import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_teams/apply_as_player.dart';
@@ -15,7 +16,9 @@ import 'package:e_sport/ui/components/no_item_page.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:e_sport/ui/home/post/components/report_page.dart';
+import 'package:e_sport/ui/profiles/components/recent_posts.dart';
 import 'package:e_sport/ui/profiles/components/team_games_played_item.dart';
 import 'package:e_sport/ui/profiles/components/teams_games_played_list.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
@@ -42,6 +45,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
   final teamController = Get.put(TeamRepository());
   final authController = Get.put(AuthRepository());
   final gamesController = Get.put(GamesRepository());
+    final postController = Get.put(PostRepository());
 
   List<Map<String, dynamic>>? _teamFollowers;
   bool _isFollowing = false;
@@ -519,8 +523,31 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
               title: 'Recent Posts',
             ),
           ),
-          NoItemPage(title: 'Recent posts', size: Get.height * 0.05),
-          Gap(Get.height * 0.01),
+      Gap(Get.height * 0.02),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+        child: SizedBox(
+          width: double.infinity,
+          height: Get.height * 0.46,
+          child: ListView.separated(
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+              itemBuilder: (context, index) => InkWell(
+                  onTap: () {
+                      Get.to(() => PostDetails(
+                          item: postController.forYouPosts[index]));
+                  }, 
+                  child: SizedBox(
+                    width: Get.height * 0.35,
+                    child: PostItemForProfile(item: postController.forYouPosts[index])
+                  )
+              ),
+              itemCount: postController.forYouPosts.length),
+        ),
+      ),
+      Gap(Get.height * 0.005),
           Divider(
             color: AppColor().lightItemsColor.withOpacity(0.3),
             height: Get.height * 0.05,
