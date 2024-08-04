@@ -165,7 +165,7 @@ class SocialEventItem extends StatelessWidget {
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'Event link: ',
-                  subTitle: 'https://spaces.twitter.com/coc...',
+                  subTitle: item.linkForBracket,
                 ),
                 Gap(Get.height * 0.01),
               ],

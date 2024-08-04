@@ -358,7 +358,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                           Gap(Get.height * 0.01),
                           textItem(
                             title: 'Event link: ',
-                            subTitle: 'https://spaces.twitter.com/coc...',
+                            subTitle: widget.item.linkForBracket,
                           ),
                           Gap(Get.height * 0.01),
                         ],
