@@ -7,6 +7,7 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:e_sport/ui/home/post/components/report_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
@@ -16,18 +17,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:html/parser.dart';
 import 'package:like_button/like_button.dart';
-import 'post_details.dart';
 
-class PostItem extends StatefulWidget {
+// Post Item For Profile
+
+class PostItemForProfile extends StatefulWidget {
   final PostModel item;
-  const PostItem({super.key, required this.item});
+  const PostItemForProfile({super.key, required this.item});
 
   @override
-  State<PostItem> createState() => _PostItemState();
+  State<PostItemForProfile> createState() => _PostItemForProfileState();
 }
 
-class _PostItemState extends State<PostItem> {
+class _PostItemForProfileState extends State<PostItemForProfile> {
+  
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   final navController = Get.put(NavRepository());
@@ -161,7 +165,7 @@ class _PostItemState extends State<PostItem> {
                       Gap(Get.height * 0.01),
                       if (widget.item.body != '')
                         CustomText(
-                          title: widget.item.body!.characters.take(200).toString().toUpperFirstCase(),
+                          title: widget.item.body!.characters.take(100).toString().toUpperFirstCase(),
                           size: Get.height * 0.015,
                           fontFamily: 'GilroyBold',
                           textAlign: TextAlign.start,
@@ -285,22 +289,25 @@ class _PostItemState extends State<PostItem> {
                                     ),
                                   ),
                             Gap(Get.height * 0.01),
-                            CustomText(
-                              title: widget.item.repost!.author!.userName!,
-                              size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
-                              textAlign: TextAlign.start,
-                              color: AppColor().lightItemsColor,
-                            ),
-                            Gap(Get.height * 0.005),
-                            const SmallCircle(),
-                            Gap(Get.height * 0.005),
-                            CustomText(
-                              title: timeAgo(widget.item.createdAt!),
-                              size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
-                              textAlign: TextAlign.start,
-                              color: AppColor().lightItemsColor,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomText(
+                                  title: widget.item.repost!.author!.userName!,
+                                  size: Get.height * 0.015,
+                                  fontFamily: 'GilroyMedium',
+                                  textAlign: TextAlign.start,
+                                  color: AppColor().lightItemsColor,
+                                ),
+                                Gap(Get.height * 0.005),
+                                CustomText(
+                                  title: timeAgo(widget.item.createdAt!),
+                                  size: Get.height * 0.015,
+                                  fontFamily: 'GilroyMedium',
+                                  textAlign: TextAlign.start,
+                                  color: AppColor().lightItemsColor,
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -319,8 +326,8 @@ class _PostItemState extends State<PostItem> {
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: CustomText(
                 title: widget.item.repost == null
-                    ? widget.item.body!.characters.take(200).toString().toUpperFirstCase()
-                    : widget.item.repost!.body!.characters.take(200).toString().toUpperFirstCase(),
+                    ? widget.item.body!.characters.take(220).toString().toUpperFirstCase()
+                    : widget.item.repost!.body!.characters.take(100).toString().toUpperFirstCase(),
                 size: Get.height * 0.015,
                 fontFamily: 'GilroyMedium',
                 textAlign: TextAlign.start,
@@ -342,7 +349,7 @@ class _PostItemState extends State<PostItem> {
                                   onTap: () => Helpers().showImagePopup(
                                       context, widget.item.image!),
                                   child: CachedNetworkImage(
-                                    height: Get.height * 0.25,
+                                    height: Get.width * 0.431,
                                     width: double.infinity,
                                     progressIndicatorBuilder:
                                         (context, url, progress) => Center(
@@ -374,7 +381,7 @@ class _PostItemState extends State<PostItem> {
                           child: widget.item.repost!.image == null
                               ? Container()
                               : CachedNetworkImage(
-                                  height: Get.height * 0.25,
+                                  height: Get.width * 0.25,
                                   width: double.infinity,
                                   progressIndicatorBuilder:
                                       (context, url, progress) => Center(
@@ -447,7 +454,6 @@ class _PostItemState extends State<PostItem> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  profileMenu(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,

@@ -10,9 +10,13 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/social_event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
+import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
+import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/home/post/components/post_details.dart';
+import 'package:e_sport/ui/profiles/components/recent_posts.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -39,6 +43,7 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
   final communityController = Get.put(CommunityRepository());
   final socialEventController = Get.put(SocialEventRepository());
   final tournamentController = Get.put(TournamentRepository());
+  final postController = Get.put(PostRepository());
 
   List<Map<String, dynamic>>? _communityFollowers;
   List<UserModel>? _participantList;
@@ -466,7 +471,44 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
               height: Get.height * 0.05,
               thickness: 4,
             ),
+            Gap(Get.height * 0.005),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: PageHeaderWidget(
+                onTap: () {},
+                title: 'Announcements',
+              ),
+            ),
             Gap(Get.height * 0.02),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              child: SizedBox(
+                width: double.infinity,
+                height: Get.height * 0.46,
+                child: ListView.separated(
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    separatorBuilder: (context, index) =>
+                        Gap(Get.height * 0.02),
+                    itemBuilder: (context, index) => InkWell(
+                        onTap: () {
+                          Get.to(() => PostDetails(
+                              item: postController.forYouPosts[index]));
+                        },
+                        child: SizedBox(
+                            width: Get.height * 0.35,
+                            child: PostItemForProfile(
+                                item: postController.forYouPosts[index]))),
+                    itemCount: postController.forYouPosts.length),
+              ),
+            ),
+            Gap(Get.height * 0.005),
+            Divider(
+              color: AppColor().lightItemsColor.withOpacity(0.3),
+              height: Get.height * 0.05,
+              thickness: 4,
+            ),
           ],
         ),
       ),

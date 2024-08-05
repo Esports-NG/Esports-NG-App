@@ -87,7 +87,7 @@ class _DashboardState extends State<Dashboard> {
         textStyle: TextStyle(
           fontFamily: 'GilroyMedium',
           fontWeight: FontWeight.normal,
-          fontSize: Get.height * 0.015,
+          fontSize: Get.height * 0.01,
         ),
       ),
       PersistentBottomNavBarItem(
@@ -98,7 +98,7 @@ class _DashboardState extends State<Dashboard> {
         textStyle: TextStyle(
           fontFamily: 'GilroyMedium',
           fontWeight: FontWeight.normal,
-          fontSize: Get.height * 0.015,
+          fontSize: Get.height * 0.01,
         ),
       ),
       PersistentBottomNavBarItem(
@@ -109,7 +109,7 @@ class _DashboardState extends State<Dashboard> {
         textStyle: TextStyle(
           fontFamily: 'GilroyMedium',
           fontWeight: FontWeight.normal,
-          fontSize: Get.height * 0.015,
+          fontSize: Get.height * 0.01,
         ),
       ),
       PersistentBottomNavBarItem(
@@ -124,7 +124,7 @@ class _DashboardState extends State<Dashboard> {
         textStyle: TextStyle(
           fontFamily: 'GilroyMedium',
           fontWeight: FontWeight.normal,
-          fontSize: Get.height * 0.015,
+          fontSize: Get.height * 0.01,
         ),
       ),
     ];

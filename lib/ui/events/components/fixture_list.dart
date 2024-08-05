@@ -1,20 +1,40 @@
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/components/account_tournament_detail.dart';
+import 'package:e_sport/ui/events/components/fixture_item.dart';
 import 'package:e_sport/ui/events/components/social_event_details.dart';
+import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class AllEventList extends StatefulWidget {
-  const AllEventList({super.key});
+class FixtureList extends StatefulWidget {
+  const FixtureList({super.key});
 
   @override
-  State<AllEventList> createState() => _AllEventListState();
+  State<FixtureList> createState() => _FixtureListState();
 }
 
-class _AllEventListState extends State<AllEventList> {
+class _FixtureListState extends State<FixtureList> {
   var eventController = Get.put(EventRepository());
+  final _colors = [
+    LinearGradient(
+      colors: [
+        AppColor().fixturePurple,
+        AppColor().fixturePurple,
+      ],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    ),
+    LinearGradient(
+      colors: [
+        AppColor().darkGrey.withOpacity(0.8),
+        AppColor().bgDark.withOpacity(0.005),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomCenter,
+    ),
+  ];
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -31,8 +51,7 @@ class _AllEventListState extends State<AllEventList> {
                       item: eventController.filteredEvent[index]));
                 }
               },
-              child: AccountEventsItem(
-                  item: eventController.filteredEvent[index])),
+              child: FixtureCardTournament(backgroundColor: _colors[index % _colors.length])),
           separatorBuilder: (context, index) => Gap(Get.height * 0.02),
           itemCount: eventController.filteredEvent.length),
     );

@@ -199,11 +199,6 @@ class _CommunityPageState extends State<CommunityPage> {
                   thickness: 4,
                 ),
                 Gap(Get.height * 0.03),
-                Divider(
-                  color: AppColor().primaryWhite.withOpacity(0.1),
-                  thickness: 4,
-                ),
-                Gap(Get.height * 0.03),
                 Column(
                   children: [
                     Padding(
