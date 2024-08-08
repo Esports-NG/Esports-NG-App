@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage>
                                   child: CupertinoSearchTextField(
                                     placeholder: 'Search recent posts...',
                                     onSubmitted: (_) =>
-                                        Get.to(() => const SearchScreen()),
+                                        Get.to(() => SearchScreen(selectedPage: 0,)),
                                     borderRadius: BorderRadius.circular(10),
                                     prefixInsets: const EdgeInsets.only(
                                         right: 5, left: 10),

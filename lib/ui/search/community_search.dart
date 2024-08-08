@@ -37,20 +37,23 @@ class _CommunitySearchState extends State<CommunitySearch> {
                     )
                   : Column(
                       children: [
-                        ListView.separated(
-                            physics: const ScrollPhysics(),
+                        GridView.builder(
+                            physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
-                            separatorBuilder: (context, index) =>
-                                Gap(Get.height * 0.02),
-                            itemCount:
-                                communityController.searchedCommunities.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 1 * 0.67,
+                            ),
+                            itemCount: communityController.searchedCommunities.length,
                             itemBuilder: (context, index) {
-                              var item = communityController
-                                  .searchedCommunities[index];
+                              var item = communityController.searchedCommunities[index];
                               return GestureDetector(
                                   onTap: () => Get.to(
                                       () => AccountCommunityDetail(item: item)),
-                                  child: AllCommunityItem(item: item));
+                                  child: CommunityItem(item: item));
                             })
                       ],
                     ),
