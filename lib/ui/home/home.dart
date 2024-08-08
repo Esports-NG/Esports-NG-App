@@ -162,20 +162,24 @@ class _HomePageState extends State<HomePage>
                               ),
                               Gap(Get.height * 0.025),
                               SizedBox(
-                                  height: 50,
+                                  height: Get.height * 0.06,
                                   child: CupertinoSearchTextField(
+                                    placeholder: 'Search recent posts...',
                                     onSubmitted: (_) =>
                                         Get.to(() => const SearchScreen()),
                                     borderRadius: BorderRadius.circular(10),
                                     prefixInsets: const EdgeInsets.only(
-                                        right: 10, left: 10),
+                                        right: 5, left: 10),
                                     controller: authController.searchController,
                                     itemColor: AppColor()
                                         .primaryWhite
                                         .withOpacity(0.5),
                                     style: TextStyle(
                                         color: AppColor().primaryWhite,
-                                        fontFamily: 'GilroyMedium'),
+                                        fontFamily: 'GilroyMedium',
+                                        fontSize: 14,
+                                        height: Get.height * 0.0019,
+                                        ),
                                   )),
                               Gap(Get.height * 0.025),
                               TabBar(

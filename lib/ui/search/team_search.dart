@@ -44,7 +44,7 @@ class _TeamSearchState extends State<TeamSearch> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20,
-                              childAspectRatio: 1 * 0.68,
+                              childAspectRatio: 1 * 0.7,
                             ),
                             itemCount: teamController.searchedTeams.length,
                             itemBuilder: (context, index) {
