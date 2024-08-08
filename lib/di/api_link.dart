@@ -21,6 +21,8 @@ class ApiLink {
   static String followUser = "${baseurl}extra/followuser/";
   // static String followCommunity = "${baseurl}extra/followcomm/";
   static String viewUserTeam = "${baseurl}team/myteam/";
+  static String searchAll(String query) =>
+      "${baseurl}extra/search/?param=$query";
 
   //Post
   static String createPost = "${baseurl}post/create/";
@@ -39,6 +41,8 @@ class ApiLink {
   static String likeComment(int commentId) =>
       "${baseurl}post/comment/$commentId/like/";
   static String report = "${baseurl}extra/report/";
+  static String searchForPostsorUsers(String query, String type) =>
+      "${baseurl}$type/search_${type}s/?search=$query";
 
   //Team
   static String createTeam = "${baseurl}team/create/";
@@ -113,6 +117,8 @@ class ApiLink {
   static String followGame(int gameId) => "${baseurl}games/follow/$gameId/";
   static String getGameFollowers(int gameId) =>
       "${baseurl}games/followers/$gameId/users/";
+  static String searchForGames(String query) =>
+      "${baseurl}games/find_game/?search=$query";
 
   // News
   static String getNews =

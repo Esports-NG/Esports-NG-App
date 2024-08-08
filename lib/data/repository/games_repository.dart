@@ -18,6 +18,7 @@ class GamesRepository extends GetxController {
   TextEditingController gameSearchText = TextEditingController();
   RxList<GamePlayed> filteredGames = <GamePlayed>[].obs;
   RxList<GamePlayed> filteredUserGames = <GamePlayed>[].obs;
+  RxList<GamePlayed> searchedGames = <GamePlayed>[].obs;
 
   @override
   onInit() {
@@ -150,6 +151,19 @@ class GamesRepository extends GetxController {
       } else {
         return "error";
       }
+    } catch (err) {}
+  }
+
+  Future searchForGames(String query) async {
+    try {
+      var response =
+          await http.get(Uri.parse(ApiLink.searchForGames(query)), headers: {
+        "Authorization": "JWT ${authController.token}",
+        "Content-type": "application/json"
+      });
+      var list = List.from(jsonDecode(response.body));
+      var games = list.map((e) => GamePlayed.fromJson(e)).toList();
+      searchedGames.assignAll(games);
     } catch (err) {}
   }
 }

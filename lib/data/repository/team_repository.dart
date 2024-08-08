@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_inbox_model.dart';
@@ -14,8 +15,8 @@ import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 enum TeamStatus {
   loading,
@@ -61,6 +62,8 @@ class TeamRepository extends GetxController {
   final Rx<List<TeamModel>> _allTeam = Rx([]);
   final Rx<List<TeamModel>?> _myTeam = Rx([]);
   final Rx<TeamInboxModel?> _teamInbox = Rx(null);
+
+  final RxList<TeamModel> searchedTeams = <TeamModel>[].obs;
 
   List<TeamModel> get allTeam => _allTeam.value;
   List<TeamModel> get myTeam => _myTeam.value!;

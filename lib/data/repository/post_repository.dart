@@ -3,19 +3,20 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/news_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
-import 'package:e_sport/ui/home/components/create_success_page.dart';
-import 'package:e_sport/util/helpers.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/home/components/create_success_page.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 enum LikePostStatus { loading, success, error, empty }
 
@@ -54,6 +55,7 @@ class PostRepository extends GetxController {
   List<PostModel> get followingPost => _followingPost.value;
   List<PostModel> get forYouPosts => _forYouPosts.value;
   List<NewsModel> get news => _news.value;
+  RxList<PostModel> searchedPosts = <PostModel>[].obs;
 
   final _postStatus = PostStatus.empty.obs;
   final _bookmarkStatus = BookmarkStatus.empty.obs;
@@ -656,6 +658,19 @@ class PostRepository extends GetxController {
     log(response.body);
     var newsFromJson = newsModelFromJson(response.body);
     _news.value = newsFromJson;
+  }
+
+  Future searchForPosts(String query) async {
+    var response = await http
+        .get(Uri.parse(ApiLink.searchForPostsorUsers(query, "post")), headers: {
+      "Authorization": "JWT ${authController.token}",
+      "Content-type": "application/json"
+    });
+    log(response.body);
+    var json = jsonDecode(response.body);
+    var list = List.from(json);
+    var posts = list.map((e) => PostModel.fromJson(e)).toList();
+    searchedPosts.assignAll(posts);
   }
 
   void handleError(dynamic error) {

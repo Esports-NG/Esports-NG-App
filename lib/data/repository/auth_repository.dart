@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/shared_pref.dart';
@@ -12,8 +13,8 @@ import 'package:e_sport/ui/home/root.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 enum DeliveryAddressStatus {
   empty,
@@ -169,6 +170,8 @@ class AuthRepository extends GetxController {
 
   SharedPref? pref;
 
+  RxList<UserModel> searchedUsers = <UserModel>[].obs;
+
   Rx<String> mToken = Rx("");
   String get token => mToken.value;
 
@@ -176,6 +179,7 @@ class AuthRepository extends GetxController {
   RxBool mGetCountryCode = false.obs;
   RxBool mNetworkAvailable = false.obs;
   RxBool isLoading = false.obs;
+  RxBool searchLoading = false.obs;
 
   Rx<String> mFcmToken = Rx("");
   String get fcmToken => mFcmToken.value;
@@ -742,6 +746,37 @@ class AuthRepository extends GetxController {
       }
       debugPrint("getting country code error: ${error.toString()}");
     }
+  }
+
+  Future searchForUsers(String query) async {
+    try {
+      var response = await http.get(
+          Uri.parse(ApiLink.searchForPostsorUsers(query, "user")),
+          headers: {
+            "Authorization": "JWT $token",
+            "Content-type": "application/json"
+          });
+
+      var json = jsonDecode(response.body);
+      var list = List.from(json);
+      var users = list.map((e) => UserModel.fromJson(e)).toList();
+
+      searchedUsers.assignAll(users);
+    } catch (err) {}
+  }
+
+  Future searchAll(String query) async {
+    try {
+      var response = await http.get(Uri.parse(ApiLink.searchAll(query)),
+          headers: {
+            "Authorization": "JWT $token",
+            "Content-type": "application/json"
+          });
+
+      var json = jsonDecode(response.body);
+
+      return json;
+    } catch (err) {}
   }
 
   void getError(var error) {
