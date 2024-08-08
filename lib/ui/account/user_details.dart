@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/user_profile.dart';
@@ -49,7 +50,7 @@ class UserDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authController = Get.put(AuthRepository());
-      final postController = Get.put(PostRepository());
+    final postController = Get.put(PostRepository());
 
     return Obx(
       () => Scaffold(
@@ -526,7 +527,7 @@ class _UserProfileState extends State<UserProfile> {
         padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
         child: SizedBox(
           width: double.infinity,
-          height: Get.height * 0.46,
+          height: Get.height * 0.38,
           child: ListView.separated(
               physics: const ScrollPhysics(),
               shrinkWrap: true,
@@ -534,14 +535,13 @@ class _UserProfileState extends State<UserProfile> {
               separatorBuilder: (context, index) => Gap(Get.height * 0.02),
               itemBuilder: (context, index) => InkWell(
                   onTap: () {
-                      Get.to(() => PostDetails(
-                          item: postController.forYouPosts[index]));
-                  }, 
+                    Get.to(() =>
+                        PostDetails(item: postController.forYouPosts[index]));
+                  },
                   child: SizedBox(
-                    width: Get.height * 0.35,
-                    child: PostItemForProfile(item: postController.forYouPosts[index])
-                  )
-              ),
+                      width: Get.height * 0.35,
+                      child: PostItemForProfile(
+                          item: postController.forYouPosts[index]))),
               itemCount: postController.forYouPosts.length),
         ),
       ),

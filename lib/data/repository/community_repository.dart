@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
@@ -13,8 +14,8 @@ import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 enum CommunityStatus {
   loading,
@@ -44,6 +45,8 @@ class CommunityRepository extends GetxController {
   final Rx<List<CommunityModel>> _myCommunity = Rx([]);
   List<CommunityModel> get allCommunity => _allCommunity.value;
   List<CommunityModel> get myCommunity => _myCommunity.value;
+
+  final RxList<CommunityModel> searchedCommunities = <CommunityModel>[].obs;
 
   RxList<UserModel> suggestedProfiles = RxList([]);
 
