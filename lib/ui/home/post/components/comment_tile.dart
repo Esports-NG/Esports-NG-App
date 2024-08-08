@@ -67,12 +67,15 @@ class _CommentTileState extends State<CommentTile> {
               size: Get.height * 0.015,
             ),
             Gap(Get.height * 0.01),
-            CustomText(
-              title: widget.item.body!,
-              color: AppColor().primaryWhite,
-              weight: FontWeight.w400,
-              fontFamily: 'GilroyBold',
-              size: Get.height * 0.015,
+            SizedBox(
+              width: Get.width * 0.65,
+              child: CustomText(
+                title: widget.item.body!,
+                color: AppColor().primaryWhite,
+                weight: FontWeight.w400,
+                fontFamily: 'GilroyBold',
+                size: Get.height * 0.015,
+              ),
             ),
             Gap(Get.height * 0.01),
             Row(

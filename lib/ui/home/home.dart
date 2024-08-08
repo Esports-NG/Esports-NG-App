@@ -149,8 +149,9 @@ class _HomePageState extends State<HomePage>
                                           );
                                         },
                                         child: SvgPicture.asset(
-                                          'assets/images/svg/notification.svg',
+                                          'assets/images/svg/notification_icon.svg',
                                           height: Get.height * 0.025,
+                                          color: AppColor().primaryWhite,
                                         ),
                                       ),
                                     ],
