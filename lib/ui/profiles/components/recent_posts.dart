@@ -17,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:html/parser.dart';
 import 'package:like_button/like_button.dart';
 
 // Post Item For Profile
@@ -31,7 +30,6 @@ class PostItemForProfile extends StatefulWidget {
 }
 
 class _PostItemForProfileState extends State<PostItemForProfile> {
-  
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   final navController = Get.put(NavRepository());
@@ -90,8 +88,8 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.item.repost != null)
-              InkWell(
-                borderRadius: BorderRadius.circular(10),
+              GestureDetector(
+                // borderRadius: BorderRadius.circular(10),
                 onTap: () {
                   Get.to(() => PostDetails(item: widget.item));
                 },
@@ -114,7 +112,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                                       height: Get.height * 0.025,
                                       width: Get.height * 0.025,
                                     )
-                                  : InkWell(
+                                  : GestureDetector(
                                       onTap: () => Get.to(() => UserDetails(
                                           id: widget.item.author!.id!)),
                                       child: CachedNetworkImage(
@@ -153,7 +151,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                               ),
                             ],
                           ),
-                          InkWell(
+                          GestureDetector(
                             child: Icon(
                               Icons.more_vert,
                               color: AppColor().primaryWhite,
@@ -165,7 +163,10 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                       Gap(Get.height * 0.01),
                       if (widget.item.body != '')
                         CustomText(
-                          title: widget.item.body!.characters.take(100).toString().toUpperFirstCase(),
+                          title: widget.item.body!.characters
+                              .take(100)
+                              .toString()
+                              .toUpperFirstCase(),
                           size: Get.height * 0.015,
                           fontFamily: 'GilroyBold',
                           textAlign: TextAlign.start,
@@ -191,7 +192,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                           children: [
                             (widget.item.author!.profile!.profilePicture ==
                                     null)
-                                ? InkWell(
+                                ? GestureDetector(
                                     onTap: () {
                                       Get.to(() => UserDetails(
                                           id: widget.item.author!.id!));
@@ -201,7 +202,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                                         height: Get.height * 0.035,
                                         width: Get.height * 0.035),
                                   )
-                                : InkWell(
+                                : GestureDetector(
                                     onTap: () {
                                       Get.to(() => UserDetails(
                                           id: widget.item.author!.id!));
@@ -260,7 +261,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                                     'assets/images/svg/people.svg',
                                     height: Get.height * 0.035,
                                     width: Get.height * 0.035)
-                                : InkWell(
+                                : GestureDetector(
                                     onTap: () => Get.to(() => UserDetails(
                                         id: widget.item.repost!.author!.id!)),
                                     child: CachedNetworkImage(
@@ -312,7 +313,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                           ],
                         ),
                   if (widget.item.repost == null)
-                    InkWell(
+                    GestureDetector(
                       child: Icon(
                         Icons.more_vert,
                         color: AppColor().primaryWhite,
@@ -326,8 +327,14 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: CustomText(
                 title: widget.item.repost == null
-                    ? widget.item.body!.characters.take(220).toString().toUpperFirstCase()
-                    : widget.item.repost!.body!.characters.take(100).toString().toUpperFirstCase(),
+                    ? widget.item.body!.characters
+                        .take(220)
+                        .toString()
+                        .toUpperFirstCase()
+                    : widget.item.repost!.body!.characters
+                        .take(100)
+                        .toString()
+                        .toUpperFirstCase(),
                 size: Get.height * 0.015,
                 fontFamily: 'GilroyMedium',
                 textAlign: TextAlign.start,
@@ -449,6 +456,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                 ],
               ),
             ),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -511,7 +519,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                   ),
                   Row(
                     children: [
-                      InkWell(
+                      GestureDetector(
                         child: Icon(
                           Icons.sms_outlined,
                           color: AppColor().primaryWhite,
@@ -531,7 +539,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                   ),
                   Row(
                     children: [
-                      InkWell(
+                      GestureDetector(
                         child: Icon(
                           Icons.share_outlined,
                           color: AppColor().primaryWhite,

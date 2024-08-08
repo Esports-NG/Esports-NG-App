@@ -5,9 +5,9 @@ import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/all_post_widget.dart';
 import 'package:e_sport/ui/components/news_widget.dart';
+import 'package:e_sport/ui/search/search_screen.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'components/profile_image.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,6 +35,7 @@ class _HomePageState extends State<HomePage>
   final postController = Get.put(PostRepository());
   late final TabController _tabController =
       TabController(length: 4, vsync: this);
+
   @override
   void dispose() {
     _searchFocusNode.dispose();
@@ -159,29 +161,21 @@ class _HomePageState extends State<HomePage>
                               ),
                               Gap(Get.height * 0.025),
                               SizedBox(
-                                height: Get.height * 0.06,
-                                child: CustomTextField(
-                                  hint: "Search recent posts...",
-                                  fontFamily: 'GilroyMedium',
-                                  prefixIcon: Icon(
-                                    CupertinoIcons.search,
-                                    color: AppColor().lightItemsColor,
-                                  ),
-                                  textEditingController:
-                                      authController.searchController,
-                                  hasText: isSearch!,
-                                  focusNode: _searchFocusNode,
-                                  onTap: handleTap,
-                                  onSubmited: (_) {
-                                    _searchFocusNode.unfocus();
-                                  },
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isSearch = value.isNotEmpty;
-                                    });
-                                  },
-                                ),
-                              ),
+                                  height: 50,
+                                  child: CupertinoSearchTextField(
+                                    onSubmitted: (_) =>
+                                        Get.to(() => const SearchScreen()),
+                                    borderRadius: BorderRadius.circular(10),
+                                    prefixInsets: const EdgeInsets.only(
+                                        right: 10, left: 10),
+                                    controller: authController.searchController,
+                                    itemColor: AppColor()
+                                        .primaryWhite
+                                        .withOpacity(0.5),
+                                    style: TextStyle(
+                                        color: AppColor().primaryWhite,
+                                        fontFamily: 'GilroyMedium'),
+                                  )),
                               Gap(Get.height * 0.025),
                               TabBar(
                                   isScrollable: true,

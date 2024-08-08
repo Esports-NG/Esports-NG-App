@@ -2,14 +2,15 @@
 
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/auth/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 enum EventStatus {
   empty,
@@ -59,6 +60,8 @@ class EventRepository extends GetxController
   final Rx<List<EventModel>> _myTournaments = Rx([]);
   final Rx<List<EventModel>> _allSocialEvent = Rx([]);
   final Rx<List<EventModel>> _mySocialEvent = Rx([]);
+
+  final RxList<EventModel> searchedEvents = <EventModel>[].obs;
 
   RxBool isFiltering = true.obs;
 
