@@ -40,7 +40,7 @@ class _UsersSearchState extends State<UsersSearch> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20,
-                              childAspectRatio: 1 * 0.8,
+                              childAspectRatio: 1 * 0.75,
                             ),
                             itemCount: authController.searchedUsers.length,
                             itemBuilder: (context, index) {

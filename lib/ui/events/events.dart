@@ -1,8 +1,10 @@
 import 'dart:math';
 
 // import 'package:e_sport/data/model/category_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/events/components/event_tab.dart';
+import 'package:e_sport/ui/search/search_screen.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
@@ -24,6 +26,7 @@ class _EventsPageState extends State<EventsPage>
   final FocusNode _searchFocusNode = FocusNode();
   int? eventType = 0;
   final eventController = Get.put(EventRepository());
+  final authController = Get.put(AuthRepository());
 
   @override
   void dispose() {
@@ -69,28 +72,25 @@ class _EventsPageState extends State<EventsPage>
                   Padding(
                     padding: EdgeInsets.all(Get.height * 0.02),
                     child: SizedBox(
-                      height: Get.height * 0.06,
-                      child: CustomTextField(
-                        hint: "Search for events...",
-                        fontFamily: 'GilroyMedium',
-                        prefixIcon: Icon(
-                          CupertinoIcons.search,
-                          color: AppColor().lightItemsColor,
-                        ),
-                        textEditingController: eventController.searchController,
-                        hasText: isSearch!,
-                        focusNode: _searchFocusNode,
-                        onTap: handleTap,
-                        onSubmited: (_) {
-                          _searchFocusNode.unfocus();
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            isSearch = value.isNotEmpty;
-                          });
-                        },
-                      ),
-                    ),
+                                  height: Get.height * 0.06,
+                                  child: CupertinoSearchTextField(
+                                    placeholder: 'Search for events...',
+                                    onSubmitted: (_) =>
+                                        Get.to(() => SearchScreen(selectedPage: 3,)),
+                                    borderRadius: BorderRadius.circular(10),
+                                    prefixInsets: const EdgeInsets.only(
+                                        right: 5, left: 10),
+                                    controller: authController.searchController,
+                                    itemColor: AppColor()
+                                        .primaryWhite
+                                        .withOpacity(0.5),
+                                    style: TextStyle(
+                                        color: AppColor().primaryWhite,
+                                        fontFamily: 'GilroyMedium',
+                                        fontSize: 14,
+                                        height: Get.height * 0.0019,
+                                        ),
+                                  )),
                   ),
                 ],
               ),

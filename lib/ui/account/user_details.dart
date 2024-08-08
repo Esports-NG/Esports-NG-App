@@ -527,7 +527,7 @@ class _UserProfileState extends State<UserProfile> {
         padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
         child: SizedBox(
           width: double.infinity,
-          height: Get.height * 0.38,
+          height: Get.height * 0.46,
           child: ListView.separated(
               physics: const ScrollPhysics(),
               shrinkWrap: true,

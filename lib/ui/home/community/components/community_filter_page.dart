@@ -1,3 +1,4 @@
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
@@ -9,9 +10,11 @@ import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/home/community/components/suggested_profile_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_team_item.dart';
+import 'package:e_sport/ui/search/search_screen.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -27,6 +30,7 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
   final communityController = Get.put(CommunityRepository());
   final gameController = Get.put(GamesRepository());
   final teamController = Get.put(TeamRepository());
+  final authController = Get.put(AuthRepository());
 
   @override
   void dispose() {
@@ -57,6 +61,33 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                 title: communityController.typeFilter.value,
                 onFilterPage: true,
               ),
+              Gap(Get.height * 0.02),
+              SizedBox(
+                  height: Get.height * 0.06,
+                  child: CupertinoSearchTextField(
+                    placeholder: 'Search ${communityController.typeFilter.value}...',
+                    onSubmitted: (_) => Get.to(() => SearchScreen(
+                      selectedPage: communityController.typeFilter.value == "Trending Games"
+                          ? 2
+                          : communityController.typeFilter.value ==
+                                  "Suggested Profiles"
+                              ? 1
+                              : communityController.typeFilter.value ==
+                                      "Trending Teams"
+                                  ? 4
+                                  : 5
+                                  )),
+                    borderRadius: BorderRadius.circular(10),
+                    prefixInsets: const EdgeInsets.only(right: 5, left: 10),
+                    controller: authController.searchController,
+                    itemColor: AppColor().primaryWhite.withOpacity(0.5),
+                    style: TextStyle(
+                      color: AppColor().primaryWhite,
+                      fontFamily: 'GilroyMedium',
+                      fontSize: 14,
+                      height: Get.height * 0.0019,
+                    ),
+                  )),
               Gap(Get.height * 0.02),
               GridView.builder(
                   physics: const BouncingScrollPhysics(),

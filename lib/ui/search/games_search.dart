@@ -43,6 +43,7 @@ class _GamesSearchState extends State<GamesSearch> {
     return SingleChildScrollView(
       child: Obx(
         () => Container(
+          padding: EdgeInsets.all(Get.height * 0.02),
           child: authController.searchLoading.value
               ? const Center(child: ButtonLoader())
               : gameController.searchedGames.isEmpty
@@ -52,36 +53,33 @@ class _GamesSearchState extends State<GamesSearch> {
                         color: AppColor().primaryWhite,
                       ),
                     )
-                  : Padding(
-                      padding: EdgeInsets.all(Get.height * 0.02),
-                      child: Column(
-                        children: [
-                          GridView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 20,
-                                mainAxisSpacing: 20,
-                                childAspectRatio: 1 * 0.8,
-                              ),
-                              itemCount: gameController.searchedGames.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      Get.to(() => GameProfile(
-                                          game: gameController
-                                              .searchedGames[index]));
-                                    },
-                                    child: TrendingGamesItem(
-                                        isOnTrendingPage: true,
-                                        game: gameController
-                                            .searchedGames[index]));
-                              })
-                        ],
-                      ),
-                    ),
+                  : Column(
+                    children: [
+                      GridView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: 1 * 0.75,
+                          ),
+                          itemCount: gameController.searchedGames.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                                onTap: () {
+                                  Get.to(() => GameProfile(
+                                      game: gameController
+                                          .searchedGames[index]));
+                                },
+                                child: TrendingGamesItem(
+                                    isOnTrendingPage: true,
+                                    game: gameController
+                                        .searchedGames[index]));
+                          })
+                    ],
+                  ),
         ),
       ),
     );
