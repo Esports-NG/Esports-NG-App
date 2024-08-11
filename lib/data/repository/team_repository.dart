@@ -432,6 +432,45 @@ class TeamRepository extends GetxController {
     }
   }
 
+  Future editTeam(int id, Map<String, dynamic> data) async {
+    try {
+      var headers = {
+        "Authorization": "JWT ${authController.token}",
+        "Content-type": "application/json"
+      };
+
+      var request =
+          http.MultipartRequest("PUT", Uri.parse(ApiLink.editTeam(id)))
+            ..fields["name"] = data["name"]
+            ..fields["bio"] = data["bio"]
+            ..fields["abbrev"] = data["abbrev"];
+
+      if (teamProfileImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'profile_picture', teamProfileImage!.path));
+      }
+      if (teamCoverImage != null) {
+        request.files.add(
+            await http.MultipartFile.fromPath('cover', teamCoverImage!.path));
+      }
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        Get.back();
+        Helpers().showCustomSnackbar(message: "Team edited successfully");
+      } else {
+        Helpers().showCustomSnackbar(
+            message: "An error occurred. Please try again.");
+      }
+    } catch (err) {
+      Helpers()
+          .showCustomSnackbar(message: "An error occurred. Please try again.");
+      print(err);
+    }
+  }
+
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(
@@ -458,6 +497,8 @@ class TeamRepository extends GetxController {
 
   void clear() {
     teamNameController.clear();
+    teamAbbrevController.clear();
+    teamBioController.clear();
     gameTagController.clear();
     seeController.clear();
   }

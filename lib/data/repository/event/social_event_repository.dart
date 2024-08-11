@@ -170,7 +170,8 @@ class SocialEventRepository extends GetxController {
           Uri.parse(ApiLink.createSocialEvent(organizingCommunity.value!.id!)))
         ..fields["name"] = eventNameController.text
         ..fields["description"] = eventDescController.text
-        ..fields["entry_fee"] = entryFeeController.text
+        ..fields["entry_fee"] =
+            eventController.currency.value + entryFeeController.text
         ..fields["igames"] = gameCoveredController.text
         ..fields["registration_start"] = regStartDateController.text
         ..fields["registration_end"] = regEndDateController.text

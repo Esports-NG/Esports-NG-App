@@ -61,7 +61,53 @@ class EventRepository extends GetxController
   final Rx<List<EventModel>> _allSocialEvent = Rx([]);
   final Rx<List<EventModel>> _mySocialEvent = Rx([]);
 
+  final Rx<String> currency = "".obs;
+
   final RxList<EventModel> searchedEvents = <EventModel>[].obs;
+
+  Map<String, String> currencies = {
+    "NGN": "₦", // Nigerian Naira
+    "USD": "\$",
+    "EUR": "€",
+    "JPY": "¥",
+    "GBP": "£",
+    "AUD": "A\$",
+    "CAD": "C\$",
+    "CHF": "CHF",
+    "CNY": "¥",
+    "INR": "₹",
+    "RUB": "₽",
+    "BRL": "R\$",
+    "ZAR": "R",
+    "MXN": "\$",
+    "SGD": "S\$",
+    "HKD": "HK\$",
+    "KRW": "₩",
+    "TRY": "₺",
+    "SEK": "kr",
+    "NOK": "kr",
+    "DKK": "kr",
+    "EGP": "£", // Egyptian Pound
+    "KES": "KSh", // Kenyan Shilling
+    "GHS": "₵", // Ghanaian Cedi
+    "ZMW": "ZK", // Zambian Kwacha
+    "TZS": "TSh", // Tanzanian Shilling
+    "UGX": "USh", // Ugandan Shilling
+    "MAD": "MAD", // Moroccan Dirham
+    "DZD": "دج", // Algerian Dinar
+    "TND": "د.ت", // Tunisian Dinar
+    "XOF": "CFA", // West African CFA Franc
+    "XAF": "CFA", // Central African CFA Franc
+    "BWP": "P", // Botswana Pula
+    "MUR": "₨", // Mauritian Rupee
+    "SCR": "₨", // Seychellois Rupee
+    "MZN": "MT", // Mozambican Metical
+    "AOA": "Kz", // Angolan Kwanza
+    "ETB": "Br", // Ethiopian Birr
+    "NAD": "\$", // Namibian Dollar
+    "LSL": "L", // Lesotho Loti
+    "SZL": "E", // Eswatini Lilangeni
+  };
 
   RxBool isFiltering = true.obs;
 

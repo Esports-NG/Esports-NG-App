@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -46,7 +48,7 @@ class CustomText extends StatelessWidget {
           decorationColor: decorationColor,
           decoration: underline ?? TextDecoration.none,
         ),
-        text: title!,
+        text: utf8.decode(title!.runes.toList(), allowMalformed: true),
         textAlign: textAlign ?? TextAlign.left,
         maxLines: maxLines,
         style: TextStyle(

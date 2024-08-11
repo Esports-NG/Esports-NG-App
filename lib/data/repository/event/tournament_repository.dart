@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
@@ -17,8 +18,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class TournamentRepository extends GetxController {
@@ -304,14 +305,19 @@ class TournamentRepository extends GetxController {
         ..fields["reg_end"] = regEndDateController.text
         ..fields["start_date"] = startDateController.text
         ..fields["end_date"] = endDateController.text
-        ..fields["prize_pool"] = prizePoolController.text
+        ..fields["prize_pool"] =
+            eventController.currency.value + prizePoolController.text
         ..fields["summary"] = tournamentSummaryController.text
-        ..fields["entry_fee"] = entryFeeController.text
+        ..fields["entry_fee"] =
+            eventController.currency.value + entryFeeController.text
         ..fields["requirements"] = tournamentRequirementsController.text
         ..fields["structure"] = tournamentStructureController.text
-        ..fields["first"] = firstPrizeController.text
-        ..fields["second"] = secondPrizeController.text
-        ..fields["third"] = thirdPrizeController.text
+        ..fields["first"] =
+            eventController.currency.value + firstPrizeController.text
+        ..fields["second"] =
+            eventController.currency.value + secondPrizeController.text
+        ..fields["third"] =
+            eventController.currency.value + thirdPrizeController.text
         ..fields["rules_regs"] = tournamentRegulationsController.text
         ..fields["event_type"] = "tournament"
         ..fields["tournament_type"] = tournamentTypeValue.value!

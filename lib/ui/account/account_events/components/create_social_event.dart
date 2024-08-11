@@ -1,7 +1,9 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/social_event_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/home/post/create_post_item.dart';
@@ -28,6 +30,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   final socialEventController = Get.put(SocialEventRepository());
+  final eventController = Get.put(EventRepository());
   final communityController = Get.put(CommunityRepository());
   CommunityModel? selectedItem;
   int selectedMenu = 0;
@@ -405,7 +408,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
               ),
               Gap(Get.height * 0.01),
               CustomTextField(
-                hint: "type text here",
+                hint: "Type text here",
                 textEditingController:
                     socialEventController.eventDescController,
                 maxLines: 4,
@@ -420,6 +423,75 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
               ),
               Gap(Get.height * 0.02),
               CustomText(
+                title: 'Currency *',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.017,
+              ),
+              Gap(Get.height * 0.01),
+              Theme(
+                data: ThemeData.dark(),
+                child: DropdownSearch<MapEntry<String, String>>(
+                  onChanged: (value) {
+                    eventController.currency.value = value!.value;
+                  },
+                  items: eventController.currencies.entries.toList(),
+                  itemAsString: (item) => item.key,
+                  popupProps: PopupProps.menu(
+                      showSearchBox: true,
+                      searchFieldProps: TextFieldProps(
+                          decoration: InputDecoration(
+                        hintText: "Select a currency",
+                        prefixIcon: Icon(
+                          CupertinoIcons.search,
+                          color: AppColor().greyFour,
+                        ),
+                        hintStyle: TextStyle(
+                            color: AppColor().greyFour,
+                            fontFamily: "GilroyMedium"),
+                        filled: true,
+                        fillColor: AppColor().primaryWhite.withOpacity(0.05),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      )),
+                      menuProps: MenuProps(
+                          backgroundColor: AppColor().primaryDark,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)))),
+                  dropdownButtonProps: DropdownButtonProps(
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      color: AppColor().greyFour),
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                      baseStyle: TextStyle(color: AppColor().primaryWhite),
+                      dropdownSearchDecoration: InputDecoration(
+                        hintText: "Select a currency",
+                        hintStyle: TextStyle(
+                            color: AppColor().greyFour,
+                            fontFamily: "GilroyMedium"),
+                        filled: true,
+                        fillColor: AppColor().primaryDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      )),
+                ),
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
                 title: 'Entry fee *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
@@ -428,7 +500,18 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
               ),
               Gap(Get.height * 0.01),
               CustomTextField(
-                hint: "NGN 0.00",
+                prefixIcon: IntrinsicWidth(
+                  child: Center(
+                    child: Text(
+                      eventController.currency.value,
+                      style: TextStyle(
+                          color: AppColor().greyFour,
+                          fontFamily: "dfe",
+                          fontSize: 16),
+                    ),
+                  ),
+                ),
+                hint: "0.00",
                 textEditingController: socialEventController.entryFeeController,
                 hasText: isEntryFee,
                 focusNode: _entryFeeFocusNode,

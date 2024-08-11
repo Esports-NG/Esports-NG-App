@@ -260,6 +260,45 @@ class CommunityRepository extends GetxController {
     }
   }
 
+  Future editCommunity(int id, Map<String, dynamic> data) async {
+    try {
+      var headers = {
+        "Authorization": "JWT ${authController.token}",
+        "Content-type": "application/json"
+      };
+
+      var request =
+          http.MultipartRequest("PUT", Uri.parse(ApiLink.editCommunity(id)))
+            ..fields["name"] = data["name"]
+            ..fields["bio"] = data["bio"]
+            ..fields["abbrev"] = data["abbrev"];
+
+      if (communityProfileImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'profile_picture', communityProfileImage!.path));
+      }
+      if (communityCoverImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'cover', communityCoverImage!.path));
+      }
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        Get.back();
+        Helpers().showCustomSnackbar(message: "Community edited successfully");
+      } else {
+        Helpers().showCustomSnackbar(
+            message: "An error occurred. Please try again.");
+      }
+    } catch (err) {
+      Helpers()
+          .showCustomSnackbar(message: "An error occurred. Please try again.");
+      print(err);
+    }
+  }
+
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(

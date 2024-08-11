@@ -23,6 +23,8 @@ class ApiLink {
   static String viewUserTeam = "${baseurl}team/myteam/";
   static String searchAll(String query) =>
       "${baseurl}extra/search/?param=$query";
+  static String postFromGroup(int id, String group) =>
+      "${baseurl}post/authored/?pk=$id&group=$group";
 
   //Post
   static String createPost = "${baseurl}post/create/";
@@ -66,6 +68,7 @@ class ApiLink {
   static String addToRoster(int teamId, int playerId, int rosterId) =>
       "${baseurl}team/$teamId/addplayer/$playerId/roster/$rosterId/";
   static String blockTeam(id) => "${baseurl}post/block/?team_pk=$id";
+  static String editTeam(id) => "${baseurl}team/edit/$id/";
 
   //Player
   static String createPlayer = "${baseurl}player/register/";
@@ -100,6 +103,7 @@ class ApiLink {
   static String addGameToCommunity(int commId, int gameId) =>
       "${baseurl}org/$commId/addgame/$gameId/";
   static String blockCommunity(id) => "${baseurl}post/block/?comm_pk=$id";
+  static String editCommunity(id) => "${baseurl}org/edit/$id/";
 
   //Profile
   static String getDataWithFollowers({required int id, required String type}) =>

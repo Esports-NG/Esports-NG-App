@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
-import 'dart:convert';
 
 import 'team_inbox_model.dart';
 
@@ -11,6 +12,7 @@ List<TeamModel> teamModelListFromJson(String str) =>
 class TeamModel {
   int? id;
   Author? owner;
+  String? abbrev;
   String? name;
   String? profilePicture;
   String? cover;
@@ -34,6 +36,7 @@ class TeamModel {
       this.members,
       this.playersCount,
       this.membersCount,
+      this.abbrev,
       this.players});
 
   factory TeamModel.fromJson(Map<String, dynamic> json) => TeamModel(
@@ -42,6 +45,7 @@ class TeamModel {
       name: json["name"],
       profilePicture: json["profile_picture"],
       cover: json["cover"],
+      abbrev: json["abbrev"],
       gamesPlayed: json["games_played"] == null
           ? []
           : List<GamePlayed>.from(
@@ -66,6 +70,7 @@ class TeamModel {
         "cover": cover,
         "games_played": gamesPlayed,
         "bio": bio,
+        "abbrev": abbrev,
         "manager": manager,
         "members": members == null
             ? []

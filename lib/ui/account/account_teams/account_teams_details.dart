@@ -9,6 +9,7 @@ import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_teams/apply_as_player.dart';
+import 'package:e_sport/ui/account/account_teams/edit_team_profile.dart';
 import 'package:e_sport/ui/account/account_teams/player_application_list.dart';
 import 'package:e_sport/ui/account/account_teams/team_players_list.dart';
 import 'package:e_sport/ui/account/user_details.dart';
@@ -26,12 +27,12 @@ import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:e_sport/util/helpers.dart';
-
 
 class AccountTeamsDetail extends StatefulWidget {
   final TeamModel item;
@@ -45,7 +46,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
   final teamController = Get.put(TeamRepository());
   final authController = Get.put(AuthRepository());
   final gamesController = Get.put(GamesRepository());
-    final postController = Get.put(PostRepository());
+  final postController = Get.put(PostRepository());
 
   List<Map<String, dynamic>>? _teamFollowers;
   bool _isFollowing = false;
@@ -157,46 +158,82 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                               color: AppColor().primaryMenu,
                               position:
                                   const RelativeRect.fromLTRB(100, 100, 0, 0),
-                              items: [
-                                PopupMenuItem(
-                                  onTap: () async {
-                                    await teamController
-                                        .blockTeam(widget.item.id!);
-                                  },
-                                  value: '2',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.block,
-                                          color: AppColor().primaryWhite),
-                                      const Gap(10),
-                                      CustomText(
-                                        title: 'Block Team',
-                                        color: AppColor().primaryWhite,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  onTap: () {
-                                    Get.to(ReportPage(
-                                        id: widget.item.id!, type: "team"));
-                                  },
-                                  value: '3',
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.report,
-                                        color: AppColor().primaryWhite,
+                              items: widget.item.owner!.id! ==
+                                      authController.user!.id!
+                                  ? [
+                                      PopupMenuItem(
+                                          value: "0",
+                                          onTap: () async {
+                                            await Get.to(() => EditTeamPage(
+                                                team: widget.item));
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Icon(CupertinoIcons.pen,
+                                                  color:
+                                                      AppColor().primaryWhite),
+                                              const Gap(10),
+                                              CustomText(
+                                                title: 'Edit Team',
+                                                color: AppColor().primaryWhite,
+                                              )
+                                            ],
+                                          )),
+                                      PopupMenuItem(
+                                          value: "1",
+                                          child: Row(
+                                            children: [
+                                              Icon(CupertinoIcons.delete,
+                                                  color: AppColor().primaryRed),
+                                              const Gap(10),
+                                              CustomText(
+                                                title: 'Delete Team',
+                                                color: AppColor().primaryRed,
+                                              )
+                                            ],
+                                          )),
+                                    ]
+                                  : [
+                                      PopupMenuItem(
+                                        onTap: () async {
+                                          await teamController
+                                              .blockTeam(widget.item.id!);
+                                        },
+                                        value: '2',
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.block,
+                                                color: AppColor().primaryWhite),
+                                            const Gap(10),
+                                            CustomText(
+                                              title: 'Block Team',
+                                              color: AppColor().primaryWhite,
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      const Gap(10),
-                                      CustomText(
-                                        title: 'Report Team',
-                                        color: AppColor().primaryWhite,
-                                      )
+                                      PopupMenuItem(
+                                        onTap: () {
+                                          Get.to(ReportPage(
+                                              id: widget.item.id!,
+                                              type: "team"));
+                                        },
+                                        value: '3',
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.report,
+                                              color: AppColor().primaryWhite,
+                                            ),
+                                            const Gap(10),
+                                            CustomText(
+                                              title: 'Report Team',
+                                              color: AppColor().primaryWhite,
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ],
-                                  ),
-                                ),
-                              ],
                             );
                           },
                           child: Icon(Icons.more_vert,
@@ -523,31 +560,30 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
               title: 'Recent Posts',
             ),
           ),
-      Gap(Get.height * 0.02),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: SizedBox(
-          width: double.infinity,
-          height: Get.height * 0.46,
-          child: ListView.separated(
-              physics: const ScrollPhysics(),
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-              itemBuilder: (context, index) => InkWell(
-                  onTap: () {
-                      Get.to(() => PostDetails(
-                          item: postController.forYouPosts[index]));
-                  }, 
-                  child: SizedBox(
-                    width: Get.height * 0.35,
-                    child: PostItemForProfile(item: postController.forYouPosts[index])
-                  )
-              ),
-              itemCount: postController.forYouPosts.length),
-        ),
-      ),
-      Gap(Get.height * 0.005),
+          Gap(Get.height * 0.02),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+            child: SizedBox(
+              width: double.infinity,
+              height: Get.height * 0.46,
+              child: ListView.separated(
+                  physics: const ScrollPhysics(),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+                  itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        Get.to(() => PostDetails(
+                            item: postController.forYouPosts[index]));
+                      },
+                      child: SizedBox(
+                          width: Get.height * 0.35,
+                          child: PostItemForProfile(
+                              item: postController.forYouPosts[index]))),
+                  itemCount: postController.forYouPosts.length),
+            ),
+          ),
+          Gap(Get.height * 0.005),
           Divider(
             color: AppColor().lightItemsColor.withOpacity(0.3),
             height: Get.height * 0.05,
