@@ -6,6 +6,7 @@ class CommunityModel {
   dynamic logo;
   dynamic cover;
   String? bio;
+  String? abbrev;
   Owner? owner;
   List<GamePlayed>? gamesPlayed;
   DateTime? createdAt;
@@ -28,6 +29,7 @@ class CommunityModel {
       this.socials,
       this.commStaffs,
       this.followers,
+      this.abbrev,
       this.following});
 
   factory CommunityModel.fromJson(Map<String, dynamic> json) => CommunityModel(
@@ -36,6 +38,7 @@ class CommunityModel {
         logo: json["logo"],
         cover: json["cover"],
         bio: json["bio"],
+        abbrev: json["abbrev"],
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
         gamesPlayed: json["games_played"] == null
             ? []
@@ -62,6 +65,7 @@ class CommunityModel {
         "logo": logo,
         "cover": cover,
         "bio": bio,
+        "abbrev": abbrev,
         "owner": owner?.toJson(),
         "games_played": gamesPlayed == null
             ? []

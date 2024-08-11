@@ -22,6 +22,7 @@ import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'components/suggested_profile_item.dart';
 
 class CommunityPage extends StatefulWidget {
@@ -130,8 +131,9 @@ class _CommunityPageState extends State<CommunityPage> {
                               .take(5)
                               .length,
                           itemBuilder: (context, index) {
-                            var item =
-                                communityController.suggestedProfiles[index];
+                            var item = communityController
+                                .suggestedProfiles.reversed
+                                .toList()[index];
                             return SizedBox(
                                 child: SuggestedProfileList(item: item));
                           }),
@@ -183,11 +185,13 @@ class _CommunityPageState extends State<CommunityPage> {
                                 return InkWell(
                                     onTap: () {
                                       Get.to(() => GameProfile(
-                                          game:
-                                              gamesController.allGames[index]));
+                                          game: gamesController
+                                              .allGames.reversed
+                                              .toList()[index]));
                                     },
                                     child: TrendingGamesItem(
-                                      game: gamesController.allGames[index],
+                                      game: gamesController.allGames.reversed
+                                          .toList()[index],
                                     ));
                               }),
                     )
@@ -232,12 +236,14 @@ class _CommunityPageState extends State<CommunityPage> {
                                   scrollDirection: Axis.horizontal,
                                   separatorBuilder: (context, index) =>
                                       Gap(Get.height * 0.02),
-                                  itemCount: communityController.allCommunity
+                                  itemCount: communityController
+                                      .allCommunity.reversed
                                       .take(5)
                                       .length,
                                   itemBuilder: (context, index) {
-                                    var item =
-                                        communityController.allCommunity[index];
+                                    var item = communityController
+                                        .allCommunity.reversed
+                                        .toList()[index];
                                     return InkWell(
                                         onTap: () => Get.to(() =>
                                             AccountCommunityDetail(item: item)),
@@ -291,7 +297,8 @@ class _CommunityPageState extends State<CommunityPage> {
                                     itemCount:
                                         teamController.allTeam.take(5).length,
                                     itemBuilder: (context, index) {
-                                      var item = teamController.allTeam[index];
+                                      var item = teamController.allTeam.reversed
+                                          .toList()[index];
                                       return InkWell(
                                           onTap: () => Get.to(() =>
                                               AccountTeamsDetail(item: item)),

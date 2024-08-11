@@ -65,18 +65,19 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
               SizedBox(
                   height: Get.height * 0.06,
                   child: CupertinoSearchTextField(
-                    placeholder: 'Search ${communityController.typeFilter.value}...',
+                    placeholder:
+                        'Search ${communityController.typeFilter.value}...',
                     onSubmitted: (_) => Get.to(() => SearchScreen(
-                      selectedPage: communityController.typeFilter.value == "Trending Games"
-                          ? 2
-                          : communityController.typeFilter.value ==
-                                  "Suggested Profiles"
-                              ? 1
-                              : communityController.typeFilter.value ==
-                                      "Trending Teams"
-                                  ? 4
-                                  : 5
-                                  )),
+                        selectedPage: communityController.typeFilter.value ==
+                                "Trending Games"
+                            ? 2
+                            : communityController.typeFilter.value ==
+                                    "Suggested Profiles"
+                                ? 1
+                                : communityController.typeFilter.value ==
+                                        "Trending Teams"
+                                    ? 4
+                                    : 5)),
                     borderRadius: BorderRadius.circular(10),
                     prefixInsets: const EdgeInsets.only(right: 5, left: 10),
                     controller: authController.searchController,
@@ -114,37 +115,44 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                           if (communityController.typeFilter.value ==
                               "Trending Games") {
                             Get.to(() => GameProfile(
-                                game: gameController.allGames[index]));
+                                game: gameController.allGames.reversed
+                                    .toList()[index]));
                           } else if (communityController.typeFilter.value ==
                               "Suggested Profiles") {
                           } else if (communityController.typeFilter.value ==
                               "Trending Teams") {
                             Get.to(() => AccountTeamsDetail(
-                                item: teamController.allTeam[index]));
+                                item: teamController.allTeam.reversed
+                                    .toList()[index]));
                           } else {
                             Get.to(() => AccountCommunityDetail(
-                                item: communityController.allCommunity[index]));
+                                item: communityController.allCommunity.reversed
+                                    .toList()[index]));
                           }
                         },
                         child: communityController.typeFilter.value ==
                                 "Trending Games"
                             ? TrendingGamesItem(
                                 isOnTrendingPage: true,
-                                game: gameController.allGames[index])
+                                game: gameController.allGames.reversed
+                                    .toList()[index])
                             : communityController.typeFilter.value ==
                                     "Suggested Profiles"
                                 ? SuggestedProfileItem(
                                     item: communityController
-                                        .suggestedProfiles[index])
+                                        .suggestedProfiles.reversed
+                                        .toList()[index])
                                 : communityController.typeFilter.value ==
                                         "Trending Teams"
                                     ? TrendingTeamsItem(
                                         onFilterPage: true,
-                                        item: teamController.allTeam[index])
+                                        item: teamController.allTeam.reversed
+                                            .toList()[index])
                                     : CommunityItem(
                                         onFilterPage: true,
                                         item: communityController
-                                            .allCommunity[index]));
+                                            .allCommunity.reversed
+                                            .toList()[index]));
                   })
             ],
           ),

@@ -125,9 +125,7 @@ class CustomTextField extends StatelessWidget {
               color: AppColor().lightItemsColor,
               fontSize: 13,
               fontStyle: FontStyle.normal,
-              fontFamily: fontFamily ?? 'GilroyMedium',
-              fontWeight: FontWeight.w400,
-              height: 1.7,
+              fontFamily: 'GilroyMedium',
             ),
             suffixText: sufText,
             focusedErrorBorder: OutlineInputBorder(

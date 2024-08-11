@@ -26,8 +26,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class SearchScreen extends StatefulWidget {
-  SearchScreen({super.key, required this.selectedPage});
-  int selectedPage;
+  const SearchScreen({super.key, required this.selectedPage});
+  final int selectedPage;
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -43,8 +43,10 @@ class _SearchScreenState extends State<SearchScreen>
   final communityController = Get.put(CommunityRepository());
 
   late final _searchTabController = TabController(
-    length: 6, vsync: this, initialIndex: widget.selectedPage,
-    );
+    length: 6,
+    vsync: this,
+    initialIndex: widget.selectedPage,
+  );
   Future<void> search() async {
     authController.searchLoading.value = true;
     // await authController.searchForUsers(authController.searchController.text);

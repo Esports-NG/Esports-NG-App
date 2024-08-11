@@ -1,12 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/account/account_community/edit_community_profile.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
@@ -17,16 +22,19 @@ import 'package:e_sport/ui/profiles/components/community_games_covered_item.dart
 import 'package:e_sport/ui/profiles/components/community_games_covered_list.dart';
 import 'package:e_sport/ui/profiles/components/recent_posts.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 import 'no_item_page.dart';
 
@@ -42,7 +50,30 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
   final authController = Get.put(AuthRepository());
   final communityController = Get.put(CommunityRepository());
   final gamesController = Get.put(GamesRepository());
-    final postController = Get.put(PostRepository());
+  final postController = Get.put(PostRepository());
+
+  List<PostModel> _recentPosts = [];
+  bool _fetchingPosts = false;
+
+  Future fetchRecentPosts() async {
+    setState(() {
+      _fetchingPosts = true;
+    });
+    var response = await http.get(
+        Uri.parse(ApiLink.postFromGroup(widget.item.id!, "comm")),
+        headers: {
+          "Authorization": "JWT ${authController.token}",
+          "Content-type": "application/json"
+        });
+
+    var json = jsonDecode(response.body);
+    var list = List.from(json);
+
+    setState(() {
+      _recentPosts = list.map((e) => PostModel.fromJson(e)).toList();
+      _fetchingPosts = false;
+    });
+  }
 
   List<Map<String, dynamic>>? _communityFollowers;
   bool _isFollowing = false;
@@ -79,10 +110,17 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
   }
 
   @override
-  initState() {
+  void initState() {
     getCommunityFollowers();
     getDetails();
+    fetchRecentPosts();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    getDetails();
+    super.didChangeDependencies();
   }
 
   @override
@@ -181,49 +219,98 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                       color: AppColor().primaryMenu,
                                       position: const RelativeRect.fromLTRB(
                                           100, 100, 0, 0),
-                                      items: [
-                                        PopupMenuItem(
-                                          onTap: () async {
-                                            await communityController
-                                                .blockCommunity(
-                                                    widget.item.id!);
-                                          },
-                                          value: '2',
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.block,
-                                                  color:
-                                                      AppColor().primaryWhite),
-                                              const Gap(10),
-                                              CustomText(
-                                                title: 'Block Community',
-                                                color: AppColor().primaryWhite,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          onTap: () {
-                                            Get.to(ReportPage(
-                                                id: widget.item.id!,
-                                                type: "community"));
-                                          },
-                                          value: '3',
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.report,
-                                                color: AppColor().primaryWhite,
+                                      items: widget.item.owner!.id! ==
+                                              authController.user!.id!
+                                          ? [
+                                              PopupMenuItem(
+                                                  value: "0",
+                                                  onTap: () async {
+                                                    await Get.to(() =>
+                                                            EditCommunityPage(
+                                                                community:
+                                                                    details!))
+                                                        ?.whenComplete(
+                                                            () async {
+                                                      await getDetails();
+                                                    });
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(CupertinoIcons.pen,
+                                                          color: AppColor()
+                                                              .primaryWhite),
+                                                      const Gap(10),
+                                                      CustomText(
+                                                        title: 'Edit Community',
+                                                        color: AppColor()
+                                                            .primaryWhite,
+                                                      )
+                                                    ],
+                                                  )),
+                                              PopupMenuItem(
+                                                  value: "1",
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                          CupertinoIcons.delete,
+                                                          color: AppColor()
+                                                              .primaryRed),
+                                                      const Gap(10),
+                                                      CustomText(
+                                                        title:
+                                                            'Delete Community',
+                                                        color: AppColor()
+                                                            .primaryRed,
+                                                      )
+                                                    ],
+                                                  )),
+                                            ]
+                                          : [
+                                              PopupMenuItem(
+                                                onTap: () async {
+                                                  await communityController
+                                                      .blockCommunity(
+                                                          widget.item.id!);
+                                                },
+                                                value: '2',
+                                                child: Row(
+                                                  children: [
+                                                    Icon(Icons.block,
+                                                        color: AppColor()
+                                                            .primaryWhite),
+                                                    const Gap(10),
+                                                    CustomText(
+                                                      title: 'Block Community',
+                                                      color: AppColor()
+                                                          .primaryWhite,
+                                                    )
+                                                  ],
+                                                ),
                                               ),
-                                              const Gap(10),
-                                              CustomText(
-                                                title: 'Report Community',
-                                                color: AppColor().primaryWhite,
-                                              )
+                                              PopupMenuItem(
+                                                onTap: () {
+                                                  Get.to(ReportPage(
+                                                      id: widget.item.id!,
+                                                      type: "community"));
+                                                },
+                                                value: '3',
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.report,
+                                                      color: AppColor()
+                                                          .primaryWhite,
+                                                    ),
+                                                    const Gap(10),
+                                                    CustomText(
+                                                      title: 'Report Community',
+                                                      color: AppColor()
+                                                          .primaryWhite,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
                                             ],
-                                          ),
-                                        ),
-                                      ],
                                     );
                                   },
                                   child: Icon(Icons.more_vert,
@@ -576,31 +663,39 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                       title: 'Recent Posts',
                     ),
                   ),
-      Gap(Get.height * 0.02),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: SizedBox(
-          width: double.infinity,
-          height: Get.height * 0.46,
-          child: ListView.separated(
-              physics: const ScrollPhysics(),
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-              itemBuilder: (context, index) => InkWell(
-                  onTap: () {
-                      Get.to(() => PostDetails(
-                          item: postController.forYouPosts[index]));
-                  }, 
-                  child: SizedBox(
-                    width: Get.height * 0.35,
-                    child: PostItemForProfile(item: postController.forYouPosts[index])
-                  )
-              ),
-              itemCount: postController.forYouPosts.length),
-        ),
-      ),
-      Gap(Get.height * 0.005),
+                  Gap(Get.height * 0.02),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: Get.height * 0.46,
+                      child: _fetchingPosts
+                          ? const Center(child: ButtonLoader())
+                          : _recentPosts.isEmpty
+                              ? Center(
+                                  child: CustomText(
+                                      title: "No Posts",
+                                      color: AppColor().primaryWhite))
+                              : ListView.separated(
+                                  physics: const ScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  separatorBuilder: (context, index) =>
+                                      Gap(Get.height * 0.02),
+                                  itemBuilder: (context, index) => InkWell(
+                                      onTap: () {
+                                        Get.to(() => PostDetails(
+                                            item: _recentPosts[index]));
+                                      },
+                                      child: SizedBox(
+                                          width: Get.height * 0.35,
+                                          child: PostItemForProfile(
+                                              item: _recentPosts[index]))),
+                                  itemCount: _recentPosts.length),
+                    ),
+                  ),
+                  Gap(Get.height * 0.005),
                   Divider(
                     color: AppColor().lightItemsColor.withOpacity(0.3),
                     height: Get.height * 0.05,

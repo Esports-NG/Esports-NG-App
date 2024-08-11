@@ -17,6 +17,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
+
 import 'post_details.dart';
 
 class PostItem extends StatefulWidget {
@@ -161,7 +162,10 @@ class _PostItemState extends State<PostItem> {
                       Gap(Get.height * 0.01),
                       if (widget.item.body != '')
                         CustomText(
-                          title: widget.item.body!.characters.take(200).toString().toUpperFirstCase(),
+                          title: widget.item.body!.characters
+                              .take(200)
+                              .toString()
+                              .toUpperFirstCase(),
                           size: Get.height * 0.015,
                           fontFamily: 'GilroyBold',
                           textAlign: TextAlign.start,
@@ -319,8 +323,14 @@ class _PostItemState extends State<PostItem> {
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: CustomText(
                 title: widget.item.repost == null
-                    ? widget.item.body!.characters.take(200).toString().toUpperFirstCase()
-                    : widget.item.repost!.body!.characters.take(200).toString().toUpperFirstCase(),
+                    ? widget.item.body!.characters
+                        .take(200)
+                        .toString()
+                        .toUpperFirstCase()
+                    : widget.item.repost!.body!.characters
+                        .take(200)
+                        .toString()
+                        .toUpperFirstCase(),
                 size: Get.height * 0.015,
                 fontFamily: 'GilroyMedium',
                 textAlign: TextAlign.start,

@@ -537,6 +537,7 @@ class PostRepository extends GetxController {
     if (response.statusCode == 200) {
       var list = List.from(json);
       var posts = list.map((e) => PostModel.fromJson(e)).toList();
+      print(posts.reversed.toList()[0].body);
       debugPrint("${posts.length} for you posts found");
       _forYouPosts(posts.reversed.toList());
       // _bookmarkStatus(BookmarkStatus.success);
