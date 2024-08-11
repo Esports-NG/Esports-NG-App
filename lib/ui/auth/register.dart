@@ -989,7 +989,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           email: authController.emailController.text.trim(),
                           password:
                               authController.passwordController.text.trim(),
-                          bio: "Test Bio",
+                          bio: "...",
                           password2:
                               authController.passwordController.text.trim(),
                           phoneNumber:
