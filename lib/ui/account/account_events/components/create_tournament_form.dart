@@ -745,6 +745,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 ),
               ),
               hint: "0.00",
+              keyType: TextInputType.number,
               textEditingController: tournamentController.prizePoolController,
               hasText: tournamentController.isPrizePool.value,
               focusNode: _prizePoolFocusNode,
@@ -781,6 +782,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 ),
               ),
               hint: "0.00",
+              keyType: TextInputType.number,
               textEditingController: tournamentController.entryFeeController,
               hasText: tournamentController.isEntryFee.value,
               focusNode: _entryFeeFocusNode,
@@ -829,6 +831,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 ),
               ),
               hint: "0.00",
+              keyType: TextInputType.number,
               textEditingController: tournamentController.firstPrizeController,
               hasText: tournamentController.isFirstPrize.value,
               focusNode: _firstPrizeFocusNode,
@@ -863,6 +866,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 ),
               ),
               hint: "0.00",
+              keyType: TextInputType.number,
               textEditingController: tournamentController.secondPrizeController,
               hasText: tournamentController.isSecondPrize.value,
               focusNode: _secondPrizeFocusNode,
@@ -897,6 +901,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 ),
               ),
               hint: "0.00",
+              keyType: TextInputType.number,
               textEditingController: tournamentController.thirdPrizeController,
               hasText: tournamentController.isThirdPrize.value,
               focusNode: _thirdPrizeFocusNode,
@@ -921,8 +926,6 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
             ),
             Gap(Get.height * 0.02),
             Container(
-              height: Get.height * 0.065,
-              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: tournamentController.isParticipant.value == true
@@ -933,57 +936,65 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CustomText(
-                    title:
-                        tournamentController.participantCount.value.toString(),
-                    color: tournamentController.isParticipant.value == true
-                        ? AppColor().primaryBackGroundColor
-                        : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyBold',
-                    weight: FontWeight.w400,
-                    size: 15,
+                  Expanded(
+                    child: CustomTextField(
+                      keyType: TextInputType.number,
+                      initialValue: tournamentController.participantCount.value
+                          .toString(),
+                      onSubmited: (_) {
+                        _thirdPrizeFocusNode.unfocus();
+                      },
+                      onChanged: (value) {
+                        tournamentController.participantCount.value =
+                            int.parse(value);
+                      },
+                      validate: Validator.isNumber,
+                    ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          if (tournamentController.participantCount.value >=
-                              0) {
-                            tournamentController.participantCount.value++;
-                            tournamentController.participantController.text =
-                                tournamentController.participantCount.value
-                                    .toString();
-                          }
-                        },
-                        child: Icon(
-                          Icons.arrow_drop_up,
-                          color:
-                              tournamentController.isParticipant.value == true
-                                  ? AppColor().primaryBackGroundColor
-                                  : AppColor().lightItemsColor,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (tournamentController.participantCount.value >=
+                                0) {
+                              tournamentController.participantCount.value++;
+                              tournamentController.participantController.text =
+                                  tournamentController.participantCount.value
+                                      .toString();
+                            }
+                          },
+                          child: Icon(
+                            Icons.arrow_drop_up,
+                            color:
+                                tournamentController.isParticipant.value == true
+                                    ? AppColor().primaryBackGroundColor
+                                    : AppColor().lightItemsColor,
+                          ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          if (tournamentController.participantCount.value >=
-                              2) {
-                            --tournamentController.participantCount.value;
-                            tournamentController.participantController.text =
-                                tournamentController.participantCount.value
-                                    .toString();
-                          }
-                        },
-                        child: Icon(
-                          Icons.arrow_drop_down,
-                          color:
-                              tournamentController.isParticipant.value == true
-                                  ? AppColor().primaryBackGroundColor
-                                  : AppColor().lightItemsColor,
+                        InkWell(
+                          onTap: () {
+                            if (tournamentController.participantCount.value >=
+                                2) {
+                              --tournamentController.participantCount.value;
+                              tournamentController.participantController.text =
+                                  tournamentController.participantCount.value
+                                      .toString();
+                            }
+                          },
+                          child: Icon(
+                            Icons.arrow_drop_down,
+                            color:
+                                tournamentController.isParticipant.value == true
+                                    ? AppColor().primaryBackGroundColor
+                                    : AppColor().lightItemsColor,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 ],
               ),

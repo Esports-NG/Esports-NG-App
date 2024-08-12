@@ -11,8 +11,7 @@ import 'package:get/get.dart';
 
 // Games Played Item For Scrollable
 class UserGamesPlayedItem extends StatelessWidget {
-  const UserGamesPlayedItem(
-      {super.key, required this.player});
+  const UserGamesPlayedItem({super.key, required this.player});
 
   final PlayerModel player;
 
@@ -72,8 +71,7 @@ class UserGamesPlayedItem extends StatelessWidget {
                           topLeft: Radius.circular(10),
                           topRight: Radius.circular(10)),
                       image: DecorationImage(
-                          image:
-                              NetworkImage(player.profile),
+                          image: NetworkImage(player.profile),
                           fit: BoxFit.cover),
                     ),
                   ),
@@ -83,20 +81,18 @@ class UserGamesPlayedItem extends StatelessWidget {
             padding: const EdgeInsets.only(left: 10, bottom: 5),
             child: Column(
               children: [
-                    textItem(
-                        title: 'Game: ',
-                        subTitle: player.gamePlayed!.name!),
-                    Gap(Get.height * 0.01),
-                    textItem(
-                      title: 'Game ID: ',
-                      subTitle: player.inGameId!,
-                    ),
-                    Gap(Get.height * 0.01),
-                    textItem(
-                      title: 'IGN: ',
-                      subTitle: player.inGameName!,
-                    ),
-                  ],
+                textItem(title: 'Game: ', subTitle: player.gamePlayed!.name!),
+                Gap(Get.height * 0.01),
+                textItem(
+                  title: 'Game ID: ',
+                  subTitle: player.inGameId!,
+                ),
+                Gap(Get.height * 0.01),
+                textItem(
+                  title: 'IGN: ',
+                  subTitle: player.inGameName!,
+                ),
+              ],
             ),
           ),
           Gap(Get.height * 0.005),
@@ -105,7 +101,7 @@ class UserGamesPlayedItem extends StatelessWidget {
     );
   }
 
-    Row textItem({String? title, subTitle}) {
+  Row textItem({String? title, subTitle}) {
     return Row(
       children: [
         CustomText(
@@ -126,5 +122,3 @@ class UserGamesPlayedItem extends StatelessWidget {
     );
   }
 }
-
-
