@@ -1,8 +1,12 @@
 import 'dart:io';
-import 'package:e_sport/data/model/category_model.dart';
+
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/account/account_teams/game_selection_chip.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
@@ -15,7 +19,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'create_post_item.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({super.key});
@@ -27,6 +30,10 @@ class CreatePost extends StatefulWidget {
 class _CreatePostState extends State<CreatePost> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final postController = Get.put(PostRepository());
+  final teamController = Get.put(TeamRepository());
+  final communityController = Get.put(CommunityRepository());
+  final authController = Get.put(AuthRepository());
+
   String? gameTag, seePost, engagePost;
   int? selectedMenu = 0;
   bool? isPostTitle = false,
@@ -138,15 +145,12 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                         children: [
                           TextSpan(
-                            text: postController.accountTypeController.text ==
-                                    ''
-                                ? "“Your User Profile”"
-                                : "“${postController.accountTypeController.text}”",
+                            text: postController.postName.value,
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ],
                       )),
-                      InkWell(
+                      GestureDetector(
                         onTap: _showAccountListDialog,
                         child: CustomText(
                           title: 'Change Account',
@@ -379,6 +383,7 @@ class _CreatePostState extends State<CreatePost> {
         return StatefulBuilder(builder: (context, myState) {
           return AlertDialog(
             title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -392,9 +397,9 @@ class _CreatePostState extends State<CreatePost> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 0),
                   child: CustomText(
-                    title: 'Select an account for\nyour post',
+                    title: 'Post as:',
                     size: Get.height * 0.018,
                     fontFamily: 'GilroySemiBold',
                     textAlign: TextAlign.center,
@@ -404,35 +409,74 @@ class _CreatePostState extends State<CreatePost> {
               ],
             ),
             backgroundColor: AppColor().primaryLightColor,
-            content: Container(
-                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+            content: SizedBox(
                 width: Get.width * 0.5,
-                child: ListView.separated(
-                  padding: EdgeInsets.zero,
-                  physics: const ScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: selectAccountItem.length,
-                  separatorBuilder: (context, index) => Gap(Get.height * 0.03),
-                  itemBuilder: (context, index) {
-                    var item = selectAccountItem[index];
-                    return InkWell(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
                       onTap: () {
-                        setState(() {
-                          postController.accountTypeController.text =
-                              item.title;
-                        });
-                        myState(() {
-                          selectedMenu = index;
-                        });
+                        postController.postAs.value = "user";
+                        postController.postId.value = authController.user!.id!;
+                        postController.postName.value =
+                            authController.user!.fullName!;
                         Get.back();
                       },
-                      child: CreateMenu(
-                        item: item,
-                        selectedItem: selectedMenu,
-                        index: index,
+                      child: Row(
+                        children: [
+                          OtherImage(
+                            image: authController.user!.profile!.profilePicture,
+                            width: 40,
+                            height: 40,
+                          ),
+                          const Gap(10),
+                          CustomText(
+                              title: authController.user!.fullName,
+                              color: AppColor().primaryWhite,
+                              size: 16)
+                        ],
                       ),
-                    );
-                  },
+                    ),
+                    const Gap(20),
+                    ListView.separated(
+                      padding: EdgeInsets.zero,
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: teamController.myTeam.length,
+                      separatorBuilder: (context, index) => Gap(20),
+                      itemBuilder: (context, index) {
+                        var item = teamController.myTeam[index];
+                        return GestureDetector(
+                          onTap: () {
+                            postController.postAs.value = "team";
+                            postController.postId.value = item.id!;
+                            postController.postName.value = item.name!;
+                            Get.back();
+                          },
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(90),
+                                    image: DecorationImage(
+                                        image:
+                                            NetworkImage(item.profilePicture!),
+                                        fit: BoxFit.cover)),
+                                width: 40,
+                                height: 40,
+                              ),
+                              const Gap(10),
+                              CustomText(
+                                  title: item.name,
+                                  color: AppColor().primaryWhite,
+                                  size: 16)
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 )),
           );
         });

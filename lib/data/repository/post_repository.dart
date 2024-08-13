@@ -48,6 +48,9 @@ class PostRepository extends GetxController {
   final Rx<List<PostModel>> _followingPost = Rx([]);
   final Rx<List<PostModel>> _forYouPosts = Rx([]);
   final Rx<List<NewsModel>> _news = Rx([]);
+  final Rx<int> postId = 0.obs;
+  final RxString postAs = "user".obs;
+  final RxString postName = "".obs;
 
   List<PostModel> get allPost => _allPost.value;
   List<PostModel> get myPost => _myPost.value;
@@ -90,6 +93,9 @@ class PostRepository extends GetxController {
     super.onInit();
     authController.mToken.listen((p0) {
       if (p0 != '0') {
+        postId.value = authController.user!.id!;
+        postAs.value = "user";
+        postName.value = authController.user!.fullName!;
         getAllPost(true);
         getBookmarkedPost(true);
         getMyPost(true);
