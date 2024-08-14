@@ -12,6 +12,7 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -150,13 +151,7 @@ class _PostItemState extends State<PostItem> {
                               ),
                             ],
                           ),
-                          InkWell(
-                            child: Icon(
-                              Icons.more_vert,
-                              color: AppColor().primaryWhite,
-                            ),
-                            onTap: () => postMenu(),
-                          ),
+                          moreMenuAnchor(),
                         ],
                       ),
                       Gap(Get.height * 0.01),
@@ -308,14 +303,7 @@ class _PostItemState extends State<PostItem> {
                             ),
                           ],
                         ),
-                  if (widget.item.repost == null)
-                    InkWell(
-                      child: Icon(
-                        Icons.more_vert,
-                        color: AppColor().primaryWhite,
-                      ),
-                      onTap: () => postMenu(),
-                    ),
+                  if (widget.item.repost == null) moreMenuAnchor(),
                 ],
               ),
             ),
@@ -698,161 +686,190 @@ class _PostItemState extends State<PostItem> {
     );
   }
 
-  void postMenu() async {
-    String? selectedMenuItem = await showMenu(
-      context: context,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), side: BorderSide.none),
-      constraints: const BoxConstraints(),
-      color: AppColor().primaryMenu,
-      position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-      items: [
-        PopupMenuItem(
-          value: '0',
-          child:
-              popUpMenuItems(icon: Icons.bookmark_outline, title: 'Bookmark'),
-        ),
-        PopupMenuItem(
-          value: '1',
-          child: popUpMenuItems(
-              icon: Icons.thumb_down_alt_outlined,
-              title: 'Not interested in this post'),
-        ),
-        PopupMenuItem(
-          value: '2',
-          child: popUpMenuItems(
-              icon: Icons.person_add_alt_outlined,
-              title: 'Follow/Unfollow @${widget.item.author!.userName}'),
-        ),
-        PopupMenuItem(
-          value: '3',
-          child: popUpMenuItems(
-              icon: Icons.notifications_off_outlined,
-              title: 'Turn on/Turn off Notifications'),
-        ),
-        PopupMenuItem(
-          value: '4',
-          child: popUpMenuItems(
-              icon: Icons.volume_off_outlined,
-              title: 'Mute/Unmute @${widget.item.author!.userName}'),
-        ),
-        PopupMenuItem(
-          value: '5',
-          child: popUpMenuItems(
-              icon: Icons.block_outlined,
-              title: 'Block @${widget.item.author!.userName}'),
-        ),
-        PopupMenuItem(
-          value: '6',
-          child: popUpMenuItems(icon: Icons.flag, title: 'Report Post'),
-        ),
-      ],
-    );
-
-    if (selectedMenuItem == '0' &&
-        postController.bookmarkPostStatus != BookmarkPostStatus.loading) {
-      debugPrint('bookmark');
-      await postController.bookmarkPost(widget.item.id!);
-    } else if (selectedMenuItem == '1' &&
-        postController.blockPostStatus != BlockPostStatus.loading) {
-      debugPrint('uninterested post');
-      await postController.blockUserOrPost(widget.item.id!, 'uninterested');
-    } else if (selectedMenuItem == '2' &&
-        authController.followStatus != FollowStatus.loading) {
-      debugPrint('follow / unfollow user');
-      await authController.followUser(widget.item.author!.id!);
-    } else if (selectedMenuItem == '3' &&
-        authController.followStatus != FollowStatus.loading) {
-      debugPrint('turning notification');
-      await authController.turnNotification(widget.item.author!.id.toString());
-    } else if (selectedMenuItem == '5' &&
-        postController.blockPostStatus != BlockPostStatus.loading) {
-      debugPrint('block user');
-      await postController.blockUserOrPost(widget.item.author!.id!, 'block');
-    } else if (selectedMenuItem == '6') {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          elevation: 0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          backgroundColor: AppColor().primaryBgColor,
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.to(() => ReportPage(type: "post", id: widget.item.id!));
-                  },
-                  child: CustomText(
-                    title: 'Report Post by ${widget.item.author!.userName}',
-                    // Additional fields after this should be Comment details, Reason for reporting etc
-                    color: AppColor().primaryWhite,
-                    weight: FontWeight.w400,
-                    fontFamily: 'GilroyBold',
-                    size: Get.height * 0.015,
-                  ),
-                ),
-                Gap(Get.height * 0.03),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.to(() =>
-                        ReportPage(type: "user", id: widget.item.author!.id!));
-                  },
-                  child: CustomText(
-                    title: 'Report ${widget.item.author!.userName}',
-                    // Additional fields after this should be Comment details, Reason for reporting etc
-                    color: AppColor().primaryWhite,
-                    weight: FontWeight.w400,
-                    fontFamily: 'GilroyBold',
-                    size: Get.height * 0.015,
-                  ),
-                ),
-                Gap(Get.height * 0.03),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    postController.blockUserOrPost(
-                        widget.item.author!.id!, "block");
-                  },
-                  child: CustomText(
-                    title: 'Block ${widget.item.author!.userName}',
-                    // Additional fields after this should be Comment details, Reason for reporting etc
-                    color: AppColor().primaryWhite,
-                    weight: FontWeight.w400,
-                    fontFamily: 'GilroyBold',
-                    size: Get.height * 0.015,
-                  ),
-                ),
-              ],
-            ),
+  Widget moreMenuAnchor() {
+    Row popUpMenuItems({String? title, IconData? icon}) {
+      return Row(
+        children: [
+          Icon(
+            icon,
+            color: AppColor().primaryWhite,
+            size: Get.height * 0.016,
           ),
-        ),
+          Gap(Get.height * 0.02),
+          CustomText(
+            title: title,
+            size: Get.height * 0.014,
+            fontFamily: 'GilroyMedium',
+            textAlign: TextAlign.start,
+            color: AppColor().primaryWhite,
+          ),
+        ],
       );
     }
-  }
 
-  Row popUpMenuItems({String? title, IconData? icon}) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          color: AppColor().primaryWhite,
-          size: Get.height * 0.016,
-        ),
-        Gap(Get.height * 0.02),
-        CustomText(
-          title: title,
-          size: Get.height * 0.014,
-          fontFamily: 'GilroyMedium',
-          textAlign: TextAlign.start,
-          color: AppColor().primaryWhite,
-        ),
-      ],
-    );
+    return MenuAnchor(
+        style: MenuStyle(
+            alignment: Alignment.bottomLeft,
+            shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide.none)),
+            backgroundColor: WidgetStatePropertyAll(AppColor().primaryMenu)),
+        menuChildren: authController.user!.id! == widget.item.author!.id!
+            ? [
+                MenuItemButton(
+                  child: popUpMenuItems(
+                      icon: CupertinoIcons.pen, title: 'Edit Post'),
+                ),
+                MenuItemButton(
+                  child: Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.delete,
+                        color: AppColor().primaryWhite,
+                        size: Get.height * 0.016,
+                      ),
+                      Gap(Get.height * 0.02),
+                      CustomText(
+                        title: "Delete Post",
+                        size: Get.height * 0.014,
+                        fontFamily: 'GilroyMedium',
+                        textAlign: TextAlign.start,
+                        color: AppColor().primaryRed,
+                      ),
+                    ],
+                  ),
+                )
+              ]
+            : [
+                MenuItemButton(
+                  onPressed: () async {
+                    await postController.bookmarkPost(widget.item.id!);
+                  },
+                  child: popUpMenuItems(
+                      icon: Icons.bookmark_outline, title: 'Bookmark'),
+                ),
+                MenuItemButton(
+                  onPressed: () async {
+                    await postController.blockUserOrPost(
+                        widget.item.id!, 'uninterested');
+                  },
+                  child: popUpMenuItems(
+                      icon: Icons.thumb_down_alt_outlined,
+                      title: 'Not interested in this post'),
+                ),
+                MenuItemButton(
+                  onPressed: () async {
+                    await authController.followUser(widget.item.author!.id!);
+                  },
+                  child: popUpMenuItems(
+                      icon: Icons.person_add_alt_outlined,
+                      title:
+                          'Follow/Unfollow @${widget.item.author!.userName}'),
+                ),
+                MenuItemButton(
+                  onPressed: () async {
+                    await authController
+                        .turnNotification(widget.item.author!.id.toString());
+                  },
+                  child: popUpMenuItems(
+                      icon: Icons.notifications_off_outlined,
+                      title: 'Turn on/Turn off Notifications'),
+                ),
+                MenuItemButton(
+                  onPressed: () async {
+                    await postController.blockUserOrPost(
+                        widget.item.author!.id!, 'block');
+                  },
+                  child: popUpMenuItems(
+                      icon: Icons.block_outlined,
+                      title: 'Block @${widget.item.author!.userName}'),
+                ),
+                MenuItemButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        backgroundColor: AppColor().primaryBgColor,
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Get.to(() => ReportPage(
+                                      type: "post", id: widget.item.id!));
+                                },
+                                child: CustomText(
+                                  title:
+                                      'Report Post by ${widget.item.author!.userName}',
+                                  // Additional fields after this should be Comment details, Reason for reporting etc
+                                  color: AppColor().primaryWhite,
+                                  weight: FontWeight.w400,
+                                  fontFamily: 'GilroyBold',
+                                  size: Get.height * 0.015,
+                                ),
+                              ),
+                              Gap(Get.height * 0.03),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Get.to(() => ReportPage(
+                                      type: "user",
+                                      id: widget.item.author!.id!));
+                                },
+                                child: CustomText(
+                                  title:
+                                      'Report ${widget.item.author!.userName}',
+                                  // Additional fields after this should be Comment details, Reason for reporting etc
+                                  color: AppColor().primaryWhite,
+                                  weight: FontWeight.w400,
+                                  fontFamily: 'GilroyBold',
+                                  size: Get.height * 0.015,
+                                ),
+                              ),
+                              Gap(Get.height * 0.03),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  postController.blockUserOrPost(
+                                      widget.item.author!.id!, "block");
+                                },
+                                child: CustomText(
+                                  title:
+                                      'Block ${widget.item.author!.userName}',
+                                  // Additional fields after this should be Comment details, Reason for reporting etc
+                                  color: AppColor().primaryWhite,
+                                  weight: FontWeight.w400,
+                                  fontFamily: 'GilroyBold',
+                                  size: Get.height * 0.015,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: popUpMenuItems(icon: Icons.flag, title: 'Report Post'),
+                ),
+              ],
+        builder: (context, controller, child) {
+          return IconButton(
+            onPressed: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+            icon: Icon(Icons.more_vert),
+            color: AppColor().primaryWhite.withOpacity(0.7),
+          );
+        });
   }
 }

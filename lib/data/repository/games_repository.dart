@@ -23,7 +23,11 @@ class GamesRepository extends GetxController {
   @override
   onInit() {
     super.onInit();
-    getAllGames();
+    authController.mToken.listen((p0) async {
+      if (p0 != '0') {
+        getAllGames();
+      }
+    });
     getUserGames();
     gameSearchText.addListener(() {
       filterList(gameSearchText.text);

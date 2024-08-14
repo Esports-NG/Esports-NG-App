@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/ui/account/games_played/edit_player_profile.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:e_sport/ui/account/games_played/edit_player_profile.dart';
 
 class GamesPlayedItem extends StatefulWidget {
   final PlayerModel item;
@@ -100,7 +100,7 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (ctx) => const EditPlayerProfile()));
+                                  builder: (ctx) => EditPlayerProfile(player: widget.item)));
                         },
                         buttonText: 'Edit',
                         width: 80,

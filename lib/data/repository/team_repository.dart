@@ -458,6 +458,7 @@ class TeamRepository extends GetxController {
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
+        getMyTeam(false);
         Get.back();
         Helpers().showCustomSnackbar(message: "Team edited successfully");
       } else {

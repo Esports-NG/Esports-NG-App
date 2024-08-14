@@ -73,6 +73,7 @@ class ApiLink {
   //Player
   static String createPlayer = "${baseurl}player/register/";
   static String getAllPlayer = "${baseurl}player/view/";
+  static String editPlayer(int id) => "${baseurl}player/edit/$id/";
 
   //Events
   static String createTournament(int communityId) =>

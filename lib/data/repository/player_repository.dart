@@ -2,20 +2,23 @@
 
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/home/components/create_success_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/helpers.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 enum PlayerStatus {
@@ -35,6 +38,7 @@ enum CreatePlayerStatus {
 
 class PlayerRepository extends GetxController {
   final authController = Get.put(AuthRepository());
+  final gamesController = Get.put(GamesRepository());
   late final gameIdController = TextEditingController();
   late final gameNameController = TextEditingController();
   late final searchController = TextEditingController();
@@ -148,6 +152,34 @@ class PlayerRepository extends GetxController {
     }
   }
 
+  Future editPlayerProfile(int id, Map<String, dynamic> data) async {
+    var headers = {
+      "Authorization": "JWT ${authController.token}",
+      "Content-type": "application/json"
+    };
+    try {
+      var request =
+          http.MultipartRequest("PUT", Uri.parse(ApiLink.editPlayer(id)))
+            ..fields["in_game_id"] = data["in_game_id"]
+            ..fields["in_game_name"] = data["in_game_name"];
+
+      if (playerProfileImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+            'profile', playerProfileImage!.path));
+      }
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      // var body = await http.Response.fromStream(response);
+      // print(body.body);
+      if (response.statusCode == 200) {
+        Get.back();
+        Helpers().showCustomSnackbar(message: "Player Profile edited");
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(
@@ -160,60 +192,6 @@ class PlayerRepository extends GetxController {
                 : error.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM);
-  }
-
-  Widget pickProfileImage({VoidCallback? onTap}) {
-    return Obx(
-      () => Container(
-        padding: EdgeInsets.all(Get.height * 0.04),
-        decoration: BoxDecoration(
-            color: AppColor().bgDark, borderRadius: BorderRadius.circular(10)),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              playerProfileImage == null
-                  ? SvgPicture.asset(
-                      'assets/images/svg/photo.svg',
-                      height: Get.height * 0.08,
-                    )
-                  : Container(
-                      height: Get.height * 0.08,
-                      width: Get.height * 0.08,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: FileImage(playerProfileImage!),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-              Gap(Get.height * 0.01),
-              InkWell(
-                onTap: onTap,
-                child: CustomText(
-                  title:
-                      playerProfileImage == null ? 'Click to upload' : 'Cancel',
-                  weight: FontWeight.w400,
-                  size: 15,
-                  fontFamily: 'GilroyMedium',
-                  color: AppColor().primaryColor,
-                  underline: TextDecoration.underline,
-                ),
-              ),
-              Gap(Get.height * 0.02),
-              CustomText(
-                title: 'Max file size: 4MB',
-                color: AppColor().primaryWhite,
-                textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
-                size: Get.height * 0.014,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Future pickImageFromCamera(String? title) async {
@@ -248,5 +226,59 @@ class PlayerRepository extends GetxController {
     clearProfilePhoto();
     gameIdController.clear();
     gameNameController.clear();
+  }
+
+  Widget pickProfileImage({VoidCallback? onTap}) {
+    return Obx(
+      () => Container(
+        padding: EdgeInsets.all(Get.height * 0.04),
+        decoration: BoxDecoration(
+            color: AppColor().bgDark, borderRadius: BorderRadius.circular(10)),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              playerProfileImage != null
+                  ? Container(
+                      height: Get.height * 0.08,
+                      width: Get.height * 0.08,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image: FileImage(playerProfileImage!),
+                            fit: BoxFit.cover),
+                      ),
+                    )
+                  : SvgPicture.asset(
+                      'assets/images/svg/photo.svg',
+                      height: Get.height * 0.08,
+                    ),
+              Gap(Get.height * 0.01),
+              InkWell(
+                onTap: onTap,
+                child: CustomText(
+                  title:
+                      playerProfileImage == null ? 'Click to upload' : 'Cancel',
+                  weight: FontWeight.w400,
+                  size: 15,
+                  fontFamily: 'GilroyMedium',
+                  color: AppColor().primaryColor,
+                  underline: TextDecoration.underline,
+                ),
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Max file size: 4MB',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.014,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
