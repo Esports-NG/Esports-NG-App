@@ -380,6 +380,7 @@ class _CreatePostState extends State<CreatePost> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final List<bool> _isOpen = [false, false];
         return StatefulBuilder(builder: (context, myState) {
           return AlertDialog(
             title: Column(
@@ -438,44 +439,124 @@ class _CreatePostState extends State<CreatePost> {
                         ],
                       ),
                     ),
-                    const Gap(20),
-                    ListView.separated(
-                      padding: EdgeInsets.zero,
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: teamController.myTeam.length,
-                      separatorBuilder: (context, index) => Gap(20),
-                      itemBuilder: (context, index) {
-                        var item = teamController.myTeam[index];
-                        return GestureDetector(
-                          onTap: () {
-                            postController.postAs.value = "team";
-                            postController.postId.value = item.id!;
-                            postController.postName.value = item.name!;
-                            Get.back();
-                          },
-                          child: Row(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(90),
-                                    image: DecorationImage(
-                                        image:
-                                            NetworkImage(item.profilePicture!),
-                                        fit: BoxFit.cover)),
-                                width: 40,
-                                height: 40,
-                              ),
-                              const Gap(10),
-                              CustomText(
-                                  title: item.name,
-                                  color: AppColor().primaryWhite,
-                                  size: 16)
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                    const Gap(10),
+                    ExpansionPanelList(
+                        expandedHeaderPadding: const EdgeInsets.all(0),
+                        dividerColor: Colors.transparent,
+                        expansionCallback: (panelIndex, isExpanded) =>
+                            myState(() {
+                              _isOpen[panelIndex] = isExpanded;
+                            }),
+                        expandIconColor: AppColor().primaryWhite,
+                        elevation: 0,
+                        children: [
+                          ExpansionPanel(
+                              backgroundColor: Colors.transparent,
+                              isExpanded: _isOpen[0],
+                              headerBuilder: (context, isExpanded) => Row(
+                                    children: [
+                                      CustomText(
+                                          title: "Teams",
+                                          color: AppColor().primaryWhite),
+                                    ],
+                                  ),
+                              body: ListView.separated(
+                                padding: EdgeInsets.zero,
+                                physics: const ScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: teamController.myTeam.length,
+                                separatorBuilder: (context, index) => Gap(20),
+                                itemBuilder: (context, index) {
+                                  var item = teamController.myTeam[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      postController.postAs.value = "team";
+                                      postController.postId.value = item.id!;
+                                      postController.postName.value =
+                                          item.name!;
+                                      Get.back();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(90),
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      item.profilePicture!),
+                                                  fit: BoxFit.cover)),
+                                          width: 40,
+                                          height: 40,
+                                        ),
+                                        const Gap(10),
+                                        CustomText(
+                                            title: item.name,
+                                            color: AppColor().primaryWhite,
+                                            size: 16)
+                                      ],
+                                    ),
+                                  );
+                                },
+                              )),
+                          ExpansionPanel(
+                              backgroundColor: Colors.transparent,
+                              isExpanded: _isOpen[1],
+                              headerBuilder: (context, isExpanded) => Row(
+                                    children: [
+                                      CustomText(
+                                          title: "Communities",
+                                          color: AppColor().primaryWhite),
+                                    ],
+                                  ),
+                              body: ListView.separated(
+                                padding: EdgeInsets.zero,
+                                physics: const ScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: communityController.allCommunity
+                                    .where((e) =>
+                                        e.owner!.id == authController.user!.id)
+                                    .toList()
+                                    .length,
+                                separatorBuilder: (context, index) => Gap(20),
+                                itemBuilder: (context, index) {
+                                  var item = communityController.allCommunity
+                                      .where((e) =>
+                                          e.owner!.id ==
+                                          authController.user!.id)
+                                      .toList()[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      postController.postAs.value = "community";
+                                      postController.postId.value = item.id!;
+                                      postController.postName.value =
+                                          item.name!;
+                                      Get.back();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(90),
+                                              image: DecorationImage(
+                                                  image:
+                                                      NetworkImage(item.logo!),
+                                                  fit: BoxFit.cover)),
+                                          width: 40,
+                                          height: 40,
+                                        ),
+                                        const Gap(10),
+                                        CustomText(
+                                            title: item.name,
+                                            color: AppColor().primaryWhite,
+                                            size: 16)
+                                      ],
+                                    ),
+                                  );
+                                },
+                              )),
+                        ]),
                   ],
                 )),
           );

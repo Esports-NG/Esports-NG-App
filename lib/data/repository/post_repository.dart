@@ -185,15 +185,15 @@ class PostRepository extends GetxController {
         Uri.parse("${ApiLink.editPost}$postId/"),
         body: jsonEncode(body),
         headers: {
-          "Content-Type": "application/json",
+          "Content-type": "application/json",
           "Authorization": 'JWT ${authController.token}'
         },
       );
 
+      debugPrint(response.body);
       if (response.statusCode != 200) {
         throw ('An error occurred');
       }
-      debugPrint(response.body);
       if (response.statusCode == 200) {
         _createPostStatus(CreatePostStatus.success);
         Get.to(() => const CreateSuccessPage(title: 'Post Updated'))!
@@ -230,10 +230,8 @@ class PostRepository extends GetxController {
       if (response.statusCode == 200) {
         _postStatus(PostStatus.success);
         EasyLoading.dismiss();
-        Get.to(() => const CreateSuccessPage(title: 'Post Deleted'))!
-            .then((value) {
-          getAllPost(true);
-        });
+        Helpers().showCustomSnackbar(message: "Post deleted");
+        await getAllPost(false);
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
