@@ -8,6 +8,7 @@ import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/home/post/components/report_page.dart';
+import 'package:e_sport/ui/home/post/edit_post.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -690,12 +691,6 @@ class _PostItemState extends State<PostItem> {
     Row popUpMenuItems({String? title, IconData? icon}) {
       return Row(
         children: [
-          Icon(
-            icon,
-            color: AppColor().primaryWhite,
-            size: Get.height * 0.016,
-          ),
-          Gap(Get.height * 0.02),
           CustomText(
             title: title,
             size: Get.height * 0.014,
@@ -704,6 +699,49 @@ class _PostItemState extends State<PostItem> {
             color: AppColor().primaryWhite,
           ),
         ],
+      );
+    }
+
+    Future<void> _showDeleteDialog() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Delete Post'),
+            titleTextStyle: TextStyle(
+                color: AppColor().primaryWhite,
+                fontFamily: "GilroySemiBold",
+                fontSize: 20),
+            backgroundColor: AppColor().primaryMenu,
+            content: Container(
+              child: CustomText(
+                  title: "Are you sure you want to delete this post?",
+                  color: AppColor().primaryWhite),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: CustomText(
+                  title: 'Yes',
+                  color: AppColor().primaryRed,
+                ),
+                onPressed: () {
+                  postController.deletePost(widget.item.id!);
+                  Get.back();
+                },
+              ),
+              TextButton(
+                child: CustomText(
+                  title: 'No',
+                  color: AppColor().primaryWhite,
+                ),
+                onPressed: () {
+                  Get.back();
+                },
+              ),
+            ],
+          );
+        },
       );
     }
 
@@ -717,18 +755,28 @@ class _PostItemState extends State<PostItem> {
         menuChildren: authController.user!.id! == widget.item.author!.id!
             ? [
                 MenuItemButton(
+                  leadingIcon: Icon(
+                    CupertinoIcons.pen,
+                    color: AppColor().primaryWhite,
+                    size: 18,
+                  ),
+                  onPressed: () {
+                    Get.to(() => EditPost(item: widget.item));
+                  },
                   child: popUpMenuItems(
                       icon: CupertinoIcons.pen, title: 'Edit Post'),
                 ),
                 MenuItemButton(
+                  leadingIcon: Icon(
+                    CupertinoIcons.delete,
+                    color: AppColor().primaryRed,
+                    size: 18,
+                  ),
+                  onPressed: () async {
+                    await _showDeleteDialog();
+                  },
                   child: Row(
                     children: [
-                      Icon(
-                        CupertinoIcons.delete,
-                        color: AppColor().primaryWhite,
-                        size: Get.height * 0.016,
-                      ),
-                      Gap(Get.height * 0.02),
                       CustomText(
                         title: "Delete Post",
                         size: Get.height * 0.014,
@@ -742,6 +790,11 @@ class _PostItemState extends State<PostItem> {
               ]
             : [
                 MenuItemButton(
+                  leadingIcon: Icon(
+                    Icons.bookmark_outline,
+                    color: AppColor().primaryWhite,
+                    size: 18,
+                  ),
                   onPressed: () async {
                     await postController.bookmarkPost(widget.item.id!);
                   },
@@ -749,6 +802,11 @@ class _PostItemState extends State<PostItem> {
                       icon: Icons.bookmark_outline, title: 'Bookmark'),
                 ),
                 MenuItemButton(
+                  leadingIcon: Icon(
+                    Icons.thumb_down_alt_outlined,
+                    color: AppColor().primaryWhite,
+                    size: 18,
+                  ),
                   onPressed: () async {
                     await postController.blockUserOrPost(
                         widget.item.id!, 'uninterested');
@@ -758,6 +816,11 @@ class _PostItemState extends State<PostItem> {
                       title: 'Not interested in this post'),
                 ),
                 MenuItemButton(
+                  leadingIcon: Icon(
+                    Icons.person_add_alt_outlined,
+                    color: AppColor().primaryWhite,
+                    size: 18,
+                  ),
                   onPressed: () async {
                     await authController.followUser(widget.item.author!.id!);
                   },
@@ -767,6 +830,11 @@ class _PostItemState extends State<PostItem> {
                           'Follow/Unfollow @${widget.item.author!.userName}'),
                 ),
                 MenuItemButton(
+                  leadingIcon: Icon(
+                    Icons.notifications_off_outlined,
+                    color: AppColor().primaryWhite,
+                    size: 18,
+                  ),
                   onPressed: () async {
                     await authController
                         .turnNotification(widget.item.author!.id.toString());
@@ -776,6 +844,11 @@ class _PostItemState extends State<PostItem> {
                       title: 'Turn on/Turn off Notifications'),
                 ),
                 MenuItemButton(
+                  leadingIcon: Icon(
+                    Icons.block_outlined,
+                    color: AppColor().primaryWhite,
+                    size: 18,
+                  ),
                   onPressed: () async {
                     await postController.blockUserOrPost(
                         widget.item.author!.id!, 'block');
@@ -785,6 +858,11 @@ class _PostItemState extends State<PostItem> {
                       title: 'Block @${widget.item.author!.userName}'),
                 ),
                 MenuItemButton(
+                  leadingIcon: Icon(
+                    Icons.flag,
+                    color: AppColor().primaryWhite,
+                    size: 18,
+                  ),
                   onPressed: () {
                     showDialog(
                       context: context,

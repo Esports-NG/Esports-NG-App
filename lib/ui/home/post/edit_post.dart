@@ -1,20 +1,25 @@
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/account/account_teams/game_selection_chip.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:e_sport/util/loading.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'create_post_item.dart';
 
 class EditPost extends StatefulWidget {
@@ -28,6 +33,7 @@ class EditPost extends StatefulWidget {
 class _EditPostState extends State<EditPost> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final postController = Get.put(PostRepository());
+  final gamesController = Get.put(GamesRepository());
   String? gameTag, seePost, engagePost;
   int? selectedMenu = 0;
   bool? isPostTitle = false,
@@ -42,7 +48,13 @@ class _EditPostState extends State<EditPost> {
 
   @override
   void initState() {
-    postController.postBodyController.text = widget.item.body!;
+    postController.postBodyController.text =
+        utf8.decode(widget.item.body!.runes.toList(), allowMalformed: true);
+    final gamesTagList = gamesController.allGames
+        .where((e) =>
+            widget.item.tags!.where((i) => i.title! == e.abbrev!).isNotEmpty)
+        .toList();
+    postController.gameTags.assignAll(gamesTagList);
     super.initState();
   }
 
@@ -116,17 +128,6 @@ class _EditPostState extends State<EditPost> {
             weight: FontWeight.w600,
             size: 18,
             color: AppColor().primaryWhite,
-          ),
-          leading: IconButton(
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: AppColor().primaryWhite,
-            ),
           ),
           actions: [
             IconButton(
@@ -247,7 +248,7 @@ class _EditPostState extends State<EditPost> {
                   // ),
                   // Gap(Get.height * 0.03),
                   CustomText(
-                    title: 'Post text *',
+                    title: 'Post body *',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
                     fontFamily: 'GilroyRegular',
@@ -275,94 +276,29 @@ class _EditPostState extends State<EditPost> {
                   ),
                   Gap(Get.height * 0.02),
                   CustomText(
-                    title: 'Add game tags *',
+                    title: 'Game tags *',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
                     fontFamily: 'GilroyRegular',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
-                  InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: isGameTag == true
-                          ? AppColor().primaryWhite
-                          : AppColor().bgDark,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: AppColor().lightItemsColor, width: 1),
-                          borderRadius: BorderRadius.circular(10)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: gameTag,
-                        icon: Icon(
-                          Icons.expand_more,
-                          color: AppColor().primaryWhite,
-                        ),
-                        items: <String>[
-                          'COD',
-                          'Others',
-                        ].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: CustomText(
-                              title: value,
-                              color: isGameTag == true
-                                  ? AppColor().primaryBackGroundColor
-                                  : AppColor().lightItemsColor,
-                              fontFamily: 'GilroyBold',
-                              weight: FontWeight.w400,
-                              size: 13,
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            gameTag = value;
-                            postController.gameTagController.text = gameTag!;
-                            handleTap('gameTag');
-                          });
-                        },
-                        hint: CustomText(
-                          title: "Game Tag",
-                          color: isGameTag == true
-                              ? AppColor().primaryBackGroundColor
-                              : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyBold',
-                          weight: FontWeight.w400,
-                          size: 13,
-                        ),
-                      ),
-                    ),
+                  const GameSelectionChip(
+                    postCreation: true,
                   ),
                   Gap(Get.height * 0.02),
-                  CustomText(
-                    title: 'Post image',
-                    color: AppColor().primaryWhite,
-                    textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
-                    size: Get.height * 0.017,
-                  ),
-                  Gap(Get.height * 0.01),
-                  widget.item.image == null
-                      ? Container(
-                          height: Get.height * 0.25,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: const DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/png/placeholder.png'),
-                                fit: BoxFit.cover),
-                          ),
-                        )
-                      : CachedNetworkImage(
+                  if (widget.item.image != null)
+                    Column(
+                      children: [
+                        CustomText(
+                          title: 'Post image',
+                          color: AppColor().primaryWhite,
+                          textAlign: TextAlign.center,
+                          fontFamily: 'GilroyRegular',
+                          size: Get.height * 0.017,
+                        ),
+                        Gap(Get.height * 0.01),
+                        CachedNetworkImage(
                           height: Get.height * 0.25,
                           width: double.infinity,
                           progressIndicatorBuilder: (context, url, progress) =>
@@ -389,265 +325,15 @@ class _EditPostState extends State<EditPost> {
                             ),
                           ),
                         ),
-                  // Container(
-                  //   width: double.infinity,
-                  //   padding: EdgeInsets.all(Get.height * 0.04),
-                  //   decoration: BoxDecoration(
-                  //       color: AppColor().bgDark,
-                  //       borderRadius: BorderRadius.circular(10)),
-                  //   child: Column(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     children: [
-                  //       postController.postImage == null
-                  //           ? SvgPicture.asset(
-                  //               'assets/images/svg/photo.svg',
-                  //               height: Get.height * 0.08,
-                  //             )
-                  //           : Container(
-                  //               height: Get.height * 0.08,
-                  //               width: Get.height * 0.08,
-                  //               decoration: BoxDecoration(
-                  //                 borderRadius: BorderRadius.circular(10),
-                  //                 image: DecorationImage(
-                  //                     image:
-                  //                         FileImage(postController.postImage!),
-                  //                     fit: BoxFit.cover),
-                  //               ),
-                  //             ),
-                  //       Gap(Get.height * 0.01),
-                  //       InkWell(
-                  //         onTap: () {
-                  //           if (postController.postImage == null) {
-                  //             debugPrint('pick image');
-                  //             Get.defaultDialog(
-                  //               title: "Select your image",
-                  //               backgroundColor: AppColor().primaryLightColor,
-                  //               titlePadding: const EdgeInsets.only(top: 30),
-                  //               contentPadding: const EdgeInsets.only(
-                  //                   top: 5, bottom: 30, left: 25, right: 25),
-                  //               middleText: "Upload your profile picture",
-                  //               titleStyle: TextStyle(
-                  //                 color: AppColor().primaryWhite,
-                  //                 fontSize: 15,
-                  //                 fontWeight: FontWeight.w600,
-                  //                 fontFamily: 'GilroyRegular',
-                  //               ),
-                  //               radius: 10,
-                  //               confirm: Column(
-                  //                 children: [
-                  //                   CustomFillButton(
-                  //                     onTap: () {
-                  //                       pickImageFromGallery();
-                  //                       Get.back();
-                  //                     },
-                  //                     height: 45,
-                  //                     width: Get.width * 0.5,
-                  //                     buttonText: 'Upload from gallery',
-                  //                     textColor: AppColor().primaryWhite,
-                  //                     buttonColor: AppColor().primaryColor,
-                  //                     boarderColor: AppColor().primaryColor,
-                  //                     borderRadius: BorderRadius.circular(25),
-                  //                   ),
-                  //                   const Gap(10),
-                  //                   CustomFillButton(
-                  //                     onTap: () {
-                  //                       pickImageFromCamera();
-                  //                       Get.back();
-                  //                     },
-                  //                     height: 45,
-                  //                     width: Get.width * 0.5,
-                  //                     buttonText: 'Upload from camera',
-                  //                     textColor: AppColor().primaryWhite,
-                  //                     buttonColor: AppColor().primaryColor,
-                  //                     boarderColor: AppColor().primaryColor,
-                  //                     borderRadius: BorderRadius.circular(25),
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //               middleTextStyle: TextStyle(
-                  //                 color: AppColor().primaryWhite,
-                  //                 fontFamily: 'GilroyRegular',
-                  //                 fontSize: 14,
-                  //                 fontWeight: FontWeight.w400,
-                  //               ),
-                  //             );
-                  //           } else {
-                  //             postController.clearPhoto();
-                  //           }
-                  //         },
-                  //         child: CustomText(
-                  //           title: postController.postImage == null
-                  //               ? 'Click to upload'
-                  //               : 'Cancel',
-                  //           weight: FontWeight.w400,
-                  //           size: 15,
-                  //           fontFamily: 'GilroyMedium',
-                  //           color: AppColor().primaryColor,
-                  //           underline: TextDecoration.underline,
-                  //         ),
-                  //       ),
-                  //       Gap(Get.height * 0.02),
-                  //       CustomText(
-                  //         title: 'Max file size: 4MB',
-                  //         color: AppColor().primaryWhite,
-                  //         textAlign: TextAlign.center,
-                  //         fontFamily: 'GilroyRegular',
-                  //         size: Get.height * 0.014,
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  Gap(Get.height * 0.02),
-                  CustomText(
-                    title: 'Who can see this post *',
-                    color: AppColor().primaryWhite,
-                    textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
-                    size: Get.height * 0.017,
-                  ),
-                  Gap(Get.height * 0.01),
-                  InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: isSeePost == true
-                          ? AppColor().primaryWhite
-                          : AppColor().bgDark,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: AppColor().lightItemsColor, width: 1),
-                          borderRadius: BorderRadius.circular(10)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
+                        Gap(Get.height * 0.05),
+                      ],
                     ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: seePost,
-                        icon: Icon(
-                          Icons.expand_more,
-                          color: AppColor().primaryWhite,
-                        ),
-                        items: <String>['Everyone', 'My Followers', 'Just Me']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: CustomText(
-                              title: value,
-                              color: isSeePost == true
-                                  ? AppColor().primaryBackGroundColor
-                                  : AppColor().lightItemsColor,
-                              fontFamily: 'GilroyBold',
-                              weight: FontWeight.w400,
-                              size: 13,
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            seePost = value;
-                            postController.seeController.text = seePost!;
-                            handleTap('seePost');
-                          });
-                        },
-                        hint: CustomText(
-                          title: "Everyone",
-                          color: isSeePost == true
-                              ? AppColor().primaryBackGroundColor
-                              : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyBold',
-                          weight: FontWeight.w400,
-                          size: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Gap(Get.height * 0.02),
-                  CustomText(
-                    title: 'Who can engage with this post *',
-                    color: AppColor().primaryWhite,
-                    textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
-                    size: Get.height * 0.017,
-                  ),
-                  Gap(Get.height * 0.01),
-                  InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: isEngagePost == true
-                          ? AppColor().primaryWhite
-                          : AppColor().bgDark,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: AppColor().lightItemsColor, width: 1),
-                          borderRadius: BorderRadius.circular(10)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: engagePost,
-                        icon: Icon(
-                          Icons.expand_more,
-                          color: AppColor().primaryWhite,
-                        ),
-                        items: <String>['Everyone', 'My Followers', 'Just Me']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: CustomText(
-                              title: value,
-                              color: isEngagePost == true
-                                  ? AppColor().primaryBackGroundColor
-                                  : AppColor().lightItemsColor,
-                              fontFamily: 'GilroyBold',
-                              weight: FontWeight.w400,
-                              size: 13,
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            engagePost = value;
-                            postController.engageController.text = engagePost!;
-                            handleTap('engagePost');
-                          });
-                        },
-                        hint: CustomText(
-                          title: "Everyone",
-                          color: isEngagePost == true
-                              ? AppColor().primaryBackGroundColor
-                              : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyBold',
-                          weight: FontWeight.w400,
-                          size: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Gap(Get.height * 0.05),
-                  InkWell(
+                  GestureDetector(
                     onTap: () {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        // if (postController.postImage == null) {
-                        //   EasyLoading.showInfo('Select post image!');
-                        // } else if (postController.gameTagController.text ==
-                        //     '') {
-                        //   EasyLoading.showInfo('Select game tag!');
-                        // } else if (postController.seeController.text == '') {
-                        //   EasyLoading.showInfo('Select who can see post!');
-                        // } else if (postController.engageController.text == '') {
-                        //   EasyLoading.showInfo('Select who can engage post!');
-                        // } else {
                         postController.editPost(widget.item.id!);
-                        // }
                       }
                     },
                     child: Container(
@@ -655,11 +341,14 @@ class _EditPostState extends State<EditPost> {
                       width: Get.width,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: AppColor().primaryColor,
+                        color: postController.createPostStatus ==
+                                CreatePostStatus.loading
+                            ? Colors.transparent
+                            : AppColor().primaryColor,
                       ),
                       child: (postController.createPostStatus ==
                               CreatePostStatus.loading)
-                          ? const LoadingWidget()
+                          ? const Center(child: ButtonLoader())
                           : Center(
                               child: CustomText(
                               title: 'Update Post',

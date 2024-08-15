@@ -109,12 +109,13 @@ class CustomTextField extends StatelessWidget {
       initialValue: initialValue,
       obscureText: obscure ?? false,
       style: TextStyle(
-          color: AppColor().lightItemsColor,
-          fontSize: 13,
-          fontStyle: FontStyle.normal,
-          fontFamily: fontFamily ?? 'GilroyMedium',
-          fontWeight: FontWeight.w400,
-          height: 1.7),
+        color: AppColor().lightItemsColor,
+        fontSize: 13,
+        fontStyle: FontStyle.normal,
+        fontFamily: fontFamily ?? 'GilroyMedium',
+        fontWeight: FontWeight.w400,
+        height: 1.7,
+      ),
       decoration: decoration ??
           InputDecoration(
             fillColor: fillColor ?? AppColor().primaryDark,
