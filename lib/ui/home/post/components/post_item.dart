@@ -615,13 +615,13 @@ class _PostItemState extends State<PostItem> {
                           const CircularProgressIndicator(),
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
-                      imageUrl: authController.user!.profile!.profilePicture!,
+                      imageUrl: authController.user!.profile!.profilePicture,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               image: NetworkImage(authController
-                                  .user!.profile!.profilePicture!),
+                                  .user!.profile!.profilePicture),
                               fit: BoxFit.cover),
                         ),
                       ),

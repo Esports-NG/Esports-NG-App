@@ -456,33 +456,6 @@ class _MyProfileState extends State<MyProfile> {
                       ),
                       Gap(Get.height * 0.02),
                       CustomText(
-                        title: 'Email Address',
-                        color: AppColor().primaryWhite,
-                        textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
-                        size: Get.height * 0.017,
-                      ),
-                      Gap(Get.height * 0.01),
-                      CustomTextField(
-                        hint: "johndoe@mail.com",
-                        textEditingController: authController.emailController,
-                        hasText: isEmail,
-                        focusNode: _emailFocusNode,
-                        onTap: () {
-                          handleTap('email');
-                        },
-                        onSubmited: (_) {
-                          _emailFocusNode.unfocus();
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            isEmail = value.isNotEmpty;
-                          });
-                        },
-                        validate: Validator.isEmail,
-                      ),
-                      Gap(Get.height * 0.02),
-                      CustomText(
                         title: 'Phone number',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
