@@ -209,18 +209,19 @@ class _PostItemState extends State<PostItem> {
                                           const CircularProgressIndicator(),
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
-                                      imageUrl: widget.item.author!.profile!
-                                          .profilePicture!,
+                                      imageUrl: widget.item.community != null
+                                          ? widget.item.community!.logo!
+                                          : widget.item.team != null
+                                              ? widget
+                                                  .item.team!.profilePicture!
+                                              : widget.item.author!.profile!
+                                                  .profilePicture!,
                                       imageBuilder: (context, imageProvider) =>
                                           Container(
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           image: DecorationImage(
-                                              image: NetworkImage(widget
-                                                  .item
-                                                  .author!
-                                                  .profile!
-                                                  .profilePicture!),
+                                              image: imageProvider,
                                               fit: BoxFit.cover),
                                         ),
                                       ),
@@ -228,7 +229,11 @@ class _PostItemState extends State<PostItem> {
                                   ),
                             Gap(Get.height * 0.01),
                             CustomText(
-                              title: widget.item.author!.userName!,
+                              title: widget.item.community != null
+                                  ? widget.item.community!.name!
+                                  : widget.item.team != null
+                                      ? widget.item.team!.name
+                                      : widget.item.author!.userName!,
                               size: Get.height * 0.015,
                               fontFamily: 'GilroyMedium',
                               textAlign: TextAlign.start,

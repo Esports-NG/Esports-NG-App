@@ -21,7 +21,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreatePost extends StatefulWidget {
-  const CreatePost({super.key});
+  const CreatePost({super.key, this.postId, this.postAs, this.postName});
+  final int? postId;
+  final String? postAs;
+  final String? postName;
 
   @override
   State<CreatePost> createState() => _CreatePostState();
@@ -44,6 +47,20 @@ class _CreatePostState extends State<CreatePost> {
 
   final FocusNode postBodyFocusNode = FocusNode();
   final FocusNode gameTagFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.postId != null) {
+      postController.postId.value = widget.postId!;
+      postController.postAs.value = widget.postAs!;
+      postController.postName.value = widget.postName!;
+    } else {
+      postController.postId.value = authController.user!.id!;
+      postController.postAs.value = "user";
+      postController.postName.value = authController.user!.fullName!;
+    }
+  }
 
   @override
   void dispose() {

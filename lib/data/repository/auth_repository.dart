@@ -304,7 +304,7 @@ class AuthRepository extends GetxController {
             "password": passwordController.text.trim(),
           }));
 
-      debugPrint(response.body);
+      debugPrint('login response ${response.body}');
       var json = jsonDecode(response.body);
       if (json.toString().contains('non_field_errors')) {
         throw (json["error"]['non_field_errors'][0]);

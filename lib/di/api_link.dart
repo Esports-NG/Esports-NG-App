@@ -93,6 +93,7 @@ class ApiLink {
   static String filterEvents = "event/search";
   static String getEventParticipants(int id) =>
       "${baseurl}event/participants/$id";
+  static String createFixture(int id) => "${baseurl}event/fixture/create/$id/";
 
   //Community
   static String createCommunity = "${baseurl}org/register/";

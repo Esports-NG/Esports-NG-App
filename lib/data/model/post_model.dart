@@ -1,3 +1,5 @@
+import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 
 class PostModel {
@@ -5,7 +7,8 @@ class PostModel {
   Author? author;
   String? title;
   PostModel? repost;
-  dynamic community;
+  CommunityModel? community;
+  TeamModel? team;
   String? body;
   List<String>? iTags;
   List<String>? iViewers;
@@ -41,6 +44,7 @@ class PostModel {
     this.comment,
     this.createdAt,
     this.updatedAt,
+    this.team,
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
@@ -49,7 +53,10 @@ class PostModel {
         author: json["author"] == null ? null : Author.fromJson(json["author"]),
         repost:
             json["repost"] == null ? null : PostModel.fromJson(json['repost']),
-        community: json["community"],
+        community: json["community"] == null
+            ? null
+            : CommunityModel.fromJson(json["community"]),
+        team: json["team"] == null ? null : TeamModel.fromJson(json["team"]),
         body: json["body"],
         likeCount: json["like_count"],
         likes: json["likes"] == null
