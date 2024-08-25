@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:e_sport/data/model/events_model.dart';
@@ -186,8 +187,6 @@ class EventRepository extends GetxController
     } else {
       maxTabs.value = 2;
     }
-    // item.isSelected = !item.isSelected!;
-    debugPrint('Type: ${item.title}');
     eventTypeController.text = item.title!;
   }
 
@@ -243,11 +242,9 @@ class EventRepository extends GetxController
       "Authorization": 'JWT ${authController.token}'
     });
 
-    print(response.body);
-
     var json = jsonDecode(response.body);
+    log(response.body);
     if (response.statusCode != 200) {
-      throw (json['detail']);
     } else {
       var list = List.from(json);
       var events = list.map((e) => EventModel.fromJson(e)).toList();
@@ -271,7 +268,6 @@ class EventRepository extends GetxController
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
-      print(response.body);
 
       if (response.statusCode == 200) {
         var list = List.from(json);
@@ -307,8 +303,6 @@ class EventRepository extends GetxController
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       });
-
-      print(response.body);
       var json = jsonDecode(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
@@ -338,7 +332,6 @@ class EventRepository extends GetxController
 
   Future filterEvents() async {
     try {
-      print("filtering");
       isFiltering(true);
       var response = await http.get(
           Uri.https(
@@ -347,7 +340,6 @@ class EventRepository extends GetxController
             "Content-Type": "application/json",
             "Authorization": 'JWT ${authController.token}'
           });
-      print(response.body);
       var json = jsonDecode(response.body);
       var list = List.from(json);
       var filteredEvents = list.map((e) => EventModel.fromJson(e)).toList();

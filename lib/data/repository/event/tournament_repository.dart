@@ -58,6 +58,14 @@ class TournamentRepository extends GetxController {
   late final partnersController = TextEditingController();
   late final staffController = TextEditingController();
 
+  //fixtures
+  late final addFixtureRoundNameController = TextEditingController();
+  late final addFixtureStreamingLinkController = TextEditingController();
+  late final addFixturesHomeTeamScoreController = TextEditingController();
+  late final addFixturesAwayTeamScoreController = TextEditingController();
+  Rx<PlayerModel?> selectedAwayPlayer = Rx(null);
+  Rx<PlayerModel?> selectedHomePlayer = Rx(null);
+
   Rx<String?> communitiesValue = Rx(null);
   Rx<GamePlayed?> gameValue = Rx(null);
   Rx<String?> gameModeValue = Rx(null);
@@ -435,6 +443,34 @@ class TournamentRepository extends GetxController {
       if (response.statusCode == 200) {
         Helpers().showCustomSnackbar(message: json['message']);
       }
+    } catch (err) {}
+  }
+
+  Future createFixture(int id) async {
+    Map<String, dynamic> body = {
+      "away_team_id": 1,
+      "away_player_id": 1,
+      "away_score": 100,
+      "home_team_id": 1,
+      "home_player_id": 1,
+      "home_score": 100,
+      "team_ids": [1, 2],
+      "player_ids": [1, 2],
+      "igame_mode": 1,
+      "fixture_group": "",
+      "fixture_date": "",
+      "fixture_time": "",
+      "fixture_type": "",
+      "title": "",
+      "streaming_link": "https://stream.com",
+      "streaming_platform": "youtube"
+    };
+    try {
+      var response =
+          await http.post(Uri.parse(ApiLink.createFixture(id)), headers: {
+        "Authorization": "JWT ${authController.token}",
+        "Content-type": "application/json"
+      });
     } catch (err) {}
   }
 

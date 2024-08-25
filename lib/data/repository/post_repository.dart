@@ -93,9 +93,9 @@ class PostRepository extends GetxController {
     super.onInit();
     authController.mToken.listen((p0) {
       if (p0 != '0') {
-        postId.value = authController.user!.id!;
-        postAs.value = "user";
-        postName.value = authController.user!.fullName!;
+        // postId.value = authController.user!.id!;
+        // postAs.value = "user";
+        // postName.value = authController.user!.fullName!;
         getAllPost(true);
         getBookmarkedPost(true);
         getMyPost(true);
@@ -133,13 +133,19 @@ class PostRepository extends GetxController {
   }
 
   Future createPost(PostModel post) async {
+    var postUrl = postAs.value == "user"
+        ? Uri.parse(ApiLink.createPost)
+        : postAs.value == "community"
+            ? Uri.parse("${ApiLink.createPost}?comm_pk=${postId.value}")
+            : Uri.parse("${ApiLink.createPost}?team_pk=${postId.value}");
+
     try {
       _createPostStatus(CreatePostStatus.loading);
       var headers = {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       };
-      var request = http.MultipartRequest("POST", Uri.parse(ApiLink.createPost))
+      var request = http.MultipartRequest("POST", postUrl)
         ..fields["body"] = postBodyController.text;
       for (int i = 0; i < gameTags.length; i++) {
         request.fields['itags[$i]'] = '${gameTags[i].abbrev}';
@@ -154,8 +160,7 @@ class PostRepository extends GetxController {
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
-        debugPrint(await response.stream.bytesToString());
-        getAllPost(true);
+        getPostForYou(true);
         clear();
         Get.to(() => const CreateSuccessPage(title: 'Post Created'));
       } else if (response.statusCode == 401) {
@@ -198,7 +203,7 @@ class PostRepository extends GetxController {
         _createPostStatus(CreatePostStatus.success);
         Get.to(() => const CreateSuccessPage(title: 'Post Updated'))!
             .then((value) {
-          getAllPost(true);
+          getPostForYou(true);
         });
       } else if (response.statusCode == 401) {
         authController
@@ -218,7 +223,7 @@ class PostRepository extends GetxController {
     try {
       EasyLoading.show(status: 'Deleting post...');
       _postStatus(PostStatus.loading);
-      var response = await http.post(
+      var response = await http.delete(
         Uri.parse("${ApiLink.deletePost}$postId/"),
         headers: {
           "Content-Type": "application/json",
@@ -231,7 +236,7 @@ class PostRepository extends GetxController {
         _postStatus(PostStatus.success);
         EasyLoading.dismiss();
         Helpers().showCustomSnackbar(message: "Post deleted");
-        await getAllPost(false);
+        await getPostForYou(false);
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
@@ -530,8 +535,6 @@ class PostRepository extends GetxController {
       "Content-Type": "application/json",
       "Authorization": 'JWT ${authController.token}'
     });
-
-    print(response.body);
     var json = jsonDecode(response.body);
 
     if (response.statusCode != 200) {
@@ -541,7 +544,7 @@ class PostRepository extends GetxController {
     if (response.statusCode == 200) {
       var list = List.from(json);
       var posts = list.map((e) => PostModel.fromJson(e)).toList();
-      print(posts.reversed.toList()[0].body);
+      print(posts.reversed.toList()[0]);
       debugPrint("${posts.length} for you posts found");
       _forYouPosts(posts.reversed.toList());
       // _bookmarkStatus(BookmarkStatus.success);

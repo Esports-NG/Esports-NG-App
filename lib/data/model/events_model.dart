@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 
 class EventModel {
@@ -29,8 +30,8 @@ class EventModel {
   String? description;
   String? requirements;
   String? structure;
-  List<dynamic>? teams;
-  List<dynamic>? players;
+  List<TeamModel>? teams;
+  List<PlayerModel>? players;
   String? rulesRegs;
   PrizePoolDistribution? prizePoolDistribution;
 
@@ -102,10 +103,12 @@ class EventModel {
                 json["games"]!.map((x) => GamePlayed.fromJson(x))),
         teams: json["teams"] == null
             ? []
-            : List<dynamic>.from(json["teams"]!.map((x) => x)),
+            : List<TeamModel>.from(
+                json["teams"]!.map((x) => TeamModel.fromJson(x))),
         players: json["players"] == null
             ? []
-            : List<dynamic>.from(json["players"]!.map((x) => x)),
+            : List<PlayerModel>.from(
+                json["players"]!.map((x) => PlayerModel.fromJson(x))),
         rulesRegs: json["rules_regs"],
         prizePoolDistribution: json["prize_pool_distribution"] == null
             ? null

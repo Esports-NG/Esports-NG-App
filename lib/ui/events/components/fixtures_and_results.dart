@@ -1,22 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/events_model.dart';
-import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
-import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/account_tournament_detail.dart';
-import 'package:e_sport/ui/components/games_played_details.dart';
+import 'package:e_sport/ui/events/components/add_fixture.dart';
 import 'package:e_sport/ui/events/components/fixture_item.dart';
 import 'package:e_sport/ui/events/components/social_event_details.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
-import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,7 +25,6 @@ class FixturesAndResults extends StatefulWidget {
 }
 
 class _FixturesAndResultsState extends State<FixturesAndResults> {
-
   final tournamentController = Get.put(TournamentRepository());
   final authController = Get.put(AuthRepository());
   var eventController = Get.put(EventRepository());
@@ -56,19 +50,19 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Row(children: [
-            CachedNetworkImage(
-              imageUrl: ApiLink.imageUrl + widget.event.banner!,
-              imageBuilder: (context, imageProvider) => Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: imageProvider,
-                    ),
-                    borderRadius: BorderRadius.circular(999)),
+      appBar: AppBar(
+        title: Row(children: [
+          CachedNetworkImage(
+            imageUrl: ApiLink.imageUrl + widget.event.banner!,
+            imageBuilder: (context, imageProvider) => Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: imageProvider,
+                  ),
+                  borderRadius: BorderRadius.circular(999)),
             ),
           ),
           Gap(Get.height * 0.01),
@@ -92,18 +86,20 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
           onPressed: () => Get.back(),
         ),
       ),
-      floatingActionButton: authController.user!.id ==
-                widget.event.community!.owner!.id
-            ? FloatingActionButton(
-                shape: const CircleBorder(),
-                backgroundColor: AppColor().primaryColor,
-                onPressed: () {},
-                child: Icon(
-                  Icons.add,
-                  color: AppColor().primaryWhite,
-                ),
-              )
-            : null,
+      floatingActionButton:
+          authController.user!.id == widget.event.community!.owner!.id
+              ? FloatingActionButton(
+                  shape: const CircleBorder(),
+                  backgroundColor: AppColor().primaryColor,
+                  onPressed: () {
+                    Get.to(() => AddFixture(event: widget.event));
+                  },
+                  child: Icon(
+                    Icons.add,
+                    color: AppColor().primaryWhite,
+                  ),
+                )
+              : null,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(Get.height * 0.02),
