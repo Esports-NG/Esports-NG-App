@@ -1,5 +1,5 @@
 import 'package:e_sport/data/model/events_model.dart';
-import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
@@ -11,15 +11,15 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class AddFixture extends StatefulWidget {
-  const AddFixture({super.key, required this.event});
+class AddFixtureTeam extends StatefulWidget {
+  const AddFixtureTeam({super.key, required this.event});
   final EventModel event;
 
   @override
-  State<AddFixture> createState() => _AddFixtureState();
+  State<AddFixtureTeam> createState() => _AddFixtureTeamState();
 }
 
-class _AddFixtureState extends State<AddFixture> {
+class _AddFixtureTeamState extends State<AddFixtureTeam> {
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final tournamentController = Get.put(TournamentRepository());
 
@@ -38,7 +38,7 @@ class _AddFixtureState extends State<AddFixture> {
           onPressed: () => Get.back(),
         ),
         title: CustomText(
-          title: "Add New Fixture ",
+          title: "Add New Fixture",
           color: AppColor().primaryWhite,
           size: 20,
           fontFamily: "GilroySemibold",
@@ -54,7 +54,7 @@ class _AddFixtureState extends State<AddFixture> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    title: "Select Home Player",
+                    title: "Select Home Team",
                     color: AppColor().primaryWhite,
                     size: 16,
                   ),
@@ -77,10 +77,10 @@ class _AddFixtureState extends State<AddFixture> {
                           horizontal: 10, vertical: 5),
                     ),
                     child: DropdownButtonHideUnderline(
-                      child: DropdownButton<PlayerModel>(
+                      child: DropdownButton<TeamModel>(
                         dropdownColor: AppColor().primaryDark,
                         borderRadius: BorderRadius.circular(10),
-                        value: tournamentController.selectedHomePlayer.value,
+                        value: tournamentController.selectedHomeTeam.value,
                         icon: Icon(
                           Icons.keyboard_arrow_down,
                           color:
@@ -88,11 +88,11 @@ class _AddFixtureState extends State<AddFixture> {
                                   ? AppColor().primaryBackGroundColor
                                   : AppColor().lightItemsColor,
                         ),
-                        items: widget.event.players!.map((value) {
-                          return DropdownMenuItem<PlayerModel>(
+                        items: widget.event.teams!.map((value) {
+                          return DropdownMenuItem<TeamModel>(
                             value: value,
                             child: CustomText(
-                              title: value.inGameName,
+                              title: value.name,
                               color: AppColor().lightItemsColor,
                               fontFamily: 'GilroyMedium',
                               weight: FontWeight.w400,
@@ -101,10 +101,10 @@ class _AddFixtureState extends State<AddFixture> {
                           );
                         }).toList(),
                         onChanged: (value) {
-                          tournamentController.selectedHomePlayer.value = value;
+                          tournamentController.selectedHomeTeam.value = value;
                         },
                         hint: CustomText(
-                          title: "Home Player",
+                          title: "Home Team",
                           color:
                               tournamentController.isCommunities.value == true
                                   ? AppColor().primaryBackGroundColor
@@ -118,7 +118,7 @@ class _AddFixtureState extends State<AddFixture> {
                   ),
                   const Gap(20),
                   CustomText(
-                    title: "Select Away Player",
+                    title: "Select Away Team",
                     color: AppColor().primaryWhite,
                     size: 16,
                   ),
@@ -138,10 +138,10 @@ class _AddFixtureState extends State<AddFixture> {
                           horizontal: 10, vertical: 5),
                     ),
                     child: DropdownButtonHideUnderline(
-                      child: DropdownButton<PlayerModel>(
+                      child: DropdownButton<TeamModel>(
                         dropdownColor: AppColor().primaryDark,
                         borderRadius: BorderRadius.circular(10),
-                        value: tournamentController.selectedAwayPlayer.value,
+                        value: tournamentController.selectedAwayTeam.value,
                         icon: Icon(
                           Icons.keyboard_arrow_down,
                           color:
@@ -149,11 +149,11 @@ class _AddFixtureState extends State<AddFixture> {
                                   ? AppColor().primaryBackGroundColor
                                   : AppColor().lightItemsColor,
                         ),
-                        items: widget.event.players!.map((value) {
-                          return DropdownMenuItem<PlayerModel>(
+                        items: widget.event.teams!.map((value) {
+                          return DropdownMenuItem<TeamModel>(
                             value: value,
                             child: CustomText(
-                              title: value.inGameName,
+                              title: value.name,
                               color: AppColor().lightItemsColor,
                               fontFamily: 'GilroyMedium',
                               weight: FontWeight.w400,
@@ -162,10 +162,10 @@ class _AddFixtureState extends State<AddFixture> {
                           );
                         }).toList(),
                         onChanged: (value) {
-                          tournamentController.selectedAwayPlayer.value = value;
+                          tournamentController.selectedAwayTeam.value = value;
                         },
                         hint: CustomText(
-                          title: "Away Player",
+                          title: "Away Team",
                           color: AppColor().lightItemsColor,
                           fontFamily: 'GilroyMedium',
                           weight: FontWeight.w400,
@@ -412,25 +412,25 @@ class _AddFixtureState extends State<AddFixture> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
-                            title: "Home Player Score",
+                            title: "Home Team Score",
                             color: AppColor().primaryWhite,
                             size: 16,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
                             textEditingController: tournamentController
-                                .addFixturesHomePlayerScoreController,
+                                .addFixturesHomeTeamScoreController,
                           ),
                           Gap(Get.height * 0.02),
                           CustomText(
-                            title: "Away Player Score",
+                            title: "Away Team Score",
                             color: AppColor().primaryWhite,
                             size: 16,
                           ),
                           Gap(Get.height * 0.01),
                           CustomTextField(
                             textEditingController: tournamentController
-                                .addFixturesAwayPlayerScoreController,
+                                .addFixturesAwayTeamScoreController,
                           ),
                         ]),
                   ),
@@ -441,7 +441,7 @@ class _AddFixtureState extends State<AddFixture> {
                           _isLoading = true;
                         });
                         await tournamentController
-                            .createFixtureForPlayer(widget.event.id!);
+                            .createFixtureForTeam(widget.event.id!);
                         setState(() {
                           _isLoading = false;
                         });

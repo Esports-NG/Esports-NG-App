@@ -514,38 +514,6 @@ final purposeEnumValues = EnumValues({
   "Gaming News": PurposeEnum.GAMING_NEWS
 });
 
-class GameMode {
-  final int? id;
-  final String? banner;
-  final String? name;
-  final String? subCategories;
-  final int? game;
-
-  GameMode({
-    this.id,
-    this.banner,
-    this.name,
-    this.subCategories,
-    this.game,
-  });
-
-  factory GameMode.fromJson(Map<String, dynamic> json) => GameMode(
-        id: json["id"],
-        banner: json["banner"],
-        name: json["name"],
-        subCategories: json["sub_categories"],
-        game: json["game"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "banner": banner,
-        "name": name,
-        "sub_categories": subCategories,
-        "game": game,
-      };
-}
-
 class EnumValues<T> {
   Map<String, T> map;
   late Map<T, String> reverseMap;
