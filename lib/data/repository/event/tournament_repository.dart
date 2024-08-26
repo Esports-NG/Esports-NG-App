@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
@@ -21,6 +23,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class TournamentRepository extends GetxController {
   final authController = Get.put(AuthRepository());
@@ -63,8 +66,17 @@ class TournamentRepository extends GetxController {
   late final addFixtureStreamingLinkController = TextEditingController();
   late final addFixturesHomeTeamScoreController = TextEditingController();
   late final addFixturesAwayTeamScoreController = TextEditingController();
+  late final addFixturesAwayPlayerScoreController = TextEditingController();
+  late final addFixturesHomePlayerScoreController = TextEditingController();
+
   Rx<PlayerModel?> selectedAwayPlayer = Rx(null);
   Rx<PlayerModel?> selectedHomePlayer = Rx(null);
+  Rx<TeamModel?> selectedHomeTeam = Rx(null);
+  Rx<TeamModel?> selectedAwayTeam = Rx(null);
+  Rx<DateTime?> fixtureDate = Rx(null);
+  Rx<TimeOfDay?> fixtureTime = Rx(null);
+  Rx<String?> fixturePlatform = Rx(null);
+  Rx<GameMode?> fixtureGameMode = Rx(null);
 
   Rx<String?> communitiesValue = Rx(null);
   Rx<GamePlayed?> gameValue = Rx(null);
@@ -446,31 +458,84 @@ class TournamentRepository extends GetxController {
     } catch (err) {}
   }
 
-  Future createFixture(int id) async {
+  Future getFixtures(int id) async {
+    var response = await http.get(Uri.parse(ApiLink.getFixtures(id)), headers: {
+      "Authorization": "JWT ${authController.token}",
+      "Content-type": "application/json"
+    });
+
+    return fixtureModelFromJson(response.body);
+  }
+
+  Future createFixtureForPlayer(int id) async {
     Map<String, dynamic> body = {
-      "away_team_id": 1,
-      "away_player_id": 1,
-      "away_score": 100,
-      "home_team_id": 1,
-      "home_player_id": 1,
-      "home_score": 100,
-      "team_ids": [1, 2],
-      "player_ids": [1, 2],
+      "away_player_id": selectedAwayPlayer.value!.id,
+      "away_score": addFixturesAwayPlayerScoreController.text,
+      "home_player_id": selectedHomePlayer.value!.id,
+      "home_score": addFixturesHomePlayerScoreController.text,
+      "player_ids": [
+        selectedHomePlayer.value!.id,
+        selectedAwayPlayer.value!.id
+      ],
       "igame_mode": 1,
-      "fixture_group": "",
-      "fixture_date": "",
-      "fixture_time": "",
-      "fixture_type": "",
-      "title": "",
-      "streaming_link": "https://stream.com",
-      "streaming_platform": "youtube"
+      "fixture_group": "player",
+      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+      "fixture_time":
+          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+      "fixture_type": "1v1",
+      "title": addFixtureRoundNameController.text,
+      "streaming_link": "https://${addFixtureStreamingLinkController.text}",
+      "streaming_platform": fixturePlatform.value
     };
     try {
-      var response =
-          await http.post(Uri.parse(ApiLink.createFixture(id)), headers: {
-        "Authorization": "JWT ${authController.token}",
-        "Content-type": "application/json"
-      });
+      var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
+          headers: {
+            "Authorization": "JWT ${authController.token}",
+            "Content-type": "application/json"
+          },
+          body: jsonEncode(body));
+
+      log(response.body);
+
+      if (response.statusCode == 200) {
+        Helpers().showCustomSnackbar(message: "Fixture added succesfully");
+
+        Get.back();
+      }
+    } catch (err) {}
+  }
+
+  Future createFixtureForTeam(int id) async {
+    Map<String, dynamic> body = {
+      "away_team_id": selectedAwayTeam.value!.id,
+      "away_score": addFixturesAwayTeamScoreController.text,
+      "home_team_id": selectedHomeTeam.value!.id,
+      "home_score": addFixturesHomeTeamScoreController.text,
+      "team_ids": [selectedHomeTeam.value!.id, selectedAwayTeam.value!.id],
+      "igame_mode": 1,
+      "fixture_group": "team",
+      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+      "fixture_time":
+          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+      "fixture_type": "1v1",
+      "title": addFixtureRoundNameController.text,
+      "streaming_link": "https://${addFixtureStreamingLinkController.text}",
+      "streaming_platform": fixturePlatform.value
+    };
+    try {
+      var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
+          headers: {
+            "Authorization": "JWT ${authController.token}",
+            "Content-type": "application/json"
+          },
+          body: jsonEncode(body));
+
+      log(response.body);
+
+      if (response.statusCode == 200) {
+        Helpers().showCustomSnackbar(message: "Fixture added succesfully");
+        Get.back();
+      }
     } catch (err) {}
   }
 

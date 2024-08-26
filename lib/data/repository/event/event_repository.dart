@@ -264,6 +264,7 @@ class EventRepository extends GetxController
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       });
+      print(response.body);
       var json = jsonDecode(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
@@ -287,7 +288,7 @@ class EventRepository extends GetxController
       return response.body;
     } catch (error) {
       eventStatus(EventStatus.error);
-      debugPrint("getting all event: ${error.toString()}");
+      debugPrint("getting tournament: ${error.toString()}");
     }
   }
 

@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
@@ -21,7 +22,6 @@ import 'package:e_sport/ui/components/participant_list.dart';
 import 'package:e_sport/ui/components/team_participant_list.dart';
 import 'package:e_sport/ui/events/components/fixture_item.dart';
 import 'package:e_sport/ui/events/components/fixtures_and_results.dart';
-import 'package:e_sport/ui/events/components/social_event_details.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/home/post/components/post_details.dart';
@@ -55,6 +55,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   final teamController = Get.put(TeamRepository());
   var eventController = Get.put(EventRepository());
   final postController = Get.put(PostRepository());
+  List<FixtureModel> _fixturesList = [];
 
   final _colors = [
     LinearGradient(
@@ -125,6 +126,13 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
     }
   }
 
+  Future getFixtures() async {
+    var fixturesList = await tournamentController.getFixtures(widget.item.id!);
+    setState(() {
+      _fixturesList = fixturesList;
+    });
+  }
+
   Future getCommunityFollowers() async {
     var followers = await communityController
         .getCommunityFollowers(widget.item.community!.id!);
@@ -145,6 +153,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
     print(widget.item.toJson());
     getCommunityFollowers();
     getParticipants();
+    getFixtures();
     super.initState();
   }
 
@@ -696,20 +705,12 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (context, index) =>
                         Gap(Get.height * 0.02),
-                    itemBuilder: (context, index) => InkWell(
-                        onTap: () {
-                          if (eventController.filteredEvent[index].type ==
-                              "tournament") {
-                            Get.to(() => AccountTournamentDetail(
-                                item: eventController.filteredEvent[index]));
-                          } else {
-                            Get.to(() => SocialEventDetails(
-                                item: eventController.filteredEvent[index]));
-                          }
-                        },
+                    itemBuilder: (context, index) => GestureDetector(
+                        onTap: () {},
                         child: FixtureCardScrollable(
+                            fixture: _fixturesList[index],
                             backgroundColor: _colors[index % _colors.length])),
-                    itemCount: eventController.filteredEvent.length),
+                    itemCount: _fixturesList.take(5).length),
               ),
             ),
             Gap(Get.height * 0.005),

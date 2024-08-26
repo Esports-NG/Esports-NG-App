@@ -364,9 +364,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                   },
                   hint: CustomText(
                     title: "Tournament Type",
-                    color: tournamentController.isTournamentType.value == true
-                        ? AppColor().primaryBackGroundColor
-                        : AppColor().lightItemsColor,
+                    color: AppColor().lightItemsColor,
                     fontFamily: 'GilroyMedium',
                     weight: FontWeight.w400,
                     size: 15,

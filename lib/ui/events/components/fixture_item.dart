@@ -1,9 +1,10 @@
+import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
+import 'package:intl/intl.dart';
 
 //Fixture Card For Home Screen
 
@@ -24,17 +25,17 @@ class _FixtureCardState extends State<FixtureCard> {
       decoration: BoxDecoration(
         gradient: widget.backgroundColor,
         image: DecorationImage(
-          image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
-          alignment: Alignment(Get.width * -0.015, 0)
-        ),
+            image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
+            alignment: Alignment(Get.width * -0.015, 0)),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: AppColor().lightItemsColor,
+          color: AppColor().bgDark,
           width: 0.5,
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(Get.height * 0.02, Get.height * 0.02, Get.height * 0.02, Get.height * 0.01),
+        padding: EdgeInsets.fromLTRB(Get.height * 0.02, Get.height * 0.02,
+            Get.height * 0.02, Get.height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -75,7 +76,9 @@ class _FixtureCardState extends State<FixtureCard> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02,),
+              padding: EdgeInsets.symmetric(
+                horizontal: Get.height * 0.02,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -87,10 +90,13 @@ class _FixtureCardState extends State<FixtureCard> {
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/images/png/tournament_cover.png')),
-                          borderRadius: BorderRadius.all(Radius.circular(Get.width * 0.15)),
+                              image: AssetImage(
+                                  'assets/images/png/tournament_cover.png')),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Get.width * 0.15)),
                           color: Colors.redAccent,
-                          border: Border.all(width: 2, color: AppColor().lightItemsColor),
+                          border: Border.all(
+                              width: 2, color: AppColor().lightItemsColor),
                         ),
                       ),
                       Gap(Get.height * 0.005),
@@ -135,10 +141,13 @@ class _FixtureCardState extends State<FixtureCard> {
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/images/png/tournament_cover.png')),
-                          borderRadius: BorderRadius.all(Radius.circular(Get.width * 0.15)),
+                              image: AssetImage(
+                                  'assets/images/png/tournament_cover.png')),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Get.width * 0.15)),
                           color: Colors.redAccent,
-                          border: Border.all(width: 2, color: AppColor().lightItemsColor),
+                          border: Border.all(
+                              width: 2, color: AppColor().lightItemsColor),
                         ),
                       ),
                       Gap(Get.height * 0.005),
@@ -180,14 +189,14 @@ class _FixtureCardState extends State<FixtureCard> {
   }
 }
 
-
-
 //Fixture Card For Tournament Screen
 
 class FixtureCardScrollable extends StatefulWidget {
-  const FixtureCardScrollable({super.key, required this.backgroundColor});
+  const FixtureCardScrollable(
+      {super.key, required this.fixture, required this.backgroundColor});
 
   final LinearGradient backgroundColor;
+  final FixtureModel fixture;
 
   @override
   State<FixtureCardScrollable> createState() => _FixtureCardScrollableState();
@@ -196,15 +205,17 @@ class FixtureCardScrollable extends StatefulWidget {
 class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
   @override
   Widget build(BuildContext context) {
+    var formattedTime =
+        "${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).hour}:${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).minute} ${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).period.name.toUpperCase()}";
+
     return Container(
       width: Get.width * 0.6,
       decoration: BoxDecoration(
         gradient: widget.backgroundColor,
         image: DecorationImage(
-          image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
-          alignment: Alignment(Get.height * 0.004, 0),
-          fit: BoxFit.fitHeight
-        ),
+            image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
+            alignment: Alignment(Get.height * 0.004, 0),
+            fit: BoxFit.fitHeight),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: AppColor().darkGrey,
@@ -219,7 +230,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
             SizedBox(
               width: Get.width * 0.9,
               child: CustomText(
-                title: 'ROUND NAME',
+                title: widget.fixture.title,
                 color: AppColor().primaryWhite,
                 fontFamily: 'GilroyRegular',
                 textAlign: TextAlign.center,
@@ -230,7 +241,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
             SizedBox(
               width: Get.width * 0.9,
               child: CustomText(
-                title: '25th, Dec 2023',
+                title: DateFormat.yMMMEd().format(widget.fixture.fixtureDate!),
                 color: AppColor().primaryWhite,
                 fontFamily: 'GilroySemiBold',
                 textAlign: TextAlign.center,
@@ -251,10 +262,11 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                         width: Get.width * 0.15,
                         height: Get.width * 0.15,
                         decoration: BoxDecoration(
-                          image: const DecorationImage(
+                          image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage(
-                                  'assets/images/png/tournament_cover.png')),
+                              image: NetworkImage(
+                                  widget.fixture.homePlayer?.profile ??
+                                      widget.fixture.homeTeam!.profilePicture)),
                           borderRadius: BorderRadius.all(
                               Radius.circular(Get.width * 0.15)),
                           color: Colors.redAccent,
@@ -266,7 +278,8 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                       SizedBox(
                         width: Get.width * 0.18,
                         child: CustomText(
-                          title: 'Name of home team',
+                          title: widget.fixture.homePlayer?.inGameName ??
+                              widget.fixture.homeTeam!.name,
                           color: AppColor().primaryWhite,
                           fontFamily: 'GilroyMedium',
                           textAlign: TextAlign.center,
@@ -286,7 +299,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                       ),
                       Gap(Get.height * 0.005),
                       CustomText(
-                        title: '08:00',
+                        title: formattedTime,
                         color: AppColor().primaryWhite,
                         fontFamily: 'GilroyMedium',
                         textAlign: TextAlign.center,
@@ -302,10 +315,11 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                         width: Get.width * 0.15,
                         height: Get.width * 0.15,
                         decoration: BoxDecoration(
-                          image: const DecorationImage(
+                          image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage(
-                                  'assets/images/png/tournament_cover.png')),
+                              image: NetworkImage(
+                                  widget.fixture.awayPlayer?.profile ??
+                                      widget.fixture.awayTeam!.profilePicture)),
                           borderRadius: BorderRadius.all(
                               Radius.circular(Get.width * 0.15)),
                           color: Colors.redAccent,
@@ -317,7 +331,8 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                       SizedBox(
                         width: Get.width * 0.17,
                         child: CustomText(
-                          title: 'Name of away team',
+                          title: widget.fixture.awayPlayer?.inGameName ??
+                              widget.fixture.awayTeam!.name,
                           color: AppColor().primaryWhite,
                           fontFamily: 'GilroyMedium',
                           textAlign: TextAlign.center,
@@ -352,13 +367,13 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
   }
 }
 
-
-
 //Fixture Card For Tournament List
 
 class FixtureCardTournament extends StatefulWidget {
-  const FixtureCardTournament({super.key, required this.backgroundColor});
+  const FixtureCardTournament(
+      {super.key, required this.backgroundColor, required this.fixture});
 
+  final FixtureModel fixture;
   final LinearGradient backgroundColor;
 
   @override
@@ -368,29 +383,31 @@ class FixtureCardTournament extends StatefulWidget {
 class _FixtureCardTournamentState extends State<FixtureCardTournament> {
   @override
   Widget build(BuildContext context) {
+    var formattedTime =
+        "${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).hour}:${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).minute} ${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).period.name.toUpperCase()}";
     return Container(
       width: Get.width * 0.9,
       decoration: BoxDecoration(
         gradient: widget.backgroundColor,
         image: DecorationImage(
-          image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
-          alignment: Alignment(Get.width * -0.0025, 0)
-        ),
+            image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
+            alignment: Alignment(Get.width * -0.0025, 0)),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: AppColor().lightItemsColor,
+          color: AppColor().bgDark,
           width: 0.5,
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(Get.height * 0.02, Get.height * 0.02, Get.height * 0.02, Get.height * 0.01),
+        padding: EdgeInsets.fromLTRB(Get.height * 0.02, Get.height * 0.02,
+            Get.height * 0.02, Get.height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               width: Get.width * 0.9,
               child: CustomText(
-                title: 'ROUND NAME',
+                title: widget.fixture.title,
                 color: AppColor().primaryWhite,
                 fontFamily: 'GilroyRegular',
                 textAlign: TextAlign.center,
@@ -401,7 +418,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
             SizedBox(
               width: Get.width * 0.9,
               child: CustomText(
-                title: '25th, Dec 2023',
+                title: DateFormat.yMMMEd().format(widget.fixture.fixtureDate!),
                 color: AppColor().primaryWhite,
                 fontFamily: 'GilroySemiBold',
                 textAlign: TextAlign.center,
@@ -409,7 +426,9 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02,),
+              padding: EdgeInsets.symmetric(
+                horizontal: Get.height * 0.02,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -419,19 +438,24 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                         width: Get.width * 0.15,
                         height: Get.width * 0.15,
                         decoration: BoxDecoration(
-                          image: const DecorationImage(
+                          image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/images/png/tournament_cover.png')),
-                          borderRadius: BorderRadius.all(Radius.circular(Get.width * 0.15)),
+                              image: NetworkImage(
+                                  widget.fixture.homePlayer?.profile ??
+                                      widget.fixture.homeTeam!.profilePicture)),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Get.width * 0.15)),
                           color: Colors.redAccent,
-                          border: Border.all(width: 2, color: AppColor().lightItemsColor),
+                          border: Border.all(
+                              width: 2, color: AppColor().lightItemsColor),
                         ),
                       ),
                       Gap(Get.height * 0.005),
                       SizedBox(
                         width: Get.width * 0.18,
                         child: CustomText(
-                          title: 'Name of home team',
+                          title: widget.fixture.homePlayer?.inGameName ??
+                              widget.fixture.homeTeam!.name,
                           color: AppColor().primaryWhite,
                           fontFamily: 'GilroyMedium',
                           textAlign: TextAlign.center,
@@ -451,7 +475,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                       ),
                       Gap(Get.height * 0.005),
                       CustomText(
-                        title: '08:00',
+                        title: formattedTime,
                         color: AppColor().primaryWhite,
                         fontFamily: 'GilroyMedium',
                         textAlign: TextAlign.center,
@@ -467,19 +491,24 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                         width: Get.width * 0.15,
                         height: Get.width * 0.15,
                         decoration: BoxDecoration(
-                          image: const DecorationImage(
+                          image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/images/png/tournament_cover.png')),
-                          borderRadius: BorderRadius.all(Radius.circular(Get.width * 0.15)),
+                              image: NetworkImage(
+                                  widget.fixture.awayPlayer?.profile ??
+                                      widget.fixture.awayTeam!.profilePicture)),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Get.width * 0.15)),
                           color: Colors.redAccent,
-                          border: Border.all(width: 2, color: AppColor().lightItemsColor),
+                          border: Border.all(
+                              width: 2, color: AppColor().lightItemsColor),
                         ),
                       ),
                       Gap(Get.height * 0.005),
                       SizedBox(
                         width: Get.width * 0.17,
                         child: CustomText(
-                          title: 'Name of away team',
+                          title: widget.fixture.awayPlayer?.inGameName ??
+                              widget.fixture.awayTeam!.name,
                           color: AppColor().primaryWhite,
                           fontFamily: 'GilroyMedium',
                           textAlign: TextAlign.center,

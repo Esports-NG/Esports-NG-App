@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/components/account_tournament_detail.dart';
 import 'package:e_sport/ui/events/components/add_fixture.dart';
+import 'package:e_sport/ui/events/components/add_fixture_team.dart';
 import 'package:e_sport/ui/events/components/fixture_item.dart';
-import 'package:e_sport/ui/events/components/social_event_details.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,26 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
   final tournamentController = Get.put(TournamentRepository());
   final authController = Get.put(AuthRepository());
   var eventController = Get.put(EventRepository());
+  List<FixtureModel> _fixturesList = [];
+  bool _isLoading = true;
+
+  Future getFixtures() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var fixturesList = await tournamentController.getFixtures(widget.event.id!);
+    setState(() {
+      _fixturesList = fixturesList;
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    getFixtures();
+    super.initState();
+  }
+
   final _colors = [
     LinearGradient(
       colors: [
@@ -92,7 +113,19 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                   shape: const CircleBorder(),
                   backgroundColor: AppColor().primaryColor,
                   onPressed: () {
-                    Get.to(() => AddFixture(event: widget.event));
+                    if (widget.event.tournamentType == "team") {
+                      Get.to(
+                        () => AddFixtureTeam(event: widget.event),
+                      )!
+                          .whenComplete(() async {
+                        await getFixtures();
+                      });
+                    } else {
+                      Get.to(() => AddFixture(event: widget.event))!
+                          .whenComplete(() async {
+                        await getFixtures();
+                      });
+                    }
                   },
                   child: Icon(
                     Icons.add,
@@ -114,7 +147,7 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                   underline: TextDecoration.underline,
                   color: AppColor().primaryWhite),
               Gap(Get.height * 0.01),
-              InkWell(
+              GestureDetector(
                 onTap: () => launchUrl(Uri.parse(widget.event.linkForBracket!)),
                 child: CustomText(
                   title: widget.event.linkForBracket,
@@ -143,26 +176,22 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                     color: AppColor().primaryWhite,
                   ),
                   Gap(Get.height * 0.02),
-                  ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => InkWell(
-                          onTap: () {
-                            if (eventController.filteredEvent[index].type ==
-                                "tournament") {
-                              Get.to(() => AccountTournamentDetail(
-                                  item: eventController.filteredEvent[index]));
-                            } else {
-                              Get.to(() => SocialEventDetails(
-                                  item: eventController.filteredEvent[index]));
-                            }
-                          },
-                          child: FixtureCardTournament(
-                              backgroundColor:
-                                  _colors[index % _colors.length])),
-                      separatorBuilder: (context, index) =>
-                          Gap(Get.height * 0.02),
-                      itemCount: eventController.filteredEvent.length),
+                  _isLoading
+                      ? Container(
+                          margin: const EdgeInsets.only(top: 40),
+                          child: const Center(child: ButtonLoader()))
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => GestureDetector(
+                              onTap: () {},
+                              child: FixtureCardTournament(
+                                  fixture: _fixturesList[index],
+                                  backgroundColor:
+                                      _colors[index % _colors.length])),
+                          separatorBuilder: (context, index) =>
+                              Gap(Get.height * 0.02),
+                          itemCount: _fixturesList.length),
                 ],
               ),
             ],

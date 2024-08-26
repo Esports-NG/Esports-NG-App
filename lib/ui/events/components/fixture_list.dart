@@ -1,7 +1,5 @@
 import 'package:e_sport/data/repository/event/event_repository.dart';
-import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/components/account_tournament_detail.dart';
-import 'package:e_sport/ui/events/components/fixture_item.dart';
 import 'package:e_sport/ui/events/components/social_event_details.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +49,7 @@ class _FixtureListState extends State<FixtureList> {
                       item: eventController.filteredEvent[index]));
                 }
               },
-              child: FixtureCardTournament(backgroundColor: _colors[index % _colors.length])),
+              child: Container()),
           separatorBuilder: (context, index) => Gap(Get.height * 0.02),
           itemCount: eventController.filteredEvent.length),
     );
