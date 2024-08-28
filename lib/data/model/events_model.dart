@@ -15,7 +15,7 @@ class EventModel {
   List<GamePlayed>? games;
   CommunityModel? community;
   String? linkForBracket;
-  String? gameMode;
+  List<GameMode>? gameMode;
   String? tournamentType;
   String? knockoutType;
   String? rankType;
@@ -76,7 +76,10 @@ class EventModel {
             ? null
             : CommunityModel.fromJson(json["community"]),
         linkForBracket: json["link"],
-        gameMode: json["game_mode"],
+        gameMode: json["game_mode"] == null
+            ? null
+            : List<GameMode>.from(
+                json["game_mode"].map(((x) => GameMode.fromJson(x)))),
         tournamentType: json["tournament_type"],
         knockoutType: json["knockout_type"],
         rankType: json["rank_type"],
