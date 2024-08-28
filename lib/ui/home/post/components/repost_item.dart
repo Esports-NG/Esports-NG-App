@@ -3,7 +3,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -80,8 +82,16 @@ class _RepostItemState extends State<RepostItem> {
                             width: Get.height * 0.035,
                           )
                         : InkWell(
-                            onTap: () => Get.to(() => UserDetails(
-                                id: widget.item.repost!.author!.id!)),
+                            onTap: () {
+                                      widget.item.repost!.team != null
+                                      ? Get.to(() => AccountTeamsDetail(
+                                          item: widget.item.repost!.team!))
+                                          : widget.item.repost!.community != null
+                                      ? Get.to(() => AccountCommunityDetail(
+                                          item: widget.item.repost!.community!))
+                                      : Get.to(() => UserDetails(
+                                          id: widget.item.repost!.author!.id!));
+                                    },
                             child: CachedNetworkImage(
                               height: Get.height * 0.035,
                               width: Get.height * 0.035,
@@ -97,8 +107,11 @@ class _RepostItemState extends State<RepostItem> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       image: NetworkImage(
-                                        widget.item.repost!.author!.profile!
-                                            .profilePicture!,
+                                        widget.item.repost!.community != null
+                                          ? widget.item.repost!.community!.logo
+                                          : widget.item.repost!.team != null
+                                              ? widget.item.repost!.team!.profilePicture
+                                              : widget.item.repost!.author!.profile!.profilePicture,
                                       ),
                                       fit: BoxFit.cover),
                                 ),
@@ -108,7 +121,11 @@ class _RepostItemState extends State<RepostItem> {
                     Gap(Get.height * 0.01),
                     CustomText(
                       title:
-                          widget.item.repost!.author!.fullName!.toCapitalCase(),
+                          widget.item.repost!.community != null
+                                  ? widget.item.repost!.community!.name!
+                                  : widget.item.repost!.team != null
+                                      ? widget.item.repost!.team!.name
+                                      : widget.item.repost!.author!.userName!,
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,
@@ -118,7 +135,7 @@ class _RepostItemState extends State<RepostItem> {
                     const SmallCircle(),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: timeAgo(widget.item.createdAt!),
+                      title: timeAgo(widget.item.repost!.createdAt!),
                       size: Get.height * 0.015,
                       fontFamily: 'GilroyMedium',
                       textAlign: TextAlign.start,

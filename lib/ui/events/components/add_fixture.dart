@@ -176,7 +176,7 @@ class _AddFixtureState extends State<AddFixture> {
                   ),
                   const Gap(20),
                   CustomText(
-                    title: "Fixture round name",
+                    title: "Fixture Name",
                     color: AppColor().primaryWhite,
                     size: 16,
                   ),

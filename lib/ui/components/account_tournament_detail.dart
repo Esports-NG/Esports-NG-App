@@ -650,7 +650,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
               padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
               child: PageHeaderWidget(
                 onTap: () {},
-                title: 'Announcements',
+                title: 'Posts and Announcements',
               ),
             ),
             Gap(Get.height * 0.02),

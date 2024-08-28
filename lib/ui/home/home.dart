@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage>
                                   tabs: const [
                                     Tab(text: 'For you'),
                                     Tab(text: 'Following'),
-                                    Tab(text: 'Bookmarks'),
+                                    Tab(text: 'Activities'),
                                     Tab(text: 'News'),
                                   ]),
                               Gap(Get.height * 0.02)
