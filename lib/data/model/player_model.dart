@@ -278,18 +278,17 @@ class GameMode {
   int? id;
   String? name;
   String? subCategories;
+  GamePlayed? game;
+  String? banner;
 
-  GameMode({
-    this.id,
-    this.name,
-    this.subCategories,
-  });
+  GameMode({this.id, this.name, this.subCategories, this.game, this.banner});
 
   factory GameMode.fromJson(Map<String, dynamic> json) => GameMode(
-        id: json["id"],
-        name: json["name"],
-        subCategories: json["sub_categories"],
-      );
+      id: json["id"],
+      name: json["name"],
+      subCategories: json["sub_categories"],
+      game: json["game"] == null ? null : GamePlayed.fromJson(json["game"]),
+      banner: json["banner"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
