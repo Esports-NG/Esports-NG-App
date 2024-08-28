@@ -6,7 +6,9 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/home/post/components/report_page.dart';
 import 'package:e_sport/ui/home/post/edit_post.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -144,7 +146,17 @@ class _PostItemState extends State<PostItem> {
                               Gap(Get.height * 0.01),
                               CustomText(
                                 title:
-                                    '${widget.item.author!.userName!} Reposted this',
+                                    '${widget.item.author!.userName!} reposted',
+                                size: Get.height * 0.015,
+                                fontFamily: 'GilroyMedium',
+                                textAlign: TextAlign.start,
+                                color: AppColor().lightItemsColor,
+                              ),
+                              Gap(Get.height * 0.005),
+                              const SmallCircle(),
+                              Gap(Get.height * 0.005),
+                              CustomText(
+                                title: timeAgo(widget.item.createdAt!),
                                 size: Get.height * 0.015,
                                 fontFamily: 'GilroyMedium',
                                 textAlign: TextAlign.start,
@@ -189,7 +201,13 @@ class _PostItemState extends State<PostItem> {
                                     null)
                                 ? InkWell(
                                     onTap: () {
-                                      Get.to(() => UserDetails(
+                                      widget.item.team != null
+                                      ? Get.to(() => AccountTeamsDetail(
+                                          item: widget.item.team!))
+                                          : widget.item.community != null
+                                      ? Get.to(() => AccountCommunityDetail(
+                                          item: widget.item.community!))
+                                      : Get.to(() => UserDetails(
                                           id: widget.item.author!.id!));
                                     },
                                     child: SvgPicture.asset(
@@ -199,7 +217,13 @@ class _PostItemState extends State<PostItem> {
                                   )
                                 : InkWell(
                                     onTap: () {
-                                      Get.to(() => UserDetails(
+                                      widget.item.team != null
+                                      ? Get.to(() => AccountTeamsDetail(
+                                          item: widget.item.team!))
+                                          : widget.item.community != null
+                                      ? Get.to(() => AccountCommunityDetail(
+                                          item: widget.item.community!))
+                                      : Get.to(() => UserDetails(
                                           id: widget.item.author!.id!));
                                     },
                                     child: CachedNetworkImage(
@@ -210,12 +234,12 @@ class _PostItemState extends State<PostItem> {
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
                                       imageUrl: widget.item.community != null
-                                          ? widget.item.community!.logo!
+                                          ? widget.item.community!.logo
                                           : widget.item.team != null
                                               ? widget
-                                                  .item.team!.profilePicture!
+                                                  .item.team!.profilePicture
                                               : widget.item.author!.profile!
-                                                  .profilePicture!,
+                                                  .profilePicture,
                                       imageBuilder: (context, imageProvider) =>
                                           Container(
                                         decoration: BoxDecoration(
@@ -262,8 +286,16 @@ class _PostItemState extends State<PostItem> {
                                     height: Get.height * 0.035,
                                     width: Get.height * 0.035)
                                 : InkWell(
-                                    onTap: () => Get.to(() => UserDetails(
-                                        id: widget.item.repost!.author!.id!)),
+                                    onTap: () {
+                                      widget.item.repost!.team != null
+                                      ? Get.to(() => AccountTeamsDetail(
+                                          item: widget.item.repost!.team!))
+                                          : widget.item.repost!.community != null
+                                      ? Get.to(() => AccountCommunityDetail(
+                                          item: widget.item.repost!.community!))
+                                      : Get.to(() => UserDetails(
+                                          id: widget.item.repost!.author!.id!));
+                                    },
                                     child: CachedNetworkImage(
                                       height: Get.height * 0.035,
                                       width: Get.height * 0.035,
@@ -271,19 +303,21 @@ class _PostItemState extends State<PostItem> {
                                           const CircularProgressIndicator(),
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
-                                      imageUrl: widget.item.repost!.author!
-                                          .profile!.profilePicture!,
+                                      imageUrl: widget.item.repost!.community != null
+                                          ? widget.item.repost!.community!.logo
+                                          : widget.item.repost!.team != null
+                                              ? widget.item.repost!.team!.profilePicture
+                                              : widget.item.repost!.author!.profile!.profilePicture,
                                       imageBuilder: (context, imageProvider) =>
                                           Container(
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           image: DecorationImage(
-                                              image: NetworkImage(widget
-                                                  .item
-                                                  .repost!
-                                                  .author!
-                                                  .profile!
-                                                  .profilePicture!),
+                                              image: NetworkImage(widget.item.repost!.community != null
+                                          ? widget.item.repost!.community!.logo
+                                          : widget.item.repost!.team != null
+                                              ? widget.item.repost!.team!.profilePicture
+                                              : widget.item.repost!.author!.profile!.profilePicture,),
                                               fit: BoxFit.cover),
                                         ),
                                       ),
@@ -291,7 +325,11 @@ class _PostItemState extends State<PostItem> {
                                   ),
                             Gap(Get.height * 0.01),
                             CustomText(
-                              title: widget.item.repost!.author!.userName!,
+                              title: widget.item.repost!.community != null
+                                  ? widget.item.repost!.community!.name!
+                                  : widget.item.repost!.team != null
+                                      ? widget.item.repost!.team!.name
+                                      : widget.item.repost!.author!.userName!,
                               size: Get.height * 0.015,
                               fontFamily: 'GilroyMedium',
                               textAlign: TextAlign.start,
@@ -301,7 +339,7 @@ class _PostItemState extends State<PostItem> {
                             const SmallCircle(),
                             Gap(Get.height * 0.005),
                             CustomText(
-                              title: timeAgo(widget.item.createdAt!),
+                              title: timeAgo(widget.item.repost!.createdAt!),
                               size: Get.height * 0.015,
                               fontFamily: 'GilroyMedium',
                               textAlign: TextAlign.start,

@@ -9,6 +9,7 @@ import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
+import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:e_sport/ui/home/post/components/post_details_on_repost.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -29,15 +30,15 @@ import 'repost_details.dart';
 import 'repost_item.dart';
 import './comment_tile.dart';
 
-class PostDetails extends StatefulWidget {
+class PostDetails2 extends StatefulWidget {
   final PostModel item;
-  const PostDetails({super.key, required this.item});
+  const PostDetails2({super.key, required this.item});
 
   @override
-  State<PostDetails> createState() => _PostDetailsState();
+  State<PostDetails2> createState() => _PostDetails2State();
 }
 
-class _PostDetailsState extends State<PostDetails> {
+class _PostDetails2State extends State<PostDetails2> {
 
   String timeAgo(DateTime itemDate) {
     final now = DateTime.now();
@@ -405,7 +406,7 @@ class _PostDetailsState extends State<PostDetails> {
                                     onTap: () {
                                       debugPrint('okay');
                                       Get.to(() =>
-                                          PostDetails2(item: _postDetails!.repost!));
+                                          PostDetails(item: _postDetails!.repost!));
                                     },
                                     child: RepostItem(item: _postDetails!))
                                 : GestureDetector(
