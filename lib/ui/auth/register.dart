@@ -691,7 +691,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                                 keyType: TextInputType.phone,
                                 pretext:
-                                    authController.countryCodeController.text,
+                                    '${authController.countryCodeController.text} ',
                                 validate: Validator.isPhone,
                               ),
                             ),
@@ -801,33 +801,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: AppColor().lightItemsColor,
                                 ),
                               ),
-                            ),
-                            Gap(Get.height * 0.02),
-                            CustomText(
-                              title: 'Referral code (Optional)',
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.center,
-                              fontFamily: 'GilroyRegular',
-                              size: Get.height * 0.017,
-                            ),
-                            Gap(Get.height * 0.01),
-                            CustomTextField(
-                              hint: "DJKNDFD7786S",
-                              textEditingController:
-                                  authController.referralController,
-                              hasText: isReferral!,
-                              focusNode: _referralFocusNode,
-                              onTap: () {
-                                handleTap('referral');
-                              },
-                              onSubmited: (_) {
-                                _referralFocusNode.unfocus();
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  isReferral = value.isNotEmpty;
-                                });
-                              },
                             ),
                             Gap(Get.height * 0.02),
                             Row(mainAxisSize: MainAxisSize.max, children: [
@@ -989,7 +962,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           email: authController.emailController.text.trim(),
                           password:
                               authController.passwordController.text.trim(),
-                          bio: "Test Bio",
+                          bio: "...",
                           password2:
                               authController.passwordController.text.trim(),
                           phoneNumber:
