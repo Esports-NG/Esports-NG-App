@@ -16,6 +16,7 @@ import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/account/account_events/components/tournament_details.dart';
+import 'package:e_sport/ui/account/account_events/event_posts_and_announcements.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/choose_team_dialog.dart';
 import 'package:e_sport/ui/components/participant_list.dart';
@@ -649,7 +650,11 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
               child: PageHeaderWidget(
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => EventPostsAndAnnouncements(
+                        event: widget.item,
+                      ));
+                },
                 title: 'Posts and Announcements',
               ),
             ),
