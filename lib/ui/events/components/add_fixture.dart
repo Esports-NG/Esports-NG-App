@@ -1,6 +1,9 @@
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/platform_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -9,6 +12,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class AddFixture extends StatefulWidget {
@@ -22,9 +26,38 @@ class AddFixture extends StatefulWidget {
 class _AddFixtureState extends State<AddFixture> {
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final tournamentController = Get.put(TournamentRepository());
+  final authController = Get.put(AuthRepository());
 
   bool _hasBeenPlayed = false;
   bool _isLoading = false;
+  List<PlatformModel> _platforms = [];
+
+  Future<void> getPlatforms() async {
+    var response = await http.get(Uri.parse(ApiLink.getPlatforms),
+        headers: {"Authorization": "JWT ${authController.token}"});
+
+    print(response.body);
+
+    setState(() {
+      _platforms = platformModelFromJson(response.body);
+    });
+  }
+
+  void close() {
+    tournamentController.fixturePlatform.value = null;
+  }
+
+  @override
+  void dispose() {
+    close();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    getPlatforms();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -307,7 +340,7 @@ class _AddFixtureState extends State<AddFixture> {
                           horizontal: 10, vertical: 5),
                     ),
                     child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
+                      child: DropdownButton<PlatformModel>(
                         dropdownColor: AppColor().primaryDark,
                         borderRadius: BorderRadius.circular(10),
                         value: tournamentController.fixturePlatform.value,
@@ -315,21 +348,25 @@ class _AddFixtureState extends State<AddFixture> {
                           Icons.keyboard_arrow_down,
                           color: AppColor().lightItemsColor,
                         ),
-                        items: <String>[
-                          "Youtube",
-                          "Twitch",
-                          "Facebook Gaming",
-                          "TikTok",
-                          "Freetyl"
-                        ].map((value) {
-                          return DropdownMenuItem<String>(
+                        items: _platforms.map((value) {
+                          return DropdownMenuItem(
                             value: value,
-                            child: CustomText(
-                              title: value,
-                              color: AppColor().lightItemsColor,
-                              fontFamily: 'GilroyMedium',
-                              weight: FontWeight.w400,
-                              size: 15,
+                            child: Row(
+                              children: [
+                                Image.network(
+                                  "${ApiLink.imageUrl}${value.logo}",
+                                  height: 35,
+                                  fit: BoxFit.contain,
+                                ),
+                                const Gap(10),
+                                CustomText(
+                                  title: value.title,
+                                  color: AppColor().lightItemsColor,
+                                  fontFamily: 'GilroyMedium',
+                                  weight: FontWeight.w400,
+                                  size: 18,
+                                ),
+                              ],
                             ),
                           );
                         }).toList(),

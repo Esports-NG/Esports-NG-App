@@ -59,6 +59,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
   final FocusNode _entryFeeFocusNode = FocusNode();
   final FocusNode _eventLinkFocusNode = FocusNode();
   final FocusNode _eventDateFocusNode = FocusNode();
+  final FocusNode _eventHashtagFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -70,6 +71,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
     _registrationEndDateFocusNode.dispose();
     _entryFeeFocusNode.dispose();
     _eventLinkFocusNode.dispose();
+    _eventHashtagFocusNode.dispose();
     super.dispose();
   }
 
@@ -316,7 +318,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   filled: true,
                   fillColor: isCommunities == true
                       ? AppColor().primaryWhite
-                      : AppColor().bgDark,
+                      : AppColor().primaryDark,
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: AppColor().lightItemsColor, width: 1),
@@ -397,6 +399,28 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   isEventName = value.isNotEmpty;
                 }),
                 validate: Validator.isName,
+              ),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: 'Event hashtag *',
+                color: AppColor().primaryWhite,
+                textAlign: TextAlign.center,
+                fontFamily: 'GilroyRegular',
+                size: Get.height * 0.017,
+              ),
+              Gap(Get.height * 0.01),
+              CustomTextField(
+                prefixIcon: Icon(
+                  Icons.tag,
+                  color: AppColor().primaryWhite,
+                ),
+                hint: "Hashtag",
+                textEditingController:
+                    socialEventController.eventHashtagController,
+                focusNode: _eventHashtagFocusNode,
+                onSubmited: (_) {
+                  _eventHashtagFocusNode.unfocus();
+                },
               ),
               Gap(Get.height * 0.02),
               CustomText(
@@ -540,7 +564,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   filled: true,
                   fillColor: isGame == true
                       ? AppColor().primaryWhite
-                      : AppColor().bgDark,
+                      : AppColor().primaryDark,
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: AppColor().lightItemsColor, width: 1),
@@ -717,7 +741,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                           borderRadius: BorderRadius.circular(10),
                           color: isStartTime == true
                               ? AppColor().primaryWhite
-                              : AppColor().bgDark,
+                              : AppColor().primaryDark,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -786,7 +810,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                           borderRadius: BorderRadius.circular(10),
                           color: isEndTime == true
                               ? AppColor().primaryWhite
-                              : AppColor().bgDark,
+                              : AppColor().primaryDark,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

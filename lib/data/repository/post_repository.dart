@@ -148,7 +148,7 @@ class PostRepository extends GetxController {
       var request = http.MultipartRequest("POST", postUrl)
         ..fields["body"] = postBodyController.text;
       for (int i = 0; i < gameTags.length; i++) {
-        request.fields['itags[$i]'] = '${gameTags[i].abbrev}';
+        request.fields['itags[$i].title'] = '${gameTags[i].abbrev}';
       }
 
       if (postImage != null) {
@@ -536,6 +536,7 @@ class PostRepository extends GetxController {
       "Authorization": 'JWT ${authController.token}'
     });
     var json = jsonDecode(response.body);
+    log(response.body);
 
     if (response.statusCode != 200) {
       throw (json['detail']);
@@ -679,6 +680,59 @@ class PostRepository extends GetxController {
     var list = List.from(json);
     var posts = list.map((e) => PostModel.fromJson(e)).toList();
     searchedPosts.assignAll(posts);
+  }
+
+  Future createEventPost(int eventId) async {
+    var postUrl = postAs.value == "user"
+        ? Uri.parse(ApiLink.createPost)
+        : postAs.value == "community"
+            ? Uri.parse("${ApiLink.createPost}?comm_pk=${postId.value}")
+            : Uri.parse("${ApiLink.createPost}?team_pk=${postId.value}");
+
+    try {
+      _createPostStatus(CreatePostStatus.loading);
+      var headers = {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      };
+      var request = http.MultipartRequest("POST", postUrl)
+        ..fields["body"] = postBodyController.text
+        ..fields["itags[0].title"] = "WRGMS"
+        ..fields["itags[0].event_id"] = eventId.toString();
+      for (int i = 0; i < gameTags.length; i++) {
+        request.fields['itags[${i + 1}].title'] = '${gameTags[i].abbrev}';
+      }
+
+      if (postImage != null) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image', postImage!.path));
+      }
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      var responseBody = await response.stream.bytesToString();
+      log(responseBody); // Log the response body for debugging
+      if (response.statusCode == 201) {
+        _createPostStatus(CreatePostStatus.success);
+        getPostForYou(true);
+        clear();
+        Get.to(() => const CreateSuccessPage(title: 'Post Created'));
+      } else if (response.statusCode == 401) {
+        debugPrint(response.reasonPhrase);
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+        _createPostStatus(CreatePostStatus.error);
+      } else {
+        _createPostStatus(CreatePostStatus.error);
+        debugPrint(response.reasonPhrase);
+        handleError(response.reasonPhrase);
+      }
+    } catch (error) {
+      _createPostStatus(CreatePostStatus.error);
+      debugPrint("Error occurred ${error.toString()}");
+      handleError(error);
+    }
   }
 
   void handleError(dynamic error) {

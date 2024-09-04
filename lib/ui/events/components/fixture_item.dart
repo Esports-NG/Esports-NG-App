@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/fixture_model.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -291,7 +292,9 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                   Column(
                     children: [
                       CustomText(
-                        title: 'VS',
+                        title: widget.fixture.homeScore != null
+                            ? "${widget.fixture.homeScore} - ${widget.fixture.awayScore}"
+                            : 'VS',
                         color: AppColor().secondaryGreenColor,
                         fontFamily: 'GilroyMedium',
                         textAlign: TextAlign.center,
@@ -354,10 +357,15 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.2),
               width: Get.width * 0.9,
-              child: Image.asset(
-                'assets/images/png/twitch_logo.png',
-                width: Get.width * 0.25,
-                alignment: Alignment.center,
+              child: ColorFiltered(
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcATop,
+                ),
+                child: Image.network(
+                  '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                  alignment: Alignment.center,
+                ),
               ),
             ),
           ],
@@ -464,26 +472,61 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                       )
                     ],
                   ),
-                  Column(
-                    children: [
-                      CustomText(
-                        title: 'VS',
-                        color: AppColor().secondaryGreenColor,
-                        fontFamily: 'GilroyMedium',
-                        textAlign: TextAlign.center,
-                        size: 20,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          widget.fixture.homeScore != null
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomText(
+                                      title:
+                                          widget.fixture.homeScore.toString(),
+                                      color: AppColor().secondaryGreenColor,
+                                      fontFamily: 'GilroyMedium',
+                                      textAlign: TextAlign.center,
+                                      size: 28,
+                                    ),
+                                    CustomText(
+                                      title: '-',
+                                      color: AppColor().secondaryGreenColor,
+                                      fontFamily: 'GilroyMedium',
+                                      textAlign: TextAlign.center,
+                                      size: 20,
+                                    ),
+                                    CustomText(
+                                      title:
+                                          widget.fixture.awayScore.toString(),
+                                      color: AppColor().secondaryGreenColor,
+                                      fontFamily: 'GilroyMedium',
+                                      textAlign: TextAlign.center,
+                                      size: 28,
+                                    ),
+                                  ],
+                                )
+                              : CustomText(
+                                  title: 'VS',
+                                  color: AppColor().secondaryGreenColor,
+                                  fontFamily: 'GilroyMedium',
+                                  textAlign: TextAlign.center,
+                                  size: 20,
+                                ),
+                          Gap(Get.height * 0.005),
+                          CustomText(
+                            title: formattedTime,
+                            color: AppColor().primaryWhite,
+                            fontFamily: 'GilroyMedium',
+                            textAlign: TextAlign.center,
+                            size: 14,
+                            underline: TextDecoration.underline,
+                            decorationColor: AppColor().primaryWhite,
+                          )
+                        ],
                       ),
-                      Gap(Get.height * 0.005),
-                      CustomText(
-                        title: formattedTime,
-                        color: AppColor().primaryWhite,
-                        fontFamily: 'GilroyMedium',
-                        textAlign: TextAlign.center,
-                        size: 14,
-                        underline: TextDecoration.underline,
-                        decorationColor: AppColor().primaryWhite,
-                      )
-                    ],
+                    ),
                   ),
                   Column(
                     children: [
@@ -530,10 +573,17 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.3),
               width: Get.width * 0.9,
-              child: Image.asset(
-                'assets/images/png/twitch_logo.png',
-                width: Get.width * 0.25,
-                alignment: Alignment.center,
+              child: ColorFiltered(
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcATop,
+                ),
+                child: Image.network(
+                  '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                  // height: 25,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                ),
               ),
             ),
           ],

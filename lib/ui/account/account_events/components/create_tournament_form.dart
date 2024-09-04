@@ -82,6 +82,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
   final FocusNode _firstPrizeFocusNode = FocusNode();
   final FocusNode _secondPrizeFocusNode = FocusNode();
   final FocusNode _thirdPrizeFocusNode = FocusNode();
+  final FocusNode _tournamentHashtagFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -100,6 +101,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
     _firstPrizeFocusNode.dispose();
     _secondPrizeFocusNode.dispose();
     _thirdPrizeFocusNode.dispose();
+    _tournamentHashtagFocusNode.dispose();
     super.dispose();
   }
 
@@ -249,6 +251,28 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 tournamentController.isTournamentName.value = value.isNotEmpty;
               },
               validate: Validator.isName,
+            ),
+            Gap(Get.height * 0.02),
+            CustomText(
+              title: 'Tournament hashtag *',
+              color: AppColor().primaryWhite,
+              textAlign: TextAlign.center,
+              fontFamily: 'GilroyRegular',
+              size: Get.height * 0.017,
+            ),
+            Gap(Get.height * 0.01),
+            CustomTextField(
+              prefixIcon: Icon(
+                Icons.tag,
+                color: AppColor().primaryWhite,
+              ),
+              hint: "Hashtag",
+              textEditingController:
+                  tournamentController.tournamentHashtagController,
+              focusNode: _tournamentHashtagFocusNode,
+              onSubmited: (_) {
+                _tournamentHashtagFocusNode.unfocus();
+              },
             ),
             Gap(Get.height * 0.02),
             CustomText(

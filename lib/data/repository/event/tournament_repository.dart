@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/fixture_model.dart';
+import 'package:e_sport/data/model/platform_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
@@ -60,6 +61,7 @@ class TournamentRepository extends GetxController {
   late final tournamentTypeController = TextEditingController();
   late final partnersController = TextEditingController();
   late final staffController = TextEditingController();
+  late final tournamentHashtagController = TextEditingController();
 
   //fixtures
   late final addFixtureRoundNameController = TextEditingController();
@@ -75,7 +77,7 @@ class TournamentRepository extends GetxController {
   Rx<TeamModel?> selectedAwayTeam = Rx(null);
   Rx<DateTime?> fixtureDate = Rx(null);
   Rx<TimeOfDay?> fixtureTime = Rx(null);
-  Rx<String?> fixturePlatform = Rx(null);
+  Rx<PlatformModel?> fixturePlatform = Rx(null);
   Rx<GameMode?> fixtureGameMode = Rx(null);
 
   Rx<String?> communitiesValue = Rx(null);
@@ -340,6 +342,7 @@ class TournamentRepository extends GetxController {
             eventController.currency.value + thirdPrizeController.text
         ..fields["rules_regs"] = tournamentRegulationsController.text
         ..fields["event_type"] = "tournament"
+        ..fields["hashtag"] = tournamentHashtagController.text
         ..fields["tournament_type"] = tournamentTypeValue.value!
         ..fields["igames"] = gameValue.value!.id.toString();
 
@@ -484,8 +487,17 @@ class TournamentRepository extends GetxController {
           "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
       "fixture_type": "1v1",
       "title": addFixtureRoundNameController.text,
-      "streaming_link": "https://${addFixtureStreamingLinkController.text}",
-      "streaming_platform": fixturePlatform.value
+      "streaming_platform": fixturePlatform.value,
+      "livestreams": [
+        {
+          "title": addFixtureRoundNameController.text,
+          "description": "fixture",
+          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+          "platform_id": fixturePlatform.value!.id!,
+          "link": "https://${addFixtureStreamingLinkController.text}"
+        }
+      ]
     };
     try {
       var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
@@ -495,12 +507,9 @@ class TournamentRepository extends GetxController {
           },
           body: jsonEncode(body));
 
-      log(response.body);
-
       if (response.statusCode == 200) {
-        Helpers().showCustomSnackbar(message: "Fixture added succesfully");
-
         Get.back();
+        Helpers().showCustomSnackbar(message: "Fixture added successfully");
       }
     } catch (err) {}
   }
@@ -520,7 +529,17 @@ class TournamentRepository extends GetxController {
       "fixture_type": "1v1",
       "title": addFixtureRoundNameController.text,
       "streaming_link": "https://${addFixtureStreamingLinkController.text}",
-      "streaming_platform": fixturePlatform.value
+      "streaming_platform": fixturePlatform.value,
+      "livestreams": [
+        {
+          "title": "",
+          "description": "",
+          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+          "platform_id": fixturePlatform.value!.id!,
+          "link": "https://${addFixtureStreamingLinkController.text}"
+        }
+      ]
     };
     try {
       var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
@@ -533,8 +552,8 @@ class TournamentRepository extends GetxController {
       log(response.body);
 
       if (response.statusCode == 200) {
-        Helpers().showCustomSnackbar(message: "Fixture added succesfully");
         Get.back();
+        Helpers().showCustomSnackbar(message: "Fixture added succesfully");
       }
     } catch (err) {}
   }
