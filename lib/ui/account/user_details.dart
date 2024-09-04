@@ -558,7 +558,6 @@ class _UserProfileState extends State<UserProfile> {
                       child: CustomText(
                           title: "No posts", color: AppColor().primaryWhite))
                   : ListView.separated(
-                      reverse: true,
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
@@ -572,7 +571,7 @@ class _UserProfileState extends State<UserProfile> {
                           child: SizedBox(
                               width: Get.height * 0.35,
                               child: PostItemForProfile(
-                                  item: _recentPosts[index]))),
+                                  item: _recentPosts.reversed.toList()[index]))),
                       itemCount: _recentPosts.length),
         ),
       ),
