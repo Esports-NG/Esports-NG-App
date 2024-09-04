@@ -242,8 +242,8 @@ class EventRepository extends GetxController
       "Authorization": 'JWT ${authController.token}'
     });
 
-    var json = jsonDecode(response.body);
     log(response.body);
+    var json = jsonDecode(response.body);
     if (response.statusCode != 200) {
     } else {
       var list = List.from(json);

@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/platform_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 
@@ -19,7 +20,7 @@ class FixtureModel {
   final String? title;
   final String? fixtureRound;
   final EventModel? tournament;
-  final GameMode? gameMode;
+  final List<GameMode>? gameMode;
   final PlayerModel? homePlayer;
   final TeamModel? homeTeam;
   final int? homeScore;
@@ -34,28 +35,29 @@ class FixtureModel {
   final String? fixtureGroup;
   final String? streamingLink;
   final String? streamingPlatform;
+  final List<LivestreamModel>? livestreams;
 
-  FixtureModel({
-    this.id,
-    this.title,
-    this.fixtureRound,
-    this.tournament,
-    this.gameMode,
-    this.homePlayer,
-    this.homeTeam,
-    this.homeScore,
-    this.players,
-    this.teams,
-    this.awayPlayer,
-    this.awayTeam,
-    this.awayScore,
-    this.fixtureDate,
-    this.fixtureTime,
-    this.fixtureType,
-    this.fixtureGroup,
-    this.streamingLink,
-    this.streamingPlatform,
-  });
+  FixtureModel(
+      {this.id,
+      this.title,
+      this.fixtureRound,
+      this.tournament,
+      this.gameMode,
+      this.homePlayer,
+      this.homeTeam,
+      this.homeScore,
+      this.players,
+      this.teams,
+      this.awayPlayer,
+      this.awayTeam,
+      this.awayScore,
+      this.fixtureDate,
+      this.fixtureTime,
+      this.fixtureType,
+      this.fixtureGroup,
+      this.streamingLink,
+      this.streamingPlatform,
+      this.livestreams});
 
   factory FixtureModel.fromJson(Map<String, dynamic> json) => FixtureModel(
         id: json["id"],
@@ -66,7 +68,8 @@ class FixtureModel {
             : EventModel.fromJson(json["tournament"]),
         gameMode: json["game_mode"] == null
             ? null
-            : GameMode.fromJson(json["game_mode"]),
+            : List<GameMode>.from(
+                json["livestreams"]!.map((x) => GameMode.fromJson(x))),
         homePlayer: json["home_player"] == null
             ? null
             : PlayerModel.fromJson(json["home_player"]),
@@ -95,6 +98,10 @@ class FixtureModel {
         fixtureGroup: json["fixture_group"],
         streamingLink: json["streaming_link"],
         streamingPlatform: json["streaming_platform"],
+        livestreams: json["livestreams"] == null
+            ? []
+            : List<LivestreamModel>.from(
+                json["livestreams"]!.map((x) => LivestreamModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -102,7 +109,7 @@ class FixtureModel {
         "title": title,
         "fixture_round": fixtureRound,
         "tournament": tournament?.toJson(),
-        "game_mode": gameMode?.toJson(),
+        // "game_mode": gameMode?.toJson(),
         "home_player": homePlayer?.toJson(),
         "home_team": homeTeam,
         "home_score": homeScore,
@@ -119,5 +126,49 @@ class FixtureModel {
         "fixture_group": fixtureGroup,
         "streaming_link": streamingLink,
         "streaming_platform": streamingPlatform,
+      };
+}
+
+class LivestreamModel {
+  final int? id;
+  final String? title;
+  final String? description;
+  final DateTime? date;
+  final String? time;
+  final PlatformModel? platform;
+  final String? link;
+
+  LivestreamModel({
+    this.id,
+    this.title,
+    this.description,
+    this.date,
+    this.time,
+    this.platform,
+    this.link,
+  });
+
+  factory LivestreamModel.fromJson(Map<String, dynamic> json) =>
+      LivestreamModel(
+        id: json["id"],
+        title: json["title"],
+        description: json["description"],
+        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        time: json["time"],
+        platform: json["platform"] == null
+            ? null
+            : PlatformModel.fromJson(json["platform"]),
+        link: json["link"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+        "description": description,
+        "date":
+            "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
+        "time": time,
+        "platform": platform?.toJson(),
+        "link": link,
       };
 }

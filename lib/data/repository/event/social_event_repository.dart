@@ -39,6 +39,7 @@ class SocialEventRepository extends GetxController {
   final TextEditingController eventLinkController = TextEditingController();
   final TextEditingController eventDateController = TextEditingController();
   final TextEditingController partnersController = TextEditingController();
+  final TextEditingController eventHashtagController = TextEditingController();
 
   Rx<DateTime?> date = Rx(null);
 
@@ -181,6 +182,7 @@ class SocialEventRepository extends GetxController {
             "${eventDateController.text}T${DateFormat("HH:mm").format(endTime)}"
         ..fields["venue"] = eventVenueController.text
         ..fields["link"] = eventLinkController.text
+        ..fields["hashtag"] = eventHashtagController.text
         ..fields["event_type"] = "social";
 
       request.files.add(
