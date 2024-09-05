@@ -44,7 +44,7 @@ class _AddFixtureState extends State<AddFixture> {
   }
 
   void close() {
-    tournamentController.fixturePlatform.value = null;
+    tournamentController.clearFixturesData();
   }
 
   @override
