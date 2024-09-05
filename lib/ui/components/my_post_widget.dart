@@ -28,6 +28,7 @@ class _MyPostWidgetState extends State<MyPostWidget>
       appBar: AppBar(
           centerTitle: true,
           elevation: 0,
+          scrolledUnderElevation: 0,
           title: CustomText(
             title: 'Posts',
             fontFamily: 'GilroySemiBold',
@@ -43,7 +44,7 @@ class _MyPostWidgetState extends State<MyPostWidget>
           });
         },
         child: Padding(
-          padding: EdgeInsets.all(Get.height * 0.02),
+          padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
           child: Obx(() => NestedScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -52,28 +53,32 @@ class _MyPostWidgetState extends State<MyPostWidget>
                       delegate: _SliverAppBarDelegate(
                           minHeight: 45,
                           maxHeight: 45,
-                          child: TabBar(
-                              isScrollable: true,
-                              tabAlignment: TabAlignment.start,
-                              labelColor: AppColor().primaryColor,
-                              indicatorColor: AppColor().primaryColor,
-                              dividerColor: Colors.transparent,
-                              labelStyle: const TextStyle(
-                                fontFamily: 'GilroyBold',
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              unselectedLabelColor: AppColor().lightItemsColor,
-                              unselectedLabelStyle: const TextStyle(
-                                fontFamily: 'GilroyMedium',
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              controller: _tabController,
-                              tabs: const [
-                                Tab(text: 'My Posts'),
-                                Tab(text: 'Bookmarks'),
-                              ])))
+                          child: Container(
+                            color: AppColor().primaryBackGroundColor,
+                            child: TabBar(
+                                isScrollable: true,
+                                tabAlignment: TabAlignment.start,
+                                labelColor: AppColor().primaryColor,
+                                indicatorColor: AppColor().primaryColor,
+                                dividerColor: Colors.transparent,
+                                labelStyle: const TextStyle(
+                                  fontFamily: 'GilroyBold',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                unselectedLabelColor:
+                                    AppColor().lightItemsColor,
+                                unselectedLabelStyle: const TextStyle(
+                                  fontFamily: 'GilroyMedium',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                controller: _tabController,
+                                tabs: const [
+                                  Tab(text: 'My Posts'),
+                                  Tab(text: 'Bookmarks'),
+                                ]),
+                          )))
                 ],
                 body: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
