@@ -785,6 +785,24 @@ class AuthRepository extends GetxController {
     } catch (err) {}
   }
 
+  Future sendActivationLink(String email) async {
+    try {
+      var response = await http
+          .post(Uri.parse(ApiLink.sendActivationEmail(email)), headers: {
+        // "Authorization": "JWT $token",
+        "Content-type": "application/json"
+      });
+      log(response.body);
+
+      var json = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        Get.back();
+        Helpers().showCustomSnackbar(message: "Account activation email sent.");
+      }
+    } catch (err) {}
+  }
+
   void getError(var error) {
     Helpers().showCustomSnackbar(
         message: (error.toString().contains("esports-ng.vercel.app") ||
