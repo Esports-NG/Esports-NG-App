@@ -166,7 +166,9 @@ class _HomePageState extends State<HomePage>
                                   child: CupertinoSearchTextField(
                                     placeholder: 'Search recent posts...',
                                     onSubmitted: (_) =>
-                                        Get.to(() => SearchScreen(selectedPage: 0,)),
+                                        Get.to(() => const SearchScreen(
+                                              selectedPage: 0,
+                                            )),
                                     borderRadius: BorderRadius.circular(10),
                                     prefixInsets: const EdgeInsets.only(
                                         right: 5, left: 10),
@@ -175,11 +177,11 @@ class _HomePageState extends State<HomePage>
                                         .primaryWhite
                                         .withOpacity(0.5),
                                     style: TextStyle(
-                                        color: AppColor().primaryWhite,
-                                        fontFamily: 'GilroyMedium',
-                                        fontSize: 14,
-                                        height: Get.height * 0.0019,
-                                        ),
+                                      color: AppColor().primaryWhite,
+                                      fontFamily: 'GilroyMedium',
+                                      fontSize: 14,
+                                      height: Get.height * 0.0019,
+                                    ),
                                   )),
                               Gap(Get.height * 0.025),
                               TabBar(

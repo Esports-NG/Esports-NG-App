@@ -725,7 +725,9 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     icon: const Icon(Icons.keyboard_arrow_down),
                     color: AppColor().greyFour),
                 dropdownDecoratorProps: DropDownDecoratorProps(
-                    baseStyle: TextStyle(color: AppColor().primaryWhite),
+                    baseStyle: TextStyle(
+                        color: AppColor().primaryWhite,
+                        fontFamily: "GilroyMedium"),
                     dropdownSearchDecoration: InputDecoration(
                       hintText: "Select a currency",
                       hintStyle: TextStyle(
