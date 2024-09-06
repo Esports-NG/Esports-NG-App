@@ -1,13 +1,14 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:e_sport/util/loading.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'register.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -162,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Gap(Get.height * 0.1),
                 Obx(() {
-                  return InkWell(
+                  return GestureDetector(
                     onTap: () {
                       if (_formKey.currentState!.validate() &&
                           authController.signInStatus != SignInStatus.loading) {
@@ -178,7 +179,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child:
                           (authController.signInStatus == SignInStatus.loading)
-                              ? const LoadingWidget()
+                              ? Center(
+                                  child: ButtonLoader(
+                                    color: AppColor().primaryWhite,
+                                  ),
+                                )
                               : Center(
                                   child: CustomText(
                                   title: 'Log in',

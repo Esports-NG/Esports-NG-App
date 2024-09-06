@@ -473,9 +473,13 @@ class TournamentRepository extends GetxController {
   Future createFixtureForPlayer(int id) async {
     Map<String, dynamic> body = {
       "away_player_id": selectedAwayPlayer.value!.id,
-      "away_score": addFixturesAwayPlayerScoreController.text,
+      "away_score": addFixturesAwayPlayerScoreController.text == ""
+          ? null
+          : addFixturesAwayPlayerScoreController.text,
       "home_player_id": selectedHomePlayer.value!.id,
-      "home_score": addFixturesHomePlayerScoreController.text,
+      "home_score": addFixturesHomePlayerScoreController.text == ""
+          ? null
+          : addFixturesHomePlayerScoreController.text,
       "player_ids": [
         selectedHomePlayer.value!.id,
         selectedAwayPlayer.value!.id
@@ -506,6 +510,8 @@ class TournamentRepository extends GetxController {
             "Content-type": "application/json"
           },
           body: jsonEncode(body));
+
+      log(response.body);
 
       if (response.statusCode == 200) {
         Get.back();
@@ -570,6 +576,22 @@ class TournamentRepository extends GetxController {
                 : error.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM);
+  }
+
+  void clearFixturesData() {
+    fixtureTime.value = null;
+    fixtureDate.value = null;
+    addFixturesAwayPlayerScoreController.clear();
+    addFixturesHomePlayerScoreController.clear();
+    addFixturesAwayTeamScoreController.clear();
+    addFixturesHomeTeamScoreController.clear();
+    selectedAwayPlayer.value = null;
+    selectedHomePlayer.value = null;
+    selectedHomeTeam.value = null;
+    selectedAwayTeam.value = null;
+    addFixtureRoundNameController.clear();
+    addFixtureStreamingLinkController.clear();
+    fixturePlatform.value = null;
   }
 
   void clearProfilePhoto() {

@@ -49,9 +49,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                 width: 70,
                 duration: const Duration(milliseconds: 500),
                 decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(99),
-                        bottomRight: Radius.circular(99)),
+                    borderRadius: BorderRadius.circular(99),
                     color: AppColor().primaryColor),
               ),
             ),

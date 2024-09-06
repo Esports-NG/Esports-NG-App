@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:e_sport/data/model/user_model.dart';
@@ -304,10 +305,15 @@ class AuthRepository extends GetxController {
             "password": passwordController.text.trim(),
           }));
 
-      debugPrint('login response ${response.body}');
+      log(response.body);
       var json = jsonDecode(response.body);
       if (json.toString().contains('non_field_errors')) {
         throw (json["error"]['non_field_errors'][0]);
+      }
+      if (json['error'] != null) {
+        Helpers()
+            .showCustomSnackbar(message: json['error'].toString().capitalize!);
+        _signInStatus(SignInStatus.error);
       }
 
       if (json.toString().contains('Quota Exceeded')) {
@@ -315,23 +321,23 @@ class AuthRepository extends GetxController {
       }
 
       if (response.statusCode == 200) {
-        var userModel = UserModel.fromJson(json);
-        mToken(json['tokens']['access']);
-        pref!.saveToken(token);
-        mUser(userModel);
-        pref!.setUser(userModel);
-        _signInStatus(SignInStatus.success);
-        _authStatus(AuthStatus.authenticated);
-        Helpers().showCustomSnackbar(message: "Login Successfull");
-        await Future.delayed(const Duration(seconds: 1));
-        Get.offAll(() => const RootDashboard());
-        // EasyLoading.showInfo('Login Successful',
-        //         duration: const Duration(seconds: 2))
-        //     .then((value) async {
-        //   await Future.delayed(const Duration(seconds: 2));
-        //   Get.to(() => const OTPScreen());
-        //   clear();
-        // });
+        if (json['tokens'] != null) {
+          var userModel = UserModel.fromJson(json);
+          mToken(json['tokens']['access']);
+          pref!.saveToken(token);
+          mUser(userModel);
+          pref!.setUser(userModel);
+          _signInStatus(SignInStatus.success);
+          _authStatus(AuthStatus.authenticated);
+          Helpers().showCustomSnackbar(message: "Login Successful");
+          await Future.delayed(const Duration(seconds: 1));
+          Get.offAll(() => const RootDashboard());
+        } else {
+          if (json['message'] != null) {
+            Helpers().showCustomSnackbar(message: json["message"]);
+          }
+          _signInStatus(SignInStatus.error);
+        }
       }
 
       return response.body;
