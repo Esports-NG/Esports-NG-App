@@ -17,6 +17,8 @@ class ApiLink {
   static String getUser = "${baseurl}user/info/";
   static String updateUser = "${baseurl}users/profile";
   static String deleteAcct = "${baseurl}users";
+  static String sendActivationEmail(String email) =>
+      "${baseurl}user/resendlink/$email/";
   static String changePassword = "${baseurl}users/profile";
   static String followUser = "${baseurl}extra/followuser/";
   // static String followCommunity = "${baseurl}extra/followcomm/";

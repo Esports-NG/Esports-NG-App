@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/no_internet.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+
 import 'di/app_binding.dart';
 import 'ui/auth/splash_screen.dart';
 
@@ -80,8 +82,8 @@ class _ESportAppState extends State<ESportApp> {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: {
-              TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
-              TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
             },
           ),
         ),
