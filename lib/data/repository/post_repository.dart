@@ -703,7 +703,7 @@ class PostRepository extends GetxController {
         ..fields["annoucement"] = isEventAnnouncement.value.toString()
         ..fields["participant_annoucement"] =
             isParticipantAnnouncement.value.toString()
-        ..fields["itags[0].title"] = "WRGMS"
+        ..fields["itags[0].title"] = "EVENT"
         ..fields["itags[0].event_id"] = eventId.toString();
       for (int i = 0; i < gameTags.length; i++) {
         request.fields['itags[${i + 1}].title'] = '${gameTags[i].abbrev}';
