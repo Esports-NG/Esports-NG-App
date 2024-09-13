@@ -73,14 +73,14 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                   CustomText(
                     title: widget.event.name,
                     color: AppColor().primaryWhite,
-                    weight: FontWeight.w600,
+                    fontFamily: "InterSemiBold",
                     size: 16,
                     overflow: TextOverflow.ellipsis,
                   ),
                   CustomText(
                     title: "${_participantList?.length ?? ""} Team(s)",
                     color: AppColor().primaryWhite.withOpacity(0.5),
-                    // weight: FontWeight.w600,
+                    // fontFamily: "InterSemiBold",
                     size: 14,
                   )
                 ],
@@ -125,7 +125,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                           title: _isRegistered ? "Registered" : "Register",
                           color: AppColor().primaryWhite,
                           size: 12,
-                          fontFamily: 'GilroyMedium',
+                          fontFamily: 'InterMedium',
                         )),
                 ),
               ),
@@ -142,7 +142,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                 CustomText(
                   title: "Participant List",
                   color: AppColor().secondaryGreenColor,
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   size: 20,
                 ),
                 CustomText(
@@ -195,7 +195,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                                           .toUpperCase(),
                                                   color:
                                                       AppColor().primaryWhite,
-                                                  weight: FontWeight.w600,
+                                                  fontFamily: "InterSemiBold",
                                                   size: 16,
                                                 ),
                                                 CustomText(
@@ -220,7 +220,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                                 color: AppColor()
                                                     .primaryWhite
                                                     .withOpacity(0.8),
-                                                fontFamily: "GilroyMedium"),
+                                                fontFamily: "InterMedium"),
                                           ),
                                           const Spacer(),
                                           Expanded(
@@ -230,7 +230,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                                 color: AppColor()
                                                     .primaryWhite
                                                     .withOpacity(0.8),
-                                                fontFamily: "GilroyMedium"),
+                                                fontFamily: "InterMedium"),
                                           ),
                                           const Spacer(),
                                           Expanded(
@@ -241,7 +241,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                                 color: AppColor()
                                                     .primaryWhite
                                                     .withOpacity(0.8),
-                                                fontFamily: "GilroyMedium"),
+                                                fontFamily: "InterMedium"),
                                           ),
                                           const Spacer(),
                                           Expanded(
@@ -251,7 +251,7 @@ class _TeamParticipantListState extends State<TeamParticipantList> {
                                                 color: AppColor()
                                                     .primaryWhite
                                                     .withOpacity(0.8),
-                                                fontFamily: "GilroyMedium"),
+                                                fontFamily: "InterMedium"),
                                           )
                                         ],
                                       ),

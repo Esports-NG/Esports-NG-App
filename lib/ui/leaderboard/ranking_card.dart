@@ -36,7 +36,7 @@ class RankingCard extends StatelessWidget {
                 CustomText(
                   title: "Rankings",
                   color: AppColor().primaryWhite,
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   size: 18,
                 ),
               ],

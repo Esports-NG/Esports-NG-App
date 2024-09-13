@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'components/community_item.dart';
 
 class TrendingCommunity extends StatefulWidget {
@@ -45,7 +46,7 @@ class _TrendingCommunityState extends State<TrendingCommunity> {
         leading: GoBackButton(onPressed: () => Get.back()),
         title: CustomText(
           title: 'Trending Communities',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -60,7 +61,7 @@ class _TrendingCommunityState extends State<TrendingCommunity> {
                 height: Get.height * 0.06,
                 child: CustomTextField(
                   hint: "Search for gaming news, competitions...",
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   prefixIcon: Icon(
                     CupertinoIcons.search,
                     color: AppColor().lightItemsColor,

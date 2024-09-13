@@ -288,9 +288,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                 Gap(Get.height * 0.07),
                 CustomText(
                     title: _details!.name,
-                    weight: FontWeight.w500,
                     size: Get.height * 0.02,
-                    fontFamily: 'GilroyBold',
+                    fontFamily: 'InterBold',
                     color: AppColor().primaryWhite),
                 Gap(Get.height * 0.01),
                 CustomText(
@@ -299,9 +298,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                         : _details!.members!.length == 1
                             ? '1 Member'
                             : '${_details!.members!.length} Members',
-                    weight: FontWeight.w400,
                     size: Get.height * 0.017,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     color: AppColor().greyEight),
                 Gap(Get.height * 0.02),
                 Row(
@@ -312,16 +310,14 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                       children: [
                         CustomText(
                             title: '0',
-                            weight: FontWeight.w500,
                             size: Get.height * 0.02,
-                            fontFamily: 'GilroyBold',
+                            fontFamily: 'InterBold',
                             color: AppColor().primaryWhite),
                         Gap(Get.height * 0.01),
                         CustomText(
                             title: 'Following',
-                            weight: FontWeight.w400,
                             size: Get.height * 0.017,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             color: AppColor().greyEight),
                       ],
                     ),
@@ -337,17 +333,15 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                         _teamFollowers != null
                             ? CustomText(
                                 title: _followerCount.toString(),
-                                weight: FontWeight.w500,
                                 size: Get.height * 0.02,
-                                fontFamily: 'GilroyBold',
+                                fontFamily: 'InterBold',
                                 color: AppColor().primaryWhite)
                             : const ButtonLoader(),
                         Gap(Get.height * 0.01),
                         CustomText(
                             title: 'Followers',
-                            weight: FontWeight.w400,
                             size: Get.height * 0.017,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             color: AppColor().greyEight),
                       ],
                     ),
@@ -363,17 +357,15 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                         _teamFollowers != null
                             ? CustomText(
                                 title: _details!.playersCount.toString(),
-                                weight: FontWeight.w500,
                                 size: Get.height * 0.02,
-                                fontFamily: 'GilroyBold',
+                                fontFamily: 'InterBold',
                                 color: AppColor().primaryWhite)
                             : const ButtonLoader(),
                         Gap(Get.height * 0.01),
                         CustomText(
                             title: 'Players',
-                            weight: FontWeight.w400,
                             size: Get.height * 0.017,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             color: AppColor().greyEight),
                       ],
                     ),
@@ -423,9 +415,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                               title: _isFollowing
                                                   ? 'Unfollow'
                                                   : 'Follow',
-                                              weight: FontWeight.w400,
                                               size: Get.height * 0.017,
-                                              fontFamily: 'GilroyRegular',
+                                              fontFamily: 'Inter',
                                               color: AppColor().primaryWhite),
                                         ]),
                             ),
@@ -451,9 +442,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                     Gap(Get.height * 0.01),
                                     CustomText(
                                         title: 'Message',
-                                        weight: FontWeight.w400,
                                         size: Get.height * 0.017,
-                                        fontFamily: 'GilroyRegular',
+                                        fontFamily: 'Inter',
                                         color: AppColor().primaryWhite),
                                     Gap(Get.height * 0.01),
                                     Icon(
@@ -478,18 +468,16 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                         },
                         child: CustomText(
                             title: 'Apply to team',
-                            weight: FontWeight.w400,
                             size: Get.height * 0.017,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             color: AppColor().primaryWhite),
                       ),
                       Gap(Get.height * 0.04),
                       CustomText(
                           title:
                               'This team is made up of skilled gamers who are passionate\nabout the Attack on Titan series.',
-                          weight: FontWeight.w400,
                           size: Get.height * 0.015,
-                          fontFamily: 'GilroyRegular',
+                          fontFamily: 'Inter',
                           textAlign: TextAlign.center,
                           height: 1.5,
                           color: AppColor().greyEight),
@@ -512,9 +500,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                       children: [
                         CustomText(
                             title: 'Team Owner',
-                            weight: FontWeight.w400,
                             size: 18,
-                            fontFamily: 'GilroySemiBold',
+                            fontFamily: 'InterSemiBold',
                             color: AppColor().primaryWhite),
                         Gap(Get.height * 0.02),
                         Row(
@@ -557,9 +544,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                               child: CustomText(
                                   title: _details!.owner!.fullName!
                                       .toCapitalCase(),
-                                  weight: FontWeight.w400,
                                   size: Get.height * 0.017,
-                                  fontFamily: 'GilroyMedium',
+                                  fontFamily: 'InterMedium',
                                   color: AppColor().primaryWhite),
                             ),
                           ],
@@ -567,9 +553,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                         Gap(Get.height * 0.01),
                         CustomText(
                             title: _details!.owner!.bio!,
-                            weight: FontWeight.w400,
                             size: Get.height * 0.015,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             textAlign: TextAlign.left,
                             height: 1.5,
                             color: AppColor().greyEight),
@@ -580,9 +565,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                           child: Center(
                             child: CustomText(
                                 title: 'See full profile',
-                                weight: FontWeight.w400,
                                 size: Get.height * 0.017,
-                                fontFamily: 'GilroyMedium',
+                                fontFamily: 'InterMedium',
                                 underline: TextDecoration.underline,
                                 color: AppColor().primaryColor),
                           ),
@@ -643,7 +627,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                         title: "Personnel List",
                         size: 18,
                         color: AppColor().primaryWhite,
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                       ),
                       Gap(Get.height * 0.02),
                       Padding(
@@ -742,7 +726,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                         title: "Team Records",
                         size: 18,
                         color: AppColor().primaryWhite,
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
@@ -810,9 +794,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                           child: Center(
                                             child: CustomText(
                                                 title: 'See all',
-                                                weight: FontWeight.w400,
                                                 size: Get.height * 0.017,
-                                                fontFamily: 'GilroyMedium',
+                                                fontFamily: 'InterMedium',
                                                 underline:
                                                     TextDecoration.underline,
                                                 color: AppColor().primaryColor),
@@ -890,7 +873,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                     children: [
                       CustomText(
                         title: 'Join our Community:',
-                        fontFamily: 'GilroySemiBold',
+                        fontFamily: 'InterSemiBold',
                         size: 16,
                         color: AppColor().primaryWhite,
                       ),

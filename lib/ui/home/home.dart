@@ -178,7 +178,7 @@ class _HomePageState extends State<HomePage>
                                         .withOpacity(0.5),
                                     style: TextStyle(
                                       color: AppColor().primaryWhite,
-                                      fontFamily: 'GilroyMedium',
+                                      fontFamily: 'InterMedium',
                                       fontSize: 14,
                                       height: Get.height * 0.0019,
                                     ),
@@ -191,16 +191,14 @@ class _HomePageState extends State<HomePage>
                                   indicatorColor: AppColor().primaryColor,
                                   dividerColor: Colors.transparent,
                                   labelStyle: const TextStyle(
-                                    fontFamily: 'GilroyBold',
+                                    fontFamily: 'InterBold',
                                     fontSize: 13,
-                                    fontWeight: FontWeight.w400,
                                   ),
                                   unselectedLabelColor:
                                       AppColor().lightItemsColor,
                                   unselectedLabelStyle: const TextStyle(
-                                    fontFamily: 'GilroyMedium',
+                                    fontFamily: 'InterMedium',
                                     fontSize: 13,
-                                    fontWeight: FontWeight.w400,
                                   ),
                                   controller: _tabController,
                                   tabs: const [
@@ -263,8 +261,7 @@ class _HomePageState extends State<HomePage>
                     title: item.title,
                     size: 13,
                     fontFamily:
-                        categoryType == index ? 'GilroyBold' : 'GilroyMedium',
-                    weight: FontWeight.w400,
+                        categoryType == index ? 'InterBold' : 'InterMedium',
                     textAlign: TextAlign.start,
                     color: categoryType == index
                         ? AppColor().primaryColor

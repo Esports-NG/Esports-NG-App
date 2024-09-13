@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'components/trending_team_item.dart';
 
 class TrendingTeam extends StatefulWidget {
@@ -47,7 +48,7 @@ class _TrendingTeamState extends State<TrendingTeam> {
         leading: GoBackButton(onPressed: () => Get.back()),
         title: CustomText(
           title: 'Trending Team',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -62,7 +63,7 @@ class _TrendingTeamState extends State<TrendingTeam> {
                 height: Get.height * 0.06,
                 child: CustomTextField(
                   hint: "Search for gaming news, competitions...",
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   prefixIcon: Icon(
                     CupertinoIcons.search,
                     color: AppColor().lightItemsColor,

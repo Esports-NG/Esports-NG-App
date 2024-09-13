@@ -2,6 +2,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'custom_text.dart';
 
 class NoInternetScreen extends StatelessWidget {
@@ -27,7 +28,7 @@ class NoInternetScreen extends StatelessWidget {
             child: CustomText(
               title: "No internet connection",
               size: Get.height * 0.02,
-              weight: FontWeight.w600,
+              fontFamily: "InterSemiBold",
               color: AppColor().primaryWhite,
             ),
           ),

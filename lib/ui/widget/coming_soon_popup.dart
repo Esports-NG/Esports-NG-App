@@ -36,7 +36,7 @@ class ComingSoonPopup extends StatelessWidget {
           Gap(Get.height * 0.02),
           CustomText(
             title: "Coming Soon",
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             color: AppColor().primaryWhite,
             size: 20,
           ),

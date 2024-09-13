@@ -98,7 +98,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
           centerTitle: true,
           title: CustomText(
             title: 'Edit Community Page',
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -138,8 +138,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
                   titleStyle: TextStyle(
                     color: AppColor().primaryWhite,
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: "InterSemiBold",
                   ),
                   radius: 10,
                   confirm: Column(
@@ -174,9 +173,8 @@ class _EditCommunityState extends State<EditCommunityPage> {
                   ),
                   middleTextStyle: TextStyle(
                     color: AppColor().primaryWhite,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     fontSize: 14,
-                    fontWeight: FontWeight.w400,
                   ),
                 );
               },
@@ -197,9 +195,8 @@ class _EditCommunityState extends State<EditCommunityPage> {
                 padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                 child: CustomText(
                   title: 'Edit your Community',
-                  weight: FontWeight.w400,
                   size: 15,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   color: AppColor().primaryWhite,
                 ),
               ),
@@ -215,7 +212,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
                         title: 'Community name *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -234,7 +231,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
                         title: 'Community abbreviation (Max 5 characters) *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -253,7 +250,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
                         title: 'Community bio *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -273,7 +270,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
                         title: 'Community profile picture *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -288,11 +285,9 @@ class _EditCommunityState extends State<EditCommunityPage> {
                                 top: 5, bottom: 30, left: 25, right: 25),
                             middleText: "Upload your community profile picture",
                             titleStyle: TextStyle(
-                              color: AppColor().primaryWhite,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'GilroyRegular',
-                            ),
+                                color: AppColor().primaryWhite,
+                                fontSize: 15,
+                                fontFamily: "InterSemiBold"),
                             radius: 10,
                             confirm: Column(
                               children: [
@@ -327,9 +322,8 @@ class _EditCommunityState extends State<EditCommunityPage> {
                             ),
                             middleTextStyle: TextStyle(
                               color: AppColor().primaryWhite,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               fontSize: 14,
-                              fontWeight: FontWeight.w400,
                             ),
                           );
                         } else {
@@ -341,7 +335,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
                         title: 'Community cover photo *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -358,8 +352,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
                             titleStyle: TextStyle(
                               color: AppColor().primaryWhite,
                               fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: "InterSemiBold",
                             ),
                             radius: 10,
                             confirm: Column(
@@ -395,9 +388,8 @@ class _EditCommunityState extends State<EditCommunityPage> {
                             ),
                             middleTextStyle: TextStyle(
                               color: AppColor().primaryWhite,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               fontSize: 14,
-                              fontWeight: FontWeight.w400,
                             ),
                           );
                         } else {
@@ -443,7 +435,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
                           child: CustomText(
                           title: 'Update Community',
                           color: AppColor().primaryWhite,
-                          weight: FontWeight.w600,
+                          fontFamily: "InterSemiBold",
                           size: Get.height * 0.018,
                         )),
                 ),
@@ -464,7 +456,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
           title: title,
           color: AppColor().primaryWhite,
           textAlign: TextAlign.center,
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: Get.height * 0.016,
         ),
         Gap(Get.height * 0.01),
@@ -526,9 +518,8 @@ class _EditCommunityState extends State<EditCommunityPage> {
                 title: communityController.communityProfileImage == null
                     ? 'Click to upload'
                     : 'Cancel',
-                weight: FontWeight.w400,
                 size: 15,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryColor,
                 underline: TextDecoration.underline,
               ),
@@ -538,7 +529,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
               title: 'Max file size: 4MB',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.014,
             ),
           ],
@@ -591,9 +582,8 @@ class _EditCommunityState extends State<EditCommunityPage> {
                 title: communityController.communityCoverImage == null
                     ? 'Click to upload'
                     : 'Cancel',
-                weight: FontWeight.w400,
                 size: 15,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryColor,
                 underline: TextDecoration.underline,
               ),
@@ -603,7 +593,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
               title: 'Max file size: 4MB',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.014,
             ),
           ],

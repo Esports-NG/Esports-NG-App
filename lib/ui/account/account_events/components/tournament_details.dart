@@ -21,7 +21,7 @@ class TournamentDetails extends StatelessWidget {
           title: title,
           color: AppColor().primaryWhite,
           size: 18,
-          fontFamily: "GilroyMedium",
+          fontFamily: "InterMedium",
         ),
       ),
       body: SingleChildScrollView(
@@ -53,7 +53,7 @@ class TournamentDetailsItem extends StatelessWidget {
           title: title,
           color: AppColor().primaryWhite,
           size: 20,
-          weight: FontWeight.w600,
+          fontFamily: "InterSemiBold",
         ),
         Gap(Get.height * 0.01),
         CustomText(

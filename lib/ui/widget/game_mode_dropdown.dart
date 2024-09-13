@@ -1,8 +1,8 @@
 import 'package:e_sport/data/model/player_model.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 
 class GameModeDropDown extends StatefulWidget {
   const GameModeDropDown(
@@ -17,7 +17,7 @@ class GameModeDropDown extends StatefulWidget {
   final bool? toggleArrow;
   final Rx<String?> gameModeValue;
   final Rx<GamePlayed?> gameValue;
-  final TextEditingController gameModeController;
+  final MultiSelectController<int> gameModeController;
   final dynamic handleTap;
 
   @override
@@ -28,67 +28,40 @@ class _GameModeDropDownState extends State<GameModeDropDown> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => InputDecorator(
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: widget.enableFill == true
-              ? AppColor().primaryWhite
-              : AppColor().primaryDark,
-          focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: AppColor().lightItemsColor, width: 1),
-              borderRadius: BorderRadius.circular(10)),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(10)),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: widget.gameValue.value != null
-              ? DropdownButton<String>(
-                  icon: Icon(Icons.keyboard_arrow_down,
-                      color: widget.enableFill == true
-                          ? AppColor().primaryBackGroundColor
-                          : AppColor().lightItemsColor),
-                  value: widget.gameModeValue.value,
-                  dropdownColor: AppColor().primaryDark,
-                  borderRadius: BorderRadius.circular(10),
-                  items: widget.gameValue.value!.gameModes!.map((element) {
-                    return DropdownMenuItem<String>(
-                      value: element.name,
-                      child: CustomText(
-                        title: element.name,
-                        color: widget.enableFill == true
-                            ? AppColor().primaryBackGroundColor
-                            : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyMedium',
-                        weight: FontWeight.w400,
-                        size: 13,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    widget.gameModeValue.value = value;
-                    debugPrint(value);
-                    widget.gameModeController.text = value!;
-                    widget.handleTap;
-                  },
-                  hint: CustomText(
-                    title: "Game Mode",
-                    color: widget.enableFill == true
-                        ? AppColor().primaryBackGroundColor
-                        : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
-                    size: 13,
-                  ),
-                )
-              : CustomText(
-                  title: "Select a Game",
-                  color: AppColor().primaryWhite,
-                ),
-        ),
+      () => MultiDropdown<int>(
+        // singleSelect: true,
+
+        controller: widget.gameModeController,
+        onSelectionChange: (selectedItems) => print(selectedItems),
+        items: widget.gameValue.value == null
+            ? []
+            : widget.gameValue.value!.gameModes!
+                .map((e) => DropdownItem(label: e.name!, value: e.id!))
+                .toList(),
+        enabled: true,
+        dropdownDecoration:
+            DropdownDecoration(backgroundColor: AppColor().primaryDark),
+        fieldDecoration: FieldDecoration(
+            hintText: 'Select Game Mode',
+            animateSuffixIcon: true,
+            suffixIcon: Icon(
+              Icons.keyboard_arrow_down,
+              color: AppColor().lightItemsColor,
+            ),
+            hintStyle: TextStyle(
+                fontFamily: "InterMedium", color: AppColor().lightItemsColor),
+            showClearIcon: false,
+            backgroundColor: AppColor().primaryDark),
+        chipDecoration: ChipDecoration(
+            wrap: false,
+            backgroundColor: AppColor().secondaryGreenColor,
+            labelStyle: TextStyle(
+                fontFamily: "InterMedium",
+                color: AppColor().primaryBackGroundColor)),
+        dropdownItemDecoration: DropdownItemDecoration(
+            selectedBackgroundColor: Colors.transparent,
+            textColor: AppColor().lightItemsColor,
+            selectedTextColor: AppColor().primaryColor),
       ),
     );
   }

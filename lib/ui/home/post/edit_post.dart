@@ -125,7 +125,7 @@ class _EditPostState extends State<EditPost> {
           centerTitle: true,
           title: CustomText(
             title: 'Edit Post',
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -144,8 +144,7 @@ class _EditPostState extends State<EditPost> {
                   titleStyle: TextStyle(
                     color: AppColor().primaryWhite,
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: "InterSemiBold",
                   ),
                   radius: 10,
                   confirm: Column(
@@ -180,9 +179,8 @@ class _EditPostState extends State<EditPost> {
                   ),
                   middleTextStyle: TextStyle(
                     color: AppColor().primaryWhite,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     fontSize: 14,
-                    fontWeight: FontWeight.w400,
                   ),
                 );
               },
@@ -210,7 +208,7 @@ class _EditPostState extends State<EditPost> {
                   //       text: "Post as: ",
                   //       style: TextStyle(
                   //         color: AppColor().primaryWhite,
-                  //         fontFamily: 'GilroyMedium',
+                  //         fontFamily: 'InterMedium',
                   //         fontSize: 15,
                   //       ),
                   //       children: [
@@ -219,7 +217,7 @@ class _EditPostState extends State<EditPost> {
                   //                   ''
                   //               ? "“Your User Profile”"
                   //               : "“${postController.accountTypeController.text}”",
-                  //           style: const TextStyle(fontWeight: FontWeight.w600),
+                  //           style: const TextStyle( fontFamily: "InterSemiBold"),
                   //         ),
                   //       ],
                   //     )),
@@ -229,9 +227,9 @@ class _EditPostState extends State<EditPost> {
                   //       },
                   //       child: CustomText(
                   //         title: 'Change Account',
-                  //         weight: FontWeight.w400,
+                  //
                   //         size: 15,
-                  //         fontFamily: 'GilroyMedium',
+                  //         fontFamily: 'InterMedium',
                   //         color: AppColor().primaryColor,
                   //         underline: TextDecoration.underline,
                   //       ),
@@ -241,9 +239,9 @@ class _EditPostState extends State<EditPost> {
                   // Gap(Get.height * 0.03),
                   // CustomText(
                   //   title: 'Edit the form correctly to create a new post',
-                  //   weight: FontWeight.w400,
+                  //
                   //   size: 15,
-                  //   fontFamily: 'GilroyMedium',
+                  //   fontFamily: 'InterMedium',
                   //   color: AppColor().primaryWhite,
                   // ),
                   // Gap(Get.height * 0.03),
@@ -251,7 +249,7 @@ class _EditPostState extends State<EditPost> {
                     title: 'Post body *',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
@@ -279,7 +277,7 @@ class _EditPostState extends State<EditPost> {
                     title: 'Game tags *',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
@@ -294,7 +292,7 @@ class _EditPostState extends State<EditPost> {
                           title: 'Post image',
                           color: AppColor().primaryWhite,
                           textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
+                          fontFamily: 'Inter',
                           size: Get.height * 0.017,
                         ),
                         Gap(Get.height * 0.01),
@@ -353,7 +351,7 @@ class _EditPostState extends State<EditPost> {
                               child: CustomText(
                               title: 'Update Post',
                               color: AppColor().primaryWhite,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                               size: Get.height * 0.018,
                             )),
                     ),
@@ -392,7 +390,7 @@ class _EditPostState extends State<EditPost> {
                   child: CustomText(
                     title: 'Select an account for\nyour post',
                     size: Get.height * 0.018,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     textAlign: TextAlign.center,
                     color: AppColor().primaryWhite,
                   ),
@@ -460,7 +458,7 @@ class _EditPostState extends State<EditPost> {
                   child: CustomText(
                     title: 'Are you sure you want to delete post?',
                     size: Get.height * 0.018,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     textAlign: TextAlign.center,
                     color: AppColor().primaryWhite,
                   ),
@@ -490,7 +488,7 @@ class _EditPostState extends State<EditPost> {
                             CustomText(
                               title: 'Yes',
                               size: Get.height * 0.016,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().primaryWhite,
                             ),
@@ -521,7 +519,7 @@ class _EditPostState extends State<EditPost> {
                             CustomText(
                               title: 'No',
                               size: Get.height * 0.016,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().primaryWhite,
                             ),

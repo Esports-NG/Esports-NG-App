@@ -22,7 +22,7 @@ class ReferralLeaderboardWidget extends StatelessWidget {
             child: CustomText(
               color: AppColor().primaryWhite,
               title: "Top Referring Users",
-              weight: FontWeight.w600,
+              fontFamily: "InterSemiBold",
               size: 20,
             ),
           ),
@@ -66,7 +66,7 @@ class ReferralLeaderboardWidget extends StatelessWidget {
                             CustomText(
                               title: "November",
                               color: AppColor().primaryWhite,
-                              fontFamily: "GilroyMedium",
+                              fontFamily: "InterMedium",
                               size: 18,
                             ),
                             const Spacer(),
@@ -91,7 +91,7 @@ class ReferralLeaderboardWidget extends StatelessWidget {
                           CustomText(
                             title: "2023",
                             color: AppColor().primaryWhite,
-                            fontFamily: "GilroyMedium",
+                            fontFamily: "InterMedium",
                             size: 18,
                           ),
                           Gap(Get.height * 0.01),
@@ -119,14 +119,14 @@ class ReferralLeaderboardWidget extends StatelessWidget {
                         child: CustomText(
                       title: "Rank",
                       color: AppColor().primaryWhite,
-                      weight: FontWeight.w600,
+                      fontFamily: "InterSemiBold",
                       size: 16,
                     )),
                     Expanded(
                       child: CustomText(
                         title: '',
                         size: 16,
-                        fontFamily: 'GilroySemiBold',
+                        fontFamily: 'InterSemiBold',
                         textAlign: TextAlign.start,
                         color: AppColor().primaryWhite,
                       ),
@@ -136,7 +136,7 @@ class ReferralLeaderboardWidget extends StatelessWidget {
                         child: CustomText(
                           title: "Users",
                           color: AppColor().primaryWhite,
-                          weight: FontWeight.w600,
+                          fontFamily: "InterSemiBold",
                           size: 16,
                         )),
                     Expanded(
@@ -145,7 +145,7 @@ class ReferralLeaderboardWidget extends StatelessWidget {
                           title: "Referrals",
                           textAlign: TextAlign.end,
                           color: AppColor().primaryWhite,
-                          weight: FontWeight.w600,
+                          fontFamily: "InterSemiBold",
                           size: 16,
                         )),
                   ],

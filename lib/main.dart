@@ -74,7 +74,11 @@ class _ESportAppState extends State<ESportApp> {
         title: 'Esports NG',
         initialBinding: AppBinding(),
         theme: ThemeData(
-          fontFamily: "GilroyMedium",
+          textTheme: Theme.of(context).textTheme.apply(
+              bodyColor: AppColor().primaryWhite,
+              displayColor: AppColor().primaryWhite,
+              fontFamily: "Inter"),
+          fontFamily: "InterMedium",
           appBarTheme: AppBarTheme(
             backgroundColor: AppColor().primaryBackGroundColor,
           ),

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:e_sport/data/model/events_model.dart';
-import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
@@ -73,6 +72,7 @@ class _CreateEventPostState extends State<CreateEventPost> {
   void dispose() {
     postBodyFocusNode.dispose();
     gameTagFocusNode.dispose();
+    postController.clear();
     super.dispose();
   }
 
@@ -131,7 +131,7 @@ class _CreateEventPostState extends State<CreateEventPost> {
           centerTitle: true,
           title: CustomText(
             title: 'Create an Event Post',
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -164,13 +164,13 @@ class _CreateEventPostState extends State<CreateEventPost> {
                         text: "Post as: ",
                         style: TextStyle(
                           color: AppColor().primaryWhite,
-                          fontFamily: 'GilroyMedium',
+                          fontFamily: 'InterMedium',
                           fontSize: 15,
                         ),
                         children: [
                           TextSpan(
                             text: postController.postName.value,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                            style: const TextStyle(fontFamily: "InterSemiBold"),
                           ),
                         ],
                       )),
@@ -178,9 +178,8 @@ class _CreateEventPostState extends State<CreateEventPost> {
                         onTap: _showAccountListDialog,
                         child: CustomText(
                           title: 'Change Account',
-                          weight: FontWeight.w400,
                           size: 15,
-                          fontFamily: 'GilroyMedium',
+                          fontFamily: 'InterMedium',
                           color: AppColor().primaryColor,
                           underline: TextDecoration.underline,
                         ),
@@ -190,9 +189,8 @@ class _CreateEventPostState extends State<CreateEventPost> {
                   Gap(Get.height * 0.03),
                   CustomText(
                     title: 'Fill the form correctly to create a new post',
-                    weight: FontWeight.w400,
                     size: 15,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     color: AppColor().primaryWhite,
                   ),
                   Gap(Get.height * 0.03),
@@ -200,7 +198,7 @@ class _CreateEventPostState extends State<CreateEventPost> {
                     title: 'Post text *',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
@@ -228,7 +226,7 @@ class _CreateEventPostState extends State<CreateEventPost> {
                     title: 'Upload an image (Optional)',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
@@ -273,8 +271,7 @@ class _CreateEventPostState extends State<CreateEventPost> {
                                 titleStyle: TextStyle(
                                   color: AppColor().primaryWhite,
                                   fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'GilroyRegular',
+                                  fontFamily: "InterSemiBold",
                                 ),
                                 radius: 10,
                                 confirm: Column(
@@ -310,9 +307,8 @@ class _CreateEventPostState extends State<CreateEventPost> {
                                 ),
                                 middleTextStyle: TextStyle(
                                   color: AppColor().primaryWhite,
-                                  fontFamily: 'GilroyRegular',
+                                  fontFamily: 'InterMedium',
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w400,
                                 ),
                               );
                             } else {
@@ -323,9 +319,8 @@ class _CreateEventPostState extends State<CreateEventPost> {
                             title: postController.postImage == null
                                 ? 'Click to upload'
                                 : 'Cancel',
-                            weight: FontWeight.w400,
                             size: 15,
-                            fontFamily: 'GilroyMedium',
+                            fontFamily: 'InterMedium',
                             color: AppColor().primaryColor,
                             underline: TextDecoration.underline,
                           ),
@@ -335,7 +330,7 @@ class _CreateEventPostState extends State<CreateEventPost> {
                           title: 'Max file size: 4MB',
                           color: AppColor().primaryWhite,
                           textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
+                          fontFamily: 'Inter',
                           size: Get.height * 0.014,
                         ),
                       ],
@@ -346,15 +341,60 @@ class _CreateEventPostState extends State<CreateEventPost> {
                     title: 'Add game tags',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
                   const GameSelectionChip(
                     postCreation: true,
                   ),
+                  Gap(Get.height * 0.01),
+                  Visibility(
+                    visible: widget.event.community!.owner!.id ==
+                        authController.user!.id,
+                    child: Row(
+                      children: [
+                        CustomText(
+                          title: "Announcement",
+                          size: 16,
+                          color: AppColor().primaryWhite,
+                        ),
+                        Radio(
+                          activeColor: AppColor().primaryColor,
+                          toggleable: true,
+                          value: true,
+                          groupValue: postController.isEventAnnouncement.value,
+                          onChanged: (value) {
+                            postController.isEventAnnouncement.value =
+                                value ?? false;
+                            print(postController.isEventAnnouncement.value);
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      CustomText(
+                        title: "Participant Announcement",
+                        size: 16,
+                        color: AppColor().primaryWhite,
+                      ),
+                      Radio(
+                        activeColor: AppColor().primaryColor,
+                        toggleable: true,
+                        value: true,
+                        groupValue:
+                            postController.isParticipantAnnouncement.value,
+                        onChanged: (value) {
+                          postController.isParticipantAnnouncement.value =
+                              value ?? false;
+                        },
+                      )
+                    ],
+                  ),
                   Gap(Get.height * 0.05),
-                  InkWell(
+                  GestureDetector(
                     onTap: () {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
@@ -376,12 +416,11 @@ class _CreateEventPostState extends State<CreateEventPost> {
                               child: CustomText(
                               title: 'Create Post for Event',
                               color: AppColor().primaryWhite,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                               size: Get.height * 0.018,
                             )),
                     ),
                   ),
-                  Gap(Get.height * 0.02),
                 ],
               ),
             ),
@@ -417,7 +456,7 @@ class _CreateEventPostState extends State<CreateEventPost> {
                   child: CustomText(
                     title: 'Post as:',
                     size: Get.height * 0.018,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     textAlign: TextAlign.center,
                     color: AppColor().primaryWhite,
                   ),

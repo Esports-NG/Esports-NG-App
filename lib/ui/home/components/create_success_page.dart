@@ -46,7 +46,7 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
             title: '${widget.title} Successfully!!',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
-            fontFamily: 'GilroyBold',
+            fontFamily: 'InterBold',
             size: Get.height * 0.04,
           ),
           const Spacer(),
@@ -80,7 +80,7 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
                         ? 'My Profile'
                         : 'Create Again',
                 color: AppColor().primaryWhite,
-                weight: FontWeight.w600,
+                fontFamily: "InterSemiBold",
                 size: Get.height * 0.016,
               )),
             ),
@@ -100,7 +100,7 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
                   child: CustomText(
                 title: 'Back to Home',
                 color: AppColor().primaryColor,
-                weight: FontWeight.w600,
+                fontFamily: "InterSemiBold",
                 size: Get.height * 0.016,
               )),
             ),

@@ -62,9 +62,8 @@ class _AccountTeamsFullProfileState extends State<AccountTeamsFullProfile> {
                 children: [
                   CustomText(
                       title: widget.item.owner!.fullName!.toCapitalCase(),
-                      weight: FontWeight.w400,
                       size: Get.height * 0.018,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       color: AppColor().primaryWhite),
                   Gap(Get.height * 0.005),
                   CustomText(
@@ -73,9 +72,8 @@ class _AccountTeamsFullProfileState extends State<AccountTeamsFullProfile> {
                           : widget.item.members!.length == 1
                               ? '1 Member'
                               : '${widget.item.members!.length} Members',
-                      weight: FontWeight.w400,
                       size: Get.height * 0.017,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       color: AppColor().greyEight),
                 ],
               ),
@@ -127,7 +125,7 @@ class _AccountTeamsFullProfileState extends State<AccountTeamsFullProfile> {
                         children: [
                           CustomText(
                             title: 'Personnel List',
-                            fontFamily: 'GilroySemiBold',
+                            fontFamily: 'InterSemiBold',
                             size: 16,
                             color: AppColor().primaryWhite,
                           ),
@@ -172,7 +170,7 @@ class _AccountTeamsFullProfileState extends State<AccountTeamsFullProfile> {
                         children: [
                           CustomText(
                             title: 'Team Record',
-                            fontFamily: 'GilroySemiBold',
+                            fontFamily: 'InterSemiBold',
                             size: 16,
                             color: AppColor().primaryWhite,
                           ),
@@ -212,7 +210,7 @@ class _AccountTeamsFullProfileState extends State<AccountTeamsFullProfile> {
                         children: [
                           CustomText(
                             title: 'Join our Community:',
-                            fontFamily: 'GilroySemiBold',
+                            fontFamily: 'InterSemiBold',
                             size: 16,
                             color: AppColor().primaryWhite,
                           ),
@@ -252,9 +250,8 @@ class _AccountTeamsFullProfileState extends State<AccountTeamsFullProfile> {
         children: [
           CustomText(
               title: title,
-              weight: FontWeight.w400,
               size: Get.height * 0.017,
-              fontFamily: 'GilroyMedium',
+              fontFamily: 'InterMedium',
               underline: TextDecoration.underline,
               color: AppColor().greySix),
           Icon(

@@ -63,7 +63,7 @@ class _EventGameFilterState extends State<EventGameFilter> {
                             CustomText(
                               title: "Games",
                               color: AppColor().primaryWhite.withOpacity(0.7),
-                              fontFamily: "GilroyMedium",
+                              fontFamily: "InterMedium",
                               size: 16,
                             ),
                             Gap(Get.height * 0.01),
@@ -77,7 +77,8 @@ class _EventGameFilterState extends State<EventGameFilter> {
                                       title: "Game", value: "All");
                                   _overlayController.hide();
                                 },
-                                child: const CustomTile(title: "Game", value: "All")),
+                                child: const CustomTile(
+                                    title: "Game", value: "All")),
                             Gap(Get.height * 0.01),
                             ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
@@ -126,7 +127,7 @@ class _EventGameFilterState extends State<EventGameFilter> {
                         color: AppColor().primaryWhite,
                         overflow: TextOverflow.ellipsis,
                         // size: 16,
-                        fontFamily: "GilroyMedium",
+                        fontFamily: "InterMedium",
                       ),
                     ),
                     // const Spacer(),
@@ -174,7 +175,7 @@ class CustomTile extends StatelessWidget {
             child: CustomText(
               title: value,
               size: Get.height * 0.016,
-              fontFamily: 'GilroyMedium',
+              fontFamily: 'InterMedium',
               textAlign: TextAlign.start,
               overflow: TextOverflow.ellipsis,
               color: AppColor().primaryWhite,

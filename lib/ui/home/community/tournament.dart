@@ -26,7 +26,7 @@ class _TournamentState extends State<Tournament> {
           leading: GoBackButton(onPressed: () => Get.back()),
           title: CustomText(
             title: 'Tournament',
-            fontFamily: 'GilroySemiBold',
+            fontFamily: 'InterSemiBold',
             size: 18,
             color: AppColor().primaryWhite,
           ),

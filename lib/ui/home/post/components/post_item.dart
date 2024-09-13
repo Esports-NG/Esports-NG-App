@@ -148,7 +148,7 @@ class _PostItemState extends State<PostItem> {
                                 title:
                                     '${widget.item.author!.userName!} reposted',
                                 size: Get.height * 0.015,
-                                fontFamily: 'GilroyMedium',
+                                fontFamily: 'InterMedium',
                                 textAlign: TextAlign.start,
                                 color: AppColor().lightItemsColor,
                               ),
@@ -158,7 +158,7 @@ class _PostItemState extends State<PostItem> {
                               CustomText(
                                 title: timeAgo(widget.item.createdAt!),
                                 size: Get.height * 0.015,
-                                fontFamily: 'GilroyMedium',
+                                fontFamily: 'InterMedium',
                                 textAlign: TextAlign.start,
                                 color: AppColor().lightItemsColor,
                               ),
@@ -175,7 +175,7 @@ class _PostItemState extends State<PostItem> {
                               .toString()
                               .toUpperFirstCase(),
                           size: Get.height * 0.015,
-                          fontFamily: 'GilroyBold',
+                          fontFamily: 'Inter',
                           textAlign: TextAlign.start,
                           color: AppColor().primaryWhite,
                         ),
@@ -202,13 +202,15 @@ class _PostItemState extends State<PostItem> {
                                 ? InkWell(
                                     onTap: () {
                                       widget.item.team != null
-                                      ? Get.to(() => AccountTeamsDetail(
-                                          item: widget.item.team!))
+                                          ? Get.to(() => AccountTeamsDetail(
+                                              item: widget.item.team!))
                                           : widget.item.community != null
-                                      ? Get.to(() => AccountCommunityDetail(
-                                          item: widget.item.community!))
-                                      : Get.to(() => UserDetails(
-                                          id: widget.item.author!.id!));
+                                              ? Get.to(() =>
+                                                  AccountCommunityDetail(
+                                                      item: widget
+                                                          .item.community!))
+                                              : Get.to(() => UserDetails(
+                                                  id: widget.item.author!.id!));
                                     },
                                     child: SvgPicture.asset(
                                         'assets/images/svg/people.svg',
@@ -218,13 +220,15 @@ class _PostItemState extends State<PostItem> {
                                 : InkWell(
                                     onTap: () {
                                       widget.item.team != null
-                                      ? Get.to(() => AccountTeamsDetail(
-                                          item: widget.item.team!))
+                                          ? Get.to(() => AccountTeamsDetail(
+                                              item: widget.item.team!))
                                           : widget.item.community != null
-                                      ? Get.to(() => AccountCommunityDetail(
-                                          item: widget.item.community!))
-                                      : Get.to(() => UserDetails(
-                                          id: widget.item.author!.id!));
+                                              ? Get.to(() =>
+                                                  AccountCommunityDetail(
+                                                      item: widget
+                                                          .item.community!))
+                                              : Get.to(() => UserDetails(
+                                                  id: widget.item.author!.id!));
                                     },
                                     child: CachedNetworkImage(
                                       height: Get.height * 0.035,
@@ -236,8 +240,7 @@ class _PostItemState extends State<PostItem> {
                                       imageUrl: widget.item.community != null
                                           ? widget.item.community!.logo
                                           : widget.item.team != null
-                                              ? widget
-                                                  .item.team!.profilePicture
+                                              ? widget.item.team!.profilePicture
                                               : widget.item.author!.profile!
                                                   .profilePicture,
                                       imageBuilder: (context, imageProvider) =>
@@ -259,7 +262,7 @@ class _PostItemState extends State<PostItem> {
                                       ? widget.item.team!.name
                                       : widget.item.author!.userName!,
                               size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().lightItemsColor,
                             ),
@@ -269,7 +272,7 @@ class _PostItemState extends State<PostItem> {
                             CustomText(
                               title: timeAgo(widget.item.createdAt!),
                               size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().lightItemsColor,
                             ),
@@ -288,13 +291,17 @@ class _PostItemState extends State<PostItem> {
                                 : InkWell(
                                     onTap: () {
                                       widget.item.repost!.team != null
-                                      ? Get.to(() => AccountTeamsDetail(
-                                          item: widget.item.repost!.team!))
-                                          : widget.item.repost!.community != null
-                                      ? Get.to(() => AccountCommunityDetail(
-                                          item: widget.item.repost!.community!))
-                                      : Get.to(() => UserDetails(
-                                          id: widget.item.repost!.author!.id!));
+                                          ? Get.to(() => AccountTeamsDetail(
+                                              item: widget.item.repost!.team!))
+                                          : widget.item.repost!.community !=
+                                                  null
+                                              ? Get.to(() =>
+                                                  AccountCommunityDetail(
+                                                      item: widget.item.repost!
+                                                          .community!))
+                                              : Get.to(() => UserDetails(
+                                                  id: widget.item.repost!
+                                                      .author!.id!));
                                     },
                                     child: CachedNetworkImage(
                                       height: Get.height * 0.035,
@@ -303,21 +310,39 @@ class _PostItemState extends State<PostItem> {
                                           const CircularProgressIndicator(),
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
-                                      imageUrl: widget.item.repost!.community != null
+                                      imageUrl: widget.item.repost!.community !=
+                                              null
                                           ? widget.item.repost!.community!.logo
                                           : widget.item.repost!.team != null
-                                              ? widget.item.repost!.team!.profilePicture
-                                              : widget.item.repost!.author!.profile!.profilePicture,
+                                              ? widget.item.repost!.team!
+                                                  .profilePicture
+                                              : widget.item.repost!.author!
+                                                  .profile!.profilePicture,
                                       imageBuilder: (context, imageProvider) =>
                                           Container(
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           image: DecorationImage(
-                                              image: NetworkImage(widget.item.repost!.community != null
-                                          ? widget.item.repost!.community!.logo
-                                          : widget.item.repost!.team != null
-                                              ? widget.item.repost!.team!.profilePicture
-                                              : widget.item.repost!.author!.profile!.profilePicture,),
+                                              image: NetworkImage(
+                                                widget.item.repost!.community !=
+                                                        null
+                                                    ? widget.item.repost!
+                                                        .community!.logo
+                                                    : widget.item.repost!
+                                                                .team !=
+                                                            null
+                                                        ? widget
+                                                            .item
+                                                            .repost!
+                                                            .team!
+                                                            .profilePicture
+                                                        : widget
+                                                            .item
+                                                            .repost!
+                                                            .author!
+                                                            .profile!
+                                                            .profilePicture,
+                                              ),
                                               fit: BoxFit.cover),
                                         ),
                                       ),
@@ -331,7 +356,7 @@ class _PostItemState extends State<PostItem> {
                                       ? widget.item.repost!.team!.name
                                       : widget.item.repost!.author!.userName!,
                               size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().lightItemsColor,
                             ),
@@ -341,7 +366,7 @@ class _PostItemState extends State<PostItem> {
                             CustomText(
                               title: timeAgo(widget.item.repost!.createdAt!),
                               size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().lightItemsColor,
                             ),
@@ -364,7 +389,7 @@ class _PostItemState extends State<PostItem> {
                         .toString()
                         .toUpperFirstCase(),
                 size: Get.height * 0.015,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'Inter',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -474,7 +499,7 @@ class _PostItemState extends State<PostItem> {
                                   color: AppColor().primaryWhite,
                                   textAlign: TextAlign.center,
                                   size: Get.height * 0.014,
-                                  fontFamily: 'GilroyBold',
+                                  fontFamily: 'InterBold',
                                 ),
                               ),
                             );
@@ -522,21 +547,21 @@ class _PostItemState extends State<PostItem> {
                             result = CustomText(
                                 title: '0',
                                 size: Get.height * 0.014,
-                                fontFamily: 'GilroyBold',
+                                fontFamily: 'InterBold',
                                 textAlign: TextAlign.start,
                                 color: color);
                           } else if (count == 1) {
                             result = CustomText(
                                 title: '$text like',
                                 size: Get.height * 0.014,
-                                fontFamily: 'GilroyBold',
+                                fontFamily: 'InterBold',
                                 textAlign: TextAlign.start,
                                 color: color);
                           } else {
                             result = CustomText(
                                 title: '$text likes',
                                 size: Get.height * 0.014,
-                                fontFamily: 'GilroyBold',
+                                fontFamily: 'InterBold',
                                 textAlign: TextAlign.start,
                                 color: color);
                           }
@@ -559,7 +584,7 @@ class _PostItemState extends State<PostItem> {
                       CustomText(
                         title: widget.item.comment!.length.toString(),
                         size: Get.height * 0.014,
-                        fontFamily: 'GilroyBold',
+                        fontFamily: 'InterBold',
                         textAlign: TextAlign.start,
                         color: AppColor().primaryWhite,
                       ),
@@ -579,7 +604,7 @@ class _PostItemState extends State<PostItem> {
                       CustomText(
                         title: 'Share',
                         size: Get.height * 0.014,
-                        fontFamily: 'GilroyBold',
+                        fontFamily: 'InterBold',
                         textAlign: TextAlign.start,
                         color: AppColor().primaryWhite,
                       ),
@@ -637,7 +662,7 @@ class _PostItemState extends State<PostItem> {
           child: CustomText(
             title: 'Like, Comment and Repost as:',
             size: Get.height * 0.014,
-            fontFamily: 'GilroyBold',
+            fontFamily: 'InterBold',
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),
@@ -663,8 +688,8 @@ class _PostItemState extends State<PostItem> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                              image: NetworkImage(authController
-                                  .user!.profile!.profilePicture),
+                              image: NetworkImage(
+                                  authController.user!.profile!.profilePicture),
                               fit: BoxFit.cover),
                         ),
                       ),
@@ -673,7 +698,7 @@ class _PostItemState extends State<PostItem> {
               CustomText(
                 title: authController.user!.fullName,
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -692,7 +717,7 @@ class _PostItemState extends State<PostItem> {
               CustomText(
                 title: 'Your Team Profile',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -737,7 +762,7 @@ class _PostItemState extends State<PostItem> {
           CustomText(
             title: title,
             size: Get.height * 0.014,
-            fontFamily: 'GilroyMedium',
+            fontFamily: 'InterMedium',
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),
@@ -754,7 +779,7 @@ class _PostItemState extends State<PostItem> {
             title: const Text('Delete Post'),
             titleTextStyle: TextStyle(
                 color: AppColor().primaryWhite,
-                fontFamily: "GilroySemiBold",
+                fontFamily: "InterSemiBold",
                 fontSize: 20),
             backgroundColor: AppColor().primaryMenu,
             content: Container(
@@ -823,7 +848,7 @@ class _PostItemState extends State<PostItem> {
                       CustomText(
                         title: "Delete Post",
                         size: Get.height * 0.014,
-                        fontFamily: 'GilroyMedium',
+                        fontFamily: 'InterMedium',
                         textAlign: TextAlign.start,
                         color: AppColor().primaryRed,
                       ),
@@ -930,8 +955,8 @@ class _PostItemState extends State<PostItem> {
                                       'Report Post by ${widget.item.author!.userName}',
                                   // Additional fields after this should be Comment details, Reason for reporting etc
                                   color: AppColor().primaryWhite,
-                                  weight: FontWeight.w400,
-                                  fontFamily: 'GilroyBold',
+
+                                  fontFamily: 'InterBold',
                                   size: Get.height * 0.015,
                                 ),
                               ),
@@ -948,8 +973,8 @@ class _PostItemState extends State<PostItem> {
                                       'Report ${widget.item.author!.userName}',
                                   // Additional fields after this should be Comment details, Reason for reporting etc
                                   color: AppColor().primaryWhite,
-                                  weight: FontWeight.w400,
-                                  fontFamily: 'GilroyBold',
+
+                                  fontFamily: 'InterBold',
                                   size: Get.height * 0.015,
                                 ),
                               ),
@@ -965,8 +990,8 @@ class _PostItemState extends State<PostItem> {
                                       'Block ${widget.item.author!.userName}',
                                   // Additional fields after this should be Comment details, Reason for reporting etc
                                   color: AppColor().primaryWhite,
-                                  weight: FontWeight.w400,
-                                  fontFamily: 'GilroyBold',
+
+                                  fontFamily: 'InterBold',
                                   size: Get.height * 0.015,
                                 ),
                               ),

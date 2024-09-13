@@ -35,7 +35,7 @@ class GameModeItem extends StatelessWidget {
             CustomText(
               title: mode,
               color: AppColor().primaryWhite,
-              weight: FontWeight.w600,
+              fontFamily: "InterSemiBold",
             ),
           ]),
         )

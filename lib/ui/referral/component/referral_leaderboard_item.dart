@@ -30,7 +30,7 @@ class ReferralLeaderboardItem extends StatelessWidget {
           Expanded(
               child: CustomText(
             title: '${index + 1}',
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             color: [0, 1, 2].contains(index)
                 ? AppColor().pureBlackColor
                 : AppColor().primaryWhite,
@@ -51,7 +51,7 @@ class ReferralLeaderboardItem extends StatelessWidget {
               flex: 3,
               child: CustomText(
                 title: item.name,
-                weight: FontWeight.w600,
+                fontFamily: "InterSemiBold",
                 color: [0, 1, 2].contains(index)
                     ? AppColor().pureBlackColor
                     : AppColor().primaryWhite,
@@ -63,7 +63,7 @@ class ReferralLeaderboardItem extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: CustomText(
                   title: "${item.points! ~/ 10}",
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   color: [0, 1, 2].contains(index)
                       ? AppColor().pureBlackColor
                       : AppColor().primaryWhite,

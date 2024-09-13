@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'login.dart';
 import 'register.dart';
 
@@ -50,17 +51,16 @@ class _FirstScreenState extends State<FirstScreen> {
                     child: CustomText(
                       title:
                           'Esports NG is your all in one social\nnetworking platform for Gaming',
-                      color: AppColor().primaryWhite.withOpacity(0.7),
+                      color: AppColor().primaryWhite.withOpacity(0.9),
                       textAlign: TextAlign.center,
-                      fontFamily: 'GilroyMedium',
-                      size: Get.height * 0.018,
+                      fontFamily: 'InterMedium',
+                      size: 16,
                     ),
                   ),
                   Gap(Get.height * 0.1),
                   CustomFillButton(
                     buttonText: 'Sign up',
-                    fontWeight: FontWeight.w600,
-                    textSize: Get.height * 0.018,
+                    textSize: 16,
                     onTap: () {
                       authController.pref!.setFirstTimeOpen(false);
                       Get.to(() => const RegisterScreen());
@@ -71,10 +71,9 @@ class _FirstScreenState extends State<FirstScreen> {
                   CustomFillButton(
                     buttonText: 'Log in',
                     textColor: AppColor().primaryColor,
-                    fontWeight: FontWeight.w600,
                     buttonColor:
                         AppColor().primaryBackGroundColor.withOpacity(0.7),
-                    textSize: Get.height * 0.018,
+                    textSize: 16,
                     onTap: () {
                       authController.pref!.setFirstTimeOpen(false);
                       Get.to(() => const LoginScreen());
@@ -96,7 +95,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   //           title: 'OR',
                   //           color: AppColor().primaryWhite.withOpacity(0.7),
                   //           textAlign: TextAlign.center,
-                  //           fontFamily: 'GilroyMedium',
+                  //           fontFamily: 'InterMedium',
                   //           size: Get.height * 0.018,
                   //         ),
                   //       ),
@@ -124,7 +123,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   //   buttonText: '',
                   //   textColor: AppColor().primaryColor,
                   //   boarderColor: AppColor().primaryWhite,
-                  //   fontWeight: FontWeight.w600,
+                  //    fontFamily: "InterSemiBold",
                   //   buttonColor:
                   //       AppColor().primaryBackGroundColor.withOpacity(0.7),
                   //   textSize: Get.height * 0.021,
@@ -140,7 +139,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   //         title: 'Continue with Google',
                   //         color: AppColor().primaryWhite,
                   //         textAlign: TextAlign.center,
-                  //         fontFamily: 'GilroyMedium',
+                  //         fontFamily: 'InterMedium',
                   //         size: Get.height * 0.018,
                   //       ),
                   //     ],

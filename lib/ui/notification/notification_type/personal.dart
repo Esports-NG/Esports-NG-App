@@ -70,14 +70,14 @@ class PersonalItem extends StatelessWidget {
                             title: '${item.infoName} ',
                             color: AppColor().primaryWhite,
                             textAlign: TextAlign.start,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             size: Get.height * 0.016,
                           ),
                           CustomText(
                             title: item.infoTag,
                             color: AppColor().lightItemsColor,
                             textAlign: TextAlign.start,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             size: Get.height * 0.016,
                           ),
                           Gap(Get.height * 0.01),
@@ -87,7 +87,7 @@ class PersonalItem extends StatelessWidget {
                             title: item.time,
                             color: AppColor().lightItemsColor,
                             textAlign: TextAlign.start,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             size: Get.height * 0.016,
                           ),
                         ],
@@ -122,7 +122,7 @@ class PersonalItem extends StatelessWidget {
                           ? AppColor().lightItemsColor
                           : AppColor().primaryWhite,
                       textAlign: TextAlign.start,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.016,
                     ),
                   ],
@@ -135,7 +135,7 @@ class PersonalItem extends StatelessWidget {
                           text: item.details,
                           style: TextStyle(
                             color: AppColor().lightItemsColor,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             fontSize: Get.height * 0.016,
                           ),
                           children: <TextSpan>[

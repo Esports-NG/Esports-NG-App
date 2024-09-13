@@ -118,8 +118,7 @@ class _TrendingTeamsItemState extends State<TrendingTeamsItem> {
                     CustomText(
                       title: widget.item.name!.toCapitalCase(),
                       size: 16,
-                      fontFamily: 'GilroySemiBold',
-                      weight: FontWeight.w400,
+                      fontFamily: 'InterSemiBold',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
                       maxLines: 1,
@@ -135,8 +134,7 @@ class _TrendingTeamsItemState extends State<TrendingTeamsItem> {
                                 ? '1 Member'
                                 : '${widget.item.members!.length.toString()} Members',
                         size: 12,
-                        fontFamily: 'GilroyRegular',
-                        weight: FontWeight.w400,
+                        fontFamily: 'Inter',
                         color: AppColor().greyFour,
                       ),
                     ),
@@ -179,8 +177,7 @@ class _TrendingTeamsItemState extends State<TrendingTeamsItem> {
                                 : CustomText(
                                     title: _isFollowing ? "Unfollow" : 'Follow',
                                     size: 14,
-                                    fontFamily: 'GilroyMedium',
-                                    weight: FontWeight.w400,
+                                    fontFamily: 'InterMedium',
                                     color: _isFollowing
                                         ? AppColor().primaryColor
                                         : AppColor().primaryWhite,

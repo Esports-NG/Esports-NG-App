@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -69,7 +70,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
           centerTitle: true,
           title: CustomText(
             title: 'Create Team',
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -105,9 +106,8 @@ class _CreateTeamState extends State<CreateTeamPage> {
                 padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                 child: CustomText(
                   title: 'Fill the form correctly to create a team page',
-                  weight: FontWeight.w400,
                   size: 15,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   color: AppColor().primaryWhite,
                 ),
               ),
@@ -124,7 +124,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                         title: 'Team name *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -139,11 +139,11 @@ class _CreateTeamState extends State<CreateTeamPage> {
                         title: 'Team abbreviation (Max 5 characters) *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
-                       CustomTextField(
+                      CustomTextField(
                         hint: "The Willywonkers",
                         textEditingController:
                             teamController.teamAbbrevController,
@@ -154,7 +154,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                         title: 'Team bio *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -169,7 +169,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                         title: 'Team profile picture *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -186,8 +186,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                             titleStyle: TextStyle(
                               color: AppColor().primaryWhite,
                               fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: "InterSemiBold",
                             ),
                             radius: 10,
                             confirm: Column(
@@ -223,9 +222,8 @@ class _CreateTeamState extends State<CreateTeamPage> {
                             ),
                             middleTextStyle: TextStyle(
                               color: AppColor().primaryWhite,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               fontSize: 14,
-                              fontWeight: FontWeight.w400,
                             ),
                           );
                         } else {
@@ -237,7 +235,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                         title: 'Team cover photo *',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -254,8 +252,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                             titleStyle: TextStyle(
                               color: AppColor().primaryWhite,
                               fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: "InterSemiBold",
                             ),
                             radius: 10,
                             confirm: Column(
@@ -291,9 +288,8 @@ class _CreateTeamState extends State<CreateTeamPage> {
                             ),
                             middleTextStyle: TextStyle(
                               color: AppColor().primaryWhite,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               fontSize: 14,
-                              fontWeight: FontWeight.w400,
                             ),
                           );
                         } else {
@@ -305,7 +301,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                       //   title: 'Games Covered *',
                       //   color: AppColor().primaryWhite,
                       //   textAlign: TextAlign.center,
-                      //   fontFamily: 'GilroyRegular',
+                      //   fontFamily: 'Inter',
                       //   size: Get.height * 0.017,
                       // ),
                       // Gap(Get.height * 0.01),
@@ -326,7 +322,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                       title: 'Add team manager (Optional)',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.017,
                     ),
                     Gap(Get.height * 0.01),
@@ -360,7 +356,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
                             : CustomText(
                                 title: 'Submit',
                                 color: AppColor().primaryWhite,
-                                weight: FontWeight.w600,
+                                fontFamily: "InterSemiBold",
                                 size: Get.height * 0.018,
                               )),
                   ),
@@ -382,7 +378,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
           title: title,
           color: AppColor().primaryWhite,
           textAlign: TextAlign.center,
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: Get.height * 0.016,
         ),
         Gap(Get.height * 0.01),
@@ -434,9 +430,8 @@ class _CreateTeamState extends State<CreateTeamPage> {
                 title: teamController.teamProfileImage == null
                     ? 'Click to upload'
                     : 'Cancel',
-                weight: FontWeight.w400,
                 size: 15,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryColor,
                 underline: TextDecoration.underline,
               ),
@@ -446,7 +441,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
               title: 'Max file size: 4MB',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.014,
             ),
           ],
@@ -488,9 +483,8 @@ class _CreateTeamState extends State<CreateTeamPage> {
                 title: teamController.teamCoverImage == null
                     ? 'Click to upload'
                     : 'Cancel',
-                weight: FontWeight.w400,
                 size: 15,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryColor,
                 underline: TextDecoration.underline,
               ),
@@ -500,7 +494,7 @@ class _CreateTeamState extends State<CreateTeamPage> {
               title: 'Max file size: 4MB',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.014,
             ),
           ],

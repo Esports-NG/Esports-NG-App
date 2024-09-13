@@ -18,7 +18,7 @@ class ComingSoonWidget extends StatelessWidget {
         const Gap(5),
         CustomText(
           title: "Coming soon",
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: Colors.white.withOpacity(0.75),
         )

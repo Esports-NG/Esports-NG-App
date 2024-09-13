@@ -30,7 +30,7 @@ class _TeamsGamesPlayedListState extends State<TeamsGamesPlayedList> {
           elevation: 0,
           title: CustomText(
             title: 'Games Played',
-            fontFamily: 'GilroySemiBold',
+            fontFamily: 'InterSemiBold',
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -69,7 +69,7 @@ class _TeamsGamesPlayedListState extends State<TeamsGamesPlayedList> {
                 child: CustomText(
                   title: 'Games Played By ${widget.team.name}:',
                   size: 14,
-                  fontFamily: 'GilroyBold',
+                  fontFamily: 'InterBold',
                   textAlign: TextAlign.start,
                   color: AppColor().greyTwo,
                 ),

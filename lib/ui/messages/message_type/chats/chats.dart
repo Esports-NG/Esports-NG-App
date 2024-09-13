@@ -7,6 +7,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'chats_item.dart';
 
 class Chats extends StatefulWidget {
@@ -40,9 +41,8 @@ class _ChatsState extends State<Chats> {
                   children: [
                     CustomText(
                       title: '4 Requests',
-                      weight: FontWeight.w500,
                       size: 14,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       color: AppColor().primaryLiteColor,
                     ),
                     Icon(

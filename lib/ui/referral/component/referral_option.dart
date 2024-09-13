@@ -37,9 +37,8 @@ class ReferralOption extends StatelessWidget {
             CustomText(
               title: title,
               color: textColor ?? AppColor().greyTwo,
-              weight: FontWeight.w400,
               size: Get.height * 0.016,
-              fontFamily: 'GilroySemiBold',
+              fontFamily: 'InterSemiBold',
             ),
           ],
         ),

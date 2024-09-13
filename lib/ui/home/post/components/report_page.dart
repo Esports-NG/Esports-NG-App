@@ -34,7 +34,7 @@ class _ReportPageState extends State<ReportPage> {
         title: CustomText(
           title: "Report ${widget.type.toCapitalCase()}",
           color: AppColor().primaryWhite,
-          weight: FontWeight.w600,
+          fontFamily: "InterSemiBold",
           size: 20,
         ),
         centerTitle: true,
@@ -50,7 +50,7 @@ class _ReportPageState extends State<ReportPage> {
             CustomText(
               title: "Title of Offense",
               color: AppColor().primaryWhite,
-              weight: FontWeight.w600,
+              fontFamily: "InterSemiBold",
               size: 16,
             ),
             const Gap(10),
@@ -62,7 +62,7 @@ class _ReportPageState extends State<ReportPage> {
             CustomText(
               title: "Offense Description",
               color: AppColor().primaryWhite,
-              weight: FontWeight.w600,
+              fontFamily: "InterSemiBold",
               size: 16,
             ),
             const Gap(10),
@@ -100,7 +100,7 @@ class _ReportPageState extends State<ReportPage> {
                       : CustomText(
                           title: "Submit Report",
                           color: AppColor().primaryWhite,
-                          weight: FontWeight.w600,
+                          fontFamily: "InterSemiBold",
                         ),
                 ),
               ),

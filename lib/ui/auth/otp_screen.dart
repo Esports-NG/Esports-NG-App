@@ -54,7 +54,7 @@ class _OTPScreenState extends State<OTPScreen> {
               title: 'OTP Verification',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyBold',
+              fontFamily: 'InterBold',
               size: Get.height * 0.04,
             ),
             CustomText(
@@ -62,7 +62,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   'We’ve sent you a one time code to your phone\nnumber **** *** 8328',
               color: AppColor().primaryWhite.withOpacity(0.8),
               textAlign: TextAlign.start,
-              fontFamily: 'GilroyMedium',
+              fontFamily: 'InterMedium',
               size: Get.height * 0.018,
             ),
             Gap(Get.height * 0.05),
@@ -100,8 +100,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     ProvidedPinBoxDecoration.defaultPinBoxDecoration,
                 pinTextStyle: const TextStyle(
                   fontSize: 22.0,
-                  fontFamily: 'GilroyMedium',
-                  fontWeight: FontWeight.w700,
+                  fontFamily: 'InterBold',
                 ),
                 pinTextAnimatedSwitcherTransition:
                     ProvidedPinBoxTextAnimation.scalingTransition,
@@ -127,7 +126,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       title: '00:${time.toString().replaceAll('.0', '')}',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
-                      fontFamily: 'GilroyBlack',
+                      fontFamily: 'InterBlack',
                       size: Get.height * 0.03,
                     ),
                   );
@@ -138,7 +137,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 text: "Didn`t receive code?",
                 style: TextStyle(
                   color: AppColor().primaryWhite.withOpacity(0.8),
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   fontSize: Get.height * 0.018,
                 ),
                 children: <TextSpan>[

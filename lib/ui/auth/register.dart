@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/account/privacy_policy.dart';
@@ -17,8 +18,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+
 import 'choose_alias.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -229,8 +231,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 text: '${pageCount + 1}',
                 style: TextStyle(
                   color: AppColor().primaryWhite,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'GilroyBold',
+                  fontFamily: "InterSemiBold",
                   fontSize: Get.height * 0.017,
                 ),
                 children: <TextSpan>[
@@ -291,7 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   : 'All done',
                           color: AppColor().primaryWhite,
                           textAlign: TextAlign.center,
-                          fontFamily: 'GilroyBold',
+                          fontFamily: 'InterBold',
                           size: Get.height * 0.035,
                         ),
                         Gap(Get.height * 0.01),
@@ -312,7 +313,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               : 'Please select as many categories as you like, to\nimprove your feed experience',
                       color: AppColor().primaryWhite.withOpacity(0.8),
                       textAlign: TextAlign.start,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.018,
                     ),
                     Gap(Get.height * 0.02),
@@ -367,8 +368,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             titleStyle: TextStyle(
                                               color: AppColor().primaryWhite,
                                               fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: 'GilroyRegular',
+                                              fontFamily: "InterSemiBold",
                                             ),
                                             radius: 10,
                                             confirm: Column(
@@ -414,9 +414,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             ),
                                             middleTextStyle: TextStyle(
                                               color: AppColor().primaryWhite,
-                                              fontFamily: 'GilroyRegular',
+                                              fontFamily: 'Inter',
                                               fontSize: 14,
-                                              fontWeight: FontWeight.w400,
                                             ),
                                           );
                                         },
@@ -456,7 +455,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   title: 'Max file size 1MB *',
                                   color: AppColor().primaryWhite,
                                   textAlign: TextAlign.center,
-                                  fontFamily: 'GilroyRegular',
+                                  fontFamily: 'Inter',
                                   size: Get.height * 0.017,
                                 ),
                               ),
@@ -475,7 +474,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               title: 'Full name',
                               color: AppColor().primaryWhite,
                               textAlign: TextAlign.center,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               size: Get.height * 0.017,
                             ),
                             Gap(Get.height * 0.01),
@@ -503,7 +502,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               title: 'Email Address',
                               color: AppColor().primaryWhite,
                               textAlign: TextAlign.center,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               size: Get.height * 0.017,
                             ),
                             Gap(Get.height * 0.01),
@@ -531,7 +530,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               title: 'Password',
                               color: AppColor().primaryWhite,
                               textAlign: TextAlign.center,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               size: Get.height * 0.017,
                             ),
                             Gap(Get.height * 0.01),
@@ -571,7 +570,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               title: 'Country',
                               color: AppColor().primaryWhite,
                               textAlign: TextAlign.center,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               size: Get.height * 0.017,
                             ),
                             Gap(Get.height * 0.01),
@@ -602,22 +601,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       : AppColor().lightItemsColor,
                                   fontSize: 13,
                                   fontStyle: FontStyle.normal,
-                                  fontFamily: 'GilroyBold',
-                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'InterBold',
                                   height: 1.7),
                               dropdownHeadingStyle: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 17,
                                 fontStyle: FontStyle.normal,
-                                fontFamily: 'GilroyBold',
-                                fontWeight: FontWeight.w400,
+                                fontFamily: 'InterBold',
                               ),
                               dropdownItemStyle: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 13,
                                 fontStyle: FontStyle.normal,
-                                fontFamily: 'GilroyBold',
-                                fontWeight: FontWeight.w400,
+                                fontFamily: 'InterBold',
                               ),
                               dropdownDialogRadius: 10.0,
                               searchBarRadius: 10.0,
@@ -651,7 +647,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               title: 'Phone number',
                               color: AppColor().primaryWhite,
                               textAlign: TextAlign.center,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               size: Get.height * 0.017,
                             ),
                             Gap(Get.height * 0.01),
@@ -700,7 +696,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               title: 'Gender',
                               color: AppColor().primaryWhite,
                               textAlign: TextAlign.center,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               size: Get.height * 0.017,
                             ),
                             Gap(Get.height * 0.01),
@@ -735,8 +731,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         color: isGender == true
                                             ? AppColor().primaryBackGroundColor
                                             : AppColor().lightItemsColor,
-                                        fontFamily: 'GilroyBold',
-                                        weight: FontWeight.w400,
+                                        fontFamily: 'InterBold',
                                         size: 13,
                                       ),
                                     );
@@ -760,8 +755,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     color: isGender == true
                                         ? AppColor().primaryBackGroundColor
                                         : AppColor().lightItemsColor,
-                                    fontFamily: 'GilroyBold',
-                                    weight: FontWeight.w400,
+                                    fontFamily: 'InterBold',
                                     size: 13,
                                   ),
                                 ),
@@ -772,7 +766,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               title: 'Date of birth',
                               color: AppColor().primaryWhite,
                               textAlign: TextAlign.center,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               size: Get.height * 0.017,
                             ),
                             Gap(Get.height * 0.01),
@@ -823,7 +817,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               "By signing up, you agree with our ",
                                           style: TextStyle(
                                             color: AppColor().primaryWhite,
-                                            fontFamily: "GilroyMedium",
+                                            fontFamily: "InterMedium",
                                           ),
                                           children: [
                                             TextSpan(
@@ -831,7 +825,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 style: TextStyle(
                                                     color:
                                                         AppColor().primaryColor,
-                                                    fontFamily: "GilroyMedium",
+                                                    fontFamily: "InterMedium",
                                                     decoration: TextDecoration
                                                         .underline)),
                                           ])),
@@ -880,7 +874,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ? AppColor().primaryGreen
                                   : AppColor().primaryWhite,
                               borderRadius: BorderRadius.circular(30),
-                              fontWeight: FontWeight.w400,
                             );
                           }),
                     ] else ...[
@@ -1075,7 +1068,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         }
                       },
                       buttonText: 'Next',
-                      fontWeight: FontWeight.w600,
                       textSize: Get.height * 0.016,
                       isLoading: false,
                     ),

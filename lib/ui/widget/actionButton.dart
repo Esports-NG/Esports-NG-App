@@ -65,7 +65,7 @@ class _ActionButtonState extends State<ActionButton> {
                   child: CustomText(
                     title: 'Select what you would like\nto create',
                     size: Get.height * 0.018,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     textAlign: TextAlign.center,
                     color: AppColor().primaryWhite,
                   ),

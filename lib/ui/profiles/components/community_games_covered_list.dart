@@ -35,7 +35,7 @@ class _CommunityGamesCoveredListState extends State<CommunityGamesCoveredList> {
           elevation: 0,
           title: CustomText(
             title: 'Games Covered',
-            fontFamily: 'GilroySemiBold',
+            fontFamily: 'InterSemiBold',
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -76,7 +76,7 @@ class _CommunityGamesCoveredListState extends State<CommunityGamesCoveredList> {
                 child: CustomText(
                   title: 'Games Covered By ${widget.community.name}:',
                   size: 14,
-                  fontFamily: 'GilroyBold',
+                  fontFamily: 'InterBold',
                   textAlign: TextAlign.start,
                   color: AppColor().greyTwo,
                 ),
@@ -87,7 +87,7 @@ class _CommunityGamesCoveredListState extends State<CommunityGamesCoveredList> {
                         child: CustomText(
                           title: "No games added yet",
                           color: AppColor().primaryWhite,
-                          // fontFamily: "GilroyMedium",
+                          // fontFamily: "InterMedium",
                           size: 16,
                         ),
                       ),

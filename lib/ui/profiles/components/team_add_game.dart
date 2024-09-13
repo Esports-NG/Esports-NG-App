@@ -30,7 +30,7 @@ class _TeamAddGameState extends State<TeamAddGame> {
         elevation: 0,
         title: CustomText(
           title: 'Add Game To Your Team',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -60,7 +60,7 @@ class _TeamAddGameState extends State<TeamAddGame> {
                 title: 'Game to be played *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -96,7 +96,7 @@ class _TeamAddGameState extends State<TeamAddGame> {
                       : Center(
                           child: CustomText(
                               title: "Add Game",
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                               color: AppColor().primaryWhite),
                         ),
                 ),

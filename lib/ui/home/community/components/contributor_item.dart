@@ -79,7 +79,7 @@ class ContributorItem extends StatelessWidget {
                   CustomText(
                     title: contributor.fullName,
                     color: AppColor().primaryWhite,
-                    weight: FontWeight.w600,
+                    fontFamily: "InterSemiBold",
                   ),
                   Gap(Get.height * 0.005),
                   CustomText(

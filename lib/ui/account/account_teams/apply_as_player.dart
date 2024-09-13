@@ -35,7 +35,7 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
             title: "Apply as Player",
             color: AppColor().primaryWhite,
             size: 18,
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
           ),
         ),
         body: SingleChildScrollView(
@@ -51,7 +51,7 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                       title:
                           "Fill the form below with your correct player information.",
                       color: AppColor().primaryWhite,
-                      fontFamily: "GilroyMedium",
+                      fontFamily: "InterMedium",
                       size: 16,
                     ),
                     Gap(Get.height * 0.03),
@@ -112,7 +112,7 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                               : CustomText(
                                   title: "Submit",
                                   color: AppColor().primaryWhite,
-                                  weight: FontWeight.w600,
+                                  fontFamily: "InterSemiBold",
                                 ),
                         ),
                       ),
@@ -132,7 +132,7 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
         CustomText(
           title: label,
           color: AppColor().primaryWhite.withOpacity(0.6),
-          fontFamily: "GilroyMedium",
+          fontFamily: "InterMedium",
         ),
         Gap(Get.height * 0.01),
         widget

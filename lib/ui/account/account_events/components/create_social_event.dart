@@ -10,6 +10,7 @@ import 'package:e_sport/ui/home/post/create_post_item.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
+import 'package:e_sport/ui/widget/game_list_dropdown.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -210,7 +211,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   child: CustomText(
                     title: 'Select an account for\nyour post',
                     size: Get.height * 0.018,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     textAlign: TextAlign.center,
                     color: AppColor().primaryWhite,
                   ),
@@ -264,44 +265,10 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text.rich(TextSpan(
-                    text: "Post as: ",
-                    style: TextStyle(
-                      color: AppColor().primaryWhite,
-                      fontFamily: 'GilroyMedium',
-                      fontSize: 15,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: postController.accountTypeController.text == ''
-                            ? "“Your User Profile”"
-                            : "“${postController.accountTypeController.text}”",
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  )),
-                  InkWell(
-                    onTap: _showAccountListDialog,
-                    child: CustomText(
-                      title: 'Change Account',
-                      weight: FontWeight.w400,
-                      size: 15,
-                      fontFamily: 'GilroyMedium',
-                      color: AppColor().primaryColor,
-                      underline: TextDecoration.underline,
-                    ),
-                  ),
-                ],
-              ),
-              Gap(Get.height * 0.03),
               CustomText(
                 title: 'Fill the form correctly to create a social event page',
-                weight: FontWeight.w400,
                 size: 15,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryWhite,
               ),
               Gap(Get.height * 0.02),
@@ -309,8 +276,8 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Organising community *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
-                size: Get.height * 0.017,
+                fontFamily: 'Inter',
+                size: 16,
               ),
               Gap(Get.height * 0.01),
               InputDecorator(
@@ -351,9 +318,8 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                           color: isCommunities == true
                               ? AppColor().primaryBackGroundColor
                               : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyBold',
-                          weight: FontWeight.w400,
-                          size: 13,
+                          fontFamily: 'InterMedium',
+                          size: 16,
                         ),
                       );
                     }).toList(),
@@ -371,9 +337,8 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                       color: isCommunities == true
                           ? AppColor().primaryBackGroundColor
                           : AppColor().lightItemsColor,
-                      fontFamily: 'GilroyBold',
-                      weight: FontWeight.w400,
-                      size: 13,
+                      fontFamily: 'InterMedium',
+                      size: 16,
                     ),
                   ),
                 ),
@@ -383,7 +348,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Event name *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -405,7 +370,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Event hashtag *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -427,7 +392,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Event description *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -450,7 +415,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Currency *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -473,7 +438,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                         ),
                         hintStyle: TextStyle(
                             color: AppColor().greyFour,
-                            fontFamily: "GilroyMedium"),
+                            fontFamily: "InterMedium"),
                         filled: true,
                         fillColor: AppColor().primaryWhite.withOpacity(0.05),
                         focusedBorder: OutlineInputBorder(
@@ -499,7 +464,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                         hintText: "Select a currency",
                         hintStyle: TextStyle(
                             color: AppColor().greyFour,
-                            fontFamily: "GilroyMedium"),
+                            fontFamily: "InterMedium"),
                         filled: true,
                         fillColor: AppColor().primaryDark,
                         focusedBorder: OutlineInputBorder(
@@ -519,7 +484,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Entry fee *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -555,74 +520,17 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Games covered *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
-              InputDecorator(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: isGame == true
-                      ? AppColor().primaryWhite
-                      : AppColor().primaryDark,
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: AppColor().lightItemsColor, width: 1),
-                      borderRadius: BorderRadius.circular(10)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10)),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    icon: Icon(Icons.keyboard_arrow_down,
-                        color: isGame == true
-                            ? AppColor().primaryBackGroundColor
-                            : AppColor().lightItemsColor),
-                    value: gameValue,
-                    items: <String>[
-                      '1',
-                      '2',
-                    ].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: CustomText(
-                          title: value,
-                          color: isGame == true
-                              ? AppColor().primaryBackGroundColor
-                              : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyBold',
-                          weight: FontWeight.w400,
-                          size: 13,
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) => setState(() {
-                      gameValue = value;
-                      debugPrint(value);
-                      socialEventController.gameCoveredController.text = value!;
-                      handleTap('game');
-                    }),
-                    hint: CustomText(
-                      title: "Game covered",
-                      color: isGame == true
-                          ? AppColor().primaryBackGroundColor
-                          : AppColor().lightItemsColor,
-                      fontFamily: 'GilroyBold',
-                      weight: FontWeight.w400,
-                      size: 13,
-                    ),
-                  ),
-                ),
-              ),
+              GameDropdown(gameValue: socialEventController.gameValue),
               Gap(Get.height * 0.02),
               CustomText(
                 title: 'Registration Start date *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -655,7 +563,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Registration End date *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -688,7 +596,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Event date *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -721,7 +629,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Event time *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -762,8 +670,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                                   color: isStartTime == true
                                       ? AppColor().primaryBackGroundColor
                                       : AppColor().lightItemsColor,
-                                  fontFamily: 'GilroyBold',
-                                  weight: FontWeight.w400,
+                                  fontFamily: 'InterBold',
                                   size: 13,
                                 ),
                                 Gap(Get.height * 0.005),
@@ -777,8 +684,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                                   color: isStartTime == true
                                       ? AppColor().primaryBackGroundColor
                                       : AppColor().lightItemsColor,
-                                  fontFamily: 'GilroyBold',
-                                  weight: FontWeight.w400,
+                                  fontFamily: 'InterBold',
                                   size: 13,
                                 ),
                               ],
@@ -831,8 +737,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                                   color: isEndTime == true
                                       ? AppColor().primaryBackGroundColor
                                       : AppColor().lightItemsColor,
-                                  fontFamily: 'GilroyBold',
-                                  weight: FontWeight.w400,
+                                  fontFamily: 'InterBold',
                                   size: 13,
                                 ),
                                 Gap(Get.height * 0.005),
@@ -846,8 +751,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                                   color: isEndTime == true
                                       ? AppColor().primaryBackGroundColor
                                       : AppColor().lightItemsColor,
-                                  fontFamily: 'GilroyBold',
-                                  weight: FontWeight.w400,
+                                  fontFamily: 'InterBold',
                                   size: 13,
                                 ),
                               ],
@@ -871,7 +775,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Event image *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -888,8 +792,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                     titleStyle: TextStyle(
                       color: AppColor().primaryWhite,
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: "InterSemiBold",
                     ),
                     radius: 10,
                     confirm: Column(
@@ -925,9 +828,8 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                     ),
                     middleTextStyle: TextStyle(
                       color: AppColor().primaryWhite,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'InterMedium',
                       fontSize: 14,
-                      fontWeight: FontWeight.w400,
                     ),
                   );
                 } else {
@@ -939,7 +841,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Event venue *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -962,7 +864,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 title: 'Event link *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -985,7 +887,6 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   socialEventController.createSocialEvent();
                 },
                 buttonText: 'Create Event',
-                fontWeight: FontWeight.w600,
                 textSize: Get.height * 0.016,
                 isLoading: false,
               ),

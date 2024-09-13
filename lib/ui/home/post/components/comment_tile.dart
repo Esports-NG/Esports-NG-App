@@ -62,8 +62,7 @@ class _CommentTileState extends State<CommentTile> {
             CustomText(
               title: widget.item.user!.userName!,
               color: AppColor().greySix,
-              weight: FontWeight.w400,
-              fontFamily: 'GilroyMedium',
+              fontFamily: 'InterMedium',
               size: Get.height * 0.015,
             ),
             Gap(Get.height * 0.01),
@@ -72,8 +71,7 @@ class _CommentTileState extends State<CommentTile> {
               child: CustomText(
                 title: widget.item.body!,
                 color: AppColor().primaryWhite,
-                weight: FontWeight.w400,
-                fontFamily: 'GilroyBold',
+                fontFamily: 'InterBold',
                 size: Get.height * 0.015,
               ),
             ),
@@ -87,22 +85,19 @@ class _CommentTileState extends State<CommentTile> {
                             ? '1 Like'
                             : '$_likeCount Like',
                     color: AppColor().greySix,
-                    weight: FontWeight.w400,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     size: 12),
                 Gap(Get.height * 0.02),
                 CustomText(
                     title: 'Reply',
                     color: AppColor().greySix,
-                    weight: FontWeight.w400,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     size: 12),
                 Gap(Get.height * 0.02),
                 CustomText(
                     title: 'Repost',
                     color: AppColor().greySix,
-                    weight: FontWeight.w400,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     size: 12),
                 Gap(Get.height * 0.03),
                 InkWell(
@@ -130,8 +125,8 @@ class _CommentTileState extends State<CommentTile> {
                                       'Report Comment by ${widget.item.user!.userName}',
                                   // Additional fields after this should be Comment details, Reason for reporting etc
                                   color: AppColor().primaryWhite,
-                                  weight: FontWeight.w400,
-                                  fontFamily: 'GilroyBold',
+
+                                  fontFamily: 'InterBold',
                                   size: Get.height * 0.015,
                                 ),
                               ),
@@ -146,8 +141,8 @@ class _CommentTileState extends State<CommentTile> {
                                   title: 'Report ${widget.item.user!.userName}',
                                   // Additional fields after this should be Comment details, Reason for reporting etc
                                   color: AppColor().primaryWhite,
-                                  weight: FontWeight.w400,
-                                  fontFamily: 'GilroyBold',
+
+                                  fontFamily: 'InterBold',
                                   size: Get.height * 0.015,
                                 ),
                               ),
@@ -162,8 +157,8 @@ class _CommentTileState extends State<CommentTile> {
                                   title: 'Block ${widget.item.user!.userName}',
                                   // Additional fields after this should be Comment details, Reason for reporting etc
                                   color: AppColor().primaryWhite,
-                                  weight: FontWeight.w400,
-                                  fontFamily: 'GilroyBold',
+
+                                  fontFamily: 'InterBold',
                                   size: Get.height * 0.015,
                                 ),
                               ),
@@ -176,8 +171,7 @@ class _CommentTileState extends State<CommentTile> {
                   child: CustomText(
                       title: 'Report',
                       color: AppColor().primaryRed,
-                      weight: FontWeight.w400,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       size: 12),
                 ),
               ],

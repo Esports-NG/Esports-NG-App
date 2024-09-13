@@ -36,7 +36,7 @@ class _ActivateAccountState extends State<ActivateAccount> {
                     CustomText(
                       title: "Request Account Activation Link",
                       color: AppColor().primaryWhite,
-                      fontFamily: "GilroySemiBold",
+                      fontFamily: "InterSemiBold",
                       size: 18,
                     ),
                     Gap(Get.height * 0.02),
@@ -72,7 +72,7 @@ class _ActivateAccountState extends State<ActivateAccount> {
                                 title: "Send Activation Email",
                                 color: AppColor().primaryWhite,
                                 size: 16,
-                                fontFamily: "GilroySemiBold",
+                                fontFamily: "InterSemiBold",
                               )),
                       ),
                     )

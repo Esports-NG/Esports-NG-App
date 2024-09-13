@@ -33,7 +33,7 @@ class _ChooseTeamDialogState extends State<ChooseTeamDialog> {
             Text(
               "Select Team",
               style: TextStyle(
-                  color: AppColor().primaryWhite, fontWeight: FontWeight.w600),
+                  color: AppColor().primaryWhite, fontFamily: "InterSemiBold"),
             ),
             const Spacer(),
           ],
@@ -115,7 +115,7 @@ class _TeamItemState extends State<TeamItem> {
             title: widget.team.name,
             color: AppColor().primaryWhite,
             size: 16,
-            fontFamily: "GilroyMedium",
+            fontFamily: "InterMedium",
           ),
           const Spacer(),
           GestureDetector(
@@ -129,7 +129,7 @@ class _TeamItemState extends State<TeamItem> {
                   ? const ButtonLoader()
                   : CustomText(
                       title: _isRegistered ? "Unregister" : "Register",
-                      weight: FontWeight.w600,
+                      fontFamily: "InterSemiBold",
                       color: AppColor().primaryWhite,
                     ),
             ),

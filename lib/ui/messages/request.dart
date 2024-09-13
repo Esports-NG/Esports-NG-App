@@ -6,6 +6,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'message_type/chats/chats_item.dart';
 
 class DMRequest extends StatefulWidget {
@@ -26,7 +27,7 @@ class _DMRequestState extends State<DMRequest> {
         centerTitle: true,
         title: CustomText(
           title: 'DM Request',
-          weight: FontWeight.w600,
+          fontFamily: "InterSemiBold",
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -77,9 +78,8 @@ class _DMRequestState extends State<DMRequest> {
                     child: CustomText(
                       title:
                           'Messages here will remain un-read until you’ve accepted the request',
-                      weight: FontWeight.w500,
                       size: 14,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -180,15 +180,13 @@ class RequestOption extends StatelessWidget {
                     title: item.userName,
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.start,
-                    weight: FontWeight.w500,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     size: Get.height * 0.018,
                   ),
                   CustomText(
                     title: 'Last seen recently',
-                    weight: FontWeight.w500,
                     size: Get.height * 0.016,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     color: AppColor().lightItemsColor,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -209,7 +207,7 @@ class RequestOption extends StatelessWidget {
               title: 'Today',
               weight: FontWeight.w100,
               size: Get.height * 0.016,
-              fontFamily: 'GilroyBold',
+              fontFamily: 'InterBold',
               color: AppColor().lightItemsColor,
               overflow: TextOverflow.ellipsis,
             ),
@@ -230,7 +228,7 @@ class RequestOption extends StatelessWidget {
                 title: 'Hi, How are you doing? ',
                 weight: FontWeight.w100,
                 size: Get.height * 0.018,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryWhite,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -243,7 +241,7 @@ class RequestOption extends StatelessWidget {
               title: '02:30PM',
               weight: FontWeight.w100,
               size: Get.height * 0.016,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               color: AppColor().lightItemsColor,
               overflow: TextOverflow.ellipsis,
             ),
@@ -255,7 +253,6 @@ class RequestOption extends StatelessWidget {
               children: [
                 CustomFillButton(
                   buttonText: 'Accept',
-                  fontWeight: FontWeight.w600,
                   textSize: Get.height * 0.018,
                   width: Get.width / 2 - Get.height * 0.027,
                   onTap: () {
@@ -267,7 +264,6 @@ class RequestOption extends StatelessWidget {
                 CustomFillButton(
                   buttonText: 'Reject',
                   textColor: AppColor().primaryColor,
-                  fontWeight: FontWeight.w600,
                   buttonColor:
                       AppColor().primaryBackGroundColor.withOpacity(0.7),
                   textSize: Get.height * 0.018,

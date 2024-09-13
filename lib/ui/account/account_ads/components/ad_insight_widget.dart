@@ -1,12 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/account/account_ads/components/overview_widget.dart';
+import 'package:e_sport/ui/home/post/components/repost_details.dart';
 import 'package:e_sport/ui/home/post/components/repost_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:e_sport/ui/home/post/components/repost_details.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -29,7 +29,7 @@ class _AdInsightState extends State<AdInsight> {
         title: CustomText(
           textAlign: TextAlign.center,
           title: 'Ad Insight',
-          weight: FontWeight.w600,
+          fontFamily: "InterSemiBold",
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -124,7 +124,7 @@ class _AdInsightState extends State<AdInsight> {
                                     color: AppColor().primaryWhite,
                                     textAlign: TextAlign.center,
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyBold',
+                                    fontFamily: 'InterBold',
                                   ),
                                 ),
                               );
@@ -141,7 +141,7 @@ class _AdInsightState extends State<AdInsight> {
                 CustomText(
                   title: "September 27th - October 3rd 2023",
                   color: AppColor().primaryWhite,
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   size: 18,
                 ),
                 Gap(Get.height * 0.02),
@@ -222,7 +222,7 @@ class _AdInsightState extends State<AdInsight> {
                           borderRadius: BorderRadius.circular(999)),
                       child: CustomText(
                         title: "Notification",
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         color: AppColor().primaryGreen,
                       ),
                     ),
@@ -234,7 +234,7 @@ class _AdInsightState extends State<AdInsight> {
                           borderRadius: BorderRadius.circular(999)),
                       child: CustomText(
                         title: "Messages",
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         color: AppColor().primaryGreen,
                       ),
                     ),
@@ -246,7 +246,7 @@ class _AdInsightState extends State<AdInsight> {
                           borderRadius: BorderRadius.circular(999)),
                       child: CustomText(
                         title: "Comments",
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         color: AppColor().primaryGreen,
                       ),
                     ),
@@ -280,7 +280,7 @@ class _AdInsightState extends State<AdInsight> {
                             child: Center(
                               child: CustomText(
                                   title: "Yes",
-                                  weight: FontWeight.w600,
+                                  fontFamily: "InterSemiBold",
                                   size: 18,
                                   color: AppColor().primaryWhite),
                             )),
@@ -298,7 +298,7 @@ class _AdInsightState extends State<AdInsight> {
                             child: Center(
                               child: CustomText(
                                   title: "No",
-                                  weight: FontWeight.w600,
+                                  fontFamily: "InterSemiBold",
                                   size: 18,
                                   color: AppColor().primaryColor),
                             )),

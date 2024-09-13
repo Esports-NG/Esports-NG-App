@@ -23,69 +23,72 @@ class PostModel {
   List<Comment>? comment;
   DateTime? createdAt;
   DateTime? updatedAt;
+  bool? announcement;
+  bool? participantAnnouncement;
 
-  PostModel({
-    this.title,
-    this.id,
-    this.author,
-    this.repost,
-    this.community,
-    this.body,
-    this.iTags,
-    this.iViewers,
-    this.likeCount,
-    this.likes,
-    this.viewCount,
-    this.views,
-    this.tags,
-    this.repostCount,
-    this.viewers,
-    this.image,
-    this.comment,
-    this.createdAt,
-    this.updatedAt,
-    this.team,
-  });
+  PostModel(
+      {this.title,
+      this.id,
+      this.author,
+      this.repost,
+      this.community,
+      this.body,
+      this.iTags,
+      this.iViewers,
+      this.likeCount,
+      this.likes,
+      this.viewCount,
+      this.views,
+      this.tags,
+      this.repostCount,
+      this.viewers,
+      this.image,
+      this.comment,
+      this.createdAt,
+      this.updatedAt,
+      this.team,
+      this.announcement,
+      this.participantAnnouncement});
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
-        id: json["id"],
-        title: json["title"],
-        author: json["author"] == null ? null : Author.fromJson(json["author"]),
-        repost:
-            json["repost"] == null ? null : PostModel.fromJson(json['repost']),
-        community: json["community"] == null
-            ? null
-            : CommunityModel.fromJson(json["community"]),
-        team: json["team"] == null ? null : TeamModel.fromJson(json["team"]),
-        body: json["body"],
-        likeCount: json["like_count"],
-        likes: json["likes"] == null
-            ? []
-            : List<Author>.from(json["likes"]!.map((x) => Author.fromJson(x))),
-        viewCount: json["view_count"],
-        views: json["views"] == null
-            ? []
-            : List<Author>.from(json["views"]!.map((x) => Author.fromJson(x))),
-        tags: json["tags"] == null
-            ? []
-            : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
-        repostCount: json["repost_count"],
-        viewers: json["viewers"] == null
-            ? []
-            : List<Viewer>.from(
-                json["viewers"]!.map((x) => Viewer.fromJson(x))),
-        image: json["image"],
-        comment: json["comment"] == null
-            ? []
-            : List<Comment>.from(
-                json["comment"]!.map((x) => Comment.fromJson(x))),
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-      );
+      id: json["id"],
+      title: json["title"],
+      author: json["author"] == null ? null : Author.fromJson(json["author"]),
+      repost:
+          json["repost"] == null ? null : PostModel.fromJson(json['repost']),
+      community: json["community"] == null
+          ? null
+          : CommunityModel.fromJson(json["community"]),
+      team: json["team"] == null ? null : TeamModel.fromJson(json["team"]),
+      body: json["body"],
+      likeCount: json["like_count"],
+      likes: json["likes"] == null
+          ? []
+          : List<Author>.from(json["likes"]!.map((x) => Author.fromJson(x))),
+      viewCount: json["view_count"],
+      views: json["views"] == null
+          ? []
+          : List<Author>.from(json["views"]!.map((x) => Author.fromJson(x))),
+      tags: json["tags"] == null
+          ? []
+          : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
+      repostCount: json["repost_count"],
+      viewers: json["viewers"] == null
+          ? []
+          : List<Viewer>.from(json["viewers"]!.map((x) => Viewer.fromJson(x))),
+      image: json["image"],
+      comment: json["comment"] == null
+          ? []
+          : List<Comment>.from(
+              json["comment"]!.map((x) => Comment.fromJson(x))),
+      createdAt: json["created_at"] == null
+          ? null
+          : DateTime.parse(json["created_at"]),
+      updatedAt: json["updated_at"] == null
+          ? null
+          : DateTime.parse(json["updated_at"]),
+      announcement: json['annoucement'],
+      participantAnnouncement: json['participant_annoucement']);
 
   Map<String, dynamic> toJson() => {
         "id": id,

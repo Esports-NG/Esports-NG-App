@@ -46,8 +46,7 @@ class ReferralEarningModal extends StatelessWidget {
                     CustomText(
                       title: 'Referral Earnings',
                       color: AppColor().greyOne,
-                      weight: FontWeight.w400,
-                      fontFamily: 'GilroySemiBold',
+                      fontFamily: 'InterSemiBold',
                       size: Get.height * 0.022,
                     ),
                     IconButton(
@@ -81,8 +80,7 @@ class ReferralEarningModal extends StatelessWidget {
                         CustomText(
                           title: item.title,
                           color: AppColor().greyTwo,
-                          weight: FontWeight.w400,
-                          fontFamily: 'GilroyMedium',
+                          fontFamily: 'InterMedium',
                           size: Get.height * 0.020,
                         ),
                         CustomText(
@@ -90,8 +88,7 @@ class ReferralEarningModal extends StatelessWidget {
                               ? 'N${display(item.price)}'
                               : display(item.price),
                           color: AppColor().greyTwo,
-                          weight: FontWeight.w400,
-                          fontFamily: 'GilroySemiBold',
+                          fontFamily: 'InterSemiBold',
                           size: Get.height * 0.022,
                         ),
                       ],

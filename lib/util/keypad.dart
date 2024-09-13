@@ -37,8 +37,7 @@ class NumButton extends StatelessWidget {
               const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'InterBold',
               ),
         ),
       ),

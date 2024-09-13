@@ -107,14 +107,14 @@ class UserGamesPlayedItem extends StatelessWidget {
         CustomText(
           title: title,
           size: 12,
-          fontFamily: 'GilroyRegular',
+          fontFamily: 'Inter',
           textAlign: TextAlign.start,
           color: AppColor().greyTwo,
         ),
         CustomText(
           title: subTitle,
           size: 12,
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           textAlign: TextAlign.start,
           color: AppColor().greyTwo,
         ),

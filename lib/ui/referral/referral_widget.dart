@@ -3,6 +3,7 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'component/referral_leaderboard_widget.dart';
 import 'component/referral_link_widget.dart';
 
@@ -41,7 +42,7 @@ class _ReferralState extends State<Referral>
         title: CustomText(
           textAlign: TextAlign.center,
           title: 'Referrals',
-          weight: FontWeight.w600,
+          fontFamily: "InterSemiBold",
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -71,8 +72,7 @@ class _ReferralState extends State<Referral>
                       : AppColor().lightItemsColor,
                   size: 16,
                   fontFamily:
-                      _tabController.index == 0 ? 'GilroyBold' : 'GilroyMedium',
-                  weight: FontWeight.w400,
+                      _tabController.index == 0 ? 'InterBold' : 'InterMedium',
                 ),
               ),
               Padding(
@@ -84,8 +84,7 @@ class _ReferralState extends State<Referral>
                       : AppColor().lightItemsColor,
                   size: 16,
                   fontFamily:
-                      _tabController.index == 1 ? 'GilroyBold' : 'GilroyMedium',
-                  weight: FontWeight.w400,
+                      _tabController.index == 1 ? 'InterBold' : 'InterMedium',
                 ),
               ),
             ]),

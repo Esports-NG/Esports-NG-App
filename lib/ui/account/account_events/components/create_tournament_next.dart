@@ -32,9 +32,8 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
         children: [
           CustomText(
             title: 'Tournament group stage settings',
-            weight: FontWeight.w500,
             size: 14,
-            fontFamily: 'GilroyMedium',
+            fontFamily: 'InterMedium',
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),
@@ -43,7 +42,7 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
             title: 'Tournament summary *',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
-            fontFamily: 'GilroyRegular',
+            fontFamily: 'Inter',
             size: Get.height * 0.017,
           ),
           Gap(Get.height * 0.01),
@@ -68,7 +67,7 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
             title: 'Requirements for entry *',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
-            fontFamily: 'GilroyRegular',
+            fontFamily: 'Inter',
             size: Get.height * 0.017,
           ),
           Gap(Get.height * 0.01),
@@ -94,7 +93,7 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
             title: 'Tournament structure *',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
-            fontFamily: 'GilroyRegular',
+            fontFamily: 'Inter',
             size: Get.height * 0.017,
           ),
           Gap(Get.height * 0.01),
@@ -119,7 +118,7 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
             title: 'Tournament rules & regulations *',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
-            fontFamily: 'GilroyRegular',
+            fontFamily: 'Inter',
             size: Get.height * 0.017,
           ),
           Gap(Get.height * 0.01),
@@ -145,7 +144,7 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
             title: 'Tournament image *',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
-            fontFamily: 'GilroyRegular',
+            fontFamily: 'Inter',
             size: Get.height * 0.017,
           ),
           Gap(Get.height * 0.01),
@@ -162,8 +161,7 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
                 titleStyle: TextStyle(
                   color: AppColor().primaryWhite,
                   fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'GilroyRegular',
+                  fontFamily: "InterSemiBold",
                 ),
                 radius: 10,
                 confirm: Column(
@@ -198,11 +196,9 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
                   ],
                 ),
                 middleTextStyle: TextStyle(
-                  color: AppColor().primaryWhite,
-                  fontFamily: 'GilroyRegular',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
+                    color: AppColor().primaryWhite,
+                    fontSize: 14,
+                    fontFamily: "Inter"),
               );
             } else {
               tournamentController.clearProfilePhoto();
@@ -213,7 +209,7 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
             title: 'Tournament banner *',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
-            fontFamily: 'GilroyRegular',
+            fontFamily: 'Inter',
             size: Get.height * 0.017,
           ),
           Gap(Get.height * 0.01),
@@ -230,8 +226,7 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
                 titleStyle: TextStyle(
                   color: AppColor().primaryWhite,
                   fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'GilroyRegular',
+                  fontFamily: "InterSemiBold",
                 ),
                 radius: 10,
                 confirm: Column(
@@ -267,9 +262,8 @@ class _CreateTournamentNextState extends State<CreateTournamentNext> {
                 ),
                 middleTextStyle: TextStyle(
                   color: AppColor().primaryWhite,
-                  fontFamily: 'GilroyRegular',
+                  fontFamily: 'Inter',
                   fontSize: 14,
-                  fontWeight: FontWeight.w400,
                 ),
               );
             } else {

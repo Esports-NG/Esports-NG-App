@@ -71,7 +71,7 @@ class _EventFilterState extends State<EventFilter> {
                             CustomText(
                               title: widget.title,
                               color: AppColor().primaryWhite.withOpacity(0.7),
-                              fontFamily: "GilroyMedium",
+                              fontFamily: "InterMedium",
                               size: 16,
                             ),
                             Gap(Get.height * 0.01),
@@ -121,7 +121,7 @@ class _EventFilterState extends State<EventFilter> {
                         color: AppColor().primaryWhite,
                         overflow: TextOverflow.ellipsis,
                         // size: 16,
-                        fontFamily: "GilroyMedium",
+                        fontFamily: "InterMedium",
                       ),
                     ),
                     // const Spacer(),
@@ -169,7 +169,7 @@ class CustomTile extends StatelessWidget {
             child: CustomText(
               title: value,
               size: Get.height * 0.016,
-              fontFamily: 'GilroyMedium',
+              fontFamily: 'InterMedium',
               textAlign: TextAlign.start,
               overflow: TextOverflow.ellipsis,
               color: AppColor().primaryWhite,

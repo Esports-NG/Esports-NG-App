@@ -65,13 +65,13 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
                 CustomText(
                   title: widget.item.name,
                   color: AppColor().primaryWhite,
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   size: 16,
                 ),
                 CustomText(
                   title: "Player Applications",
                   color: AppColor().primaryWhite.withOpacity(0.5),
-                  // weight: FontWeight.w600,
+                  // fontFamily: "InterSemiBold",
                   size: 14,
                 )
               ],
@@ -95,7 +95,7 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
                     CustomText(
                       title: "Player Applications",
                       color: AppColor().primaryWhite,
-                      fontFamily: "GilroyMedium",
+                      fontFamily: "InterMedium",
                       size: 16,
                     ),
                     Gap(Get.height * 0.02),
@@ -136,7 +136,7 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
                                                     BorderRadius.circular(99)),
                                             label: CustomText(
                                               title: "Rejected",
-                                              weight: FontWeight.w600,
+                                              fontFamily: "InterSemiBold",
                                               size: 12,
                                               color: AppColor().primaryWhite,
                                             ))),
@@ -154,7 +154,7 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
                                                     BorderRadius.circular(99)),
                                             label: const CustomText(
                                               title: "Accepted",
-                                              weight: FontWeight.w600,
+                                              fontFamily: "InterSemiBold",
                                               size: 12,
                                             ))),
                                     Icon(

@@ -32,7 +32,7 @@ class _CreatePlayerProfileState extends State<CreatePlayerProfile> {
           elevation: 0,
           title: CustomText(
             title: "Add Game Profile",
-            fontFamily: 'GilroySemiBold',
+            fontFamily: 'InterSemiBold',
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -81,8 +81,7 @@ class _CreatePlayerProfileState extends State<CreatePlayerProfile> {
                           child: CustomText(
                             title: value.name,
                             color: AppColor().lightItemsColor,
-                            fontFamily: 'GilroyBold',
-                            weight: FontWeight.w400,
+                            fontFamily: 'InterBold',
                             size: 13,
                           ),
                         );
@@ -96,8 +95,7 @@ class _CreatePlayerProfileState extends State<CreatePlayerProfile> {
                       hint: CustomText(
                         title: "Select a Game",
                         color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
+                        fontFamily: 'InterBold',
                         size: 13,
                       ),
                     ),
@@ -146,8 +144,7 @@ class _CreatePlayerProfileState extends State<CreatePlayerProfile> {
                       titleStyle: TextStyle(
                         color: AppColor().primaryWhite,
                         fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: "InterSemiBold",
                       ),
                       radius: 10,
                       confirm: Column(
@@ -183,9 +180,8 @@ class _CreatePlayerProfileState extends State<CreatePlayerProfile> {
                       ),
                       middleTextStyle: TextStyle(
                         color: AppColor().primaryWhite,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         fontSize: 14,
-                        fontWeight: FontWeight.w400,
                       ),
                     );
                   } else {

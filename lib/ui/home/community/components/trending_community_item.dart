@@ -85,8 +85,7 @@ class _CommunityItemState extends State<CommunityItem> {
               CustomText(
                 title: widget.item.name,
                 size: 14,
-                fontFamily: 'GilroySemiBold',
-                weight: FontWeight.w400,
+                fontFamily: 'InterSemiBold',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
               ),
@@ -94,8 +93,7 @@ class _CommunityItemState extends State<CommunityItem> {
               CustomText(
                 title: widget.item.bio,
                 size: 12,
-                fontFamily: 'GilroyRegular',
-                weight: FontWeight.w400,
+                fontFamily: 'Inter',
                 color: AppColor().greySix,
               ),
               Gap(Get.height * 0.02),
@@ -117,8 +115,7 @@ class _CommunityItemState extends State<CommunityItem> {
                           : CustomText(
                               title: 'Follow',
                               size: 14,
-                              fontFamily: 'GilroyMedium',
-                              weight: FontWeight.w400,
+                              fontFamily: 'InterMedium',
                               color: AppColor().primaryColor,
                             ),
                     ),

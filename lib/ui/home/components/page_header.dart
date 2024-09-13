@@ -21,7 +21,7 @@ class PageHeaderWidget extends StatelessWidget {
       children: [
         CustomText(
           title: title,
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 16,
           color: AppColor().primaryWhite,
         ),
@@ -31,7 +31,7 @@ class PageHeaderWidget extends StatelessWidget {
             children: [
               CustomText(
                 title: 'See all',
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 size: 16,
                 color: AppColor().primaryLiteColor,
               ),
