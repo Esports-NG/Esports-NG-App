@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 //Fixture Card For Home Screen
 
@@ -252,7 +251,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: Get.height * 0.01,
+                horizontal: Get.height * 0.02,
                 vertical: Get.height * 0.01,
               ),
               child: Row(
@@ -261,8 +260,8 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                   Column(
                     children: [
                       Container(
-                        width: Get.width * 0.14,
-                        height: Get.width * 0.14,
+                        width: Get.width * 0.15,
+                        height: Get.width * 0.15,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.cover,
@@ -316,8 +315,8 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                   Column(
                     children: [
                       Container(
-                        width: Get.width * 0.14,
-                        height: Get.width * 0.14,
+                        width: Get.width * 0.15,
+                        height: Get.width * 0.15,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.cover,
@@ -358,17 +357,14 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.2),
               width: Get.width * 0.9,
-              child: InkWell(
-                onTap: ()  => launchUrl(Uri.parse(widget.fixture.livestreams![0].link!)),
-                child: ColorFiltered(
-                  colorFilter: const ColorFilter.mode(
-                    Colors.white,
-                    BlendMode.srcATop,
-                  ),
-                  child: Image.network(
-                    '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
-                    alignment: Alignment.center,
-                  ),
+              child: ColorFiltered(
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcATop,
+                ),
+                child: Image.network(
+                  '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                  alignment: Alignment.center,
                 ),
               ),
             ),
@@ -577,19 +573,16 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.3),
               width: Get.width * 0.9,
-              child: InkWell(
-                onTap: ()  => launchUrl(Uri.parse(widget.fixture.livestreams![0].link!)),
-                child: ColorFiltered(
-                  colorFilter: const ColorFilter.mode(
-                    Colors.white,
-                    BlendMode.srcATop,
-                  ),
-                  child: Image.network(
-                    '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
-                    // height: 25,
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center,
-                  ),
+              child: ColorFiltered(
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcATop,
+                ),
+                child: Image.network(
+                  '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                  // height: 25,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
                 ),
               ),
             ),
