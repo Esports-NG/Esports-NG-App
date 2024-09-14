@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'components/suggested_profile_item.dart';
 
 class SuggestedProfile extends StatefulWidget {
@@ -45,7 +46,7 @@ class _SuggestedProfileState extends State<SuggestedProfile> {
         leading: GoBackButton(onPressed: () => Get.back()),
         title: CustomText(
           title: 'Suggested Profiles',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -60,7 +61,7 @@ class _SuggestedProfileState extends State<SuggestedProfile> {
                 height: Get.height * 0.06,
                 child: CustomTextField(
                   hint: "Search for gaming news, competitions...",
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   prefixIcon: Icon(
                     CupertinoIcons.search,
                     color: AppColor().lightItemsColor,

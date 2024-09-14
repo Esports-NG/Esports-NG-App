@@ -90,8 +90,7 @@ class CommunityGamesCoveredItem extends StatelessWidget {
                 child: CustomText(
                   title: game.name!.toCapitalCase(),
                   size: 15,
-                  fontFamily: 'GilroyMedium',
-                  weight: FontWeight.w400,
+                  fontFamily: 'InterMedium',
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.left,
                 ),
@@ -170,8 +169,7 @@ class CommunityGamesCoveredItemForList extends StatelessWidget {
                     child: CustomText(
                       title: game.name!.toCapitalCase(),
                       size: 15,
-                      fontFamily: 'GilroyMedium',
-                      weight: FontWeight.w400,
+                      fontFamily: 'InterMedium',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.left,
                     ),
@@ -193,8 +191,8 @@ class CommunityGamesCoveredItemForList extends StatelessWidget {
                   //       titleStyle: TextStyle(
                   //         color: AppColor().primaryWhite,
                   //         fontSize: 15,
-                  //         fontWeight: FontWeight.w600,
-                  //         fontFamily: 'GilroyRegular',
+                  //          fontFamily: "InterSemiBold",
+                  //         fontFamily: 'Inter',
                   //       ),
                   //       radius: 10,
                   //       confirm: Column(
@@ -229,9 +227,9 @@ class CommunityGamesCoveredItemForList extends StatelessWidget {
                   //       ),
                   //       middleTextStyle: TextStyle(
                   //         color: AppColor().primaryWhite,
-                  //         fontFamily: 'GilroyRegular',
+                  //         fontFamily: 'Inter',
                   //         fontSize: 14,
-                  //         fontWeight: FontWeight.w400,
+                  //
                   //       ),
                   //     );
                   //   },
@@ -256,14 +254,14 @@ class CommunityGamesCoveredItemForList extends StatelessWidget {
         CustomText(
           title: title,
           size: 12,
-          fontFamily: 'GilroyRegular',
+          fontFamily: 'Inter',
           textAlign: TextAlign.start,
           color: AppColor().greyTwo,
         ),
         CustomText(
           title: subTitle,
           size: 12,
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           textAlign: TextAlign.start,
           color: AppColor().greyTwo,
         ),

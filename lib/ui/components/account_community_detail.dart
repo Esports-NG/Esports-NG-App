@@ -326,16 +326,14 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                   Gap(Get.height * 0.07),
                   CustomText(
                       title: details!.name,
-                      weight: FontWeight.w500,
                       size: Get.height * 0.02,
-                      fontFamily: 'GilroyBold',
+                      fontFamily: 'InterBold',
                       color: AppColor().primaryWhite),
                   Gap(Get.height * 0.01),
                   CustomText(
                       title: 'No Member',
-                      weight: FontWeight.w400,
                       size: Get.height * 0.017,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       color: AppColor().greyEight),
                   Gap(Get.height * 0.02),
                   Row(
@@ -347,9 +345,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                           followingCount != null
                               ? CustomText(
                                   title: followingCount?.toString(),
-                                  weight: FontWeight.w500,
                                   size: Get.height * 0.02,
-                                  fontFamily: 'GilroyBold',
+                                  fontFamily: 'InterBold',
                                   color: AppColor().primaryWhite)
                               : SizedBox(
                                   height: 20,
@@ -363,9 +360,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                           Gap(Get.height * 0.01),
                           CustomText(
                               title: 'Following',
-                              weight: FontWeight.w400,
                               size: Get.height * 0.017,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               color: AppColor().greyEight),
                         ],
                       ),
@@ -381,9 +377,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                           followerCount != null
                               ? CustomText(
                                   title: followerCount?.toString(),
-                                  weight: FontWeight.w500,
                                   size: Get.height * 0.02,
-                                  fontFamily: 'GilroyBold',
+                                  fontFamily: 'InterBold',
                                   color: AppColor().primaryWhite)
                               : SizedBox(
                                   height: 20,
@@ -397,9 +392,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                           Gap(Get.height * 0.01),
                           CustomText(
                               title: 'Follower(s)',
-                              weight: FontWeight.w400,
                               size: Get.height * 0.017,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               color: AppColor().greyEight),
                         ],
                       ),
@@ -462,9 +456,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                                 title: _isFollowing
                                                     ? 'Unfollow'
                                                     : 'Follow',
-                                                weight: FontWeight.w400,
                                                 size: Get.height * 0.017,
-                                                fontFamily: 'GilroyRegular',
+                                                fontFamily: 'Inter',
                                                 color: AppColor().primaryWhite),
                                           ]),
                               ),
@@ -498,9 +491,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                       Gap(Get.height * 0.01),
                                       CustomText(
                                           title: 'Message',
-                                          weight: FontWeight.w400,
                                           size: Get.height * 0.017,
-                                          fontFamily: 'GilroyRegular',
+                                          fontFamily: 'Inter',
                                           color: AppColor().primaryWhite),
                                       Gap(Get.height * 0.01),
                                       Icon(
@@ -531,9 +523,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                           ),
                           child: CustomText(
                               title: 'Apply as a staff',
-                              weight: FontWeight.w400,
                               size: Get.height * 0.017,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               color: AppColor().primaryWhite),
                         ),
                         Gap(Get.height * 0.02),
@@ -545,17 +536,15 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                           onTap: () {},
                           child: CustomText(
                               title: 'Join community',
-                              weight: FontWeight.w400,
                               size: Get.height * 0.017,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               color: AppColor().primaryWhite),
                         ),
                         Gap(Get.height * 0.04),
                         CustomText(
                             title: details?.bio,
-                            weight: FontWeight.w400,
                             size: Get.height * 0.015,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             textAlign: TextAlign.center,
                             height: 1.5,
                             color: AppColor().greyEight),
@@ -577,9 +566,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                         children: [
                           CustomText(
                               title: 'Community Owner',
-                              weight: FontWeight.w400,
                               size: Get.height * 0.019,
-                              fontFamily: 'GilroySemiBold',
+                              fontFamily: 'InterSemiBold',
                               color: AppColor().primaryWhite),
                           Gap(Get.height * 0.02),
                           InkWell(
@@ -614,9 +602,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                 CustomText(
                                     title: details!.owner!.fullName!
                                         .toCapitalCase(),
-                                    weight: FontWeight.w400,
                                     size: Get.height * 0.017,
-                                    fontFamily: 'GilroyMedium',
+                                    fontFamily: 'InterMedium',
                                     color: AppColor().primaryWhite),
                               ],
                             ),
@@ -624,9 +611,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                           Gap(Get.height * 0.01),
                           CustomText(
                               title: details?.owner?.bio,
-                              weight: FontWeight.w400,
                               size: Get.height * 0.015,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               textAlign: TextAlign.left,
                               height: 1.5,
                               color: AppColor().greyEight),
@@ -639,9 +625,8 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                               },
                               child: CustomText(
                                   title: 'See full profile',
-                                  weight: FontWeight.w400,
                                   size: Get.height * 0.017,
-                                  fontFamily: 'GilroyMedium',
+                                  fontFamily: 'InterMedium',
                                   underline: TextDecoration.underline,
                                   color: AppColor().primaryColor),
                             ),
@@ -722,7 +707,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                             child: CustomText(
                               title: "No game added yet",
                               color: AppColor().primaryWhite,
-                              // fontFamily: "GilroyMedium",
+                              // fontFamily: "InterMedium",
                               size: 16,
                             ),
                           )
@@ -826,7 +811,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                       children: [
                         CustomText(
                           title: 'Join our Community:',
-                          fontFamily: 'GilroySemiBold',
+                          fontFamily: 'InterSemiBold',
                           size: 16,
                           color: AppColor().primaryWhite,
                         ),

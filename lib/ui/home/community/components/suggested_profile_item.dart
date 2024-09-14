@@ -119,14 +119,14 @@ class _SuggestedProfileItemState extends State<SuggestedProfileItem> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         color: AppColor().primaryWhite,
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         size: 14,
                       ),
                       const Gap(2),
                       CustomText(
                         title: "@${widget.item.userName}",
                         color: AppColor().greyFour,
-                        fontFamily: "GilroyRegular",
+                        fontFamily: "Inter",
                         size: 12,
                       ),
                       Gap(Get.height * 0.015),
@@ -169,7 +169,7 @@ class _SuggestedProfileItemState extends State<SuggestedProfileItem> {
                                           title: _isFollowing
                                               ? "Unfollow"
                                               : "Follow",
-                                          weight: FontWeight.w600,
+                                          fontFamily: "InterSemiBold",
                                           size: 12,
                                           color: _isFollowing || _isLoading
                                               ? AppColor().primaryColor
@@ -328,14 +328,14 @@ class _SuggestedProfileListState extends State<SuggestedProfileList> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         color: AppColor().primaryWhite,
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         size: 14,
                       ),
                       const Gap(2),
                       CustomText(
                         title: "@${widget.item.userName}",
                         color: AppColor().greyFour,
-                        fontFamily: "GilroyRegular",
+                        fontFamily: "Inter",
                         size: 14,
                       ),
                       Gap(Get.height * 0.015),
@@ -378,7 +378,7 @@ class _SuggestedProfileListState extends State<SuggestedProfileList> {
                                           title: _isFollowing
                                               ? "Unfollow"
                                               : "Follow",
-                                          weight: FontWeight.w600,
+                                          fontFamily: "InterSemiBold",
                                           size: 14,
                                           color: _isFollowing || _isLoading
                                               ? AppColor().primaryColor

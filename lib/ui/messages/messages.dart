@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'message_type/chats/chats.dart';
 import 'message_type/communities.dart';
 import 'message_type/tournaments.dart';
@@ -51,7 +52,7 @@ class _MessagesPageState extends State<Messages>
           title: (messageController.messageOnSelect.isFalse)
               ? CustomText(
                   title: 'Messages',
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   size: 18,
                   color: AppColor().primaryWhite,
                 )
@@ -125,7 +126,7 @@ class _MessagesPageState extends State<Messages>
                     child: CustomText(
                       title: 'Archives',
                       size: Get.height * 0.016,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -139,7 +140,7 @@ class _MessagesPageState extends State<Messages>
                     child: CustomText(
                       title: 'Friend requests',
                       size: Get.height * 0.016,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -236,7 +237,7 @@ class _MessagesPageState extends State<Messages>
                     child: CustomText(
                       title: 'Mark as unread',
                       size: Get.height * 0.016,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -251,7 +252,7 @@ class _MessagesPageState extends State<Messages>
                     child: CustomText(
                       title: 'Select all',
                       size: Get.height * 0.016,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -266,7 +267,7 @@ class _MessagesPageState extends State<Messages>
                     child: CustomText(
                       title: 'Block user',
                       size: Get.height * 0.016,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -281,7 +282,7 @@ class _MessagesPageState extends State<Messages>
                     child: CustomText(
                       title: 'Contact info',
                       size: Get.height * 0.016,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -320,7 +321,7 @@ class _MessagesPageState extends State<Messages>
                                   ? AppColor().primaryColor
                                   : AppColor().lightItemsColor,
                               size: 13,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                             ),
                             Gap(Get.height * 0.01),
                             Container(
@@ -349,7 +350,7 @@ class _MessagesPageState extends State<Messages>
                                   ? AppColor().primaryColor
                                   : AppColor().lightItemsColor,
                               size: 14,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                             ),
                           ],
                         ),
@@ -365,7 +366,7 @@ class _MessagesPageState extends State<Messages>
                                   ? AppColor().primaryColor
                                   : AppColor().lightItemsColor,
                               size: 13,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                             ),
                             Gap(Get.height * 0.01),
                             Container(
@@ -394,7 +395,7 @@ class _MessagesPageState extends State<Messages>
                                   ? AppColor().primaryColor
                                   : AppColor().lightItemsColor,
                               size: 14,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                             ),
                           ],
                         ),
@@ -410,7 +411,7 @@ class _MessagesPageState extends State<Messages>
                                   ? AppColor().primaryColor
                                   : AppColor().lightItemsColor,
                               size: 13,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                             ),
                             Gap(Get.height * 0.01),
                             Container(
@@ -439,7 +440,7 @@ class _MessagesPageState extends State<Messages>
                                   ? AppColor().primaryColor
                                   : AppColor().lightItemsColor,
                               size: 14,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                             ),
                           ],
                         ),

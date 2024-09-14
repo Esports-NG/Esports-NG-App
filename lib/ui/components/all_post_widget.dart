@@ -6,6 +6,7 @@ import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'no_item_page.dart';
 
 class PostWidget extends StatefulWidget {
@@ -39,7 +40,7 @@ class _PostWidgetState extends State<PostWidget> {
                 separatorBuilder: (context, index) => Gap(Get.height * 0.02),
                 itemBuilder: (context, index) {
                   var item = widget.posts![index];
-                  return InkWell(
+                  return GestureDetector(
                       onTap: () => Get.to(() => PostDetails(item: item)),
                       child: PostItem(item: item));
                 },

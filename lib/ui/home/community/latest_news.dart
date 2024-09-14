@@ -6,6 +6,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'components/latest_news_item.dart';
 
 class LatestNews extends StatefulWidget {
@@ -27,7 +28,7 @@ class _LatestNewsState extends State<LatestNews> {
         leading: GoBackButton(onPressed: () => Get.back()),
         title: CustomText(
           title: 'Latest News',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),

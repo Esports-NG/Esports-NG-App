@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'contributors.dart';
 
 class GameProfile extends StatefulWidget {
@@ -198,16 +199,14 @@ class _GameProfileState extends State<GameProfile> {
                   Gap(Get.height * 0.07),
                   CustomText(
                       title: details!.name,
-                      weight: FontWeight.w500,
                       size: Get.height * 0.02,
-                      fontFamily: 'GilroyBold',
+                      fontFamily: 'InterBold',
                       color: AppColor().primaryWhite),
                   Gap(Get.height * 0.01),
                   CustomText(
                       title: '${details!.players} Players',
-                      weight: FontWeight.w400,
                       size: Get.height * 0.017,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       color: AppColor().greyEight),
                   Gap(Get.height * 0.02),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -271,7 +270,7 @@ class _GameProfileState extends State<GameProfile> {
                                     : CustomText(
                                         size: 14,
                                         color: AppColor().primaryWhite,
-                                        weight: FontWeight.w600,
+                                        fontFamily: "InterSemiBold",
                                         title: _isFollowingGame
                                             ? "Unfollow"
                                             : "Follow")))),
@@ -302,7 +301,7 @@ class _GameProfileState extends State<GameProfile> {
                     children: [
                       CustomText(
                         title: "Categories",
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         size: 18,
                         color: AppColor().primaryWhite,
                       ),
@@ -430,7 +429,7 @@ class LinkHeader extends StatelessWidget {
         CustomText(
           title: title,
           size: 18,
-          weight: FontWeight.w600,
+          fontFamily: "InterSemiBold",
           color: AppColor().primaryWhite,
         ),
         InkWell(
@@ -441,7 +440,7 @@ class LinkHeader extends StatelessWidget {
                 title: "See all",
                 size: 16,
                 color: AppColor().primaryColor,
-                fontFamily: "GilroyMedium",
+                fontFamily: "InterMedium",
               ),
               Gap(Get.height * 0.01),
               Icon(
@@ -469,16 +468,14 @@ class ProfileMetric extends StatelessWidget {
       children: [
         CustomText(
             title: value,
-            weight: FontWeight.w500,
             size: Get.height * 0.02,
-            fontFamily: 'GilroyBold',
+            fontFamily: 'InterBold',
             color: AppColor().primaryWhite),
         Gap(Get.height * 0.01),
         CustomText(
             title: title,
-            weight: FontWeight.w400,
             size: Get.height * 0.017,
-            fontFamily: 'GilroyRegular',
+            fontFamily: 'Inter',
             color: AppColor().greyEight),
       ],
     );

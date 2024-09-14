@@ -64,7 +64,7 @@ class WalletWidget extends StatelessWidget {
                     Center(
                       child: CustomText(
                         size: 32,
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         color: AppColor().primaryWhite,
                         title: "N3,543,090.00",
                       ),
@@ -101,9 +101,8 @@ class WalletWidget extends StatelessWidget {
                   CustomText(
                     title: 'Transaction History',
                     color: AppColor().greyTwo,
-                    weight: FontWeight.w400,
                     size: 18,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                   ),
                   Gap(Get.height * 0.02),
                   ListView.separated(
@@ -151,9 +150,8 @@ class WalletWidget extends StatelessWidget {
             child: CustomText(
               title: title,
               color: AppColor().primaryWhite,
-              weight: FontWeight.w400,
               size: Get.height * 0.016,
-              fontFamily: 'GilroySemiBold',
+              fontFamily: 'InterSemiBold',
             ),
           ),
         ),

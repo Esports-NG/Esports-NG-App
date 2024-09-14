@@ -1,6 +1,7 @@
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'custom_text.dart';
 
 class CustomFillButton extends StatelessWidget {
@@ -52,9 +53,9 @@ class CustomFillButton extends StatelessWidget {
               : child ??
                   CustomText(
                     title: buttonText ?? '',
-                    size: textSize ?? 14,
+                    size: textSize ?? 16,
                     weight: fontWeight ?? FontWeight.w500,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     textAlign: TextAlign.center,
                     color: textColor ?? AppColor().primaryWhite,
                   ),

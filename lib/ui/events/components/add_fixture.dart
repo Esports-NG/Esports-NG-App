@@ -74,7 +74,7 @@ class _AddFixtureState extends State<AddFixture> {
           title: "Add New Fixture ",
           color: AppColor().primaryWhite,
           size: 20,
-          fontFamily: "GilroySemibold",
+          fontFamily: "InterSemibold",
         ),
       ),
       body: Obx(
@@ -127,8 +127,7 @@ class _AddFixtureState extends State<AddFixture> {
                             child: CustomText(
                               title: value.inGameName,
                               color: AppColor().lightItemsColor,
-                              fontFamily: 'GilroyMedium',
-                              weight: FontWeight.w400,
+                              fontFamily: 'InterMedium',
                               size: 15,
                             ),
                           );
@@ -142,8 +141,7 @@ class _AddFixtureState extends State<AddFixture> {
                               tournamentController.isCommunities.value == true
                                   ? AppColor().primaryBackGroundColor
                                   : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyMedium',
-                          weight: FontWeight.w400,
+                          fontFamily: 'InterMedium',
                           size: 15,
                         ),
                       ),
@@ -188,8 +186,7 @@ class _AddFixtureState extends State<AddFixture> {
                             child: CustomText(
                               title: value.inGameName,
                               color: AppColor().lightItemsColor,
-                              fontFamily: 'GilroyMedium',
-                              weight: FontWeight.w400,
+                              fontFamily: 'InterMedium',
                               size: 15,
                             ),
                           );
@@ -200,8 +197,7 @@ class _AddFixtureState extends State<AddFixture> {
                         hint: CustomText(
                           title: "Away Player",
                           color: AppColor().lightItemsColor,
-                          fontFamily: 'GilroyMedium',
-                          weight: FontWeight.w400,
+                          fontFamily: 'InterMedium',
                           size: 15,
                         ),
                       ),
@@ -362,8 +358,7 @@ class _AddFixtureState extends State<AddFixture> {
                                 CustomText(
                                   title: value.title,
                                   color: AppColor().lightItemsColor,
-                                  fontFamily: 'GilroyMedium',
-                                  weight: FontWeight.w400,
+                                  fontFamily: 'InterMedium',
                                   size: 18,
                                 ),
                               ],
@@ -377,8 +372,7 @@ class _AddFixtureState extends State<AddFixture> {
                         hint: CustomText(
                           title: "Select Platform",
                           color: AppColor().lightItemsColor,
-                          fontFamily: 'GilroyMedium',
-                          weight: FontWeight.w400,
+                          fontFamily: 'InterMedium',
                           size: 15,
                         ),
                       ),
@@ -496,7 +490,7 @@ class _AddFixtureState extends State<AddFixture> {
                                   child: CustomText(
                                       title: "Add Fixture",
                                       size: 16,
-                                      fontFamily: "GilroySemiBold",
+                                      fontFamily: "InterSemiBold",
                                       color: AppColor().primaryWhite))))
                 ],
               ),

@@ -2,12 +2,13 @@
 
 library csc_picker;
 
+import 'dart:convert';
+
 import 'package:csc_picker/model/select_status_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -814,7 +815,7 @@ class CSCPickerState extends State<CSCPicker> {
                     title: 'State',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),

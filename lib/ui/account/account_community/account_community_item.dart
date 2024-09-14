@@ -104,7 +104,7 @@ class AccountCommunityItem extends StatelessWidget {
                             CustomText(
                               title: item.name,
                               size: 16,
-                              fontFamily: 'GilroyBold',
+                              fontFamily: 'InterBold',
                               textAlign: TextAlign.start,
                               color: AppColor().greyOne,
                             ),
@@ -120,7 +120,7 @@ class AccountCommunityItem extends StatelessWidget {
                             CustomText(
                               title: item.bio!.toSentenceCase(),
                               size: 12,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().greySix,
                             ),

@@ -51,7 +51,7 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
           elevation: 0,
           title: CustomText(
             title: "Edit Game Profile",
-            fontFamily: 'GilroySemiBold',
+            fontFamily: 'InterSemiBold',
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -101,8 +101,7 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                           child: CustomText(
                             title: value.name,
                             color: AppColor().lightItemsColor,
-                            fontFamily: 'GilroyBold',
-                            weight: FontWeight.w400,
+                            fontFamily: 'InterBold',
                             size: 13,
                           ),
                         );
@@ -116,8 +115,7 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                       hint: CustomText(
                         title: "Select a Game",
                         color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyBold',
-                        weight: FontWeight.w400,
+                        fontFamily: 'InterBold',
                         size: 13,
                       ),
                     ),
@@ -166,8 +164,7 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                       titleStyle: TextStyle(
                         color: AppColor().primaryWhite,
                         fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: "InterSemiBold",
                       ),
                       radius: 10,
                       confirm: Column(
@@ -203,9 +200,8 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                       ),
                       middleTextStyle: TextStyle(
                         color: AppColor().primaryWhite,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         fontSize: 14,
-                        fontWeight: FontWeight.w400,
                       ),
                     );
                   } else {
@@ -244,7 +240,7 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                                       ? const ButtonLoader()
                                       : CustomText(
                                           title: "Update Game Profile",
-                                          fontFamily: "GilroyMedium",
+                                          fontFamily: "InterMedium",
                                           color: AppColor().primaryWhite,
                                         )),
                             ))),
@@ -325,9 +321,8 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                   title: playerController.playerProfileImage == null
                       ? 'Click to upload'
                       : 'Cancel',
-                  weight: FontWeight.w400,
                   size: 15,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   color: AppColor().primaryColor,
                   underline: TextDecoration.underline,
                 ),
@@ -337,7 +332,7 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                 title: 'Max file size: 4MB',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.014,
               ),
             ],

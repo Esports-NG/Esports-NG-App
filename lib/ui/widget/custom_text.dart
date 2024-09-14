@@ -40,11 +40,11 @@ class CustomText extends StatelessWidget {
         },
         linkStyle: TextStyle(
           color: AppColor().primaryColor,
-          fontFamily: fontFamily ?? 'GilroyRegular',
+          fontFamily: fontFamily ?? 'Inter',
           fontSize: size,
           fontWeight: weight ?? FontWeight.normal,
           overflow: overflow,
-          height: height ?? 1.2,
+          // height: height ?? 1.2,
           decorationColor: decorationColor,
           decoration: underline ?? TextDecoration.none,
         ),
@@ -53,7 +53,7 @@ class CustomText extends StatelessWidget {
         maxLines: maxLines,
         style: TextStyle(
           color: color ?? Colors.black,
-          fontFamily: fontFamily ?? 'GilroyRegular',
+          fontFamily: fontFamily ?? 'Inter',
           fontSize: size,
           fontWeight: weight ?? FontWeight.normal,
           overflow: overflow,

@@ -14,7 +14,7 @@ class GamesRepository extends GetxController {
   RxList<GamePlayed> userGames = <GamePlayed>[].obs;
   Rx<GamePlayed?> selectedGame = Rx(null);
   RxString selectedGameName = "".obs;
-  RxBool isLoading = false.obs;
+  RxBool isLoading = true.obs;
   TextEditingController gameSearchText = TextEditingController();
   RxList<GamePlayed> filteredGames = <GamePlayed>[].obs;
   RxList<GamePlayed> filteredUserGames = <GamePlayed>[].obs;

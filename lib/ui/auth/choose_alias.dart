@@ -69,7 +69,7 @@ class _ChooseAliasState extends State<ChooseAlias> {
             title: 'Choose an awesome\nalias for your profile ',
             color: AppColor().primaryWhite,
             textAlign: TextAlign.center,
-            fontFamily: 'GilroyBold',
+            fontFamily: 'InterBold',
             size: Get.height * 0.04,
           ),
           Gap(Get.height * 0.03),
@@ -112,9 +112,9 @@ class _ChooseAliasState extends State<ChooseAlias> {
                     ),
                   );
                 } else {
-                    if (authController.signUpStatus != SignUpStatus.loading) {
-                      authController.signUp(widget.user, context);
-                    }
+                  if (authController.signUpStatus != SignUpStatus.loading) {
+                    authController.signUp(widget.user, context);
+                  }
                 }
               },
               child: Container(
@@ -134,7 +134,7 @@ class _ChooseAliasState extends State<ChooseAlias> {
                         color: userCheck == false
                             ? AppColor().bgDark
                             : AppColor().primaryWhite,
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         size: Get.height * 0.016,
                       )),
               ),

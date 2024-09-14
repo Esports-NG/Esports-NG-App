@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'notification_type/all.dart';
 import 'notification_type/events.dart';
 import 'notification_type/personal.dart';
@@ -189,7 +190,7 @@ class _NotificationPageState extends State<NotificationPage>
         //               ? AppColor().primaryColor
         //               : AppColor().lightItemsColor,
         //           size: 14,
-        //           weight: FontWeight.w600,
+        //           fontFamily: "InterSemiBold",
         //         ),
         //       ),
         //       Tab(
@@ -199,7 +200,7 @@ class _NotificationPageState extends State<NotificationPage>
         //               ? AppColor().primaryColor
         //               : AppColor().lightItemsColor,
         //           size: 14,
-        //           weight: FontWeight.w600,
+        //           fontFamily: "InterSemiBold",
         //         ),
         //       ),
         //       Tab(
@@ -209,7 +210,7 @@ class _NotificationPageState extends State<NotificationPage>
         //               ? AppColor().primaryColor
         //               : AppColor().lightItemsColor,
         //           size: 14,
-        //           weight: FontWeight.w600,
+        //           fontFamily: "InterSemiBold",
         //         ),
         //       ),
         //     ]),
@@ -234,7 +235,7 @@ class _NotificationPageState extends State<NotificationPage>
           CustomText(
             title: title,
             size: Get.height * 0.016,
-            fontFamily: 'GilroyMedium',
+            fontFamily: 'InterMedium',
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),

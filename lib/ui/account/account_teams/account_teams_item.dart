@@ -102,7 +102,7 @@ class AccountTeamsItem extends StatelessWidget {
                           CustomText(
                             title: item.name,
                             size: 16,
-                            fontFamily: 'GilroyBold',
+                            fontFamily: 'InterBold',
                             textAlign: TextAlign.start,
                             color: AppColor().greyOne,
                           ),
@@ -114,7 +114,7 @@ class AccountTeamsItem extends StatelessWidget {
                                     ? '${item.membersCount} member'
                                     : '${item.membersCount} members',
                             size: 12,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             textAlign: TextAlign.start,
                             color: AppColor().greySix,
                           ),
@@ -126,7 +126,7 @@ class AccountTeamsItem extends StatelessWidget {
                           CustomText(
                             title: item.bio,
                             size: 12,
-                            fontFamily: 'GilroyMedium',
+                            fontFamily: 'InterMedium',
                             textAlign: TextAlign.start,
                             color: AppColor().greySix,
                           ),

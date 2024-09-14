@@ -118,16 +118,14 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
               CustomText(
                 title: widget.game.name!.toCapitalCase(),
                 size: 15,
-                fontFamily: 'GilroyMedium',
-                weight: FontWeight.w400,
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryWhite,
               ),
               Gap(Get.height * 0.005),
               CustomText(
                 title: '${widget.game.players} Player(s)',
                 size: 12,
-                fontFamily: 'GilroyRegular',
-                weight: FontWeight.w400,
+                fontFamily: 'Inter',
                 color: AppColor().greySix,
               ),
               Gap(Get.height * 0.01),
@@ -175,8 +173,7 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
                         : CustomText(
                             title: _isFollowingGame ? "Unfollow" : 'Follow',
                             size: 14,
-                            fontFamily: 'GilroyMedium',
-                            weight: FontWeight.w400,
+                            fontFamily: 'InterMedium',
                             color: _isFollowingGame
                                 ? AppColor().primaryColor
                                 : AppColor().primaryWhite,

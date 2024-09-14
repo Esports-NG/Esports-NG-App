@@ -31,7 +31,7 @@ class _MyPostWidgetState extends State<MyPostWidget>
           scrolledUnderElevation: 0,
           title: CustomText(
             title: 'Posts',
-            fontFamily: 'GilroySemiBold',
+            fontFamily: 'InterSemiBold',
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -62,16 +62,14 @@ class _MyPostWidgetState extends State<MyPostWidget>
                                 indicatorColor: AppColor().primaryColor,
                                 dividerColor: Colors.transparent,
                                 labelStyle: const TextStyle(
-                                  fontFamily: 'GilroyBold',
+                                  fontFamily: 'InterBold',
                                   fontSize: 13,
-                                  fontWeight: FontWeight.w400,
                                 ),
                                 unselectedLabelColor:
                                     AppColor().lightItemsColor,
                                 unselectedLabelStyle: const TextStyle(
-                                  fontFamily: 'GilroyMedium',
+                                  fontFamily: 'InterMedium',
                                   fontSize: 13,
-                                  fontWeight: FontWeight.w400,
                                 ),
                                 controller: _tabController,
                                 tabs: const [

@@ -124,7 +124,7 @@ class _CreatePostState extends State<CreatePost> {
           centerTitle: true,
           title: CustomText(
             title: 'Create a Post',
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -157,13 +157,13 @@ class _CreatePostState extends State<CreatePost> {
                         text: "Post as: ",
                         style: TextStyle(
                           color: AppColor().primaryWhite,
-                          fontFamily: 'GilroyMedium',
+                          fontFamily: 'InterMedium',
                           fontSize: 15,
                         ),
                         children: [
                           TextSpan(
                             text: postController.postName.value,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                            style: const TextStyle(fontFamily: "InterSemiBold"),
                           ),
                         ],
                       )),
@@ -171,9 +171,8 @@ class _CreatePostState extends State<CreatePost> {
                         onTap: _showAccountListDialog,
                         child: CustomText(
                           title: 'Change Account',
-                          weight: FontWeight.w400,
                           size: 15,
-                          fontFamily: 'GilroyMedium',
+                          fontFamily: 'InterMedium',
                           color: AppColor().primaryColor,
                           underline: TextDecoration.underline,
                         ),
@@ -183,9 +182,8 @@ class _CreatePostState extends State<CreatePost> {
                   Gap(Get.height * 0.03),
                   CustomText(
                     title: 'Fill the form correctly to create a new post',
-                    weight: FontWeight.w400,
                     size: 15,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     color: AppColor().primaryWhite,
                   ),
                   Gap(Get.height * 0.03),
@@ -193,7 +191,7 @@ class _CreatePostState extends State<CreatePost> {
                     title: 'Post text *',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
@@ -221,7 +219,7 @@ class _CreatePostState extends State<CreatePost> {
                     title: 'Upload an image (Optional)',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
@@ -264,11 +262,9 @@ class _CreatePostState extends State<CreatePost> {
                                     top: 5, bottom: 30, left: 25, right: 25),
                                 middleText: "Upload your profile picture",
                                 titleStyle: TextStyle(
-                                  color: AppColor().primaryWhite,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'GilroyRegular',
-                                ),
+                                    color: AppColor().primaryWhite,
+                                    fontSize: 15,
+                                    fontFamily: "InterSemiBold"),
                                 radius: 10,
                                 confirm: Column(
                                   children: [
@@ -303,9 +299,8 @@ class _CreatePostState extends State<CreatePost> {
                                 ),
                                 middleTextStyle: TextStyle(
                                   color: AppColor().primaryWhite,
-                                  fontFamily: 'GilroyRegular',
+                                  fontFamily: 'Inter',
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w400,
                                 ),
                               );
                             } else {
@@ -316,9 +311,8 @@ class _CreatePostState extends State<CreatePost> {
                             title: postController.postImage == null
                                 ? 'Click to upload'
                                 : 'Cancel',
-                            weight: FontWeight.w400,
                             size: 15,
-                            fontFamily: 'GilroyMedium',
+                            fontFamily: 'InterMedium',
                             color: AppColor().primaryColor,
                             underline: TextDecoration.underline,
                           ),
@@ -328,7 +322,7 @@ class _CreatePostState extends State<CreatePost> {
                           title: 'Max file size: 4MB',
                           color: AppColor().primaryWhite,
                           textAlign: TextAlign.center,
-                          fontFamily: 'GilroyRegular',
+                          fontFamily: 'Inter',
                           size: Get.height * 0.014,
                         ),
                       ],
@@ -339,7 +333,7 @@ class _CreatePostState extends State<CreatePost> {
                     title: 'Add game tags',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
@@ -378,7 +372,7 @@ class _CreatePostState extends State<CreatePost> {
                               child: CustomText(
                               title: 'Create Post',
                               color: AppColor().primaryWhite,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                               size: Get.height * 0.018,
                             )),
                     ),
@@ -419,7 +413,7 @@ class _CreatePostState extends State<CreatePost> {
                   child: CustomText(
                     title: 'Post as:',
                     size: Get.height * 0.018,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     textAlign: TextAlign.center,
                     color: AppColor().primaryWhite,
                   ),

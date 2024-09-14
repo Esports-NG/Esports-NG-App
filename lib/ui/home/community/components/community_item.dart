@@ -120,8 +120,7 @@ class _CommunityItemState extends State<CommunityItem> {
               CustomText(
                 title: widget.item.name,
                 size: 14,
-                fontFamily: 'GilroySemiBold',
-                weight: FontWeight.w400,
+                fontFamily: 'InterSemiBold',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
               ),
@@ -131,8 +130,7 @@ class _CommunityItemState extends State<CommunityItem> {
                 child: CustomText(
                   title: 'No Member',
                   size: 12,
-                  fontFamily: 'GilroyRegular',
-                  weight: FontWeight.w400,
+                  fontFamily: 'Inter',
                   color: AppColor().greySix,
                 ),
               ),
@@ -178,8 +176,7 @@ class _CommunityItemState extends State<CommunityItem> {
                         : CustomText(
                             title: _isFollowing ? 'Unfollow' : 'Follow',
                             size: 14,
-                            fontFamily: 'GilroyMedium',
-                            weight: FontWeight.w400,
+                            fontFamily: 'InterMedium',
                             color: _isFollowing
                                 ? AppColor().primaryColor
                                 : AppColor().primaryWhite,
@@ -309,8 +306,7 @@ class AllCommunityItem extends StatelessWidget {
               CustomText(
                 title: item.name,
                 size: 14,
-                fontFamily: 'GilroySemiBold',
-                weight: FontWeight.w400,
+                fontFamily: 'InterSemiBold',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
               ),
@@ -318,8 +314,7 @@ class AllCommunityItem extends StatelessWidget {
               CustomText(
                   title: 'No Member',
                   size: 12,
-                  fontFamily: 'GilroyRegular',
-                  weight: FontWeight.w400,
+                  fontFamily: 'Inter',
                   color: AppColor().greySix),
               Gap(Get.height * 0.015),
               Padding(
@@ -327,8 +322,7 @@ class AllCommunityItem extends StatelessWidget {
                 child: CustomText(
                     title: item.bio,
                     size: 12,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
+                    fontFamily: 'InterMedium',
                     color: AppColor().greySix,
                     height: 1.5,
                     textAlign: TextAlign.center),
@@ -350,8 +344,7 @@ class AllCommunityItem extends StatelessWidget {
                     child: CustomText(
                         title: 'Follow',
                         size: 14,
-                        fontFamily: 'GilroyMedium',
-                        weight: FontWeight.w400,
+                        fontFamily: 'InterMedium',
                         color: AppColor().primaryWhite),
                   ),
                 ),

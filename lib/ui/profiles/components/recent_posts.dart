@@ -145,7 +145,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                                 title:
                                     '${widget.item.author!.userName!} Reposted this',
                                 size: Get.height * 0.015,
-                                fontFamily: 'GilroyMedium',
+                                fontFamily: 'InterMedium',
                                 textAlign: TextAlign.start,
                                 color: AppColor().lightItemsColor,
                               ),
@@ -168,7 +168,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                               .toString()
                               .toUpperFirstCase(),
                           size: Get.height * 0.015,
-                          fontFamily: 'GilroyBold',
+                          fontFamily: 'InterBold',
                           textAlign: TextAlign.start,
                           color: AppColor().primaryWhite,
                         ),
@@ -235,7 +235,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                             CustomText(
                               title: widget.item.author!.userName!,
                               size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().lightItemsColor,
                             ),
@@ -245,7 +245,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                             CustomText(
                               title: timeAgo(widget.item.createdAt!),
                               size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().lightItemsColor,
                             ),
@@ -296,7 +296,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                                 CustomText(
                                   title: widget.item.repost!.author!.userName!,
                                   size: Get.height * 0.015,
-                                  fontFamily: 'GilroyMedium',
+                                  fontFamily: 'InterMedium',
                                   textAlign: TextAlign.start,
                                   color: AppColor().lightItemsColor,
                                 ),
@@ -304,7 +304,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                                 CustomText(
                                   title: timeAgo(widget.item.createdAt!),
                                   size: Get.height * 0.015,
-                                  fontFamily: 'GilroyMedium',
+                                  fontFamily: 'InterMedium',
                                   textAlign: TextAlign.start,
                                   color: AppColor().lightItemsColor,
                                 ),
@@ -336,7 +336,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                         .toString()
                         .toUpperFirstCase(),
                 size: Get.height * 0.015,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -446,7 +446,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                                   color: AppColor().primaryWhite,
                                   textAlign: TextAlign.center,
                                   size: Get.height * 0.014,
-                                  fontFamily: 'GilroyBold',
+                                  fontFamily: 'InterBold',
                                 ),
                               ),
                             );
@@ -494,21 +494,21 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                             result = CustomText(
                                 title: '0',
                                 size: Get.height * 0.014,
-                                fontFamily: 'GilroyBold',
+                                fontFamily: 'InterBold',
                                 textAlign: TextAlign.start,
                                 color: color);
                           } else if (count == 1) {
                             result = CustomText(
                                 title: '$text like',
                                 size: Get.height * 0.014,
-                                fontFamily: 'GilroyBold',
+                                fontFamily: 'InterBold',
                                 textAlign: TextAlign.start,
                                 color: color);
                           } else {
                             result = CustomText(
                                 title: '$text likes',
                                 size: Get.height * 0.014,
-                                fontFamily: 'GilroyBold',
+                                fontFamily: 'InterBold',
                                 textAlign: TextAlign.start,
                                 color: color);
                           }
@@ -531,7 +531,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                       CustomText(
                         title: widget.item.comment!.length.toString(),
                         size: Get.height * 0.014,
-                        fontFamily: 'GilroyBold',
+                        fontFamily: 'InterBold',
                         textAlign: TextAlign.start,
                         color: AppColor().primaryWhite,
                       ),
@@ -551,7 +551,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                       CustomText(
                         title: 'Share',
                         size: Get.height * 0.014,
-                        fontFamily: 'GilroyBold',
+                        fontFamily: 'InterBold',
                         textAlign: TextAlign.start,
                         color: AppColor().primaryWhite,
                       ),
@@ -609,7 +609,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
           child: CustomText(
             title: 'Like, Comment and Repost as:',
             size: Get.height * 0.014,
-            fontFamily: 'GilroyBold',
+            fontFamily: 'InterBold',
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),
@@ -645,7 +645,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
               CustomText(
                 title: authController.user!.fullName,
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -664,7 +664,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
               CustomText(
                 title: 'Your Team Profile',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -795,8 +795,8 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                     title: 'Report Post by ${widget.item.author!.userName}',
                     // Additional fields after this should be Comment details, Reason for reporting etc
                     color: AppColor().primaryWhite,
-                    weight: FontWeight.w400,
-                    fontFamily: 'GilroyBold',
+
+                    fontFamily: 'InterBold',
                     size: Get.height * 0.015,
                   ),
                 ),
@@ -811,8 +811,8 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                     title: 'Report ${widget.item.author!.userName}',
                     // Additional fields after this should be Comment details, Reason for reporting etc
                     color: AppColor().primaryWhite,
-                    weight: FontWeight.w400,
-                    fontFamily: 'GilroyBold',
+
+                    fontFamily: 'InterBold',
                     size: Get.height * 0.015,
                   ),
                 ),
@@ -827,8 +827,8 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                     title: 'Block ${widget.item.author!.userName}',
                     // Additional fields after this should be Comment details, Reason for reporting etc
                     color: AppColor().primaryWhite,
-                    weight: FontWeight.w400,
-                    fontFamily: 'GilroyBold',
+
+                    fontFamily: 'InterBold',
                     size: Get.height * 0.015,
                   ),
                 ),
@@ -852,7 +852,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
         CustomText(
           title: title,
           size: Get.height * 0.014,
-          fontFamily: 'GilroyMedium',
+          fontFamily: 'InterMedium',
           textAlign: TextAlign.start,
           color: AppColor().primaryWhite,
         ),

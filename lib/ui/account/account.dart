@@ -16,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'account_details.dart';
 import 'my_profile.dart';
 
@@ -110,12 +111,6 @@ class _AccountState extends State<Account> {
                           itemSize: Get.height * 0.13,
                           image: authController.user!.profile!.profilePicture,
                         ),
-                        // Positioned(
-                        //   child: SvgPicture.asset(
-                        //     'assets/images/svg/check_badge.svg',
-                        //     height: Get.height * 0.035,
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -145,7 +140,7 @@ class _AccountState extends State<Account> {
               return CustomText(
                 title: '@ ${authController.user?.userName ?? 'yourusername'}',
                 size: 16,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 textAlign: TextAlign.start,
                 color: AppColor().lightItemsColor,
               );
@@ -155,16 +150,16 @@ class _AccountState extends State<Account> {
               return CustomText(
                 title: authController.user!.fullName!.toCapitalCase(),
                 size: 20,
-                fontFamily: 'GilroyBold',
+                fontFamily: 'InterBold',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               );
             }),
-            Gap(Get.height * 0.01),
+            const Gap(5),
             CustomText(
               title: authController.user?.bio,
               size: 16,
-              fontFamily: 'GilroyMedium',
+              fontFamily: 'Inter',
               textAlign: TextAlign.start,
               color: AppColor().lightItemsColor,
             ),
@@ -185,7 +180,6 @@ class _AccountState extends State<Account> {
                   var item = accountItem[index];
                   return InkWell(
                     splashColor: AppColor().primaryColor,
-                    // splashFactory: ,
                     onTap: () {
                       debugPrint(item.title);
                       setState(() {
@@ -237,18 +231,13 @@ class _AccountState extends State<Account> {
                     child: Container(
                       height: Get.height * 0.065,
                       padding: EdgeInsets.all(Get.height * 0.02),
-                      decoration: BoxDecoration(
-                          color: accountTab == index
-                              ? AppColor().primaryColor
-                              : Colors.transparent),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomText(
                             title: item.title,
-                            size: Get.height * 0.017,
-                            fontFamily: 'GilroySemiBold',
-                            weight: FontWeight.w400,
+                            size: 16,
+                            fontFamily: 'InterMedium',
                             textAlign: TextAlign.start,
                             color: item.title == 'Logout'
                                 ? AppColor().primaryRed
@@ -256,13 +245,15 @@ class _AccountState extends State<Account> {
                                     ? AppColor().primaryWhite
                                     : AppColor().lightItemsColor,
                           ),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: accountTab == index
-                                ? AppColor().primaryWhite
-                                : AppColor().lightItemsColor,
-                            size: Get.height * 0.02,
-                          )
+                          Visibility(
+                              visible: item.title != "Logout",
+                              child: Icon(
+                                Icons.arrow_forward_ios,
+                                color: accountTab == index
+                                    ? AppColor().primaryWhite
+                                    : AppColor().lightItemsColor,
+                                size: 16,
+                              ))
                         ],
                       ),
                     ),
@@ -301,7 +292,7 @@ class _AccountState extends State<Account> {
               CustomText(
                 title: 'Edit Profile',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -327,7 +318,7 @@ class _AccountState extends State<Account> {
               CustomText(
                 title: 'Edit Socials',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -349,7 +340,7 @@ class _AccountState extends State<Account> {
               CustomText(
                 title: 'Privacy and Security',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -375,14 +366,13 @@ class _AccountState extends State<Account> {
               CustomText(
                 title: 'Privacy and User Policy',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
             ],
           ),
         ),
-        
       ],
     );
 
@@ -402,7 +392,7 @@ class _AccountState extends State<Account> {
       case 'ScreenC':
         // Get.to(() => const Privacy());
         break;
-        case 'ScreenD':
+      case 'ScreenD':
         Get.to(() => PrivacyPolicy());
         break;
     }
@@ -432,7 +422,7 @@ class _AccountState extends State<Account> {
                   child: CustomText(
                     title: 'Are you sure you want to log out?',
                     size: Get.height * 0.018,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     textAlign: TextAlign.center,
                     color: AppColor().primaryWhite,
                   ),
@@ -462,7 +452,7 @@ class _AccountState extends State<Account> {
                             CustomText(
                               title: 'Yes',
                               size: Get.height * 0.016,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().primaryWhite,
                             ),
@@ -493,7 +483,7 @@ class _AccountState extends State<Account> {
                             CustomText(
                               title: 'No',
                               size: Get.height * 0.016,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().primaryWhite,
                             ),

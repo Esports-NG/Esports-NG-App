@@ -260,9 +260,8 @@ class PlayerRepository extends GetxController {
                 child: CustomText(
                   title:
                       playerProfileImage == null ? 'Click to upload' : 'Cancel',
-                  weight: FontWeight.w400,
                   size: 15,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   color: AppColor().primaryColor,
                   underline: TextDecoration.underline,
                 ),
@@ -272,7 +271,7 @@ class PlayerRepository extends GetxController {
                 title: 'Max file size: 4MB',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.014,
               ),
             ],

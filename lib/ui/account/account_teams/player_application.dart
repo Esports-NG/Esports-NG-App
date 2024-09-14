@@ -32,7 +32,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
           title: "${widget.application.applicant?.userName}'s Application",
           color: AppColor().primaryWhite,
           size: 20,
-          fontFamily: 'GilroyMedium',
+          fontFamily: 'InterMedium',
         ),
       ),
       body: SingleChildScrollView(
@@ -46,7 +46,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                 title: "Role",
                 color: AppColor().primaryWhite,
                 size: 18,
-                fontFamily: "GilroyMedium",
+                fontFamily: "InterMedium",
               ),
               Gap(Get.height * 0.005),
               CustomText(
@@ -58,7 +58,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                 title: "Application Reason",
                 color: AppColor().primaryWhite,
                 size: 18,
-                fontFamily: "GilroyMedium",
+                fontFamily: "InterMedium",
               ),
               Gap(Get.height * 0.005),
               CustomText(
@@ -70,7 +70,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                 title: "Selected Games",
                 color: AppColor().primaryWhite,
                 size: 18,
-                fontFamily: "GilroyMedium",
+                fontFamily: "InterMedium",
               ),
               Gap(Get.height * 0.01),
               SizedBox(
@@ -119,7 +119,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                               : CustomText(
                                   title: "Accept",
                                   color: AppColor().primaryDark,
-                                  weight: FontWeight.w600,
+                                  fontFamily: "InterSemiBold",
                                 )),
                     ),
                   )),
@@ -152,7 +152,7 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                               : CustomText(
                                   title: "Reject",
                                   color: AppColor().primaryWhite,
-                                  weight: FontWeight.w600,
+                                  fontFamily: "InterSemiBold",
                                 )),
                     ),
                   ))

@@ -70,7 +70,7 @@ class _CommunityPageState extends State<CommunityPage> {
         centerTitle: true,
         title: CustomText(
           title: 'Community',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -324,7 +324,7 @@ class _CommunityPageState extends State<CommunityPage> {
                         CustomText(
                           title: "Leaderboard",
                           color: AppColor().primaryWhite,
-                          weight: FontWeight.w600,
+                          fontFamily: "InterSemiBold",
                           size: 16,
                         ),
                         Gap(Get.height * 0.02),

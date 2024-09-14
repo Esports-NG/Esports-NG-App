@@ -1,5 +1,6 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/auth/activate_account.dart';
+import 'package:e_sport/ui/auth/forgot_password.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -76,7 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     title: 'Hello again',
                     color: AppColor().primaryWhite,
                     textAlign: TextAlign.center,
-                    size: Get.height * 0.035,
+                    size: 32,
+                    fontFamily: "InterSemiBold",
                   ),
                   Gap(Get.height * 0.01),
                   Image.asset(
@@ -84,11 +86,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
+              const Gap(5),
               CustomText(
                 title: "Welcome back, you've been missed",
                 color: AppColor().primaryWhite.withOpacity(0.8),
                 textAlign: TextAlign.center,
-                size: Get.height * 0.016,
+                fontFamily: "Inter",
+                size: 14,
               ),
               Gap(Get.height * 0.05),
               CustomText(
@@ -155,12 +159,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Gap(Get.height * 0.03),
-              CustomText(
-                title: 'Forgot password?',
-                color: AppColor().primaryColor,
-                textAlign: TextAlign.center,
-                size: Get.height * 0.018,
-                underline: TextDecoration.underline,
+              GestureDetector(
+                onTap: () => Get.to(() => const ForgotPassword()),
+                child: CustomText(
+                  title: 'Forgot password?',
+                  color: AppColor().primaryColor,
+                  textAlign: TextAlign.center,
+                  size: Get.height * 0.018,
+                  underline: TextDecoration.underline,
+                ),
               ),
               Gap(Get.height * 0.05),
               Obx(() {
@@ -188,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: CustomText(
                             title: 'Log in',
                             color: AppColor().primaryWhite,
-                            weight: FontWeight.w600,
+                            fontFamily: "InterSemiBold",
                             size: Get.height * 0.018,
                           )),
                   ),
@@ -200,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   text: "Can't login?",
                   style: TextStyle(
                     color: AppColor().primaryWhite,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     fontSize: Get.height * 0.018,
                   ),
                   children: <TextSpan>[
@@ -222,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   text: "Don’t have an account?",
                   style: TextStyle(
                     color: AppColor().primaryWhite,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     fontSize: Get.height * 0.018,
                   ),
                   children: <TextSpan>[

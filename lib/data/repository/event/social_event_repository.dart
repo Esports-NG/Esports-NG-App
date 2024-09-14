@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
@@ -40,6 +41,8 @@ class SocialEventRepository extends GetxController {
   final TextEditingController eventDateController = TextEditingController();
   final TextEditingController partnersController = TextEditingController();
   final TextEditingController eventHashtagController = TextEditingController();
+
+  Rx<GamePlayed?> gameValue = Rx(null);
 
   Rx<DateTime?> date = Rx(null);
 
@@ -135,9 +138,8 @@ class SocialEventRepository extends GetxController {
                 onTap: onTap,
                 child: CustomText(
                   title: eventCoverImage == null ? 'Click to upload' : 'Cancel',
-                  weight: FontWeight.w400,
                   size: 15,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   color: AppColor().primaryColor,
                   underline: TextDecoration.underline,
                 ),
@@ -147,7 +149,7 @@ class SocialEventRepository extends GetxController {
                 title: 'Max file size: 4MB',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.014,
               ),
             ],

@@ -85,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
         activeColorPrimary: AppColor().primaryColor,
         inactiveColorPrimary: AppColor().lightItemsColor,
         textStyle: TextStyle(
-          fontFamily: 'GilroyMedium',
+          fontFamily: 'InterMedium',
           fontWeight: FontWeight.normal,
           fontSize: Get.height * 0.01,
         ),
@@ -96,7 +96,7 @@ class _DashboardState extends State<Dashboard> {
         activeColorPrimary: AppColor().primaryColor,
         inactiveColorPrimary: AppColor().lightItemsColor,
         textStyle: TextStyle(
-          fontFamily: 'GilroyMedium',
+          fontFamily: 'InterMedium',
           fontWeight: FontWeight.normal,
           fontSize: Get.height * 0.01,
         ),
@@ -107,7 +107,7 @@ class _DashboardState extends State<Dashboard> {
         activeColorPrimary: AppColor().primaryColor,
         inactiveColorPrimary: AppColor().lightItemsColor,
         textStyle: TextStyle(
-          fontFamily: 'GilroyMedium',
+          fontFamily: 'InterMedium',
           fontWeight: FontWeight.normal,
           fontSize: Get.height * 0.01,
         ),
@@ -122,7 +122,7 @@ class _DashboardState extends State<Dashboard> {
         activeColorPrimary: AppColor().primaryColor,
         inactiveColorPrimary: AppColor().lightItemsColor,
         textStyle: TextStyle(
-          fontFamily: 'GilroyMedium',
+          fontFamily: 'InterMedium',
           fontWeight: FontWeight.normal,
           fontSize: Get.height * 0.01,
         ),
@@ -154,7 +154,7 @@ class _DashboardState extends State<Dashboard> {
                   child: CustomText(
                     title: 'Select what you would like\nto create',
                     size: Get.height * 0.018,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     textAlign: TextAlign.center,
                     color: AppColor().primaryWhite,
                   ),

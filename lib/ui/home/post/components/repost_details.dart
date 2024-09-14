@@ -14,7 +14,6 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/ui/widget/small_circle.dart';
-
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +73,7 @@ class _RepostDetailsState extends State<RepostDetails> {
         centerTitle: true,
         title: CustomText(
           title: 'Posts',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -137,7 +136,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                               title: widget.item.repost!.author!.fullName!
                                   .toCapitalCase(),
                               size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().lightItemsColor,
                             ),
@@ -147,7 +146,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                             CustomText(
                               title: timeAgo(widget.item.repost!.createdAt!),
                               size: Get.height * 0.015,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               textAlign: TextAlign.start,
                               color: AppColor().lightItemsColor,
                             ),
@@ -187,15 +186,14 @@ class _RepostDetailsState extends State<RepostDetails> {
                           ? widget.item.body
                           : widget.item.repost!.body,
                       size: Get.height * 0.015,
-                      fontFamily: 'GilroyBold',
-                      weight: FontWeight.w500,
+                      fontFamily: 'InterBold',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
                     Gap(Get.height * 0.015),
                     GestureDetector(
-                      onTap: () => Helpers().showImagePopup(context,
-                                  "${widget.item.repost!.image}"),
+                      onTap: () => Helpers().showImagePopup(
+                          context, "${widget.item.repost!.image}"),
                       child: Stack(
                         children: [
                           widget.item.repost == null
@@ -217,18 +215,21 @@ class _RepostDetailsState extends State<RepostDetails> {
                                           height: Get.height * 0.25,
                                           width: double.infinity,
                                           progressIndicatorBuilder:
-                                              (context, url, progress) => Center(
+                                              (context, url, progress) =>
+                                                  Center(
                                             child: SizedBox(
                                               height: Get.height * 0.05,
                                               width: Get.height * 0.05,
                                               child: CircularProgressIndicator(
-                                                  color: AppColor().primaryWhite,
+                                                  color:
+                                                      AppColor().primaryWhite,
                                                   value: progress.progress),
                                             ),
                                           ),
                                           errorWidget: (context, url, error) =>
                                               Icon(Icons.error,
-                                                  color: AppColor().primaryWhite),
+                                                  color:
+                                                      AppColor().primaryWhite),
                                           imageUrl: widget.item.image!,
                                           imageBuilder:
                                               (context, imageProvider) =>
@@ -262,18 +263,21 @@ class _RepostDetailsState extends State<RepostDetails> {
                                           height: Get.height * 0.25,
                                           width: double.infinity,
                                           progressIndicatorBuilder:
-                                              (context, url, progress) => Center(
+                                              (context, url, progress) =>
+                                                  Center(
                                             child: SizedBox(
                                               height: Get.height * 0.05,
                                               width: Get.height * 0.05,
                                               child: CircularProgressIndicator(
-                                                  color: AppColor().primaryWhite,
+                                                  color:
+                                                      AppColor().primaryWhite,
                                                   value: progress.progress),
                                             ),
                                           ),
                                           errorWidget: (context, url, error) =>
                                               Icon(Icons.error,
-                                                  color: AppColor().primaryWhite),
+                                                  color:
+                                                      AppColor().primaryWhite),
                                           imageUrl: widget.item.repost!.image!,
                                           imageBuilder:
                                               (context, imageProvider) =>
@@ -282,8 +286,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                               image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      widget.item.repost!.image!),
+                                                  image: NetworkImage(widget
+                                                      .item.repost!.image!),
                                                   fit: BoxFit.cover),
                                             ),
                                           ),
@@ -327,7 +331,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                           color: AppColor().primaryWhite,
                                           textAlign: TextAlign.center,
                                           size: Get.height * 0.014,
-                                          fontFamily: 'GilroyBold',
+                                          fontFamily: 'InterBold',
                                         ),
                                       ),
                                     );
@@ -353,7 +357,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                         .item.repost!.createdAt!
                                         .toLocal()),
                                 size: Get.height * 0.014,
-                                fontFamily: 'GilroyMedium',
+                                fontFamily: 'InterMedium',
                                 textAlign: TextAlign.start,
                                 color: AppColor().primaryWhite,
                               ),
@@ -368,7 +372,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                         .item.repost!.createdAt!
                                         .toLocal()),
                                 size: Get.height * 0.014,
-                                fontFamily: 'GilroyMedium',
+                                fontFamily: 'InterMedium',
                                 textAlign: TextAlign.start,
                                 color: AppColor().primaryWhite,
                               ),
@@ -385,7 +389,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                         : widget.item.repost!.viewers!.length
                                             .toString(),
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyBold',
+                                    fontFamily: 'InterBold',
                                     textAlign: TextAlign.start,
                                     color: AppColor().primaryWhite,
                                   ),
@@ -393,7 +397,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                   CustomText(
                                     title: 'Views',
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyRegular',
+                                    fontFamily: 'Inter',
                                     textAlign: TextAlign.start,
                                     color: AppColor().primaryWhite,
                                   ),
@@ -408,7 +412,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                         : widget.item.repost!.comment!.length
                                             .toString(),
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyBold',
+                                    fontFamily: 'InterBold',
                                     textAlign: TextAlign.start,
                                     color: AppColor().primaryWhite,
                                   ),
@@ -416,7 +420,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                   CustomText(
                                     title: 'Repost',
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyRegular',
+                                    fontFamily: 'Inter',
                                     textAlign: TextAlign.start,
                                     color: AppColor().primaryWhite,
                                   ),
@@ -431,7 +435,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                         : widget.item.repost!.likeCount
                                             .toString(),
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyBold',
+                                    fontFamily: 'InterBold',
                                     textAlign: TextAlign.start,
                                     color: AppColor().primaryWhite,
                                   ),
@@ -439,7 +443,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                   CustomText(
                                     title: 'Likes',
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyRegular',
+                                    fontFamily: 'Inter',
                                     textAlign: TextAlign.start,
                                     color: AppColor().primaryWhite,
                                   ),
@@ -515,21 +519,21 @@ class _RepostDetailsState extends State<RepostDetails> {
                                   result = CustomText(
                                       title: '0',
                                       size: Get.height * 0.014,
-                                      fontFamily: 'GilroyBold',
+                                      fontFamily: 'InterBold',
                                       textAlign: TextAlign.start,
                                       color: color);
                                 } else if (count == 1) {
                                   result = CustomText(
                                       title: '$text like',
                                       size: Get.height * 0.014,
-                                      fontFamily: 'GilroyBold',
+                                      fontFamily: 'InterBold',
                                       textAlign: TextAlign.start,
                                       color: color);
                                 } else {
                                   result = CustomText(
                                       title: '$text likes',
                                       size: Get.height * 0.014,
-                                      fontFamily: 'GilroyBold',
+                                      fontFamily: 'InterBold',
                                       textAlign: TextAlign.start,
                                       color: color);
                                 }
@@ -615,8 +619,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                 CustomText(
                                                   title: item.title,
                                                   color: AppColor().greyTwo,
-                                                  weight: FontWeight.w400,
-                                                  fontFamily: 'GilroyMedium',
+                                                  fontFamily: 'InterMedium',
                                                   size: Get.height * 0.020,
                                                 ),
                                               ],
@@ -645,7 +648,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                   : widget.item.repost!.comment!.length
                                       .toString(),
                               size: Get.height * 0.014,
-                              fontFamily: 'GilroyBold',
+                              fontFamily: 'InterBold',
                               textAlign: TextAlign.start,
                               color: AppColor().primaryWhite,
                             ),
@@ -671,7 +674,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                     CustomText(
                       title: 'Comments',
                       size: Get.height * 0.018,
-                      fontFamily: 'GilroyBold',
+                      fontFamily: 'InterBold',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -683,7 +686,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                     child: CustomText(
                                       title: 'No comment',
                                       size: Get.height * 0.016,
-                                      fontFamily: 'GilroyMedium',
+                                      fontFamily: 'InterMedium',
                                       textAlign: TextAlign.start,
                                       color: AppColor().lightItemsColor,
                                     ),
@@ -720,8 +723,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                             //     title: item.name![0]
                                             //         .toCapitalCase(),
                                             //     color: AppColor().greyTwo,
-                                            //     weight: FontWeight.w600,
-                                            //     fontFamily: 'GilroyMedium',
+                                            //     fontFamily: "InterSemiBold",
+                                            //     fontFamily: 'InterMedium',
                                             //     size: Get.height * 0.025,
                                             //   ),
                                             // ),
@@ -733,8 +736,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                 // CustomText(
                                                 //   title: item.name,
                                                 //   color: AppColor().greySix,
-                                                //   weight: FontWeight.w400,
-                                                //   fontFamily: 'GilroyMedium',
+                                                //
+                                                //   fontFamily: 'InterMedium',
                                                 //   size: Get.height * 0.015,
                                                 // ),
                                                 Gap(Get.height * 0.01),
@@ -742,8 +745,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                   title: item.body!,
                                                   color:
                                                       AppColor().primaryWhite,
-                                                  weight: FontWeight.w400,
-                                                  fontFamily: 'GilroyBold',
+                                                  fontFamily: 'InterBold',
                                                   size: Get.height * 0.015,
                                                 ),
                                                 Gap(Get.height * 0.01),
@@ -757,9 +759,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                                 : '${item.likes}Like',
                                                         color:
                                                             AppColor().greySix,
-                                                        weight: FontWeight.w400,
                                                         fontFamily:
-                                                            'GilroyMedium',
+                                                            'InterMedium',
                                                         size:
                                                             Get.height * 0.01),
                                                     Gap(Get.height * 0.01),
@@ -767,9 +768,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                         title: 'Reply',
                                                         color:
                                                             AppColor().greySix,
-                                                        weight: FontWeight.w400,
                                                         fontFamily:
-                                                            'GilroyMedium',
+                                                            'InterMedium',
                                                         size:
                                                             Get.height * 0.01),
                                                     Gap(Get.height * 0.01),
@@ -777,9 +777,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                         title: 'Repost',
                                                         color:
                                                             AppColor().greySix,
-                                                        weight: FontWeight.w400,
                                                         fontFamily:
-                                                            'GilroyMedium',
+                                                            'InterMedium',
                                                         size:
                                                             Get.height * 0.01),
                                                   ],
@@ -823,7 +822,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                     child: CustomText(
                                       title: 'No comment',
                                       size: Get.height * 0.016,
-                                      fontFamily: 'GilroyMedium',
+                                      fontFamily: 'InterMedium',
                                       textAlign: TextAlign.start,
                                       color: AppColor().lightItemsColor,
                                     ),
@@ -862,8 +861,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                             //     title: item.name![0]
                                             //         .toCapitalCase(),
                                             //     color: AppColor().greyTwo,
-                                            //     weight: FontWeight.w600,
-                                            //     fontFamily: 'GilroyMedium',
+                                            //     fontFamily: "InterSemiBold",
+                                            //     fontFamily: 'InterMedium',
                                             //     size: Get.height * 0.025,
                                             //   ),
                                             // ),
@@ -875,8 +874,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                 // CustomText(
                                                 //   title: item.name,
                                                 //   color: AppColor().greySix,
-                                                //   weight: FontWeight.w400,
-                                                //   fontFamily: 'GilroyMedium',
+                                                //
+                                                //   fontFamily: 'InterMedium',
                                                 //   size: Get.height * 0.015,
                                                 // ),
                                                 Gap(Get.height * 0.01),
@@ -884,8 +883,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                   title: item.body!,
                                                   color:
                                                       AppColor().primaryWhite,
-                                                  weight: FontWeight.w400,
-                                                  fontFamily: 'GilroyBold',
+                                                  fontFamily: 'InterBold',
                                                   size: Get.height * 0.015,
                                                 ),
                                                 Gap(Get.height * 0.01),
@@ -899,9 +897,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                                 : '${item.likes}Like',
                                                         color:
                                                             AppColor().greySix,
-                                                        weight: FontWeight.w400,
                                                         fontFamily:
-                                                            'GilroyMedium',
+                                                            'InterMedium',
                                                         size:
                                                             Get.height * 0.01),
                                                     Gap(Get.height * 0.01),
@@ -909,9 +906,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                         title: 'Reply',
                                                         color:
                                                             AppColor().greySix,
-                                                        weight: FontWeight.w400,
                                                         fontFamily:
-                                                            'GilroyMedium',
+                                                            'InterMedium',
                                                         size:
                                                             Get.height * 0.01),
                                                     Gap(Get.height * 0.01),
@@ -919,9 +915,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                                         title: 'Repost',
                                                         color:
                                                             AppColor().greySix,
-                                                        weight: FontWeight.w400,
                                                         fontFamily:
-                                                            'GilroyMedium',
+                                                            'InterMedium',
                                                         size:
                                                             Get.height * 0.01),
                                                   ],
@@ -998,14 +993,12 @@ class _RepostDetailsState extends State<RepostDetails> {
                     labelStyle: TextStyle(
                       color: AppColor().primaryWhite,
                       fontSize: 13,
-                      fontFamily: 'GilroyRegular',
-                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Inter',
                     ),
                     hintStyle: TextStyle(
                       color: AppColor().primaryWhite,
                       fontSize: 13,
-                      fontFamily: 'GilroyRegular',
-                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Inter',
                     ),
                   ),
                 )),
@@ -1013,8 +1006,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                 CustomText(
                   title: '@',
                   size: 23,
-                  fontFamily: 'GilroyRegular',
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   textAlign: TextAlign.start,
                   color: AppColor().primaryWhite,
                 ),
@@ -1053,7 +1045,7 @@ class _RepostDetailsState extends State<RepostDetails> {
               CustomText(
                 title: 'Edit Post',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -1095,7 +1087,7 @@ class _RepostDetailsState extends State<RepostDetails> {
               CustomText(
                 title: 'Southpark #2234',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 textAlign: TextAlign.start,
                 color: AppColor().lightItemsColor,
               ),
@@ -1108,7 +1100,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                     child: CustomText(
                       title: comment,
                       size: Get.height * 0.016,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -1133,7 +1125,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                   CustomText(
                     title: like,
                     size: Get.height * 0.012,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     textAlign: TextAlign.start,
                     color: AppColor().lightItemsColor,
                   ),
@@ -1141,7 +1133,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                   CustomText(
                     title: 'Reply',
                     size: Get.height * 0.012,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     textAlign: TextAlign.start,
                     color: AppColor().lightItemsColor,
                   ),
@@ -1149,7 +1141,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                   CustomText(
                     title: 'Repost',
                     size: Get.height * 0.012,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     textAlign: TextAlign.start,
                     color: AppColor().lightItemsColor,
                   ),

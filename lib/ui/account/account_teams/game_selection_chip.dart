@@ -193,7 +193,7 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             CustomText(
-                                              fontFamily: "GilroyMedium",
+                                              fontFamily: "InterMedium",
                                               title: element.abbrev,
                                             ),
                                             const Gap(5),

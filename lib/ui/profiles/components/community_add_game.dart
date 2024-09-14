@@ -29,7 +29,7 @@ class _CommunityAddGameState extends State<CommunityAddGame> {
         elevation: 0,
         title: CustomText(
           title: 'Add Game To Community',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -59,7 +59,7 @@ class _CommunityAddGameState extends State<CommunityAddGame> {
                 title: 'Game to be covered *',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
@@ -96,7 +96,7 @@ class _CommunityAddGameState extends State<CommunityAddGame> {
                       : Center(
                           child: CustomText(
                               title: "Add Game",
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                               color: AppColor().primaryWhite),
                         ),
                 ),

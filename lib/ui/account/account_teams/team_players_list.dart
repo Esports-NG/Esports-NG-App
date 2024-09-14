@@ -81,13 +81,13 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                 CustomText(
                   title: widget.item.name,
                   color: AppColor().primaryWhite,
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   size: 16,
                 ),
                 CustomText(
                   title: "Players",
                   color: AppColor().primaryWhite.withOpacity(0.5),
-                  // weight: FontWeight.w600,
+                  // fontFamily: "InterSemiBold",
                   size: 14,
                 )
               ],
@@ -163,7 +163,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                                         CustomText(
                                           title: e.game!.name!,
                                           color: AppColor().primaryWhite,
-                                          weight: FontWeight.w600,
+                                          fontFamily: "InterSemiBold",
                                           size: 16,
                                         )
                                       ],
@@ -182,7 +182,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                                           color: AppColor()
                                               .primaryWhite
                                               .withOpacity(0.8),
-                                          fontFamily: "GilroyMedium"),
+                                          fontFamily: "InterMedium"),
                                     ),
                                     const Spacer(),
                                     Expanded(
@@ -192,7 +192,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                                           color: AppColor()
                                               .primaryWhite
                                               .withOpacity(0.8),
-                                          fontFamily: "GilroyMedium"),
+                                          fontFamily: "InterMedium"),
                                     ),
                                     const Spacer(),
                                     Expanded(
@@ -202,7 +202,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                                           color: AppColor()
                                               .primaryWhite
                                               .withOpacity(0.8),
-                                          fontFamily: "GilroyMedium"),
+                                          fontFamily: "InterMedium"),
                                     ),
                                     const Spacer(),
                                     Expanded(
@@ -212,7 +212,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                                           color: AppColor()
                                               .primaryWhite
                                               .withOpacity(0.8),
-                                          fontFamily: "GilroyMedium"),
+                                          fontFamily: "InterMedium"),
                                     )
                                   ],
                                 ),

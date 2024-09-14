@@ -24,10 +24,10 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
+
 import '../edit_post.dart';
-import 'repost_details.dart';
-import 'repost_item.dart';
 import './comment_tile.dart';
+import 'repost_item.dart';
 
 class PostDetails extends StatefulWidget {
   final PostModel item;
@@ -38,7 +38,6 @@ class PostDetails extends StatefulWidget {
 }
 
 class _PostDetailsState extends State<PostDetails> {
-
   String timeAgo(DateTime itemDate) {
     final now = DateTime.now();
     final difference = now.difference(itemDate);
@@ -59,7 +58,6 @@ class _PostDetailsState extends State<PostDetails> {
       return '${(difference.inDays / 365).floor()} years ago';
     }
   }
-
 
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
@@ -123,7 +121,7 @@ class _PostDetailsState extends State<PostDetails> {
         centerTitle: true,
         title: CustomText(
           title: 'Post',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -243,15 +241,27 @@ class _PostDetailsState extends State<PostDetails> {
                                                 )
                                               : InkWell(
                                                   onTap: () {
-                                      widget.item.team != null
-                                      ? Get.to(() => AccountTeamsDetail(
-                                          item: widget.item.team!))
-                                          : widget.item.community != null
-                                      ? Get.to(() => AccountCommunityDetail(
-                                          item: widget.item.community!))
-                                      : Get.to(() => UserDetails(
-                                          id: widget.item.author!.id!));
-                                    },
+                                                    widget.item.team != null
+                                                        ? Get.to(() =>
+                                                            AccountTeamsDetail(
+                                                                item: widget
+                                                                    .item
+                                                                    .team!))
+                                                        : widget.item
+                                                                    .community !=
+                                                                null
+                                                            ? Get.to(() =>
+                                                                AccountCommunityDetail(
+                                                                    item: widget
+                                                                        .item
+                                                                        .community!))
+                                                            : Get.to(() =>
+                                                                UserDetails(
+                                                                    id: widget
+                                                                        .item
+                                                                        .author!
+                                                                        .id!));
+                                                  },
                                                   child: CachedNetworkImage(
                                                     height: Get.height * 0.05,
                                                     width: Get.height * 0.05,
@@ -272,13 +282,25 @@ class _PostDetailsState extends State<PostDetails> {
                                                         shape: BoxShape.circle,
                                                         image: DecorationImage(
                                                             image: NetworkImage(
-                                                                widget.item.community != null
-                                          ? widget.item.community!.logo!
-                                          : widget.item.team != null
-                                              ? widget
-                                                  .item.team!.profilePicture!
-                                              : widget.item.author!.profile!
-                                                  .profilePicture!,),
+                                                              widget.item.community !=
+                                                                      null
+                                                                  ? widget
+                                                                      .item
+                                                                      .community!
+                                                                      .logo!
+                                                                  : widget.item
+                                                                              .team !=
+                                                                          null
+                                                                      ? widget
+                                                                          .item
+                                                                          .team!
+                                                                          .profilePicture!
+                                                                      : widget
+                                                                          .item
+                                                                          .author!
+                                                                          .profile!
+                                                                          .profilePicture!,
+                                                            ),
                                                             fit: BoxFit.cover),
                                                       ),
                                                     ),
@@ -293,7 +315,7 @@ class _PostDetailsState extends State<PostDetails> {
                                                     : widget
                                                         .item.author!.userName!,
                                             size: Get.height * 0.015,
-                                            fontFamily: 'GilroyMedium',
+                                            fontFamily: 'InterMedium',
                                             textAlign: TextAlign.start,
                                             color: AppColor().lightItemsColor,
                                           ),
@@ -304,7 +326,7 @@ class _PostDetailsState extends State<PostDetails> {
                                             title:
                                                 timeAgo(widget.item.createdAt!),
                                             size: Get.height * 0.015,
-                                            fontFamily: 'GilroyMedium',
+                                            fontFamily: 'InterMedium',
                                             textAlign: TextAlign.start,
                                             color: AppColor().lightItemsColor,
                                           ),
@@ -370,7 +392,7 @@ class _PostDetailsState extends State<PostDetails> {
                                                                   .w400,
                                                               size: 12,
                                                               fontFamily:
-                                                                  'GilroyMedium',
+                                                                  'InterMedium',
                                                               color: AppColor()
                                                                   .primaryWhite),
                                                         ]),
@@ -394,8 +416,7 @@ class _PostDetailsState extends State<PostDetails> {
                               CustomText(
                                 title: _postDetails!.body,
                                 size: Get.height * 0.015,
-                                fontFamily: 'GilroyBold',
-                                weight: FontWeight.w500,
+                                fontFamily: 'InterBold',
                                 textAlign: TextAlign.start,
                                 color: AppColor().primaryWhite,
                               ),
@@ -404,8 +425,8 @@ class _PostDetailsState extends State<PostDetails> {
                                 ? InkWell(
                                     onTap: () {
                                       debugPrint('okay');
-                                      Get.to(() =>
-                                          PostDetails2(item: _postDetails!.repost!));
+                                      Get.to(() => PostDetails2(
+                                          item: _postDetails!.repost!));
                                     },
                                     child: RepostItem(item: _postDetails!))
                                 : GestureDetector(
@@ -497,8 +518,7 @@ class _PostDetailsState extends State<PostDetails> {
                                                             TextAlign.center,
                                                         size:
                                                             Get.height * 0.014,
-                                                        fontFamily:
-                                                            'GilroyBold',
+                                                        fontFamily: 'InterBold',
                                                       ),
                                                     ),
                                                   );
@@ -522,7 +542,7 @@ class _PostDetailsState extends State<PostDetails> {
                                         title: DateFormat.yMMMd().format(
                                             _postDetails!.createdAt!.toLocal()),
                                         size: Get.height * 0.014,
-                                        fontFamily: 'GilroyMedium',
+                                        fontFamily: 'InterMedium',
                                         textAlign: TextAlign.start,
                                         color: AppColor().primaryWhite,
                                       ),
@@ -533,7 +553,7 @@ class _PostDetailsState extends State<PostDetails> {
                                         title: DateFormat.jm().format(
                                             _postDetails!.createdAt!.toLocal()),
                                         size: Get.height * 0.014,
-                                        fontFamily: 'GilroyMedium',
+                                        fontFamily: 'InterMedium',
                                         textAlign: TextAlign.start,
                                         color: AppColor().primaryWhite,
                                       ),
@@ -549,7 +569,7 @@ class _PostDetailsState extends State<PostDetails> {
                                             title: _postDetails!.viewCount
                                                 .toString(),
                                             size: Get.height * 0.014,
-                                            fontFamily: 'GilroyBold',
+                                            fontFamily: 'InterBold',
                                             textAlign: TextAlign.start,
                                             color: AppColor().primaryWhite,
                                           ),
@@ -557,7 +577,7 @@ class _PostDetailsState extends State<PostDetails> {
                                           CustomText(
                                             title: 'Views',
                                             size: Get.height * 0.014,
-                                            fontFamily: 'GilroyRegular',
+                                            fontFamily: 'Inter',
                                             textAlign: TextAlign.start,
                                             color: AppColor().primaryWhite,
                                           ),
@@ -570,7 +590,7 @@ class _PostDetailsState extends State<PostDetails> {
                                             title: _postDetails!.repostCount
                                                 .toString(),
                                             size: Get.height * 0.014,
-                                            fontFamily: 'GilroyBold',
+                                            fontFamily: 'InterBold',
                                             textAlign: TextAlign.start,
                                             color: AppColor().primaryWhite,
                                           ),
@@ -578,7 +598,7 @@ class _PostDetailsState extends State<PostDetails> {
                                           CustomText(
                                             title: 'Repost',
                                             size: Get.height * 0.014,
-                                            fontFamily: 'GilroyRegular',
+                                            fontFamily: 'Inter',
                                             textAlign: TextAlign.start,
                                             color: AppColor().primaryWhite,
                                           ),
@@ -591,7 +611,7 @@ class _PostDetailsState extends State<PostDetails> {
                                             title: _postDetails!.likeCount
                                                 .toString(),
                                             size: Get.height * 0.014,
-                                            fontFamily: 'GilroyBold',
+                                            fontFamily: 'InterBold',
                                             textAlign: TextAlign.start,
                                             color: AppColor().primaryWhite,
                                           ),
@@ -599,7 +619,7 @@ class _PostDetailsState extends State<PostDetails> {
                                           CustomText(
                                             title: 'Likes',
                                             size: Get.height * 0.014,
-                                            fontFamily: 'GilroyRegular',
+                                            fontFamily: 'Inter',
                                             textAlign: TextAlign.start,
                                             color: AppColor().primaryWhite,
                                           ),
@@ -755,7 +775,7 @@ class _PostDetailsState extends State<PostDetails> {
                                                             weight:
                                                                 FontWeight.w400,
                                                             fontFamily:
-                                                                'GilroyMedium',
+                                                                'InterMedium',
                                                             size: Get.height *
                                                                 0.020,
                                                           ),
@@ -784,7 +804,7 @@ class _PostDetailsState extends State<PostDetails> {
                                       title: _postDetails!.comment!.length
                                           .toString(),
                                       size: Get.height * 0.014,
-                                      fontFamily: 'GilroyBold',
+                                      fontFamily: 'InterBold',
                                       textAlign: TextAlign.start,
                                       color: AppColor().primaryWhite,
                                     ),
@@ -810,7 +830,7 @@ class _PostDetailsState extends State<PostDetails> {
                             CustomText(
                               title: 'Comments',
                               size: Get.height * 0.018,
-                              fontFamily: 'GilroyBold',
+                              fontFamily: 'InterBold',
                               textAlign: TextAlign.start,
                               color: AppColor().primaryWhite,
                             ),
@@ -820,7 +840,7 @@ class _PostDetailsState extends State<PostDetails> {
                                     child: CustomText(
                                       title: 'No comment',
                                       size: Get.height * 0.016,
-                                      fontFamily: 'GilroyMedium',
+                                      fontFamily: 'InterMedium',
                                       textAlign: TextAlign.start,
                                       color: AppColor().lightItemsColor,
                                     ),
@@ -867,14 +887,12 @@ class _PostDetailsState extends State<PostDetails> {
                             labelStyle: TextStyle(
                               color: AppColor().primaryWhite,
                               fontSize: 13,
-                              fontFamily: 'GilroyRegular',
-                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Inter',
                             ),
                             hintStyle: TextStyle(
                               color: AppColor().primaryWhite,
                               fontSize: 13,
-                              fontFamily: 'GilroyRegular',
-                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Inter',
                             ),
                           ),
                         )),
@@ -899,8 +917,7 @@ class _PostDetailsState extends State<PostDetails> {
                         CustomText(
                           title: '@',
                           size: 23,
-                          fontFamily: 'GilroyRegular',
-                          weight: FontWeight.w600,
+                          fontFamily: "InterSemiBold",
                           textAlign: TextAlign.start,
                           color: AppColor().primaryWhite,
                         ),
@@ -939,7 +956,7 @@ class _PostDetailsState extends State<PostDetails> {
               CustomText(
                 title: 'Edit Post',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -981,7 +998,7 @@ class _PostDetailsState extends State<PostDetails> {
               CustomText(
                 title: 'Southpark #2234',
                 size: Get.height * 0.014,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 textAlign: TextAlign.start,
                 color: AppColor().lightItemsColor,
               ),
@@ -994,7 +1011,7 @@ class _PostDetailsState extends State<PostDetails> {
                     child: CustomText(
                       title: comment,
                       size: Get.height * 0.016,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -1019,7 +1036,7 @@ class _PostDetailsState extends State<PostDetails> {
                   CustomText(
                     title: like,
                     size: Get.height * 0.012,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     textAlign: TextAlign.start,
                     color: AppColor().lightItemsColor,
                   ),
@@ -1027,7 +1044,7 @@ class _PostDetailsState extends State<PostDetails> {
                   CustomText(
                     title: 'Reply',
                     size: Get.height * 0.012,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     textAlign: TextAlign.start,
                     color: AppColor().lightItemsColor,
                   ),
@@ -1035,7 +1052,7 @@ class _PostDetailsState extends State<PostDetails> {
                   CustomText(
                     title: 'Repost',
                     size: Get.height * 0.012,
-                    fontFamily: 'GilroyRegular',
+                    fontFamily: 'Inter',
                     textAlign: TextAlign.start,
                     color: AppColor().lightItemsColor,
                   ),

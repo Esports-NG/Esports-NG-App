@@ -32,7 +32,7 @@ class TransactionHistoryItem extends StatelessWidget {
               CustomText(
                 title: item.title,
                 size: 12,
-                fontFamily: 'GilroySemiBold',
+                fontFamily: 'InterSemiBold',
                 textAlign: TextAlign.start,
                 color: AppColor().greyTwo,
               ),
@@ -40,7 +40,7 @@ class TransactionHistoryItem extends StatelessWidget {
               CustomText(
                 title: item.date,
                 size: 12,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 textAlign: TextAlign.start,
                 color: AppColor().greySix,
               ),
@@ -49,7 +49,7 @@ class TransactionHistoryItem extends StatelessWidget {
           CustomText(
             title: 'N${display(item.price)}',
             size: 14,
-            fontFamily: 'GilroySemiBold',
+            fontFamily: 'InterSemiBold',
             textAlign: TextAlign.start,
             color: item.type == 'in'
                 ? AppColor().transactGreen

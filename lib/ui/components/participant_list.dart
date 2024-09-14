@@ -78,7 +78,7 @@ class _ParticipantListState extends State<ParticipantList> {
                   CustomText(
                     title: widget.event.name,
                     color: AppColor().primaryWhite,
-                    weight: FontWeight.w600,
+                    fontFamily: "InterSemiBold",
                     size: 16,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -86,7 +86,7 @@ class _ParticipantListState extends State<ParticipantList> {
                     title:
                         "${_participantList != null ? _participantList!.length : " "} Participants",
                     color: AppColor().primaryWhite.withOpacity(0.5),
-                    // weight: FontWeight.w600,
+                    // fontFamily: "InterSemiBold",
                     size: 14,
                   )
                 ],
@@ -145,7 +145,7 @@ class _ParticipantListState extends State<ParticipantList> {
                           title: _isRegistered ? "Registered" : 'Register Now',
                           color: AppColor().primaryWhite,
                           size: 12,
-                          fontFamily: 'GilroyMedium',
+                          fontFamily: 'InterMedium',
                         )),
                 ),
               ),
@@ -162,7 +162,7 @@ class _ParticipantListState extends State<ParticipantList> {
                 CustomText(
                   title: "Participant List",
                   color: AppColor().secondaryGreenColor,
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   size: 20,
                 ),
                 CustomText(
@@ -188,7 +188,7 @@ class _ParticipantListState extends State<ParticipantList> {
                                     color: AppColor()
                                         .primaryWhite
                                         .withOpacity(0.8),
-                                    fontFamily: "GilroyMedium"),
+                                    fontFamily: "InterMedium"),
                               ),
                               const Spacer(),
                               Expanded(
@@ -198,7 +198,7 @@ class _ParticipantListState extends State<ParticipantList> {
                                     color: AppColor()
                                         .primaryWhite
                                         .withOpacity(0.8),
-                                    fontFamily: "GilroyMedium"),
+                                    fontFamily: "InterMedium"),
                               ),
                               const Spacer(),
                               Expanded(
@@ -209,7 +209,7 @@ class _ParticipantListState extends State<ParticipantList> {
                                     color: AppColor()
                                         .primaryWhite
                                         .withOpacity(0.8),
-                                    fontFamily: "GilroyMedium"),
+                                    fontFamily: "InterMedium"),
                               ),
                               const Spacer(),
                               Expanded(
@@ -219,7 +219,7 @@ class _ParticipantListState extends State<ParticipantList> {
                                     color: AppColor()
                                         .primaryWhite
                                         .withOpacity(0.8),
-                                    fontFamily: "GilroyMedium"),
+                                    fontFamily: "InterMedium"),
                               )
                             ],
                           ),
@@ -259,7 +259,7 @@ class PlayerRow extends StatelessWidget {
           child: CustomText(
             title: (index + 1).toString(),
             color: AppColor().primaryWhite,
-            fontFamily: "GilroyMedium",
+            fontFamily: "InterMedium",
           ),
         ),
         const Spacer(),

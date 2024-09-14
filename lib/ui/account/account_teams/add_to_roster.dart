@@ -36,7 +36,7 @@ class _AddToRosterState extends State<AddToRoster> {
           title: CustomText(
             title: "Add Player to Roster",
             color: AppColor().primaryWhite,
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             size: 20,
           ),
           centerTitle: true,
@@ -84,8 +84,7 @@ class _AddToRosterState extends State<AddToRoster> {
                       child: CustomText(
                         title: rosterValue.game!.name,
                         color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyMedium',
-                        weight: FontWeight.w400,
+                        fontFamily: 'InterMedium',
                         size: 15,
                       ),
                     );
@@ -98,8 +97,7 @@ class _AddToRosterState extends State<AddToRoster> {
                   hint: CustomText(
                     title: "Select Roster",
                     color: AppColor().lightItemsColor,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
+                    fontFamily: 'InterMedium',
                     size: 15,
                   ),
                 ),
@@ -144,8 +142,7 @@ class _AddToRosterState extends State<AddToRoster> {
                       child: CustomText(
                         title: playerValue.userName,
                         color: AppColor().lightItemsColor,
-                        fontFamily: 'GilroyMedium',
-                        weight: FontWeight.w400,
+                        fontFamily: 'InterMedium',
                         size: 15,
                       ),
                     );
@@ -158,8 +155,7 @@ class _AddToRosterState extends State<AddToRoster> {
                   hint: CustomText(
                     title: "Select Player",
                     color: AppColor().lightItemsColor,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
+                    fontFamily: 'InterMedium',
                     size: 15,
                   ),
                 ),
@@ -190,7 +186,7 @@ class _AddToRosterState extends State<AddToRoster> {
                         : CustomText(
                             title: 'Submit',
                             color: AppColor().primaryWhite,
-                            weight: FontWeight.w600,
+                            fontFamily: "InterSemiBold",
                             size: Get.height * 0.018,
                           )),
               ),

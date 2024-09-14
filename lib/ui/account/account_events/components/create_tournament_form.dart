@@ -5,6 +5,8 @@ import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 // import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
+import 'package:e_sport/data/repository/games_repository.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/game_list_dropdown.dart';
@@ -16,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 
 class CreateTournamentForm extends StatefulWidget {
   const CreateTournamentForm({super.key});
@@ -30,6 +33,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
   final tournamentController = Get.put(TournamentRepository());
   final eventController = Get.put(EventRepository());
   final authController = Get.put(AuthRepository());
+  final gameController = Get.put(GamesRepository());
 
   Future pickDate(String title) async {
     final initialDate = DateTime.now();
@@ -106,6 +110,17 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
   }
 
   @override
+  void initState() {
+    tournamentController.gameValue.listen(
+      (p0) async {
+        tournamentController.gameModesController.value =
+            MultiSelectController<int>();
+      },
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Obx(
       () => Form(
@@ -133,10 +148,9 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     child: CustomText(
                       title:
                           'Please note: External software will be required for Bracket Management... You can still create fixtures on the platform',
-                      weight: FontWeight.w500,
                       size: 14,
                       height: 1.5,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),
@@ -147,9 +161,8 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
             Gap(Get.height * 0.02),
             CustomText(
               title: 'Fill the form correctly to create a tournament page',
-              weight: FontWeight.w500,
               size: 16,
-              fontFamily: 'GilroyMedium',
+              fontFamily: 'InterMedium',
               textAlign: TextAlign.start,
               color: AppColor().primaryWhite,
             ),
@@ -158,7 +171,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Organising community *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -200,8 +213,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         color: tournamentController.isCommunities.value == true
                             ? AppColor().primaryBackGroundColor
                             : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyMedium',
-                        weight: FontWeight.w400,
+                        fontFamily: 'InterMedium',
                         size: 15,
                       ),
                     );
@@ -219,8 +231,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     color: tournamentController.isCommunities.value == true
                         ? AppColor().primaryBackGroundColor
                         : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
+                    fontFamily: 'InterMedium',
                     size: 15,
                   ),
                 ),
@@ -231,7 +242,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Tournament name *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -257,7 +268,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Tournament hashtag *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -279,7 +290,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Tournament link for brackets *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -305,35 +316,43 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Game to be played *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
-            GameDropdown(
-                enableFill: tournamentController.isGame.value,
-                gameValue: tournamentController.gameValue,
-                handleTap: () => tournamentController.handleTap('game')),
+            gameController.isLoading.value
+                ? const ButtonLoader()
+                : GameDropdown(
+                    enableFill: tournamentController.isGame.value,
+                    gameValue: tournamentController.gameValue,
+                    handleTap: () => tournamentController.handleTap('game')),
             Gap(Get.height * 0.02),
             CustomText(
-              title: 'Game Mode',
+              title: 'Game Modes',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
-            GameModeDropDown(
-                gameModeController: tournamentController.gameModeController,
-                gameValue: tournamentController.gameValue,
-                gameModeValue: tournamentController.gameModeValue,
-                enableFill: tournamentController.isGameMode.value,
-                handleTap: () => tournamentController.handleTap('gameMode')),
+            tournamentController.gameValue.value != null
+                ? GameModeDropDown(
+                    gameModeController:
+                        tournamentController.gameModesController.value,
+                    gameValue: tournamentController.gameValue,
+                    gameModeValue: tournamentController.gameModeValue,
+                    enableFill: tournamentController.isGameMode.value,
+                    handleTap: () => tournamentController.handleTap('gameMode'))
+                : CustomText(
+                    title: "Please select a game",
+                    color: AppColor().primaryRed,
+                  ),
             Gap(Get.height * 0.02),
             CustomText(
               title: 'Tournament Type',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -374,8 +393,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                             tournamentController.isTournamentType.value == true
                                 ? AppColor().primaryBackGroundColor
                                 : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyMedium',
-                        weight: FontWeight.w400,
+                        fontFamily: 'InterMedium',
                         size: 15,
                       ),
                     );
@@ -389,8 +407,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                   hint: CustomText(
                     title: "Tournament Type",
                     color: AppColor().lightItemsColor,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
+                    fontFamily: 'InterMedium',
                     size: 15,
                   ),
                 ),
@@ -401,7 +418,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Knockout Type',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -443,8 +460,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         color: tournamentController.isKnockout.value == true
                             ? AppColor().primaryBackGroundColor
                             : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyMedium',
-                        weight: FontWeight.w400,
+                        fontFamily: 'InterMedium',
                         size: 15,
                       ),
                     );
@@ -460,8 +476,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     color: tournamentController.isKnockout.value == true
                         ? AppColor().primaryBackGroundColor
                         : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
+                    fontFamily: 'InterMedium',
                     size: 15,
                   ),
                 ),
@@ -472,7 +487,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Rank Type',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -512,8 +527,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         color: tournamentController.isRankType.value == true
                             ? AppColor().primaryBackGroundColor
                             : AppColor().lightItemsColor,
-                        fontFamily: 'GilroyMedium',
-                        weight: FontWeight.w400,
+                        fontFamily: 'InterMedium',
                         size: 15,
                       ),
                     );
@@ -529,8 +543,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     color: tournamentController.isRankType.value == true
                         ? AppColor().primaryBackGroundColor
                         : AppColor().lightItemsColor,
-                    fontFamily: 'GilroyMedium',
-                    weight: FontWeight.w400,
+                    fontFamily: 'InterMedium',
                     size: 15,
                   ),
                 ),
@@ -541,7 +554,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Registration start date *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -576,7 +589,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Registration end date *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -613,7 +626,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Tournament Start date *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -647,7 +660,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Tournament End date *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -681,7 +694,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Currency *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -704,7 +717,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                       ),
                       hintStyle: TextStyle(
                           color: AppColor().greyFour,
-                          fontFamily: "GilroyMedium"),
+                          fontFamily: "InterMedium"),
                       filled: true,
                       fillColor: AppColor().primaryWhite.withOpacity(0.05),
                       focusedBorder: OutlineInputBorder(
@@ -727,12 +740,12 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 dropdownDecoratorProps: DropDownDecoratorProps(
                     baseStyle: TextStyle(
                         color: AppColor().primaryWhite,
-                        fontFamily: "GilroyMedium"),
+                        fontFamily: "InterMedium"),
                     dropdownSearchDecoration: InputDecoration(
                       hintText: "Select a currency",
                       hintStyle: TextStyle(
                           color: AppColor().greyFour,
-                          fontFamily: "GilroyMedium"),
+                          fontFamily: "InterMedium"),
                       filled: true,
                       fillColor: AppColor().primaryDark,
                       focusedBorder: OutlineInputBorder(
@@ -752,7 +765,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Prize pool *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -789,7 +802,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Entry fee *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -824,7 +837,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Prize pool distribution *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.02),
@@ -838,7 +851,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'First',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -873,7 +886,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Second',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -908,7 +921,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Third',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.01),
@@ -945,7 +958,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
               title: 'Max number of participants *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.02),
@@ -1029,7 +1042,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                   'Enable leaderboard *\n(Automatically enabled for ranked tournaments) ',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.left,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.017,
             ),
             Gap(Get.height * 0.02),
@@ -1039,9 +1052,8 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                   title: 'Yes',
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.left,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   size: Get.height * 0.017,
-                  weight: FontWeight.w600,
                 ),
                 Gap(Get.height * 0.01),
                 InkWell(
@@ -1073,9 +1085,8 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                   title: 'No',
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.left,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   size: Get.height * 0.017,
-                  weight: FontWeight.w600,
                 ),
                 Gap(Get.height * 0.01),
                 InkWell(

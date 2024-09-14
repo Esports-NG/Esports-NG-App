@@ -115,47 +115,45 @@ class _NewsItemState extends State<NewsItem> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(
-                  title: parse(widget.item.title!.rendered)
-                      .documentElement!
-                      .text
-                      .toUpperCase(),
-                  size: Get.height * 0.015,
-                  fontFamily: 'GilroyMedium',
-                  textAlign: TextAlign.start,
-                  color: AppColor().primaryWhite,
-                ),
+                Text(
+                    parse(widget.item.title!.rendered)
+                        .documentElement!
+                        .text
+                        .toUpperCase(),
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'InterMedium',
+                      color: AppColor().primaryWhite,
+                    )),
                 Gap(Get.height * 0.005),
                 Divider(
                   thickness: 0.4,
                   color: AppColor().lightItemsColor.withOpacity(0.5),
                 ),
                 Gap(Get.height * 0.005),
-                CustomText(
-                  title: parse(widget.item.content!.rendered)
-                      .documentElement!
-                      .text,
-                  size: Get.height * 0.015,
-                  fontFamily: 'GilroyMedium',
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.start,
-                  color: AppColor().lightItemsColor,
-                ),
+                Text(parse(widget.item.content!.rendered).documentElement!.text,
+                    textAlign: TextAlign.start,
+                    maxLines: 5,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'InterMedium',
+                      color: AppColor().lightItemsColor,
+                    )),
                 Gap(Get.height * 0.015),
                 Row(
                   children: [
                     CustomText(
                       title: 'By ',
                       size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().lightItemsColor,
                     ),
                     CustomText(
                       title: author != null ? author!.name : "",
                       size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryGreen,
                     ),
@@ -165,7 +163,7 @@ class _NewsItemState extends State<NewsItem> {
                     CustomText(
                       title: timeAgo(DateTime.parse(widget.item.date!)),
                       size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().lightItemsColor,
                     ),
@@ -175,7 +173,7 @@ class _NewsItemState extends State<NewsItem> {
                     CustomText(
                       title: 'Nexal Gaming',
                       size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().lightItemsColor,
                     ),

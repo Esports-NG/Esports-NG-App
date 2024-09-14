@@ -29,7 +29,7 @@ class _CreateEventSelectionState extends State<CreateEventSelection> {
           title: 'Select your event type',
           color: AppColor().primaryWhite,
           textAlign: TextAlign.center,
-          fontFamily: 'GilroyBold',
+          fontFamily: 'InterBold',
           size: Get.height * 0.024,
         ),
         Gap(Get.height * 0.05),
@@ -57,7 +57,6 @@ class _CreateEventSelectionState extends State<CreateEventSelection> {
                     ? AppColor().primaryGreen
                     : AppColor().primaryWhite,
                 borderRadius: BorderRadius.circular(30),
-                fontWeight: FontWeight.w400,
               );
             }),
         // Gap(pageCount == 0 ? Get.height * 0.5 : Get.height * 0.02),
@@ -70,7 +69,7 @@ class _CreateEventSelectionState extends State<CreateEventSelection> {
         //     }
         //   },
         //   buttonText: 'Next',
-        //   fontWeight: FontWeight.w600,
+        //    fontFamily: "InterSemiBold",
         //   textSize: Get.height * 0.016,
         //   isLoading: false,
         // ),

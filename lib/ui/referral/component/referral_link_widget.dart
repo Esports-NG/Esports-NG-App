@@ -3,6 +3,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'referral_earning_modal.dart';
 import 'referral_info.dart';
 import 'referral_item.dart';
@@ -27,7 +28,7 @@ class ReferralLinkWidget extends StatelessWidget {
           child: Row(children: [
             CustomText(
               title: 'REF12345',
-              fontFamily: 'GilroySemibold',
+              fontFamily: 'InterSemibold',
               size: 24,
               color: AppColor().primaryWhite,
             ),

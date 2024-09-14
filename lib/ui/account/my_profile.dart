@@ -215,8 +215,7 @@ class _MyProfileState extends State<MyProfile> {
                                 titleStyle: TextStyle(
                                   color: AppColor().primaryWhite,
                                   fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'GilroyRegular',
+                                  fontFamily: "InterSemiBold",
                                 ),
                                 radius: 10,
                                 confirm: Column(
@@ -252,9 +251,8 @@ class _MyProfileState extends State<MyProfile> {
                                 ),
                                 middleTextStyle: TextStyle(
                                   color: AppColor().primaryWhite,
-                                  fontFamily: 'GilroyRegular',
+                                  fontFamily: 'Inter',
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w400,
                                 ),
                               );
                             },
@@ -295,7 +293,7 @@ class _MyProfileState extends State<MyProfile> {
                         title: 'Cover Image',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -333,8 +331,7 @@ class _MyProfileState extends State<MyProfile> {
                                   titleStyle: TextStyle(
                                     color: AppColor().primaryWhite,
                                     fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'GilroyRegular',
+                                    fontFamily: "InterSemiBold",
                                   ),
                                   radius: 10,
                                   confirm: Column(
@@ -370,9 +367,8 @@ class _MyProfileState extends State<MyProfile> {
                                   ),
                                   middleTextStyle: TextStyle(
                                     color: AppColor().primaryWhite,
-                                    fontFamily: 'GilroyRegular',
+                                    fontFamily: 'Inter',
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w400,
                                   ),
                                 );
                               },
@@ -406,7 +402,7 @@ class _MyProfileState extends State<MyProfile> {
                         title: 'Username',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -431,7 +427,7 @@ class _MyProfileState extends State<MyProfile> {
                         title: 'Full name',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -459,7 +455,7 @@ class _MyProfileState extends State<MyProfile> {
                         title: 'Phone number',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -488,7 +484,7 @@ class _MyProfileState extends State<MyProfile> {
                         title: 'Bio',
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
-                        fontFamily: 'GilroyRegular',
+                        fontFamily: 'Inter',
                         size: Get.height * 0.017,
                       ),
                       Gap(Get.height * 0.01),
@@ -551,7 +547,7 @@ class _MyProfileState extends State<MyProfile> {
                                     child: CustomText(
                                     title: 'Save',
                                     color: AppColor().primaryWhite,
-                                    weight: FontWeight.w600,
+                                    fontFamily: "InterSemiBold",
                                     size: Get.height * 0.016,
                                   )),
                           ),

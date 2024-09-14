@@ -23,18 +23,19 @@ class _AllEventListState extends State<AllEventList> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) => InkWell(
               onTap: () {
-                if (eventController.filteredEvent[index].type == "tournament") {
+                if (eventController.allEvent.reversed.toList()[index].type ==
+                    "tournament") {
                   Get.to(() => AccountTournamentDetail(
-                      item: eventController.filteredEvent[index]));
+                      item: eventController.allEvent.reversed.toList()[index]));
                 } else {
                   Get.to(() => SocialEventDetails(
-                      item: eventController.filteredEvent[index]));
+                      item: eventController.allEvent.reversed.toList()[index]));
                 }
               },
               child: AccountEventsItem(
-                  item: eventController.filteredEvent[index])),
+                  item: eventController.allEvent.reversed.toList()[index])),
           separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-          itemCount: eventController.filteredEvent.length),
+          itemCount: eventController.allEvent.length),
     );
   }
 }

@@ -98,7 +98,7 @@ class _EditTeamState extends State<EditTeamPage> {
           centerTitle: true,
           title: CustomText(
             title: 'Edit Team',
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -132,9 +132,8 @@ class _EditTeamState extends State<EditTeamPage> {
               padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
               child: CustomText(
                 title: 'Edit your team',
-                weight: FontWeight.w400,
                 size: 18,
-                fontFamily: 'GilroySemiBold',
+                fontFamily: 'InterSemiBold',
                 color: AppColor().primaryWhite,
               ),
             ),
@@ -150,7 +149,7 @@ class _EditTeamState extends State<EditTeamPage> {
                       title: 'Team name *',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.017,
                     ),
                     Gap(Get.height * 0.01),
@@ -164,7 +163,7 @@ class _EditTeamState extends State<EditTeamPage> {
                       title: 'Team abbreviation (Max 5 characters) *',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.017,
                     ),
                     Gap(Get.height * 0.01),
@@ -179,7 +178,7 @@ class _EditTeamState extends State<EditTeamPage> {
                       title: 'Team bio *',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.017,
                     ),
                     Gap(Get.height * 0.01),
@@ -194,7 +193,7 @@ class _EditTeamState extends State<EditTeamPage> {
                       title: 'Team profile picture *',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.017,
                     ),
                     Gap(Get.height * 0.01),
@@ -211,8 +210,7 @@ class _EditTeamState extends State<EditTeamPage> {
                           titleStyle: TextStyle(
                             color: AppColor().primaryWhite,
                             fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: "InterSemiBold",
                           ),
                           radius: 10,
                           confirm: Column(
@@ -248,9 +246,8 @@ class _EditTeamState extends State<EditTeamPage> {
                           ),
                           middleTextStyle: TextStyle(
                             color: AppColor().primaryWhite,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             fontSize: 14,
-                            fontWeight: FontWeight.w400,
                           ),
                         );
                       } else {
@@ -262,7 +259,7 @@ class _EditTeamState extends State<EditTeamPage> {
                       title: 'Team cover photo *',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.017,
                     ),
                     Gap(Get.height * 0.01),
@@ -279,8 +276,7 @@ class _EditTeamState extends State<EditTeamPage> {
                           titleStyle: TextStyle(
                             color: AppColor().primaryWhite,
                             fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: "InterSemiBold",
                           ),
                           radius: 10,
                           confirm: Column(
@@ -316,9 +312,8 @@ class _EditTeamState extends State<EditTeamPage> {
                           ),
                           middleTextStyle: TextStyle(
                             color: AppColor().primaryWhite,
-                            fontFamily: 'GilroyRegular',
+                            fontFamily: 'Inter',
                             fontSize: 14,
-                            fontWeight: FontWeight.w400,
                           ),
                         );
                       } else {
@@ -359,7 +354,7 @@ class _EditTeamState extends State<EditTeamPage> {
                         child: CustomText(
                         title: 'Update Team',
                         color: AppColor().primaryWhite,
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         size: Get.height * 0.018,
                       )),
               ),
@@ -379,7 +374,7 @@ class _EditTeamState extends State<EditTeamPage> {
           title: title,
           color: AppColor().primaryWhite,
           textAlign: TextAlign.center,
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: Get.height * 0.016,
         ),
         Gap(Get.height * 0.01),
@@ -441,9 +436,8 @@ class _EditTeamState extends State<EditTeamPage> {
                 title: teamController.teamProfileImage == null
                     ? 'Click to upload'
                     : 'Cancel',
-                weight: FontWeight.w400,
                 size: 15,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryColor,
                 underline: TextDecoration.underline,
               ),
@@ -453,7 +447,7 @@ class _EditTeamState extends State<EditTeamPage> {
               title: 'Max file size: 4MB',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.014,
             ),
           ],
@@ -506,9 +500,8 @@ class _EditTeamState extends State<EditTeamPage> {
                 title: teamController.teamCoverImage == null
                     ? 'Click to upload'
                     : 'Cancel',
-                weight: FontWeight.w400,
                 size: 15,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryColor,
                 underline: TextDecoration.underline,
               ),
@@ -518,7 +511,7 @@ class _EditTeamState extends State<EditTeamPage> {
               title: 'Max file size: 4MB',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.014,
             ),
           ],

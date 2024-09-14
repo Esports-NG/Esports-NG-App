@@ -71,7 +71,7 @@ class _CommunityFilterState extends State<CommunityFilter> {
                           // CustomText(
                           //   title: widget.title,
                           //   color: AppColor().primaryWhite.withOpacity(0.7),
-                          //   fontFamily: "GilroyMedium",
+                          //   fontFamily: "InterMedium",
                           //   size: 16,
                           // ),
                           // Gap(Get.height * 0.01),
@@ -80,9 +80,8 @@ class _CommunityFilterState extends State<CommunityFilter> {
                               communityController.typeFilter.value =
                                   "All Categories";
                               if (widget.onFilterPage != true) {
-                                 Get.back();
-                              }
-                              else {
+                                Get.back();
+                              } else {
                                 (Get.back());
                               }
                               _overlayController.hide();
@@ -170,7 +169,7 @@ class _CommunityFilterState extends State<CommunityFilter> {
               children: [
                 CustomText(
                   title: widget.title,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   size: 12,
                   color: AppColor().primaryWhite,
                 ),
@@ -217,7 +216,7 @@ class CustomTile extends StatelessWidget {
             child: CustomText(
               title: value,
               size: Get.height * 0.016,
-              fontFamily: 'GilroyMedium',
+              fontFamily: 'InterMedium',
               textAlign: TextAlign.start,
               overflow: TextOverflow.ellipsis,
               color: AppColor().primaryWhite,

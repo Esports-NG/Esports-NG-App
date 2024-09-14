@@ -40,6 +40,9 @@ class PostRepository extends GetxController {
   late final gameTagController = TextEditingController();
   late final accountTypeController = TextEditingController();
 
+  final isEventAnnouncement = RxBool(false);
+  final isParticipantAnnouncement = RxBool(false);
+
   RxList<GamePlayed> gameTags = <GamePlayed>[].obs;
 
   final Rx<List<PostModel>> _allPost = Rx([]);
@@ -697,7 +700,10 @@ class PostRepository extends GetxController {
       };
       var request = http.MultipartRequest("POST", postUrl)
         ..fields["body"] = postBodyController.text
-        ..fields["itags[0].title"] = "WRGMS"
+        ..fields["annoucement"] = isEventAnnouncement.value.toString()
+        ..fields["participant_annoucement"] =
+            isParticipantAnnouncement.value.toString()
+        ..fields["itags[0].title"] = "EVENT"
         ..fields["itags[0].event_id"] = eventId.toString();
       for (int i = 0; i < gameTags.length; i++) {
         request.fields['itags[${i + 1}].title'] = '${gameTags[i].abbrev}';
@@ -735,6 +741,17 @@ class PostRepository extends GetxController {
     }
   }
 
+  Future getEventPosts(int id) async {
+    var response = await http.get(Uri.parse(ApiLink.getEventPosts(id)),
+        headers: {"Authorization": "JWT ${authController.token}"});
+
+    log(response.body);
+    var json = jsonDecode(response.body);
+    var list = List.from(json);
+    var posts = list.map((e) => PostModel.fromJson(e)).toList();
+    return posts;
+  }
+
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(
@@ -769,5 +786,7 @@ class PostRepository extends GetxController {
     postBodyController.clear();
     gameTagController.clear();
     seeController.clear();
+    isEventAnnouncement.value = false;
+    isParticipantAnnouncement.value = false;
   }
 }

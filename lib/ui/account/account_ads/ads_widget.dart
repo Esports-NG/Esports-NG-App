@@ -42,7 +42,7 @@ class _AdsWidgetState extends State<AdsWidget>
         title: CustomText(
           textAlign: TextAlign.center,
           title: 'Ads',
-          weight: FontWeight.w600,
+          fontFamily: "InterSemiBold",
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -71,8 +71,7 @@ class _AdsWidgetState extends State<AdsWidget>
                       : AppColor().lightItemsColor,
                   size: 16,
                   fontFamily:
-                      _tabController.index == 0 ? 'GilroyBold' : 'GilroyMedium',
-                  weight: FontWeight.w400,
+                      _tabController.index == 0 ? 'InterBold' : 'InterMedium',
                 ),
               ),
               Padding(
@@ -84,8 +83,7 @@ class _AdsWidgetState extends State<AdsWidget>
                       : AppColor().lightItemsColor,
                   size: 16,
                   fontFamily:
-                      _tabController.index == 1 ? 'GilroyBold' : 'GilroyMedium',
-                  weight: FontWeight.w400,
+                      _tabController.index == 1 ? 'InterBold' : 'InterMedium',
                 ),
               ),
             ]),

@@ -8,6 +8,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'team_rank_item.dart';
 
 class Leaderboard extends StatelessWidget {
@@ -22,7 +23,7 @@ class Leaderboard extends StatelessWidget {
         elevation: 0,
         title: CustomText(
           title: 'Leaderboard',
-          weight: FontWeight.w600,
+          fontFamily: "InterSemiBold",
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -67,7 +68,7 @@ class Leaderboard extends StatelessWidget {
                         CustomText(
                           title: 'Call of Duty Mobile',
                           size: 14,
-                          fontFamily: 'GilroySemiBold',
+                          fontFamily: 'InterSemiBold',
                           textAlign: TextAlign.start,
                           color: AppColor().primaryWhite,
                         ),
@@ -75,7 +76,7 @@ class Leaderboard extends StatelessWidget {
                         CustomText(
                           title: 'MP MODE',
                           size: 12,
-                          fontFamily: 'GilroyRegular',
+                          fontFamily: 'Inter',
                           textAlign: TextAlign.start,
                           color: AppColor().greyTwo,
                         ),
@@ -178,7 +179,7 @@ class Leaderboard extends StatelessWidget {
                             CustomText(
                               title: 'Call of Duty Mobile',
                               size: 14,
-                              fontFamily: 'GilroySemiBold',
+                              fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
                               color: AppColor().primaryWhite,
                             ),
@@ -188,7 +189,7 @@ class Leaderboard extends StatelessWidget {
                                 CustomText(
                                   title: 'MP MODE',
                                   size: 12,
-                                  fontFamily: 'GilroyRegular',
+                                  fontFamily: 'Inter',
                                   textAlign: TextAlign.start,
                                   color: AppColor().greyTwo,
                                 ),
@@ -201,7 +202,7 @@ class Leaderboard extends StatelessWidget {
                                 CustomText(
                                   title: 'Arcade',
                                   size: 12,
-                                  fontFamily: 'GilroyRegular',
+                                  fontFamily: 'Inter',
                                   textAlign: TextAlign.start,
                                   color: AppColor().greyTwo,
                                 ),
@@ -229,7 +230,7 @@ class Leaderboard extends StatelessWidget {
                             CustomText(
                               title: 'Teams Ranking',
                               size: 14,
-                              fontFamily: 'GilroySemiBold',
+                              fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
                               color: AppColor().primaryWhite,
                             ),
@@ -237,7 +238,7 @@ class Leaderboard extends StatelessWidget {
                             CustomText(
                               title: 'Updated 2hours ago',
                               size: 10,
-                              fontFamily: 'GilroyRegular',
+                              fontFamily: 'Inter',
                               textAlign: TextAlign.start,
                               color: AppColor().greyTwo,
                             ),
@@ -259,7 +260,7 @@ class Leaderboard extends StatelessWidget {
                                   children: [
                                     CustomText(
                                       title: 'Tier 1',
-                                      fontFamily: 'GilroyMedium',
+                                      fontFamily: 'InterMedium',
                                       size: 12,
                                       color: AppColor().primaryWhite,
                                     ),
@@ -294,7 +295,7 @@ class Leaderboard extends StatelessWidget {
                                     Gap(Get.height * 0.01),
                                     CustomText(
                                       title: '2023',
-                                      fontFamily: 'GilroyMedium',
+                                      fontFamily: 'InterMedium',
                                       size: 12,
                                       color: AppColor().primaryWhite,
                                     ),
@@ -323,7 +324,7 @@ class Leaderboard extends StatelessWidget {
                           child: CustomText(
                             title: 'Pos',
                             size: 12,
-                            fontFamily: 'GilroySemiBold',
+                            fontFamily: 'InterSemiBold',
                             textAlign: TextAlign.start,
                             color: AppColor().primaryWhite,
                           ),
@@ -332,7 +333,7 @@ class Leaderboard extends StatelessWidget {
                           child: CustomText(
                             title: '',
                             size: 12,
-                            fontFamily: 'GilroySemiBold',
+                            fontFamily: 'InterSemiBold',
                             textAlign: TextAlign.start,
                             color: AppColor().primaryWhite,
                           ),
@@ -342,7 +343,7 @@ class Leaderboard extends StatelessWidget {
                           child: CustomText(
                             title: 'Team',
                             size: 12,
-                            fontFamily: 'GilroySemiBold',
+                            fontFamily: 'InterSemiBold',
                             textAlign: TextAlign.start,
                             color: AppColor().primaryWhite,
                           ),
@@ -353,7 +354,7 @@ class Leaderboard extends StatelessWidget {
                             child: CustomText(
                               title: 'PTS',
                               size: 12,
-                              fontFamily: 'GilroySemiBold',
+                              fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
                               color: AppColor().primaryWhite,
                             ),
@@ -385,7 +386,7 @@ class Leaderboard extends StatelessWidget {
                       child: CustomText(
                         title: 'See tournaments for this leaderboard',
                         size: 14,
-                        fontFamily: 'GilroySemiBold',
+                        fontFamily: 'InterSemiBold',
                         textAlign: TextAlign.start,
                         color: AppColor().primaryWhite,
                         underline: TextDecoration.underline,

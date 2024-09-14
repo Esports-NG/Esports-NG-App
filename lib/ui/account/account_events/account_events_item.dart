@@ -109,7 +109,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                                     color: AppColor().pureBlackColor,
                                     textAlign: TextAlign.center,
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyMedium',
+                                    fontFamily: 'InterMedium',
                                   ),
                                 ],
                               ),
@@ -135,7 +135,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                                     color: AppColor().pureBlackColor,
                                     textAlign: TextAlign.center,
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyMedium',
+                                    fontFamily: 'InterMedium',
                                   ),
                                 ],
                               ),
@@ -171,7 +171,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                                     color: AppColor().pureBlackColor,
                                     textAlign: TextAlign.center,
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyMedium',
+                                    fontFamily: 'InterMedium',
                                   ),
                                 ],
                               ),
@@ -197,7 +197,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                                     color: AppColor().pureBlackColor,
                                     textAlign: TextAlign.center,
                                     size: Get.height * 0.014,
-                                    fontFamily: 'GilroyMedium',
+                                    fontFamily: 'InterMedium',
                                   ),
                                 ],
                               ),
@@ -213,20 +213,18 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         right: Get.height * 0.02,
                         bottom: Get.height * 0.02,
                         child: Container(
-                          padding: EdgeInsets.all(Get.height * 0.005),
+                          padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(
-                              color: AppColor().secondaryGreenColor,
-                            ),
+                            borderRadius: BorderRadius.circular(5),
+                            color: AppColor().secondaryGreenColor,
                           ),
                           child: Center(
                             child: CustomText(
-                              title: 'Entry Fee: N${widget.item.entryFee}',
-                              color: AppColor().secondaryGreenColor,
+                              title: 'Entry Fee: ${widget.item.entryFee}',
+                              color: AppColor().primaryBackGroundColor,
                               textAlign: TextAlign.center,
-                              size: Get.height * 0.014,
-                              fontFamily: 'GilroyMedium',
+                              size: 14,
+                              fontFamily: "InterBold",
                             ),
                           ),
                         ),
@@ -248,7 +246,9 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                 widget.item.type == "tournament"
                     ? textItem(
                         title: 'Game: ',
-                        subTitle: widget.item.games![0].name!,
+                        subTitle: widget.item.games!.length != 0
+                            ? widget.item.games![0].name!
+                            : "",
                       )
                     : const SizedBox(),
                 widget.item.type == "tournament"
@@ -269,7 +269,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                     ? CustomText(
                         title: widget.item.name,
                         color: AppColor().primaryWhite,
-                        weight: FontWeight.w600,
+                        fontFamily: "InterSemiBold",
                         size: 18,
                       )
                     : const SizedBox(),
@@ -321,10 +321,10 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                   visible: widget.item.type == "tournament",
                   child: textItem(
                     title: 'Prize Pool: ',
-                    subTitle: 'N${widget.item.prizePool}',
+                    subTitle: '${widget.item.prizePool}',
                     color: AppColor().secondaryGreenColor,
-                    titleFamily: 'GilroySemiBold',
-                    subTitleFamily: 'GilroyBold',
+                    titleFamily: 'InterSemiBold',
+                    subTitleFamily: 'InterSemiBold',
                     titleSize: 14.0,
                     subTitleSize: 16.0,
                   ),
@@ -386,16 +386,17 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
         CustomText(
           title: title,
           size: titleSize ?? 14,
-          fontFamily: titleFamily ?? 'GilroyRegular',
+          fontFamily: titleFamily ?? 'Inter',
           textAlign: TextAlign.start,
           color: color ?? AppColor().greyTwo,
         ),
         Flexible(
           child: CustomText(
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             title: subTitle,
             size: subTitleSize ?? 14,
-            fontFamily: subTitleFamily ?? 'GilroySemiBold',
+            fontFamily: subTitleFamily ?? 'InterSemiBold',
             textAlign: TextAlign.start,
             color: color ?? AppColor().greyTwo,
           ),

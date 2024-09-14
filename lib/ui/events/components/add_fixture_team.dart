@@ -74,7 +74,7 @@ class _AddFixtureTeamState extends State<AddFixtureTeam> {
           title: "Add New Fixture",
           color: AppColor().primaryWhite,
           size: 20,
-          fontFamily: "GilroySemibold",
+          fontFamily: "InterSemibold",
         ),
       ),
       body: Obx(
@@ -127,8 +127,7 @@ class _AddFixtureTeamState extends State<AddFixtureTeam> {
                             child: CustomText(
                               title: value.name,
                               color: AppColor().lightItemsColor,
-                              fontFamily: 'GilroyMedium',
-                              weight: FontWeight.w400,
+                              fontFamily: 'InterMedium',
                               size: 15,
                             ),
                           );
@@ -142,8 +141,7 @@ class _AddFixtureTeamState extends State<AddFixtureTeam> {
                               tournamentController.isCommunities.value == true
                                   ? AppColor().primaryBackGroundColor
                                   : AppColor().lightItemsColor,
-                          fontFamily: 'GilroyMedium',
-                          weight: FontWeight.w400,
+                          fontFamily: 'InterMedium',
                           size: 15,
                         ),
                       ),
@@ -188,8 +186,7 @@ class _AddFixtureTeamState extends State<AddFixtureTeam> {
                             child: CustomText(
                               title: value.name,
                               color: AppColor().lightItemsColor,
-                              fontFamily: 'GilroyMedium',
-                              weight: FontWeight.w400,
+                              fontFamily: 'InterMedium',
                               size: 15,
                             ),
                           );
@@ -200,8 +197,7 @@ class _AddFixtureTeamState extends State<AddFixtureTeam> {
                         hint: CustomText(
                           title: "Away Team",
                           color: AppColor().lightItemsColor,
-                          fontFamily: 'GilroyMedium',
-                          weight: FontWeight.w400,
+                          fontFamily: 'InterMedium',
                           size: 15,
                         ),
                       ),
@@ -362,8 +358,7 @@ class _AddFixtureTeamState extends State<AddFixtureTeam> {
                                 CustomText(
                                   title: value.title,
                                   color: AppColor().lightItemsColor,
-                                  fontFamily: 'GilroyMedium',
-                                  weight: FontWeight.w400,
+                                  fontFamily: 'InterMedium',
                                   size: 18,
                                 ),
                               ],
@@ -377,8 +372,7 @@ class _AddFixtureTeamState extends State<AddFixtureTeam> {
                         hint: CustomText(
                           title: "Select Platform",
                           color: AppColor().lightItemsColor,
-                          fontFamily: 'GilroyMedium',
-                          weight: FontWeight.w400,
+                          fontFamily: 'InterMedium',
                           size: 15,
                         ),
                       ),
@@ -496,7 +490,7 @@ class _AddFixtureTeamState extends State<AddFixtureTeam> {
                                   child: CustomText(
                                       title: "Add Fixture",
                                       size: 16,
-                                      fontFamily: "GilroySemiBold",
+                                      fontFamily: "InterSemiBold",
                                       color: AppColor().primaryWhite))))
                 ],
               ),

@@ -127,7 +127,7 @@ class _RepostItemState extends State<RepostItem> {
                                       ? widget.item.repost!.team!.name
                                       : widget.item.repost!.author!.userName!,
                       size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().lightItemsColor,
                     ),
@@ -137,7 +137,7 @@ class _RepostItemState extends State<RepostItem> {
                     CustomText(
                       title: timeAgo(widget.item.repost!.createdAt!),
                       size: Get.height * 0.015,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().lightItemsColor,
                     ),
@@ -153,7 +153,7 @@ class _RepostItemState extends State<RepostItem> {
                   ? widget.item.body!.toUpperFirstCase()
                   : widget.item.repost!.body!.toUpperFirstCase(),
               size: Get.height * 0.015,
-              fontFamily: 'GilroyBold',
+              fontFamily: 'InterBold',
               textAlign: TextAlign.start,
               color: AppColor().primaryWhite,
             ),
@@ -226,7 +226,7 @@ class _RepostItemState extends State<RepostItem> {
                                 color: AppColor().primaryWhite,
                                 textAlign: TextAlign.center,
                                 size: Get.height * 0.014,
-                                fontFamily: 'GilroyBold',
+                                fontFamily: 'InterBold',
                               ),
                             ),
                           );

@@ -179,7 +179,7 @@ class _UserProfileState extends State<UserProfile> {
         CustomText(
           title: title,
           size: Get.height * 0.014,
-          fontFamily: 'GilroyMedium',
+          fontFamily: 'InterMedium',
           textAlign: TextAlign.start,
           color: AppColor().primaryWhite,
         ),
@@ -346,7 +346,7 @@ class _UserProfileState extends State<UserProfile> {
       CustomText(
         title: '@ ${widget.userData.userName}',
         size: 16,
-        fontFamily: 'GilroyRegular',
+        fontFamily: 'Inter',
         textAlign: TextAlign.start,
         color: AppColor().lightItemsColor,
       ),
@@ -354,7 +354,7 @@ class _UserProfileState extends State<UserProfile> {
       CustomText(
         title: widget.userData.fullName!.toCapitalCase(),
         size: 20,
-        fontFamily: 'GilroyBold',
+        fontFamily: 'InterBold',
         textAlign: TextAlign.start,
         color: AppColor().primaryWhite,
       ),
@@ -367,16 +367,14 @@ class _UserProfileState extends State<UserProfile> {
             children: [
               CustomText(
                   title: followingCount.toString(),
-                  weight: FontWeight.w500,
                   size: Get.height * 0.02,
-                  fontFamily: 'GilroyBold',
+                  fontFamily: 'InterBold',
                   color: AppColor().primaryWhite),
               Gap(Get.height * 0.01),
               CustomText(
                   title: 'Following',
-                  weight: FontWeight.w400,
                   size: Get.height * 0.017,
-                  fontFamily: 'GilroyRegular',
+                  fontFamily: 'Inter',
                   color: AppColor().greyEight),
             ],
           ),
@@ -391,16 +389,14 @@ class _UserProfileState extends State<UserProfile> {
             children: [
               CustomText(
                   title: followersCount.toString(),
-                  weight: FontWeight.w500,
                   size: Get.height * 0.02,
-                  fontFamily: 'GilroyBold',
+                  fontFamily: 'InterBold',
                   color: AppColor().primaryWhite),
               Gap(Get.height * 0.01),
               CustomText(
                   title: 'Followers',
-                  weight: FontWeight.w400,
                   size: Get.height * 0.017,
-                  fontFamily: 'GilroyRegular',
+                  fontFamily: 'Inter',
                   color: AppColor().greyEight),
             ],
           ),
@@ -465,9 +461,8 @@ class _UserProfileState extends State<UserProfile> {
                                           title: _isFollowing
                                               ? "Unfollow"
                                               : 'Follow',
-                                          weight: FontWeight.w400,
                                           size: Get.height * 0.017,
-                                          fontFamily: 'GilroyRegular',
+                                          fontFamily: 'Inter',
                                           color: AppColor().primaryWhite),
                                     ]),
                         ),
@@ -500,9 +495,8 @@ class _UserProfileState extends State<UserProfile> {
                                 Gap(Get.height * 0.01),
                                 CustomText(
                                     title: 'Message',
-                                    weight: FontWeight.w400,
                                     size: Get.height * 0.017,
-                                    fontFamily: 'GilroyRegular',
+                                    fontFamily: 'Inter',
                                     color: AppColor().primaryWhite),
                                 Gap(Get.height * 0.01),
                                 Icon(
@@ -521,9 +515,8 @@ class _UserProfileState extends State<UserProfile> {
             Gap(Get.height * 0.02),
             CustomText(
                 title: widget.userData.bio ?? "",
-                weight: FontWeight.w400,
                 size: 14,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 textAlign: TextAlign.center,
                 height: 1.5,
                 color: AppColor().greyFour),
@@ -588,7 +581,7 @@ class _UserProfileState extends State<UserProfile> {
             title: "Player Profile",
             size: 16,
             color: AppColor().primaryWhite,
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10),
@@ -704,9 +697,8 @@ class _UserProfileState extends State<UserProfile> {
                         child: Center(
                           child: CustomText(
                               title: 'See all',
-                              weight: FontWeight.w400,
                               size: Get.height * 0.017,
-                              fontFamily: 'GilroyMedium',
+                              fontFamily: 'InterMedium',
                               underline: TextDecoration.underline,
                               color: AppColor().primaryColor),
                         ),
@@ -817,7 +809,7 @@ class _UserProfileState extends State<UserProfile> {
           children: [
             CustomText(
               title: 'Follow my socials:',
-              fontFamily: 'GilroySemiBold',
+              fontFamily: 'InterSemiBold',
               size: 16,
               color: AppColor().primaryWhite,
             ),

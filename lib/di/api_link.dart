@@ -9,17 +9,17 @@ class ApiLink {
   static String tokenRefresh = "${baseurl}user/token/refresh/";
   static String getCountryCode = "https://restcountries.com/v3/name/";
   static String logout = "${baseurl}user/logout";
-  static String verifyOtp = "${baseurl}user/otp";
-  static String resendOtp = "${baseurl}user/resend-otp";
-  static String forgotPassword = "${baseurl}user/forgot-password";
-  static String resetPassword = "${baseurl}user/reset-password";
   static String validateResetOtp = "${baseurl}user/otp/verify";
   static String getUser = "${baseurl}user/info/";
   static String updateUser = "${baseurl}users/profile";
   static String deleteAcct = "${baseurl}users";
   static String sendActivationEmail(String email) =>
       "${baseurl}user/resendlink/$email/";
-  static String changePassword = "${baseurl}users/profile";
+  static String requestPasswordOtp = "${baseurl}user/otp_request/";
+  static String verifyOtp = "${baseurl}user/reset/otp/verify/";
+  static String resetPassword(String email) =>
+      "${baseurl}user/password_reset/$email";
+
   static String followUser = "${baseurl}extra/followuser/";
   // static String followCommunity = "${baseurl}extra/followcomm/";
   static String viewUserTeam = "${baseurl}team/myteam/";
@@ -47,6 +47,8 @@ class ApiLink {
   static String report = "${baseurl}extra/report/";
   static String searchForPostsorUsers(String query, String type) =>
       "${baseurl}$type/search_${type}s/?search=$query";
+  static String getEventPosts(int id) =>
+      "${baseurl}post/filter_posts/?tags__event_id=$id";
 
   //Team
   static String createTeam = "${baseurl}team/create/";
@@ -82,6 +84,7 @@ class ApiLink {
       "${baseurl}event/$communityId/create/event/";
   static String createSocialEvent(int communityId) =>
       "${baseurl}event/$communityId/create/socialevent/";
+  static String getEventDetails(int id) => "${baseurl}event/view/$id/";
   static String getAllEvent = "${baseurl}event/view/";
   static String getAllSocialEvents = "${baseurl}event/view/social";
   static String getAllTournaments = "${baseurl}event/view/tournament";
@@ -95,7 +98,10 @@ class ApiLink {
   static String filterEvents = "event/search";
   static String getEventParticipants(int id) =>
       "${baseurl}event/participants/$id";
+  static String getEventWaitlist(int id) => "${baseurl}event/view/waitlist/$id";
   static String createFixture(int id) => "${baseurl}event/fixture/create/$id/";
+  static String editFixture(int id) => "${baseurl}event/fixture/$id/edit/";
+  static String deleteFixture(int id) => "${baseurl}event/fixture/$id/delete/";
   static String getFixtures(int id) =>
       "${baseurl}event/fixture/view/?eventpk=$id";
   static String getPlatforms = "${baseurl}event/platforms/";

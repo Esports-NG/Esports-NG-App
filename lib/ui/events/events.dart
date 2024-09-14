@@ -6,7 +6,6 @@ import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/events/components/event_tab.dart';
 import 'package:e_sport/ui/search/search_screen.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,48 +48,47 @@ class _EventsPageState extends State<EventsPage>
           physics: const AlwaysScrollableScrollPhysics(),
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
-              elevation: 0,
-              centerTitle: true,
-              title: CustomText(
-                title: 'Events',
-                fontFamily: 'GilroySemiBold',
-                size: 18,
-                color: AppColor().primaryWhite,
-              ),
-              actions: [Padding(
-                padding: EdgeInsets.only(right: Get.width * 0.05),
-                child: Icon(
-                  Icons.tv_outlined,
+                elevation: 0,
+                centerTitle: true,
+                title: CustomText(
+                  title: 'Events',
+                  fontFamily: 'InterSemiBold',
+                  size: 18,
                   color: AppColor().primaryWhite,
+                ),
+                actions: [
+                  Padding(
+                    padding: EdgeInsets.only(right: Get.width * 0.05),
+                    child: Icon(
+                      Icons.tv_outlined,
+                      color: AppColor().primaryWhite,
+                    ),
                   ),
-              ),
-              ]
-            ),
+                ]),
             SliverToBoxAdapter(
               child: Column(
                 children: [
                   Padding(
                     padding: EdgeInsets.all(Get.height * 0.02),
                     child: SizedBox(
-                                  height: Get.height * 0.06,
-                                  child: CupertinoSearchTextField(
-                                    placeholder: 'Search for events...',
-                                    onSubmitted: (_) =>
-                                        Get.to(() => SearchScreen(selectedPage: 3,)),
-                                    borderRadius: BorderRadius.circular(10),
-                                    prefixInsets: const EdgeInsets.only(
-                                        right: 5, left: 10),
-                                    controller: authController.searchController,
-                                    itemColor: AppColor()
-                                        .primaryWhite
-                                        .withOpacity(0.5),
-                                    style: TextStyle(
-                                        color: AppColor().primaryWhite,
-                                        fontFamily: 'GilroyMedium',
-                                        fontSize: 14,
-                                        height: Get.height * 0.0019,
-                                        ),
-                                  )),
+                        height: Get.height * 0.06,
+                        child: CupertinoSearchTextField(
+                          placeholder: 'Search for events...',
+                          onSubmitted: (_) => Get.to(() => SearchScreen(
+                                selectedPage: 3,
+                              )),
+                          borderRadius: BorderRadius.circular(10),
+                          prefixInsets:
+                              const EdgeInsets.only(right: 5, left: 10),
+                          controller: authController.searchController,
+                          itemColor: AppColor().primaryWhite.withOpacity(0.5),
+                          style: TextStyle(
+                            color: AppColor().primaryWhite,
+                            fontFamily: 'InterMedium',
+                            fontSize: 14,
+                            height: Get.height * 0.0019,
+                          ),
+                        )),
                   ),
                 ],
               ),
@@ -107,7 +105,7 @@ class _EventsPageState extends State<EventsPage>
                               horizontal: Get.height * 0.02),
                           indicatorSize: TabBarIndicatorSize.tab,
                           labelStyle:
-                              const TextStyle(fontWeight: FontWeight.w600),
+                              const TextStyle(fontFamily: "InterMedium"),
                           // dividerColor: AppColor().primaryBackGroundColor,
                           dividerHeight: 0,
                           indicatorColor: AppColor().primaryColor,

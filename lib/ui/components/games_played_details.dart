@@ -34,47 +34,48 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
         leading: GoBackButton(onPressed: () => Get.back()),
         title: InkWell(
           onTap: () =>
-                    Get.to(() => UserDetails(id: widget.item.player!.id!.toInt())),
+              Get.to(() => UserDetails(id: widget.item.player!.id!.toInt())),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            
             children: [
               CachedNetworkImage(
-                          height: Get.height * 0.04,
-                          width: Get.height * 0.04,
-                          progressIndicatorBuilder: (context, url, progress) =>
-                              Center(
-                            child: SizedBox(
-                              height: Get.height * 0.015,
-                              width: Get.height * 0.015,
-                              child: CircularProgressIndicator(
-                                  color: AppColor().primaryColor,
-                                  value: progress.progress),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error, color: AppColor().primaryColor),
-                          imageUrl:
-                              '${widget.item.player!.profile!.profilePicture}',
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: AppColor().primaryWhite),
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      '${widget.item.player!.profile!.profilePicture}'),
-                                  fit: BoxFit.cover),
-                            ),
-                          ),
-                        ),
-              const SizedBox(width: 10,),
+                height: Get.height * 0.04,
+                width: Get.height * 0.04,
+                progressIndicatorBuilder: (context, url, progress) => Center(
+                  child: SizedBox(
+                    height: Get.height * 0.015,
+                    width: Get.height * 0.015,
+                    child: CircularProgressIndicator(
+                        color: AppColor().primaryColor,
+                        value: progress.progress),
+                  ),
+                ),
+                errorWidget: (context, url, error) =>
+                    Icon(Icons.error, color: AppColor().primaryColor),
+                imageUrl: '${widget.item.player!.profile!.profilePicture}',
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColor().primaryWhite),
+                    image: DecorationImage(
+                        image: NetworkImage(
+                            '${widget.item.player!.profile!.profilePicture}'),
+                        fit: BoxFit.cover),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
               CustomText(
                 title: '${widget.item.player!.userName}',
-                fontFamily: 'GilroySemiBold',
+                fontFamily: 'InterSemiBold',
                 size: 18,
                 color: AppColor().primaryWhite,
               ),
-              SizedBox(width: Get.height *0.08,),
+              SizedBox(
+                width: Get.height * 0.08,
+              ),
             ],
           ),
         ),
@@ -98,8 +99,9 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                         ),
                       )
                     : InkWell(
-                      onTap: () => Get.to(() => GameProfile(game: widget.item.gamePlayed!)),
-                      child: CachedNetworkImage(
+                        onTap: () => Get.to(
+                            () => GameProfile(game: widget.item.gamePlayed!)),
+                        child: CachedNetworkImage(
                           height: Get.height * 0.06,
                           width: Get.height * 0.06,
                           progressIndicatorBuilder: (context, url, progress) =>
@@ -119,7 +121,8 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(color: AppColor().primaryWhite),
+                              border:
+                                  Border.all(color: AppColor().primaryWhite),
                               image: DecorationImage(
                                   image: NetworkImage(
                                       '${ApiLink.imageUrl}${widget.item.gamePlayed!.profilePicture}'),
@@ -127,21 +130,22 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                             ),
                           ),
                         ),
-                    ),
+                      ),
                 Gap(Get.height * 0.015),
                 CustomText(
                   title: 'Game: ',
                   size: 14,
-                  fontFamily: 'GilroyRegular',
+                  fontFamily: 'Inter',
                   textAlign: TextAlign.start,
                   color: AppColor().greyOne,
                 ),
                 InkWell(
-                  onTap: () => Get.to(() => GameProfile(game: widget.item.gamePlayed!)),
+                  onTap: () =>
+                      Get.to(() => GameProfile(game: widget.item.gamePlayed!)),
                   child: CustomText(
                     title: widget.item.gamePlayed!.name!.toCapitalCase(),
                     size: 14,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     textAlign: TextAlign.start,
                     color: AppColor().greyOne,
                   ),
@@ -166,8 +170,9 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                         ),
                       )
                     : GestureDetector(
-                      onTap: () => Helpers().showImagePopup(context, widget.item.profile),
-                      child: CachedNetworkImage(
+                        onTap: () => Helpers()
+                            .showImagePopup(context, widget.item.profile),
+                        child: CachedNetworkImage(
                           height: Get.height * 0.06,
                           width: Get.height * 0.06,
                           progressIndicatorBuilder: (context, url, progress) =>
@@ -179,21 +184,22 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                                   color: AppColor().primaryColor,
                                   value: progress.progress),
                             ),
-                          ), 
+                          ),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error, color: AppColor().primaryColor),
                           imageUrl: widget.item.profile,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(color: AppColor().primaryWhite),
+                              border:
+                                  Border.all(color: AppColor().primaryWhite),
                               image: DecorationImage(
                                   image: NetworkImage(widget.item.profile),
                                   fit: BoxFit.cover),
                             ),
                           ),
                         ),
-                    ),
+                      ),
                 Gap(Get.height * 0.015),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,14 +209,14 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                         CustomText(
                           title: 'IGN: ',
                           size: 14,
-                          fontFamily: 'GilroyRegular',
+                          fontFamily: 'Inter',
                           textAlign: TextAlign.start,
                           color: AppColor().greyOne,
                         ),
                         CustomText(
                           title: widget.item.inGameName!,
                           size: 14,
-                          fontFamily: 'GilroySemiBold',
+                          fontFamily: 'InterSemiBold',
                           textAlign: TextAlign.start,
                           color: AppColor().greyOne,
                         ),
@@ -222,14 +228,14 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                         CustomText(
                           title: 'Game ID: ',
                           size: 14,
-                          fontFamily: 'GilroyRegular',
+                          fontFamily: 'Inter',
                           textAlign: TextAlign.start,
                           color: AppColor().greyOne,
                         ),
                         CustomText(
                           title: widget.item.inGameId!,
                           size: 14,
-                          fontFamily: 'GilroySemiBold',
+                          fontFamily: 'InterSemiBold',
                           textAlign: TextAlign.start,
                           color: AppColor().greyOne,
                         ),
@@ -252,9 +258,8 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
               children: [
                 CustomText(
                     title: 'Statistics:',
-                    weight: FontWeight.w400,
                     size: Get.height * 0.019,
-                    fontFamily: 'GilroySemiBold',
+                    fontFamily: 'InterSemiBold',
                     color: AppColor().primaryWhite),
                 Gap(Get.height * 0.04),
                 categoryWidget(),
@@ -317,14 +322,14 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
         CustomText(
           title: name,
           size: 14,
-          fontFamily: 'GilroyRegular',
+          fontFamily: 'Inter',
           textAlign: TextAlign.start,
           color: AppColor().greyOne,
         ),
         CustomText(
           title: value,
           size: 14,
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           textAlign: TextAlign.start,
           color: AppColor().greyOne,
         ),
@@ -356,8 +361,7 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                     title: item.title,
                     size: 13,
                     fontFamily:
-                        categoryType == index ? 'GilroyBold' : 'GilroyMedium',
-                    weight: FontWeight.w400,
+                        categoryType == index ? 'InterBold' : 'InterMedium',
                     textAlign: TextAlign.start,
                     color: categoryType == index
                         ? AppColor().primaryColor

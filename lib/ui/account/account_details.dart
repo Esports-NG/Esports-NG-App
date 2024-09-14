@@ -45,7 +45,7 @@ class _AccountDetailsState extends State<AccountDetails> {
         elevation: 0,
         title: CustomText(
           title: widget.title,
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -70,9 +70,8 @@ class _AccountDetailsState extends State<AccountDetails> {
                   label: CustomText(
                     title: 'Create New Event',
                     color: AppColor().greyTwo,
-                    weight: FontWeight.w400,
                     size: Get.height * 0.018,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                   ),
                 )
               : Container(
@@ -121,7 +120,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                       CustomText(
                         title: 'Games played',
                         size: 14,
-                        fontFamily: 'GilroyMedium',
+                        fontFamily: 'InterMedium',
                         textAlign: TextAlign.start,
                         color: AppColor().greyTwo,
                       ),

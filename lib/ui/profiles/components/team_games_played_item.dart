@@ -7,6 +7,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import '../../../data/model/team/team_model.dart';
 
 // There are 2 classes in this folder namely "TeamsGamesPlayedItem" For Scrollable
@@ -88,8 +89,7 @@ class TeamsGamesPlayedItem extends StatelessWidget {
             child: CustomText(
               title: game.name!.toCapitalCase(),
               size: 15,
-              fontFamily: 'GilroyMedium',
-              weight: FontWeight.w400,
+              fontFamily: 'InterMedium',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.left,
             ),
@@ -178,8 +178,7 @@ class TeamsGamesPlayedItemWithIGN extends StatelessWidget {
                 CustomText(
                   title: 'IGN: $ign',
                   size: 15,
-                  fontFamily: 'GilroyMedium',
-                  weight: FontWeight.w400,
+                  fontFamily: 'InterMedium',
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.left,
                 ),
@@ -187,7 +186,7 @@ class TeamsGamesPlayedItemWithIGN extends StatelessWidget {
                 CustomText(
                   title: game.name!.toCapitalCase(),
                   size: 15,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   color: AppColor().greyTwo.withOpacity(0.7),
                   textAlign: TextAlign.left,
                 )
@@ -266,8 +265,7 @@ class TeamsGamesPlayedItemForList extends StatelessWidget {
                     child: CustomText(
                       title: game.name!.toCapitalCase(),
                       size: 15,
-                      fontFamily: 'GilroyMedium',
-                      weight: FontWeight.w400,
+                      fontFamily: 'InterMedium',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.left,
                     ),
@@ -290,8 +288,8 @@ class TeamsGamesPlayedItemForList extends StatelessWidget {
                   //           titleStyle: TextStyle(
                   //             color: AppColor().primaryWhite,
                   //             fontSize: 15,
-                  //             fontWeight: FontWeight.w600,
-                  //             fontFamily: 'GilroyRegular',
+                  //              fontFamily: "InterSemiBold",
+                  //             fontFamily: 'Inter',
                   //           ),
                   //           radius: 10,
                   //           confirm: Column(
@@ -326,9 +324,9 @@ class TeamsGamesPlayedItemForList extends StatelessWidget {
                   //           ),
                   //           middleTextStyle: TextStyle(
                   //             color: AppColor().primaryWhite,
-                  //             fontFamily: 'GilroyRegular',
+                  //             fontFamily: 'Inter',
                   //             fontSize: 14,
-                  //             fontWeight: FontWeight.w400,
+                  //
                   //           ),
                   //         );
                   //       },
@@ -353,14 +351,14 @@ class TeamsGamesPlayedItemForList extends StatelessWidget {
         CustomText(
           title: title,
           size: 12,
-          fontFamily: 'GilroyRegular',
+          fontFamily: 'Inter',
           textAlign: TextAlign.start,
           color: AppColor().greyTwo,
         ),
         CustomText(
           title: subTitle,
           size: 12,
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           textAlign: TextAlign.start,
           color: AppColor().greyTwo,
         ),

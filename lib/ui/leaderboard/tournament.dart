@@ -21,7 +21,7 @@ class Tournament extends StatelessWidget {
           leading: GoBackButton(onPressed: () => Get.back()),
           title: CustomText(
             title: 'Tournament',
-            fontFamily: 'GilroySemiBold',
+            fontFamily: 'InterSemiBold',
             size: 18,
             color: AppColor().primaryWhite,
           ),
@@ -45,7 +45,7 @@ class Tournament extends StatelessWidget {
                         CustomText(
                           title: "Call of Duty Mobile",
                           color: AppColor().primaryWhite,
-                          weight: FontWeight.w600,
+                          fontFamily: "InterSemiBold",
                           size: 18,
                         ),
                         const Gap(5),
@@ -82,7 +82,7 @@ class Tournament extends StatelessWidget {
                     CustomText(
                       title: "Teams Ranking",
                       color: AppColor().primaryWhite,
-                      weight: FontWeight.w600,
+                      fontFamily: "InterSemiBold",
                       size: 18,
                     ),
                     const Spacer(),
@@ -96,7 +96,7 @@ class Tournament extends StatelessWidget {
                           CustomText(
                             title: "Tier 1",
                             color: AppColor().primaryWhite,
-                            fontFamily: "GilroyMedium",
+                            fontFamily: "InterMedium",
                           ),
                           Icon(
                             Icons.keyboard_arrow_down_rounded,
@@ -116,7 +116,7 @@ class Tournament extends StatelessWidget {
                           CustomText(
                             title: "2024",
                             color: AppColor().primaryWhite,
-                            fontFamily: "GilroyMedium",
+                            fontFamily: "InterMedium",
                           ),
                           Icon(
                             Icons.keyboard_arrow_down_rounded,

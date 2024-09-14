@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'no_item_page.dart';
 
 class NewsWidget extends StatefulWidget {
@@ -51,7 +52,7 @@ class _PostWidgetState extends State<NewsWidget> {
             CustomText(
               title: 'For more news, reports and articles,',
               size: Get.height * 0.015,
-              fontFamily: 'GilroyMedium',
+              fontFamily: 'InterMedium',
               textAlign: TextAlign.start,
               color: AppColor().primaryWhite,
             ),
@@ -62,7 +63,7 @@ class _PostWidgetState extends State<NewsWidget> {
                 CustomText(
                   title: 'visit ',
                   size: Get.height * 0.015,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   textAlign: TextAlign.start,
                   color: AppColor().primaryWhite,
                 ),
@@ -71,7 +72,7 @@ class _PostWidgetState extends State<NewsWidget> {
                   child: CustomText(
                     title: 'https://nexalgaming.co',
                     size: Get.height * 0.015,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     textAlign: TextAlign.start,
                     color: AppColor().primaryColor,
                   ),

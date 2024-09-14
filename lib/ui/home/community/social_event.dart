@@ -16,7 +16,7 @@ class SocialEvent extends StatelessWidget {
         centerTitle: true,
         title: CustomText(
           title: 'Social Event',
-          fontFamily: 'GilroySemiBold',
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),

@@ -67,7 +67,7 @@ class PostItems extends StatelessWidget {
                       title: item.likeDetails,
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.start,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.016,
                     ),
                     Gap(Get.height * 0.01),
@@ -77,7 +77,7 @@ class PostItems extends StatelessWidget {
                       title: item.time,
                       color: AppColor().lightItemsColor,
                       textAlign: TextAlign.start,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       size: Get.height * 0.016,
                     ),
                   ],
@@ -88,7 +88,7 @@ class PostItems extends StatelessWidget {
                     text: item.details,
                     style: TextStyle(
                       color: AppColor().lightItemsColor,
-                      fontFamily: 'GilroyRegular',
+                      fontFamily: 'Inter',
                       fontSize: Get.height * 0.016,
                     ),
                     children: <TextSpan>[

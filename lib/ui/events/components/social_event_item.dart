@@ -42,8 +42,8 @@ class SocialEventItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () => Helpers().showImagePopup(context,
-                                  "${ApiLink.imageUrl}${item.banner}"),
+            onTap: () => Helpers()
+                .showImagePopup(context, "${ApiLink.imageUrl}${item.banner}"),
             child: Stack(
               children: [
                 (item.banner == null)
@@ -55,8 +55,8 @@ class SocialEventItem extends StatelessWidget {
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10)),
                           image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/png/placeholder.png'),
+                              image: AssetImage(
+                                  'assets/images/png/placeholder.png'),
                               fit: BoxFit.cover),
                         ),
                       )
@@ -105,8 +105,8 @@ class SocialEventItem extends StatelessWidget {
                         title: 'Free Entry',
                         subTitle: '',
                         color: AppColor().secondaryGreenColor,
-                        titleFamily: 'GilroyMedium',
-                        subTitleFamily: 'GilroySemiBold',
+                        titleFamily: 'InterMedium',
+                        subTitleFamily: 'InterSemiBold',
                       ),
                     ),
                   ),
@@ -127,8 +127,7 @@ class SocialEventItem extends StatelessWidget {
                 CustomText(
                   title: item.name,
                   size: 18,
-                  fontFamily: 'GilroySemiBold',
-                  weight: FontWeight.w400,
+                  fontFamily: 'InterSemiBold',
                   textAlign: TextAlign.start,
                   color: AppColor().greyTwo,
                 ),
@@ -190,14 +189,14 @@ class SocialEventItem extends StatelessWidget {
         CustomText(
           title: title,
           size: titleSize ?? 14,
-          fontFamily: titleFamily ?? 'GilroyRegular',
+          fontFamily: titleFamily ?? 'Inter',
           textAlign: TextAlign.start,
           color: color ?? AppColor().greyTwo,
         ),
         CustomText(
           title: subTitle,
           size: subTitleSize ?? 14,
-          fontFamily: subTitleFamily ?? 'GilroySemiBold',
+          fontFamily: subTitleFamily ?? 'InterSemiBold',
           textAlign: TextAlign.start,
           color: color ?? AppColor().greyTwo,
         ),

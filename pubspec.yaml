@@ -46,6 +46,8 @@ dependencies:
   flutter_linkify: ^6.0.0
   dropdown_search: ^5.0.6
   win32: ^5.5.4
+  pinput: ^5.0.0
+  multi_dropdown: ^3.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -84,6 +86,22 @@ flutter:
     - family: GilroyBold
       fonts:
         - asset: assets/font/Gilroy-Bold.ttf
+
+    - family: Inter
+      fonts:
+        - asset: assets/font/Inter_28pt-Regular.ttf
+
+    - family: InterMedium
+      fonts:
+        - asset: assets/font/Inter_28pt-Medium.ttf
+
+    - family: InterSemiBold
+      fonts:
+        - asset: assets/font/Inter_28pt-SemiBold.ttf
+
+    - family: InterBold
+      fonts:
+        - asset: assets/font/Inter_28pt-Bold.ttf
 
 flutter_icons:
   android: "launcher_icon"

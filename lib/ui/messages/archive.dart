@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'message_type/chats/chats_item.dart';
 
 class Archives extends StatefulWidget {
@@ -29,7 +30,7 @@ class _DMRequestState extends State<Archives> {
         title: (messageController.archiveOnSelect.isTrue)
             ? CustomText(
                 title: 'Archives',
-                weight: FontWeight.w600,
+                fontFamily: "InterSemiBold",
                 size: 18,
                 color: AppColor().primaryWhite,
               )
@@ -92,9 +93,8 @@ class _DMRequestState extends State<Archives> {
                     child: CustomText(
                       title:
                           'The messages will remain archived even when new messages are received.',
-                      weight: FontWeight.w500,
                       size: 14,
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,
                     ),

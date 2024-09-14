@@ -1,7 +1,7 @@
-import 'package:e_sport/util/colors.dart';
-import 'package:flutter/material.dart';
 import 'package:e_sport/data/model/account_teams_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/util/colors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -19,7 +19,7 @@ class TeamRankItem extends StatelessWidget {
           child: CustomText(
             title: '${index + 1}',
             size: 14,
-            fontFamily: 'GilroySemiBold',
+            fontFamily: 'InterSemiBold',
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),
@@ -41,7 +41,7 @@ class TeamRankItem extends StatelessWidget {
               CustomText(
                 title: item.name,
                 size: 12,
-                fontFamily: 'GilroySemiBold',
+                fontFamily: 'InterSemiBold',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
@@ -54,7 +54,7 @@ class TeamRankItem extends StatelessWidget {
             child: CustomText(
               title: item.points.toString(),
               size: 14,
-              fontFamily: 'GilroySemiBold',
+              fontFamily: 'InterSemiBold',
               textAlign: TextAlign.start,
               color: AppColor().primaryWhite,
             ),

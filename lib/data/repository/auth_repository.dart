@@ -190,6 +190,12 @@ class AuthRepository extends GetxController {
   File? get userImage => mUserImage.value;
   File? get coverImage => mCoverImage.value;
 
+  TextEditingController resetPasswordEmailController = TextEditingController();
+  TextEditingController resetPasswordConfirmController =
+      TextEditingController();
+  TextEditingController resetPasswordController = TextEditingController();
+  TextEditingController resetPasswordOtpController = TextEditingController();
+
   @override
   void onInit() async {
     super.onInit();
@@ -344,50 +350,6 @@ class AuthRepository extends GetxController {
     } catch (error) {
       _signInStatus(SignInStatus.error);
       debugPrint("error $error");
-      getError(error);
-    }
-  }
-
-  Future verifyOtp(BuildContext context) async {
-    _otpValidateStatus(OtpValidateStatus.loading);
-    try {
-      debugPrint('verifying otp...');
-      EasyLoading.show(status: 'Verifying...');
-      var response = await http.post(
-          Uri.parse(
-            ApiLink.verifyOtp,
-          ),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: jsonEncode({
-            "otp": otpPin.text.trim(),
-          }));
-
-      var json = jsonDecode(response.body);
-      debugPrint(response.statusCode.toString() + response.body);
-
-      if (response.statusCode != 201) {
-        throw (json['message']);
-      }
-
-      if (response.statusCode == 201) {
-        _otpValidateStatus(OtpValidateStatus.success);
-        clear();
-        mToken(json['access']);
-        pref!.saveToken(token);
-        _authStatus(AuthStatus.authenticated);
-        EasyLoading.showInfo('Success', duration: const Duration(seconds: 3))
-            .then((value) async {
-          await Future.delayed(const Duration(seconds: 3));
-          Get.off(() => const RootDashboard());
-        });
-      }
-      return response.body;
-    } catch (error) {
-      _otpValidateStatus(OtpValidateStatus.error);
-      EasyLoading.dismiss();
-      debugPrint("error ${error.toString()}");
       getError(error);
     }
   }
@@ -801,6 +763,55 @@ class AuthRepository extends GetxController {
         Helpers().showCustomSnackbar(message: "Account activation email sent.");
       }
     } catch (err) {}
+  }
+
+  Future requestPasswordOtp() async {
+    var response = await http.post(Uri.parse(ApiLink.requestPasswordOtp),
+        headers: {"Content-type": "application/json"},
+        body: jsonEncode({"email": resetPasswordEmailController.text}));
+
+    log(response.body);
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      Helpers().showCustomSnackbar(message: json['message']);
+      return true;
+    }
+    return false;
+  }
+
+  Future verifyPasswordOtp() async {
+    log(ApiLink.verifyOtp);
+    var response = await http.post(Uri.parse(ApiLink.verifyOtp),
+        headers: {"Content-type": "application/json"},
+        body: jsonEncode({"otp": int.parse(resetPasswordOtpController.text)}));
+
+    log(response.body);
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      Helpers().showCustomSnackbar(message: json['message']);
+      return true;
+    }
+    return false;
+  }
+
+  Future resetPassword() async {
+    var response = await http.post(
+        Uri.parse(ApiLink.resetPassword(resetPasswordEmailController.text)),
+        headers: {"Content-type": "application/json"},
+        body: jsonEncode({
+          "password": resetPasswordController.text,
+          "password2": resetPasswordConfirmController.text
+        }));
+
+    log(response.body);
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      Helpers().showCustomSnackbar(message: json['message']);
+      Get.off(() => const LoginScreen());
+    }
   }
 
   void getError(var error) {

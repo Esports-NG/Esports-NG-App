@@ -95,7 +95,7 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                 CustomText(
                   title: widget.event.name,
                   color: AppColor().primaryWhite,
-                  weight: FontWeight.w600,
+                  fontFamily: "InterSemiBold",
                   size: 16,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -141,9 +141,8 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
               Gap(Get.height * 0.01),
               CustomText(
                   title: 'Tournament/Bracket Link: ',
-                  weight: FontWeight.w400,
                   size: Get.height * 0.017,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   underline: TextDecoration.underline,
                   color: AppColor().primaryWhite),
               Gap(Get.height * 0.01),
@@ -151,9 +150,8 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                 onTap: () => launchUrl(Uri.parse(widget.event.linkForBracket!)),
                 child: CustomText(
                   title: widget.event.linkForBracket,
-                  weight: FontWeight.w400,
                   size: Get.height * 0.017,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   underline: TextDecoration.underline,
                   color: AppColor().primaryColor,
                   textAlign: TextAlign.center,
@@ -172,7 +170,7 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                   CustomText(
                     title: 'Fixtures and Results:',
                     size: Get.height * 0.017,
-                    fontFamily: 'GilroyMedium',
+                    fontFamily: 'InterMedium',
                     color: AppColor().primaryWhite,
                   ),
                   Gap(Get.height * 0.02),
@@ -186,6 +184,7 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                           itemBuilder: (context, index) => GestureDetector(
                               onTap: () {},
                               child: FixtureCardTournament(
+                                  getFixtures: getFixtures,
                                   fixture: _fixturesList[index],
                                   backgroundColor:
                                       _colors[index % _colors.length])),

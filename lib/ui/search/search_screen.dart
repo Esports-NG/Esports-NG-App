@@ -112,7 +112,7 @@ class _SearchScreenState extends State<SearchScreen>
                       itemColor: AppColor().primaryWhite.withOpacity(0.5),
                       style: TextStyle(
                           color: AppColor().primaryWhite,
-                          fontFamily: 'GilroyMedium'),
+                          fontFamily: 'InterMedium'),
                     ),
                   )
                 ]),
@@ -130,15 +130,13 @@ class _SearchScreenState extends State<SearchScreen>
                     indicatorColor: AppColor().primaryColor,
                     dividerColor: AppColor().primaryDark,
                     labelStyle: const TextStyle(
-                      fontFamily: 'GilroyBold',
+                      fontFamily: 'InterBold',
                       fontSize: 14,
-                      fontWeight: FontWeight.w400,
                     ),
                     unselectedLabelColor: AppColor().lightItemsColor,
                     unselectedLabelStyle: const TextStyle(
-                      fontFamily: 'GilroyMedium',
+                      fontFamily: 'InterMedium',
                       fontSize: 14,
-                      fontWeight: FontWeight.w400,
                     ),
                     controller: _searchTabController,
                     tabs: const [

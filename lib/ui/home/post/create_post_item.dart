@@ -32,7 +32,7 @@ class CreateMenu extends StatelessWidget {
           CustomText(
             title: item!.title,
             size: Get.height * 0.016,
-            fontFamily: 'GilroyMedium',
+            fontFamily: 'InterMedium',
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),

@@ -47,16 +47,14 @@ class LatestNewsItem extends StatelessWidget {
           CustomText(
             title: item.name,
             size: Get.height * 0.018,
-            fontFamily: 'GilroySemiBold',
-            weight: FontWeight.w400,
+            fontFamily: 'InterSemiBold',
             color: AppColor().primaryWhite,
           ),
           Gap(Get.height * 0.01),
           CustomText(
             title: item.uName,
             size: Get.height * 0.016,
-            fontFamily: 'GilroyRegular',
-            weight: FontWeight.w400,
+            fontFamily: 'Inter',
             color: AppColor().greySix,
           ),
           Divider(
@@ -64,8 +62,7 @@ class LatestNewsItem extends StatelessWidget {
           CustomText(
             title: item.details,
             size: Get.height * 0.016,
-            fontFamily: 'GilroyRegular',
-            weight: FontWeight.w400,
+            fontFamily: 'Inter',
             color: AppColor().primaryWhite,
           ),
           Gap(Get.height * 0.01),
@@ -74,16 +71,14 @@ class LatestNewsItem extends StatelessWidget {
               CustomText(
                 title: 'By',
                 size: Get.height * 0.016,
-                fontFamily: 'GilroyRegular',
-                weight: FontWeight.w400,
+                fontFamily: 'Inter',
                 color: AppColor().greySix,
               ),
               Gap(Get.height * 0.01),
               CustomText(
                 title: item.postedBy,
                 size: Get.height * 0.016,
-                fontFamily: 'GilroySemiBold',
-                weight: FontWeight.w400,
+                fontFamily: 'InterSemiBold',
                 color: AppColor().primaryGreen,
               ),
               Gap(Get.height * 0.01),
@@ -92,8 +87,7 @@ class LatestNewsItem extends StatelessWidget {
               CustomText(
                 title: item.time,
                 size: Get.height * 0.016,
-                fontFamily: 'GilroyMedium',
-                weight: FontWeight.w400,
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryWhite,
               ),
             ],

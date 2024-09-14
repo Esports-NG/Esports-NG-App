@@ -18,10 +18,9 @@ class ReferralItem extends StatelessWidget {
           CustomText(
             title: title,
             color: AppColor().primaryColor,
-            weight: FontWeight.w400,
             size: Get.height * 0.018,
             underline: TextDecoration.underline,
-            fontFamily: 'GilroyMedium',
+            fontFamily: 'InterMedium',
           ),
           Gap(Get.height * 0.01),
           Icon(

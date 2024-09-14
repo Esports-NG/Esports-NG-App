@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/data/model/platform_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/model/waitlist_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
@@ -25,6 +27,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 
 class TournamentRepository extends GetxController {
   final authController = Get.put(AuthRepository());
@@ -89,6 +92,10 @@ class TournamentRepository extends GetxController {
   Rx<String?> participantValue = Rx(null);
   Rx<String?> partnerValue = Rx(null);
   Rx<String?> staffValue = Rx(null);
+
+  final gameValueController = MultiSelectController<int>();
+  final Rx<MultiSelectController<int>> gameModesController =
+      Rx(MultiSelectController<int>());
 
   Rx<CommunityModel?> selectedCommunity = Rx(null);
   Rx<int> pageCount = 0.obs, eventTypeCount = 0.obs, participantCount = 1.obs;
@@ -236,9 +243,8 @@ class TournamentRepository extends GetxController {
                 child: CustomText(
                   title:
                       eventProfileImage == null ? 'Click to upload' : 'Cancel',
-                  weight: FontWeight.w400,
                   size: 15,
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'InterMedium',
                   color: AppColor().primaryColor,
                   underline: TextDecoration.underline,
                 ),
@@ -248,7 +254,7 @@ class TournamentRepository extends GetxController {
                 title: 'Max file size: 4MB',
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
-                fontFamily: 'GilroyRegular',
+                fontFamily: 'Inter',
                 size: Get.height * 0.014,
               ),
             ],
@@ -288,9 +294,8 @@ class TournamentRepository extends GetxController {
               onTap: onTap,
               child: CustomText(
                 title: eventCoverImage == null ? 'Click to upload' : 'Cancel',
-                weight: FontWeight.w400,
                 size: 15,
-                fontFamily: 'GilroyMedium',
+                fontFamily: 'InterMedium',
                 color: AppColor().primaryColor,
                 underline: TextDecoration.underline,
               ),
@@ -300,7 +305,7 @@ class TournamentRepository extends GetxController {
               title: 'Max file size: 4MB',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
-              fontFamily: 'GilroyRegular',
+              fontFamily: 'Inter',
               size: Get.height * 0.014,
             ),
           ],
@@ -320,7 +325,6 @@ class TournamentRepository extends GetxController {
           Uri.parse(ApiLink.createTournament(selectedCommunity.value!.id!)))
         ..fields["name"] = tournamentNameController.text
         ..fields["link"] = tournamentLinkController.text
-        ..fields["game_mode"] = gameModeController.text
         ..fields["knockout_type"] = knockoutTypeController.text
         ..fields["rank_type"] = rankTypeController.text
         ..fields["reg_start"] = regDateController.text
@@ -345,6 +349,11 @@ class TournamentRepository extends GetxController {
         ..fields["hashtag"] = tournamentHashtagController.text
         ..fields["tournament_type"] = tournamentTypeValue.value!
         ..fields["igames"] = gameValue.value!.id.toString();
+
+      for (int i = 0; i < gameModesController.value.selectedItems.length; i++) {
+        request.fields['game_mode[$i]'] =
+            '${gameModesController.value.selectedItems[i].value}';
+      }
 
       request.files.add(await http.MultipartFile.fromPath(
           'profile', eventProfileImage!.path));
@@ -398,8 +407,10 @@ class TournamentRepository extends GetxController {
     if (response.statusCode == 200) {
       debugPrint("success");
       Helpers().showCustomSnackbar(message: "Successfully registered");
+      return true;
     } else {
       Helpers().showCustomSnackbar(message: json['error']);
+      return false;
     }
   }
 
@@ -424,6 +435,15 @@ class TournamentRepository extends GetxController {
     }
   }
 
+  Future getTournamentWaitlist(int id) async {
+    var response = await http.get(Uri.parse(ApiLink.getEventWaitlist(id)),
+        headers: {"Authorization": "JWT ${authController.token}"});
+    var json = await jsonDecode(response.body);
+    var waitlist = WaitlistModel.fromJson(json);
+
+    return waitlist;
+  }
+
   Future getTournamentParticipants(int id) async {
     var response =
         await http.get(Uri.parse(ApiLink.getEventParticipants(id)), headers: {
@@ -440,7 +460,6 @@ class TournamentRepository extends GetxController {
       "Content-type": "application/json",
       "Authorization": "JWT ${authController.token}"
     });
-    log(response.body);
     return roasterModelFromJson(response.body);
   }
 
@@ -562,6 +581,117 @@ class TournamentRepository extends GetxController {
         Helpers().showCustomSnackbar(message: "Fixture added succesfully");
       }
     } catch (err) {}
+  }
+
+  Future getEventDetails(int id) async {
+    var response = await http.get(Uri.parse(ApiLink.getEventDetails(id)),
+        headers: {"Authorization": "JWT ${authController.token}"});
+
+    var json = jsonDecode(response.body);
+    var event = EventModel.fromJson(json);
+
+    return event;
+  }
+
+  Future editFixtureForPlayer(int id) async {
+    Map<String, dynamic> body = {
+      "away_player_id": selectedAwayPlayer.value!.id,
+      "away_score": addFixturesAwayPlayerScoreController.text == ""
+          ? null
+          : addFixturesAwayPlayerScoreController.text,
+      "home_player_id": selectedHomePlayer.value!.id,
+      "home_score": addFixturesHomePlayerScoreController.text == ""
+          ? null
+          : addFixturesHomePlayerScoreController.text,
+      "player_ids": [
+        selectedHomePlayer.value!.id,
+        selectedAwayPlayer.value!.id
+      ],
+      "igame_mode": 1,
+      "fixture_group": "player",
+      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+      "fixture_time":
+          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+      "fixture_type": "1v1",
+      "title": addFixtureRoundNameController.text,
+      "streaming_platform": fixturePlatform.value,
+      "livestreams": [
+        {
+          "title": addFixtureRoundNameController.text,
+          "description": "fixture",
+          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+          "platform_id": fixturePlatform.value!.id!,
+          "link": addFixtureStreamingLinkController.text
+        }
+      ]
+    };
+    try {
+      var response = await http.put(Uri.parse(ApiLink.editFixture(id)),
+          headers: {
+            "Authorization": "JWT ${authController.token}",
+            "Content-type": "application/json"
+          },
+          body: jsonEncode(body));
+
+      log(response.body);
+
+      if (response.statusCode == 200) {
+        Get.back();
+        Helpers().showCustomSnackbar(message: "Fixture edited successfully");
+      }
+    } catch (err) {}
+  }
+
+  Future editFixtureForTeam(int id) async {
+    Map<String, dynamic> body = {
+      "away_team_id": selectedAwayTeam.value!.id,
+      "away_score": addFixturesAwayTeamScoreController.text,
+      "home_team_id": selectedHomeTeam.value!.id,
+      "home_score": addFixturesHomeTeamScoreController.text,
+      "team_ids": [selectedHomeTeam.value!.id, selectedAwayTeam.value!.id],
+      "igame_mode": 1,
+      "fixture_group": "team",
+      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+      "fixture_time":
+          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+      "fixture_type": "1v1",
+      "title": addFixtureRoundNameController.text,
+      "streaming_link": "addFixtureStreamingLinkController.text",
+      "streaming_platform": fixturePlatform.value,
+      "livestreams": [
+        {
+          "title": "",
+          "description": "",
+          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+          "platform_id": fixturePlatform.value!.id!,
+          "link": addFixtureStreamingLinkController.text
+        }
+      ]
+    };
+    try {
+      var response = await http.post(Uri.parse(ApiLink.editFixture(id)),
+          headers: {
+            "Authorization": "JWT ${authController.token}",
+            "Content-type": "application/json"
+          },
+          body: jsonEncode(body));
+
+      log(response.body);
+
+      if (response.statusCode == 200) {
+        Get.back();
+        Helpers().showCustomSnackbar(message: "Fixture edited successfully");
+      }
+    } catch (err) {}
+  }
+
+  Future deleteFixture(int id) async {
+    var response = await http.delete(Uri.parse(ApiLink.deleteFixture(id)),
+        headers: {"Authorization": "JWT ${authController.token}"});
+
+    log(response.body);
   }
 
   void handleError(dynamic error) {

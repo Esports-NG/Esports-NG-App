@@ -186,8 +186,6 @@ class CommunityRepository extends GetxController {
           "Authorization": 'JWT ${authController.token}'
         });
 
-    print(response.body);
-
     var json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       throw (json['detail']);
@@ -202,8 +200,6 @@ class CommunityRepository extends GetxController {
       "Content-Type": "application/json",
       "Authorization": 'JWT ${authController.token}'
     });
-
-    print(response.body);
 
     List<dynamic> json = jsonDecode(response.body);
 

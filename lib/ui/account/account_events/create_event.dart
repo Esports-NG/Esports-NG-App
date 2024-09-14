@@ -53,8 +53,7 @@ class _CreateEventState extends State<CreateEvent>
                 text: '${_currentPageIndex + 1}',
                 style: TextStyle(
                   color: AppColor().primaryWhite,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'GilroyBold',
+                  fontFamily: "InterSemiBold",
                   fontSize: Get.height * 0.017,
                 ),
                 children: <TextSpan>[
@@ -85,7 +84,7 @@ class _CreateEventState extends State<CreateEvent>
             title:
                 "Create ${eventController.eventTypeController.text != "" ? eventController.eventTypeController.text : "Event"}",
             size: 18,
-            weight: FontWeight.w600,
+            fontFamily: "InterSemiBold",
             color: AppColor().primaryWhite,
           ),
           centerTitle: true,
@@ -151,7 +150,7 @@ class _CreateEventState extends State<CreateEvent>
                                 child: CustomText(
                               title: 'Next',
                               color: AppColor().primaryWhite,
-                              weight: FontWeight.w600,
+                              fontFamily: "InterSemiBold",
                               size: Get.height * 0.018,
                             )),
                           ),
@@ -190,7 +189,7 @@ class _CreateEventState extends State<CreateEvent>
                                         : CustomText(
                                             title: 'Submit',
                                             color: AppColor().primaryWhite,
-                                            weight: FontWeight.w600,
+                                            fontFamily: "InterSemiBold",
                                             size: Get.height * 0.018,
                                           )),
                           ),

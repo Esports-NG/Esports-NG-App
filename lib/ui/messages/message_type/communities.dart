@@ -17,7 +17,7 @@ class _ChatsState extends State<Communities> {
       body: Center(
         child: CustomText(
           title: 'Communities',
-          weight: FontWeight.w500,
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
