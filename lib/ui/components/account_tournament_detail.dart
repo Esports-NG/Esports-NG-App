@@ -700,7 +700,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                               event: _eventDetails!,
                             ));
                       },
-                      title: 'Posts and Announcements',
+                      title: 'Announcements and Posts',
                     ),
                   ),
                   Gap(Get.height * 0.02),
@@ -709,7 +709,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: SizedBox(
                       width: double.infinity,
-                      height: _isFetchingPosts || _posts.isEmpty ? 50 : 400,
+                      height: _isFetchingPosts || _posts.isEmpty ? 50 : 220,
                       child: _isFetchingPosts
                           ? const Center(child: ButtonLoader())
                           : _posts.isEmpty
@@ -734,7 +734,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                           width: Get.height * 0.35,
                                           child: PostItemForProfile(
                                               item: _posts[index]))),
-                                  itemCount: _posts.length),
+                                  itemCount: _posts.where((e) => e.announcement! == true).length),
                     ),
                   ),
                   Divider(

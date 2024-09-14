@@ -103,10 +103,10 @@ class _EventPostsAndAnnouncementsState extends State<EventPostsAndAnnouncements>
                           ),
                           controller: _tabController,
                           tabs: [
-                            Tab(text: 'Posts (${_posts.length})'),
                             Tab(
                                 text:
                                     'Announcements (${_posts.where((e) => e.announcement! == true).length})'),
+                            Tab(text: 'Posts (${_posts.length})'),
                             Tab(
                                 text:
                                     'Participant Announcements (${_posts.where((e) => e.participantAnnouncement! == true).length})'),
@@ -127,12 +127,12 @@ class _EventPostsAndAnnouncementsState extends State<EventPostsAndAnnouncements>
                       )
                     : TabBarView(controller: _tabController, children: [
                         PostWidget(
-                          posts: _posts,
-                        ),
-                        PostWidget(
                           posts: _posts
                               .where((e) => e.announcement! == true)
                               .toList(),
+                        ),
+                        PostWidget(
+                          posts: _posts,
                         ),
                         PostWidget(
                           posts: _posts

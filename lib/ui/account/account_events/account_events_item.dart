@@ -213,17 +213,17 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         right: Get.height * 0.02,
                         bottom: Get.height * 0.02,
                         child: Container(
-                          padding: const EdgeInsets.all(5),
+                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: AppColor().secondaryGreenColor,
+                            color: AppColor().secondaryGreenColor.withOpacity(0.8),
                           ),
                           child: Center(
                             child: CustomText(
                               title: 'Entry Fee: ${widget.item.entryFee}',
                               color: AppColor().primaryBackGroundColor,
                               textAlign: TextAlign.center,
-                              size: 14,
+                              size: 13,
                               fontFamily: "InterBold",
                             ),
                           ),

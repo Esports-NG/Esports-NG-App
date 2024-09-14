@@ -122,7 +122,7 @@ class _NewsItemState extends State<NewsItem> {
                         .toUpperCase(),
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontFamily: 'InterMedium',
                       color: AppColor().primaryWhite,
                     )),
@@ -136,7 +136,7 @@ class _NewsItemState extends State<NewsItem> {
                     textAlign: TextAlign.start,
                     maxLines: 5,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 13,
                       fontFamily: 'InterMedium',
                       color: AppColor().lightItemsColor,
                     )),
