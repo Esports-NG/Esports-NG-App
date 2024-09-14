@@ -1,12 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/events_model.dart';
-import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_events/create_event_post.dart';
-import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class EventPostsAndAnnouncements extends StatefulWidget {
@@ -36,39 +32,17 @@ class _EventPostsAndAnnouncementsState
         ),
       ),
       appBar: AppBar(
-        title: Row(children: [
-          CachedNetworkImage(
-            imageUrl: ApiLink.imageUrl + widget.event.banner!,
-            imageBuilder: (context, imageProvider) => Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: imageProvider,
-                  ),
-                  borderRadius: BorderRadius.circular(999)),
-            ),
-          ),
-          Gap(Get.height * 0.01),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomText(
-                  title: '${widget.event.name}: Event Posts',
-                  color: AppColor().primaryWhite,
-                  weight: FontWeight.w600,
-                  size: 16,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          )
-        ]),
-        leading: GoBackButton(
-          onPressed: () => Get.back(),
+        title: CustomText(
+          title: 'Event Posts',
+          color: AppColor().primaryWhite,
+          fontFamily: 'GilroySemiBold',
+          size: 18,
+        ),
+        backgroundColor: AppColor().primaryBackGroundColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: AppColor().primaryWhite),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: Container(

@@ -222,7 +222,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                           ),
                           child: Center(
                             child: CustomText(
-                              title: 'Entry Fee: ${widget.item.entryFee}',
+                              title: 'Entry Fee: N${widget.item.entryFee}',
                               color: AppColor().secondaryGreenColor,
                               textAlign: TextAlign.center,
                               size: Get.height * 0.014,
@@ -321,7 +321,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                   visible: widget.item.type == "tournament",
                   child: textItem(
                     title: 'Prize Pool: ',
-                    subTitle: widget.item.prizePool,
+                    subTitle: 'N${widget.item.prizePool}',
                     color: AppColor().secondaryGreenColor,
                     titleFamily: 'GilroySemiBold',
                     subTitleFamily: 'GilroyBold',
