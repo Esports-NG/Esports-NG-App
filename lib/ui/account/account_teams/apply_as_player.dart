@@ -78,14 +78,20 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                           hint: "Type here...",
                         )),
                     Gap(Get.height * 0.02),
-                    formControl(
-                      "Would you like to include your gamer profile?*",
-                      checkRadio(teamController.includeGamerProfile),
+                    Visibility(
+                      visible: false,
+                      child: formControl(
+                        "Would you like to include your gamer profile?*",
+                        checkRadio(teamController.includeGamerProfile),
+                      ),
                     ),
                     Gap(Get.height * 0.02),
-                    formControl("Would you like to share your team history?*",
-                        checkRadio(teamController.shareTeamHistory)),
-                    Gap(Get.height * 0.02),
+                    Visibility(
+                      visible: false,
+                      child: formControl("Would you like to share your team history?*",
+                          checkRadio(teamController.shareTeamHistory)),
+                    ),
+                    //Gap(Get.height * 0.02),
                     InkWell(
                       onTap: () async {
                         setState(() {
@@ -93,7 +99,7 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                         });
                         await teamController.applyAsPlayer(widget.item.id!);
                         setState(() {
-                          _isSubmitting = false;
+                          _isSubmitting = true;
                         });
                       },
                       child: Container(

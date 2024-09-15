@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
@@ -17,6 +18,7 @@ import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:e_sport/ui/profiles/components/recent_posts.dart';
+import 'package:e_sport/ui/account/account_events/event_posts_and_announcements.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -53,6 +55,19 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
   bool _isRegistering = false;
   bool _isRegistered = false;
   EventModel? _eventDetails;
+  bool _isFetchingPosts = true;
+  List<PostModel> _posts = [];
+
+    Future getEventPosts() async {
+    setState(() {
+      _isFetchingPosts = true;
+    });
+    var posts = await postController.getEventPosts(widget.item.id!);
+    setState(() {
+      _posts = posts;
+      _isFetchingPosts = false;
+    });
+  }
 
   Future getParticipantList() async {
     setState(() {
@@ -106,6 +121,7 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
     getCommunityFollowers();
     getParticipantList();
     super.initState();
+    getEventPosts();
   }
 
   @override
@@ -491,8 +507,12 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                     padding:
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Announcements',
+                      onTap: () {
+                        Get.to(() => EventPostsAndAnnouncements(
+                              event: _eventDetails!,
+                            ));
+                      },
+                      title: 'Announcements and Posts',
                     ),
                   ),
                   Gap(Get.height * 0.02),
@@ -501,24 +521,32 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: SizedBox(
                       width: double.infinity,
-                      height: Get.height * 0.46,
-                      child: ListView.separated(
-                          physics: const ScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context, index) =>
-                              Gap(Get.height * 0.02),
-                          itemBuilder: (context, index) => InkWell(
-                              onTap: () {
-                                Get.to(() => PostDetails(
-                                    item: postController.forYouPosts[index]));
-                              },
-                              child: SizedBox(
-                                  width: Get.height * 0.35,
-                                  child: PostItemForProfile(
-                                      item:
-                                          postController.forYouPosts[index]))),
-                          itemCount: postController.forYouPosts.length),
+                      height: _isFetchingPosts || _posts.isEmpty ? 50 : 220,
+                      child: _isFetchingPosts
+                          ? const Center(child: ButtonLoader())
+                          : _posts.isEmpty
+                              ? Center(
+                                  child: CustomText(
+                                      title: "No posts",
+                                      size: 16,
+                                      fontFamily: "InterMedium",
+                                      color: AppColor().lightItemsColor))
+                              : ListView.separated(
+                                  physics: const ScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  separatorBuilder: (context, index) =>
+                                      Gap(Get.height * 0.02),
+                                  itemBuilder: (context, index) => InkWell(
+                                      onTap: () {
+                                        Get.to(() =>
+                                            PostDetails(item: _posts[index]));
+                                      },
+                                      child: SizedBox(
+                                          width: Get.height * 0.35,
+                                          child: PostItemForProfile(
+                                              item: _posts[index]))),
+                                  itemCount: _posts.where((e) => e.announcement! == true).length),
                     ),
                   ),
                   Gap(Get.height * 0.005),

@@ -336,18 +336,18 @@ class _CreateEventPostState extends State<CreateEventPost> {
                       ],
                     ),
                   ),
-                  Gap(Get.height * 0.02),
-                  CustomText(
-                    title: 'Add game tags',
-                    color: AppColor().primaryWhite,
-                    textAlign: TextAlign.center,
-                    fontFamily: 'Inter',
-                    size: Get.height * 0.017,
-                  ),
-                  Gap(Get.height * 0.01),
-                  const GameSelectionChip(
-                    postCreation: true,
-                  ),
+                  // Gap(Get.height * 0.02),
+                  // CustomText(
+                  //   title: 'Add game tags',
+                  //   color: AppColor().primaryWhite,
+                  //   textAlign: TextAlign.center,
+                  //   fontFamily: 'Inter',
+                  //   size: Get.height * 0.017,
+                  // ),
+                  // Gap(Get.height * 0.01),
+                  // const GameSelectionChip(
+                  //   postCreation: true,
+                  // ),
                   Gap(Get.height * 0.01),
                   Visibility(
                     visible: widget.event.community!.owner!.id ==
@@ -373,25 +373,29 @@ class _CreateEventPostState extends State<CreateEventPost> {
                       ],
                     ),
                   ),
-                  Row(
-                    children: [
-                      CustomText(
-                        title: "Participant Announcement",
-                        size: 16,
-                        color: AppColor().primaryWhite,
-                      ),
-                      Radio(
-                        activeColor: AppColor().primaryColor,
-                        toggleable: true,
-                        value: true,
-                        groupValue:
-                            postController.isParticipantAnnouncement.value,
-                        onChanged: (value) {
-                          postController.isParticipantAnnouncement.value =
-                              value ?? false;
-                        },
-                      )
-                    ],
+                  Visibility(
+                    visible: widget.event.community!.owner!.id ==
+                        authController.user!.id,
+                    child: Row(
+                      children: [
+                        CustomText(
+                          title: "Participant Announcement",
+                          size: 16,
+                          color: AppColor().primaryWhite,
+                        ),
+                        Radio(
+                          activeColor: AppColor().primaryColor,
+                          toggleable: true,
+                          value: true,
+                          groupValue:
+                              postController.isParticipantAnnouncement.value,
+                          onChanged: (value) {
+                            postController.isParticipantAnnouncement.value =
+                                value ?? false;
+                          },
+                        )
+                      ],
+                    ),
                   ),
                   Gap(Get.height * 0.05),
                   GestureDetector(
