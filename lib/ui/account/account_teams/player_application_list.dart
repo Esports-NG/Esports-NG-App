@@ -114,7 +114,7 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
                                       child: CustomText(
                                         title: _teamApplications.reversed
                                             .toList()[index]
-                                            .role,
+                                            .applicant!.userName,
                                         color: AppColor()
                                             .primaryWhite
                                             .withOpacity(0.7),
