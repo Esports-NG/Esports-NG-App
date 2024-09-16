@@ -1,7 +1,9 @@
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class Helpers {
   void showCustomSnackbar({required String message}) {

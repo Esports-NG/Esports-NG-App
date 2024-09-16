@@ -1,3 +1,4 @@
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,7 +48,7 @@ class CustomFillButton extends StatelessWidget {
                 color: boarderColor ?? AppColor().primaryColor, width: 1)),
         child: Center(
           child: (isLoading)
-              ? const CircularProgressIndicator(
+              ? const ButtonLoader(
                   color: Colors.white,
                 )
               : child ??

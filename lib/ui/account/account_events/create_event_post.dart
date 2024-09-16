@@ -5,7 +5,6 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
-import 'package:e_sport/ui/account/account_teams/game_selection_chip.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
@@ -403,7 +402,8 @@ class _CreateEventPostState extends State<CreateEventPost> {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        postController.createEventPost(widget.event.id!);
+                        postController.createEventPost(
+                            widget.event.id!, widget.event.hashtag ?? "EVENT");
                       }
                     },
                     child: Container(

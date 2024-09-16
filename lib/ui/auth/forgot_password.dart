@@ -22,6 +22,7 @@ class _ForgotPasswordState extends State<ForgotPassword>
   final authController = Get.put(AuthRepository());
   int _currentPage = 0;
   bool _isHiddenPassword = true;
+  bool _isLoading = false;
 
   void _togglePasswordView() {
     setState(() {
@@ -30,6 +31,9 @@ class _ForgotPasswordState extends State<ForgotPassword>
   }
 
   Future handleButton() async {
+    setState(() {
+      _isLoading = true;
+    });
     if (_currentPage == 0) {
       if (authController.resetPasswordEmailController.text != "") {
         var success = await authController.requestPasswordOtp();
@@ -48,7 +52,26 @@ class _ForgotPasswordState extends State<ForgotPassword>
               curve: Curves.linear);
         }
       } else {}
-    } else {}
+    } else {
+      var success = await authController.resetPassword();
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void clear() {
+    authController.resetPasswordIdController.clear();
+    authController.resetPasswordEmailController.clear();
+    authController.resetPasswordConfirmController.clear();
+    authController.resetPasswordOtpController.clear();
+    authController.resetPasswordController.clear();
+  }
+
+  @override
+  void dispose() {
+    clear();
+    super.dispose();
   }
 
   @override
@@ -211,12 +234,14 @@ class _ForgotPasswordState extends State<ForgotPassword>
           Padding(
               padding: EdgeInsets.all(Get.height * 0.02),
               child: CustomFillButton(
-                  buttonText: _currentPage == 0
-                      ? "Send OTP"
-                      : _currentPage == 1
-                          ? "Verify OTP"
-                          : "Reset Password",
-                  onTap: handleButton))
+                buttonText: _currentPage == 0
+                    ? "Send OTP"
+                    : _currentPage == 1
+                        ? "Verify OTP"
+                        : "Reset Password",
+                onTap: handleButton,
+                isLoading: _isLoading,
+              ))
         ],
       ),
     );

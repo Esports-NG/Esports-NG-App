@@ -17,6 +17,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:multi_dropdown/multi_dropdown.dart';
 
 enum LikePostStatus { loading, success, error, empty }
 
@@ -44,7 +45,8 @@ class PostRepository extends GetxController {
   final isParticipantAnnouncement = RxBool(false);
 
   RxList<GamePlayed> gameTags = <GamePlayed>[].obs;
-
+  MultiSelectController<GamePlayed> gameTagsController =
+      MultiSelectController<GamePlayed>();
   final Rx<List<PostModel>> _allPost = Rx([]);
   final Rx<List<PostModel>> _myPost = Rx([]);
   final Rx<List<PostModel>> _bookmarkedPost = Rx([]);
@@ -150,8 +152,9 @@ class PostRepository extends GetxController {
       };
       var request = http.MultipartRequest("POST", postUrl)
         ..fields["body"] = postBodyController.text;
-      for (int i = 0; i < gameTags.length; i++) {
-        request.fields['itags[$i].title'] = '${gameTags[i].abbrev}';
+      for (int i = 0; i < gameTagsController.selectedItems.length; i++) {
+        request.fields['itags[$i].title'] =
+            '${gameTagsController.selectedItems[i].value.abbrev}';
       }
 
       if (postImage != null) {
@@ -685,7 +688,7 @@ class PostRepository extends GetxController {
     searchedPosts.assignAll(posts);
   }
 
-  Future createEventPost(int eventId) async {
+  Future createEventPost(int eventId, String hashtag) async {
     var postUrl = postAs.value == "user"
         ? Uri.parse(ApiLink.createPost)
         : postAs.value == "community"
@@ -703,7 +706,7 @@ class PostRepository extends GetxController {
         ..fields["annoucement"] = isEventAnnouncement.value.toString()
         ..fields["participant_annoucement"] =
             isParticipantAnnouncement.value.toString()
-        ..fields["itags[0].title"] = "EVENT"
+        ..fields["itags[0].title"] = hashtag
         ..fields["itags[0].event_id"] = eventId.toString();
       for (int i = 0; i < gameTags.length; i++) {
         request.fields['itags[${i + 1}].title'] = '${gameTags[i].abbrev}';

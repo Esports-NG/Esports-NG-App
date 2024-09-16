@@ -281,8 +281,10 @@ class _EditPostState extends State<EditPost> {
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
-                  const GameSelectionChip(
+                  GameSelectionChip(
                     postCreation: true,
+                    gameList: gamesController.allGames,
+                    controller: postController.gameTagsController,
                   ),
                   Gap(Get.height * 0.02),
                   if (widget.item.image != null)

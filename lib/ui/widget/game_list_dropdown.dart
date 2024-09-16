@@ -17,11 +17,13 @@ class GameDropdown extends StatefulWidget {
     this.toggleArrow,
     required this.gameValue,
     this.handleTap,
+    this.gameList,
   });
   final bool? enableFill;
   final bool? toggleArrow;
   final Rx<GamePlayed?> gameValue;
   final dynamic handleTap;
+  final List<GamePlayed>? gameList;
 
   @override
   State<GameDropdown> createState() => _GameDropdownState();
@@ -34,85 +36,84 @@ class _GameDropdownState extends State<GameDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => MultiDropdown<GamePlayed>(
-          itemBuilder: (item, index, onTap) => InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: Row(
-                children: [
-                  Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(90),
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              "${ApiLink.imageUrl}${item.value.profilePicture!}",
-                            )),
-                      )),
-                  const Gap(16),
-                  CustomText(
-                    title: item.label,
-                    fontFamily: "InterMedium",
-                    color: item.selected
-                        ? AppColor().primaryColor
-                        : AppColor().lightItemsColor,
-                  ),
-                  const Spacer(),
-                  Visibility(
-                      visible: item.selected,
-                      child: Icon(
-                        CupertinoIcons.checkmark_alt,
-                        color: AppColor().primaryColor,
-                      ))
-                ],
-              ),
-            ),
-          ),
-          searchEnabled: true,
-          selectedItemBuilder: (item) => CustomText(
-            title: item.label,
-            color: AppColor().primaryWhite,
-          ),
-          singleSelect: true,
-          searchDecoration: SearchFieldDecoration(
-              searchIcon: Icon(
-                CupertinoIcons.search,
-                color: AppColor().lightItemsColor,
-              ),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: AppColor().bgDark))),
-          onSelectionChange: (selectedItems) {
-            widget.gameValue.value = selectedItems[0];
-          },
-          items: gameController.allGames
-              .map((e) => DropdownItem(label: e.name!, value: e))
-              .toList(),
-          dropdownDecoration:
-              DropdownDecoration(backgroundColor: AppColor().primaryDark),
-          fieldDecoration: FieldDecoration(
-              hintText: 'Select Game',
-              animateSuffixIcon: true,
-              suffixIcon: Icon(
-                Icons.keyboard_arrow_down,
-                color: AppColor().lightItemsColor,
-              ),
-              hintStyle: TextStyle(
-                  fontFamily: "InterMedium", color: AppColor().lightItemsColor),
-              backgroundColor: AppColor().primaryDark),
-          chipDecoration: ChipDecoration(
-              backgroundColor: AppColor().secondaryGreenColor,
-              labelStyle: const TextStyle(
+    return MultiDropdown<GamePlayed>(
+      itemBuilder: (item, index, onTap) => InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+          child: Row(
+            children: [
+              Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(90),
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          "${ApiLink.imageUrl}${item.value.profilePicture!}",
+                        )),
+                  )),
+              const Gap(16),
+              CustomText(
+                title: item.label,
                 fontFamily: "InterMedium",
-              )),
-          dropdownItemDecoration: DropdownItemDecoration(
-              selectedBackgroundColor: Colors.transparent,
-              textColor: AppColor().lightItemsColor,
-              selectedTextColor: AppColor().primaryColor),
-        ));
+                color: item.selected
+                    ? AppColor().primaryColor
+                    : AppColor().lightItemsColor,
+              ),
+              const Spacer(),
+              Visibility(
+                  visible: item.selected,
+                  child: Icon(
+                    CupertinoIcons.checkmark_alt,
+                    color: AppColor().primaryColor,
+                  ))
+            ],
+          ),
+        ),
+      ),
+      searchEnabled: true,
+      selectedItemBuilder: (item) => CustomText(
+        title: item.label,
+        color: AppColor().primaryWhite,
+      ),
+      singleSelect: true,
+      searchDecoration: SearchFieldDecoration(
+          searchIcon: Icon(
+            CupertinoIcons.search,
+            color: AppColor().lightItemsColor,
+          ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: AppColor().bgDark))),
+      onSelectionChange: (selectedItems) {
+        widget.gameValue.value = selectedItems[0];
+      },
+      items: (widget.gameList ?? gameController.allGames)
+          .map((e) => DropdownItem(label: e.name!, value: e))
+          .toList(),
+      dropdownDecoration:
+          DropdownDecoration(backgroundColor: AppColor().primaryDark),
+      fieldDecoration: FieldDecoration(
+          hintText: 'Select Game',
+          animateSuffixIcon: true,
+          suffixIcon: Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColor().lightItemsColor,
+          ),
+          hintStyle: TextStyle(
+              fontFamily: "InterMedium", color: AppColor().lightItemsColor),
+          backgroundColor: AppColor().primaryDark),
+      chipDecoration: ChipDecoration(
+          backgroundColor: AppColor().secondaryGreenColor,
+          labelStyle: const TextStyle(
+            fontFamily: "InterMedium",
+          )),
+      dropdownItemDecoration: DropdownItemDecoration(
+          selectedBackgroundColor: Colors.transparent,
+          textColor: AppColor().lightItemsColor,
+          selectedTextColor: AppColor().primaryColor),
+    );
   }
 }

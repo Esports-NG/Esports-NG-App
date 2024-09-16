@@ -17,6 +17,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:multi_dropdown/multi_dropdown.dart';
 
 enum TeamStatus {
   loading,
@@ -76,6 +77,10 @@ class TeamRepository extends GetxController {
   RxBool shareTeamHistory = false.obs;
   Rx<GamePlayed?> addToRosterGame = null.obs;
   RxList<GamePlayed> gamesPlayed = <GamePlayed>[].obs;
+
+  MultiSelectController<GamePlayed> gamesPlayedController =
+      MultiSelectController<GamePlayed>();
+
   OverlayPortalController gameChipOverlayController = OverlayPortalController();
   TextEditingController gameSearchController = TextEditingController();
   Rx<GamePlayed?> addToGamesPlayedValue = Rx(null);
@@ -335,7 +340,9 @@ class TeamRepository extends GetxController {
     try {
       Map<String, dynamic> body = {
         "iteam": teamId,
-        "igames": gamesPlayed.map((e) => e.id!).toList(),
+        "igames": gamesPlayedController.selectedItems
+            .map((e) => e.value.id!)
+            .toList(),
         "message": teamJoinReason.text,
         "role": teamRole.text
       };
