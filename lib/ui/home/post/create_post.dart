@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/account/account_teams/game_selection_chip.dart';
@@ -36,6 +37,7 @@ class _CreatePostState extends State<CreatePost> {
   final teamController = Get.put(TeamRepository());
   final communityController = Get.put(CommunityRepository());
   final authController = Get.put(AuthRepository());
+  final gameController = Get.put(GamesRepository());
 
   String? gameTag, seePost, engagePost;
   int? selectedMenu = 0;
@@ -337,8 +339,10 @@ class _CreatePostState extends State<CreatePost> {
                     size: Get.height * 0.017,
                   ),
                   Gap(Get.height * 0.01),
-                  const GameSelectionChip(
+                  GameSelectionChip(
                     postCreation: true,
+                    controller: postController.gameTagsController,
+                    gameList: gameController.allGames,
                   ),
                   Gap(Get.height * 0.05),
                   InkWell(

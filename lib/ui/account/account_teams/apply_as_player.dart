@@ -1,10 +1,11 @@
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/account/account_teams/game_selection_chip.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
-import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
+import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -22,7 +23,17 @@ class ApplyAsPlayer extends StatefulWidget {
 class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
   final _formKey = GlobalKey<FormState>();
   final teamController = Get.put(TeamRepository());
+  final gameController = Get.put(GamesRepository());
+
   bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    teamController.gamesPlayedController.clearAll();
+    teamController.teamRole.clear();
+    teamController.teamJoinReason.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +68,10 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                     Gap(Get.height * 0.03),
                     formControl(
                       "Which games would you like to play?*",
-                      const GameSelectionChip(
+                      GameSelectionChip(
                         teamApplication: true,
+                        controller: teamController.gamesPlayedController,
+                        gameList: gameController.userGames,
                       ),
                     ),
                     Gap(Get.height * 0.02),
@@ -88,40 +101,23 @@ class _ApplyAsPlayerState extends State<ApplyAsPlayer> {
                     Gap(Get.height * 0.02),
                     Visibility(
                       visible: false,
-                      child: formControl("Would you like to share your team history?*",
+                      child: formControl(
+                          "Would you like to share your team history?*",
                           checkRadio(teamController.shareTeamHistory)),
                     ),
                     //Gap(Get.height * 0.02),
-                    InkWell(
+                    CustomFillButton(
+                      buttonText: "Submit",
                       onTap: () async {
                         setState(() {
                           _isSubmitting = true;
                         });
                         await teamController.applyAsPlayer(widget.item.id!);
                         setState(() {
-                          _isSubmitting = true;
+                          _isSubmitting = false;
                         });
                       },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        decoration: BoxDecoration(
-                            color: _isSubmitting
-                                ? Colors.transparent
-                                : AppColor().primaryColor,
-                            borderRadius: BorderRadius.circular(99),
-                            border: _isSubmitting
-                                ? Border.all(color: AppColor().primaryColor)
-                                : null),
-                        child: Center(
-                          child: _isSubmitting
-                              ? const ButtonLoader()
-                              : CustomText(
-                                  title: "Submit",
-                                  color: AppColor().primaryWhite,
-                                  fontFamily: "InterSemiBold",
-                                ),
-                        ),
-                      ),
+                      isLoading: _isSubmitting,
                     )
                   ]),
             ),

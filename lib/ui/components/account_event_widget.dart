@@ -2,11 +2,11 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/events/components/social_event_details.dart';
-import 'package:e_sport/util/colors.dart';
-import 'package:e_sport/util/loading.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'account_tournament_detail.dart';
 import 'error_page.dart';
 import 'no_item_page.dart';
@@ -27,39 +27,32 @@ class _AccountEventsWidgetState extends State<AccountEventsWidget> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (eventController.eventStatus == EventStatus.loading) {
-        return LoadingWidget(color: AppColor().primaryColor);
-      } else if (eventController.eventStatus == EventStatus.available) {
+      if (eventController.myEventStatus.value == EventStatus.loading) {
+        return const ButtonLoader();
+      } else if (eventController.myEventStatus.value == EventStatus.available) {
         return ListView.separated(
           padding: EdgeInsets.zero,
           physics: const ScrollPhysics(),
           shrinkWrap: true,
-          itemCount: eventController.allEvent
-              .where((event) =>
-                  event.community!.owner!.id == authController.user!.id)
-              .toList()
-              .length,
+          itemCount: eventController.myEvent.length,
           separatorBuilder: (context, index) => Gap(Get.height * 0.02),
           itemBuilder: (context, index) {
-            var item = eventController.allEvent
-                .where((event) =>
-                    event.community!.owner!.id == authController.user!.id)
-                .toList()[index];
+            var item = eventController.myEvent[index];
             return InkWell(
               onTap: () {
-                if (eventController.filteredEvent[index].type == "tournament") {
+                if (eventController.myEvent[index].type == "tournament") {
                   Get.to(() => AccountTournamentDetail(
-                      item: eventController.filteredEvent[index]));
+                      item: eventController.myEvent[index]));
                 } else {
-                  Get.to(() => SocialEventDetails(
-                      item: eventController.filteredEvent[index]));
+                  Get.to(() =>
+                      SocialEventDetails(item: eventController.myEvent[index]));
                 }
               },
               child: AccountEventsItem(item: item),
             );
           },
         );
-      } else if (eventController.eventStatus == EventStatus.empty) {
+      } else if (eventController.myEvent.isEmpty) {
         return const NoItemPage(title: 'Event');
       } else {
         return const ErrorPage();
