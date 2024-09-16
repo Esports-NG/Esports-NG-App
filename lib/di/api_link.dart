@@ -17,8 +17,8 @@ class ApiLink {
       "${baseurl}user/resendlink/$email/";
   static String requestPasswordOtp = "${baseurl}user/otp_request/";
   static String verifyOtp = "${baseurl}user/reset/otp/verify/";
-  static String resetPassword(String email) =>
-      "${baseurl}user/password_reset/$email";
+  static String resetPassword(String id) =>
+      "${baseurl}user/password_reset/$id/";
 
   static String followUser = "${baseurl}extra/followuser/";
   // static String followCommunity = "${baseurl}extra/followcomm/";
@@ -86,6 +86,7 @@ class ApiLink {
       "${baseurl}event/$communityId/create/socialevent/";
   static String getEventDetails(int id) => "${baseurl}event/view/$id/";
   static String getAllEvent = "${baseurl}event/view/";
+  static String getMyEvents = "${baseurl}event/myevents/";
   static String getAllSocialEvents = "${baseurl}event/view/social";
   static String getAllTournaments = "${baseurl}event/view/tournament";
   static String registerForEvent(int id) => "${baseurl}event/$id/join/";

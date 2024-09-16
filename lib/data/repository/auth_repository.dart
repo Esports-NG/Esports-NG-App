@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/shared_pref.dart';
@@ -195,6 +196,11 @@ class AuthRepository extends GetxController {
       TextEditingController();
   TextEditingController resetPasswordController = TextEditingController();
   TextEditingController resetPasswordOtpController = TextEditingController();
+  TextEditingController resetPasswordIdController = TextEditingController();
+
+  RxMap<String, dynamic>? sessionHeaders = RxMap({});
+
+  var dio = Dio();
 
   @override
   void onInit() async {
@@ -766,12 +772,16 @@ class AuthRepository extends GetxController {
   }
 
   Future requestPasswordOtp() async {
-    var response = await http.post(Uri.parse(ApiLink.requestPasswordOtp),
-        headers: {"Content-type": "application/json"},
-        body: jsonEncode({"email": resetPasswordEmailController.text}));
+    var body = {"email": resetPasswordEmailController.text};
+    var response = await dio.post(ApiLink.requestPasswordOtp, data: body);
 
-    log(response.body);
-    var json = jsonDecode(response.body);
+    var cookies = response.headers.map['set-cookie'];
+    if (cookies != null && cookies.isNotEmpty) {
+      dio.options.headers['cookie'] = cookies;
+    }
+
+    print(response.data);
+    var json = response.data;
 
     if (response.statusCode == 200) {
       Helpers().showCustomSnackbar(message: json['message']);
@@ -781,35 +791,40 @@ class AuthRepository extends GetxController {
   }
 
   Future verifyPasswordOtp() async {
-    log(ApiLink.verifyOtp);
-    var response = await http.post(Uri.parse(ApiLink.verifyOtp),
-        headers: {"Content-type": "application/json"},
-        body: jsonEncode({"otp": int.parse(resetPasswordOtpController.text)}));
+    var body = {"otp": int.parse(resetPasswordOtpController.text)};
+    var response = await dio.post(ApiLink.verifyOtp, data: body);
 
-    log(response.body);
-    var json = jsonDecode(response.body);
+    var cookies = response.headers.map['set-cookie'];
+    if (cookies != null && cookies.isNotEmpty) {
+      dio.options.headers['cookie'] = cookies;
+    }
+
+    print(response.data);
+    var json = response.data;
+
+    resetPasswordIdController.text = json['message']!.toString();
 
     if (response.statusCode == 200) {
-      Helpers().showCustomSnackbar(message: json['message']);
+      Helpers().showCustomSnackbar(message: "Verified OTP");
       return true;
     }
     return false;
   }
 
   Future resetPassword() async {
-    var response = await http.post(
-        Uri.parse(ApiLink.resetPassword(resetPasswordEmailController.text)),
-        headers: {"Content-type": "application/json"},
-        body: jsonEncode({
-          "password": resetPasswordController.text,
-          "password2": resetPasswordConfirmController.text
-        }));
+    var body = {
+      "password": resetPasswordController.text,
+      "password2": resetPasswordConfirmController.text
+    };
+    var response = await dio
+        .put(ApiLink.resetPassword(resetPasswordIdController.text), data: body);
 
-    log(response.body);
-    var json = jsonDecode(response.body);
+    print(response.data);
+
+    var json = response.data;
 
     if (response.statusCode == 200) {
-      Helpers().showCustomSnackbar(message: json['message']);
+      Helpers().showCustomSnackbar(message: "Your password has been reset");
       Get.off(() => const LoginScreen());
     }
   }

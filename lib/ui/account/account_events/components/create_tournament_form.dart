@@ -313,7 +313,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
             ),
             Gap(Get.height * 0.02),
             CustomText(
-              title: 'Game to be played *',
+              title: 'Games you cover *',
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
               fontFamily: 'Inter',
@@ -322,10 +322,17 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
             Gap(Get.height * 0.01),
             gameController.isLoading.value
                 ? const ButtonLoader()
-                : GameDropdown(
-                    enableFill: tournamentController.isGame.value,
-                    gameValue: tournamentController.gameValue,
-                    handleTap: () => tournamentController.handleTap('game')),
+                : tournamentController.selectedCommunity.value == null
+                    ? CustomText(
+                        title: "Please select a community",
+                        color: AppColor().primaryRed)
+                    : GameDropdown(
+                        gameList: tournamentController
+                            .selectedCommunity.value!.gamesPlayed,
+                        enableFill: tournamentController.isGame.value,
+                        gameValue: tournamentController.gameValue,
+                        handleTap: () =>
+                            tournamentController.handleTap('game')),
             Gap(Get.height * 0.02),
             CustomText(
               title: 'Game Modes',

@@ -93,12 +93,15 @@ class _AccountDetailsState extends State<AccountDetails> {
       body: RefreshIndicator(
         onRefresh: () async {
           return Future.delayed(const Duration(seconds: 2), () {
-            postController.getAllPost(false);
-            communityController.getAllCommunity(false);
-            teamController.getAllTeam(false);
-            playerController.getAllPlayer(false);
-            eventController.getAllTournaments(false);
-            eventController.getAllSocialEvents(false);
+            if (widget.title == "Posts") {
+              postController.getPostForYou(false);
+            } else if (widget.title == "Events") {
+              eventController.getMyEvents();
+            } else {
+              communityController.getAllCommunity(false);
+              teamController.getAllTeam(false);
+              playerController.getAllPlayer(false);
+            }
           });
         },
         child: SingleChildScrollView(

@@ -26,42 +26,9 @@ class GamesRepository extends GetxController {
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
         getAllGames();
+        getUserGames();
       }
     });
-    getUserGames();
-    gameSearchText.addListener(() {
-      filterList(gameSearchText.text);
-    });
-  }
-
-  void filterList(String query) {
-    if (query.isEmpty) {
-      filteredUserGames.assignAll(userGames);
-
-      filteredGames.assignAll(allGames);
-    } else {
-      filteredUserGames.assignAll(userGames.where(
-          (item) => item.name!.toLowerCase().contains(query.toLowerCase())));
-      filteredGames.assignAll(allGames.where(
-          (item) => item.name!.toLowerCase().contains(query.toLowerCase())));
-    }
-  }
-
-  OverlayPortalController gameDropdownOverlayController =
-      OverlayPortalController();
-  OverlayPortalController gameChipOverlayController = OverlayPortalController();
-
-  void hideGameDropdown() {
-    // gameSearchText.text = "";
-    filteredGames.assignAll(allGames);
-    gameDropdownOverlayController.hide();
-  }
-
-  void hideGameChip() {
-    // gameSearchText.text = "";
-    filteredGames.assignAll(allGames);
-    filteredUserGames.assignAll(userGames);
-    gameChipOverlayController.hide();
   }
 
   Future<void> getAllGames() async {

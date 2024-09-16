@@ -133,6 +133,7 @@ class EventRepository extends GetxController
   var maxTabs = 3.obs, eventTypeCount = 0.obs, participantCount = 0.obs;
 
   final eventStatus = EventStatus.empty.obs;
+  final myEventStatus = EventStatus.empty.obs;
   final createEventStatus = CreateEventStatus.empty.obs;
   RxMap<dynamic, dynamic> eventFilter = {}.obs;
 
@@ -249,6 +250,25 @@ class EventRepository extends GetxController
       var list = List.from(json);
       var events = list.map((e) => EventModel.fromJson(e)).toList();
       _allEvent(events);
+    }
+  }
+
+  Future getMyEvents() async {
+    myEventStatus.value = EventStatus.loading;
+    var response = await http.get(Uri.parse(ApiLink.getMyEvents), headers: {
+      "Content-type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    });
+
+    log(response.body);
+    var json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      myEventStatus.value = EventStatus.error;
+    } else {
+      var list = List.from(json);
+      var events = list.map((e) => EventModel.fromJson(e)).toList();
+      _myEvent(events);
+      myEventStatus.value = EventStatus.available;
     }
   }
 

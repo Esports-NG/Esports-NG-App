@@ -33,7 +33,6 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
   final socialEventController = Get.put(SocialEventRepository());
   final eventController = Get.put(EventRepository());
   final communityController = Get.put(CommunityRepository());
-  CommunityModel? selectedItem;
   int selectedMenu = 0;
   String? communitiesValue, gameValue, partnerValue;
 
@@ -258,10 +257,10 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => SingleChildScrollView(
-        child: Form(
-          key: formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+      () => Form(
+        key: formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -300,7 +299,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   child: DropdownButton<CommunityModel>(
                     dropdownColor: AppColor().primaryDark,
                     borderRadius: BorderRadius.circular(10),
-                    value: selectedItem,
+                    value: socialEventController.organizingCommunity.value,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
                       color: isCommunities == true
@@ -324,13 +323,11 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                       );
                     }).toList(),
                     onChanged: (value) {
-                      setState(() {
-                        socialEventController.organizingCommunity.value = value;
-                        socialEventController.communitiesOwnedController.text =
-                            value!.name!;
-                        debugPrint(communitiesValue);
-                        handleTap('communities');
-                      });
+                      socialEventController.organizingCommunity.value = value;
+                      socialEventController.communitiesOwnedController.text =
+                          value!.name!;
+                      debugPrint(communitiesValue);
+                      handleTap('communities');
                     },
                     hint: CustomText(
                       title: "Communities Owned",
@@ -524,7 +521,15 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 size: Get.height * 0.017,
               ),
               Gap(Get.height * 0.01),
-              GameDropdown(gameValue: socialEventController.gameValue),
+              socialEventController.organizingCommunity.value == null
+                  ? CustomText(
+                      title: "Please select a community",
+                      color: AppColor().primaryRed)
+                  : GameDropdown(
+                      gameValue: socialEventController.gameValue,
+                      gameList: socialEventController
+                          .organizingCommunity.value!.gamesPlayed,
+                    ),
               Gap(Get.height * 0.02),
               CustomText(
                 title: 'Registration Start date *',
@@ -888,7 +893,8 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                 },
                 buttonText: 'Create Event',
                 textSize: Get.height * 0.016,
-                isLoading: false,
+                isLoading: eventController.createEventStatus.value ==
+                    CreateEventStatus.loading,
               ),
               Gap(Get.height * 0.02),
             ],

@@ -24,7 +24,7 @@ import 'package:intl/intl.dart';
 class SocialEventRepository extends GetxController {
   final eventController = Get.put(EventRepository());
   final authController = Get.put(AuthRepository());
-  final Rx<CommunityModel?> organizingCommunity = null.obs;
+  final Rx<CommunityModel?> organizingCommunity = Rx(null);
 
   final TextEditingController startTimeController = TextEditingController();
   final TextEditingController endTimeController = TextEditingController();
@@ -170,16 +170,18 @@ class SocialEventRepository extends GetxController {
       var endTime = DateFormat.jm().parse(endTimeController.text);
 
       var request = http.MultipartRequest("POST",
-          Uri.parse(ApiLink.createSocialEvent(organizingCommunity.value!.id!)))
+          Uri.parse(ApiLink.createTournament(organizingCommunity.value!.id!)))
         ..fields["name"] = eventNameController.text
         ..fields["description"] = eventDescController.text
         ..fields["entry_fee"] =
             eventController.currency.value + entryFeeController.text
-        ..fields["igames"] = gameCoveredController.text
-        ..fields["registration_start"] = regStartDateController.text
-        ..fields["registration_end"] = regEndDateController.text
+        ..fields["igames"] = gameValue.value!.id!.toString()
+        ..fields["reg_start"] = regStartDateController.text
+        ..fields["reg_end"] = regEndDateController.text
         ..fields["start"] =
             "${eventDateController.text}T${DateFormat("HH:mm").format(startTime)}"
+        ..fields["end_date"] = eventDateController.text
+        ..fields["start_date"] = eventDateController.text
         ..fields["end"] =
             "${eventDateController.text}T${DateFormat("HH:mm").format(endTime)}"
         ..fields["venue"] = eventVenueController.text
@@ -191,6 +193,8 @@ class SocialEventRepository extends GetxController {
           await http.MultipartFile.fromPath('image', eventCoverImage!.path));
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
+      var res = await response.stream.bytesToString();
+      print(res);
       if (response.statusCode == 201) {
         eventController.createEventStatus(CreateEventStatus.success);
         debugPrint(await response.stream.bytesToString());
