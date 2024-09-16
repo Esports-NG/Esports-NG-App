@@ -4,6 +4,7 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/account/faq.dart';
 import 'package:e_sport/ui/account/privacy_policy.dart';
 import 'package:e_sport/ui/components/my_post_widget.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
@@ -373,6 +374,32 @@ class _AccountState extends State<Account> {
             ],
           ),
         ),
+        PopupMenuItem(
+          value: 'ScreenE',
+          height: 20,
+          padding: const EdgeInsets.only(
+            bottom: 10,
+            left: 20,
+            top: 10,
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.question_mark_rounded,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.015),
+              CustomText(
+                title: 'FAQs/Report Bug',
+                size: Get.height * 0.014,
+                fontFamily: 'InterMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
       ],
     );
 
@@ -394,6 +421,9 @@ class _AccountState extends State<Account> {
         break;
       case 'ScreenD':
         Get.to(() => PrivacyPolicy());
+        break;
+      case 'ScreenE':
+        Get.to(() => Faq());
         break;
     }
   }
