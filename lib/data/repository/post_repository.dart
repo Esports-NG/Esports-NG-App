@@ -164,6 +164,8 @@ class PostRepository extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
+      var responseBody = await response.stream.bytesToString();
+      log(responseBody);
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
         getPostForYou(true);
@@ -719,8 +721,7 @@ class PostRepository extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
-      var responseBody = await response.stream.bytesToString();
-      log(responseBody); // Log the response body for debugging
+      // Log the response body for debugging
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
         getPostForYou(true);

@@ -49,6 +49,9 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         height: Get.height * 0.22,
                         width: double.infinity,
                         decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10)),
                           image: DecorationImage(
                               image: AssetImage(
                                   'assets/images/png/placeholder.png'),
@@ -213,10 +216,12 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         right: Get.height * 0.02,
                         bottom: Get.height * 0.02,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: AppColor().secondaryGreenColor.withOpacity(0.8),
+                            color:
+                                AppColor().secondaryGreenColor.withOpacity(0.8),
                           ),
                           child: Center(
                             child: CustomText(

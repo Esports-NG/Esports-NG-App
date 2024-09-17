@@ -360,6 +360,10 @@ class TeamRepository extends GetxController {
       if (response.statusCode == 200) {
         Helpers().showCustomSnackbar(message: "Application sent");
       }
+
+      if (json['error'] != null) {
+        Helpers().showCustomSnackbar(message: json['error']);
+      }
     } catch (error) {
       debugPrint("team application error: $error");
     }
