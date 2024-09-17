@@ -36,6 +36,7 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
   Widget build(BuildContext context) {
     return Obx(
       () => MultiDropdown<GamePlayed>(
+        enabled: true,
         controller: widget.controller,
         itemBuilder: (item, index, onTap) => InkWell(
           onTap: onTap,
@@ -74,10 +75,6 @@ class _GameSelectionChipState extends State<GameSelectionChip> {
           ),
         ),
         searchEnabled: true,
-        selectedItemBuilder: (item) => CustomText(
-          title: item.label,
-          color: AppColor().primaryWhite,
-        ),
         searchDecoration: SearchFieldDecoration(
             searchIcon: Icon(
               CupertinoIcons.search,

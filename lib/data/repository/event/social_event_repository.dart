@@ -189,12 +189,14 @@ class SocialEventRepository extends GetxController {
         ..fields["hashtag"] = eventHashtagController.text
         ..fields["event_type"] = "social";
 
-      request.files.add(
-          await http.MultipartFile.fromPath('image', eventCoverImage!.path));
+      if (eventCoverImage != null) {
+        request.files.add(
+            await http.MultipartFile.fromPath('banner', eventCoverImage!.path));
+      }
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
-      var res = await response.stream.bytesToString();
-      print(res);
+      // var res = await response.stream.bytesToString();
+      // print(res);
       if (response.statusCode == 201) {
         eventController.createEventStatus(CreateEventStatus.success);
         debugPrint(await response.stream.bytesToString());
