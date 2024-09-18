@@ -236,6 +236,7 @@ class CommunityRepository extends GetxController {
             message: json['message'] != null
                 ? "Game added to community"
                 : json['error']);
+        getAllCommunity(false);
       } else {}
     } catch (err) {
       debugPrint('adding game to community error: $err');

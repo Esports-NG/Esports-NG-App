@@ -117,6 +117,13 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
             MultiSelectController<int>();
       },
     );
+    tournamentController.selectedCommunity.listen(
+      (p0) async {
+        tournamentController.selectingCommunity.value = true;
+        await Future.delayed(const Duration(milliseconds: 500));
+        tournamentController.selectingCommunity.value = false;
+      },
+    );
     super.initState();
   }
 
@@ -326,13 +333,21 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                     ? CustomText(
                         title: "Please select a community",
                         color: AppColor().primaryRed)
-                    : GameDropdown(
-                        gameList: tournamentController
-                            .selectedCommunity.value!.gamesPlayed,
-                        enableFill: tournamentController.isGame.value,
-                        gameValue: tournamentController.gameValue,
-                        handleTap: () =>
-                            tournamentController.handleTap('game')),
+                    : tournamentController.selectingCommunity.value
+                        ? const ButtonLoader()
+                        : tournamentController
+                                .selectedCommunity.value!.gamesPlayed!.isEmpty
+                            ? CustomText(
+                                title:
+                                    "This community does not have a game. Please add a a game to the community then try again.",
+                                color: AppColor().primaryRed)
+                            : GameDropdown(
+                                gameList: tournamentController
+                                    .selectedCommunity.value!.gamesPlayed,
+                                enableFill: tournamentController.isGame.value,
+                                gameValue: tournamentController.gameValue,
+                                handleTap: () =>
+                                    tournamentController.handleTap('game')),
             Gap(Get.height * 0.02),
             CustomText(
               title: 'Game Modes',

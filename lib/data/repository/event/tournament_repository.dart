@@ -96,7 +96,7 @@ class TournamentRepository extends GetxController {
   final gameValueController = MultiSelectController<int>();
   final Rx<MultiSelectController<int>> gameModesController =
       Rx(MultiSelectController<int>());
-
+  RxBool selectingCommunity = false.obs;
   Rx<CommunityModel?> selectedCommunity = Rx(null);
   Rx<int> pageCount = 0.obs, eventTypeCount = 0.obs, participantCount = 1.obs;
 
@@ -372,7 +372,7 @@ class TournamentRepository extends GetxController {
         debugPrint(await response.stream.bytesToString());
         Get.to(() => const CreateSuccessPage(title: 'Event Created'))!
             .then((value) {
-          eventController.getAllTournaments(false);
+          eventController.getAllEvents();
           clear();
         });
       } else if (response.statusCode == 401) {
@@ -440,6 +440,7 @@ class TournamentRepository extends GetxController {
         headers: {"Authorization": "JWT ${authController.token}"});
     var json = await jsonDecode(response.body);
     var waitlist = WaitlistModel.fromJson(json);
+    log(response.body);
 
     return waitlist;
   }

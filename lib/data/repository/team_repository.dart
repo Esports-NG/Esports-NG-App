@@ -321,6 +321,7 @@ class TeamRepository extends GetxController {
         if (rosterResponse.statusCode == 200) {
           Helpers()
               .showCustomSnackbar(message: "Successfully added game to team");
+          getMyTeam(true);
         }
       }
     } catch (err) {

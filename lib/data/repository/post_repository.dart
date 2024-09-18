@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:change_case/change_case.dart';
@@ -164,8 +163,6 @@ class PostRepository extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
-      var responseBody = await response.stream.bytesToString();
-      log(responseBody);
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
         getPostForYou(true);
@@ -544,7 +541,6 @@ class PostRepository extends GetxController {
       "Authorization": 'JWT ${authController.token}'
     });
     var json = jsonDecode(response.body);
-    log(response.body);
 
     if (response.statusCode != 200) {
       throw (json['detail']);
@@ -672,7 +668,6 @@ class PostRepository extends GetxController {
           "Basic ${base64.encode(utf8.encode("zillalikestogame:zillalikesnexal"))}"
     });
 
-    log(response.body);
     var newsFromJson = newsModelFromJson(response.body);
     _news.value = newsFromJson;
   }
@@ -683,7 +678,6 @@ class PostRepository extends GetxController {
       "Authorization": "JWT ${authController.token}",
       "Content-type": "application/json"
     });
-    log(response.body);
     var json = jsonDecode(response.body);
     var list = List.from(json);
     var posts = list.map((e) => PostModel.fromJson(e)).toList();
@@ -749,7 +743,6 @@ class PostRepository extends GetxController {
     var response = await http.get(Uri.parse(ApiLink.getEventPosts(id)),
         headers: {"Authorization": "JWT ${authController.token}"});
 
-    log(response.body);
     var json = jsonDecode(response.body);
     var list = List.from(json);
     var posts = list.map((e) => PostModel.fromJson(e)).toList();
