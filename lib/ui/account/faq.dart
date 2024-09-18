@@ -10,6 +10,7 @@ class Faq extends StatelessWidget {
   Faq({super.key});
 
   final webViewController = WebViewController()
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
     ..loadRequest(Uri.parse(
         'https://nexalgamingcommunity.com/esports-ng-faqs/'));
 

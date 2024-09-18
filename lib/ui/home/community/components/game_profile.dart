@@ -349,7 +349,7 @@ class _GameProfileState extends State<GameProfile> {
                             scrollDirection: Axis.horizontal,
                             separatorBuilder: (context, index) =>
                                 Gap(Get.height * 0.02),
-                            itemCount: 5,
+                            itemCount: details!.gameModes!.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                   onTap: () {},
