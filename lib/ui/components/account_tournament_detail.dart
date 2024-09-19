@@ -99,7 +99,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   bool _isRegisterLoading = true;
   List<PlayerModel>? _participantList;
   List<RoasterModel>? _teamParticipantList;
-  WaitlistModel? _waitlist;
+  List<WaitlistModel>? _waitlist;
   bool _isRegistered = false;
   TeamModel? _registeredTeam;
   PlayerModel? _participantProfile;
@@ -130,7 +130,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
     } else {
       List<PlayerModel> participantList =
           await tournamentController.getTournamentParticipants(widget.item.id!);
-      WaitlistModel waitlist =
+      List<WaitlistModel> waitlist =
           await tournamentController.getTournamentWaitlist(widget.item.id!);
       setState(() {
         _waitlist = waitlist;
@@ -139,15 +139,20 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 .where((element) =>
                     element.player!.id! == authController.user!.id!)
                 .isNotEmpty ||
-            waitlist.players!
+            waitlist
                 .where((element) =>
-                    element.player!.id! == authController.user!.id!)
+                    element.player!.player!.id! == authController.user!.id!)
                 .isNotEmpty) {
           _isRegistered = true;
-          _participantProfile = participantList
-              .where(
-                  (element) => element.player!.id! == authController.user!.id!)
-              .toList()[0];
+          _participantProfile = participantList.isNotEmpty
+              ? participantList
+                  .where((element) =>
+                      element.player!.id! == authController.user!.id!)
+                  .toList()[0]
+              : waitlist
+                  .where((e) => e.player!.player!.id == authController.user!.id)
+                  .toList()[0]
+                  .player;
         }
         _isRegisterLoading = false;
       });

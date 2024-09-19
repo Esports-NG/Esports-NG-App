@@ -302,7 +302,17 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
             ),
             Gap(Get.height * 0.01),
             CustomTextField(
-              hint: "https://",
+              prefixIcon: const IntrinsicWidth(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Center(
+                    child: Text(
+                      "https://",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+              ),
               textEditingController:
                   tournamentController.tournamentLinkController,
               hasText: tournamentController.isTournamentLink.value,

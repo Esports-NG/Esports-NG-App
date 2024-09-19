@@ -154,6 +154,7 @@ class PostRepository extends GetxController {
       for (int i = 0; i < gameTagsController.selectedItems.length; i++) {
         request.fields['itags[$i].title'] =
             '${gameTagsController.selectedItems[i].value.abbrev}';
+        request.fields['itags[$i].event_id'] = '';
       }
 
       if (postImage != null) {
@@ -163,6 +164,8 @@ class PostRepository extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
+      var res = await response.stream.bytesToString();
+      print(res);
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
         getPostForYou(true);

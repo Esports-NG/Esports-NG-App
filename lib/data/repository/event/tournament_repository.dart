@@ -317,6 +317,7 @@ class TournamentRepository extends GetxController {
   Future createTournament() async {
     try {
       eventController.createEventStatus(CreateEventStatus.loading);
+      var tournamentLink = "https://${tournamentLinkController.text}";
       var headers = {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
@@ -324,7 +325,7 @@ class TournamentRepository extends GetxController {
       var request = http.MultipartRequest("POST",
           Uri.parse(ApiLink.createTournament(selectedCommunity.value!.id!)))
         ..fields["name"] = tournamentNameController.text
-        ..fields["link"] = tournamentLinkController.text
+        ..fields["link"] = tournamentLink
         ..fields["knockout_type"] = knockoutTypeController.text
         ..fields["rank_type"] = rankTypeController.text
         ..fields["reg_start"] = regDateController.text
@@ -438,9 +439,10 @@ class TournamentRepository extends GetxController {
   Future getTournamentWaitlist(int id) async {
     var response = await http.get(Uri.parse(ApiLink.getEventWaitlist(id)),
         headers: {"Authorization": "JWT ${authController.token}"});
-    var json = await jsonDecode(response.body);
-    var waitlist = WaitlistModel.fromJson(json);
-    log(response.body);
+    debugPrint(response.body);
+
+    List<WaitlistModel> waitlist = List<WaitlistModel>.from(
+        json.decode(response.body).map((x) => WaitlistModel.fromJson(x)));
 
     return waitlist;
   }
@@ -693,6 +695,25 @@ class TournamentRepository extends GetxController {
         headers: {"Authorization": "JWT ${authController.token}"});
 
     log(response.body);
+  }
+
+  Future takeActionOnWaitlist(
+      int eventId, int applicantId, String action) async {
+    var response = await http.post(
+        Uri.parse(ApiLink.takeActionOnWaitlist(eventId, applicantId, action)),
+        headers: {
+          "Authorization": "JWT ${authController.token}",
+        });
+    debugPrint(response.body);
+    if (response.statusCode == 200) {
+      if (action == "accept") {
+        Helpers()
+            .showCustomSnackbar(message: "Participant accepted successfully");
+      } else {
+        Helpers()
+            .showCustomSnackbar(message: "Participant rejected successfully");
+      }
+    }
   }
 
   void handleError(dynamic error) {

@@ -274,7 +274,8 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                               fit: BoxFit.cover,
                               image: NetworkImage(
                                   widget.fixture.homePlayer?.profile ??
-                                      widget.fixture.homeTeam!.profilePicture)),
+                                      widget.fixture.homeTeam?.profilePicture ??
+                                      "jhh")),
                           borderRadius: BorderRadius.all(
                               Radius.circular(Get.width * 0.15)),
                           color: Colors.redAccent,
@@ -287,7 +288,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                         width: Get.width * 0.18,
                         child: CustomText(
                           title: widget.fixture.homePlayer?.inGameName ??
-                              widget.fixture.homeTeam!.name,
+                              widget.fixture.homeTeam?.name,
                           color: AppColor().primaryWhite,
                           fontFamily: 'InterMedium',
                           textAlign: TextAlign.center,
@@ -365,7 +366,8 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.2),
               width: Get.width * 0.9,
               child: InkWell(
-                onTap: () => launchUrl(Uri.parse(widget.fixture.livestreams![0].link!)),
+                onTap: () =>
+                    launchUrl(Uri.parse(widget.fixture.livestreams![0].link!)),
                 child: ColorFiltered(
                   colorFilter: const ColorFilter.mode(
                     Colors.white,
@@ -591,10 +593,12 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                 ),
                 Gap(Get.height * 0.01),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: Get.width * 0.3, vertical: Get.width * 0.01),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Get.width * 0.3, vertical: Get.width * 0.01),
                   width: Get.width * 0.9,
                   child: InkWell(
-                    onTap: () => launchUrl(Uri.parse(widget.fixture.livestreams![0].link!)),
+                    onTap: () => launchUrl(
+                        Uri.parse(widget.fixture.livestreams![0].link!)),
                     child: ColorFiltered(
                       colorFilter: const ColorFilter.mode(
                         Colors.white,

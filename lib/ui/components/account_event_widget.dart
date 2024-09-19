@@ -34,25 +34,25 @@ class _AccountEventsWidgetState extends State<AccountEventsWidget> {
           padding: EdgeInsets.zero,
           physics: const ScrollPhysics(),
           shrinkWrap: true,
-          itemCount: eventController.myEvent.length,
+          itemCount: eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList().length,
           separatorBuilder: (context, index) => Gap(Get.height * 0.02),
           itemBuilder: (context, index) {
-            var item = eventController.myEvent[index];
+            var item = eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList()[index];
             return InkWell(
               onTap: () {
-                if (eventController.myEvent[index].type == "tournament") {
+                if (eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList()[index].type == "tournament") {
                   Get.to(() => AccountTournamentDetail(
-                      item: eventController.myEvent[index]));
+                      item: eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList()[index]));
                 } else {
                   Get.to(() =>
-                      SocialEventDetails(item: eventController.myEvent[index]));
+                      SocialEventDetails(item: eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList()[index]));
                 }
               },
               child: AccountEventsItem(item: item),
             );
           },
         );
-      } else if (eventController.myEvent.isEmpty) {
+      } else if (eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList().isEmpty) {
         return const NoItemPage(title: 'Event');
       } else {
         return const ErrorPage();
