@@ -105,6 +105,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   PlayerModel? _participantProfile;
   bool _isFetchingPosts = true;
   EventModel? _eventDetails;
+  bool _isFetchingFixtures = true;
 
   Future getParticipants() async {
     if (widget.item.tournamentType == "team") {
@@ -155,9 +156,13 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   }
 
   Future getFixtures() async {
+    setState(() {
+      _isFetchingFixtures = true;
+    });
     var fixturesList = await tournamentController.getFixtures(widget.item.id!);
     setState(() {
       _fixturesList = fixturesList;
+      _isFetchingFixtures = false;
     });
   }
 
@@ -760,8 +765,17 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: SizedBox(
                       width: double.infinity,
-                      height: Get.height * 0.25,
-                      child: ListView.separated(
+                      height: _isFetchingFixtures || _fixturesList.isEmpty ? 50 : Get.height * 0.25,
+                      child: _isFetchingFixtures
+                          ? const Center(child: ButtonLoader())
+                          : _fixturesList.isEmpty
+                              ? Center(
+                                  child: CustomText(
+                                      title: "No fixtures",
+                                      size: 16,
+                                      fontFamily: "InterMedium",
+                                      color: AppColor().lightItemsColor))
+                              : ListView.separated(
                           physics: const ScrollPhysics(),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,

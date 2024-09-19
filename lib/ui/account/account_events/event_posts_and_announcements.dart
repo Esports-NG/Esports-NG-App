@@ -89,11 +89,11 @@ class _EventPostsAndAnnouncementsState extends State<EventPostsAndAnnouncements>
                       child: TabBar(
                           isScrollable: true,
                           tabAlignment: TabAlignment.start,
-                          labelColor: AppColor().primaryColor,
-                          indicatorColor: AppColor().primaryColor,
+                          labelColor: AppColor().secondaryGreenColor,
+                          indicatorColor: AppColor().secondaryGreenColor,
                           dividerColor: Colors.transparent,
                           labelStyle: const TextStyle(
-                            fontFamily: 'InterBold',
+                            fontFamily: 'InterSemiBold',
                             fontSize: 13,
                           ),
                           unselectedLabelColor: AppColor().lightItemsColor,

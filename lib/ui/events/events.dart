@@ -102,7 +102,7 @@ class _EventsPageState extends State<EventsPage>
                       color: AppColor().primaryBackGroundColor,
                       child: TabBar(
                           padding: EdgeInsets.symmetric(
-                              horizontal: Get.height * 0.02),
+                              horizontal: Get.height * 0.015),
                           indicatorSize: TabBarIndicatorSize.tab,
                           labelStyle:
                               const TextStyle(fontFamily: "InterMedium"),
@@ -116,7 +116,7 @@ class _EventsPageState extends State<EventsPage>
                             Tab(
                               text: "Active Events",
                             ),
-                            Tab(text: "My Events"),
+                            Tab(text: "You Registered"),
                             Tab(text: "All Events")
                           ]),
                     )))
