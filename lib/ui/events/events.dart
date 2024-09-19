@@ -132,14 +132,16 @@ class _EventsPageState extends State<EventsPage>
               },
               child: TabBarView(
                 controller: eventController.tabController,
-                children: const [
-                  SingleChildScrollView(
+                children: [
+                  const SingleChildScrollView(
                       physics: NeverScrollableScrollPhysics(),
                       child: EventTab()),
                   SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      child: EventTab()),
-                  SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: EventTab(
+                        eventList: eventController.myEvent,
+                      )),
+                  const SingleChildScrollView(
                       physics: NeverScrollableScrollPhysics(),
                       child: EventTab()),
                 ],

@@ -1,3 +1,4 @@
+import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/events/components/all_event_list.dart';
 import 'package:e_sport/ui/events/components/event_filter_dropdown.dart';
@@ -11,7 +12,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class EventTab extends StatefulWidget {
-  const EventTab({super.key});
+  const EventTab({super.key, this.eventList});
+  final List<EventModel>? eventList;
 
   @override
   State<EventTab> createState() => _EventTabState();
@@ -84,7 +86,9 @@ class _EventTabState extends State<EventTab> {
                   ),
                 )
               : eventController.typeFilter.value == "All"
-                  ? const AllEventList()
+                  ? AllEventList(
+                      eventList: widget.eventList,
+                    )
                   : eventController.typeFilter.value == "Tournament"
                       ? const TournamentList()
                       : const SocialEventsList()

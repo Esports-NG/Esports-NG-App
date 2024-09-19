@@ -146,6 +146,8 @@ class TeamRepository extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
+      // var res = await response.stream.bytesToString();
+      // print(res);
 
       if (response.statusCode == 201) {
         _createTeamStatus(CreateTeamStatus.success);
@@ -321,6 +323,7 @@ class TeamRepository extends GetxController {
         if (rosterResponse.statusCode == 200) {
           Helpers()
               .showCustomSnackbar(message: "Successfully added game to team");
+          getMyTeam(true);
         }
       }
     } catch (err) {
@@ -385,11 +388,10 @@ class TeamRepository extends GetxController {
     return null;
   }
 
-  Future takeActionOnApplication(String action, int teamId) async {
+  Future takeActionOnApplication(int id, String action, int teamId) async {
     try {
       var response = await http.put(
-          Uri.parse(ApiLink.respondToApplication(
-              authController.user!.id!, teamId, action)),
+          Uri.parse(ApiLink.respondToApplication(id, teamId, action)),
           headers: {
             "Content-type": "application/json",
             "Authorization": "JWT ${authController.token}"

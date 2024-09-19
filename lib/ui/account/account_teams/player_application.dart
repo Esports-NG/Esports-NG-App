@@ -100,7 +100,9 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                           _isTakingAction = true;
                         });
                         await teamController.takeActionOnApplication(
-                            "accept", widget.application.team!.id!);
+                            widget.application.applicant!.id!,
+                            "accept",
+                            widget.application.team!.id!);
                       }
                       setState(() {
                         _isTakingAction = false;
@@ -133,7 +135,9 @@ class _PlayerApplicationState extends State<PlayerApplication> {
                           _isTakingAction = true;
                         });
                         await teamController.takeActionOnApplication(
-                            "reject", widget.application.team!.id!);
+                            widget.application.applicant!.id!,
+                            "reject",
+                            widget.application.team!.id!);
                       }
                       setState(() {
                         _isTakingAction = false;

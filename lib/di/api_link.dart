@@ -106,6 +106,9 @@ class ApiLink {
   static String getFixtures(int id) =>
       "${baseurl}event/fixture/view/?eventpk=$id";
   static String getPlatforms = "${baseurl}event/platforms/";
+  static String takeActionOnWaitlist(
+          int eventId, int applicantId, String action) =>
+      "${baseurl}event/$eventId/$action/$applicantId/";
 
   //Community
   static String createCommunity = "${baseurl}org/register/";
