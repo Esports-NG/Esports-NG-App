@@ -1,10 +1,10 @@
 import 'package:e_sport/data/model/player_model.dart';
-import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/model/team/roaster_model.dart';
 
 class WaitlistModel {
   int? id;
   PlayerModel? player;
-  TeamModel? team;
+  RoasterModel? team;
 
   WaitlistModel({this.id, this.player, this.team});
 
@@ -13,6 +13,6 @@ class WaitlistModel {
         player: json["player"] == null
             ? null
             : PlayerModel.fromJson(json['player']),
-        team: json["team"] == null ? null : TeamModel.fromJson(json['team']),
+        team: json["team"] == null ? null : RoasterModel.fromJson(json['team']),
       );
 }
