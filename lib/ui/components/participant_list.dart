@@ -256,6 +256,15 @@ class _ParticipantListState extends State<ParticipantList>
                                                 .primaryWhite
                                                 .withOpacity(0.8),
                                             fontFamily: "InterMedium"),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: CustomText(
+                                            title: "",
+                                            color: AppColor()
+                                                .primaryWhite
+                                                .withOpacity(0.8),
+                                            fontFamily: "InterMedium"),
                                       )
                                     ],
                                   ),
@@ -269,10 +278,12 @@ class _ParticipantListState extends State<ParticipantList>
                                       physics:
                                           const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) =>
-                                          PlayerRow(
-                                              participant:
-                                                  _participantList![index],
-                                              index: index,),
+                                          EventPlayerRow(
+                                            participant:
+                                                _participantList![index],
+                                            index: index,
+                                            event: widget.event,
+                                          ),
                                       separatorBuilder: (ctx, index) =>
                                           const Gap(20),
                                       itemCount: _participantList!.length)
@@ -501,6 +512,112 @@ class PlayerRow extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+        )
+      ],
+    );
+  }
+}
+
+
+// For Remove Participant
+class EventPlayerRow extends StatefulWidget {
+  const EventPlayerRow(
+      {super.key,
+      required this.participant,
+      required this.index,
+      required this.event});
+  final EventModel event;
+  final PlayerModel participant;
+  final int index;
+
+  @override
+  State<EventPlayerRow> createState() => _EventPlayerRowState();
+}
+
+class _EventPlayerRowState extends State<EventPlayerRow> {
+  final authController = Get.put(AuthRepository());
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: CustomText(
+            title: (widget.index + 1).toString(),
+            color: AppColor().primaryWhite,
+            fontFamily: "InterMedium",
+          ),
+        ),
+        const Spacer(),
+        Expanded(
+          flex: 2,
+          child: InkWell(
+            onTap: () => Get.to(GamesPlayedDetails(item: widget.participant)),
+            child: widget.participant.profile != null
+                ? Row(
+                    children: [
+                      Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image:
+                                    NetworkImage(widget.participant.profile!))),
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/images/svg/people.svg",
+                        width: 30,
+                        height: 30,
+                      ),
+                    ],
+                  ),
+          ),
+        ),
+        const Spacer(),
+        Expanded(
+          flex: 5,
+          child: InkWell(
+            onTap: () => Get.to(GamesPlayedDetails(item: widget.participant)),
+            child: CustomText(
+              title: widget.participant.inGameName,
+              color: AppColor().primaryWhite,
+            ),
+          ),
+        ),
+        const Spacer(),
+        Expanded(
+          flex: 6,
+          child: InkWell(
+            onTap: () =>
+                Get.to(UserDetails(id: widget.participant.player!.id!)),
+            child: CustomText(
+              title: widget.participant.player!.userName,
+              color: AppColor().primaryWhite,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        Visibility(
+          visible:
+              authController.user!.id! != widget.event.community!.owner!.id!,
+          child: Expanded(
+              flex: 2,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {},
+                color: AppColor().primaryWhite,
+                style: ButtonStyle(
+                    backgroundColor:
+                        WidgetStatePropertyAll(AppColor().primaryRed)),
+              )),
         )
       ],
     );
