@@ -57,14 +57,14 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
                   ),
                   errorWidget: (context, url, error) =>
                       Icon(Icons.error, color: AppColor().primaryColor),
-                  imageUrl: widget.item.profile!,
+                  imageUrl: widget.item.profile,
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(10),
                           topRight: Radius.circular(10)),
                       image: DecorationImage(
-                          image: NetworkImage(widget.item.profile!),
+                          image: NetworkImage(widget.item.profile),
                           fit: BoxFit.cover),
                     ),
                   ),
@@ -77,16 +77,16 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
                   children: [
                     textItem(
                         title: 'Game: ',
-                        subTitle: widget.item.gamePlayed!.name!),
+                        subTitle: widget.item.gamePlayed!.name),
                     Gap(Get.height * 0.01),
                     textItem(
                       title: 'Game ID: ',
-                      subTitle: widget.item.inGameId!,
+                      subTitle: widget.item.inGameId,
                     ),
                     Gap(Get.height * 0.01),
                     textItem(
                       title: 'IGN: ',
-                      subTitle: widget.item.inGameName!,
+                      subTitle: widget.item.inGameName,
                     ),
                   ],
                 ),
