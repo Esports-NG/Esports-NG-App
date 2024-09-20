@@ -290,7 +290,7 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                       )
                     : const SizedBox(),
                 Visibility(
-                  visible: widget.onDetailsPage != null,
+                  visible: widget.item.type == "tournament",
                   child: Column(
                     children: [
                       Gap(Get.height * 0.01),
@@ -311,6 +311,19 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                         title: 'Tournament Date: ',
                         subTitle:
                             "${DateFormat.MMM().format(widget.item.startDate!)} ${widget.item.startDate!.day}, ${widget.item.startDate!.year} - ${DateFormat.MMM().format(widget.item.endDate!)} ${widget.item.endDate!.day}, ${widget.item.endDate!.year}",
+                      ),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: widget.onDetailsPage != null,
+                  child: Column(
+                    children: [
+                      Gap(Get.height * 0.01),
+                      textItem(
+                        title: 'Game Modes: ',
+                        subTitle:
+                            widget.item.gameMode.toString(),
                       ),
                     ],
                   ),

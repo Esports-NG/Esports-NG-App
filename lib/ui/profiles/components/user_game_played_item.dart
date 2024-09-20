@@ -81,16 +81,16 @@ class UserGamesPlayedItem extends StatelessWidget {
             padding: const EdgeInsets.only(left: 10, bottom: 5),
             child: Column(
               children: [
-                textItem(title: 'Game: ', subTitle: player.gamePlayed!.name!),
+                textItem(title: 'Game: ', subTitle: player.gamePlayed!.name),
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'Game ID: ',
-                  subTitle: player.inGameId!,
+                  subTitle: player.inGameId,
                 ),
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'IGN: ',
-                  subTitle: player.inGameName!,
+                  subTitle: player.inGameName,
                 ),
               ],
             ),
