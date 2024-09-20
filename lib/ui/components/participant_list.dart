@@ -171,12 +171,12 @@ class _ParticipantListState extends State<ParticipantList>
                   indicatorColor: AppColor().secondaryGreenColor,
                   dividerColor: Colors.transparent,
                   labelStyle: const TextStyle(
-                    fontFamily: 'InterMedium',
+                    fontFamily: 'InterSemiBold',
                     fontSize: 13,
                   ),
                   unselectedLabelColor: AppColor().lightItemsColor,
                   unselectedLabelStyle: const TextStyle(
-                    fontFamily: 'Inter',
+                    fontFamily: 'InterMedium',
                     fontSize: 13,
                   ),
                   controller: _tabController,
@@ -196,7 +196,7 @@ class _ParticipantListState extends State<ParticipantList>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
-                          title: "Participant List",
+                          title: "Registered Participants",
                           color: AppColor().secondaryGreenColor,
                           fontFamily: "InterSemiBold",
                           size: 20,
@@ -272,7 +272,7 @@ class _ParticipantListState extends State<ParticipantList>
                                           PlayerRow(
                                               participant:
                                                   _participantList![index],
-                                              index: index),
+                                              index: index,),
                                       separatorBuilder: (ctx, index) =>
                                           const Gap(20),
                                       itemCount: _participantList!.length)
@@ -282,111 +282,148 @@ class _ParticipantListState extends State<ParticipantList>
                     ),
                   ),
                 ),
-                authController.user!.id! != widget.event.community!.owner!.id!
-                    ? Center(
-                        child: CustomText(
-                            title: "Sorry, you cannot view this page",
-                            color: AppColor().lightItemsColor))
-                    : _waitlist == null
-                        ? Center(
-                            child: ButtonLoader(),
-                          )
-                        : ListView.separated(
-                            itemBuilder: (context, index) {
-                              WaitlistModel item = _waitlist![index];
-                              return Container(
-                                padding: EdgeInsets.all(Get.height * 0.02),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CustomText(
-                                          title:
-                                              "IGN: ${item.player!.inGameName}",
-                                          color: AppColor().primaryWhite,
-                                          size: 16,
+                _waitlist == null
+                    ? const Center(
+                        child: ButtonLoader(),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Get.width * 0.05,
+                            vertical: Get.width * 0.025),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              title: "Registered Participants",
+                              color: AppColor().secondaryGreenColor,
+                              fontFamily: "InterSemiBold",
+                              size: 20,
+                            ),
+                            CustomText(
+                              title:
+                                  "${_waitlist != null ? _waitlist!.length : " "} players",
+                              color: AppColor().primaryWhite,
+                              size: 16,
+                            ),
+                            const Gap(20),
+                            ListView.separated(
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  WaitlistModel item = _waitlist![index];
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InkWell(
+                                        onTap: () => Get.to(GamesPlayedDetails(
+                                            item: item.player!)),
+                                        child: Row(
+                                          children: [
+                                            CircleAvatar(
+                                              foregroundImage: NetworkImage(
+                                                  item.player!.profile),
+                                            ),
+                                            Gap(Get.width * 0.03),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                CustomText(
+                                                  title:
+                                                      "IGN: ${item.player!.inGameName}",
+                                                  color:
+                                                      AppColor().primaryWhite,
+                                                  size: 16,
+                                                ),
+                                                const Gap(5),
+                                                CustomText(
+                                                    title:
+                                                        "Username: ${item.player!.player!.userName}",
+                                                    color: AppColor()
+                                                        .lightItemsColor)
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        const Gap(5),
-                                        CustomText(
-                                            title:
-                                                "Username: ${item.player!.player!.userName}",
-                                            color: AppColor().lightItemsColor)
-                                      ],
-                                    ),
-                                    Row(children: [
-                                      IconButton(
-                                          icon: _isTakingAction
-                                              ? ButtonLoader(
-                                                  color: AppColor()
-                                                      .primaryBackGroundColor)
-                                              : const Icon(Icons.check),
-                                          onPressed: () async {
-                                            setState(() {
-                                              _isTakingAction = true;
-                                            });
-                                            await tournamentController
-                                                .takeActionOnWaitlist(
-                                                    widget.event.id!,
-                                                    item.player!.id!,
-                                                    "accept");
-                                            setState(() {
-                                              _isTakingAction = false;
-                                              _participantList!
-                                                  .add(item.player!);
-                                              _waitlist!.removeWhere(
-                                                  (element) =>
-                                                      element.player!.id! ==
-                                                      item.player!.id!);
-                                            });
-                                          },
-                                          color:
-                                              AppColor().primaryBackGroundColor,
-                                          style: ButtonStyle(
-                                              backgroundColor:
-                                                  WidgetStatePropertyAll(
-                                                      AppColor()
-                                                          .secondaryGreenColor))),
-                                      const Gap(10),
-                                      IconButton(
-                                        icon: _isTakingAction
-                                            ? ButtonLoader(
-                                                color: AppColor().primaryWhite)
-                                            : const Icon(Icons.close),
-                                        onPressed: () async {
-                                          setState(() {
-                                            _isTakingAction = true;
-                                          });
-                                          await tournamentController
-                                              .takeActionOnWaitlist(
-                                                  widget.event.id!,
-                                                  item.player!.id!,
-                                                  "reject");
-                                          setState(() {
-                                            _isTakingAction = false;
-                                            _waitlist!.removeWhere((element) =>
-                                                element.player!.id! ==
-                                                item.player!.id!);
-                                          });
-                                        },
-                                        color: AppColor().primaryWhite,
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                WidgetStatePropertyAll(
-                                                    AppColor().primaryRed)),
+                                      ),
+                                      Visibility(
+                                        visible: authController.user!.id! ==
+                                            widget.event.community!.owner!.id!,
+                                        child: Row(children: [
+                                          IconButton(
+                                              icon: _isTakingAction
+                                                  ? ButtonLoader(
+                                                      color: AppColor()
+                                                          .primaryBackGroundColor)
+                                                  : const Icon(Icons.check),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  _isTakingAction = true;
+                                                });
+                                                await tournamentController
+                                                    .takeActionOnWaitlist(
+                                                        widget.event.id!,
+                                                        item.player!.id!,
+                                                        "accept");
+                                                setState(() {
+                                                  _isTakingAction = false;
+                                                  _participantList!
+                                                      .add(item.player!);
+                                                  _waitlist!.removeWhere(
+                                                      (element) =>
+                                                          element.player!.id! ==
+                                                          item.player!.id!);
+                                                });
+                                              },
+                                              color: AppColor()
+                                                  .primaryBackGroundColor,
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      WidgetStatePropertyAll(
+                                                          AppColor()
+                                                              .secondaryGreenColor))),
+                                          const Gap(10),
+                                          IconButton(
+                                            icon: _isTakingAction
+                                                ? ButtonLoader(
+                                                    color:
+                                                        AppColor().primaryWhite)
+                                                : const Icon(Icons.close),
+                                            onPressed: () async {
+                                              setState(() {
+                                                _isTakingAction = true;
+                                              });
+                                              await tournamentController
+                                                  .takeActionOnWaitlist(
+                                                      widget.event.id!,
+                                                      item.player!.id!,
+                                                      "reject");
+                                              setState(() {
+                                                _isTakingAction = false;
+                                                _waitlist!.removeWhere(
+                                                    (element) =>
+                                                        element.player!.id! ==
+                                                        item.player!.id!);
+                                              });
+                                            },
+                                            color: AppColor().primaryWhite,
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    WidgetStatePropertyAll(
+                                                        AppColor().primaryRed)),
+                                          )
+                                        ]),
                                       )
-                                    ])
-                                  ],
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(
-                                  color: AppColor().bgDark,
-                                ),
-                            itemCount: _waitlist!.length)
+                                    ],
+                                  );
+                                },
+                                separatorBuilder: (context, index) => Divider(
+                                      color: AppColor().bgDark,
+                                    ),
+                                itemCount: _waitlist!.length),
+                          ],
+                        ),
+                      )
               ]),
             ),
           ],
