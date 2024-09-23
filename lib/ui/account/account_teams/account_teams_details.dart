@@ -642,7 +642,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     CustomText(
-                                      title: "Players/Roster",
+                                      title: "Squad",
                                       size: 14,
                                       color: AppColor().primaryWhite,
                                     ),

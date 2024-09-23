@@ -47,7 +47,7 @@ class _ParticipantListState extends State<ParticipantList>
       _participantList = participantList;
       _waitlist = waitlist;
       if (participantList
-          .where((element) => element.player!.id! == authController.user!.id!)
+          .where((element) => element.player!.id! == authController.user!.id!).isNotEmpty || waitlist.where((element) => element.player!.player!.id! == authController.user!.id!)
           .isNotEmpty) {
         _isRegistered = true;
       }
@@ -196,7 +196,7 @@ class _ParticipantListState extends State<ParticipantList>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
-                          title: "Registered Participants",
+                          title: "Approved Participants",
                           color: AppColor().secondaryGreenColor,
                           fontFamily: "InterSemiBold",
                           size: 20,
@@ -607,7 +607,7 @@ class _EventPlayerRowState extends State<EventPlayerRow> {
         ),
         Visibility(
           visible:
-              authController.user!.id! != widget.event.community!.owner!.id!,
+              authController.user!.id! == widget.event.community!.owner!.id!,
           child: Expanded(
               flex: 2,
               child: IconButton(
