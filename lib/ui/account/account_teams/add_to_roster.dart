@@ -1,7 +1,6 @@
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
-import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
@@ -22,7 +21,7 @@ class AddToRoster extends StatefulWidget {
 
 class _AddToRosterState extends State<AddToRoster> {
   final teamController = Get.put(TeamRepository());
-  UserModel? _player;
+  PlayerModel? _player;
   RoasterModel? _roster;
   GamePlayed? _game;
   String? _playerString;
@@ -131,16 +130,16 @@ class _AddToRosterState extends State<AddToRoster> {
                   icon: Icon(Icons.keyboard_arrow_down,
                       color: AppColor().lightItemsColor),
                   value: _playerString,
-                  items: widget.team.players!.map((playerValue) {
+                  items: widget.team.playerProfiles!.map((playerValue) {
                     return DropdownMenuItem<String>(
-                      value: playerValue.userName,
+                      value: playerValue.inGameName,
                       onTap: () {
                         setState(() {
                           _player = playerValue;
                         });
                       },
                       child: CustomText(
-                        title: playerValue.userName,
+                        title: playerValue.inGameName,
                         color: AppColor().lightItemsColor,
                         fontFamily: 'InterMedium',
                         size: 15,

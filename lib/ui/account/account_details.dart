@@ -37,6 +37,7 @@ class _AccountDetailsState extends State<AccountDetails> {
   final eventController = Get.put(EventRepository());
 
   int? accountTab = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +83,10 @@ class _AccountDetailsState extends State<AccountDetails> {
                       if (widget.title == 'Posts') {
                         Get.to(() => const CreatePost());
                       } else if (widget.title == 'Player Profile') {
-                        Get.to(() => const CreatePlayerProfile());
+                        Get.to(() => const CreatePlayerProfile())!
+                            .whenComplete(() async {
+                          playerController.getAllPlayer(false);
+                        });
                       } else if (widget.title == 'Teams') {
                         Get.to(() => const CreateTeamPage());
                       }

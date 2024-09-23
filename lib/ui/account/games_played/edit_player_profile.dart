@@ -252,18 +252,20 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                       child: CustomFillButton(
                         buttonColor: appColors.primaryRed,
                         boarderColor: appColors.primaryColor.withOpacity(0),
-                        onTap: () {
+                        onTap: () async {
                           if (formKey.currentState!.validate()) {
-                            playerController.createPlayer(PlayerModel(
-                                inGameName:
-                                    playerController.gameNameController.text,
-                                inGameId:
-                                    playerController.gameIdController.text,
-                                gamePlayed:
-                                    gamesController.selectedGame.value));
+                            setState(() {
+                              _isDeleting = true;
+                            });
+                            await playerController
+                                .deletePlayerProfile(widget.player.id!);
+                            setState(() {
+                              _isDeleting = false;
+                            });
                           }
                         },
                         buttonText: "Delete Game Profile",
+                        isLoading: _isDeleting,
                       ),
                     ),
                   ],

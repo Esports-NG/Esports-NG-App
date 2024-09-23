@@ -1,11 +1,11 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/ui/account/games_played/games_played_item.dart';
-import 'package:e_sport/util/colors.dart';
-import 'package:e_sport/util/loading.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'error_page.dart';
 import 'games_played_details.dart';
 import 'no_item_page.dart';
@@ -25,7 +25,7 @@ class _GamesPlayedWidgetState extends State<GamesPlayedWidget> {
   @override
   Widget build(BuildContext context) {
     if (playerController.playerStatus == PlayerStatus.loading) {
-      return LoadingWidget(color: AppColor().primaryColor);
+      return const ButtonLoader();
     } else if (playerController.playerStatus == PlayerStatus.available) {
       return ListView.separated(
         padding: EdgeInsets.zero,

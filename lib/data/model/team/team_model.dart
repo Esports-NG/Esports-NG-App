@@ -23,6 +23,7 @@ class TeamModel {
   List<UserModel>? players;
   String? membersCount;
   int? playersCount;
+  List<PlayerModel>? playerProfiles;
 
   TeamModel(
       {this.id,
@@ -37,7 +38,7 @@ class TeamModel {
       this.playersCount,
       this.membersCount,
       this.abbrev,
-      this.players});
+      this.players, this.playerProfiles});
 
   factory TeamModel.fromJson(Map<String, dynamic> json) => TeamModel(
       id: json["id"],
@@ -52,6 +53,7 @@ class TeamModel {
               json["games_played"]!.map((x) => GamePlayed.fromJson(x))),
       bio: json["bio"],
       manager: json["manager"],
+      playerProfiles: json['player_profiles'] == null ? [] : List<PlayerModel>.from(json['player_profiles']!.map((x)=> PlayerModel.fromJson(x))),
       players: json["players"] == null
           ? []
           : List<UserModel>.from(

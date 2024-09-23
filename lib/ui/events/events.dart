@@ -128,6 +128,7 @@ class _EventsPageState extends State<EventsPage>
                 await eventController.getAllEvents();
                 // await eventController.getAllSocialEvents(false);
                 // await eventController.getAllTournaments(false);
+                await eventController.getMyEvents();
                 await eventController.filterEvents();
               },
               child: TabBarView(
@@ -138,8 +139,10 @@ class _EventsPageState extends State<EventsPage>
                       child: EventTab()),
                   SingleChildScrollView(
                       physics: const NeverScrollableScrollPhysics(),
-                      child: EventTab(
-                        eventList: eventController.myEvent,
+                      child: Obx(
+                        () => EventTab(
+                          eventList: eventController.myEvent,
+                        ),
                       )),
                   const SingleChildScrollView(
                       physics: NeverScrollableScrollPhysics(),

@@ -84,23 +84,19 @@ class PlayerRepository extends GetxController {
       if (playerProfileImage != null) {
         request.files.add(await http.MultipartFile.fromPath(
             'profile', playerProfileImage!.path));
-        request.headers.addAll(headers);
       }
-      EasyLoading.show();
+      request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 201) {
         _createPlayerStatus(CreatePlayerStatus.success);
         debugPrint(await response.stream.bytesToString());
-        EasyLoading.showSuccess("Player Created");
         Get.to(() => const CreateSuccessPage(title: 'Player Created'))!
             .then((value) {
           getAllPlayer(false);
           clear();
         });
       } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
+        authController.refreshToken();
         _createPlayerStatus(CreatePlayerStatus.error);
       } else {
         _createPlayerStatus(CreatePlayerStatus.error);
@@ -177,6 +173,17 @@ class PlayerRepository extends GetxController {
       }
     } catch (error) {
       print(error);
+    }
+  }
+
+  Future deletePlayerProfile(int id) async {
+    var response = await http.delete(Uri.parse(ApiLink.deletePlayer(id)),
+        headers: {"Authorization": "JWT ${authController.token}"});
+    debugPrint(response.body);
+
+    if (response.statusCode == 200) {
+      Get.back();
+      Helpers().showCustomSnackbar(message: "Player Profile Deleted");
     }
   }
 

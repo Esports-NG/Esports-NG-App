@@ -334,103 +334,140 @@ class _TeamParticipantListState extends State<TeamParticipantList>
                     ),
                   ),
                   _waitlist == null
-                      ? Center(
+                      ? const Center(
                           child: ButtonLoader(),
                         )
-                      : ListView.separated(
-                          itemBuilder: (context, index) {
-                            WaitlistModel item = _waitlist![index];
-                            return Container(
-                              padding: EdgeInsets.all(Get.height * 0.02),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CustomText(
-                                        title:
-                                            "IGN: ${item.player!.inGameName}",
-                                        color: AppColor().primaryWhite,
-                                        size: 16,
-                                      ),
-                                      const Gap(5),
-                                      CustomText(
-                                          title:
-                                              "Username: ${item.player!.player!.userName}",
-                                          color: AppColor().lightItemsColor)
-                                    ],
-                                  ),
-                                  Row(children: [
-                                    IconButton(
-                                        icon: _isTakingAction
-                                            ? ButtonLoader(
-                                                color: AppColor()
-                                                    .primaryBackGroundColor)
-                                            : const Icon(Icons.check),
-                                        onPressed: () async {
-                                          setState(() {
-                                            _isTakingAction = true;
-                                          });
-                                          await tournamentController
-                                              .takeActionOnWaitlist(
-                                                  widget.event.id!,
-                                                  item.player!.id!,
-                                                  "accept");
-                                          setState(() {
-                                            _isTakingAction = false;
-                                            // _participantList!.add(item.player!);
-                                            _waitlist!.removeWhere((element) =>
-                                                element.team!.id! ==
-                                                item.team!.id!);
-                                          });
-                                        },
-                                        color: AppColor()
-                                            .primaryBackGroundColor,
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                WidgetStatePropertyAll(
-                                                    AppColor()
-                                                        .secondaryGreenColor))),
-                                    const Gap(10),
-                                    IconButton(
-                                      icon: _isTakingAction
-                                          ? ButtonLoader(
-                                              color: AppColor().primaryWhite)
-                                          : const Icon(Icons.close),
-                                      onPressed: () async {
-                                        setState(() {
-                                          _isTakingAction = true;
-                                        });
-                                        await tournamentController
-                                            .takeActionOnWaitlist(
-                                                widget.event.id!,
-                                                item.player!.id!,
-                                                "reject");
-                                        setState(() {
-                                          _isTakingAction = false;
-                                          _waitlist!.removeWhere((element) =>
-                                              element.player!.id! ==
-                                              item.player!.id!);
-                                        });
-                                      },
-                                      color: AppColor().primaryWhite,
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              WidgetStatePropertyAll(
-                                                  AppColor().primaryRed)),
-                                    )
-                                  ])
-                                ],
+                      : SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: Get.height * 0.02,
+                                    left: Get.height * 0.02,
+                                    right: Get.height * 0.02),
+                                child: CustomText(
+                                  title: "Registered Teams",
+                                  color: AppColor().secondaryGreenColor,
+                                  fontFamily: "InterSemiBold",
+                                  size: 20,
+                                ),
                               ),
-                            );
-                          },
-                          separatorBuilder: (context, index) => Divider(
-                                color: AppColor().bgDark,
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Get.height * 0.02),
+                                child: CustomText(
+                                  title:
+                                      "${_waitlist != null ? _waitlist!.length : " "} players",
+                                  color: AppColor().primaryWhite,
+                                  size: 16,
+                                ),
                               ),
-                          itemCount: _waitlist!.length)
+                              const Gap(20),
+                              ListView.separated(
+                                itemBuilder: (context, index) {
+                                  WaitlistModel item = _waitlist![index];
+                                  return Container(
+                                    padding: EdgeInsets.all(Get.height * 0.02),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CustomText(
+                                              title:
+                                                  "Team Name: ${item.team!.team!.name!}",
+                                              color: AppColor().primaryWhite,
+                                              size: 16,
+                                            ),
+                                            const Gap(5),
+                                            CustomText(
+                                                title:
+                                                    "${item.team!.players!.length} player(s)",
+                                                color:
+                                                    AppColor().lightItemsColor)
+                                          ],
+                                        ),
+                                        Row(children: [
+                                          IconButton(
+                                              icon: _isTakingAction
+                                                  ? ButtonLoader(
+                                                      color: AppColor()
+                                                          .primaryBackGroundColor)
+                                                  : const Icon(Icons.check),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  _isTakingAction = true;
+                                                });
+                                                await tournamentController
+                                                    .takeActionOnWaitlist(
+                                                        widget.event.id!,
+                                                        item.team!.team!.id!,
+                                                        "accept");
+                                                setState(() {
+                                                  _isTakingAction = false;
+                                                  _participantList!
+                                                      .add(item.team!);
+                                                  _waitlist!.removeWhere(
+                                                      (element) =>
+                                                          element.team!.id! ==
+                                                          item.team!.id!);
+                                                });
+                                              },
+                                              color: AppColor()
+                                                  .primaryBackGroundColor,
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      WidgetStatePropertyAll(
+                                                          AppColor()
+                                                              .secondaryGreenColor))),
+                                          const Gap(10),
+                                          IconButton(
+                                            icon: _isTakingAction
+                                                ? ButtonLoader(
+                                                    color:
+                                                        AppColor().primaryWhite)
+                                                : const Icon(Icons.close),
+                                            onPressed: () async {
+                                              setState(() {
+                                                _isTakingAction = true;
+                                              });
+                                              await tournamentController
+                                                  .takeActionOnWaitlist(
+                                                      widget.event.id!,
+                                                      item.player!.id!,
+                                                      "reject");
+                                              setState(() {
+                                                _isTakingAction = false;
+                                                _waitlist!.removeWhere(
+                                                    (element) =>
+                                                        element.team!.id! ==
+                                                        item.team!.id!);
+                                              });
+                                            },
+                                            color: AppColor().primaryWhite,
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    WidgetStatePropertyAll(
+                                                        AppColor().primaryRed)),
+                                          )
+                                        ])
+                                      ],
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (context, index) => Divider(
+                                  color: AppColor().bgDark,
+                                ),
+                                itemCount: _waitlist!.length,
+                                shrinkWrap: true,
+                              ),
+                            ],
+                          ),
+                        )
                 ],
               ),
             ),

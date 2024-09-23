@@ -54,6 +54,8 @@ class EventRepository extends GetxController
 
   late TabController tabController;
 
+  Rx<bool> fetchingCreatedEvents = Rx(false);
+
   final Rx<List<EventModel>> _allEvent = Rx([]);
   final Rx<List<EventModel>> _filteredEvent = Rx([]);
   final Rx<List<EventModel>> _myEvent = Rx([]);
@@ -61,6 +63,7 @@ class EventRepository extends GetxController
   final Rx<List<EventModel>> _myTournaments = Rx([]);
   final Rx<List<EventModel>> _allSocialEvent = Rx([]);
   final Rx<List<EventModel>> _mySocialEvent = Rx([]);
+  final RxList<EventModel> createdEvents = <EventModel>[].obs;
 
   final Rx<String> currency = "".obs;
 
@@ -349,6 +352,21 @@ class EventRepository extends GetxController
       eventStatus(EventStatus.error);
       debugPrint("getting all event: ${error.toString()}");
     }
+  }
+
+  Future getCreatedEvents() async {
+    fetchingCreatedEvents.value = true;
+    var response =
+        await http.get(Uri.parse(ApiLink.getCreatedEvents), headers: {
+      "Authorization": "JWT ${authController.token}",
+    });
+
+    log(response.body);
+    var json = jsonDecode(response.body);
+    var list = List.from(json);
+    var events = list.map((e) => EventModel.fromJson(e));
+    createdEvents.assignAll(events);
+    fetchingCreatedEvents.value = false;
   }
 
   Future filterEvents() async {
