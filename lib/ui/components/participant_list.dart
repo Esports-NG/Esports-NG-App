@@ -54,6 +54,12 @@ class _ParticipantListState extends State<ParticipantList>
     });
   }
 
+  void removeParticipant(int id) {
+    setState(() {
+      _participantList!.removeWhere((e) => e.id == id);
+    });
+  }
+
   @override
   void initState() {
     getParticipants();
@@ -279,6 +285,8 @@ class _ParticipantListState extends State<ParticipantList>
                                           const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) =>
                                           EventPlayerRow(
+                                            removeParticipant:
+                                                removeParticipant,
                                             participant:
                                                 _participantList![index],
                                             index: index,
@@ -518,17 +526,18 @@ class PlayerRow extends StatelessWidget {
   }
 }
 
-
 // For Remove Participant
 class EventPlayerRow extends StatefulWidget {
   const EventPlayerRow(
       {super.key,
       required this.participant,
       required this.index,
-      required this.event});
+      required this.event,
+      required this.removeParticipant});
   final EventModel event;
   final PlayerModel participant;
   final int index;
+  final Function removeParticipant;
 
   @override
   State<EventPlayerRow> createState() => _EventPlayerRowState();
@@ -536,6 +545,9 @@ class EventPlayerRow extends StatefulWidget {
 
 class _EventPlayerRowState extends State<EventPlayerRow> {
   final authController = Get.put(AuthRepository());
+  final tournamentController = Get.put(TournamentRepository());
+
+  bool _isRemoving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -610,14 +622,26 @@ class _EventPlayerRowState extends State<EventPlayerRow> {
               authController.user!.id! == widget.event.community!.owner!.id!,
           child: Expanded(
               flex: 2,
-              child: IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {},
-                color: AppColor().primaryWhite,
-                style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStatePropertyAll(AppColor().primaryRed)),
-              )),
+              child: _isRemoving
+                  ? ButtonLoader(color: AppColor().primaryWhite)
+                  : IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () async {
+                        setState(() {
+                          _isRemoving = true;
+                        });
+                        await tournamentController.editParticipant(
+                            widget.event.id!, widget.participant.id!, "remove");
+                        widget.removeParticipant(widget.participant.id!);
+                        setState(() {
+                          _isRemoving = false;
+                        });
+                      },
+                      color: AppColor().primaryWhite,
+                      style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStatePropertyAll(AppColor().primaryRed)),
+                    )),
         )
       ],
     );

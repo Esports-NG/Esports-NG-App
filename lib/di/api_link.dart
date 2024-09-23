@@ -78,6 +78,7 @@ class ApiLink {
   static String createPlayer = "${baseurl}player/register/";
   static String getAllPlayer = "${baseurl}player/view/";
   static String editPlayer(int id) => "${baseurl}player/edit/$id/";
+  static String deletePlayer(int id) => "${baseurl}player/delete/$id/";
 
   //Events
   static String createTournament(int communityId) =>
@@ -109,6 +110,10 @@ class ApiLink {
   static String takeActionOnWaitlist(
           int eventId, int applicantId, String action) =>
       "${baseurl}event/$eventId/$action/$applicantId/";
+  static String editParticipant(
+          int eventId, int participantId, String action) =>
+      "${baseurl}event/edit/$eventId/participants/$participantId/$action/";
+  static String getCreatedEvents = "${baseurl}event/created/";
 
   //Community
   static String createCommunity = "${baseurl}org/register/";

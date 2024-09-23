@@ -19,34 +19,32 @@ class _AllEventListState extends State<AllEventList> {
   var eventController = Get.put(EventRepository());
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => InkWell(
-              onTap: () {
-                if ((widget.eventList ?? eventController.allEvent)
-                        .reversed
-                        .toList()[index]
-                        .type ==
-                    "tournament") {
-                  Get.to(() => AccountTournamentDetail(
-                      item: (widget.eventList ?? eventController.allEvent)
-                          .reversed
-                          .toList()[index]));
-                } else {
-                  Get.to(() => SocialEventDetails(
-                      item: (widget.eventList ?? eventController.allEvent)
-                          .reversed
-                          .toList()[index]));
-                }
-              },
-              child: AccountEventsItem(
-                  item: (widget.eventList ?? eventController.allEvent)
+    return ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) => InkWell(
+            onTap: () {
+              if ((widget.eventList ?? eventController.allEvent)
                       .reversed
-                      .toList()[index])),
-          separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-          itemCount: (widget.eventList ?? eventController.allEvent).length),
-    );
+                      .toList()[index]
+                      .type ==
+                  "tournament") {
+                Get.to(() => AccountTournamentDetail(
+                    item: (widget.eventList ?? eventController.allEvent)
+                        .reversed
+                        .toList()[index]));
+              } else {
+                Get.to(() => SocialEventDetails(
+                    item: (widget.eventList ?? eventController.allEvent)
+                        .reversed
+                        .toList()[index]));
+              }
+            },
+            child: AccountEventsItem(
+                item: (widget.eventList ?? eventController.allEvent)
+                    .reversed
+                    .toList()[index])),
+        separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+        itemCount: (widget.eventList ?? eventController.allEvent).length);
   }
 }

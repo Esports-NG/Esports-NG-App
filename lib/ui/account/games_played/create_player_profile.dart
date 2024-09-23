@@ -5,6 +5,7 @@ import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
+import 'package:e_sport/ui/widget/game_list_dropdown.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
@@ -54,53 +55,7 @@ class _CreatePlayerProfileState extends State<CreatePlayerProfile> {
                   color: AppColor().greyFour,
                 ),
                 Gap(Get.height * 0.01),
-                InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: AppColor().bgDark,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor().lightItemsColor, width: 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10)),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<GamePlayed>(
-                      value: gamesController.selectedGame.value,
-                      icon: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: AppColor().lightItemsColor,
-                      ),
-                      items: gamesController.allGames.map((value) {
-                        return DropdownMenuItem<GamePlayed>(
-                          value: value,
-                          child: CustomText(
-                            title: value.name,
-                            color: AppColor().lightItemsColor,
-                            fontFamily: 'InterBold',
-                            size: 13,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        gamesController.selectedGame.value = value;
-                        gamesController.selectedGameName.value = value!.name!;
-                        // debugPrint(gamesController.communitiesValue.value);
-                        // gamesController.handleTap('commu');
-                      },
-                      hint: CustomText(
-                        title: "Select a Game",
-                        color: AppColor().lightItemsColor,
-                        fontFamily: 'InterBold',
-                        size: 13,
-                      ),
-                    ),
-                  ),
-                ),
+                GameDropdown(gameValue: gamesController.selectedGame),
                 Gap(Get.height * 0.03),
                 CustomText(
                   title: "IGN",
@@ -190,16 +145,18 @@ class _CreatePlayerProfileState extends State<CreatePlayerProfile> {
                 }),
                 Gap(Get.height * 0.03),
                 CustomFillButton(
-                    onTap: () {
-                      if (formKey.currentState!.validate()) {
-                        playerController.createPlayer(PlayerModel(
-                            inGameName:
-                                playerController.gameNameController.text,
-                            inGameId: playerController.gameIdController.text,
-                            gamePlayed: gamesController.selectedGame.value));
-                      }
-                    },
-                    buttonText: "Add Game Profile")
+                  onTap: () {
+                    if (formKey.currentState!.validate()) {
+                      playerController.createPlayer(PlayerModel(
+                          inGameName: playerController.gameNameController.text,
+                          inGameId: playerController.gameIdController.text,
+                          gamePlayed: gamesController.selectedGame.value));
+                    }
+                  },
+                  buttonText: "Add Game Profile",
+                  isLoading: playerController.createPlayerStatus ==
+                      CreatePlayerStatus.loading,
+                )
               ],
             ),
           ),

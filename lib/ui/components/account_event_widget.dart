@@ -8,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import 'account_tournament_detail.dart';
-import 'error_page.dart';
 import 'no_item_page.dart';
 
 class AccountEventsWidget extends StatefulWidget {
@@ -24,38 +23,46 @@ class _AccountEventsWidgetState extends State<AccountEventsWidget> {
   final eventController = Get.put(EventRepository());
   final authController = Get.put(AuthRepository());
 
+  Future fetchCreatedEvents() async {
+    await eventController.getCreatedEvents();
+  }
+
+  @override
+  void initState() {
+    fetchCreatedEvents();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (eventController.myEventStatus.value == EventStatus.loading) {
+      if (eventController.fetchingCreatedEvents.value) {
         return const ButtonLoader();
-      } else if (eventController.myEventStatus.value == EventStatus.available) {
+      } else if (eventController.createdEvents.isEmpty) {
+        return const NoItemPage(title: 'Event');
+      } else {
         return ListView.separated(
           padding: EdgeInsets.zero,
           physics: const ScrollPhysics(),
           shrinkWrap: true,
-          itemCount: eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList().length,
+          itemCount: eventController.createdEvents.length,
           separatorBuilder: (context, index) => Gap(Get.height * 0.02),
           itemBuilder: (context, index) {
-            var item = eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList()[index];
+            var item = eventController.createdEvents[index];
             return InkWell(
               onTap: () {
-                if (eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList()[index].type == "tournament") {
+                if (eventController.createdEvents[index].type == "tournament") {
                   Get.to(() => AccountTournamentDetail(
-                      item: eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList()[index]));
+                      item: eventController.createdEvents[index]));
                 } else {
-                  Get.to(() =>
-                      SocialEventDetails(item: eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList()[index]));
+                  Get.to(() => SocialEventDetails(
+                      item: eventController.createdEvents[index]));
                 }
               },
               child: AccountEventsItem(item: item),
             );
           },
         );
-      } else if (eventController.allEvent.where((e)=> e.community!.owner!.id == authController.user!.id).toList().isEmpty) {
-        return const NoItemPage(title: 'Event');
-      } else {
-        return const ErrorPage();
       }
     });
   }

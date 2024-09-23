@@ -716,6 +716,19 @@ class TournamentRepository extends GetxController {
     }
   }
 
+  Future editParticipant(int eventId, int participantId, String action) async {
+    var response = await http.put(
+        Uri.parse(ApiLink.editParticipant(eventId, participantId, action)),
+        headers: {"Authorization": "JWT ${authController.token}"});
+
+    log(response.body);
+    if (response.statusCode == 200) {
+      if (action == "remove") {
+        Helpers().showCustomSnackbar(message: "Removed Participant");
+      }
+    }
+  }
+
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(
