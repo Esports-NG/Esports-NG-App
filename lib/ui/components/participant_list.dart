@@ -47,7 +47,7 @@ class _ParticipantListState extends State<ParticipantList>
       _participantList = participantList;
       _waitlist = waitlist;
       if (participantList
-          .where((element) => element.player!.id! == authController.user!.id!)
+          .where((element) => element.player!.id! == authController.user!.id!).isNotEmpty || waitlist.where((element) => element.player!.player!.id! == authController.user!.id!)
           .isNotEmpty) {
         _isRegistered = true;
       }

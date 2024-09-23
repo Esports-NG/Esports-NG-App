@@ -85,7 +85,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
                   size: 16,
                 ),
                 CustomText(
-                  title: "Players",
+                  title: "Squad",
                   color: AppColor().primaryWhite.withOpacity(0.5),
                   // fontFamily: "InterSemiBold",
                   size: 14,
