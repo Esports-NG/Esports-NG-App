@@ -84,13 +84,13 @@ class UserGamesPlayedItem extends StatelessWidget {
                 textItem(title: 'Game: ', subTitle: player.gamePlayed!.name),
                 Gap(Get.height * 0.01),
                 textItem(
-                  title: 'Game ID: ',
-                  subTitle: player.inGameId ?? "",
+                  title: 'IGN: ',
+                  subTitle: player.inGameName ?? "",
                 ),
                 Gap(Get.height * 0.01),
                 textItem(
-                  title: 'IGN: ',
-                  subTitle: player.inGameName ?? "",
+                  title: 'Game ID: ',
+                  subTitle: player.inGameId ?? "",
                 ),
               ],
             ),

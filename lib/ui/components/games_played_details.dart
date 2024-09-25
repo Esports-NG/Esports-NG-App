@@ -38,7 +38,13 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CachedNetworkImage(
+              widget.item.player!.profile!.profilePicture == null
+                  ? SvgPicture.asset(
+                      'assets/images/svg/people.svg',
+                      height: Get.height * 0.035,
+                      width: Get.height * 0.035,
+                    )
+                  :CachedNetworkImage(
                 height: Get.height * 0.04,
                 width: Get.height * 0.04,
                 progressIndicatorBuilder: (context, url, progress) => Center(
