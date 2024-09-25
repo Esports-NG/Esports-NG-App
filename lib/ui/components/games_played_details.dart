@@ -214,7 +214,7 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                           color: AppColor().greyOne,
                         ),
                         CustomText(
-                          title: widget.item.inGameName!,
+                          title: widget.item.inGameName,
                           size: 14,
                           fontFamily: 'InterSemiBold',
                           textAlign: TextAlign.start,
@@ -233,7 +233,7 @@ class _GamesPlayedDetailsState extends State<GamesPlayedDetails> {
                           color: AppColor().greyOne,
                         ),
                         CustomText(
-                          title: widget.item.inGameId!,
+                          title: widget.item.inGameId ?? "",
                           size: 14,
                           fontFamily: 'InterSemiBold',
                           textAlign: TextAlign.start,

@@ -85,12 +85,12 @@ class UserGamesPlayedItem extends StatelessWidget {
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'Game ID: ',
-                  subTitle: player.inGameId,
+                  subTitle: player.inGameId ?? "",
                 ),
                 Gap(Get.height * 0.01),
                 textItem(
                   title: 'IGN: ',
-                  subTitle: player.inGameName,
+                  subTitle: player.inGameName ?? "",
                 ),
               ],
             ),
@@ -101,7 +101,7 @@ class UserGamesPlayedItem extends StatelessWidget {
     );
   }
 
-  Row textItem({String? title, subTitle}) {
+  Row textItem({String? title, String? subTitle}) {
     return Row(
       children: [
         CustomText(
