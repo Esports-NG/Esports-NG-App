@@ -101,7 +101,7 @@ class UserGamesPlayedItem extends StatelessWidget {
     );
   }
 
-  Row textItem({String? title, String? subTitle}) {
+  Row textItem({String? title, subTitle}) {
     return Row(
       children: [
         CustomText(
