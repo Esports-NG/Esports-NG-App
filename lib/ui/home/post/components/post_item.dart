@@ -126,7 +126,7 @@ class _PostItemState extends State<PostItem> {
                                         errorWidget: (context, url, error) =>
                                             const Icon(Icons.error),
                                         imageUrl: widget.item.author!.profile!
-                                            .profilePicture!,
+                                            .profilePicture ?? "",
                                         imageBuilder:
                                             (context, imageProvider) =>
                                                 Container(
@@ -137,7 +137,7 @@ class _PostItemState extends State<PostItem> {
                                                     .item
                                                     .author!
                                                     .profile!
-                                                    .profilePicture!),
+                                                    .profilePicture ?? ""),
                                                 fit: BoxFit.cover),
                                           ),
                                         ),
@@ -733,13 +733,19 @@ class _PostItemState extends State<PostItem> {
       ],
       child: Row(
         children: [
-          Container(
+          authController.user!.profile!.profilePicture == null
+                  ? SvgPicture.asset(
+                      'assets/images/svg/people.svg',
+                      height: Get.height * 0.02,
+                      width: Get.height * 0.02,
+                    )
+                  :Container(
             height: Get.height * 0.02,
             width: Get.height * 0.02,
             decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(
-                      authController.user!.profile!.profilePicture!),
+                      authController.user!.profile!.profilePicture ?? ""),
                   fit: BoxFit.cover,
                 ),
                 shape: BoxShape.circle,

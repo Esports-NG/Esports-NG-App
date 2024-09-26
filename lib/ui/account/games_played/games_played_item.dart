@@ -77,16 +77,17 @@ class _GamesPlayedItemState extends State<GamesPlayedItem> {
                   children: [
                     textItem(
                         title: 'Game: ',
-                        subTitle: widget.item.gamePlayed!.name),
-                    Gap(Get.height * 0.01),
-                    textItem(
-                      title: 'Game ID: ',
-                      subTitle: widget.item.inGameId,
+                        subTitle: widget.item.gamePlayed!.name
                     ),
                     Gap(Get.height * 0.01),
                     textItem(
                       title: 'IGN: ',
-                      subTitle: widget.item.inGameName,
+                      subTitle: widget.item.inGameName ?? "",
+                    ),
+                    Gap(Get.height * 0.01),
+                    textItem(
+                      title: 'Game ID: ',
+                      subTitle: widget.item.inGameId ?? "",
                     ),
                   ],
                 ),
