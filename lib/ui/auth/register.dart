@@ -644,7 +644,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             Gap(Get.height * 0.02),
                             CustomText(
-                              title: 'Phone number',
+                              title: 'Phone number (optional)',
                               color: AppColor().primaryWhite,
                               textAlign: TextAlign.center,
                               fontFamily: 'Inter',
