@@ -692,111 +692,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                             Gap(Get.height * 0.02),
-                            CustomText(
-                              title: 'Gender',
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.center,
-                              fontFamily: 'Inter',
-                              size: Get.height * 0.017,
-                            ),
-                            Gap(Get.height * 0.01),
-                            InputDecorator(
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: isGender == true
-                                    ? AppColor().primaryWhite
-                                    : AppColor().bgDark,
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: AppColor().lightItemsColor,
-                                        width: 1),
-                                    borderRadius: BorderRadius.circular(10)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(10)),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: genderValue,
-                                  items: <String>[
-                                    'Male',
-                                    'Female',
-                                  ].map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: CustomText(
-                                        title: value,
-                                        color: isGender == true
-                                            ? AppColor().primaryBackGroundColor
-                                            : AppColor().lightItemsColor,
-                                        fontFamily: 'InterBold',
-                                        size: 13,
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      genderValue = value;
-                                      if (genderValue == "Male") {
-                                        authController.genderController.text =
-                                            'M';
-                                      } else {
-                                        authController.genderController.text =
-                                            'F';
-                                      }
-                                      debugPrint(value);
-                                      handleTap('gender');
-                                    });
-                                  },
-                                  hint: CustomText(
-                                    title: "Gender",
-                                    color: isGender == true
-                                        ? AppColor().primaryBackGroundColor
-                                        : AppColor().lightItemsColor,
-                                    fontFamily: 'InterBold',
-                                    size: 13,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Gap(Get.height * 0.02),
-                            CustomText(
-                              title: 'Date of birth',
-                              color: AppColor().primaryWhite,
-                              textAlign: TextAlign.center,
-                              fontFamily: 'Inter',
-                              size: Get.height * 0.017,
-                            ),
-                            Gap(Get.height * 0.01),
-                            InkWell(
-                              onTap: () {
-                                pickDate(context);
-                                handleTap('dob');
-                              },
-                              child: CustomTextField(
-                                hint: "DD/MM/YY",
-                                enabled: false,
-                                textEditingController:
-                                    authController.dobController,
-                                hasText: isDob!,
-                                focusNode: _dobFocusNode,
-                                onSubmited: (_) {
-                                  _dobFocusNode.unfocus();
-                                },
-                                onChanged: (value) {
-                                  setState(() {
-                                    isDob = value.isNotEmpty;
-                                  });
-                                },
-                                suffixIcon: Icon(
-                                  CupertinoIcons.calendar,
-                                  color: AppColor().lightItemsColor,
-                                ),
-                              ),
-                            ),
-                            Gap(Get.height * 0.02),
                             Row(mainAxisSize: MainAxisSize.max, children: [
                               Checkbox(
                                 value: true,
@@ -963,10 +858,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   authController.phoneNoController.text.trim(),
                           country: authController.countryController.text.trim(),
                           state: authController.stateController.text.trim(),
-                          gender: authController.genderController.text.trim(),
-                          dOB: authController.dobController.text
-                              .trim()
-                              .toString(),
                           ipurpose: selectedUse.map((e) => e.title!).toList(),
                           userName:
                               authController.userNameController.text.trim(),
