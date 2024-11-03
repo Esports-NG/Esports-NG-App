@@ -1,12 +1,18 @@
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 
 class PostModel {
   int? id;
   Author? author;
+  UserModel? owner;
   String? title;
   PostModel? repost;
+  String? type;
+  EventModel? event;
+  GamePlayed? game;
   CommunityModel? community;
   TeamModel? team;
   String? body;
@@ -48,7 +54,11 @@ class PostModel {
       this.updatedAt,
       this.team,
       this.announcement,
-      this.participantAnnouncement});
+      this.participantAnnouncement,
+      this.owner,
+      this.game,
+      this.event,
+      this.type});
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
       id: json["id"],
@@ -61,14 +71,18 @@ class PostModel {
           : CommunityModel.fromJson(json["community"]),
       team: json["team"] == null ? null : TeamModel.fromJson(json["team"]),
       body: json["body"],
+      type: json["type"],
       likeCount: json["like_count"],
+      owner: json["owner"] == null ? null : UserModel.fromJson(json["owner"]),
+      game: json['game'] == null ? null : GamePlayed.fromJson(json["game"]),
+      event: json['event'] == null ? null : EventModel.fromJson(json["event"]),
       likes: json["likes"] == null
           ? []
           : List<Author>.from(json["likes"]!.map((x) => Author.fromJson(x))),
       viewCount: json["view_count"],
-      views: json["views"] == null
-          ? []
-          : List<Author>.from(json["views"]!.map((x) => Author.fromJson(x))),
+      // views: json["views"] == null
+      //     ? []
+      //     : List<Author>.from(json["views"]!.map((x) => Author.fromJson(x))),
       tags: json["tags"] == null
           ? []
           : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),

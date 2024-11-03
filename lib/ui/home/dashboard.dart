@@ -10,15 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+
 import '../account/account.dart';
-import 'community/community.dart';
 import '../events/events.dart';
+import 'community/community.dart';
 import 'home.dart';
 import 'post/create_post.dart';
 import 'post/create_post_item.dart';
 import 'post/create_team.dart';
-import 'package:heroicons/heroicons.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -47,18 +47,22 @@ class _DashboardState extends State<Dashboard> {
       alignment: Alignment.bottomCenter,
       children: [
         PersistentTabView(
-          context,
           controller: _controller,
-          screens: _buildScreens(),
-          items: _navBarsItems(),
-          confineInSafeArea: true,
+          tabs: _navBarsItems(),
+          // screens: _buildScreens(),
+          // items: _navBarsItems(),
+          // confineInSafeArea: true,
+          navBarBuilder: (navBarConfig) => Style1BottomNavBar(
+            navBarConfig: navBarConfig,
+            navBarDecoration: NavBarDecoration(color: Colors.transparent),
+          ),
           backgroundColor: AppColor().primaryBackGroundColor,
           resizeToAvoidBottomInset: true,
           stateManagement: true,
-          hideNavigationBarWhenKeyboardShows: false,
+          // hideNavigationBarWhenKeyboardShows: false,
           popAllScreensOnTapOfSelectedTab: true,
           popActionScreens: PopActionScreensType.all,
-          navBarStyle: NavBarStyle.style3,
+          // navBarStyle: NavBarStyle.style3,
         ),
         Padding(
           padding: EdgeInsets.only(bottom: Get.height * 0.05),
@@ -77,55 +81,72 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  List<PersistentBottomNavBarItem> _navBarsItems() {
+  List<PersistentTabConfig> _navBarsItems() {
     return [
-      PersistentBottomNavBarItem(
-        icon: const HeroIcon(HeroIcons.home),
-        title: "Home",
-        activeColorPrimary: AppColor().primaryColor,
-        inactiveColorPrimary: AppColor().lightItemsColor,
-        textStyle: TextStyle(
-          fontFamily: 'InterMedium',
-          fontWeight: FontWeight.normal,
-          fontSize: Get.height * 0.01,
-        ),
-      ),
-      PersistentBottomNavBarItem(
-        icon: const HeroIcon(HeroIcons.calendar),
-        title: "Events",
-        activeColorPrimary: AppColor().primaryColor,
-        inactiveColorPrimary: AppColor().lightItemsColor,
-        textStyle: TextStyle(
-          fontFamily: 'InterMedium',
-          fontWeight: FontWeight.normal,
-          fontSize: Get.height * 0.01,
-        ),
-      ),
-      PersistentBottomNavBarItem(
-        icon: const HeroIcon(HeroIcons.userGroup),
-        title: "Community",
-        activeColorPrimary: AppColor().primaryColor,
-        inactiveColorPrimary: AppColor().lightItemsColor,
-        textStyle: TextStyle(
-          fontFamily: 'InterMedium',
-          fontWeight: FontWeight.normal,
-          fontSize: Get.height * 0.01,
-        ),
-      ),
-      PersistentBottomNavBarItem(
-        icon: SvgPicture.asset(
-          'assets/images/svg/account_icon.svg',
-          height: Get.height * 0.025,
-          color: AppColor().lightItemsColor,
-        ),
-        title: "Account",
-        activeColorPrimary: AppColor().primaryColor,
-        inactiveColorPrimary: AppColor().lightItemsColor,
-        textStyle: TextStyle(
-          fontFamily: 'InterMedium',
-          fontWeight: FontWeight.normal,
-          fontSize: Get.height * 0.01,
-        ),
+      PersistentTabConfig(
+          screen: _buildScreens()[0],
+          item: ItemConfig(
+              icon: SvgPicture.asset(
+                'assets/images/svg/account_icon.svg',
+                height: Get.height * 0.025,
+                color: AppColor().lightItemsColor,
+              ),
+              title: "Account",
+              // activeColorPrimary: AppColor().primaryColor,
+              // inactiveColorPrimary: AppColor().lightItemsColor,
+              textStyle: TextStyle(
+                fontFamily: 'InterMedium',
+                fontWeight: FontWeight.normal,
+                fontSize: Get.height * 0.01,
+              ))),
+      PersistentTabConfig(
+          screen: _buildScreens()[1],
+          item: ItemConfig(
+              icon: SvgPicture.asset(
+                'assets/images/svg/account_icon.svg',
+                height: Get.height * 0.025,
+                color: AppColor().lightItemsColor,
+              ),
+              title: "Account",
+              // activeColorPrimary: AppColor().primaryColor,
+              // inactiveColorPrimary: AppColor().lightItemsColor,
+              textStyle: TextStyle(
+                fontFamily: 'InterMedium',
+                fontWeight: FontWeight.normal,
+                fontSize: Get.height * 0.01,
+              ))),
+      PersistentTabConfig(
+          screen: _buildScreens()[2],
+          item: ItemConfig(
+              icon: SvgPicture.asset(
+                'assets/images/svg/account_icon.svg',
+                height: Get.height * 0.025,
+                color: AppColor().lightItemsColor,
+              ),
+              title: "Account",
+              // activeColorPrimary: AppColor().primaryColor,
+              // inactiveColorPrimary: AppColor().lightItemsColor,
+              textStyle: TextStyle(
+                fontFamily: 'InterMedium',
+                fontWeight: FontWeight.normal,
+                fontSize: Get.height * 0.01,
+              ))),
+      PersistentTabConfig(
+        screen: _buildScreens()[3],
+        item: ItemConfig(
+            icon: SvgPicture.asset(
+              'assets/images/svg/account_icon.svg',
+              height: Get.height * 0.025,
+              color: AppColor().lightItemsColor,
+            ),
+            title: "Account",
+            // activeColorPrimary: AppColor().primaryColor,
+            // inactiveColorPrimary: AppColor().lightItemsColor,
+            textStyle: TextStyle(
+              fontFamily: 'InterMedium',
+              fontWeight: FontWeight.normal,
+              fontSize: Get.height * 0.01,
+            )),
       ),
     ];
   }

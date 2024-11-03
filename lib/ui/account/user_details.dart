@@ -558,13 +558,14 @@ class _UserProfileState extends State<UserProfile> {
                           Gap(Get.height * 0.02),
                       itemBuilder: (context, index) => InkWell(
                           onTap: () {
-                            Get.to(
-                                () => PostDetails(item: _recentPosts[index]));
+                            Get.to(() => PostDetails(
+                                item: _recentPosts.reversed.toList()[index]));
                           },
                           child: SizedBox(
                               width: Get.height * 0.35,
                               child: PostItemForProfile(
-                                  item: _recentPosts.reversed.toList()[index]))),
+                                  item:
+                                      _recentPosts.reversed.toList()[index]))),
                       itemCount: _recentPosts.length),
         ),
       ),

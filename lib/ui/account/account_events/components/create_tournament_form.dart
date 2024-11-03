@@ -736,7 +736,8 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 onChanged: (value) {
                   eventController.currency.value = value!.value;
                 },
-                items: eventController.currencies.entries.toList(),
+                items: (filter, infiniteScrollProps) =>
+                    eventController.currencies.entries.toList(),
                 itemAsString: (item) => item.key,
                 popupProps: PopupProps.menu(
                     showSearchBox: true,
@@ -766,30 +767,30 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         backgroundColor: AppColor().primaryDark,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)))),
-                dropdownButtonProps: DropdownButtonProps(
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    color: AppColor().greyFour),
-                dropdownDecoratorProps: DropDownDecoratorProps(
-                    baseStyle: TextStyle(
-                        color: AppColor().primaryWhite,
-                        fontFamily: "InterMedium"),
-                    dropdownSearchDecoration: InputDecoration(
-                      hintText: "Select a currency",
-                      hintStyle: TextStyle(
-                          color: AppColor().greyFour,
-                          fontFamily: "InterMedium"),
-                      filled: true,
-                      fillColor: AppColor().primaryDark,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: AppColor().lightItemsColor, width: 1),
-                          borderRadius: BorderRadius.circular(10)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                    )),
+                // dropdownButtonProps: DropdownButtonProps(
+                //     icon: const Icon(Icons.keyboard_arrow_down),
+                //     color: AppColor().greyFour),
+                // dropdownDecoratorProps: DropDownDecoratorProps(
+                //     baseStyle: TextStyle(
+                //         color: AppColor().primaryWhite,
+                //         fontFamily: "InterMedium"),
+                //     dropdownSearchDecoration: InputDecoration(
+                //       hintText: "Select a currency",
+                //       hintStyle: TextStyle(
+                //           color: AppColor().greyFour,
+                //           fontFamily: "InterMedium"),
+                //       filled: true,
+                //       fillColor: AppColor().primaryDark,
+                //       focusedBorder: OutlineInputBorder(
+                //           borderSide: BorderSide(
+                //               color: AppColor().lightItemsColor, width: 1),
+                //           borderRadius: BorderRadius.circular(10)),
+                //       enabledBorder: OutlineInputBorder(
+                //           borderSide: BorderSide.none,
+                //           borderRadius: BorderRadius.circular(10)),
+                //       contentPadding: const EdgeInsets.symmetric(
+                //           horizontal: 10, vertical: 5),
+                //     )),
               ),
             ),
             Gap(Get.height * 0.02),

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:change_case/change_case.dart';
@@ -753,6 +754,13 @@ class PostRepository extends GetxController {
     var list = List.from(json);
     var posts = list.map((e) => PostModel.fromJson(e)).toList();
     return posts;
+  }
+
+  Future getAdverts() async {
+    var response = await http.get(Uri.parse(ApiLink.getAds),
+        headers: {"Authorization": "JWT ${authController.token}"});
+
+    log(response.body);
   }
 
   void handleError(dynamic error) {

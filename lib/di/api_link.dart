@@ -49,6 +49,7 @@ class ApiLink {
       "${baseurl}$type/search_${type}s/?search=$query";
   static String getEventPosts(int id) =>
       "${baseurl}post/filter_posts/?tags__event_id=$id";
+  static String getAds = "${baseurl}extra/advert/view/";
 
   //Team
   static String createTeam = "${baseurl}team/create/";

@@ -33,7 +33,7 @@ class ESportApp extends StatefulWidget {
 
 class _ESportAppState extends State<ESportApp> {
   final authController = Get.put(AuthRepository());
-  late StreamSubscription<ConnectivityResult> connectivitySubscription;
+  late StreamSubscription<List<ConnectivityResult>> connectivitySubscription;
   bool isCurrentlyOnNoInternet = false;
 
   @override
@@ -50,13 +50,13 @@ class _ESportAppState extends State<ESportApp> {
 
   void init() async {
     connectivitySubscription = Connectivity().onConnectivityChanged.listen((e) {
-      if (e == ConnectivityResult.none) {
+      if (e.contains(ConnectivityResult.none)) {
         debugPrint('not connected');
         isCurrentlyOnNoInternet = true;
         authController.mNetworkAvailable.value = true;
         Get.to(() => const NoInternetScreen());
-      } else if (e == ConnectivityResult.wifi ||
-          e == ConnectivityResult.mobile) {
+      } else if (e.contains(ConnectivityResult.wifi) ||
+          e.contains(ConnectivityResult.mobile)) {
         if (isCurrentlyOnNoInternet) {
           Get.back();
           isCurrentlyOnNoInternet = false;
