@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
+import 'package:e_sport/ui/events/components/event_ad_item.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/home/community/components/suggested_profile_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
@@ -35,7 +36,7 @@ class _AdListState extends State<AdList> {
         ),
         Gap(10),
         SizedBox(
-            height: Get.height * 0.28,
+            height: firstAd.type == "event" ? 330 : Get.height * 0.28,
             child: ListView.separated(
                 physics: const ScrollPhysics(),
                 shrinkWrap: true,
@@ -61,7 +62,11 @@ class _AdListState extends State<AdList> {
                               ? SizedBox(
                                   child:
                                       SuggestedProfileList(item: item.owner!))
-                              : Gap(1);
+                              : item.type == 'event'
+                                  ? SizedBox(
+                                      width: 350,
+                                      child: EventAdItem(item: item.event!))
+                                  : Gap(1);
                 })),
       ],
     );
