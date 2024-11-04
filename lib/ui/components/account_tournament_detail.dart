@@ -19,6 +19,7 @@ import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/account/account_events/components/tournament_details.dart';
 import 'package:e_sport/ui/account/account_events/event_posts_and_announcements.dart';
+import 'package:e_sport/ui/account/account_events/tournament_leaderboard.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/choose_team_dialog.dart';
 import 'package:e_sport/ui/components/participant_list.dart';
@@ -28,6 +29,7 @@ import 'package:e_sport/ui/events/components/fixtures_and_results.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/home/post/components/post_details.dart';
+import 'package:e_sport/ui/leaderboard/ranking_card.dart';
 import 'package:e_sport/ui/profiles/components/recent_posts.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
@@ -770,7 +772,9 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: SizedBox(
                       width: double.infinity,
-                      height: _isFetchingFixtures || _fixturesList.isEmpty ? 50 : Get.height * 0.25,
+                      height: _isFetchingFixtures || _fixturesList.isEmpty
+                          ? 50
+                          : Get.height * 0.25,
                       child: _isFetchingFixtures
                           ? const Center(child: ButtonLoader())
                           : _fixturesList.isEmpty
@@ -781,18 +785,19 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                       fontFamily: "InterMedium",
                                       color: AppColor().lightItemsColor))
                               : ListView.separated(
-                          physics: const ScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context, index) =>
-                              Gap(Get.height * 0.02),
-                          itemBuilder: (context, index) => GestureDetector(
-                              onTap: () {},
-                              child: FixtureCardScrollable(
-                                  fixture: _fixturesList[index],
-                                  backgroundColor:
-                                      _colors[index % _colors.length])),
-                          itemCount: _fixturesList.take(5).length),
+                                  physics: const ScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  separatorBuilder: (context, index) =>
+                                      Gap(Get.height * 0.02),
+                                  itemBuilder: (context, index) =>
+                                      GestureDetector(
+                                          onTap: () {},
+                                          child: FixtureCardScrollable(
+                                              fixture: _fixturesList[index],
+                                              backgroundColor: _colors[
+                                                  index % _colors.length])),
+                                  itemCount: _fixturesList.take(5).length),
                     ),
                   ),
                   Gap(Get.height * 0.005),
@@ -890,11 +895,19 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                     padding:
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: PageHeaderWidget(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(
+                            () => TournamentLeaderboard(event: _eventDetails!));
+                      },
                       title: 'Tournament Leaderboard',
                     ),
                   ),
-                  const ComingSoonWidget(),
+                  const Gap(16),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                    child: RankingCard(title: "Rankings"),
+                  ),
                   Divider(
                     color: AppColor().lightItemsColor.withOpacity(0.3),
                     height: Get.height * 0.05,

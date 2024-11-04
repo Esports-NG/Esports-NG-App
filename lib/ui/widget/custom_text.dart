@@ -17,6 +17,8 @@ class CustomText extends StatelessWidget {
   final TextDecoration? underline;
   final Color? decorationColor;
   final int? maxLines;
+  final double? letterSpacing;
+
   const CustomText(
       {Key? key,
       this.title,
@@ -29,7 +31,8 @@ class CustomText extends StatelessWidget {
       this.fontFamily,
       this.underline,
       this.decorationColor,
-      this.maxLines})
+      this.maxLines,
+      this.letterSpacing})
       : super(key: key);
 
   @override
@@ -53,6 +56,7 @@ class CustomText extends StatelessWidget {
         maxLines: maxLines,
         style: TextStyle(
           color: color ?? Colors.black,
+          letterSpacing: letterSpacing ?? -0.2,
           fontFamily: fontFamily ?? 'Inter',
           fontSize: size,
           fontWeight: weight ?? FontWeight.normal,

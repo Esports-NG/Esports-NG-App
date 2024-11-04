@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
@@ -183,48 +185,57 @@ class _HomePageState extends State<HomePage>
                                       height: Get.height * 0.0019,
                                     ),
                                   )),
-                              Gap(Get.height * 0.025),
-                              TabBar(
-                                  isScrollable: true,
-                                  tabAlignment: TabAlignment.start,
-                                  labelColor: AppColor().primaryColor,
-                                  indicatorColor: AppColor().primaryColor,
-                                  dividerColor: Colors.transparent,
-                                  labelStyle: const TextStyle(
-                                    fontFamily: 'InterBold',
-                                    fontSize: 13,
-                                  ),
-                                  unselectedLabelColor:
-                                      AppColor().lightItemsColor,
-                                  unselectedLabelStyle: const TextStyle(
-                                    fontFamily: 'InterMedium',
-                                    fontSize: 13,
-                                  ),
-                                  controller: _tabController,
-                                  tabs: const [
-                                    Tab(text: 'For you'),
-                                    Tab(text: 'Following'),
-                                    Tab(text: 'Activities'),
-                                    Tab(text: 'News'),
-                                  ]),
-                              Gap(Get.height * 0.02)
+                              Gap(Get.height * 0.02),
                             ]),
-                      )
+                      ),
+                      SliverPersistentHeader(
+                          pinned: true,
+                          delegate: _SliverAppBarDelegate(
+                            minHeight: 45,
+                            maxHeight: 45,
+                            child: TabBar(
+                                isScrollable: true,
+                                tabAlignment: TabAlignment.start,
+                                labelColor: AppColor().primaryColor,
+                                indicatorColor: AppColor().primaryColor,
+                                dividerColor: Colors.transparent,
+                                labelStyle: const TextStyle(
+                                  fontFamily: 'InterBold',
+                                  fontSize: 13,
+                                ),
+                                unselectedLabelColor:
+                                    AppColor().lightItemsColor,
+                                unselectedLabelStyle: const TextStyle(
+                                  fontFamily: 'InterMedium',
+                                  fontSize: 13,
+                                ),
+                                controller: _tabController,
+                                tabs: const [
+                                  Tab(text: 'For you'),
+                                  Tab(text: 'Following'),
+                                  Tab(text: 'Activities'),
+                                  Tab(text: 'News'),
+                                ]),
+                          ))
                     ],
                 body: RefreshIndicator(
                   notificationPredicate: (notification) =>
                       notification.depth == 1,
                   onRefresh: () async {
-                    // await postController.getAllPost(false);
+                    await postController.getAllPost(false);
                     await postController.getPostForYou(false);
                     await postController.getBookmarkedPost(false);
+                    // await postController.getAdverts();
                   },
-                  child: TabBarView(controller: _tabController, children: [
-                    PostWidget(posts: postController.forYouPosts),
-                    PostWidget(posts: postController.followingPost),
-                    PostWidget(posts: postController.bookmarkedPost),
-                    NewsWidget(posts: postController.news),
-                  ]),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: TabBarView(controller: _tabController, children: [
+                      PostWidget(posts: postController.forYouPosts),
+                      PostWidget(posts: postController.followingPost),
+                      PostWidget(posts: postController.bookmarkedPost),
+                      NewsWidget(posts: postController.news),
+                    ]),
+                  ),
                 )),
           ),
           Center(
@@ -282,5 +293,38 @@ class _HomePageState extends State<HomePage>
         },
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => max(maxHeight, minHeight);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(
+        child:
+            Container(color: AppColor().primaryBackGroundColor, child: child));
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }

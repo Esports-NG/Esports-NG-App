@@ -118,8 +118,7 @@ class Leaderboard extends StatelessWidget {
               child: ListView.separated(
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) =>
-                    RankingCard(title: "Ranking", teamRanks: teamRankItem),
+                itemBuilder: (context, index) => RankingCard(title: "Ranking"),
                 itemCount: 2,
                 shrinkWrap: true,
                 separatorBuilder: (context, index) => Gap(Get.width * 0.05),
