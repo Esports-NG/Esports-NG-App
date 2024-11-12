@@ -100,7 +100,7 @@ class _AccountDetailsState extends State<AccountDetails> {
             if (widget.title == "Posts") {
               postController.getPostForYou(false);
             } else if (widget.title == "Events") {
-              eventController.getMyEvents();
+              eventController.getMyEvents(false);
             } else {
               communityController.getAllCommunity(false);
               teamController.getAllTeam(false);

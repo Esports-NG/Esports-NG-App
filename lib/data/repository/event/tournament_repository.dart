@@ -73,6 +73,7 @@ class TournamentRepository extends GetxController {
   late final addFixturesAwayTeamScoreController = TextEditingController();
   late final addFixturesAwayPlayerScoreController = TextEditingController();
   late final addFixturesHomePlayerScoreController = TextEditingController();
+  RxList<FixtureModel> allFixtures = RxList([]);
 
   Rx<PlayerModel?> selectedAwayPlayer = Rx(null);
   Rx<PlayerModel?> selectedHomePlayer = Rx(null);
@@ -373,7 +374,7 @@ class TournamentRepository extends GetxController {
         debugPrint(await response.stream.bytesToString());
         Get.to(() => const CreateSuccessPage(title: 'Event Created'))!
             .then((value) {
-          eventController.getAllEvents();
+          eventController.getAllEvents(false);
           clear();
         });
       } else if (response.statusCode == 401) {
@@ -474,7 +475,6 @@ class TournamentRepository extends GetxController {
             'Content-type': "application/json",
             "Authorization": "JWT ${authController.token}"
           });
-      log(response.body);
 
       var json = jsonDecode(response.body);
       if (response.statusCode == 200) {
@@ -489,7 +489,12 @@ class TournamentRepository extends GetxController {
       "Content-type": "application/json"
     });
 
-    return fixtureModelFromJson(response.body);
+    var json = jsonDecode(response.body);
+
+    var list = List.from(json['results']);
+    var fixtures = list.map((e) => FixtureModel.fromJson(e)).toList();
+
+    return fixtures;
   }
 
   Future createFixtureForPlayer(int id) async {
@@ -533,8 +538,6 @@ class TournamentRepository extends GetxController {
           },
           body: jsonEncode(body));
 
-      log(response.body);
-
       if (response.statusCode == 200) {
         Get.back();
         Helpers().showCustomSnackbar(message: "Fixture added successfully");
@@ -576,8 +579,6 @@ class TournamentRepository extends GetxController {
             "Content-type": "application/json"
           },
           body: jsonEncode(body));
-
-      log(response.body);
 
       if (response.statusCode == 200) {
         Get.back();
@@ -637,8 +638,6 @@ class TournamentRepository extends GetxController {
           },
           body: jsonEncode(body));
 
-      log(response.body);
-
       if (response.statusCode == 200) {
         Get.back();
         Helpers().showCustomSnackbar(message: "Fixture edited successfully");
@@ -681,8 +680,6 @@ class TournamentRepository extends GetxController {
           },
           body: jsonEncode(body));
 
-      log(response.body);
-
       if (response.statusCode == 200) {
         Get.back();
         Helpers().showCustomSnackbar(message: "Fixture edited successfully");
@@ -693,8 +690,6 @@ class TournamentRepository extends GetxController {
   Future deleteFixture(int id) async {
     var response = await http.delete(Uri.parse(ApiLink.deleteFixture(id)),
         headers: {"Authorization": "JWT ${authController.token}"});
-
-    log(response.body);
   }
 
   Future takeActionOnWaitlist(
@@ -721,11 +716,22 @@ class TournamentRepository extends GetxController {
         Uri.parse(ApiLink.editParticipant(eventId, participantId, action)),
         headers: {"Authorization": "JWT ${authController.token}"});
 
-    log(response.body);
     if (response.statusCode == 200) {
       if (action == "remove") {
         Helpers().showCustomSnackbar(message: "Removed Participant");
       }
+    }
+  }
+
+  Future getAllFixture() async {
+    var response = await http.get(Uri.parse(ApiLink.getAllFixture()),
+        headers: {"Authorization": "JWT ${authController.token}"});
+    log("all fixtures" + response.body);
+    var json = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      var list = List.from(json['results']);
+      var fixtures = list.map((e) => FixtureModel.fromJson(e)).toList();
+      allFixtures.assignAll(fixtures);
     }
   }
 

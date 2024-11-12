@@ -1,7 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:e_sport/data/model/community_model.dart';
@@ -229,7 +228,6 @@ class CommunityRepository extends GetxController {
             "Authorization": "JWT ${authController.token}"
           });
 
-      log(response.body);
       var json = jsonDecode(response.body);
       if (response.statusCode == 200) {
         Helpers().showCustomSnackbar(

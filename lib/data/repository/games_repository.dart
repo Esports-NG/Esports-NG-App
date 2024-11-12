@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
@@ -58,7 +57,6 @@ class GamesRepository extends GetxController {
       "Authorization": "JWT ${authController.token}"
     });
 
-    log(response.body);
     var json = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
@@ -92,7 +90,7 @@ class GamesRepository extends GetxController {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       });
-      log(response.body);
+
       var json = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -111,7 +109,6 @@ class GamesRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       });
 
-      log(response.body);
       var json = jsonDecode(response.body);
       if (response.statusCode == 200) {
         if (json["message"].toString().contains("unfollowed")) {

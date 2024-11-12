@@ -1,5 +1,5 @@
 class ApiLink {
-  static String domain = "https://esports-ng.vercel.app";
+  static String domain = "https://esportsng-production.up.railway.app";
   static String baseurl = "$domain/";
   static String imageUrl = "http://res.cloudinary.com/dkykwpryb/";
 
@@ -35,7 +35,7 @@ class ApiLink {
   static String getAllPost = "${baseurl}post/view/";
   static String getPostsForYou = "${baseurl}post/for_you";
   static String getBookmarkedPost = "${baseurl}post/viewbooked/";
-  static String getFollowingPost = "${baseurl}post/viewbooked/";
+  static String getFollowingPost = "${baseurl}post/following/";
   static String getMyPost = "${baseurl}post/myposts/";
   static String likePost = "${baseurl}post/like/";
   static String post = "${baseurl}post/";
@@ -107,6 +107,7 @@ class ApiLink {
   static String deleteFixture(int id) => "${baseurl}event/fixture/$id/delete/";
   static String getFixtures(int id) =>
       "${baseurl}event/fixture/view/?eventpk=$id";
+  static String getAllFixture() => "${baseurl}event/fixtures/all/";
   static String getPlatforms = "${baseurl}event/platforms/";
   static String takeActionOnWaitlist(
           int eventId, int applicantId, String action) =>

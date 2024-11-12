@@ -6,10 +6,15 @@ import 'package:e_sport/ui/events/components/social_event_details.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class AllEventList extends StatefulWidget {
-  const AllEventList({super.key, this.eventList});
+  const AllEventList(
+      {super.key, this.eventList, this.refresh, this.getNext, this.nextLink});
   final List<EventModel>? eventList;
+  final Future Function(bool?)? refresh;
+  final Future Function()? getNext;
+  final String? nextLink;
 
   @override
   State<AllEventList> createState() => _AllEventListState();
@@ -17,34 +22,60 @@ class AllEventList extends StatefulWidget {
 
 class _AllEventListState extends State<AllEventList> {
   var eventController = Get.put(EventRepository());
+
+  @override
+  void initState() {
+    super.initState();
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+  }
+
+  final PagingController<int, EventModel> _pagingController =
+      PagingController<int, EventModel>(firstPageKey: 1);
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      if (widget.nextLink != null && widget.nextLink != "" && pageKey > 1) {
+        var events = await widget.getNext!();
+        _pagingController.appendPage(events, pageKey + 1);
+      } else {
+        if (widget.refresh != null && pageKey == 1) {
+          var events = await widget.refresh!(false);
+          _pagingController.appendPage(events, pageKey + 1);
+        } else {
+          _pagingController.appendLastPage([]);
+        }
+      }
+    } catch (err) {
+      _pagingController.error = err;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) => InkWell(
-            onTap: () {
-              if ((widget.eventList ?? eventController.allEvent)
-                      .reversed
-                      .toList()[index]
-                      .type ==
-                  "tournament") {
-                Get.to(() => AccountTournamentDetail(
-                    item: (widget.eventList ?? eventController.allEvent)
-                        .reversed
-                        .toList()[index]));
-              } else {
-                Get.to(() => SocialEventDetails(
-                    item: (widget.eventList ?? eventController.allEvent)
-                        .reversed
-                        .toList()[index]));
-              }
-            },
-            child: AccountEventsItem(
-                item: (widget.eventList ?? eventController.allEvent)
-                    .reversed
-                    .toList()[index])),
-        separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-        itemCount: (widget.eventList ?? eventController.allEvent).length);
+    return RefreshIndicator(
+      notificationPredicate: (notification) => notification.depth == 1,
+      onRefresh: () => Future.sync(
+        // 2
+        () => _pagingController.refresh(),
+      ),
+      child: PagedListView.separated(
+          pagingController: _pagingController,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          builderDelegate: PagedChildBuilderDelegate<EventModel>(
+            itemBuilder: (context, event, index) => InkWell(
+                onTap: () {
+                  if (event.type == "tournament") {
+                    Get.to(() => AccountTournamentDetail(item: event));
+                  } else {
+                    Get.to(() => SocialEventDetails(item: event));
+                  }
+                },
+                child: AccountEventsItem(item: event)),
+          ),
+          separatorBuilder: (context, index) => Gap(Get.height * 0.02)),
+    );
   }
 }
