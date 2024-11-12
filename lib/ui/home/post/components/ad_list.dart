@@ -1,6 +1,9 @@
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
+import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/events/components/event_ad_item.dart';
+import 'package:e_sport/ui/events/components/fixture_item.dart';
+import 'package:e_sport/ui/home/community/components/community_item.dart';
 import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/home/community/components/suggested_profile_item.dart';
 import 'package:e_sport/ui/home/community/components/trending_games_item.dart';
@@ -20,6 +23,25 @@ class AdList extends StatefulWidget {
 }
 
 class _AdListState extends State<AdList> {
+  final _colors = [
+    LinearGradient(
+      colors: [
+        AppColor().fixturePurple,
+        AppColor().fixturePurple,
+      ],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    ),
+    LinearGradient(
+      colors: [
+        AppColor().darkGrey.withOpacity(0.8),
+        AppColor().bgDark.withOpacity(0.005),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomCenter,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     var firstAd = widget.ads.toList()[0];
@@ -29,14 +51,20 @@ class _AdListState extends State<AdList> {
         CustomText(
           title: firstAd.type == "game"
               ? "Games to play"
-              : "${firstAd.type!.capitalize}s to follow",
+              : firstAd.type == "community"
+                  ? "Communities to follow"
+                  : "${firstAd.type!.capitalize}s to follow",
           color: AppColor().primaryWhite,
           fontFamily: "InterMedium",
           size: 18,
         ),
         Gap(10),
         SizedBox(
-            height: firstAd.type == "event" ? 330 : Get.height * 0.28,
+            height: firstAd.type == "event"
+                ? 330
+                : firstAd.type == "fixture"
+                    ? Get.height * 0.25
+                    : Get.height * 0.28,
             child: ListView.separated(
                 physics: const ScrollPhysics(),
                 shrinkWrap: true,
@@ -66,7 +94,19 @@ class _AdListState extends State<AdList> {
                                   ? SizedBox(
                                       width: 350,
                                       child: EventAdItem(item: item.event!))
-                                  : Gap(1);
+                                  : item.type == 'community'
+                                      ? InkWell(
+                                          onTap: () => Get.to(() =>
+                                              AccountCommunityDetail(
+                                                  item: item.community!)),
+                                          child: CommunityItem(
+                                              item: item.community!))
+                                      : item.type == "fixture"
+                                          ? FixtureCardScrollable(
+                                              fixture: item.fixture!,
+                                              backgroundColor: _colors[
+                                                  index % _colors.length])
+                                          : Gap(1);
                 })),
       ],
     );

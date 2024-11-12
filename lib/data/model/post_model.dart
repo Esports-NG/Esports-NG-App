@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
@@ -14,6 +15,7 @@ class PostModel {
   EventModel? event;
   GamePlayed? game;
   CommunityModel? community;
+  FixtureModel? fixture;
   TeamModel? team;
   String? body;
   List<String>? iTags;
@@ -58,7 +60,8 @@ class PostModel {
       this.owner,
       this.game,
       this.event,
-      this.type});
+      this.type,
+      this.fixture});
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
       id: json["id"],
@@ -69,6 +72,9 @@ class PostModel {
       community: json["community"] == null
           ? null
           : CommunityModel.fromJson(json["community"]),
+      fixture: json['fixture'] == null
+          ? null
+          : FixtureModel.fromJson(json["fixture"]),
       team: json["team"] == null ? null : TeamModel.fromJson(json["team"]),
       body: json["body"],
       type: json["type"],
