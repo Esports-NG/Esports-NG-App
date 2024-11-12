@@ -1,5 +1,5 @@
 class ApiLink {
-  static String domain = "https://esports-ng.vercel.app";
+  static String domain = "https://esportsng-production.up.railway.app";
   static String baseurl = "$domain/";
   static String imageUrl = "http://res.cloudinary.com/dkykwpryb/";
 
