@@ -186,7 +186,7 @@ class TeamRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       });
       var json = jsonDecode(response.body);
-      log(response.body);
+
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
@@ -222,7 +222,6 @@ class TeamRepository extends GetxController {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       });
-      log("my team ${response.body}");
       var json = jsonDecode(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
@@ -305,7 +304,7 @@ class TeamRepository extends GetxController {
             "Content-type": "application/json",
             "Authorization": "JWT ${authController.token}"
           });
-      log(response.body);
+
       var json = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -357,7 +356,6 @@ class TeamRepository extends GetxController {
           },
           body: jsonEncode(body));
 
-      log(response.body);
       var json = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -380,7 +378,6 @@ class TeamRepository extends GetxController {
         "Authorization": "JWT ${authController.token}"
       });
 
-      log(response.body);
       var teamApplications = teamApplicationModelFromJson(response.body);
 
       return teamApplications;
@@ -397,7 +394,6 @@ class TeamRepository extends GetxController {
             "Authorization": "JWT ${authController.token}"
           });
 
-      log(response.body);
       var json = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -423,7 +419,7 @@ class TeamRepository extends GetxController {
           "Content-type": "application/json",
           "Authorization": "JWT ${authController.token}"
         });
-    log(response.body);
+
     var json = jsonDecode(response.body);
     if (response.statusCode == 200) {
       Helpers().showCustomSnackbar(message: json['message']);

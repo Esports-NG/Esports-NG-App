@@ -1,7 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:e_sport/data/model/events_model.dart';
@@ -66,6 +65,7 @@ class EventRepository extends GetxController
   final RxList<EventModel> createdEvents = <EventModel>[].obs;
 
   final Rx<String> currency = "".obs;
+  final RxString nextLink = "".obs;
 
   final RxList<EventModel> searchedEvents = <EventModel>[].obs;
 
@@ -220,15 +220,6 @@ class EventRepository extends GetxController
       }
     });
 
-    authController.mToken.listen((p0) async {
-      if (p0 != '0') {
-        getAllEvents();
-        getAllTournaments(true);
-        getAllSocialEvents(true);
-        filterEvents();
-      }
-    });
-
     eventFilter.listen((p0) async {
       await filterEvents();
     });
@@ -240,30 +231,52 @@ class EventRepository extends GetxController
     super.dispose();
   }
 
-  Future getAllEvents() async {
+  Future getAllEvents(bool? firstTime) async {
+    debugPrint("getting all events");
     var response = await http.get(Uri.parse(ApiLink.getAllEvent), headers: {
       "Content-type": "application/json",
       "Authorization": 'JWT ${authController.token}'
     });
 
-    log(response.body);
     var json = jsonDecode(response.body);
+    debugPrint(response.body);
     if (response.statusCode != 200) {
+      return null;
     } else {
-      var list = List.from(json);
+      nextLink.value = json['next'] ?? "";
+      var list = List.from(json['results']);
       var events = list.map((e) => EventModel.fromJson(e)).toList();
       _allEvent(events);
+      return events;
     }
   }
 
-  Future getMyEvents() async {
+  Future getNextEvents() async {
+    var response = await http.get(Uri.parse(nextLink.value), headers: {
+      "Content-type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    });
+
+    var json = jsonDecode(response.body);
+    debugPrint(response.body);
+    if (response.statusCode != 200) {
+      return null;
+    } else {
+      nextLink.value = json['next'] ?? "";
+      var list = List.from(json['results']);
+      var events = list.map((e) => EventModel.fromJson(e)).toList();
+      _allEvent(events);
+      return events;
+    }
+  }
+
+  Future getMyEvents(bool? firstTime) async {
     myEventStatus.value = EventStatus.loading;
     var response = await http.get(Uri.parse(ApiLink.getMyEvents), headers: {
       "Content-type": "application/json",
       "Authorization": 'JWT ${authController.token}'
     });
 
-    log(response.body);
     var json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       myEventStatus.value = EventStatus.error;
@@ -361,7 +374,6 @@ class EventRepository extends GetxController
       "Authorization": "JWT ${authController.token}",
     });
 
-    log(response.body);
     var json = jsonDecode(response.body);
     var list = List.from(json);
     var events = list.map((e) => EventModel.fromJson(e));

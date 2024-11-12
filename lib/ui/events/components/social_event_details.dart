@@ -1,7 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
@@ -13,12 +11,12 @@ import 'package:e_sport/data/repository/event/social_event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/account/account_events/event_posts_and_announcements.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:e_sport/ui/profiles/components/recent_posts.dart';
-import 'package:e_sport/ui/account/account_events/event_posts_and_announcements.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -58,7 +56,7 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
   bool _isFetchingPosts = true;
   List<PostModel> _posts = [];
 
-    Future getEventPosts() async {
+  Future getEventPosts() async {
     setState(() {
       _isFetchingPosts = true;
     });
@@ -80,7 +78,6 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
           "Authorization": "JWT ${authController.token}"
         });
 
-    log(response.body);
     setState(() {
       _isRegistering = false;
       _participantList = userModelListFromJson(response.body);
