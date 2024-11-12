@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:change_case/change_case.dart';
@@ -50,18 +49,24 @@ class PostRepository extends GetxController {
   final Rx<List<PostModel>> _allPost = Rx([]);
   final Rx<List<PostModel>> _myPost = Rx([]);
   final Rx<List<PostModel>> _bookmarkedPost = Rx([]);
-  final Rx<List<PostModel>> _followingPost = Rx([]);
-  final Rx<List<PostModel>> _forYouPosts = Rx([]);
+  final RxList<PostModel> _followingPost = RxList([]);
+  final RxList<PostModel> _forYouPosts = RxList([]);
   final Rx<List<NewsModel>> _news = Rx([]);
   final Rx<int> postId = 0.obs;
   final RxString postAs = "user".obs;
   final RxString postName = "".obs;
 
+  RxString forYouPrevLink = "".obs;
+  RxString forYouNextlink = "".obs;
+
+  RxString followingPrevLink = "".obs;
+  RxString followingNextLink = "".obs;
+
   List<PostModel> get allPost => _allPost.value;
   List<PostModel> get myPost => _myPost.value;
   List<PostModel> get bookmarkedPost => _bookmarkedPost.value;
-  List<PostModel> get followingPost => _followingPost.value;
-  List<PostModel> get forYouPosts => _forYouPosts.value;
+  List<PostModel> get followingPost => _followingPost;
+  List<PostModel> get forYouPosts => _forYouPosts;
   List<NewsModel> get news => _news.value;
   RxList<PostModel> searchedPosts = <PostModel>[].obs;
 
@@ -100,11 +105,12 @@ class PostRepository extends GetxController {
       if (p0 != '0') {
         // postId.value = authController.user!.id!;
         // postAs.value = "user";
-        // postName.value = authController.user!.fullName!;
-        getAllPost(true);
-        getBookmarkedPost(true);
-        getMyPost(true);
-        getPostForYou(true);
+        // postName.value = authController.user!.fullName!
+        // getPostForYou(true);
+        // getFollowingPost(true);
+        // getBookmarkedPost(true);
+        // getMyPost(true);
+
         getNews();
       }
     });
@@ -555,15 +561,13 @@ class PostRepository extends GetxController {
     }
 
     if (response.statusCode == 200) {
-      var list = List.from(json);
+      forYouNextlink.value = json['next'] ?? "";
+      var list = List.from(json['results']);
       var posts = list.map((e) => PostModel.fromJson(e)).toList();
       debugPrint("${posts.length} for you posts found");
-      _forYouPosts(posts.reversed.toList());
-      // _bookmarkStatus(BookmarkStatus.success);
-      // posts.isNotEmpty
-      //     ? _bookmarkStatus(BookmarkStatus.available)
-      //     : _bookmarkStatus(BookmarkStatus.empty);
+      _forYouPosts.assignAll(posts);
       authController.setLoading(false);
+      return posts;
     } else if (response.statusCode == 401) {
       authController
           .refreshToken()
@@ -571,12 +575,121 @@ class PostRepository extends GetxController {
       // _bookmarkStatus(BookmarkStatus.error);
       authController.setLoading(false);
     }
-    return response.body;
-    // } catch (error) {
-    //   // _bookmarkStatus(BookmarkStatus.error);
-    //   authController.setLoading(false);
-    //   debugPrint("getting for you post: ${error.toString()}");
-    // }
+    return null;
+  }
+
+  Future getNextForYou() async {
+    // try {
+
+    debugPrint('getting next for you post... ');
+    var response = await http.get(Uri.parse(forYouNextlink.value),
+        headers: {"Authorization": "JWT ${authController.token}"});
+    debugPrint(response.body);
+    var json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      if (json['detail'] != null) {
+        throw (json['detail']);
+      } else if (json['error'] != null) {
+        throw (json['error']);
+      }
+    }
+
+    if (response.statusCode == 200) {
+      forYouNextlink.value = json['next'] ?? "";
+      var list = List.from(json['results']);
+      var posts = list.map((e) => PostModel.fromJson(e)).toList();
+      debugPrint("${posts.length} for you posts found");
+      _forYouPosts.addAll(posts);
+      authController.setLoading(false);
+      return posts;
+    } else if (response.statusCode == 401) {
+      authController
+          .refreshToken()
+          .then((value) => EasyLoading.showInfo('try again!'));
+      // _bookmarkStatus(BookmarkStatus.error);
+      authController.setLoading(false);
+    }
+    return null;
+  }
+
+  Future getFollowingPost(bool isFirstTime) async {
+    // try {
+    if (isFirstTime == true) {
+      authController.setLoading(true);
+      _bookmarkStatus(BookmarkStatus.loading);
+    }
+
+    debugPrint('getting all following post...');
+    var response =
+        await http.get(Uri.parse(ApiLink.getFollowingPost), headers: {
+      "Content-Type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    });
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode != 200) {
+      if (json['detail'] != null) {
+        throw (json['detail']);
+      } else if (json['error'] != null) {
+        throw (json['error']);
+      }
+    }
+    debugPrint(response.body);
+
+    if (response.statusCode == 200) {
+      followingNextLink.value = json['next'] ?? "";
+      var list = List.from(json['results']);
+      var posts = list.map((e) => PostModel.fromJson(e)).toList();
+      debugPrint("${posts.length} for you posts found");
+      _followingPost.assignAll(posts);
+      authController.setLoading(false);
+
+      return posts;
+    } else if (response.statusCode == 401) {
+      authController
+          .refreshToken()
+          .then((value) => EasyLoading.showInfo('try again!'));
+      // _bookmarkStatus(BookmarkStatus.error);
+      authController.setLoading(false);
+    }
+    return null;
+  }
+
+  Future getNextFollowing() async {
+    // try {
+
+    debugPrint('getting next following post...');
+    var response = await http.get(Uri.parse(followingNextLink.value), headers: {
+      "Content-Type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    });
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode != 200) {
+      if (json['detail'] != null) {
+        throw (json['detail']);
+      } else if (json['error'] != null) {
+        throw (json['error']);
+      }
+    }
+
+    if (response.statusCode == 200) {
+      followingNextLink.value = json['next'] ?? "";
+      var list = List.from(json['results']);
+      var posts = list.map((e) => PostModel.fromJson(e)).toList();
+      debugPrint("${posts.length} for you posts found");
+
+      _followingPost.addAll(posts);
+      authController.setLoading(false);
+      return posts;
+    } else if (response.statusCode == 401) {
+      authController
+          .refreshToken()
+          .then((value) => EasyLoading.showInfo('try again!'));
+      // _bookmarkStatus(BookmarkStatus.error);
+      authController.setLoading(false);
+    }
+    return null;
   }
 
   Future getBookmarkedPost(bool isFirstTime) async {
@@ -759,8 +872,6 @@ class PostRepository extends GetxController {
   Future getAdverts() async {
     var response = await http.get(Uri.parse(ApiLink.getAds),
         headers: {"Authorization": "JWT ${authController.token}"});
-
-    log(response.body);
   }
 
   void handleError(dynamic error) {

@@ -7,6 +7,7 @@ import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/all_post_widget.dart';
 import 'package:e_sport/ui/components/news_widget.dart';
+import 'package:e_sport/ui/home/components/activities.dart';
 import 'package:e_sport/ui/search/search_screen.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -37,11 +38,13 @@ class _HomePageState extends State<HomePage>
   final postController = Get.put(PostRepository());
   late final TabController _tabController =
       TabController(length: 4, vsync: this);
+  final _scrollController = ScrollController();
 
   @override
   void dispose() {
     _searchFocusNode.dispose();
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -49,6 +52,18 @@ class _HomePageState extends State<HomePage>
     setState(() {
       isSearch = true;
     });
+  }
+
+  void _loadMore() {
+    print('scrolled');
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {}
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_loadMore);
   }
 
   @override
@@ -223,19 +238,27 @@ class _HomePageState extends State<HomePage>
                       notification.depth == 1,
                   onRefresh: () async {
                     await postController.getAllPost(false);
+                    await postController.getFollowingPost(false);
                     await postController.getPostForYou(false);
-                    await postController.getBookmarkedPost(false);
+                    // await postController.getBookmarkedPost(false);
                     // await postController.getAdverts();
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: TabBarView(controller: _tabController, children: [
-                      PostWidget(posts: postController.forYouPosts),
-                      PostWidget(posts: postController.followingPost),
-                      PostWidget(posts: postController.bookmarkedPost),
-                      NewsWidget(posts: postController.news),
-                    ]),
-                  ),
+                  child: TabBarView(controller: _tabController, children: [
+                    PostWidget(
+                      refresh: postController.getPostForYou,
+                      posts: postController.forYouPosts,
+                      nextLink: postController.forYouNextlink.value,
+                      getNext: postController.getNextForYou,
+                    ),
+                    PostWidget(
+                      refresh: postController.getFollowingPost,
+                      posts: postController.followingPost,
+                      nextLink: postController.followingNextLink.value,
+                      getNext: postController.getNextFollowing,
+                    ),
+                    Activities(),
+                    NewsWidget(posts: postController.news),
+                  ]),
                 )),
           ),
           Center(

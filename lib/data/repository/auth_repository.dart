@@ -1,7 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -317,7 +316,6 @@ class AuthRepository extends GetxController {
             "password": passwordController.text.trim(),
           }));
 
-      log(response.body);
       var json = jsonDecode(response.body);
       if (json.toString().contains('non_field_errors')) {
         throw (json["error"]['non_field_errors'][0]);
@@ -760,7 +758,6 @@ class AuthRepository extends GetxController {
         // "Authorization": "JWT $token",
         "Content-type": "application/json"
       });
-      log(response.body);
 
       var json = jsonDecode(response.body);
 

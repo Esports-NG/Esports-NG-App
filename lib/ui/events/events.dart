@@ -122,33 +122,28 @@ class _EventsPageState extends State<EventsPage>
                     )))
           ],
           // backgroundColor: AppColor().primaryBackGroundColor,
-          body: RefreshIndicator(
-              notificationPredicate: (notification) => notification.depth == 1,
-              onRefresh: () async {
-                await eventController.getAllEvents();
-                // await eventController.getAllSocialEvents(false);
-                // await eventController.getAllTournaments(false);
-                await eventController.getMyEvents();
-                await eventController.filterEvents();
-              },
-              child: TabBarView(
-                controller: eventController.tabController,
-                children: [
-                  const SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      child: EventTab()),
-                  SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: Obx(
-                        () => EventTab(
-                          eventList: eventController.myEvent,
-                        ),
-                      )),
-                  const SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      child: EventTab()),
-                ],
-              )),
+          body: TabBarView(
+            controller: eventController.tabController,
+            children: [
+              SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child: EventTab(
+                    refresh: eventController.getAllEvents,
+                    getNext: eventController.getNextEvents,
+                    nextLink: eventController.nextLink.value,
+                  )),
+              SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Obx(
+                    () => EventTab(
+                      eventList: eventController.myEvent,
+                      refresh: eventController.getMyEvents,
+                    ),
+                  )),
+              const SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(), child: EventTab()),
+            ],
+          ),
         ),
       ),
     );

@@ -17,9 +17,11 @@ import 'package:url_launcher/url_launcher.dart';
 //Fixture Card For Home Screen
 
 class FixtureCard extends StatefulWidget {
-  const FixtureCard({super.key, required this.backgroundColor});
+  const FixtureCard(
+      {super.key, required this.backgroundColor, required this.fixture});
 
   final LinearGradient backgroundColor;
+  final FixtureModel fixture;
 
   @override
   State<FixtureCard> createState() => _FixtureCardState();
@@ -28,6 +30,8 @@ class FixtureCard extends StatefulWidget {
 class _FixtureCardState extends State<FixtureCard> {
   @override
   Widget build(BuildContext context) {
+    var formattedTime =
+        "${int.parse(widget.fixture.fixtureTime!.split(":")[0]) > 12 ? (int.parse(widget.fixture.fixtureTime!.split(":")[0]) - 12).toString().padLeft(2, "0") : widget.fixture.fixtureTime!.split(":")[0]}:${widget.fixture.fixtureTime!.split(":")[1]} ${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).period.name.toUpperCase()}";
     return Container(
       width: Get.width * 0.9,
       decoration: BoxDecoration(
@@ -48,14 +52,14 @@ class _FixtureCardState extends State<FixtureCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomText(
-              title: 'TOURNAMENT NAME',
+              title: widget.fixture.tournament!.name,
               color: AppColor().primaryWhite,
               fontFamily: 'Inter',
               textAlign: TextAlign.start,
               size: 14,
             ),
             CustomText(
-              title: 'GAME NAME - GAME MODE(S)',
+              title: '${widget.fixture.tournament!.games![0].name}',
               color: AppColor().primaryWhite,
               fontFamily: 'InterSemiBold',
               textAlign: TextAlign.start,
@@ -65,7 +69,7 @@ class _FixtureCardState extends State<FixtureCard> {
             SizedBox(
               width: Get.width * 0.9,
               child: CustomText(
-                title: 'ROUND NAME',
+                title: widget.fixture.title,
                 color: AppColor().primaryWhite,
                 fontFamily: 'Inter',
                 textAlign: TextAlign.center,
@@ -76,7 +80,7 @@ class _FixtureCardState extends State<FixtureCard> {
             SizedBox(
               width: Get.width * 0.9,
               child: CustomText(
-                title: '25th, Dec 2023',
+                title: DateFormat.yMMMEd().format(widget.fixture.fixtureDate!),
                 color: AppColor().primaryWhite,
                 fontFamily: 'InterSemiBold',
                 textAlign: TextAlign.center,
@@ -96,10 +100,12 @@ class _FixtureCardState extends State<FixtureCard> {
                         width: Get.width * 0.15,
                         height: Get.width * 0.15,
                         decoration: BoxDecoration(
-                          image: const DecorationImage(
+                          image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage(
-                                  'assets/images/png/tournament_cover.png')),
+                              image: NetworkImage(
+                                  widget.fixture.homePlayer?.profile ??
+                                      widget.fixture.homeTeam?.profilePicture ??
+                                      "jhh")),
                           borderRadius: BorderRadius.all(
                               Radius.circular(Get.width * 0.15)),
                           color: Colors.redAccent,
@@ -111,7 +117,8 @@ class _FixtureCardState extends State<FixtureCard> {
                       SizedBox(
                         width: Get.width * 0.18,
                         child: CustomText(
-                          title: 'Name of home team',
+                          title: widget.fixture.homePlayer?.inGameName ??
+                              widget.fixture.homeTeam?.name,
                           color: AppColor().primaryWhite,
                           fontFamily: 'InterMedium',
                           textAlign: TextAlign.center,
@@ -120,26 +127,61 @@ class _FixtureCardState extends State<FixtureCard> {
                       )
                     ],
                   ),
-                  Column(
-                    children: [
-                      CustomText(
-                        title: 'VS',
-                        color: AppColor().secondaryGreenColor,
-                        fontFamily: 'InterMedium',
-                        textAlign: TextAlign.center,
-                        size: 20,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          widget.fixture.homeScore != null
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomText(
+                                      title:
+                                          widget.fixture.homeScore.toString(),
+                                      color: AppColor().secondaryGreenColor,
+                                      fontFamily: 'InterMedium',
+                                      textAlign: TextAlign.center,
+                                      size: 28,
+                                    ),
+                                    CustomText(
+                                      title: '-',
+                                      color: AppColor().secondaryGreenColor,
+                                      fontFamily: 'InterMedium',
+                                      textAlign: TextAlign.center,
+                                      size: 20,
+                                    ),
+                                    CustomText(
+                                      title:
+                                          widget.fixture.awayScore.toString(),
+                                      color: AppColor().secondaryGreenColor,
+                                      fontFamily: 'InterMedium',
+                                      textAlign: TextAlign.center,
+                                      size: 28,
+                                    ),
+                                  ],
+                                )
+                              : CustomText(
+                                  title: 'VS',
+                                  color: AppColor().secondaryGreenColor,
+                                  fontFamily: 'InterMedium',
+                                  textAlign: TextAlign.center,
+                                  size: 20,
+                                ),
+                          Gap(Get.height * 0.005),
+                          CustomText(
+                            title: formattedTime,
+                            color: AppColor().primaryWhite,
+                            fontFamily: 'InterMedium',
+                            textAlign: TextAlign.center,
+                            size: 14,
+                            underline: TextDecoration.underline,
+                            decorationColor: AppColor().primaryWhite,
+                          )
+                        ],
                       ),
-                      Gap(Get.height * 0.005),
-                      CustomText(
-                        title: '08:00',
-                        color: AppColor().primaryWhite,
-                        fontFamily: 'InterMedium',
-                        textAlign: TextAlign.center,
-                        size: 14,
-                        underline: TextDecoration.underline,
-                        decorationColor: AppColor().primaryWhite,
-                      )
-                    ],
+                    ),
                   ),
                   Column(
                     children: [
@@ -147,10 +189,12 @@ class _FixtureCardState extends State<FixtureCard> {
                         width: Get.width * 0.15,
                         height: Get.width * 0.15,
                         decoration: BoxDecoration(
-                          image: const DecorationImage(
+                          image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage(
-                                  'assets/images/png/tournament_cover.png')),
+                              image: NetworkImage(
+                                  widget.fixture.awayPlayer?.profile ??
+                                      widget.fixture.awayTeam?.profilePicture ??
+                                      "jhh")),
                           borderRadius: BorderRadius.all(
                               Radius.circular(Get.width * 0.15)),
                           color: Colors.redAccent,
@@ -162,7 +206,8 @@ class _FixtureCardState extends State<FixtureCard> {
                       SizedBox(
                         width: Get.width * 0.17,
                         child: CustomText(
-                          title: 'Name of away team',
+                          title: widget.fixture.awayPlayer?.inGameName ??
+                              widget.fixture.awayTeam?.name,
                           color: AppColor().primaryWhite,
                           fontFamily: 'InterMedium',
                           textAlign: TextAlign.center,
@@ -180,14 +225,27 @@ class _FixtureCardState extends State<FixtureCard> {
               color: AppColor().lightItemsColor,
               thickness: 0.2,
             ),
-            Gap(Get.height * 0.01),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: Get.width * 0.3),
-              width: Get.width * 0.9,
-              child: Image.asset(
-                'assets/images/png/twitch_logo.png',
-                width: Get.width * 0.25,
-                alignment: Alignment.center,
+            Gap(Get.height * 0.02),
+            Center(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.2),
+                width: Get.width * 0.7,
+                child: InkWell(
+                  // onTap: () =>
+                  //     launchUrl(Uri.parse(widget.fixture.livestreams![0].link!)),
+                  child: widget.fixture.livestreams!.isEmpty
+                      ? SizedBox()
+                      : ColorFiltered(
+                          colorFilter: const ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcATop,
+                          ),
+                          child: Image.network(
+                            '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                ),
               ),
             ),
           ],

@@ -202,7 +202,7 @@ class SocialEventRepository extends GetxController {
         debugPrint(await response.stream.bytesToString());
         Get.to(() => const CreateSuccessPage(title: 'Event Created'))!
             .then((value) {
-          eventController.getAllEvents();
+          eventController.getAllEvents(false);
           clear();
         });
       } else if (response.statusCode == 401) {
