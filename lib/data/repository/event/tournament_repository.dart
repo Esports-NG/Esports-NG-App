@@ -489,9 +489,10 @@ class TournamentRepository extends GetxController {
       "Content-type": "application/json"
     });
 
+    debugPrint(response.body);
     var json = jsonDecode(response.body);
 
-    var list = List.from(json['results']);
+    var list = List.from(json);
     var fixtures = list.map((e) => FixtureModel.fromJson(e)).toList();
 
     return fixtures;
