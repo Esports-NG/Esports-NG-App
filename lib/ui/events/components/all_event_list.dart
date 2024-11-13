@@ -3,6 +3,7 @@ import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/ui/account/account_events/account_events_item.dart';
 import 'package:e_sport/ui/components/account_tournament_detail.dart';
 import 'package:e_sport/ui/events/components/social_event_details.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -55,17 +56,17 @@ class _AllEventListState extends State<AllEventList> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      notificationPredicate: (notification) => notification.depth == 1,
+      // notificationPredicate: (notification) => notification.depth == 1,
       onRefresh: () => Future.sync(
         // 2
         () => _pagingController.refresh(),
       ),
       child: PagedListView.separated(
           pagingController: _pagingController,
+          padding: const EdgeInsets.only(top: 20),
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
           builderDelegate: PagedChildBuilderDelegate<EventModel>(
-            itemBuilder: (context, event, index) => InkWell(
+            itemBuilder: (context, event, index) => GestureDetector(
                 onTap: () {
                   if (event.type == "tournament") {
                     Get.to(() => AccountTournamentDetail(item: event));
@@ -74,6 +75,10 @@ class _AllEventListState extends State<AllEventList> {
                   }
                 },
                 child: AccountEventsItem(item: event)),
+            newPageProgressIndicatorBuilder: (context) =>
+                Center(child: ButtonLoader()),
+            firstPageProgressIndicatorBuilder: (context) =>
+                Center(child: ButtonLoader()),
           ),
           separatorBuilder: (context, index) => Gap(Get.height * 0.02)),
     );
