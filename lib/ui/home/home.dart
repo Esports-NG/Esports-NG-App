@@ -200,14 +200,14 @@ class _HomePageState extends State<HomePage>
                                       height: Get.height * 0.0019,
                                     ),
                                   )),
-                              Gap(Get.height * 0.02),
+                              Gap(Get.height * 0.005),
                             ]),
                       ),
                       SliverPersistentHeader(
                           pinned: true,
                           delegate: _SliverAppBarDelegate(
-                            minHeight: 45,
-                            maxHeight: 45,
+                            minHeight: 70,
+                            maxHeight: 70,
                             child: TabBar(
                                 isScrollable: true,
                                 tabAlignment: TabAlignment.start,
