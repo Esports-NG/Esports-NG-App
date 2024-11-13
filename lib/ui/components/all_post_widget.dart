@@ -99,7 +99,6 @@ class _PostWidgetState extends State<PostWidget>
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      notificationPredicate: (notification) => notification.depth == 1,
       onRefresh: () => Future.sync(
         // 2
         () => _pagingController.refresh(),

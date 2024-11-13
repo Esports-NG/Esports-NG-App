@@ -236,33 +236,22 @@ class _HomePageState extends State<HomePage>
                                 ]),
                           ))
                     ],
-                body: RefreshIndicator(
-                  notificationPredicate: (notification) =>
-                      notification.depth == 1,
-                  onRefresh: () async {
-                    await postController.getAllPost(false);
-                    await postController.getFollowingPost(false);
-                    await postController.getPostForYou(false);
-                    // await postController.getBookmarkedPost(false);
-                    // await postController.getAdverts();
-                  },
-                  child: TabBarView(controller: _tabController, children: [
-                    PostWidget(
-                      refresh: postController.getPostForYou,
-                      posts: postController.forYouPosts,
-                      nextLink: postController.forYouNextlink.value,
-                      getNext: postController.getNextForYou,
-                    ),
-                    PostWidget(
-                      refresh: postController.getFollowingPost,
-                      posts: postController.followingPost,
-                      nextLink: postController.followingNextLink.value,
-                      getNext: postController.getNextFollowing,
-                    ),
-                    Activities(),
-                    NewsWidget(posts: postController.news),
-                  ]),
-                )),
+                body: TabBarView(controller: _tabController, children: [
+                  PostWidget(
+                    refresh: postController.getPostForYou,
+                    posts: postController.forYouPosts,
+                    nextLink: postController.forYouNextlink.value,
+                    getNext: postController.getNextForYou,
+                  ),
+                  PostWidget(
+                    refresh: postController.getFollowingPost,
+                    posts: postController.followingPost,
+                    nextLink: postController.followingNextLink.value,
+                    getNext: postController.getNextFollowing,
+                  ),
+                  Activities(),
+                  NewsWidget(posts: postController.news),
+                ])),
           ),
           Center(
             child: Visibility(
