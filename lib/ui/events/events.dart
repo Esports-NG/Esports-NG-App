@@ -20,7 +20,10 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => false;
+
   bool? isSearch = false;
   final FocusNode _searchFocusNode = FocusNode();
   int? eventType = 0;

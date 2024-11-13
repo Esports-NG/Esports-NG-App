@@ -29,7 +29,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   int? categoryType = 0;
   bool? isSearch = false;
   final FocusNode _searchFocusNode = FocusNode();

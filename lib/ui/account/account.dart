@@ -29,7 +29,10 @@ class Account extends StatefulWidget {
   State<Account> createState() => _AccountState();
 }
 
-class _AccountState extends State<Account> {
+class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   int? accountTab;

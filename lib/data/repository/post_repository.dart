@@ -581,10 +581,9 @@ class PostRepository extends GetxController {
   Future getNextForYou() async {
     // try {
 
-    debugPrint('getting next for you post... ');
+    debugPrint('getting next for you post...');
     var response = await http.get(Uri.parse(forYouNextlink.value),
         headers: {"Authorization": "JWT ${authController.token}"});
-    debugPrint(response.body);
     var json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       if (json['detail'] != null) {
