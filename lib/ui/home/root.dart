@@ -8,25 +8,55 @@ import 'package:e_sport/ui/widget/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class RootDashboard extends StatelessWidget {
+class RootDashboard extends StatefulWidget {
   const RootDashboard({super.key});
+
+  @override
+  State<RootDashboard> createState() => _RootDashboardState();
+}
+
+class _RootDashboardState extends State<RootDashboard>
+    with TickerProviderStateMixin {
+  late PageController _pageViewController;
+
+  @override
+  void initState() {
+    _pageViewController = PageController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageViewController.dispose();
+    super.dispose();
+  }
+
+  void setPage(int index) {
+    _pageViewController.animateToPage(index,
+        duration: Duration(milliseconds: 300), curve: Curves.bounceInOut);
+  }
 
   @override
   Widget build(BuildContext context) {
     final navController = Get.put(NavRepository());
-    final List<Widget> pages = [
+    final List<Widget> _pages = [
       const HomePage(),
       const EventsPage(),
       const CommunityPage(),
       const Account(),
     ];
-    return Obx(
-      () => Scaffold(
-          body: pages[navController.currentIndex.value],
-          bottomNavigationBar: const BottomNavigation(),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: const ActionButton()),
-    );
+    return Scaffold(
+        body: PageView(
+          controller: _pageViewController,
+          children: _pages,
+          onPageChanged: (value) {
+            navController.currentIndex.value = value;
+          },
+        ),
+        bottomNavigationBar: BottomNavigation(
+          setPage: setPage,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: const ActionButton());
   }
 }
