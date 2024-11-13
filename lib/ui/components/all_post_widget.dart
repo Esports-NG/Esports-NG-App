@@ -20,7 +20,10 @@ class PostWidget extends StatefulWidget {
   State<PostWidget> createState() => _PostWidgetState();
 }
 
-class _PostWidgetState extends State<PostWidget> {
+class _PostWidgetState extends State<PostWidget> with AutomaticKeepAliveClientMixin<PostWidget> {
+  @override
+  bool get wantKeepAlive => true;
+
   var _scrollController = ScrollController();
   PagingController<int, PostModel> _pagingController =
       PagingController<int, PostModel>(firstPageKey: 1);

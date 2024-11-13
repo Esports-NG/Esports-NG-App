@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 
 class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({super.key});
+  const BottomNavigation({super.key, required this.setPage});
+  final void Function(int) setPage;
 
   @override
   State<BottomNavigation> createState() => _BottomNavigationState();
@@ -59,7 +60,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                 children: [
                   GestureDetector(
                     onTap: () {
-                      navController.setIndex(0);
+                      widget.setPage(0);
                     },
                     child: Container(
                       width: 70,
@@ -96,7 +97,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                   // const Spacer(flex: 1),
                   GestureDetector(
                     onTap: () {
-                      navController.setIndex(1);
+                      widget.setPage(1);
                     },
                     child: Container(
                       width: 70,
@@ -133,7 +134,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                   const Spacer(flex: 4),
                   GestureDetector(
                     onTap: () {
-                      navController.setIndex(2);
+                      widget.setPage(2);
                     },
                     child: Container(
                       width: 70,
@@ -172,7 +173,7 @@ class _BottomNavigationState extends State<BottomNavigation>
                   // ),
                   GestureDetector(
                     onTap: () {
-                      navController.setIndex(3);
+                      widget.setPage(3);
                     },
                     child: Container(
                       width: 70,
