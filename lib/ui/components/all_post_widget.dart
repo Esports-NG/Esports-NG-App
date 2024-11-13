@@ -105,7 +105,7 @@ class _PostWidgetState extends State<PostWidget>
       ),
       child: PagedListView.separated(
         pagingController: _pagingController,
-        padding: EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.only(top: 10, bottom: 50),
         separatorBuilder: (context, index) =>
             index != 0 && widget.posts![index - 1].owner != null
                 ? Gap(0)
