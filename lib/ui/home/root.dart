@@ -33,7 +33,7 @@ class _RootDashboardState extends State<RootDashboard>
 
   void setPage(int index) {
     _pageViewController.animateToPage(index,
-        duration: Duration(milliseconds: 300), curve: Curves.bounceInOut);
+        duration: Duration(milliseconds: 300), curve: Curves.linear);
   }
 
   @override
