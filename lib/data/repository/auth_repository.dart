@@ -510,6 +510,7 @@ class AuthRepository extends GetxController {
         "Authorization": 'JWT $token'
       },
     );
+    debugPrint(response.body);
     var json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       throw (json['detail']);

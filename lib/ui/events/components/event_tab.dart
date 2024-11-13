@@ -21,7 +21,11 @@ class EventTab extends StatefulWidget {
   State<EventTab> createState() => _EventTabState();
 }
 
-class _EventTabState extends State<EventTab> {
+class _EventTabState extends State<EventTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final eventController = Get.find<EventRepository>();
 
   @override
