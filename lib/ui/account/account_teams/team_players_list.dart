@@ -36,7 +36,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
         await teamController.getTeamRoster(widget.item.id!);
     setState(() {
       _roasterList = roasterList;
-      _isOpen = List.filled(roasterList.length, false);
+      _isOpen = List.filled(roasterList.length, true);
     });
   }
 
