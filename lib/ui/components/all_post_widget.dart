@@ -13,14 +13,21 @@ class PostWidget extends StatefulWidget {
   final String? nextLink;
   final Future Function()? getNext;
   final Future Function(bool)? refresh;
+  final String? type;
   const PostWidget(
-      {super.key, this.posts, this.nextLink, this.getNext, this.refresh});
+      {super.key,
+      this.posts,
+      this.nextLink,
+      this.getNext,
+      this.refresh,
+      this.type});
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
 }
 
-class _PostWidgetState extends State<PostWidget> with AutomaticKeepAliveClientMixin<PostWidget> {
+class _PostWidgetState extends State<PostWidget>
+    with AutomaticKeepAliveClientMixin<PostWidget> {
   @override
   bool get wantKeepAlive => true;
 
@@ -69,7 +76,17 @@ class _PostWidgetState extends State<PostWidget> with AutomaticKeepAliveClientMi
       } else {
         if (widget.refresh != null && pageKey == 1) {
           var posts = await widget.refresh!(false);
-          _pagingController.appendPage(posts, pageKey + 1);
+          if (widget.type == "announcement") {
+            _pagingController.appendPage(
+                posts.where((e) => e.announcement! == true).toList(),
+                pageKey + 1);
+          } else if (widget.type == "participant") {
+            _pagingController.appendPage(
+                posts.where((e) => e.participantAnnouncement! == true).toList(),
+                pageKey + 1);
+          } else {
+            _pagingController.appendPage(posts, pageKey + 1);
+          }
         } else {
           _pagingController.appendLastPage([]);
         }
