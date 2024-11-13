@@ -31,7 +31,10 @@ class _EventTabState extends State<EventTab>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(Get.height * 0.02),
+      padding: EdgeInsets.only(
+          top: Get.height * 0.02,
+          left: Get.height * 0.02,
+          right: Get.height * 0.02),
       child: Column(children: [
         Row(
           children: [
@@ -78,7 +81,6 @@ class _EventTabState extends State<EventTab>
             )
           ],
         ),
-        Gap(Get.height * 0.02),
         // eventController.isFiltering.value
         // ? Container(
         //     margin: EdgeInsets.only(top: Get.height * 0.04),
@@ -90,11 +92,13 @@ class _EventTabState extends State<EventTab>
         //     ),
         //   )
         // : eventController.typeFilter.value == "All"
-        AllEventList(
-          eventList: widget.eventList,
-          getNext: widget.getNext,
-          refresh: widget.refresh,
-          nextLink: widget.nextLink,
+        Expanded(
+          child: AllEventList(
+            eventList: widget.eventList,
+            getNext: widget.getNext,
+            refresh: widget.refresh,
+            nextLink: widget.nextLink,
+          ),
         )
         // : eventController.typeFilter.value == "Tournament"
         //     ? const TournamentList()
