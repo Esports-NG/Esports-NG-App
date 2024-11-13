@@ -55,14 +55,14 @@ class _FixtureCardState extends State<FixtureCard> {
             CustomText(
               title: widget.fixture.tournament!.name,
               color: AppColor().primaryWhite,
-              fontFamily: 'Inter',
+              fontFamily: 'InterSemiBold',
               textAlign: TextAlign.start,
               size: 14,
             ),
             CustomText(
               title: '${widget.fixture.tournament!.games![0].name}',
               color: AppColor().primaryWhite,
-              fontFamily: 'InterSemiBold',
+              fontFamily: 'Inter',
               textAlign: TextAlign.start,
               size: 14,
             ),

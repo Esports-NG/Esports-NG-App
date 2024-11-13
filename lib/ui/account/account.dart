@@ -4,6 +4,7 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/account/delete_account.dart';
 import 'package:e_sport/ui/account/faq.dart';
 import 'package:e_sport/ui/account/privacy_policy.dart';
 import 'package:e_sport/ui/components/my_post_widget.dart';
@@ -403,6 +404,32 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
             ],
           ),
         ),
+        PopupMenuItem(
+          value: 'ScreenF',
+          height: 20,
+          padding: const EdgeInsets.only(
+            bottom: 10,
+            left: 20,
+            top: 10,
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.delete_outline_rounded,
+                color: AppColor().primaryRed,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.015),
+              CustomText(
+                title: 'Delete your Account',
+                size: Get.height * 0.014,
+                fontFamily: 'InterMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryRed,
+              ),
+            ],
+          ),
+        ),
       ],
     );
 
@@ -427,6 +454,9 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
         break;
       case 'ScreenE':
         Get.to(() => Faq());
+        break;
+      case 'ScreenF':
+        Get.to(() => DeleteAccount());
         break;
     }
   }

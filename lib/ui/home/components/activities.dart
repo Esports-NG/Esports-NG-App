@@ -69,7 +69,7 @@ class _ActivitiesState extends State<Activities>
               ))
             : ListView.separated(
                 shrinkWrap: true,
-                padding: EdgeInsets.all(0),
+                padding: EdgeInsets.symmetric(vertical: 10),
                 itemBuilder: (context, index) {
                   var item = tournamentController.allFixtures[index];
                   return FixtureCard(
