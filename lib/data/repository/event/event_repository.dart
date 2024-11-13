@@ -280,11 +280,13 @@ class EventRepository extends GetxController
     var json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       myEventStatus.value = EventStatus.error;
+      return null;
     } else {
       var list = List.from(json);
       var events = list.map((e) => EventModel.fromJson(e)).toList();
       _myEvent(events);
       myEventStatus.value = EventStatus.available;
+      return events;
     }
   }
 
