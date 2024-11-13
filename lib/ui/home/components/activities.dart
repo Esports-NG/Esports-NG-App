@@ -14,7 +14,11 @@ class Activities extends StatefulWidget {
   State<Activities> createState() => _ActivitiesState();
 }
 
-class _ActivitiesState extends State<Activities> {
+class _ActivitiesState extends State<Activities>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   var tournamentController = Get.put(TournamentRepository());
   bool _isLoading = false;
 

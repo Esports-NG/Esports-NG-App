@@ -21,7 +21,10 @@ class NewsWidget extends StatefulWidget {
   State<NewsWidget> createState() => _PostWidgetState();
 }
 
-class _PostWidgetState extends State<NewsWidget> {
+class _PostWidgetState extends State<NewsWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
