@@ -184,6 +184,7 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                           itemBuilder: (context, index) => GestureDetector(
                               onTap: () {},
                               child: FixtureCardTournament(
+                                  event: widget.event,
                                   getFixtures: getFixtures,
                                   fixture: _fixturesList[index],
                                   backgroundColor:

@@ -31,17 +31,18 @@ class _EventPostsAndAnnouncementsState extends State<EventPostsAndAnnouncements>
   List<PostModel> _posts = [];
   bool _isLoading = true;
 
-  Future getEventPosts() async {
+  Future getEventPosts(bool? firstTime) async {
     var posts = await postController.getEventPosts(widget.event.id!);
     setState(() {
       _posts = posts;
       _isLoading = false;
     });
+    return posts;
   }
 
   @override
   void initState() {
-    getEventPosts();
+    getEventPosts(false);
     super.initState();
   }
 
@@ -127,17 +128,13 @@ class _EventPostsAndAnnouncementsState extends State<EventPostsAndAnnouncements>
                       )
                     : TabBarView(controller: _tabController, children: [
                         PostWidget(
-                          posts: _posts
-                              .where((e) => e.announcement! == true)
-                              .toList(),
+                          type: "announcement",
+                          refresh: getEventPosts,
                         ),
+                        PostWidget(posts: _posts, refresh: getEventPosts),
                         PostWidget(
-                          posts: _posts,
-                        ),
-                        PostWidget(
-                          posts: _posts
-                              .where((e) => e.participantAnnouncement! == true)
-                              .toList(),
+                          type: "participant",
+                          refresh: getEventPosts,
                         ),
                       ]),
           ),

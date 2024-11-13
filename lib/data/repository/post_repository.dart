@@ -862,6 +862,8 @@ class PostRepository extends GetxController {
     var response = await http.get(Uri.parse(ApiLink.getEventPosts(id)),
         headers: {"Authorization": "JWT ${authController.token}"});
 
+    debugPrint(response.body);
+
     var json = jsonDecode(response.body);
     var list = List.from(json);
     var posts = list.map((e) => PostModel.fromJson(e)).toList();
