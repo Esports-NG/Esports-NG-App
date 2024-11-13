@@ -139,7 +139,11 @@ class _EventsPageState extends State<EventsPage>
                   refresh: eventController.getMyEvents,
                 ),
               ),
-              EventTab(),
+              EventTab(
+                refresh: eventController.getAllEvents,
+                getNext: eventController.getNextEvents,
+                nextLink: eventController.nextLink.value,
+              ),
             ],
           ),
         ),
