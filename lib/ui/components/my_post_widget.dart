@@ -45,47 +45,52 @@ class _MyPostWidgetState extends State<MyPostWidget>
         },
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-          child: Obx(() => NestedScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  SliverPersistentHeader(
-                      pinned: true,
-                      delegate: _SliverAppBarDelegate(
-                          minHeight: 45,
-                          maxHeight: 45,
-                          child: Container(
-                            color: AppColor().primaryBackGroundColor,
-                            child: TabBar(
-                                isScrollable: true,
-                                tabAlignment: TabAlignment.start,
-                                labelColor: AppColor().primaryColor,
-                                indicatorColor: AppColor().primaryColor,
-                                dividerColor: Colors.transparent,
-                                labelStyle: const TextStyle(
-                                  fontFamily: 'InterBold',
-                                  fontSize: 13,
-                                ),
-                                unselectedLabelColor:
-                                    AppColor().lightItemsColor,
-                                unselectedLabelStyle: const TextStyle(
-                                  fontFamily: 'InterMedium',
-                                  fontSize: 13,
-                                ),
-                                controller: _tabController,
-                                tabs: const [
-                                  Tab(text: 'My Posts'),
-                                  Tab(text: 'Bookmarks'),
-                                ]),
-                          )))
-                ],
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: TabBarView(controller: _tabController, children: [
-                    PostWidget(posts: postController.myPost),
-                    PostWidget(posts: postController.bookmarkedPost),
-                  ]),
+          child: NestedScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _SliverAppBarDelegate(
+                      minHeight: 45,
+                      maxHeight: 45,
+                      child: Container(
+                        color: AppColor().primaryBackGroundColor,
+                        child: TabBar(
+                            isScrollable: true,
+                            tabAlignment: TabAlignment.start,
+                            labelColor: AppColor().primaryColor,
+                            indicatorColor: AppColor().primaryColor,
+                            dividerColor: Colors.transparent,
+                            labelStyle: const TextStyle(
+                              fontFamily: 'InterBold',
+                              fontSize: 13,
+                            ),
+                            unselectedLabelColor: AppColor().lightItemsColor,
+                            unselectedLabelStyle: const TextStyle(
+                              fontFamily: 'InterMedium',
+                              fontSize: 13,
+                            ),
+                            controller: _tabController,
+                            tabs: const [
+                              Tab(text: 'My Posts'),
+                              Tab(text: 'Bookmarks'),
+                            ]),
+                      )))
+            ],
+            body: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TabBarView(controller: _tabController, children: [
+                PostWidget(
+                  refresh: postController.getMyPost,
+                  posts: postController.myPost,
                 ),
-              )),
+                PostWidget(
+                  refresh: postController.getBookmarkedPost,
+                  posts: postController.bookmarkedPost,
+                ),
+              ]),
+            ),
+          ),
         ),
       ),
     );

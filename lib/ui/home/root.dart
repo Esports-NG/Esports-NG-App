@@ -32,8 +32,7 @@ class _RootDashboardState extends State<RootDashboard>
   }
 
   void setPage(int index) {
-    _pageViewController.animateToPage(index,
-        duration: Duration(milliseconds: 300), curve: Curves.linear);
+    _pageViewController.jumpToPage(index);
   }
 
   @override
@@ -47,6 +46,7 @@ class _RootDashboardState extends State<RootDashboard>
     ];
     return Scaffold(
         body: PageView(
+          physics: NeverScrollableScrollPhysics(),
           controller: _pageViewController,
           children: _pages,
           onPageChanged: (value) {

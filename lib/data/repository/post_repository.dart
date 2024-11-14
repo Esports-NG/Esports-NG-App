@@ -480,18 +480,21 @@ class PostRepository extends GetxController {
             ? _getPostStatus(GetPostStatus.available)
             : _getPostStatus(GetPostStatus.empty);
         authController.setLoading(false);
+        return myPosts;
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
             .then((value) => EasyLoading.showInfo('try again!'));
         _getPostStatus(GetPostStatus.error);
         authController.setLoading(false);
+        return null;
       }
-      return response.body;
+      return null;
     } catch (error) {
       _getPostStatus(GetPostStatus.error);
       authController.setLoading(false);
       debugPrint("getting my post: ${error.toString()}");
+      return null;
     }
   }
 
@@ -720,18 +723,21 @@ class PostRepository extends GetxController {
             ? _bookmarkStatus(BookmarkStatus.available)
             : _bookmarkStatus(BookmarkStatus.empty);
         authController.setLoading(false);
+        return posts;
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
             .then((value) => EasyLoading.showInfo('try again!'));
         _bookmarkStatus(BookmarkStatus.error);
         authController.setLoading(false);
+        return null;
       }
-      return response.body;
+      return null;
     } catch (error) {
       _bookmarkStatus(BookmarkStatus.error);
       authController.setLoading(false);
       debugPrint("getting bookmarked post: ${error.toString()}");
+      return null;
     }
   }
 
