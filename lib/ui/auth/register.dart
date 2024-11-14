@@ -889,31 +889,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                 ),
                               );
-                            } else if (authController.genderController.text ==
-                                '') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: CustomText(
-                                    title: 'choose your gender!',
-                                    size: Get.height * 0.02,
-                                    color: AppColor().primaryWhite,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              );
-                            } else if (authController.dobController.text ==
-                                '') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: CustomText(
-                                    title: 'pick your date of birth!',
-                                    size: Get.height * 0.02,
-                                    color: AppColor().primaryWhite,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              );
-                            } else {
+                            }else {
                               setState(() {
                                 pageCount++;
                                 debugPrint('PageCount: $pageCount');
