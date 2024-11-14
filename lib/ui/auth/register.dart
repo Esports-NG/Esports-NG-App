@@ -10,7 +10,6 @@ import 'package:e_sport/ui/widget/page_indicator.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/csc_picker.dart';
 import 'package:e_sport/util/validator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -853,9 +852,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           bio: "...",
                           password2:
                               authController.passwordController.text.trim(),
-                          phoneNumber:
-                              authController.countryCodeController.text.trim() +
-                                  authController.phoneNoController.text.trim(),
+                          phoneNumber: authController.phoneNoController.text !=
+                                  ""
+                              ? authController.countryCodeController.text
+                                      .trim() +
+                                  authController.phoneNoController.text.trim()
+                              : null,
                           country: authController.countryController.text.trim(),
                           state: authController.stateController.text.trim(),
                           ipurpose: selectedUse.map((e) => e.title!).toList(),
@@ -889,7 +891,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                 ),
                               );
-                            }else {
+                            } else {
                               setState(() {
                                 pageCount++;
                                 debugPrint('PageCount: $pageCount');

@@ -232,76 +232,72 @@ class AuthRepository extends GetxController {
   }
 
   Future signUp(UserModel user, BuildContext context) async {
-    try {
-      _signUpStatus(SignUpStatus.loading);
-      var headers = {
-        "Content-Type": "application/json",
-      };
+    // try {
+    _signUpStatus(SignUpStatus.loading);
+    var headers = {
+      "Content-Type": "application/json",
+    };
 
-      var request = http.MultipartRequest("POST", Uri.parse(ApiLink.register));
+    var request = http.MultipartRequest("POST", Uri.parse(ApiLink.register));
 
-      request.headers.addAll(headers);
-      request.fields.addAll(user.toRequestJson());
-      for (int i = 0; i < user.profile!.igameType!.length; i++) {
-        request.fields['profile.igame_type[$i]'] = user.profile!.igameType![i];
-      }
-      for (int i = 0; i < user.ipurpose!.length; i++) {
-        request.fields['ipurpose[$i]'] = user.ipurpose![i];
-      }
-      if (userImage != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-            "profile.profile_picture", userImage!.path));
-      }
-
-      http.StreamedResponse res = await request.send();
-      var response = await http.Response.fromStream(res);
-
-      // var response = await http.post(Uri.parse(ApiLink.register),
-      //     body: jsonEncode(user.toJson()),
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     });
-      debugPrint(response.body);
-      var json = jsonDecode(response.body);
-
-      if (response.statusCode != 201) {
-        throw (json['profile'] != null
-            ? json['profile'][0]
-            : json['phone_number'] != null
-                ? json['phone_number'][0]
-                : json['user_name'] != null
-                    ? json['user_name'][0]
-                    : json['full_name'] != null
-                        ? json['full_name'][0]
-                        : json['email'] != null
-                            ? json['email'][0]
-                            : json['password'] != null
-                                ? json['password'][0]
-                                : json
-                                    .toString()
-                                    .replaceAll('{', '')
-                                    .replaceAll('}', ''));
-      }
-
-      if (response.statusCode == 201) {
-        _signUpStatus(SignUpStatus.success);
-        EasyLoading.showInfo(
-                'Account created successfully!\nConfirmation email sent, Please check your email for further instructions!',
-                duration: const Duration(seconds: 2))
-            .then((value) async {
-          await Future.delayed(const Duration(seconds: 2));
-          Get.offAll(() => const LoginScreen());
-          clear();
-          clearPhoto();
-        });
-      }
-
-      return response.body;
-    } catch (error) {
-      _signUpStatus(SignUpStatus.error);
-      debugPrint("Error occurred ${error.toString()}");
-      getError(error);
+    request.headers.addAll(headers);
+    request.fields.addAll(user.toRequestJson());
+    for (int i = 0; i < user.profile!.igameType!.length; i++) {
+      request.fields['profile.igame_type[$i]'] = user.profile!.igameType![i];
     }
+    for (int i = 0; i < user.ipurpose!.length; i++) {
+      request.fields['ipurpose[$i]'] = user.ipurpose![i];
+    }
+    if (userImage != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+          "profile.profile_picture", userImage!.path));
+    }
+
+    http.StreamedResponse res = await request.send();
+    var response = await http.Response.fromStream(res);
+
+    debugPrint(response.body);
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode != 201) {
+      throw (json['profile'] != null
+          ? json['profile'][0]
+          : json['phone_number'] != null
+              ? json['phone_number'][0]
+              : json['user_name'] != null
+                  ? json['user_name'][0]
+                  : json['full_name'] != null
+                      ? json['full_name'][0]
+                      : json['email'] != null
+                          ? json['email'][0]
+                          : json['password'] != null
+                              ? json['password'][0]
+                              : json
+                                  .toString()
+                                  .replaceAll('{', '')
+                                  .replaceAll('}', ''));
+    }
+
+    if (response.statusCode == 201) {
+      _signUpStatus(SignUpStatus.success);
+      EasyLoading.showInfo(
+              'Account created successfully!\nConfirmation email sent, Please check your email for further instructions!',
+              duration: const Duration(seconds: 2))
+          .then((value) async {
+        await Future.delayed(const Duration(seconds: 2));
+        Get.offAll(() => const LoginScreen());
+        clear();
+        clearPhoto();
+      });
+    }
+
+    return response.body;
+    // } catch (error) {
+    //   _signUpStatus(SignUpStatus.error);
+    //   debugPrint("Error occurred ${error.toString()}");
+    //   throw(error);
+    //   getError(error);
+    // }
   }
 
   Future login(BuildContext context) async {
