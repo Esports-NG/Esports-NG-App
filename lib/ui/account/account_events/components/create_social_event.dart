@@ -425,56 +425,98 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   items: (filter, infiniteScrollProps) =>
                       eventController.currencies.entries.toList(),
                   itemAsString: (item) => item.key,
+                  compareFn: (item1, item2) => true,
+                  decoratorProps: DropDownDecoratorProps(
+                    baseStyle: TextStyle(fontFamily: "Inter"),
+                    decoration: InputDecoration(
+                      fillColor: AppColor().primaryDark,
+                      filled: true,
+                      isDense: true,
+                      prefixStyle: TextStyle(
+                        color: AppColor().lightItemsColor,
+                        fontSize: 14,
+                        fontStyle: FontStyle.normal,
+                        fontFamily: 'InterMedium',
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      focusColor: AppColor().primaryWhite,
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColor().lightItemsColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10)),
+                      errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10)),
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontStyle: FontStyle.normal,
+                        fontFamily: 'InterMedium',
+                      ),
+                      hintStyle: TextStyle(
+                        color: AppColor().lightItemsColor,
+                        fontSize: 14,
+                        fontStyle: FontStyle.normal,
+                        fontFamily: 'InterMedium',
+                      ),
+                    ),
+                  ),
                   popupProps: PopupProps.menu(
                       showSearchBox: true,
+                      itemBuilder: (context, item, isDisabled, isSelected) =>
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: CustomText(
+                              title: item.key,
+                              color: AppColor().primaryWhite,
+                              size: 16,
+                            ),
+                          ),
                       searchFieldProps: TextFieldProps(
+                          style: TextStyle(fontFamily: "Inter"),
                           decoration: InputDecoration(
-                        hintText: "Select a currency",
-                        prefixIcon: Icon(
-                          CupertinoIcons.search,
-                          color: AppColor().greyFour,
-                        ),
-                        hintStyle: TextStyle(
-                            color: AppColor().greyFour,
-                            fontFamily: "InterMedium"),
-                        filled: true,
-                        fillColor: AppColor().primaryWhite.withOpacity(0.05),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: AppColor().lightItemsColor, width: 1),
-                            borderRadius: BorderRadius.circular(10)),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(10)),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                      )),
+                            hintText: "Select a currency",
+                            prefixIcon: Icon(
+                              CupertinoIcons.search,
+                              color: AppColor().greyFour,
+                            ),
+                            hintStyle: TextStyle(
+                                color: AppColor().greyFour,
+                                fontFamily: "InterMedium"),
+                            filled: true,
+                            fillColor:
+                                AppColor().primaryWhite.withOpacity(0.05),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: AppColor().lightItemsColor,
+                                    width: 1),
+                                borderRadius: BorderRadius.circular(10)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10)),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                          )),
                       menuProps: MenuProps(
                           backgroundColor: AppColor().primaryDark,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)))),
-                  // dropdownButtonProps: DropdownButtonProps(
-                  //     icon: const Icon(Icons.keyboard_arrow_down),
-                  //     color: AppColor().greyFour),
-                  // dropdownDecoratorProps: DropDownDecoratorProps(
-                  //     baseStyle: TextStyle(color: AppColor().primaryWhite),
-                  //     dropdownSearchDecoration: InputDecoration(
-                  //       hintText: "Select a currency",
-                  //       hintStyle: TextStyle(
-                  //           color: AppColor().greyFour,
-                  //           fontFamily: "InterMedium"),
-                  //       filled: true,
-                  //       fillColor: AppColor().primaryDark,
-                  //       focusedBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //               color: AppColor().lightItemsColor, width: 1),
-                  //           borderRadius: BorderRadius.circular(10)),
-                  //       enabledBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide.none,
-                  //           borderRadius: BorderRadius.circular(10)),
-                  //       contentPadding: const EdgeInsets.symmetric(
-                  //           horizontal: 10, vertical: 5),
-                  //     )),
                 ),
               ),
               Gap(Get.height * 0.02),

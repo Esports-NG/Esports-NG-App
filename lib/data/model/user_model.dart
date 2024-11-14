@@ -109,13 +109,11 @@ class UserModel {
         "full_name": fullName!,
         "user_name": userName!,
         "bio": bio!,
-        "phone_number": phoneNumber!,
+        "phone_number": phoneNumber ?? "",
         "password": password!,
         "password2": password2!,
         "country": country!,
         "state": state!,
-        "gender": gender!,
-        "d_o_b": dOB!,
         // "ipurpose":
         //     ipurpose == null ? [] : List<dynamic>.from(ipurpose!.map((x) => x)),
         // "profile": profile?.toJson()
