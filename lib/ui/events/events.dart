@@ -44,107 +44,110 @@ class _EventsPageState extends State<EventsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: NestedScrollView(
-          floatHeaderSlivers: true,
-          physics: const AlwaysScrollableScrollPhysics(),
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverAppBar(
-                elevation: 0,
-                centerTitle: true,
-                title: CustomText(
-                  title: 'Events',
-                  fontFamily: 'InterSemiBold',
-                  size: 18,
-                  color: AppColor().primaryWhite,
-                ),
-                actions: [
-                  Padding(
-                    padding: EdgeInsets.only(right: Get.width * 0.05),
-                    child: Icon(
-                      Icons.tv_outlined,
-                      color: AppColor().primaryWhite,
+    return Obx(
+      () => Scaffold(
+        body: SafeArea(
+          child: NestedScrollView(
+            floatHeaderSlivers: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverAppBar(
+                  elevation: 0,
+                  centerTitle: true,
+                  title: CustomText(
+                    title: 'Events',
+                    fontFamily: 'InterSemiBold',
+                    size: 18,
+                    color: AppColor().primaryWhite,
+                  ),
+                  actions: [
+                    Padding(
+                      padding: EdgeInsets.only(right: Get.width * 0.05),
+                      child: Icon(
+                        Icons.tv_outlined,
+                        color: AppColor().primaryWhite,
+                      ),
                     ),
-                  ),
-                ]),
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(Get.height * 0.02),
-                    child: SizedBox(
-                        height: Get.height * 0.06,
-                        child: CupertinoSearchTextField(
-                          placeholder: 'Search for events...',
-                          onSubmitted: (_) => Get.to(() => SearchScreen(
-                                selectedPage: 3,
-                              )),
-                          borderRadius: BorderRadius.circular(10),
-                          prefixInsets:
-                              const EdgeInsets.only(right: 5, left: 10),
-                          controller: authController.searchController,
-                          itemColor: AppColor().primaryWhite.withOpacity(0.5),
-                          style: TextStyle(
-                            color: AppColor().primaryWhite,
-                            fontFamily: 'InterMedium',
-                            fontSize: 14,
-                            height: Get.height * 0.0019,
-                          ),
-                        )),
-                  ),
-                ],
-              ),
-            ),
-            SliverPersistentHeader(
-                pinned: true,
-                delegate: _SliverAppBarDelegate(
-                    minHeight: 45,
-                    maxHeight: 45,
-                    child: Container(
-                      color: AppColor().primaryBackGroundColor,
-                      child: TabBar(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Get.height * 0.015),
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          labelStyle:
-                              const TextStyle(fontFamily: "InterMedium"),
-                          // dividerColor: AppColor().primaryBackGroundColor,
-                          dividerHeight: 0,
-                          indicatorColor: AppColor().primaryColor,
-                          labelColor: AppColor().primaryColor,
-                          unselectedLabelColor: AppColor().lightItemsColor,
-                          controller: eventController.tabController,
-                          tabs: const [
-                            Tab(
-                              text: "Active Events",
+                  ]),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(Get.height * 0.02),
+                      child: SizedBox(
+                          height: Get.height * 0.06,
+                          child: CupertinoSearchTextField(
+                            placeholder: 'Search for events...',
+                            onSubmitted: (_) => Get.to(() => SearchScreen(
+                                  selectedPage: 3,
+                                )),
+                            borderRadius: BorderRadius.circular(10),
+                            prefixInsets:
+                                const EdgeInsets.only(right: 5, left: 10),
+                            controller: authController.searchController,
+                            itemColor: AppColor().primaryWhite.withOpacity(0.5),
+                            style: TextStyle(
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'InterMedium',
+                              fontSize: 14,
+                              height: Get.height * 0.0019,
                             ),
-                            Tab(text: "You Registered"),
-                            Tab(text: "All Events")
-                          ]),
-                    )))
-          ],
-          // backgroundColor: AppColor().primaryBackGroundColor,
-          body: TabBarView(
-            controller: eventController.tabController,
-            children: [
-              EventTab(
-                refresh: eventController.getAllEvents,
-                getNext: eventController.getNextEvents,
-                nextLink: eventController.nextLink.value,
-              ),
-              Obx(
-                () => EventTab(
-                  eventList: eventController.myEvent,
-                  refresh: eventController.getMyEvents,
+                          )),
+                    ),
+                  ],
                 ),
               ),
-              EventTab(
-                refresh: eventController.getAllEvents,
-                getNext: eventController.getNextEvents,
-                nextLink: eventController.nextLink.value,
-              ),
+              SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _SliverAppBarDelegate(
+                      minHeight: 45,
+                      maxHeight: 45,
+                      child: Container(
+                        color: AppColor().primaryBackGroundColor,
+                        child: TabBar(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Get.height * 0.015),
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            labelStyle:
+                                const TextStyle(fontFamily: "InterMedium"),
+                            // dividerColor: AppColor().primaryBackGroundColor,
+                            dividerHeight: 0,
+                            indicatorColor: AppColor().primaryColor,
+                            labelColor: AppColor().primaryColor,
+                            unselectedLabelColor: AppColor().lightItemsColor,
+                            controller: eventController.tabController,
+                            tabs: const [
+                              Tab(
+                                text: "Active Events",
+                              ),
+                              Tab(text: "You Registered"),
+                              Tab(text: "All Events")
+                            ]),
+                      )))
             ],
+            // backgroundColor: AppColor().primaryBackGroundColor,
+            body: TabBarView(
+              controller: eventController.tabController,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                EventTab(
+                  refresh: eventController.getAllEvents,
+                  getNext: eventController.getNextEvents,
+                  nextLink: eventController.nextLink.value,
+                ),
+                Obx(
+                  () => EventTab(
+                    eventList: eventController.myEvent,
+                    refresh: eventController.getMyEvents,
+                  ),
+                ),
+                EventTab(
+                  refresh: eventController.getAllEvents,
+                  getNext: eventController.getNextEvents,
+                  nextLink: eventController.nextLink.value,
+                ),
+              ],
+            ),
           ),
         ),
       ),

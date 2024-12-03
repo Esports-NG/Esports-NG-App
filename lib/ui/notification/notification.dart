@@ -7,9 +7,6 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import 'notification_type/all.dart';
-import 'notification_type/events.dart';
-import 'notification_type/personal.dart';
-import 'notification_type/posts.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
@@ -40,9 +37,6 @@ class _NotificationPageState extends State<NotificationPage>
 
   var pages = <Widget>[
     const AllNotification(),
-    const Personal(),
-    const Posts(),
-    const Events(),
   ];
 
   @override
@@ -53,7 +47,7 @@ class _NotificationPageState extends State<NotificationPage>
         centerTitle: true,
         title: CustomText(
           title: 'Notifications',
-          weight: FontWeight.w500,
+          fontFamily: 'InterSemiBold',
           size: 18,
           color: AppColor().primaryWhite,
         ),
@@ -179,44 +173,9 @@ class _NotificationPageState extends State<NotificationPage>
           ),
           const Gap(20)
         ],
-        // bottom: TabBar(
-        //     controller: _tabController,
-        //     indicatorColor: AppColor().primaryColor,
-        //     tabs: [
-        //       Tab(
-        //         child: CustomText(
-        //           title: 'Personal',
-        //           color: _tabController.index == 0
-        //               ? AppColor().primaryColor
-        //               : AppColor().lightItemsColor,
-        //           size: 14,
-        //           fontFamily: "InterSemiBold",
-        //         ),
-        //       ),
-        //       Tab(
-        //         child: CustomText(
-        //           title: 'Posts',
-        //           color: _tabController.index == 1
-        //               ? AppColor().primaryColor
-        //               : AppColor().lightItemsColor,
-        //           size: 14,
-        //           fontFamily: "InterSemiBold",
-        //         ),
-        //       ),
-        //       Tab(
-        //         child: CustomText(
-        //           title: 'Events',
-        //           color: _tabController.index == 2
-        //               ? AppColor().primaryColor
-        //               : AppColor().lightItemsColor,
-        //           size: 14,
-        //           fontFamily: "InterSemiBold",
-        //         ),
-        //       ),
-        //     ]),
       ),
       backgroundColor: AppColor().primaryBackGroundColor,
-      body: pages.elementAt(_selectedIndex ?? 0),
+      body: AllNotification(),
     );
   }
 

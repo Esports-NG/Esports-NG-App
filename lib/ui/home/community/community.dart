@@ -82,13 +82,10 @@ class _CommunityPageState extends State<CommunityPage>
       backgroundColor: AppColor().primaryBackGroundColor,
       body: RefreshIndicator(
         onRefresh: () async {
-          await communityController.getSuggestedProfiles();
-          await communityController.getAllCommunity(false);
-          await eventController.getAllTournaments(false);
-          await postController.getAllPost(false);
-          await gamesController.getAllGames();
-          await teamController.getAllTeam(false);
-          await teamController.getMyTeam(false);
+          communityController.getSuggestedProfiles();
+          communityController.getAllCommunity(false);
+          gamesController.getAllGames();
+          teamController.getAllTeam(false);
         },
         child: Obx(
           () => SingleChildScrollView(
@@ -285,14 +282,14 @@ class _CommunityPageState extends State<CommunityPage>
                       ),
                     ),
                     Gap(Get.height * 0.03),
-                    (teamController.teamStatus == TeamStatus.loading)
-                        ? LoadingWidget(color: AppColor().primaryColor)
-                        : (teamController.teamStatus == TeamStatus.available)
-                            ? Container(
-                                padding:
-                                    EdgeInsets.only(left: Get.height * 0.02),
-                                height: Get.height * 0.28,
-                                child: ListView.separated(
+                    (teamController.teamStatus != TeamStatus.error)
+                        ? Container(
+                            padding: EdgeInsets.only(left: Get.height * 0.02),
+                            height: Get.height * 0.28,
+                            child: (teamController.teamStatus ==
+                                    TeamStatus.loading)
+                                ? LoadingWidget(color: AppColor().primaryColor)
+                                : ListView.separated(
                                     physics: const ScrollPhysics(),
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
@@ -308,10 +305,10 @@ class _CommunityPageState extends State<CommunityPage>
                                               AccountTeamsDetail(item: item)),
                                           child: TrendingTeamsItem(item: item));
                                     }),
-                              )
-                            : (teamController.teamStatus == TeamStatus.empty)
-                                ? const NoItemPage(title: 'Teams')
-                                : const ErrorPage(),
+                          )
+                        : (teamController.teamStatus == TeamStatus.empty)
+                            ? const NoItemPage(title: 'Teams')
+                            : const ErrorPage(),
                   ],
                 ),
                 Gap(Get.height * 0.03),

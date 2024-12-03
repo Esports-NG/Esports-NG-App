@@ -56,15 +56,13 @@ class _AllEventListState extends State<AllEventList> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      // notificationPredicate: (notification) => notification.depth == 1,
       onRefresh: () => Future.sync(
-        // 2
         () => _pagingController.refresh(),
       ),
       child: PagedListView.separated(
           pagingController: _pagingController,
-          padding: const EdgeInsets.only(top: 20),
-          shrinkWrap: true,
+          padding: const EdgeInsets.only(top: 20, bottom: 40),
+          // shrinkWrap: true,
           builderDelegate: PagedChildBuilderDelegate<EventModel>(
             itemBuilder: (context, event, index) => GestureDetector(
                 onTap: () {

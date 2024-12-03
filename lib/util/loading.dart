@@ -1,6 +1,5 @@
-import 'dart:io';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,19 +10,17 @@ class LoadingWidget extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: size ?? 20,
-      height: size ?? 20,
-      child: Center(
-          heightFactor: 1,
-          widthFactor: 1,
-          child: Platform.isIOS
-              ? CupertinoActivityIndicator(
-                  color: color ?? Colors.white,
-                )
-              : CircularProgressIndicator(
-                  color: color ?? Colors.white,
-                )),
+    return Center(
+      child: SizedBox(
+        width: size ?? 20,
+        height: size ?? 20,
+        child: Center(
+            heightFactor: 1,
+            widthFactor: 1,
+            child: ButtonLoader(
+              color: color,
+            )),
+      ),
     );
   }
 }

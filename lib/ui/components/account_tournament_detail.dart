@@ -194,11 +194,11 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
       _eventDetails = event;
       _isLoading = false;
     });
+    print(event.regEnd);
   }
 
   @override
   initState() {
-    print(widget.item.toJson());
     getCommunityFollowers();
     getParticipants();
     getFixtures();
@@ -318,46 +318,50 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                         Gap(Get.height * 0.05),
                         InkWell(
                           borderRadius: BorderRadius.circular(30),
-                          onTap: () async {
-                            if (_eventDetails!.tournamentType == "team") {
-                              setState(() {
-                                _isRegisterLoading = true;
-                              });
-                              showDialog(
-                                context: context,
-                                builder: (context) => ChooseTeamDialog(
-                                  id: _eventDetails!.id!,
-                                  isRegistered: _isRegistered,
-                                ),
-                              );
+                          onTap: DateTime.now().isAfter(_eventDetails!.regEnd!)
+                              ? null
+                              : () async {
+                                  if (_eventDetails!.tournamentType == "team") {
+                                    setState(() {
+                                      _isRegisterLoading = true;
+                                    });
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => ChooseTeamDialog(
+                                        id: _eventDetails!.id!,
+                                        isRegistered: _isRegistered,
+                                      ),
+                                    );
 
-                              setState(() {
-                                _isRegisterLoading = false;
-                              });
-                            } else {
-                              setState(() {
-                                _isRegisterLoading = true;
-                              });
-                              if (_isRegistered) {
-                                await tournamentController.unregisterForEvent(
-                                    _eventDetails!.id!,
-                                    "player",
-                                    _participantProfile!.id!);
-                                _isRegistered = false;
-                              } else {
-                                var success = await tournamentController
-                                    .registerForTournament(_eventDetails!.id!);
-                                if (success) {
-                                  setState(() {
-                                    _isRegistered = true;
-                                  });
-                                }
-                              }
-                              setState(() {
-                                _isRegisterLoading = false;
-                              });
-                            }
-                          },
+                                    setState(() {
+                                      _isRegisterLoading = false;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      _isRegisterLoading = true;
+                                    });
+                                    if (_isRegistered) {
+                                      await tournamentController
+                                          .unregisterForEvent(
+                                              _eventDetails!.id!,
+                                              "player",
+                                              _participantProfile!.id!);
+                                      _isRegistered = false;
+                                    } else {
+                                      var success = await tournamentController
+                                          .registerForTournament(
+                                              _eventDetails!.id!);
+                                      if (success) {
+                                        setState(() {
+                                          _isRegistered = true;
+                                        });
+                                      }
+                                    }
+                                    setState(() {
+                                      _isRegisterLoading = false;
+                                    });
+                                  }
+                                },
                           child: Container(
                             height: Get.height * 0.06,
                             width: Get.width,
@@ -392,7 +396,10 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                             ? "Pick Team"
                                             : _isRegistered
                                                 ? "Unregister"
-                                                : 'Register Now',
+                                                : !DateTime.now().isAfter(
+                                                        _eventDetails!.regEnd!)
+                                                    ? 'Register Now'
+                                                    : 'Registration Ended',
                                     color: AppColor().primaryWhite,
                                     size: Get.height * 0.018,
                                     fontFamily: 'InterMedium',
