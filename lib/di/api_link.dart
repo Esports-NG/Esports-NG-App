@@ -27,6 +27,7 @@ class ApiLink {
       "${baseurl}extra/search/?param=$query";
   static String postFromGroup(int id, String group) =>
       "${baseurl}post/authored/?pk=$id&group=$group";
+  static String getNotifications(int id) => "${baseurl}user/inbox/";
 
   //Post
   static String createPost = "${baseurl}post/create/";

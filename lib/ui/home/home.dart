@@ -4,10 +4,12 @@ import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/all_post_widget.dart';
 import 'package:e_sport/ui/components/news_widget.dart';
 import 'package:e_sport/ui/home/components/activities.dart';
+import 'package:e_sport/ui/notification/notification.dart';
 import 'package:e_sport/ui/search/search_screen.dart';
 import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -18,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:web_socket_channel/io.dart';
 
 import 'components/profile_image.dart';
 
@@ -42,6 +45,7 @@ class _HomePageState extends State<HomePage>
   late final TabController _tabController =
       TabController(length: 4, vsync: this);
   final _scrollController = ScrollController();
+  IOWebSocketChannel? channel;
 
   @override
   void dispose() {
@@ -66,7 +70,17 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
+    print(authController.user!.id);
+    authController.getNotifications();
     _scrollController.addListener(_loadMore);
+    channel = IOWebSocketChannel.connect(
+        Uri.parse(
+            'wss://api.esportsng.com/ws/notifications/${authController.user!.id!}/'),
+        headers: {'Origin': ApiLink.baseurl});
+    channel!.stream.listen(
+      (event) => print(event),
+      onDone: () => print('done'),
+    );
   }
 
   @override
@@ -155,20 +169,8 @@ class _HomePageState extends State<HomePage>
                                       Gap(Get.height * 0.04),
                                       InkWell(
                                         onTap: () {
-                                          // Get.to(() => const NotificationPage());
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              backgroundColor:
-                                                  AppColor().primaryBgColor,
-                                              content: const ComingSoonPopup(),
-                                            ),
-                                          );
+                                          Get.to(
+                                              () => const NotificationPage());
                                         },
                                         child: SvgPicture.asset(
                                           'assets/images/svg/notification_icon.svg',

@@ -257,8 +257,8 @@ class EventRepository extends GetxController
       "Authorization": 'JWT ${authController.token}'
     });
 
-    var json = jsonDecode(response.body);
     debugPrint(response.body);
+    var json = jsonDecode(response.body);
     if (response.statusCode != 200) {
       return null;
     } else {
@@ -302,7 +302,6 @@ class EventRepository extends GetxController
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       });
-      print(response.body);
       var json = jsonDecode(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);

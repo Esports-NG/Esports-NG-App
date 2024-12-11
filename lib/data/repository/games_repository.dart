@@ -38,7 +38,6 @@ class GamesRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       });
 
-      debugPrint(response.body);
       if (response.statusCode == 200) {
         var list = List.from(jsonDecode(response.body));
         var games = list.map((e) => GamePlayed.fromJson(e)).toList();

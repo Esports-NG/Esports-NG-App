@@ -112,7 +112,7 @@ class _PostWidgetState extends State<PostWidget>
                 : Gap(Get.height * 0.02),
         builderDelegate: PagedChildBuilderDelegate<PostModel>(
             itemBuilder: (context, post, index) {
-              return index != 0 && post.owner != null
+              return index != 0 && widget.posts![index - 1].owner != null
                   ? Gap(0)
                   : post.owner != null
                       ? AdList(ads: parseAds(index, widget.posts!))

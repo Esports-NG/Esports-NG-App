@@ -150,6 +150,8 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                             : CachedNetworkImage(
                                 // height: Get.height * 0.15,
                                 width: double.infinity,
+                                height: 209,
+                                fit: BoxFit.cover,
                                 progressIndicatorBuilder:
                                     (context, url, progress) => Center(
                                           child: SizedBox(
@@ -171,20 +173,7 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                                       opacity:
                                           const AlwaysStoppedAnimation(0.5),
                                       fit: BoxFit.cover,
-                                    )
-                                // Container(
-                                //   decoration: BoxDecoration(
-                                //     borderRadius: const BorderRadius.only(
-                                //         topLeft: Radius.circular(10),
-                                //         topRight: Radius.circular(10)),
-                                //     image: DecorationImage(
-                                //         image: NetworkImage(
-                                //             '${ApiLink.imageUrl}${_eventDetails!.banner}'),
-                                //         fit: BoxFit.cover,
-                                //         opacity: 0.6),
-                                //   ),
-                                // ),
-                                ),
+                                    )),
                         Positioned(
                           top: Get.height * 0.04,
                           width: Get.width,
@@ -207,7 +196,7 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: Get.height * 0.02),
+                              horizontal: Get.height * 0.02, vertical: 8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -216,16 +205,9 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                                   size: 24,
                                   fontFamily: 'InterSemiBold',
                                   color: AppColor().primaryWhite),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                decoration: BoxDecoration(
-                                    color: AppColor().primaryBackGroundColor),
-                                child: CustomText(
-                                  title:
-                                      "${_participantList?.length} Registered",
-                                  color: AppColor().primaryWhite,
-                                ),
+                              CustomText(
+                                title: "${_participantList?.length} Registered",
+                                color: AppColor().primaryWhite,
                               ),
                             ],
                           ),

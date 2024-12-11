@@ -176,9 +176,7 @@ class TeamRepository extends GetxController {
 
   Future getAllTeam(bool isFirstTime) async {
     try {
-      if (isFirstTime == true) {
-        _teamStatus(TeamStatus.loading);
-      }
+      _teamStatus(TeamStatus.loading);
 
       debugPrint('getting all team...');
       var response = await http.get(Uri.parse(ApiLink.getAllTeam), headers: {
@@ -186,7 +184,7 @@ class TeamRepository extends GetxController {
         "Authorization": 'JWT ${authController.token}'
       });
       var json = jsonDecode(response.body);
-
+      debugPrint(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
       }

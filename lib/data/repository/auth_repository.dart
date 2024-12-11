@@ -1,9 +1,11 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:e_sport/data/model/notification_model.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/shared_pref.dart';
@@ -198,6 +200,7 @@ class AuthRepository extends GetxController {
   TextEditingController resetPasswordIdController = TextEditingController();
 
   RxMap<String, dynamic>? sessionHeaders = RxMap({});
+  RxList<NotificationModel> notifications = RxList([]);
 
   var dio = Dio();
 
@@ -229,6 +232,17 @@ class AuthRepository extends GetxController {
 
   void setLoading(bool value) {
     isLoading.value = value;
+  }
+
+  Future getNotifications() async {
+    var response = await http.get(
+        Uri.parse(ApiLink.getNotifications(user!.id!)),
+        headers: {"Authorization": "JWT $token"});
+
+    log('notification' + response.body);
+    var json = jsonDecode(response.body);
+    var notificationList = notificationFromJson(jsonEncode(json['message']));
+    notifications.assignAll(notificationList);
   }
 
   Future signUp(UserModel user, BuildContext context) async {

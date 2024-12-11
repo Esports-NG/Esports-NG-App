@@ -33,6 +33,7 @@ class UserDetails extends StatelessWidget {
   const UserDetails({super.key, required this.id});
 
   Future<UserDataWithFollowers> fetchUserProfile(String token) async {
+    print(id);
     var response = await http.get(
       Uri.parse(ApiLink.getUserDataWithFollowers(id: id)),
       headers: {

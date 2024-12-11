@@ -1,252 +1,98 @@
-class NotificationModel {
-  final String? profileImage,
-      likeDetails,
-      details,
-      time,
-      type,
-      subType,
-      infoName,
-      infoTag,
-      link;
-  final List? likeImages;
+import 'dart:convert';
 
-  NotificationModel({
-    this.profileImage,
-    this.likeDetails,
-    this.details,
-    this.likeImages,
-    this.time,
-    this.type,
-    this.subType,
-    this.infoName,
-    this.infoTag,
-    this.link,
-  });
+List<NotificationModel> notificationFromJson(String str) =>
+    List<NotificationModel>.from(
+        json.decode(str).map((x) => NotificationModel.fromJson(x)));
+
+String notificationToJson(List<NotificationModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+Map<String, List<NotificationModel>> groupNotifications(
+    List<NotificationModel> notifications) {
+  // Create a map to group notifications based on text and postId
+  Map<String, List<NotificationModel>> grouped = {};
+
+  for (var notification in notifications) {
+    String key = '${notification.text}_${notification.postId}';
+    if (!grouped.containsKey(key)) {
+      grouped[key] = [];
+    }
+    grouped[key]?.add(notification);
+  }
+
+  return grouped;
 }
 
-var all = [
-  NotificationModel(
-    profileImage: 'assets/images/png/heart.png',
-    type: 'personal',
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    likeDetails: 'Mhiz Zee and 4 others liked your post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
-    likeImages: [
-      'assets/images/png/photo1.png',
-      'assets/images/png/photo2.png',
-      'assets/images/png/photo3.png',
-      'assets/images/png/photo4.png',
-      'assets/images/png/photo5.png',
-    ],
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/bell.png',
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    type: 'post',
-    time: '2 minutes ago',
-    likeDetails: 'XBox.NG Made a post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/clipboard-list.png',
-    type: 'tournament',
-    link: 'See all',
-    infoTag: 'Fixtures for Tournament Z by Esports NG',
-    likeDetails:
-        'Avengers FC vs Indomitables 5pm WAT\nControllers vs Evolution 7pm WAT',
-    likeImages: [
-      'assets/images/png/fixture_card1.png',
-      'assets/images/png/fixture_card2.png',
-    ],
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/icon_library.png',
-    type: 'personal',
-    subType: 'post',
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    likeDetails: 'Ghost reposted your post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain... jpeg/mortalkombat/tuyhxueye....',
-    likeImages: [
-      'assets/images/png/photo4.png',
-    ],
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/photo3.png',
-    infoName: 'Ashley Stone',
-    infoTag: '@toxicgyal234',
-    type: 'personal',
-    subType: 'comment',
-    time: '21 hours ago',
-    likeDetails: 'Commented on your post @Paula Bakare',
-    details: 'This Update is so sick! I love it!',
-  ),
-   NotificationModel(
-    profileImage: 'assets/images/png/sparkles.png',
-    type: 'event',
-    link: 'http://jointournament@nexal.com',
-    infoTag: 'PLAYSTATION.NG',
-    likeDetails: 'Click the link to join the tournament',
-    details: 'FIFA 23 Tournament is about to start! Don’t miss out',
-  ),
-];
+class NotificationModel {
+  final int? id;
+  final int? groupId;
+  final Group? group;
+  final int? postId;
+  final dynamic playerGame;
+  final String? eventLabel;
+  final String? name;
+  final String? profile;
+  final String? text;
+  final DateTime? createdAt;
+  final String? content;
 
-var personal = [
   NotificationModel(
-    profileImage: 'assets/images/png/heart.png',
-    type: 'post',
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    likeDetails: 'Mhiz Zee and 4 others liked your post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
-    likeImages: [
-      'assets/images/png/photo1.png',
-      'assets/images/png/photo2.png',
-      'assets/images/png/photo3.png',
-      'assets/images/png/photo4.png',
-      'assets/images/png/photo5.png',
-    ],
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/icon_library.png',
-    type: 'post',
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    likeDetails: 'Ghost reposted your post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain... jpeg/mortalkombat/tuyhxueye....',
-    likeImages: [
-      'assets/images/png/photo4.png',
-    ],
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/photo3.png',
-    infoName: 'Ashley Stone',
-    infoTag: '@toxicgyal234',
-    type: 'comment',
-    time: '21 hours ago',
-    likeDetails: 'Commented on your post @Paula Bakare',
-    details: 'This Update is so sick! I love it!',
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/user.png',
-    type: 'follow',
-    likeDetails: 'Dustin and 3 others followed you',
-    likeImages: [
-      'assets/images/png/photo1.png',
-      'assets/images/png/photo2.png',
-      'assets/images/png/photo3.png',
-      'assets/images/png/photo4.png',
-    ],
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/photo4.png',
-    infoName: 'Stephanie',
-    infoTag: '@stephinreallife',
-    type: 'tagged',
-    time: '2 days ago',
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    likeDetails: 'Tagged you to a post made by @Evade @Paula Bakare',
-    details:
-        'Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain... jpeg/mortalkombat/tuyhxueye....',
-  ),
-];
+      {this.id,
+      this.groupId,
+      this.group,
+      this.postId,
+      this.playerGame,
+      this.eventLabel,
+      this.name,
+      this.profile,
+      this.text,
+      this.createdAt,
+      this.content});
 
-var post = [
-  NotificationModel(
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    time: '2 minutes ago',
-    likeDetails: 'XBox.NG Made a post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
-  ),
-  NotificationModel(
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    time: '4 hours ago',
-    likeDetails: 'XBox.NG Made a post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
-  ),
-  NotificationModel(
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    time: '1 day ago',
-    likeDetails: 'XBox.NG Made a post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
-  ),
-  NotificationModel(
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    time: '3 weeks ago',
-    likeDetails: 'XBox.NG Made a post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
-  ),
-  NotificationModel(
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    time: '2 months ago',
-    likeDetails: 'XBox.NG Made a post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
-  ),
-  NotificationModel(
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    time: '1 year ago',
-    likeDetails: 'XBox.NG Made a post',
-    details:
-        'New quest unlocked: Get a chance to win 5 new skins by taking new challenge unlocked in the jungle terrain...',
-  ),
-];
+  factory NotificationModel.fromJson(Map<String, dynamic> json) =>
+      NotificationModel(
+        id: json["id"],
+        groupId: json["group_id"],
+        group: groupValues.map[json["group"]]!,
+        postId: json["post_id"],
+        playerGame: json["player_game"],
+        eventLabel: json["event_label"],
+        name: json["name"],
+        profile: json["profile"],
+        text: json["text"],
+        content: json['content'],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+      );
 
-var events = [
-  NotificationModel(
-    profileImage: 'assets/images/png/sparkles.png',
-    type: 'event',
-    link: 'http://jointournament@nexal.com',
-    infoTag: 'PLAYSTATION.NG',
-    likeDetails: 'Click the link to join the tournament',
-    details: 'FIFA 23 Tournament is about to start! Don’t miss out',
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/clipboard-list.png',
-    type: 'tournament',
-    link: 'See all',
-    infoTag: 'See Fixtures for Tournament Z',
-    likeDetails:
-        'Avengers FC    vs    Indomitables                5pm WAT\nControllers       vs    Evolution                       7pm WAT',
-    details: '',
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/photo5.png',
-    type: 'announcement',
-    link: 'See Details',
-    infoTag: 'ARE YOU A GAME DEVELOPER? APPLY FOR GAMATHON’S ARK PITCH TODAY!',
-    likeDetails: '',
-    details: '',
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/sparkles.png',
-    type: 'announcement',
-    link: 'jpeg/mortalkombat/tuyhxueye....',
-    infoTag: 'Nexal Gaming’s Event Registration Closes Soon!!!',
-    likeDetails: 'Haven’t registered? Click the link to do so.',
-    details: '',
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/sparkles.png',
-    type: 'event',
-    link: 'http://jointournament@nexal.com',
-    infoTag: 'PLAYSTATION.NG',
-    likeDetails: 'Click the link to join the tournament',
-    details: 'FIFA 23 Tournament is about to start! Don’t miss out',
-  ),
-  NotificationModel(
-    profileImage: 'assets/images/png/clipboard-list.png',
-    type: 'tournament',
-    link: 'See all',
-    infoTag: 'See Fixtures for Tournament Z',
-    likeDetails:
-        'Avengers FC    vs    Indomitables                5pm WAT\nControllers       vs    Evolution                       7pm WAT',
-    details: '',
-  ),
-];
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "group_id": groupId,
+        "group": groupValues.reverse[group],
+        "post_id": postId,
+        "player_game": playerGame,
+        "event_label": eventLabel,
+        "name": name,
+        "profile": profile,
+        "text": text,
+        "created_at": createdAt?.toIso8601String(),
+      };
+}
+
+enum Group { EVENT, TEAM, USER }
+
+final groupValues =
+    EnumValues({"event": Group.EVENT, "team": Group.TEAM, "user": Group.USER});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
+}
