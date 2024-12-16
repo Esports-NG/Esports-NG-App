@@ -74,6 +74,7 @@ class GamePlayed {
   String? abbrev;
   String? profilePicture;
   String? cover;
+  String? bio;
   int? communities;
   int? teams;
   int? players;
@@ -95,11 +96,13 @@ class GamePlayed {
     this.gameModes,
     this.contributors,
     this.followers,
+    this.bio,
   });
 
   factory GamePlayed.fromJson(Map<String, dynamic> json) => GamePlayed(
         id: json["id"],
         name: json["name"],
+        bio: json["bio"],
         abbrev: json["abbrev"],
         profilePicture: json["profile_picture"],
         cover: json["cover"],
@@ -124,6 +127,7 @@ class GamePlayed {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "bio": bio,
         "abbrev": abbrev,
         "profile_picture": profilePicture,
         "cover": cover,
