@@ -55,8 +55,8 @@ class CustomText extends StatelessWidget {
         textAlign: textAlign ?? TextAlign.left,
         maxLines: maxLines,
         style: TextStyle(
-          color: color ?? Colors.black,
-          letterSpacing: letterSpacing ?? -0.2,
+          color: color ?? AppColor().primaryWhite,
+          letterSpacing: letterSpacing ?? -0.36,
           fontFamily: fontFamily ?? 'Inter',
           fontSize: size,
           fontWeight: weight ?? FontWeight.normal,
