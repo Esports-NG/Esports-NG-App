@@ -123,6 +123,30 @@ class _HomePageState extends State<HomePage>
                                     children: [
                                       InkWell(
                                         onTap: () {
+                                          // Get.to(() => const Leaderboard());
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              elevation: 0,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              backgroundColor:
+                                                  AppColor().primaryBgColor,
+                                              content: const ComingSoonPopup(),
+                                            ),
+                                          );
+                                        },
+                                        child: Icon(
+                                          Icons.shopping_cart_outlined,
+                                          color: AppColor().primaryWhite,
+                                          size: Get.height * 0.025,
+                                        ),
+                                      ),
+                                      Gap(Get.height * 0.04),
+                                      InkWell(
+                                        onTap: () {
                                           // Get.to(() => const Messages());
                                           showDialog(
                                             context: context,
@@ -140,29 +164,6 @@ class _HomePageState extends State<HomePage>
                                         },
                                         child: SvgPicture.asset(
                                           'assets/images/svg/chat.svg',
-                                          height: Get.height * 0.025,
-                                        ),
-                                      ),
-                                      Gap(Get.height * 0.04),
-                                      InkWell(
-                                        onTap: () {
-                                          // Get.to(() => const Leaderboard());
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              backgroundColor:
-                                                  AppColor().primaryBgColor,
-                                              content: const ComingSoonPopup(),
-                                            ),
-                                          );
-                                        },
-                                        child: SvgPicture.asset(
-                                          'assets/images/svg/leaderboard.svg',
                                           height: Get.height * 0.025,
                                         ),
                                       ),
