@@ -2,6 +2,7 @@ import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/home/post/components/report_page.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -44,16 +45,10 @@ class _CommentTileState extends State<CommentTile> {
         InkWell(
           borderRadius: BorderRadius.circular(999),
           onTap: () => Get.to(() => UserDetails(id: widget.item.user!.id!)),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image:
-                      NetworkImage(widget.item.user!.profile!.profilePicture!),
-                  fit: BoxFit.cover),
-              shape: BoxShape.circle,
-            ),
-          ),
+          child: OtherImage(
+              image: widget.item.user!.profile!.profilePicture,
+              width: 40,
+              height: 40),
         ),
         Gap(Get.height * 0.02),
         Column(
