@@ -282,6 +282,7 @@ class _GameProfileState extends State<GameProfile> {
                     child: CustomText(
                       size: 13,
                       title: details!.bio,
+                      maxLines: 8,
                       color: AppColor().greySix,
                       textAlign: TextAlign.center,
                     ),
