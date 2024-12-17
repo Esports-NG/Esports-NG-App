@@ -276,17 +276,18 @@ class _GameProfileState extends State<GameProfile> {
                                             : "Follow")))),
                   ),
                   Gap(Get.height * 0.03),
-                  // Padding(
-                  //   padding:
-                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                  //   child: CustomText(
-                  //     size: 13,
-                  //     title: "",
-                  //     color: AppColor().greySix,
-                  //     textAlign: TextAlign.center,
-                  //   ),
-                  // ),
-                  // Gap(Get.height * 0.03),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                    child: CustomText(
+                      size: 13,
+                      title: details!.bio,
+                      maxLines: 8,
+                      color: AppColor().greySix,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Gap(Get.height * 0.03),
                 ],
               ),
               Divider(
@@ -366,41 +367,41 @@ class _GameProfileState extends State<GameProfile> {
                 thickness: 4,
               ),
               Gap(Get.height * 0.02),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      LinkHeader(
-                        title: "Contributors",
-                        function: () {
-                          Get.to(() => Contributors(game: details!));
-                        },
-                      ),
-                      Gap(Get.height * 0.02),
-                      SizedBox(
-                        height: Get.height * 0.17,
-                        child: ListView.separated(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            separatorBuilder: (context, index) =>
-                                Gap(Get.height * 0.02),
-                            itemCount: details!.contributors!.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                  onTap: () {
-                                    Get.to(() => UserDetails(
-                                          id: details!.contributors![index].id!,
-                                        ));
-                                  },
-                                  child: ContributorItem(
-                                    contributor: details!.contributors![index],
-                                  ));
-                            }),
-                      )
-                    ]),
-              )
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+              //   child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         LinkHeader(
+              //           title: "Contributors",
+              //           function: () {
+              //             Get.to(() => Contributors(game: details!));
+              //           },
+              //         ),
+              //         Gap(Get.height * 0.02),
+              //         SizedBox(
+              //           height: Get.height * 0.17,
+              //           child: ListView.separated(
+              //               physics: const BouncingScrollPhysics(),
+              //               shrinkWrap: true,
+              //               scrollDirection: Axis.horizontal,
+              //               separatorBuilder: (context, index) =>
+              //                   Gap(Get.height * 0.02),
+              //               itemCount: details!.contributors!.length,
+              //               itemBuilder: (context, index) {
+              //                 return InkWell(
+              //                     onTap: () {
+              //                       Get.to(() => UserDetails(
+              //                             id: details!.contributors![index].id!,
+              //                           ));
+              //                     },
+              //                     child: ContributorItem(
+              //                       contributor: details!.contributors![index],
+              //                     ));
+              //               }),
+              //         )
+              //       ]),
+              // )
             ]
           : [
               SizedBox(
