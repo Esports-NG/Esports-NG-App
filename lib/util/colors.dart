@@ -27,6 +27,7 @@ class AppColor {
   Color secondaryGreen = const Color(0xff38656A);
   Color lightItemsColor = const Color(0xff9B9B9B);
   Color greyOne = const Color(0xffF5F5F5);
+  Color greyButton = const Color(0xff42597E);
   Color greyTwo = const Color(0xffE0E0E0);
   Color greyFour = const Color(0xffb8b8b8);
   Color greySix = const Color(0xff8F8F8F);
