@@ -474,8 +474,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                       ),
                       Gap(Get.height * 0.04),
                       CustomText(
-                          title:
-                              'This team is made up of skilled gamers who are passionate\nabout the Attack on Titan series.',
+                          title: _details!.bio,
                           size: Get.height * 0.015,
                           fontFamily: 'Inter',
                           textAlign: TextAlign.center,

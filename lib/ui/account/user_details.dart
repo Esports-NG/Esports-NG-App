@@ -13,7 +13,9 @@ import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/home/post/components/post_details.dart';
 import 'package:e_sport/ui/home/post/components/report_page.dart';
+import 'package:e_sport/ui/profiles/components/community_owned_item.dart';
 import 'package:e_sport/ui/profiles/components/recent_posts.dart';
+import 'package:e_sport/ui/profiles/components/teams_owned_item.dart';
 import 'package:e_sport/ui/profiles/components/user_game_played_item.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/coming_soon.dart';
@@ -567,7 +569,7 @@ class _UserProfileState extends State<UserProfile> {
                               child: PostItemForProfile(
                                   item:
                                       _recentPosts.reversed.toList()[index]))),
-                      itemCount: _recentPosts.length),
+                      itemCount: 10),
         ),
       ),
       Gap(Get.height * 0.005),
@@ -720,13 +722,132 @@ class _UserProfileState extends State<UserProfile> {
       ),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: PageHeaderWidget(
-          onTap: () {},
-          title: 'Qualifications',
-        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          CustomText(
+            title: "Ownerships",
+            size: 16,
+            color: AppColor().primaryWhite,
+            fontFamily: "InterSemiBold",
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: ExpansionPanelList(
+              expansionCallback: (panelIndex, isExpanded) => setState(() {
+                _isOpen[panelIndex] = isExpanded;
+              }),
+              expandIconColor: AppColor().primaryColor,
+              children: [
+                ExpansionPanel(
+                  isExpanded: _isOpen[0],
+                  backgroundColor: AppColor().primaryBackGroundColor,
+                  headerBuilder: (context, isExpanded) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          title: "Teams Owned",
+                          size: 14,
+                          color: AppColor().primaryWhite,
+                        ),
+                      ]),
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: Get.height * 0.15,
+                        child: ListView.separated(
+                          physics: const ScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          separatorBuilder: (context, index) =>
+                              Gap(Get.height * 0.02),
+                          itemCount: playerItem.allPlayer
+                              .where((e) => e.player!.id == widget.userData.id)
+                              .toList()
+                              .take(5)
+                              .length,
+                          itemBuilder: (context, index) {
+                            var item = playerItem.allPlayer
+                                .where(
+                                    (e) => e.player!.id == widget.userData.id)
+                                .toList()[index];
+                            return InkWell(
+                              onTap: () =>
+                                  Get.to(() => GamesPlayedDetails(item: item)),
+                              child: TeamsOwnedItem(player: item),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Divider(
+            thickness: 0.1,
+            height: Get.height * 0.03,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: ExpansionPanelList(
+              expansionCallback: (panelIndex, isExpanded) => setState(() {
+                _isOpen[panelIndex] = isExpanded;
+              }),
+              expandIconColor: AppColor().primaryColor,
+              children: [
+                ExpansionPanel(
+                  isExpanded: _isOpen[0],
+                  backgroundColor: AppColor().primaryBackGroundColor,
+                  headerBuilder: (context, isExpanded) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          title: "Communities Owned",
+                          size: 14,
+                          color: AppColor().primaryWhite,
+                        ),
+                      ]),
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: Get.height * 0.15,
+                        child: ListView.separated(
+                          physics: const ScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          separatorBuilder: (context, index) =>
+                              Gap(Get.height * 0.02),
+                          itemCount: playerItem.allPlayer
+                              .where((e) => e.player!.id == widget.userData.id)
+                              .toList()
+                              .take(5)
+                              .length,
+                          itemBuilder: (context, index) {
+                            var item = playerItem.allPlayer
+                                .where(
+                                    (e) => e.player!.id == widget.userData.id)
+                                .toList()[index];
+                            return InkWell(
+                              onTap: () =>
+                                  Get.to(() => GamesPlayedDetails(item: item)),
+                              child: CommunityOwnedItem(player: item),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ]),
       ),
       Gap(Get.height * 0.02),
-      const ComingSoonWidget(),
       Divider(
         color: AppColor().lightItemsColor.withOpacity(0.3),
         height: Get.height * 0.05,
@@ -736,7 +857,7 @@ class _UserProfileState extends State<UserProfile> {
         padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
         child: PageHeaderWidget(
           onTap: () {},
-          title: 'Ownerships',
+          title: 'Qualifications',
         ),
       ),
       Gap(Get.height * 0.02),
