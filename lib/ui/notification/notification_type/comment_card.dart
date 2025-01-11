@@ -2,6 +2,7 @@ import 'package:e_sport/data/model/notification_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -17,6 +18,28 @@ class CommentCard extends StatefulWidget {
 
 class _CommentCardState extends State<CommentCard> {
   final authController = Get.put(AuthRepository());
+
+  String timeAgo(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds} seconds ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays < 30) {
+      return '${(difference.inDays / 7).floor()} weeks ago';
+    } else if (difference.inDays < 365) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else {
+      return '${(difference.inDays / 365).floor()} years ago';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,17 +57,31 @@ class _CommentCardState extends State<CommentCard> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RichText(
-                  text: TextSpan(
-                      text: widget.notification.userActors![0].fullName,
-                      style: TextStyle(fontSize: 12, fontFamily: "Inter"),
-                      children: [
-                    TextSpan(
-                        text:
-                            ' @${widget.notification.userActors![0].userName!}',
-                        style:
-                            TextStyle(fontSize: 12, color: AppColor().greySix))
-                  ])),
+              Row(
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          text: widget.notification.userActors![0].fullName,
+                          style: TextStyle(fontSize: 12, fontFamily: "Inter"),
+                          children: [
+                        TextSpan(
+                            text:
+                                ' @${widget.notification.userActors![0].userName!}',
+                            style: TextStyle(
+                                fontSize: 12, color: AppColor().greySix))
+                      ])),
+                  Gap(Get.height * 0.005),
+                  const SmallCircle(),
+                  Gap(Get.height * 0.005),
+                  CustomText(
+                    title: timeAgo(widget.notification.createdAt!),
+                    size: Get.height * 0.015,
+                    fontFamily: 'InterMedium',
+                    textAlign: TextAlign.start,
+                    color: AppColor().lightItemsColor,
+                  ),
+                ],
+              ),
               Gap(2),
               RichText(
                   text: TextSpan(

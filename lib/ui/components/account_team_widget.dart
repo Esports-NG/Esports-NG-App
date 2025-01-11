@@ -29,9 +29,7 @@ class _AccountTeamsWidgetState extends State<AccountTeamsWidget> {
         itemCount: teamController.myTeam.length,
         separatorBuilder: (context, index) => Gap(Get.height * 0.02),
         itemBuilder: (context, index) {
-          var item = teamController.allTeam
-              .where((team) => team.owner!.id == authController.user!.id)
-              .toList()[index];
+          var item = teamController.myTeam[index];
           return InkWell(
             onTap: () => Get.to(() => AccountTeamsDetail(item: item)),
             child: AccountTeamsItem(item: item),
