@@ -7,6 +7,7 @@ import 'package:e_sport/data/repository/notification_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/all_post_widget.dart';
+import 'package:e_sport/ui/components/games_to_play_widget.dart';
 import 'package:e_sport/ui/components/news_widget.dart';
 import 'package:e_sport/ui/home/components/activities.dart';
 import 'package:e_sport/ui/notification/notification.dart';
@@ -224,7 +225,7 @@ class _HomePageState extends State<HomePage>
                                 controller: _tabController,
                                 tabs: const [
                                   Tab(text: 'For you'),
-                                  Tab(text: 'Following'),
+                                  Tab(text: 'Games to play'),
                                   Tab(text: 'Activities'),
                                   Tab(text: 'News'),
                                 ]),
@@ -237,7 +238,7 @@ class _HomePageState extends State<HomePage>
                     nextLink: postController.forYouNextlink.value,
                     getNext: postController.getNextForYou,
                   ),
-                  PostWidget(
+                  GamesToPlayWidget(
                     refresh: postController.getFollowingPost,
                     posts: postController.followingPost,
                     nextLink: postController.followingNextLink.value,
