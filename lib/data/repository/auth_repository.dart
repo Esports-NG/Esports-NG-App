@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -377,10 +378,12 @@ class AuthRepository extends GetxController {
         "Content-Type": "application/json",
         'Authorization': 'JWT $token',
       });
+      log(response.body);
       var json = jsonDecode(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
+
       debugPrint(response.body);
       if (response.statusCode == 200) {
         print(response.body);

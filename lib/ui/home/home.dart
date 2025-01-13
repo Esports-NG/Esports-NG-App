@@ -15,6 +15,7 @@ import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -64,6 +65,11 @@ class _HomePageState extends State<HomePage>
     print('scrolled');
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {}
+  }
+
+  void updateToken() {
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+    _firebaseMessaging.onTokenRefresh.listen((refreshedToken) {});
   }
 
   @override
