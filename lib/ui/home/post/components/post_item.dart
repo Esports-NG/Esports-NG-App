@@ -75,8 +75,8 @@ class _PostItemState extends State<PostItem> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColor().bgDark,
-              AppColor().primaryBackGroundColor,
+              AppColor().primaryWhite.withOpacity(0.1),
+              AppColor().primaryWhite.withOpacity(0.0),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

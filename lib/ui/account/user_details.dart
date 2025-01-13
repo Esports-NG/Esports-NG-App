@@ -569,7 +569,7 @@ class _UserProfileState extends State<UserProfile> {
                               child: PostItemForProfile(
                                   item:
                                       _recentPosts.reversed.toList()[index]))),
-                      itemCount: 10),
+                      itemCount:_recentPosts.length),
         ),
       ),
       Gap(Get.height * 0.005),
