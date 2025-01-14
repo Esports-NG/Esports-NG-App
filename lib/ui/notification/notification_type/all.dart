@@ -15,7 +15,7 @@ class AllNotification extends StatefulWidget {
 }
 
 class _AllNotificationState extends State<AllNotification> {
-  PagingController<int, NotificationModel> _pagingController =
+  final PagingController<int, NotificationModel> _pagingController =
       PagingController<int, NotificationModel>(firstPageKey: 1);
   final notificationController = Get.put(NotificationRepository());
 

@@ -1,11 +1,14 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/notification_service.dart';
 import 'package:e_sport/di/shared_pref.dart';
 import 'package:e_sport/ui/auth/first_screen.dart';
 import 'package:e_sport/ui/auth/login.dart';
@@ -304,14 +307,25 @@ class AuthRepository extends GetxController {
 
   Future login(BuildContext context) async {
     _signInStatus(SignInStatus.loading);
+    final notificationService = NotificationService();
+    final deviceInfo = DeviceInfoPlugin();
     try {
+      var fcmToken = await notificationService.getFCMToken();
       debugPrint('login here...');
+
+      var androidInfo =
+          Platform.isAndroid ? await deviceInfo.androidInfo : null;
+      var iosInfo = Platform.isIOS ? await deviceInfo.iosInfo : null;
 
       var response = await http.post(Uri.parse(ApiLink.login),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode({
-            "email": emailController.text.trim(),
+            "email": emailController.text.trim().toLowerCase(),
             "password": passwordController.text.trim(),
+            "token": fcmToken,
+            "device_name":
+                androidInfo != null ? androidInfo.device : iosInfo?.name,
+            "device_type": Platform.isAndroid ? "android" : "ios"
           }));
 
       var json = jsonDecode(response.body);
@@ -319,6 +333,7 @@ class AuthRepository extends GetxController {
         throw (json["error"]['non_field_errors'][0]);
       }
       if (json['error'] != null) {
+        print(json['error']);
         Helpers()
             .showCustomSnackbar(message: json['error'].toString().capitalize!);
         _signInStatus(SignInStatus.error);
@@ -363,10 +378,12 @@ class AuthRepository extends GetxController {
         "Content-Type": "application/json",
         'Authorization': 'JWT $token',
       });
+      log(response.body);
       var json = jsonDecode(response.body);
       if (response.statusCode != 200) {
         throw (json['detail']);
       }
+
       debugPrint(response.body);
       if (response.statusCode == 200) {
         print(response.body);

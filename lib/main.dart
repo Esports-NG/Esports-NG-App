@@ -2,20 +2,26 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/di/notification_service.dart';
 import 'package:e_sport/ui/widget/no_internet.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 import 'di/app_binding.dart';
+import 'firebase_options.dart';
 import 'ui/auth/splash_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final notificationService = NotificationService();
+  await notificationService.initialize();
   runApp(const ESportApp());
   configLoading();
 }
