@@ -1,5 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
@@ -7,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-
 // Community Owned Item For Scrollable
 class CommunityOwnedItem extends StatelessWidget {
-  const CommunityOwnedItem({super.key, required this.player});
+  const CommunityOwnedItem({super.key, required this.community});
 
-  final PlayerModel player;
+  final CommunityModel community;
 
   @override
   Widget build(BuildContext context) {
@@ -41,21 +39,22 @@ class CommunityOwnedItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                player.profile == null
-                ? CircleAvatar(
-                  foregroundImage: AssetImage('assets/images/png/placeholder.png'),
-                  radius: Get.width * 0.05,
-                )
-                : CircleAvatar(
-                  foregroundImage: NetworkImage(player.profile),
-                  radius: Get.width * 0.05,
-                ),
+                community.logo == null
+                    ? CircleAvatar(
+                        foregroundImage:
+                            AssetImage('assets/images/png/placeholder.png'),
+                        radius: Get.width * 0.05,
+                      )
+                    : CircleAvatar(
+                        foregroundImage: NetworkImage(community.logo),
+                        radius: Get.width * 0.05,
+                      ),
                 Gap(Get.height * 0.015),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      title: player.gamePlayed!.name!.toUpperCase(),
+                      title: community.name!.toUpperCase(),
                       size: 14,
                       fontFamily: 'InterBold',
                     ),
@@ -73,13 +72,13 @@ class CommunityOwnedItem extends StatelessWidget {
                     ),
                     Gap(Get.height * 0.005),
                     CustomFillButton(
-                      buttonText: player.gamePlayed!.abbrev,
+                      buttonText: community.gamesPlayed?[0].abbrev,
                       textSize: 10,
                       buttonColor: AppColor().greyButton,
                       width: 50,
                       height: 20,
                       fontWeight: FontWeight.bold,
-                      ),
+                    ),
                   ],
                 ),
               ],

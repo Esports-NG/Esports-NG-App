@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/model/user_profile.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
@@ -117,10 +119,13 @@ class _UserProfileState extends State<UserProfile> {
   bool _isLoading = false;
   bool _isFollowing = false;
   final List<bool> _isOpen = [true];
-  final List<bool> _isOpen2 = [false];
+  final List<bool> _isOpen2 = [true, true];
+  final List<bool> _isOpen3 = [false];
   final playerItem = Get.put(PlayerRepository());
   List<PostModel> _recentPosts = [];
   bool _fetchingPosts = false;
+  CommunityModel? _ownedCommunity;
+  List<TeamModel> _ownedTeams = [];
 
   Future fetchRecentPosts() async {
     setState(() {
@@ -159,10 +164,35 @@ class _UserProfileState extends State<UserProfile> {
     });
   }
 
+  Future<void> getOwnedCommunities() async {
+    var response = await http.get(
+        Uri.parse(ApiLink.getCommunityByOwner(widget.userData.id)),
+        headers: {"Authorization": "JWT ${authController.token}"});
+    var json = jsonDecode(response.body);
+    CommunityModel community = CommunityModel.fromJson(json);
+    setState(() {
+      _ownedCommunity = community;
+    });
+  }
+
+  Future<void> getOwnedTeams() async {
+    var response = await http.get(
+        Uri.parse(ApiLink.getTeamByOwner(widget.userData.id)),
+        headers: {"Authorization": "JWT ${authController.token}"});
+    var json = jsonDecode(response.body);
+    print(response.body);
+    List<TeamModel> teams = teamModelListFromJson(response.body);
+    setState(() {
+      _ownedTeams = teams;
+    });
+  }
+
   @override
   initState() {
     getFollowersList();
     fetchRecentPosts();
+    getOwnedCommunities();
+    getOwnedTeams();
     setState(() {
       followersCount = widget.userData.followers;
       followingCount = widget.userData.following;
@@ -569,7 +599,7 @@ class _UserProfileState extends State<UserProfile> {
                               child: PostItemForProfile(
                                   item:
                                       _recentPosts.reversed.toList()[index]))),
-                      itemCount:_recentPosts.length),
+                      itemCount: _recentPosts.length),
         ),
       ),
       Gap(Get.height * 0.005),
@@ -651,12 +681,12 @@ class _UserProfileState extends State<UserProfile> {
             padding: const EdgeInsets.only(left: 10),
             child: ExpansionPanelList(
               expansionCallback: (panelIndex, isExpanded) => setState(() {
-                _isOpen2[panelIndex] = isExpanded;
+                _isOpen3[panelIndex] = isExpanded;
               }),
               expandIconColor: AppColor().primaryColor,
               children: [
                 ExpansionPanel(
-                  isExpanded: _isOpen2[0],
+                  isExpanded: _isOpen3[0],
                   backgroundColor: AppColor().primaryBackGroundColor,
                   headerBuilder: (context, isExpanded) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -733,12 +763,12 @@ class _UserProfileState extends State<UserProfile> {
             padding: const EdgeInsets.only(left: 10),
             child: ExpansionPanelList(
               expansionCallback: (panelIndex, isExpanded) => setState(() {
-                _isOpen[panelIndex] = isExpanded;
+                _isOpen2[panelIndex] = isExpanded;
               }),
               expandIconColor: AppColor().primaryColor,
               children: [
                 ExpansionPanel(
-                  isExpanded: _isOpen[0],
+                  isExpanded: _isOpen2[0],
                   backgroundColor: AppColor().primaryBackGroundColor,
                   headerBuilder: (context, isExpanded) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -750,36 +780,47 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                       ]),
                   body: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: Get.height * 0.15,
-                        child: ListView.separated(
-                          physics: const ScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context, index) =>
-                              Gap(Get.height * 0.02),
-                          itemCount: playerItem.allPlayer
-                              .where((e) => e.player!.id == widget.userData.id)
-                              .toList()
-                              .take(5)
-                              .length,
-                          itemBuilder: (context, index) {
-                            var item = playerItem.allPlayer
-                                .where(
-                                    (e) => e.player!.id == widget.userData.id)
-                                .toList()[index];
-                            return InkWell(
-                              onTap: () =>
-                                  Get.to(() => GamesPlayedDetails(item: item)),
-                              child: TeamsOwnedItem(player: item),
-                            );
-                          },
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          height: Get.height * 0.15,
+                          child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _ownedTeams.length,
+                              shrinkWrap: true,
+                              separatorBuilder: (context, index) => Gap(10),
+                              itemBuilder: (context, index) => GestureDetector(
+                                  child: TeamsOwnedItem(
+                                      team: _ownedTeams[index]))),
+                        )
+                      ]),
+                ),
+                ExpansionPanel(
+                  isExpanded: _isOpen2[1],
+                  backgroundColor: AppColor().primaryBackGroundColor,
+                  headerBuilder: (context, isExpanded) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          title: "Communities Owned",
+                          size: 14,
+                          color: AppColor().primaryWhite,
                         ),
-                      ),
-                    ],
+                      ]),
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _ownedCommunity == null
+                        ? []
+                        : [
+                            SizedBox(
+                              width: double.infinity,
+                              height: Get.height * 0.15,
+                              child: InkWell(
+                                  child: CommunityOwnedItem(
+                                      community: _ownedCommunity!)),
+                            ),
+                          ],
                   ),
                 )
               ],
@@ -796,53 +837,7 @@ class _UserProfileState extends State<UserProfile> {
                 _isOpen[panelIndex] = isExpanded;
               }),
               expandIconColor: AppColor().primaryColor,
-              children: [
-                ExpansionPanel(
-                  isExpanded: _isOpen[0],
-                  backgroundColor: AppColor().primaryBackGroundColor,
-                  headerBuilder: (context, isExpanded) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomText(
-                          title: "Communities Owned",
-                          size: 14,
-                          color: AppColor().primaryWhite,
-                        ),
-                      ]),
-                  body: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: Get.height * 0.15,
-                        child: ListView.separated(
-                          physics: const ScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context, index) =>
-                              Gap(Get.height * 0.02),
-                          itemCount: playerItem.allPlayer
-                              .where((e) => e.player!.id == widget.userData.id)
-                              .toList()
-                              .take(5)
-                              .length,
-                          itemBuilder: (context, index) {
-                            var item = playerItem.allPlayer
-                                .where(
-                                    (e) => e.player!.id == widget.userData.id)
-                                .toList()[index];
-                            return InkWell(
-                              onTap: () =>
-                                  Get.to(() => GamesPlayedDetails(item: item)),
-                              child: CommunityOwnedItem(player: item),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+              children: [],
             ),
           ),
         ]),
