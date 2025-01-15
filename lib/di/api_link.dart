@@ -75,7 +75,7 @@ class ApiLink {
       "${baseurl}team/$teamId/addplayer/$playerId/roster/$rosterId/";
   static String blockTeam(id) => "${baseurl}post/block/?team_pk=$id";
   static String editTeam(id) => "${baseurl}team/edit/$id/";
-  static String getTeamByOwner(id) =>  "${baseurl}team/owner/$id/";
+  static String getTeamByOwner(id) => "${baseurl}team/owner/$id/";
 
   //Player
   static String createPlayer = "${baseurl}player/register/";
@@ -130,7 +130,7 @@ class ApiLink {
       "${baseurl}org/$commId/addgame/$gameId/";
   static String blockCommunity(id) => "${baseurl}post/block/?comm_pk=$id";
   static String editCommunity(id) => "${baseurl}org/edit/$id/";
-  static String getCommunityByOwner(id)=> "${baseurl}org/owner/$id/";
+  static String getCommunityByOwner(id) => "${baseurl}org/owner/$id/";
 
   //Profile
   static String getDataWithFollowers({required int id, required String type}) =>
@@ -150,6 +150,7 @@ class ApiLink {
       "${baseurl}games/followers/$gameId/users/";
   static String searchForGames(String query) =>
       "${baseurl}games/find_game/?search=$query";
+  static String getGamesToPlay = "${baseurl}games/feed/";
 
   // News
   static String getNews =

@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:e_sport/data/model/games_played_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +21,8 @@ class GamesRepository extends GetxController {
   RxList<GamePlayed> filteredGames = <GamePlayed>[].obs;
   RxList<GamePlayed> filteredUserGames = <GamePlayed>[].obs;
   RxList<GamePlayed> searchedGames = <GamePlayed>[].obs;
+  RxString feedNextlink = "".obs;
+  RxList<GameToPlay> gameFeed = RxList([]);
 
   @override
   onInit() {
@@ -132,5 +137,71 @@ class GamesRepository extends GetxController {
       var games = list.map((e) => GamePlayed.fromJson(e)).toList();
       searchedGames.assignAll(games);
     } catch (err) {}
+  }
+
+  Future getGameFeed(bool isFirstTime) async {
+    debugPrint('getting all for you post...');
+    var response = await http.get(Uri.parse(ApiLink.getGamesToPlay), headers: {
+      "Content-Type": "application/json",
+      "Authorization": 'JWT ${authController.token}'
+    });
+    log(response.body);
+    var json = jsonDecode(response.body);
+
+    if (response.statusCode != 200) {
+      if (json['detail'] != null) {
+        throw (json['detail']);
+      } else if (json['error'] != null) {
+        throw (json['error']);
+      }
+    }
+
+    if (response.statusCode == 200) {
+      feedNextlink.value = json['next'] ?? "";
+      var list = List.from(json['results']);
+      var feed = list.map((e) => GameToPlay.fromJson(e)).toList();
+      gameFeed.assignAll(feed);
+      authController.setLoading(false);
+      return feed;
+    } else if (response.statusCode == 401) {
+      authController
+          .refreshToken()
+          .then((value) => EasyLoading.showInfo('try again!'));
+      // _bookmarkStatus(BookmarkStatus.error);
+      authController.setLoading(false);
+    }
+    return null;
+  }
+
+  Future getNextFeed() async {
+    // try {
+
+    var response = await http.get(Uri.parse(feedNextlink.value),
+        headers: {"Authorization": "JWT ${authController.token}"});
+    var json = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      if (json['detail'] != null) {
+        throw (json['detail']);
+      } else if (json['error'] != null) {
+        throw (json['error']);
+      }
+    }
+
+    if (response.statusCode == 200) {
+      feedNextlink.value = json['next'] ?? "";
+      var list = List.from(json['results']);
+      var feed = list.map((e) => GameToPlay.fromJson(e)).toList();
+      debugPrint("${feed.length} for you feed found");
+      gameFeed.addAll(feed);
+      authController.setLoading(false);
+      return feed;
+    } else if (response.statusCode == 401) {
+      authController
+          .refreshToken()
+          .then((value) => EasyLoading.showInfo('try again!'));
+      // _bookmarkStatus(BookmarkStatus.error);
+      authController.setLoading(false);
+    }
+    return null;
   }
 }
