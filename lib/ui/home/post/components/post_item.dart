@@ -174,7 +174,7 @@ class _PostItemState extends State<PostItem> {
                               .take(200)
                               .toString()
                               .toUpperFirstCase(),
-                          size: Get.height * 0.015,
+                          size: Get.height * 0.016,
                           fontFamily: 'Inter',
                           textAlign: TextAlign.start,
                           color: AppColor().primaryWhite,
@@ -388,7 +388,7 @@ class _PostItemState extends State<PostItem> {
                         .take(200)
                         .toString()
                         .toUpperFirstCase(),
-                size: Get.height * 0.015,
+                size: Get.height * 0.017,
                 fontFamily: 'Inter',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
