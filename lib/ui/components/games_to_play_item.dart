@@ -1,32 +1,22 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:change_case/change_case.dart';
-import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/model/games_played_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
-import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
-import 'package:e_sport/ui/account/user_details.dart';
-import 'package:e_sport/ui/components/account_community_detail.dart';
-import 'package:e_sport/ui/home/post/components/report_page.dart';
-import 'package:e_sport/ui/home/post/edit_post.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
-import 'package:e_sport/ui/widget/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
-
-import 'package:e_sport/ui/home/post/components/post_details.dart';
 
 class GamesToPlayItem extends StatefulWidget {
-  final PostModel item;
-  const GamesToPlayItem({super.key, required this.item});
+  final GameToPlay item;
+  final int index;
+  const GamesToPlayItem({super.key, required this.item, required this.index});
 
   @override
   State<GamesToPlayItem> createState() => _GamesToPlayItemState();
@@ -36,8 +26,6 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   final navController = Get.put(NavRepository());
-
-  int? _selectedIndex;
 
   String timeAgo(DateTime itemDate) {
     final now = DateTime.now();
@@ -76,7 +64,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
           image: DecorationImage(
             image: const AssetImage('assets/images/png/bubbles.png'),
             fit: BoxFit.cover,
-            ),
+          ),
           gradient: LinearGradient(
             colors: [
               AppColor().primaryWhite.withOpacity(0.1),
@@ -102,7 +90,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                 child: SizedBox(
                   height: Get.width * 0.25,
                   child: CustomText(
-                    title: '1',
+                    title: (widget.index + 1).toString(),
                     fontFamily: 'InterSemiBold',
                   ),
                 ),
@@ -115,9 +103,10 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(Get.width * 1),
                     child: Image(
-                      image: NetworkImage(widget.item.author!.profile!.profilePicture.toString()),
+                      image: NetworkImage(
+                          ApiLink.imageUrl + widget.item.profilePicture!),
                       fit: BoxFit.cover,
-                      ),
+                    ),
                   ),
                 ),
               ),
@@ -129,13 +118,13 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomText(
-                      title: 'NAME OF THE GAME',
+                      title: widget.item.name,
                       fontFamily: 'InterSemiBold',
                       size: 14,
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: '${widget.item.author!.id} Players',
+                      title: '${widget.item.players} Players',
                       color: AppColor().greySix,
                     ),
                     Gap(Get.height * 0.005),
@@ -148,37 +137,34 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                     Row(
                       children: [
                         Container(
-                          decoration: BoxDecoration(
-                            color: AppColor().primaryColor,
-                            borderRadius: BorderRadius.circular(200)
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: SvgPicture.asset('assets/images/svg/apple.svg'),
-                          )
-                        ),
+                            decoration: BoxDecoration(
+                                color: AppColor().primaryColor,
+                                borderRadius: BorderRadius.circular(200)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6),
+                              child: SvgPicture.asset(
+                                  'assets/images/svg/apple.svg'),
+                            )),
                         Gap(Get.height * 0.01),
                         Container(
-                          decoration: BoxDecoration(
-                            color: AppColor().primaryColor,
-                            borderRadius: BorderRadius.circular(200)
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: SvgPicture.asset('assets/images/svg/apple.svg'),
-                          )
-                        ),
+                            decoration: BoxDecoration(
+                                color: AppColor().primaryColor,
+                                borderRadius: BorderRadius.circular(200)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6),
+                              child: SvgPicture.asset(
+                                  'assets/images/svg/apple.svg'),
+                            )),
                         Gap(Get.height * 0.01),
                         Container(
-                          decoration: BoxDecoration(
-                            color: AppColor().primaryColor,
-                            borderRadius: BorderRadius.circular(200)
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: SvgPicture.asset('assets/images/svg/apple.svg'),
-                          )
-                        ),
+                            decoration: BoxDecoration(
+                                color: AppColor().primaryColor,
+                                borderRadius: BorderRadius.circular(200)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6),
+                              child: SvgPicture.asset(
+                                  'assets/images/svg/apple.svg'),
+                            )),
                       ],
                     ),
                   ],
@@ -196,18 +182,19 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                     ),
                     Stack(
                       children: [
-                        Positioned(child: SvgPicture.asset('assets/images/svg/event_icon_2.svg')),
                         Positioned(
-                          left: 0,
-                          right: 0,
-                          top: Get.height * 0.035,
-                          bottom: 0,
-                          child: CustomText(
-                            title: widget.item.author!.id.toString(),
-                            textAlign: TextAlign.center,
-                            fontFamily: 'InterSemiBold',
-                            )
-                          ),
+                            child: SvgPicture.asset(
+                                'assets/images/svg/event_icon_2.svg')),
+                        Positioned(
+                            left: 0,
+                            right: 0,
+                            top: Get.height * 0.035,
+                            bottom: 0,
+                            child: CustomText(
+                              title: widget.item.events,
+                              textAlign: TextAlign.center,
+                              fontFamily: 'InterSemiBold',
+                            )),
                       ],
                     ),
                   ],

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/notification_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
@@ -43,6 +44,7 @@ class _HomePageState extends State<HomePage>
   final navController = Get.put(NavRepository());
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
+  final gameController = Get.put(GamesRepository());
   late final TabController _tabController =
       TabController(length: 4, vsync: this);
   final _scrollController = ScrollController();
@@ -245,10 +247,10 @@ class _HomePageState extends State<HomePage>
                     getNext: postController.getNextForYou,
                   ),
                   GamesToPlayWidget(
-                    refresh: postController.getFollowingPost,
-                    posts: postController.followingPost,
-                    nextLink: postController.followingNextLink.value,
-                    getNext: postController.getNextFollowing,
+                    refresh: gameController.getGameFeed,
+                    gameFeed: gameController.gameFeed,
+                    nextLink: gameController.feedNextlink.value,
+                    getNext: gameController.getNextFeed,
                   ),
                   Activities(),
                   NewsWidget(posts: postController.news),
