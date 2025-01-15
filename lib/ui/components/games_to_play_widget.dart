@@ -1,8 +1,6 @@
+import 'package:e_sport/data/model/games_played_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/components/games_to_play_item.dart';
-import 'package:e_sport/ui/home/post/components/ad_list.dart';
-import 'package:e_sport/ui/home/post/components/post_details.dart';
-import 'package:e_sport/ui/home/post/components/post_item.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -10,14 +8,14 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class GamesToPlayWidget extends StatefulWidget {
-  final List<PostModel>? posts;
+  final List<GameToPlay>? gameFeed;
   final String? nextLink;
   final Future Function()? getNext;
   final Future Function(bool)? refresh;
   final String? type;
   const GamesToPlayWidget(
       {super.key,
-      this.posts,
+      this.gameFeed,
       this.nextLink,
       this.getNext,
       this.refresh,
@@ -33,8 +31,8 @@ class _GamesToPlayWidgetState extends State<GamesToPlayWidget>
   bool get wantKeepAlive => true;
 
   var _scrollController = ScrollController();
-  PagingController<int, PostModel> _pagingController =
-      PagingController<int, PostModel>(firstPageKey: 1);
+  PagingController<int, GameToPlay> _pagingController =
+      PagingController<int, GameToPlay>(firstPageKey: 1);
   List<PostModel> parseAds(int initial, List<PostModel> posts) {
     List<PostModel> result = [];
 
@@ -107,19 +105,11 @@ class _GamesToPlayWidgetState extends State<GamesToPlayWidget>
       child: PagedListView.separated(
         pagingController: _pagingController,
         padding: EdgeInsets.only(top: 10, bottom: 50),
-        separatorBuilder: (context, index) =>
-            index != 0 && widget.posts![index - 1].owner != null
-                ? Gap(0)
-                : Gap(Get.height * 0.02),
-        builderDelegate: PagedChildBuilderDelegate<PostModel>(
-            itemBuilder: (context, post, index) {
-              return index != 0 && widget.posts![index - 1].owner != null
-                  ? Gap(0)
-                  : post.owner != null
-                      ? AdList(ads: parseAds(index, widget.posts!))
-                      : GestureDetector(
-                          onTap: () => Get.to(() => PostDetails(item: post)),
-                          child: GamesToPlayItem(item: post));
+        separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+        builderDelegate: PagedChildBuilderDelegate<GameToPlay>(
+            itemBuilder: (context, feed, index) {
+              return GestureDetector(
+                  child: GamesToPlayItem(item: feed, index: index));
             },
             firstPageProgressIndicatorBuilder: (context) =>
                 Center(child: ButtonLoader()),

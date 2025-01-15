@@ -51,7 +51,8 @@ class _MyProfileState extends State<MyProfile> {
     authController.userNameController.text = authController.user!.userName!;
     authController.fullNameController.text = authController.user!.fullName!;
     authController.emailController.text = authController.user!.email!;
-    authController.phoneNoController.text = authController.user!.phoneNumber!;
+    authController.phoneNoController.text =
+        authController.user!.phoneNumber ?? "";
     authController.bioController.text = authController.user!.bio!;
     super.initState();
   }
