@@ -167,7 +167,7 @@ class _CommunityPageState extends State<CommunityPage>
                     ),
                     Gap(Get.height * 0.03),
                     SizedBox(
-                      height: Get.height * 0.28,
+                      height: Get.height * 0.35,
                       child: gamesController.isLoading.value
                           ? const Center(
                               child: CircularProgressIndicator(),
