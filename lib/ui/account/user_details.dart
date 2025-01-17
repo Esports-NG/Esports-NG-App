@@ -10,6 +10,8 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
+import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/games_played_details.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
@@ -633,7 +635,11 @@ class _UserProfileState extends State<UserProfile> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomText(
-                          title: "Games Played",
+                          title: "Games Played (${playerItem.allPlayer
+                              .where((e) => e.player!.id == widget.userData.id)
+                              .toList()
+                              .take(5)
+                              .length})",
                           size: 14,
                           color: AppColor().primaryWhite,
                         ),
@@ -775,7 +781,7 @@ class _UserProfileState extends State<UserProfile> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomText(
-                          title: "Teams Owned",
+                          title: "Teams Owned (${_ownedTeams.length})",
                           size: 14,
                           color: AppColor().primaryWhite,
                         ),
@@ -793,7 +799,10 @@ class _UserProfileState extends State<UserProfile> {
                               separatorBuilder: (context, index) => Gap(10),
                               itemBuilder: (context, index) => GestureDetector(
                                   child: TeamsOwnedItem(
-                                      team: _ownedTeams[index]))),
+                                      team: _ownedTeams[index]),
+                                  onTap: () =>  Get.to(() => AccountTeamsDetail(item: _ownedTeams[index])),
+                                      
+                              )),
                         )
                       ]),
                 ),
@@ -804,7 +813,7 @@ class _UserProfileState extends State<UserProfile> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomText(
-                          title: "Communities Owned",
+                          title: "Communities Owned (${_ownedCommunities.length})",
                           size: 14,
                           color: AppColor().primaryWhite,
                         ),
@@ -821,6 +830,7 @@ class _UserProfileState extends State<UserProfile> {
                               shrinkWrap: true,
                               separatorBuilder: (context, index) => Gap(10),
                               itemBuilder: (context, index) => GestureDetector(
+                                  onTap: () =>  Get.to(() => AccountCommunityDetail(item: _ownedCommunities[index])),
                                   child: CommunityOwnedItem(
                                       community: _ownedCommunities[index])))),
                     ],
@@ -856,20 +866,6 @@ class _UserProfileState extends State<UserProfile> {
         child: PageHeaderWidget(
           onTap: () {},
           title: 'Qualifications',
-        ),
-      ),
-      Gap(Get.height * 0.02),
-      const ComingSoonWidget(),
-      Divider(
-        color: AppColor().lightItemsColor.withOpacity(0.3),
-        height: Get.height * 0.05,
-        thickness: 4,
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: PageHeaderWidget(
-          onTap: () {},
-          title: 'Social Events',
         ),
       ),
       Gap(Get.height * 0.02),

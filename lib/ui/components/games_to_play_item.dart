@@ -94,7 +94,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                   fontFamily: 'InterSemiBold',
                 ),
               ),
-              Gap(Get.height * 0.005),
+              // Gap(Get.height * 0.0025),
               Expanded(
                 flex: 5,
                 child: AspectRatio(

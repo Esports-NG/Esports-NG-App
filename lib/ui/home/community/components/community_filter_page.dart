@@ -93,11 +93,11 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
               GridView.builder(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
-                    childAspectRatio: 1 * 0.75,
+                    childAspectRatio: communityController.typeFilter.value == "Trending Games" ? 1 * 0.6 : 1 *0.67,
                   ),
                   itemCount:
                       communityController.typeFilter.value == "Trending Games"

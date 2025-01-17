@@ -64,6 +64,8 @@ class _AdListState extends State<AdList> {
                 ? 330
                 : firstAd.type == "fixture"
                     ? Get.height * 0.23
+                    : firstAd.type == "game"
+                    ? Get.height * 0.35
                     : Get.height * 0.28,
             child: ListView.separated(
                 physics: const ScrollPhysics(),

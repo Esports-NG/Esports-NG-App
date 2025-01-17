@@ -415,7 +415,7 @@ class _PostDetails2State extends State<PostDetails2> {
                             if (isRepostActive == false)
                               CustomText(
                                 title: _postDetails!.body,
-                                size: Get.height * 0.015,
+                                size: Get.height * 0.017,
                                 fontFamily: 'InterBold',
                                 textAlign: TextAlign.start,
                                 color: AppColor().primaryWhite,

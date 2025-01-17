@@ -5,6 +5,7 @@ import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/iterable_extension.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TrendingGamesItem extends StatefulWidget {
   const TrendingGamesItem(
@@ -117,6 +119,7 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
               const Spacer(),
               CustomText(
                 title: widget.game.name!.toCapitalCase(),
+                textAlign: TextAlign.center,
                 size: 15,
                 fontFamily: 'InterMedium',
                 color: AppColor().primaryWhite,
@@ -128,7 +131,45 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
                 fontFamily: 'Inter',
                 color: AppColor().greySix,
               ),
-              Gap(Get.height * 0.01),
+              Gap(Get.height * 0.005),
+              SizedBox(
+                height: Get.height * 0.065,
+                child: Center(
+                      child: IntrinsicWidth(
+                        child: Row(
+                            children: widget.game.downloadLinks!
+                                .map((item) => GestureDetector(
+                                    onTap: () async {
+                                      print(item.link);
+                                      await launchUrl(Uri.parse(item.link!));
+                                    },
+                                    child: Container(
+                                        padding: EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(99),
+                                            border: Border.all(
+                                                color: Color(0xff1F252F),
+                                                width: 1)),
+                                        child: ColorFiltered(
+                                          colorFilter: const ColorFilter.mode(
+                                            Color(0xffEDEDFF),
+                                            BlendMode.srcATop,
+                                          ),
+                                          child: Image.network(
+                                            ApiLink.imageUrl +
+                                                item.platform!.logo!,
+                                            width: 24,
+                                            height: 24,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ))))
+                                .toList().take(3)
+                                .separator(Gap(0))
+                                .toList()),
+                      ),
+                    ),
+              ),
               InkWell(
                 onTap: () async {
                   setState(() {
