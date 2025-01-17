@@ -840,20 +840,6 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                   child: PageHeaderWidget(
                     onTap: () {},
-                    title: 'Social Events',
-                  ),
-                ),
-                NoItemPage(title: 'Social Events', size: Get.height * 0.05),
-                Gap(Get.height * 0.01),
-                Divider(
-                  color: AppColor().lightItemsColor.withOpacity(0.3),
-                  height: Get.height * 0.05,
-                  thickness: 4,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                  child: PageHeaderWidget(
-                    onTap: () {},
                     title: 'Achievements',
                   ),
                 ),

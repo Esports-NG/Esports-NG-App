@@ -86,7 +86,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: SizedBox(
                   height: Get.width * 0.25,
                   child: CustomText(
@@ -95,7 +95,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                   ),
                 ),
               ),
-              Gap(Get.height * 0.005),
+              // Gap(Get.height * 0.0025),
               Expanded(
                 flex: 5,
                 child: AspectRatio(

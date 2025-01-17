@@ -866,20 +866,6 @@ class _UserProfileState extends State<UserProfile> {
         padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
         child: PageHeaderWidget(
           onTap: () {},
-          title: 'Social Events',
-        ),
-      ),
-      Gap(Get.height * 0.02),
-      const ComingSoonWidget(),
-      Divider(
-        color: AppColor().lightItemsColor.withOpacity(0.3),
-        height: Get.height * 0.05,
-        thickness: 4,
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: PageHeaderWidget(
-          onTap: () {},
           title: 'Media, Links and Document',
         ),
       ),
