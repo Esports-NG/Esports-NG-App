@@ -6,6 +6,7 @@ import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/iterable_extension.dart';
+import 'package:e_sport/ui/search/search_screen.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +29,11 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   final navController = Get.put(NavRepository());
+
+  void goToEventSearch() {
+    authController.searchController.text = widget.item.name!;
+    Get.to(() => SearchScreen(selectedPage: 3));
+  }
 
   String timeAgo(DateTime itemDate) {
     final now = DateTime.now();
@@ -170,23 +176,25 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                       fontFamily: 'InterRegular',
                       textAlign: TextAlign.center,
                     ),
-                    Stack(
-                      children: [
-                        Positioned(
-                            child: SvgPicture.asset(
-                                'assets/images/svg/event_icon_2.svg')),
-                        Positioned(
-                            left: 0,
-                            right: 0,
-                            top: Get.height * 0.035,
-                            bottom: 0,
-                            child: CustomText(
-                              title: widget.item.events.toString(),
-                              textAlign: TextAlign.center,
-                              fontFamily: 'InterSemiBold',
-                            )),
-                      ],
-                    ),
+                    GestureDetector(
+                        onTap: () => goToEventSearch(),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                                child: SvgPicture.asset(
+                                    'assets/images/svg/event_icon_2.svg')),
+                            Positioned(
+                                left: 0,
+                                right: 0,
+                                top: Get.height * 0.035,
+                                bottom: 0,
+                                child: CustomText(
+                                  title: widget.item.events.toString(),
+                                  textAlign: TextAlign.center,
+                                  fontFamily: 'InterSemiBold',
+                                )),
+                          ],
+                        )),
                   ],
                 ),
               )
