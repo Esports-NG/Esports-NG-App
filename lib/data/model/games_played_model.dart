@@ -1,16 +1,19 @@
 import 'dart:convert';
 
-class GamesPlayed {
-  final String? image;
-  final String? name, id, ign;
+import 'package:e_sport/data/model/player_model.dart';
 
-  GamesPlayed({
-    this.image,
-    this.name,
-    this.id,
-    this.ign,
-  });
-}
+// class GamesPlayed {
+//   final String? image;
+//   final String? name, id, ign;
+//   final List<PlatformModel>? downloadLinks;
+
+//   GamesPlayed({
+//     this.image,
+//     this.name,
+//     this.id,
+//     this.ign,
+//   });
+// }
 
 List<GameToPlay> gameToPlayFromJson(String str) =>
     List<GameToPlay>.from(json.decode(str).map((x) => GameToPlay.fromJson(x)));
@@ -22,8 +25,8 @@ class GameToPlay {
   final int? id;
   final String? name;
   final String? profilePicture;
-  final List<dynamic>? downloadLinks;
-  final String? events;
+  final List<DownloadLink>? downloadLinks;
+  final int? events;
   final int? players;
 
   GameToPlay({
@@ -41,7 +44,8 @@ class GameToPlay {
         profilePicture: json["profile_picture"],
         downloadLinks: json["download_links"] == null
             ? []
-            : List<dynamic>.from(json["download_links"]!.map((x) => x)),
+            : List<DownloadLink>.from(
+                json["download_links"]!.map((x) => DownloadLink.fromJson(x))),
         events: json["events"],
         players: json["players"],
       );

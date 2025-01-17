@@ -4,8 +4,7 @@ import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/account/user_details.dart';
-import 'package:e_sport/ui/home/community/components/contributor_item.dart';
+import 'package:e_sport/di/iterable_extension.dart';
 import 'package:e_sport/ui/home/community/components/game_modes_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
@@ -16,8 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
-import 'contributors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GameProfile extends StatefulWidget {
   const GameProfile({super.key, required this.game});
@@ -208,6 +206,42 @@ class _GameProfileState extends State<GameProfile> {
                       size: Get.height * 0.017,
                       fontFamily: 'Inter',
                       color: AppColor().greyEight),
+                  Gap(Get.height * 0.02),
+                  Center(
+                    child: IntrinsicWidth(
+                      child: Row(
+                          children: details!.downloadLinks!
+                              .map((item) => GestureDetector(
+                                  onTap: () async {
+                                    print(item.link);
+                                    await launchUrl(Uri.parse(item.link!));
+                                  },
+                                  child: Container(
+                                      padding: EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(99),
+                                          border: Border.all(
+                                              color: Color(0xff1F252F),
+                                              width: 1)),
+                                      child: ColorFiltered(
+                                        colorFilter: const ColorFilter.mode(
+                                          Color(0xffEDEDFF),
+                                          BlendMode.srcATop,
+                                        ),
+                                        child: Image.network(
+                                          ApiLink.imageUrl +
+                                              item.platform!.logo!,
+                                          width: 24,
+                                          height: 24,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ))))
+                              .toList()
+                              .separator(Gap(16))
+                              .toList()),
+                    ),
+                  ),
                   Gap(Get.height * 0.02),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     ProfileMetric(

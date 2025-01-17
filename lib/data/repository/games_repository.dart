@@ -162,6 +162,7 @@ class GamesRepository extends GetxController {
       var feed = list.map((e) => GameToPlay.fromJson(e)).toList();
       gameFeed.assignAll(feed);
       authController.setLoading(false);
+      print('done');
       return feed;
     } else if (response.statusCode == 401) {
       authController

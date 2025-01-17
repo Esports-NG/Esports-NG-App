@@ -5,6 +5,7 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/iterable_extension.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GamesToPlayItem extends StatefulWidget {
   final GameToPlay item;
@@ -132,37 +134,28 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                     ),
                     Gap(Get.height * 0.006),
                     Row(
-                      children: [
-                        Container(
-                            decoration: BoxDecoration(
-                                color: AppColor().primaryColor,
-                                borderRadius: BorderRadius.circular(200)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6),
-                              child: SvgPicture.asset(
-                                  'assets/images/svg/apple.svg'),
-                            )),
-                        Gap(Get.height * 0.01),
-                        Container(
-                            decoration: BoxDecoration(
-                                color: AppColor().primaryColor,
-                                borderRadius: BorderRadius.circular(200)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6),
-                              child: SvgPicture.asset(
-                                  'assets/images/svg/apple.svg'),
-                            )),
-                        Gap(Get.height * 0.01),
-                        Container(
-                            decoration: BoxDecoration(
-                                color: AppColor().primaryColor,
-                                borderRadius: BorderRadius.circular(200)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6),
-                              child: SvgPicture.asset(
-                                  'assets/images/svg/apple.svg'),
-                            )),
-                      ],
+                      children: widget.item.downloadLinks!
+                          .map((feed) => GestureDetector(
+                              onTap: () => launchUrl(Uri.parse(feed.link!)),
+                              child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      color: AppColor().primaryColor,
+                                      borderRadius: BorderRadius.circular(99)),
+                                  child: ColorFiltered(
+                                    colorFilter: const ColorFilter.mode(
+                                      Color(0xffEDEDFF),
+                                      BlendMode.srcATop,
+                                    ),
+                                    child: Image.network(
+                                        ApiLink.imageUrl + feed.platform!.logo!,
+                                        width: 16,
+                                        height: 16,
+                                        fit: BoxFit.cover),
+                                  ))))
+                          .toList()
+                          .separator(Gap(8))
+                          .toList(),
                     ),
                   ],
                 ),
@@ -188,7 +181,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                             top: Get.height * 0.035,
                             bottom: 0,
                             child: CustomText(
-                              title: widget.item.events,
+                              title: widget.item.events.toString(),
                               textAlign: TextAlign.center,
                               fontFamily: 'InterSemiBold',
                             )),
