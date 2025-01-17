@@ -163,6 +163,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                   : OtherImage(
                                       itemSize: Get.height * 0.1,
                                       image: _details!.profilePicture),
+                              SvgPicture.asset(
+                                  "assets/images/svg/check_badge.svg")
                             ],
                           ),
                         ),
