@@ -23,7 +23,7 @@ class GameToPlay {
   final String? name;
   final String? profilePicture;
   final List<dynamic>? downloadLinks;
-  final String? events;
+  final int? events;
   final int? players;
 
   GameToPlay({

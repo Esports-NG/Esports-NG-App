@@ -188,7 +188,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                             top: Get.height * 0.035,
                             bottom: 0,
                             child: CustomText(
-                              title: widget.item.events,
+                              title: widget.item.events.toString(),
                               textAlign: TextAlign.center,
                               fontFamily: 'InterSemiBold',
                             )),
