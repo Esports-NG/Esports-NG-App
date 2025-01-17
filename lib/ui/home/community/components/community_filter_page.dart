@@ -97,7 +97,7 @@ class _CommunityFilterPageState extends State<CommunityFilterPage> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
-                    childAspectRatio: communityController.typeFilter.value == "Trending Games" ? 1 * 0.6 : 1 *0.67,
+                    childAspectRatio: communityController.typeFilter.value == "Trending Games" ? 1 * 0.63 : 1 *0.7,
                   ),
                   itemCount:
                       communityController.typeFilter.value == "Trending Games"

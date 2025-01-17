@@ -119,7 +119,7 @@ class _CommunityPageState extends State<CommunityPage>
                       ),
                     ),
                     SizedBox(
-                      height: Get.height * 0.28,
+                      height: Get.height * 0.29,
                       child: ListView.separated(
                           padding: EdgeInsets.symmetric(
                               horizontal: Get.height * 0.02),
@@ -223,7 +223,7 @@ class _CommunityPageState extends State<CommunityPage>
                     ),
                     Gap(Get.height * 0.03),
                     SizedBox(
-                      height: Get.height * 0.28,
+                      height: Get.height * 0.29,
                       child: (communityController.communityStatus ==
                               CommunityStatus.loading)
                           ? LoadingWidget(color: AppColor().primaryColor)
@@ -285,7 +285,7 @@ class _CommunityPageState extends State<CommunityPage>
                     (teamController.teamStatus != TeamStatus.error)
                         ? Container(
                             padding: EdgeInsets.only(left: Get.height * 0.02),
-                            height: Get.height * 0.28,
+                            height: Get.height * 0.29,
                             child: (teamController.teamStatus ==
                                     TeamStatus.loading)
                                 ? LoadingWidget(color: AppColor().primaryColor)

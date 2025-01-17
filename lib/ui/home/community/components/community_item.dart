@@ -124,7 +124,7 @@ class _CommunityItemState extends State<CommunityItem> {
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
               ),
-              Gap(Get.height * 0.01),
+              Gap(Get.height * 0.005),
               Visibility(
                 visible: widget.onFilterPage != true,
                 child: CustomText(
