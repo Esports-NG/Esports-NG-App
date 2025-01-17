@@ -1,6 +1,8 @@
 import 'package:e_sport/data/model/games_played_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/ui/components/games_to_play_item.dart';
+import 'package:e_sport/ui/home/community/components/game_profile.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -109,6 +111,8 @@ class _GamesToPlayWidgetState extends State<GamesToPlayWidget>
         builderDelegate: PagedChildBuilderDelegate<GameToPlay>(
             itemBuilder: (context, feed, index) {
               return GestureDetector(
+                  onTap: () => Get.to(() =>
+                      GameProfile(game: GamePlayed.fromJson({"id": feed.id}))),
                   child: GamesToPlayItem(item: feed, index: index));
             },
             firstPageProgressIndicatorBuilder: (context) =>
