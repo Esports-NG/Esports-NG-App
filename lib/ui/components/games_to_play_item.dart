@@ -85,14 +85,11 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                flex: 1,
-                child: SizedBox(
-                  height: Get.width * 0.25,
-                  child: CustomText(
-                    title: (widget.index + 1).toString(),
-                    fontFamily: 'InterSemiBold',
-                  ),
+              SizedBox(
+                height: Get.width * 0.25,
+                child: CustomText(
+                  title: (widget.index + 1).toString(),
+                  fontFamily: 'InterSemiBold',
                 ),
               ),
               Gap(Get.height * 0.005),
