@@ -86,7 +86,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: SizedBox(
                   height: Get.width * 0.25,
                   child: CustomText(
