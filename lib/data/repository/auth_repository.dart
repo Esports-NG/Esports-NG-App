@@ -875,7 +875,10 @@ class AuthRepository extends GetxController {
     countryCodeController.clear();
   }
 
-  void logout() {
+  void logout() async {
+    var response = await http.post(Uri.parse(ApiLink.logout),
+        headers: {"Authorization": "JWT $token"});
+    log(response.body);
     _authStatus(AuthStatus.unAuthenticated);
     clear();
     pref!.saveToken("0");

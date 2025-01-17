@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:e_sport/data/model/platform_model.dart';
+
 PlayerModel playerModelFromJson(String str) =>
     PlayerModel.fromJson(json.decode(str));
 
@@ -79,25 +81,26 @@ class GamePlayed {
   int? teams;
   int? players;
   int? followers;
+  List<DownloadLink>? downloadLinks;
   List<Category>? categories;
   List<GameMode>? gameModes;
   List<Player>? contributors;
 
-  GamePlayed({
-    this.id,
-    this.name,
-    this.abbrev,
-    this.profilePicture,
-    this.cover,
-    this.communities,
-    this.teams,
-    this.players,
-    this.categories,
-    this.gameModes,
-    this.contributors,
-    this.followers,
-    this.bio,
-  });
+  GamePlayed(
+      {this.id,
+      this.name,
+      this.abbrev,
+      this.profilePicture,
+      this.cover,
+      this.communities,
+      this.teams,
+      this.players,
+      this.categories,
+      this.gameModes,
+      this.contributors,
+      this.followers,
+      this.bio,
+      this.downloadLinks});
 
   factory GamePlayed.fromJson(Map<String, dynamic> json) => GamePlayed(
         id: json["id"],
@@ -109,6 +112,10 @@ class GamePlayed {
         communities: json["communities"],
         teams: json["teams"],
         players: json["players"],
+        downloadLinks: json["download_links"] == null
+            ? []
+            : List<DownloadLink>.from(
+                json["download_links"]!.map((x) => DownloadLink.fromJson(x))),
         followers: json['followers'],
         categories: json["categories"] == null
             ? []
@@ -143,6 +150,26 @@ class GamePlayed {
         "contributors": contributors == null
             ? []
             : List<dynamic>.from(contributors!.map((x) => x.toJson())),
+      };
+}
+
+class DownloadLink {
+  int? id;
+  String? link;
+  PlatformModel? platform;
+
+  DownloadLink({this.id, this.link, this.platform});
+
+  factory DownloadLink.fromJson(Map<String, dynamic> json) => DownloadLink(
+      id: json["id"],
+      link: json["link"],
+      platform: json['platform'] == null
+          ? null
+          : PlatformModel.fromJson(json['platform']));
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "link": link,
       };
 }
 
