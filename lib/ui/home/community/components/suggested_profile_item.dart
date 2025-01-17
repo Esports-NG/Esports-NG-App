@@ -331,7 +331,7 @@ class _SuggestedProfileListState extends State<SuggestedProfileList> {
                         fontFamily: "InterSemiBold",
                         size: 14,
                       ),
-                      const Gap(2),
+                      Gap(Get.height * 0.005),
                       CustomText(
                         title: "@${widget.item.userName}",
                         color: AppColor().greyFour,

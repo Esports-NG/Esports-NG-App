@@ -117,14 +117,14 @@ class _TrendingTeamsItemState extends State<TrendingTeamsItem> {
                   children: [
                     CustomText(
                       title: widget.item.name!.toCapitalCase(),
-                      size: 16,
+                      size: 14,
                       fontFamily: 'InterSemiBold',
                       color: AppColor().primaryWhite,
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // Gap(Get.height * 0.005),
+                    Gap(Get.height * 0.005),
                     Visibility(
                       visible: widget.onFilterPage == null,
                       child: CustomText(

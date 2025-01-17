@@ -117,12 +117,15 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
                       ),
                     ),
               const Spacer(),
-              CustomText(
-                title: widget.game.name!.toCapitalCase(),
-                textAlign: TextAlign.center,
-                size: 15,
-                fontFamily: 'InterMedium',
-                color: AppColor().primaryWhite,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: CustomText(
+                  title: widget.game.name!.toCapitalCase(),
+                  textAlign: TextAlign.center,
+                  size: 14,
+                  fontFamily: 'InterMedium',
+                  color: AppColor().primaryWhite,
+                ),
               ),
               Gap(Get.height * 0.005),
               CustomText(
@@ -133,7 +136,7 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
               ),
               Gap(Get.height * 0.005),
               SizedBox(
-                height: Get.height * 0.065,
+                height: Get.height * 0.06,
                 child: Center(
                       child: IntrinsicWidth(
                         child: Row(
