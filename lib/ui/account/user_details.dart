@@ -124,7 +124,7 @@ class _UserProfileState extends State<UserProfile> {
   final playerItem = Get.put(PlayerRepository());
   List<PostModel> _recentPosts = [];
   bool _fetchingPosts = false;
-  CommunityModel? _ownedCommunity;
+  List<CommunityModel> _ownedCommunities = [];
   List<TeamModel> _ownedTeams = [];
 
   Future fetchRecentPosts() async {
@@ -169,9 +169,10 @@ class _UserProfileState extends State<UserProfile> {
         Uri.parse(ApiLink.getCommunityByOwner(widget.userData.id)),
         headers: {"Authorization": "JWT ${authController.token}"});
     var json = jsonDecode(response.body);
-    CommunityModel community = CommunityModel.fromJson(json);
+    var list = List.from(json);
+    var communities = list.map((e) => CommunityModel.fromJson(e)).toList();
     setState(() {
-      _ownedCommunity = community;
+      _ownedCommunities = communities;
     });
   }
 
@@ -810,17 +811,19 @@ class _UserProfileState extends State<UserProfile> {
                       ]),
                   body: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _ownedCommunity == null
-                        ? []
-                        : [
-                            SizedBox(
-                              width: double.infinity,
-                              height: Get.height * 0.15,
-                              child: InkWell(
+                    children: [
+                      SizedBox(
+                          width: double.infinity,
+                          height: Get.height * 0.15,
+                          child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _ownedCommunities.length,
+                              shrinkWrap: true,
+                              separatorBuilder: (context, index) => Gap(10),
+                              itemBuilder: (context, index) => GestureDetector(
                                   child: CommunityOwnedItem(
-                                      community: _ownedCommunity!)),
-                            ),
-                          ],
+                                      community: _ownedCommunities[index])))),
+                    ],
                   ),
                 )
               ],
