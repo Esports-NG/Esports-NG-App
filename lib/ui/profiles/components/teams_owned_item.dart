@@ -71,14 +71,15 @@ class TeamsOwnedItem extends StatelessWidget {
                       size: 12,
                     ),
                     Gap(Get.height * 0.005),
-                    CustomFillButton(
-                      buttonText: team.gamesPlayed![0].abbrev,
-                      textSize: 10,
-                      buttonColor: AppColor().greyButton,
-                      width: 50,
-                      height: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    if (team.gamesPlayed!.isNotEmpty)
+                      CustomFillButton(
+                        buttonText: team.gamesPlayed![0].abbrev,
+                        textSize: 10,
+                        buttonColor: AppColor().greyButton,
+                        width: 50,
+                        height: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                   ],
                 ),
               ],
