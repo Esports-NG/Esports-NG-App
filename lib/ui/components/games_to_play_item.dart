@@ -128,7 +128,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                     ),
                     Gap(Get.height * 0.005),
                     CustomText(
-                      title: 'Play Here',
+                      title: 'Play Here:',
                       color: AppColor().greySix,
                       size: 12,
                     ),
