@@ -498,6 +498,44 @@ class TournamentRepository extends GetxController {
     return fixtures;
   }
 
+  Future createBRFixture(int id, List<int> participants, String type) async {
+    Map<String, dynamic> body = {
+      "player_ids": type == "player" ? participants : null,
+      "team_ids": type == "team" ? participants : null,
+      "igame_mode": 1,
+      "fixture_group": "player",
+      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+      "fixture_time":
+          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+      "fixture_type": "1v1",
+      "title": addFixtureRoundNameController.text,
+      "streaming_platform": fixturePlatform.value,
+      "livestreams": [
+        {
+          "title": addFixtureRoundNameController.text,
+          "description": "fixture",
+          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+          "platform_id": fixturePlatform.value!.id!,
+          "link": "https://${addFixtureStreamingLinkController.text}"
+        }
+      ]
+    };
+    try {
+      var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
+          headers: {
+            "Authorization": "JWT ${authController.token}",
+            "Content-type": "application/json"
+          },
+          body: jsonEncode(body));
+
+      if (response.statusCode == 200) {
+        Get.back();
+        Helpers().showCustomSnackbar(message: "Fixture added successfully");
+      }
+    } catch (err) {}
+  }
+
   Future createFixtureForPlayer(int id) async {
     Map<String, dynamic> body = {
       "away_player_id": selectedAwayPlayer.value!.id,

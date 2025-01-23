@@ -46,13 +46,6 @@ class _PostWidgetState extends State<PostWidget>
     return result;
   }
 
-  // void _loadMore() {
-  //   if (_scrollController.position.pixels ==
-  //       _scrollController.position.maxScrollExtent) {
-  //     widget.getNext!();
-  //   }
-  // }
-
   @override
   void dispose() {
     _scrollController.dispose();
@@ -65,7 +58,6 @@ class _PostWidgetState extends State<PostWidget>
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
-    // _scrollController.addListener(_loadMore);
   }
 
   Future<void> _fetchPage(int pageKey) async {
@@ -104,6 +96,8 @@ class _PostWidgetState extends State<PostWidget>
         () => _pagingController.refresh(),
       ),
       child: PagedListView.separated(
+        addAutomaticKeepAlives: true,
+        cacheExtent: 9999,
         pagingController: _pagingController,
         padding: EdgeInsets.only(top: 10, bottom: 50),
         separatorBuilder: (context, index) =>

@@ -32,10 +32,14 @@ class PostItem extends StatefulWidget {
   State<PostItem> createState() => _PostItemState();
 }
 
-class _PostItemState extends State<PostItem> {
+class _PostItemState extends State<PostItem>
+    with AutomaticKeepAliveClientMixin {
   final authController = Get.put(AuthRepository());
   final postController = Get.put(PostRepository());
   final navController = Get.put(NavRepository());
+
+  @override
+  bool get wantKeepAlive => true;
 
   int? _selectedIndex;
 
@@ -126,7 +130,8 @@ class _PostItemState extends State<PostItem> {
                                         errorWidget: (context, url, error) =>
                                             const Icon(Icons.error),
                                         imageUrl: widget.item.author!.profile!
-                                            .profilePicture ?? "",
+                                                .profilePicture ??
+                                            "",
                                         imageBuilder:
                                             (context, imageProvider) =>
                                                 Container(
@@ -134,10 +139,11 @@ class _PostItemState extends State<PostItem> {
                                             shape: BoxShape.circle,
                                             image: DecorationImage(
                                                 image: NetworkImage(widget
-                                                    .item
-                                                    .author!
-                                                    .profile!
-                                                    .profilePicture ?? ""),
+                                                        .item
+                                                        .author!
+                                                        .profile!
+                                                        .profilePicture ??
+                                                    ""),
                                                 fit: BoxFit.cover),
                                           ),
                                         ),
@@ -734,23 +740,24 @@ class _PostItemState extends State<PostItem> {
       child: Row(
         children: [
           authController.user!.profile!.profilePicture == null
-                  ? SvgPicture.asset(
-                      'assets/images/svg/people.svg',
-                      height: Get.height * 0.02,
-                      width: Get.height * 0.02,
-                    )
-                  :Container(
-            height: Get.height * 0.02,
-            width: Get.height * 0.02,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(
-                      authController.user!.profile!.profilePicture ?? ""),
-                  fit: BoxFit.cover,
+              ? SvgPicture.asset(
+                  'assets/images/svg/people.svg',
+                  height: Get.height * 0.02,
+                  width: Get.height * 0.02,
+                )
+              : Container(
+                  height: Get.height * 0.02,
+                  width: Get.height * 0.02,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            authController.user!.profile!.profilePicture ?? ""),
+                        fit: BoxFit.cover,
+                      ),
+                      shape: BoxShape.circle,
+                      border:
+                          Border.all(color: AppColor().primaryWhite, width: 1)),
                 ),
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColor().primaryWhite, width: 1)),
-          ),
           Icon(
             Icons.keyboard_arrow_down,
             color: AppColor().primaryWhite,

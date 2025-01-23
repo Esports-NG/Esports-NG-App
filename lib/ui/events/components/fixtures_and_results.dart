@@ -6,7 +6,6 @@ import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/events/components/add_fixture.dart';
-import 'package:e_sport/ui/events/components/add_fixture_team.dart';
 import 'package:e_sport/ui/events/components/fixture_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
@@ -113,19 +112,10 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                   shape: const CircleBorder(),
                   backgroundColor: AppColor().primaryColor,
                   onPressed: () {
-                    if (widget.event.tournamentType == "team") {
-                      Get.to(
-                        () => AddFixtureTeam(event: widget.event),
-                      )!
-                          .whenComplete(() async {
-                        await getFixtures();
-                      });
-                    } else {
-                      Get.to(() => AddFixture(event: widget.event))!
-                          .whenComplete(() async {
-                        await getFixtures();
-                      });
-                    }
+                    Get.to(() => AddFixture(event: widget.event))!
+                        .whenComplete(() async {
+                      await getFixtures();
+                    });
                   },
                   child: Icon(
                     Icons.add,

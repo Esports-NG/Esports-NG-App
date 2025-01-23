@@ -173,8 +173,6 @@ class _GameProfileState extends State<GameProfile> {
                                       ),
                                     ),
                                   ),
-                            SvgPicture.asset(
-                                "assets/images/svg/check_badge.svg")
                           ],
                         ),
                       ),

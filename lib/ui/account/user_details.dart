@@ -327,7 +327,7 @@ class _UserProfileState extends State<UserProfile> {
                     itemSize: Get.height * 0.11,
                     image: widget.userData.profile!.profilePicture,
                   ),
-                  SvgPicture.asset("assets/images/svg/check_badge.svg")
+                  if(widget.userData.isVerified! == true) SvgPicture.asset("assets/images/svg/check_badge.svg")
                 ],
               ),
             ),

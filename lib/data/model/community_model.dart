@@ -15,6 +15,7 @@ class CommunityModel {
   List<dynamic>? commStaffs;
   int? followers;
   int? following;
+  bool? isVerified;
 
   CommunityModel(
       {this.id,
@@ -30,7 +31,8 @@ class CommunityModel {
       this.commStaffs,
       this.followers,
       this.abbrev,
-      this.following});
+      this.following,
+      this.isVerified});
 
   factory CommunityModel.fromJson(Map<String, dynamic> json) => CommunityModel(
         id: json["id"],
@@ -38,6 +40,7 @@ class CommunityModel {
         logo: json["logo"],
         cover: json["cover"],
         bio: json["bio"],
+        isVerified: json['is_verified'],
         abbrev: json["abbrev"],
         owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
         gamesPlayed: json["games_played"] == null

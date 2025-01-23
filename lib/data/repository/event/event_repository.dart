@@ -135,6 +135,8 @@ class EventRepository extends GetxController
 
   var maxTabs = 3.obs, eventTypeCount = 0.obs, participantCount = 0.obs;
 
+  var fixtureTypeCount = 0.obs;
+
   final eventStatus = EventStatus.empty.obs;
   final myEventStatus = EventStatus.empty.obs;
   final createEventStatus = CreateEventStatus.empty.obs;
@@ -191,6 +193,12 @@ class EventRepository extends GetxController
     } else {
       maxTabs.value = 2;
     }
+    eventTypeController.text = item.title!;
+  }
+
+  void changeFixtureType({required int index, required PrimaryUse item}) {
+    fixtureTypeCount.value = index;
+
     eventTypeController.text = item.title!;
   }
 
