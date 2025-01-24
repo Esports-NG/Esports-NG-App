@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -128,35 +129,20 @@ class _CommunityItemState extends State<CommunityItem> {
         Stack(
           alignment: Alignment.bottomRight,
           children: [
-            (widget.item.logo == null)
-                ? SvgPicture.asset(
-                    'assets/images/svg/people.svg',
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                OtherImage(
+                    image: widget.item.logo,
                     height: Get.height * 0.07,
-                    width: Get.height * 0.07,
+                    width: Get.width * 0.07),
+                if (widget.item.isVerified == true)
+                  SvgPicture.asset(
+                    "assets/images/svg/check_badge.svg",
+                    height: Get.height * 0.025,
                   )
-                : Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                      CachedNetworkImage(
-                        height: Get.height * 0.07,
-                        width: Get.height * 0.07,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                        imageUrl: widget.item.logo!,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: NetworkImage(widget.item.logo!),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                      ),
-                      if(widget.item.isVerified == true) SvgPicture.asset("assets/images/svg/check_badge.svg", height: Get.height * 0.025,)
-                    ],
-                ),
+              ],
+            ),
           ],
         ),
       ],

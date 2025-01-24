@@ -7,7 +7,7 @@ import 'package:e_sport/data/model/user_model.dart';
 
 class PostModel {
   int? id;
-  Author? author;
+  UserModel? author;
   UserModel? owner;
   String? title;
   PostModel? repost;
@@ -21,9 +21,9 @@ class PostModel {
   List<String>? iTags;
   List<String>? iViewers;
   int? likeCount;
-  List<Author>? likes;
+  List<UserModel>? likes;
   int? viewCount;
-  List<Author>? views;
+  List<UserModel>? views;
   List<Tag>? tags;
   int? repostCount;
   List<Viewer>? viewers;
@@ -66,7 +66,7 @@ class PostModel {
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
       id: json["id"],
       title: json["title"],
-      author: json["author"] == null ? null : Author.fromJson(json["author"]),
+      author: json["author"] == null ? null : UserModel.fromJson(json["author"]),
       repost:
           json["repost"] == null ? null : PostModel.fromJson(json['repost']),
       community: json["community"] == null
@@ -84,11 +84,11 @@ class PostModel {
       event: json['event'] == null ? null : EventModel.fromJson(json["event"]),
       likes: json["likes"] == null
           ? []
-          : List<Author>.from(json["likes"]!.map((x) => Author.fromJson(x))),
+          : List<UserModel>.from(json["likes"]!.map((x) => UserModel.fromJson(x))),
       viewCount: json["view_count"],
       // views: json["views"] == null
       //     ? []
-      //     : List<Author>.from(json["views"]!.map((x) => Author.fromJson(x))),
+      //     : List<UserModel>.from(json["views"]!.map((x) => UserModel.fromJson(x))),
       tags: json["tags"] == null
           ? []
           : List<Tag>.from(json["tags"]!.map((x) => Tag.fromJson(x))),
@@ -145,72 +145,6 @@ class PostModel {
         "body": body,
         "itags": iTags,
         "iviewers": iViewers,
-      };
-}
-
-class Author {
-  int? id;
-  String? email;
-  String? fullName;
-  String? userName;
-  String? phoneNumber;
-  String? country;
-  String? state;
-  String? gender;
-  String? bio;
-  DateTime? dOB;
-  List<Purpose>? purpose;
-  Profile? profile;
-
-  Author(
-      {this.id,
-      this.email,
-      this.fullName,
-      this.userName,
-      this.phoneNumber,
-      this.country,
-      this.state,
-      this.gender,
-      this.dOB,
-      this.purpose,
-      this.profile,
-      this.bio});
-
-  factory Author.fromJson(Map<String, dynamic> json) => Author(
-        id: json["id"],
-        bio: json["bio"],
-        email: json["email"],
-        fullName: json["full_name"],
-        userName: json["user_name"],
-        phoneNumber: json["phone_number"],
-        country: json["country"],
-        state: json["state"],
-        gender: json["gender"],
-        dOB: json["d_o_b"] == null ? null : DateTime.parse(json["d_o_b"]),
-        purpose: json["purpose"] == null
-            ? []
-            : List<Purpose>.from(
-                json["purpose"]!.map((x) => Purpose.fromJson(x))),
-        profile:
-            json["profile"] == null ? null : Profile.fromJson(json["profile"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "email": email,
-        "full_name": fullName,
-        "user_name": userName,
-        "phone_number": phoneNumber,
-        "country": country,
-        "bio": bio,
-        "state": state,
-        "gender": gender,
-        "d_o_b":
-            "${dOB!.year.toString().padLeft(4, '0')}-${dOB!.month.toString().padLeft(2, '0')}-${dOB!.day.toString().padLeft(2, '0')}",
-        "purpose": purpose == null
-            ? []
-            : List<dynamic>.from(purpose!.map((x) => x.toJson())),
-        "profile": profile?.toJson(),
       };
 }
 
