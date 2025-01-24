@@ -111,9 +111,15 @@ class _HomePageState extends State<HomePage>
                                       Get.to(() => UserDetails(
                                           id: authController.user!.id!));
                                     },
-                                    child: OtherImage(
-                                        image: authController
-                                            .user!.profile!.profilePicture),
+                                    child: Stack(
+                                      alignment: Alignment.bottomRight,
+                                      children: [
+                                        OtherImage(
+                                          image: authController
+                                              .user!.profile!.profilePicture),
+                                        if(authController.user!.isVerified! == true) SvgPicture.asset("assets/images/svg/check_badge.svg", height: Get.height * 0.02,)
+                                      ]
+                                    ),
                                   ),
                                   Row(
                                     crossAxisAlignment:
