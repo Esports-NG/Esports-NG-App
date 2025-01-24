@@ -327,6 +327,7 @@ class _UserProfileState extends State<UserProfile> {
                     itemSize: Get.height * 0.11,
                     image: widget.userData.profile!.profilePicture,
                   ),
+                  if(widget.userData.isVerified! == true) SvgPicture.asset("assets/images/svg/check_badge.svg")
                 ],
               ),
             ),
@@ -635,11 +636,8 @@ class _UserProfileState extends State<UserProfile> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomText(
-                          title: "Games Played (${playerItem.allPlayer
-                              .where((e) => e.player!.id == widget.userData.id)
-                              .toList()
-                              .take(5)
-                              .length})",
+                          title:
+                              "Games Played (${playerItem.allPlayer.where((e) => e.player!.id == widget.userData.id).toList().take(5).length})",
                           size: 14,
                           color: AppColor().primaryWhite,
                         ),
@@ -798,11 +796,12 @@ class _UserProfileState extends State<UserProfile> {
                               shrinkWrap: true,
                               separatorBuilder: (context, index) => Gap(10),
                               itemBuilder: (context, index) => GestureDetector(
-                                  child: TeamsOwnedItem(
-                                      team: _ownedTeams[index]),
-                                  onTap: () =>  Get.to(() => AccountTeamsDetail(item: _ownedTeams[index])),
-                                      
-                              )),
+                                    child: TeamsOwnedItem(
+                                        team: _ownedTeams[index]),
+                                    onTap: () => Get.to(() =>
+                                        AccountTeamsDetail(
+                                            item: _ownedTeams[index])),
+                                  )),
                         )
                       ]),
                 ),
@@ -813,7 +812,8 @@ class _UserProfileState extends State<UserProfile> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomText(
-                          title: "Communities Owned (${_ownedCommunities.length})",
+                          title:
+                              "Communities Owned (${_ownedCommunities.length})",
                           size: 14,
                           color: AppColor().primaryWhite,
                         ),
@@ -830,7 +830,9 @@ class _UserProfileState extends State<UserProfile> {
                               shrinkWrap: true,
                               separatorBuilder: (context, index) => Gap(10),
                               itemBuilder: (context, index) => GestureDetector(
-                                  onTap: () =>  Get.to(() => AccountCommunityDetail(item: _ownedCommunities[index])),
+                                  onTap: () => Get.to(() =>
+                                      AccountCommunityDetail(
+                                          item: _ownedCommunities[index])),
                                   child: CommunityOwnedItem(
                                       community: _ownedCommunities[index])))),
                     ],

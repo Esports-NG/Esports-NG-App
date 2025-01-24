@@ -172,7 +172,7 @@ class _GameProfileState extends State<GameProfile> {
                                         ),
                                       ),
                                     ),
-                                  )
+                                  ),
                           ],
                         ),
                       ),

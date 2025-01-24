@@ -976,6 +976,11 @@ var eventTypeCard = [
   PrimaryUse(title: 'Social events', isSelected: false),
 ];
 
+var fixtureTypeCard = [
+  PrimaryUse(title: '1V1 Fixture', isSelected: false),
+  PrimaryUse(title: "Leaderboard/BR Fixture", isSelected: false)
+];
+
 var categoryCard = [
   UserPreference(title: 'Puzzle', isSelected: false),
   UserPreference(title: 'Warfare', isSelected: false),
