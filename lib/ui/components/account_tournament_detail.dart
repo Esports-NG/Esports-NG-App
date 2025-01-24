@@ -816,6 +816,58 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                    child: PageHeaderWidget(
+                      onTap: () {
+                        Get.to(() => FixturesAndResults(
+                              event: _eventDetails!,
+                            ));
+                      },
+                      title: 'Livestreams',
+                    ),
+                  ),
+                  Gap(Get.height * 0.02),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: _isFetchingFixtures || _fixturesList.isEmpty
+                          ? 50
+                          : Get.height * 0.25,
+                      child: _isFetchingFixtures
+                          ? const Center(child: ButtonLoader())
+                          : _fixturesList.isEmpty
+                              ? Center(
+                                  child: CustomText(
+                                      title: "No streams",
+                                      size: 16,
+                                      fontFamily: "InterMedium",
+                                      color: AppColor().lightItemsColor))
+                              : ListView.separated(
+                                  physics: const ScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  separatorBuilder: (context, index) =>
+                                      Gap(Get.height * 0.02),
+                                  itemBuilder: (context, index) =>
+                                      GestureDetector(
+                                          onTap: () {},
+                                          child: FixtureCardScrollable(
+                                              fixture: _fixturesList[index],
+                                              backgroundColor: _colors[
+                                                  index % _colors.length])),
+                                  itemCount: _fixturesList.take(5).length),
+                    ),
+                  ),
+                  Gap(Get.height * 0.005),
+                  Divider(
+                    color: AppColor().lightItemsColor.withOpacity(0.3),
+                    height: Get.height * 0.05,
+                    thickness: 4,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

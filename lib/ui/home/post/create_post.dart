@@ -442,7 +442,9 @@ class _CreatePostState extends State<CreatePost> {
                       child: Row(
                         children: [
                           OtherImage(
-                            image: authController.user!.profile!.profilePicture,
+                            image: authController.user!.profile!.profilePicture ?? DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/images/png/placeholder.png')),
                             width: 40,
                             height: 40,
                           ),
@@ -497,10 +499,14 @@ class _CreatePostState extends State<CreatePost> {
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(90),
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      item.profilePicture!),
-                                                  fit: BoxFit.cover)),
+                                              image: item.profilePicture == null
+                                                  ? DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/images/png/placeholder.png'))
+                                                  : DecorationImage(
+                                                      image: NetworkImage(
+                                                          item.profilePicture!),
+                                                      fit: BoxFit.cover)),
                                           width: 40,
                                           height: 40,
                                         ),
@@ -554,7 +560,11 @@ class _CreatePostState extends State<CreatePost> {
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(90),
-                                              image: DecorationImage(
+                                              image: item.logo == null
+                                                  ? DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/images/png/placeholder.png'))
+                                                  : DecorationImage(
                                                   image:
                                                       NetworkImage(item.logo!),
                                                   fit: BoxFit.cover)),

@@ -437,7 +437,7 @@ class _PostDetails2State extends State<PostDetails2> {
                                         _postDetails!.image == null
                                             ? Container()
                                             : CachedNetworkImage(
-                                                height: Get.height * 0.25,
+                                                height: Get.height * 0.4,
                                                 width: double.infinity,
                                                 progressIndicatorBuilder:
                                                     (context, url, progress) =>
@@ -477,7 +477,7 @@ class _PostDetails2State extends State<PostDetails2> {
                                         Positioned.fill(
                                           left: Get.height * 0.02,
                                           bottom: Get.height * 0.02,
-                                          top: Get.height * 0.19,
+                                          top: Get.height * 0.34,
                                           child: SizedBox(
                                             height: Get.height * 0.03,
                                             child: ListView.separated(

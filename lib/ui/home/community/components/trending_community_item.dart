@@ -134,23 +134,29 @@ class _CommunityItemState extends State<CommunityItem> {
                     height: Get.height * 0.07,
                     width: Get.height * 0.07,
                   )
-                : CachedNetworkImage(
-                    height: Get.height * 0.07,
-                    width: Get.height * 0.07,
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                    imageUrl: widget.item.logo!,
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: NetworkImage(widget.item.logo!),
-                            fit: BoxFit.cover),
+                : Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                      CachedNetworkImage(
+                        height: Get.height * 0.07,
+                        width: Get.height * 0.07,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        imageUrl: widget.item.logo!,
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(widget.item.logo!),
+                                fit: BoxFit.cover),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                      if(widget.item.isVerified == true) SvgPicture.asset("assets/images/svg/check_badge.svg", height: Get.height * 0.025,)
+                    ],
+                ),
           ],
         ),
       ],

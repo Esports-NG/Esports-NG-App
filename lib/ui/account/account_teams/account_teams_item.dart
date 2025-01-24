@@ -5,6 +5,7 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -48,31 +49,37 @@ class AccountTeamsItem extends StatelessWidget {
                         fit: BoxFit.cover),
                   ),
                 )
-              : CachedNetworkImage(
-                  height: Get.height * 0.08,
-                  width: Get.height * 0.08,
-                  progressIndicatorBuilder: (context, url, progress) => Center(
-                    child: SizedBox(
-                      height: Get.height * 0.02,
-                      width: Get.height * 0.02,
-                      child: CircularProgressIndicator(
-                          color: AppColor().primaryColor,
-                          value: progress.progress),
+              : Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                    CachedNetworkImage(
+                      height: Get.height * 0.08,
+                      width: Get.height * 0.08,
+                      progressIndicatorBuilder: (context, url, progress) => Center(
+                        child: SizedBox(
+                          height: Get.height * 0.02,
+                          width: Get.height * 0.02,
+                          child: CircularProgressIndicator(
+                              color: AppColor().primaryColor,
+                              value: progress.progress),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.error, color: AppColor().primaryColor),
+                      imageUrl: item.profilePicture!,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          // border: Border.all(color: AppColor().primaryWhite),
+                          image: DecorationImage(
+                              image: NetworkImage(item.profilePicture!),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
                     ),
-                  ),
-                  errorWidget: (context, url, error) =>
-                      Icon(Icons.error, color: AppColor().primaryColor),
-                  imageUrl: item.profilePicture!,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColor().primaryWhite),
-                      image: DecorationImage(
-                          image: NetworkImage(item.profilePicture!),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                ),
+                    if(item.isVerified == true) SvgPicture.asset("assets/images/svg/check_badge.svg", height: Get.height * 0.025,)
+                  ],
+              ),
           Gap(Get.height * 0.02),
           Expanded(
             child: Column(

@@ -111,9 +111,15 @@ class _HomePageState extends State<HomePage>
                                       Get.to(() => UserDetails(
                                           id: authController.user!.id!));
                                     },
-                                    child: OtherImage(
-                                        image: authController
-                                            .user!.profile!.profilePicture),
+                                    child: Stack(
+                                      alignment: Alignment.bottomRight,
+                                      children: [
+                                        OtherImage(
+                                          image: authController
+                                              .user!.profile!.profilePicture),
+                                        if(authController.user!.isVerified! == true) SvgPicture.asset("assets/images/svg/check_badge.svg", height: Get.height * 0.02,)
+                                      ]
+                                    ),
                                   ),
                                   Row(
                                     crossAxisAlignment:
@@ -217,7 +223,7 @@ class _HomePageState extends State<HomePage>
                             child: TabBar(
                                 isScrollable: true,
                                 tabAlignment: TabAlignment.start,
-                                labelColor: AppColor().primaryColor,
+                                labelColor: AppColor().primaryWhite.withOpacity(0.9),
                                 indicatorColor: AppColor().primaryColor,
                                 dividerColor: Colors.transparent,
                                 labelStyle: const TextStyle(

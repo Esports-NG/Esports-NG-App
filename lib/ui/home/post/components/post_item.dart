@@ -415,7 +415,7 @@ class _PostItemState extends State<PostItem>
                                   onTap: () => Helpers().showImagePopup(
                                       context, widget.item.image!),
                                   child: CachedNetworkImage(
-                                    height: Get.height * 0.25,
+                                    height: Get.height * 0.4,
                                     width: double.infinity,
                                     progressIndicatorBuilder:
                                         (context, url, progress) => Center(
@@ -447,7 +447,7 @@ class _PostItemState extends State<PostItem>
                           child: widget.item.repost!.image == null
                               ? Container()
                               : CachedNetworkImage(
-                                  height: Get.height * 0.25,
+                                  height: Get.height * 0.35,
                                   width: double.infinity,
                                   progressIndicatorBuilder:
                                       (context, url, progress) => Center(
@@ -477,7 +477,7 @@ class _PostItemState extends State<PostItem>
                   Positioned.fill(
                     left: Get.height * 0.02,
                     bottom: Get.height * 0.02,
-                    top: Get.height * 0.19,
+                    top: Get.height * 0.34,
                     child: SizedBox(
                       height: Get.height * 0.03,
                       child: ListView.separated(
@@ -682,24 +682,30 @@ class _PostItemState extends State<PostItem>
                       height: Get.height * 0.02,
                       width: Get.height * 0.02,
                     )
-                  : CachedNetworkImage(
-                      height: Get.height * 0.02,
-                      width: Get.height * 0.02,
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      imageUrl: authController.user!.profile!.profilePicture,
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  authController.user!.profile!.profilePicture),
-                              fit: BoxFit.cover),
+                  : Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                        CachedNetworkImage(
+                          height: Get.height * 0.02,
+                          width: Get.height * 0.02,
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                          imageUrl: authController.user!.profile!.profilePicture,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      authController.user!.profile!.profilePicture),
+                                  fit: BoxFit.cover),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                        if(authController.user!.isVerified! == true) SvgPicture.asset("assets/images/svg/check_badge.svg", height: Get.height * 0.01,)
+                      ],
+                  ),
               Gap(Get.height * 0.02),
               CustomText(
                 title: authController.user!.fullName,

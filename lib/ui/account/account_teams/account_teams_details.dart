@@ -528,12 +528,12 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                           itemSize: Get.height * 0.04,
                                           image: _details!
                                               .owner!.profile!.profilePicture),
-                                  Positioned(
-                                    child: SvgPicture.asset(
-                                      'assets/images/svg/check_badge.svg',
-                                      height: Get.height * 0.015,
-                                    ),
-                                  ),
+                                  // Positioned(
+                                  //   child: SvgPicture.asset(
+                                  //     'assets/images/svg/check_badge.svg',
+                                  //     height: Get.height * 0.015,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),

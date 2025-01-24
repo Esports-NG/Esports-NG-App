@@ -16,6 +16,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -113,9 +114,11 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
                       alignment: Alignment.bottomRight,
                       children: [
                         OtherImage(
-                          itemSize: Get.height * 0.13,
+                          itemSize: Get.height * 0.11,
                           image: authController.user!.profile!.profilePicture,
                         ),
+                        if(authController.user!.isVerified! == true) SvgPicture.asset("assets/images/svg/check_badge.svg")
+                        
                       ],
                     ),
                   ),
