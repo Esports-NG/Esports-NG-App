@@ -289,34 +289,40 @@ class _SuggestedProfileListState extends State<SuggestedProfileList> {
                               fit: BoxFit.cover),
                         ),
                       )
-                    : CachedNetworkImage(
-                        height: widget.onFilterPage == true
-                            ? Get.height * 0.1
-                            : Get.height * 0.12,
-                        width: double.infinity,
-                        progressIndicatorBuilder: (context, url, progress) =>
-                            Center(
-                          child: SizedBox(
-                            height: Get.height * 0.05,
-                            width: Get.height * 0.05,
-                            child: CircularProgressIndicator(
-                                color: AppColor().primaryColor,
-                                value: progress.progress),
+                    : Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                          CachedNetworkImage(
+                            height: widget.onFilterPage == true
+                                ? Get.height * 0.1
+                                : Get.height * 0.12,
+                            width: double.infinity,
+                            progressIndicatorBuilder: (context, url, progress) =>
+                                Center(
+                              child: SizedBox(
+                                height: Get.height * 0.05,
+                                width: Get.height * 0.05,
+                                child: CircularProgressIndicator(
+                                    color: AppColor().primaryColor,
+                                    value: progress.progress),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error, color: AppColor().primaryColor),
+                            imageUrl: widget.item.profile!.profilePicture,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10)),
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover),
+                              ),
+                            ),
                           ),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.error, color: AppColor().primaryColor),
-                        imageUrl: widget.item.profile!.profilePicture,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10)),
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
-                          ),
-                        ),
-                      ),
+                          if(widget.item.isVerified == true) SvgPicture.asset("assets/images/svg/check_badge.svg", height: Get.height * 0.02,)
+                        ],
+                    ),
                 const Spacer(),
                 Gap(Get.height * 0.01),
                 Padding(
