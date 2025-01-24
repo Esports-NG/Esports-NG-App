@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/account/user_details.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -184,32 +185,16 @@ class _SuggestedProfileItemState extends State<SuggestedProfileItem> {
               ],
             ),
             Positioned(
-              top: Get.height * 0.065,
-              left: Get.width * 0.13,
-              child: widget.item.profile!.profilePicture != null
-                  ? CachedNetworkImage(
-                      imageUrl: widget.item.profile!.profilePicture,
+                top: Get.height * 0.065,
+                left: Get.width * 0.13,
+                child: Stack(alignment: Alignment.bottomRight, children: [
+                  OtherImage(
+                      image: widget.item.profile!.profilePicture,
                       width: Get.height * 0.08,
-                      height: Get.height * 0.08,
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColor().greyEight),
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover)),
-                      ),
-                    )
-                  : Container(
-                      height: Get.height * 0.08,
-                      width: Get.height * 0.08,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/images/svg/people.svg',
-                      ),
-                    ),
-            ),
+                      height: Get.height * 0.08),
+                  if (widget.item.isVerified == true)
+                    SvgPicture.asset("assets/images/svg/check_badge.svg")
+                ])),
           ],
         ),
       ),

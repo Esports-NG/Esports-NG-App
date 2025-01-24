@@ -35,6 +35,7 @@ var accountItem = [
 
 var createMenu = [
   CategoryItem(title: 'Post'),
+  CategoryItem(title: 'Livestream'),
   CategoryItem(title: 'Event'),
   CategoryItem(title: 'Team'),
   CategoryItem(title: 'Community'),
