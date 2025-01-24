@@ -195,6 +195,10 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                     : OtherImage(
                                         itemSize: Get.height * 0.1,
                                         image: details!.logo),
+                                if (details!.isVerified != null &&
+                                    details!.isVerified == true)
+                                  SvgPicture.asset(
+                                      "assets/images/svg/check_badge.svg")
                               ],
                             ),
                           ),
