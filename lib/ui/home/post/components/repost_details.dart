@@ -185,7 +185,7 @@ class _RepostDetailsState extends State<RepostDetails> {
                       title: widget.item.repost == null
                           ? widget.item.body
                           : widget.item.repost!.body,
-                      size: Get.height * 0.017,
+                      size: Get.height * 0.015,
                       fontFamily: 'InterBold',
                       textAlign: TextAlign.start,
                       color: AppColor().primaryWhite,

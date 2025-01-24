@@ -116,7 +116,7 @@ class _TrendingTeamsItemState extends State<TrendingTeamsItem> {
                 child: Column(
                   children: [
                     CustomText(
-                      title: widget.item.name!.toCapitalCase(),
+                      title: widget.item.name!,
                       size: 14,
                       fontFamily: 'InterSemiBold',
                       color: AppColor().primaryWhite,

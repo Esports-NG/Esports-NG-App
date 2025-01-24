@@ -54,160 +54,163 @@ class _BottomNavigationState extends State<BottomNavigation>
                     color: AppColor().primaryColor),
               ),
             ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      widget.setPage(0);
-                    },
-                    child: Container(
-                      width: 70,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 8),
-                      decoration: const BoxDecoration(
-                          // border: navController.currentIndex.value == 0
-                          //     ? Border(
-                          //         top: BorderSide(
-                          //             color: AppColor().primaryColor, width: 2))
-                          ),
-                      child: Column(
-                        children: [
-                          HeroIcon(
-                            HeroIcons.home,
-                            size: 28,
-                            color: navController.currentIndex.value == 0
-                                ? AppColor().primaryColor
-                                : AppColor().lightItemsColor,
-                          ),
-                          const Gap(5),
-                          CustomText(
-                            title: "Home",
-                            size: 12,
-                            color: navController.currentIndex.value == 0
-                                ? AppColor().primaryColor
-                                : AppColor().lightItemsColor,
-                            fontFamily: "InterSemiBold",
-                          )
-                        ],
+            Padding(
+              padding: EdgeInsets.only(top: Get.height * 0.005),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        widget.setPage(0);
+                      },
+                      child: Container(
+                        width: 70,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 8),
+                        decoration: const BoxDecoration(
+                            // border: navController.currentIndex.value == 0
+                            //     ? Border(
+                            //         top: BorderSide(
+                            //             color: AppColor().primaryColor, width: 2))
+                            ),
+                        child: Column(
+                          children: [
+                            HeroIcon(
+                              HeroIcons.home,
+                              size: 28,
+                              color: navController.currentIndex.value == 0
+                                  ? AppColor().primaryWhite.withOpacity(0.9)
+                                  : AppColor().lightItemsColor,
+                            ),
+                            const Gap(5),
+                            CustomText(
+                              title: "Home",
+                              size: 12,
+                              color: navController.currentIndex.value == 0
+                                  ? AppColor().primaryWhite.withOpacity(0.9)
+                                  : AppColor().lightItemsColor,
+                              fontFamily: "InterSemiBold",
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  // const Spacer(flex: 1),
-                  GestureDetector(
-                    onTap: () {
-                      widget.setPage(1);
-                    },
-                    child: Container(
-                      width: 70,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 8),
-                      decoration: const BoxDecoration(
-                          // border: navController.currentIndex.value == 1
-                          //     ? Border(
-                          //         top: BorderSide(
-                          //             color: AppColor().primaryColor, width: 2))
-                          ),
-                      child: Column(
-                        children: [
-                          HeroIcon(
-                            HeroIcons.calendar,
-                            size: 28,
-                            color: navController.currentIndex.value == 1
-                                ? AppColor().primaryColor
-                                : AppColor().lightItemsColor,
-                          ),
-                          const Gap(5),
-                          CustomText(
-                            title: "Events",
-                            size: 12,
-                            color: navController.currentIndex.value == 1
-                                ? AppColor().primaryColor
-                                : AppColor().lightItemsColor,
-                            fontFamily: "InterSemiBold",
-                          )
-                        ],
+                    // const Spacer(flex: 1),
+                    GestureDetector(
+                      onTap: () {
+                        widget.setPage(1);
+                      },
+                      child: Container(
+                        width: 70,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 8),
+                        decoration: const BoxDecoration(
+                            // border: navController.currentIndex.value == 1
+                            //     ? Border(
+                            //         top: BorderSide(
+                            //             color: AppColor().primaryColor, width: 2))
+                            ),
+                        child: Column(
+                          children: [
+                            HeroIcon(
+                              HeroIcons.calendar,
+                              size: 28,
+                              color: navController.currentIndex.value == 1
+                                  ? AppColor().primaryWhite.withOpacity(0.9)
+                                  : AppColor().lightItemsColor,
+                            ),
+                            const Gap(5),
+                            CustomText(
+                              title: "Events",
+                              size: 12,
+                              color: navController.currentIndex.value == 1
+                                  ? AppColor().primaryWhite.withOpacity(0.9)
+                                  : AppColor().lightItemsColor,
+                              fontFamily: "InterSemiBold",
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const Spacer(flex: 4),
-                  GestureDetector(
-                    onTap: () {
-                      widget.setPage(2);
-                    },
-                    child: Container(
-                      width: 70,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 8),
-                      decoration: const BoxDecoration(
-                          // border: navController.currentIndex.value == 2
-                          //     ? Border(
-                          //         top: BorderSide(
-                          //             color: AppColor().primaryColor, width: 2))
-                          ),
-                      child: Column(
-                        children: [
-                          HeroIcon(
-                            HeroIcons.userGroup,
-                            size: 28,
-                            color: navController.currentIndex.value == 2
-                                ? AppColor().primaryColor
-                                : AppColor().lightItemsColor,
-                          ),
-                          const Gap(5),
-                          CustomText(
-                            title: "Community",
-                            size: 12,
-                            color: navController.currentIndex.value == 2
-                                ? AppColor().primaryColor
-                                : AppColor().lightItemsColor,
-                            fontFamily: "InterSemiBold",
-                          )
-                        ],
+                    const Spacer(flex: 4),
+                    GestureDetector(
+                      onTap: () {
+                        widget.setPage(2);
+                      },
+                      child: Container(
+                        width: 70,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 8),
+                        decoration: const BoxDecoration(
+                            // border: navController.currentIndex.value == 2
+                            //     ? Border(
+                            //         top: BorderSide(
+                            //             color: AppColor().primaryColor, width: 2))
+                            ),
+                        child: Column(
+                          children: [
+                            HeroIcon(
+                              HeroIcons.userGroup,
+                              size: 28,
+                              color: navController.currentIndex.value == 2
+                                  ? AppColor().primaryWhite.withOpacity(0.9)
+                                  : AppColor().lightItemsColor,
+                            ),
+                            const Gap(5),
+                            CustomText(
+                              title: "Community",
+                              size: 12,
+                              color: navController.currentIndex.value == 2
+                                  ? AppColor().primaryWhite.withOpacity(0.9)
+                                  : AppColor().lightItemsColor,
+                              fontFamily: "InterSemiBold",
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  // const Spacer(
-                  //   flex: 1,
-                  // ),
-                  GestureDetector(
-                    onTap: () {
-                      widget.setPage(3);
-                    },
-                    child: Container(
-                      width: 70,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 8),
-                      decoration: const BoxDecoration(
-                          // border: navController.currentIndex.value == 3
-                          //     ? Border(
-                          //         top: BorderSide(
-                          //             color: AppColor().primaryColor, width: 2))
-                          ),
-                      child: Column(
-                        children: [
-                          HeroIcon(
-                            HeroIcons.user,
-                            size: 28,
-                            color: navController.currentIndex.value == 3
-                                ? AppColor().primaryColor
-                                : AppColor().lightItemsColor,
-                          ),
-                          const Gap(5),
-                          CustomText(
-                            title: "Account",
-                            size: 12,
-                            color: navController.currentIndex.value == 3
-                                ? AppColor().primaryColor
-                                : AppColor().lightItemsColor,
-                            fontFamily: "InterSemiBold",
-                          )
-                        ],
+                    // const Spacer(
+                    //   flex: 1,
+                    // ),
+                    GestureDetector(
+                      onTap: () {
+                        widget.setPage(3);
+                      },
+                      child: Container(
+                        width: 70,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 8),
+                        decoration: const BoxDecoration(
+                            // border: navController.currentIndex.value == 3
+                            //     ? Border(
+                            //         top: BorderSide(
+                            //             color: AppColor().primaryColor, width: 2))
+                            ),
+                        child: Column(
+                          children: [
+                            HeroIcon(
+                              HeroIcons.user,
+                              size: 28,
+                              color: navController.currentIndex.value == 3
+                                  ? AppColor().primaryWhite.withOpacity(0.9)
+                                  : AppColor().lightItemsColor,
+                            ),
+                            const Gap(5),
+                            CustomText(
+                              title: "Account",
+                              size: 12,
+                              color: navController.currentIndex.value == 3
+                                  ? AppColor().primaryWhite.withOpacity(0.9)
+                                  : AppColor().lightItemsColor,
+                              fontFamily: "InterSemiBold",
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ]),
+                  ]),
+            ),
           ],
         ),
       ),

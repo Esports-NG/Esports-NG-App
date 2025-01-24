@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage>
                             child: TabBar(
                                 isScrollable: true,
                                 tabAlignment: TabAlignment.start,
-                                labelColor: AppColor().primaryColor,
+                                labelColor: AppColor().primaryWhite.withOpacity(0.9),
                                 indicatorColor: AppColor().primaryColor,
                                 dividerColor: Colors.transparent,
                                 labelStyle: const TextStyle(

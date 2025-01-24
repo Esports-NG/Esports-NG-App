@@ -409,7 +409,7 @@ class _PostItemState extends State<PostItem> {
                                   onTap: () => Helpers().showImagePopup(
                                       context, widget.item.image!),
                                   child: CachedNetworkImage(
-                                    height: Get.height * 0.25,
+                                    height: Get.height * 0.4,
                                     width: double.infinity,
                                     progressIndicatorBuilder:
                                         (context, url, progress) => Center(
@@ -441,7 +441,7 @@ class _PostItemState extends State<PostItem> {
                           child: widget.item.repost!.image == null
                               ? Container()
                               : CachedNetworkImage(
-                                  height: Get.height * 0.25,
+                                  height: Get.height * 0.35,
                                   width: double.infinity,
                                   progressIndicatorBuilder:
                                       (context, url, progress) => Center(
@@ -471,7 +471,7 @@ class _PostItemState extends State<PostItem> {
                   Positioned.fill(
                     left: Get.height * 0.02,
                     bottom: Get.height * 0.02,
-                    top: Get.height * 0.19,
+                    top: Get.height * 0.34,
                     child: SizedBox(
                       height: Get.height * 0.03,
                       child: ListView.separated(

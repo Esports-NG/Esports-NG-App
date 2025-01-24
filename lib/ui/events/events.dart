@@ -100,29 +100,32 @@ class _EventsPageState extends State<EventsPage>
               SliverPersistentHeader(
                   pinned: true,
                   delegate: _SliverAppBarDelegate(
-                      minHeight: 45,
-                      maxHeight: 45,
-                      child: Container(
-                        color: AppColor().primaryBackGroundColor,
-                        child: TabBar(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Get.height * 0.015),
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            labelStyle:
-                                const TextStyle(fontFamily: "InterMedium"),
-                            // dividerColor: AppColor().primaryBackGroundColor,
-                            dividerHeight: 0,
-                            indicatorColor: AppColor().primaryColor,
-                            labelColor: AppColor().primaryColor,
-                            unselectedLabelColor: AppColor().lightItemsColor,
-                            controller: eventController.tabController,
-                            tabs: const [
-                              Tab(
-                                text: "Active Events",
-                              ),
-                              Tab(text: "You Registered"),
-                              Tab(text: "All Events")
-                            ]),
+                      minHeight: 50,
+                      maxHeight: 50,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 3),
+                        child: Container(
+                          color: AppColor().primaryBackGroundColor,
+                          child: TabBar(
+                              // padding: EdgeInsets.symmetric(
+                              //     horizontal: Get.height * 0.015),
+                              indicatorSize: TabBarIndicatorSize.label,
+                              labelStyle:
+                                  const TextStyle(fontFamily: "InterMedium"),
+                              // dividerColor: AppColor().primaryBackGroundColor,
+                              dividerHeight: 0,
+                              indicatorColor: AppColor().primaryColor,
+                              labelColor: AppColor().primaryWhite.withOpacity(0.9),
+                              unselectedLabelColor: AppColor().lightItemsColor,
+                              controller: eventController.tabController,
+                              tabs: const [
+                                Tab(
+                                  text: "Active Events",
+                                ),
+                                Tab(text: "You Registered"),
+                                Tab(text: "All Events")
+                              ]),
+                        ),
                       )))
             ],
             // backgroundColor: AppColor().primaryBackGroundColor,
