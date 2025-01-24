@@ -3,6 +3,7 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -45,10 +46,16 @@ class CommunityOwnedItem extends StatelessWidget {
                             AssetImage('assets/images/png/placeholder.png'),
                         radius: Get.width * 0.05,
                       )
-                    : CircleAvatar(
-                        foregroundImage: NetworkImage(community.logo),
-                        radius: Get.width * 0.05,
-                      ),
+                    : Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                          CircleAvatar(
+                            foregroundImage: NetworkImage(community.logo),
+                            radius: Get.width * 0.05,
+                          ),
+                          if(community.isVerified == true) SvgPicture.asset("assets/images/svg/check_badge.svg", height: Get.height * 0.02,)
+                        ],
+                    ),
                 Gap(Get.height * 0.015),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
