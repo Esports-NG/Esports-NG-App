@@ -9,6 +9,7 @@ import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/account/account_teams/account_teams_details.dart';
 import 'package:e_sport/ui/account/user_details.dart';
 import 'package:e_sport/ui/components/account_community_detail.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/home/post/components/report_page.dart';
 import 'package:e_sport/ui/home/post/edit_post.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
@@ -112,43 +113,23 @@ class _PostItemState extends State<PostItem>
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              widget.item.author!.profile!.profilePicture ==
-                                      null
-                                  ? SvgPicture.asset(
-                                      'assets/images/svg/people.svg',
-                                      height: Get.height * 0.025,
-                                      width: Get.height * 0.025,
-                                    )
-                                  : InkWell(
-                                      onTap: () => Get.to(() => UserDetails(
-                                          id: widget.item.author!.id!)),
-                                      child: CachedNetworkImage(
-                                        height: Get.height * 0.025,
-                                        width: Get.height * 0.025,
-                                        placeholder: (context, url) =>
-                                            const CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
-                                        imageUrl: widget.item.author!.profile!
-                                                .profilePicture ??
-                                            "",
-                                        imageBuilder:
-                                            (context, imageProvider) =>
-                                                Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                image: NetworkImage(widget
-                                                        .item
-                                                        .author!
-                                                        .profile!
-                                                        .profilePicture ??
-                                                    ""),
-                                                fit: BoxFit.cover),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                              InkWell(
+                                  onTap: () => Get.to(() =>
+                                      UserDetails(id: widget.item.author!.id!)),
+                                  child: Stack(
+                                    alignment: Alignment.bottomRight,
+                                    children: [
+                                      OtherImage(
+                                          image: widget.item.author!.profile!
+                                              .profilePicture,
+                                          height: Get.height * .025,
+                                          width: Get.height * 0.025),
+                                      if (widget.item.author!.isVerified! ==
+                                          true)
+                                        SvgPicture.asset(
+                                            "assets/images/svg/check_badge.svg")
+                                    ],
+                                  )),
                               Gap(Get.height * 0.01),
                               CustomText(
                                 title:
@@ -236,30 +217,22 @@ class _PostItemState extends State<PostItem>
                                               : Get.to(() => UserDetails(
                                                   id: widget.item.author!.id!));
                                     },
-                                    child: CachedNetworkImage(
-                                      height: Get.height * 0.035,
-                                      width: Get.height * 0.035,
-                                      placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                      imageUrl: widget.item.community != null
-                                          ? widget.item.community!.logo
-                                          : widget.item.team != null
-                                              ? widget.item.team!.profilePicture
-                                              : widget.item.author!.profile!
-                                                  .profilePicture,
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                    child: Stack(
+                                      alignment: Alignment.bottomRight,
+                                      children: [
+                                        OtherImage(
+                                          image: widget.item.community != null
+                                              ? widget.item.community!.logo
+                                              : widget.item.team != null
+                                                  ? widget
+                                                      .item.team!.profilePicture
+                                                  : widget.item.author!.profile!
+                                                      .profilePicture,
+                                          height: Get.height * 0.035,
+                                          width: Get.height * 0.035,
+                                        )
+                                      ],
+                                    )),
                             Gap(Get.height * 0.01),
                             CustomText(
                               title: widget.item.community != null
@@ -683,8 +656,8 @@ class _PostItemState extends State<PostItem>
                       width: Get.height * 0.02,
                     )
                   : Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
+                      alignment: Alignment.bottomRight,
+                      children: [
                         CachedNetworkImage(
                           height: Get.height * 0.02,
                           width: Get.height * 0.02,
@@ -692,20 +665,25 @@ class _PostItemState extends State<PostItem>
                               const CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>
                               const Icon(Icons.error),
-                          imageUrl: authController.user!.profile!.profilePicture,
+                          imageUrl:
+                              authController.user!.profile!.profilePicture,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                  image: NetworkImage(
-                                      authController.user!.profile!.profilePicture),
+                                  image: NetworkImage(authController
+                                      .user!.profile!.profilePicture),
                                   fit: BoxFit.cover),
                             ),
                           ),
                         ),
-                        if(authController.user!.isVerified! == true) SvgPicture.asset("assets/images/svg/check_badge.svg", height: Get.height * 0.01,)
+                        if (authController.user!.isVerified! == true)
+                          SvgPicture.asset(
+                            "assets/images/svg/check_badge.svg",
+                            height: Get.height * 0.01,
+                          )
                       ],
-                  ),
+                    ),
               Gap(Get.height * 0.02),
               CustomText(
                 title: authController.user!.fullName,

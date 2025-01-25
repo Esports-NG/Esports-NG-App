@@ -11,7 +11,7 @@ List<TeamModel> teamModelListFromJson(String str) =>
 
 class TeamModel {
   int? id;
-  Author? owner;
+  UserModel? owner;
   String? abbrev;
   String? name;
   String? profilePicture;
@@ -45,7 +45,7 @@ class TeamModel {
 
   factory TeamModel.fromJson(Map<String, dynamic> json) => TeamModel(
       id: json["id"],
-      owner: json["owner"] == null ? null : Author.fromJson(json["owner"]),
+      owner: json["owner"] == null ? null : UserModel.fromJson(json["owner"]),
       name: json["name"],
       profilePicture: json["profile_picture"],
       cover: json["cover"],

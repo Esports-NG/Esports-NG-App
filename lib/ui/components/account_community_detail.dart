@@ -203,6 +203,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                             ),
                           ),
                         ),
+                        
                         Positioned.fill(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

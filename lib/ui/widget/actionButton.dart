@@ -9,6 +9,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:e_sport/ui/home/post/create_livestream.dart';
 
 class ActionButton extends StatefulWidget {
   const ActionButton({super.key});
@@ -93,10 +94,12 @@ class _ActionButtonState extends State<ActionButton> {
                         if (_selectedMenu == 0) {
                           Get.to(() => const CreatePost());
                         } else if (_selectedMenu == 1) {
-                          Get.to(() => const CreateEvent());
+                          Get.to(() => const CreateLivestream());
                         } else if (_selectedMenu == 2) {
+                          Get.to(() => const CreateEvent());
+                        } else if (_selectedMenu == 3) {
                           Get.to(() => const CreateTeamPage());
-                        } else {
+                        } else if (_selectedMenu == 4) {
                           Get.to(() => const CreateCommunityPage());
                         }
                       },
