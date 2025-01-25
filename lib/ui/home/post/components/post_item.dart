@@ -127,7 +127,8 @@ class _PostItemState extends State<PostItem>
                                       if (widget.item.author!.isVerified! ==
                                           true)
                                         SvgPicture.asset(
-                                            "assets/images/svg/check_badge.svg")
+                                            "assets/images/svg/check_badge.svg",
+                                            width: Get.height * 0.015)
                                     ],
                                   )),
                               Gap(Get.height * 0.01),
@@ -230,7 +231,16 @@ class _PostItemState extends State<PostItem>
                                                       .profilePicture,
                                           height: Get.height * 0.035,
                                           width: Get.height * 0.035,
-                                        )
+                                        ),
+                                        if (widget.item.community != null
+                                            ? widget.item.community!.isVerified!
+                                            : widget.item.team != null
+                                                ? widget.item.team!.isVerified!
+                                                : widget
+                                                    .item.author!.isVerified!)
+                                          SvgPicture.asset(
+                                              "assets/images/svg/check_badge.svg",
+                                              width: Get.height * 0.015)
                                       ],
                                     )),
                             Gap(Get.height * 0.01),

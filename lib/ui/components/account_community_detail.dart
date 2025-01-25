@@ -203,7 +203,6 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                             ),
                           ),
                         ),
-                        
                         Positioned.fill(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -585,22 +584,15 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                 Stack(
                                   alignment: Alignment.bottomRight,
                                   children: [
-                                    details!.owner!.profile!.profilePicture ==
-                                            null
-                                        ? Container(
-                                            height: Get.height * 0.04,
-                                            width: Get.height * 0.04,
-                                            decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: SvgPicture.asset(
-                                              'assets/images/svg/people.svg',
-                                            ),
-                                          )
-                                        : OtherImage(
-                                            itemSize: Get.height * 0.04,
-                                            image: widget.item.owner!.profile!
-                                                .profilePicture),
+                                    OtherImage(
+                                        itemSize: Get.height * 0.04,
+                                        image: widget.item.owner!.profile!
+                                            .profilePicture),
+                                    if (widget.item.owner!.isVerified!)
+                                      SvgPicture.asset(
+                                        "assets/images/svg/check_badge.svg",
+                                        width: Get.width * 0.04,
+                                      )
                                   ],
                                 ),
                                 Gap(Get.height * 0.015),
