@@ -1,4 +1,5 @@
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/user_model.dart';
 
 class CommunityModel {
   int? id;
@@ -7,7 +8,7 @@ class CommunityModel {
   dynamic cover;
   String? bio;
   String? abbrev;
-  Owner? owner;
+  UserModel? owner;
   List<GamePlayed>? gamesPlayed;
   DateTime? createdAt;
   bool? enableTeamchat;
@@ -42,7 +43,7 @@ class CommunityModel {
         bio: json["bio"],
         isVerified: json['is_verified'],
         abbrev: json["abbrev"],
-        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
+        owner: json["owner"] == null ? null : UserModel.fromJson(json["owner"]),
         gamesPlayed: json["games_played"] == null
             ? []
             : List<GamePlayed>.from(
@@ -83,76 +84,6 @@ class CommunityModel {
         "comm_staffs": commStaffs == null
             ? []
             : List<dynamic>.from(commStaffs!.map((x) => x)),
-      };
-}
-
-class Owner {
-  int? id;
-  String? userName;
-  String? fullName;
-  String? email;
-  String? phoneNumber;
-  String? bio;
-  String? country;
-  String? state;
-  String? gender;
-  DateTime? dOB;
-  String? referralCode;
-  List<Purpose>? purpose;
-  Profile? profile;
-
-  Owner(
-      {this.id,
-      this.userName,
-      this.fullName,
-      this.email,
-      this.phoneNumber,
-      this.country,
-      this.state,
-      this.gender,
-      this.dOB,
-      this.referralCode,
-      this.purpose,
-      this.profile,
-      this.bio});
-
-  factory Owner.fromJson(Map<String, dynamic> json) => Owner(
-        id: json["id"],
-        bio: json["bio"],
-        userName: json["user_name"],
-        fullName: json["full_name"],
-        email: json["email"],
-        phoneNumber: json["phone_number"],
-        country: json["country"],
-        state: json["state"],
-        gender: json["gender"],
-        dOB: json["d_o_b"] == null ? null : DateTime.parse(json["d_o_b"]),
-        referralCode: json["referral_code"],
-        purpose: json["purpose"] == null
-            ? []
-            : List<Purpose>.from(
-                json["purpose"]!.map((x) => Purpose.fromJson(x))),
-        profile:
-            json["profile"] == null ? null : Profile.fromJson(json["profile"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "bio": bio,
-        "user_name": userName,
-        "full_name": fullName,
-        "email": email,
-        "phone_number": phoneNumber,
-        "country": country,
-        "state": state,
-        "gender": gender,
-        "d_o_b":
-            "${dOB!.year.toString().padLeft(4, '0')}-${dOB!.month.toString().padLeft(2, '0')}-${dOB!.day.toString().padLeft(2, '0')}",
-        "referral_code": referralCode,
-        "purpose": purpose == null
-            ? []
-            : List<dynamic>.from(purpose!.map((x) => x.toJson())),
-        "profile": profile?.toJson(),
       };
 }
 
