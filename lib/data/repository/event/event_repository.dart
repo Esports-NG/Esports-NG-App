@@ -395,7 +395,7 @@ class EventRepository extends GetxController
       isFiltering(true);
       var response = await http.get(
           Uri.https(
-              "esports-ng.vercel.app", "/event/search/", eventFilter.cast()),
+              "api.esportsng.com", "/event/search/", eventFilter.cast()),
           headers: {
             "Content-Type": "application/json",
             "Authorization": 'JWT ${authController.token}'

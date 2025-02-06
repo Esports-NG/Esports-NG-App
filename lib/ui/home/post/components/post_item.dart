@@ -160,8 +160,7 @@ class _PostItemState extends State<PostItem>
                         CustomText(
                           title: widget.item.body!.characters
                               .take(200)
-                              .toString()
-                              .toUpperFirstCase(),
+                              .toString(),
                           size: Get.height * 0.016,
                           fontFamily: 'Inter',
                           textAlign: TextAlign.start,
@@ -372,11 +371,9 @@ class _PostItemState extends State<PostItem>
                     ? widget.item.body!.characters
                         .take(200)
                         .toString()
-                        .toUpperFirstCase()
                     : widget.item.repost!.body!.characters
                         .take(200)
-                        .toString()
-                        .toUpperFirstCase(),
+                        .toString(),
                 size: Get.height * 0.017,
                 fontFamily: 'Inter',
                 textAlign: TextAlign.start,

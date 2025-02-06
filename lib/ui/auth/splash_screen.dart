@@ -55,11 +55,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   route() async {
     if (authController.authStatus == AuthStatus.isFirstTime) {
-      Get.off(() => const FirstScreen());
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FirstScreen()));
+      //Get.off(() => const FirstScreen());
     } else if (authController.authStatus == AuthStatus.authenticated) {
-      Get.off(() => const RootDashboard());
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RootDashboard()));
+      //Get.off(() => const RootDashboard());
     } else {
-      Get.off(() => const FirstScreen());
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FirstScreen()));
+      //Get.off(() => const FirstScreen());
     }
   }
 
