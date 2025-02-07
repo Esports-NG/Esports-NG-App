@@ -73,7 +73,7 @@ class SocialEventRepository extends GetxController {
     debugPrint("error $error");
     Fluttertoast.showToast(
         fontSize: Get.height * 0.015,
-        msg: (error.toString().contains("esports-ng.vercel.app") ||
+        msg: (error.toString().contains("api.esportsng.com") ||
                 error.toString().contains("Network is unreachable"))
             ? 'Event like: No internet connection!'
             : (error.toString().contains("FormatException"))

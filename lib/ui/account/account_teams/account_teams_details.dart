@@ -528,6 +528,9 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                           itemSize: Get.height * 0.04,
                                           image: _details!
                                               .owner!.profile!.profilePicture),
+                                              if (_details!.owner!.isVerified!) SvgPicture.asset(
+                                              "assets/images/svg/check_badge.svg",
+                                              width: Get.height * 0.015)
                                   // Positioned(
                                   //   child: SvgPicture.asset(
                                   //     'assets/images/svg/check_badge.svg',
