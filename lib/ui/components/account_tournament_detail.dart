@@ -24,6 +24,7 @@ import 'package:e_sport/ui/components/account_community_detail.dart';
 import 'package:e_sport/ui/components/choose_team_dialog.dart';
 import 'package:e_sport/ui/components/participant_list.dart';
 import 'package:e_sport/ui/components/team_participant_list.dart';
+import 'package:e_sport/ui/events/components/br_fixture_card.dart';
 import 'package:e_sport/ui/events/components/fixture_item.dart';
 import 'package:e_sport/ui/events/components/fixtures_and_results.dart';
 import 'package:e_sport/ui/home/components/page_header.dart';
@@ -800,10 +801,19 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                   itemBuilder: (context, index) =>
                                       GestureDetector(
                                           onTap: () {},
-                                          child: FixtureCardScrollable(
-                                              fixture: _fixturesList[index],
-                                              backgroundColor: _colors[
-                                                  index % _colors.length])),
+                                          child: _fixturesList[index]
+                                                      .fixtureType ==
+                                                  "BR"
+                                              ? BrFixtureCard(
+                                                  event: widget.item,
+                                                  getFixtures: getFixtures,
+                                                  fixture: _fixturesList[index],
+                                                  backgroundColor: _colors[
+                                                      index % _colors.length])
+                                              : FixtureCardScrollable(
+                                                  fixture: _fixturesList[index],
+                                                  backgroundColor: _colors[
+                                                      index % _colors.length])),
                                   itemCount: _fixturesList.take(5).length),
                     ),
                   ),

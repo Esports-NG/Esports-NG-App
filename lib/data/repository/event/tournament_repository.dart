@@ -73,6 +73,16 @@ class TournamentRepository extends GetxController {
   late final addFixturesAwayTeamScoreController = TextEditingController();
   late final addFixturesAwayPlayerScoreController = TextEditingController();
   late final addFixturesHomePlayerScoreController = TextEditingController();
+  late final brWinnerController = TextEditingController();
+  late final brSecondController = TextEditingController();
+  late final brThirdController = TextEditingController();
+  Rx<PlayerModel?> brWinnerPlayer = Rx(null);
+  Rx<PlayerModel?> brSecondPlayer = Rx(null);
+  Rx<PlayerModel?> brThirdPlayer = Rx(null);
+
+  Rx<TeamModel?> brWinnerTeam = Rx(null);
+  Rx<TeamModel?> brSecondTeam = Rx(null);
+  Rx<TeamModel?> brThirdTeam = Rx(null);
   RxList<FixtureModel> allFixtures = RxList([]);
 
   Rx<PlayerModel?> selectedAwayPlayer = Rx(null);
@@ -499,15 +509,62 @@ class TournamentRepository extends GetxController {
   }
 
   Future createBRFixture(int id, List<int> participants, String type) async {
+    print(type);
     Map<String, dynamic> body = {
-      "player_ids": type == "player" ? participants : null,
-      "team_ids": type == "team" ? participants : null,
+      "player_ids": type == "solo" ? participants : [],
+      "team_ids": type == "team" ? participants : [],
       "igame_mode": 1,
       "fixture_group": "player",
       "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
       "fixture_time":
           "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-      "fixture_type": "1v1",
+      "fixture_type": "BR",
+      "title": addFixtureRoundNameController.text,
+      "streaming_platform": fixturePlatform.value,
+      "ifirst":
+          type == "solo" ? brWinnerPlayer.value?.id : brWinnerTeam.value?.id,
+      "isecond":
+          type == "solo" ? brSecondPlayer.value?.id : brSecondTeam.value?.id,
+      "ithird":
+          type == "solo" ? brThirdPlayer.value?.id : brThirdTeam.value?.id,
+      "livestreams": [
+        {
+          "title": addFixtureRoundNameController.text,
+          "description": "fixture",
+          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+          "platform_id": fixturePlatform.value!.id!,
+          "link": "https://${addFixtureStreamingLinkController.text}"
+        }
+      ]
+    };
+    try {
+      var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
+          headers: {
+            "Authorization": "JWT ${authController.token}",
+            "Content-type": "application/json"
+          },
+          body: jsonEncode(body));
+      log(response.body);
+
+      if (response.statusCode == 200) {
+        Get.back();
+        Helpers().showCustomSnackbar(message: "Fixture added successfully");
+      }
+    } catch (err) {}
+  }
+
+  Future editBRFixture(int id, List<int> participants, String type) async {
+    print(type);
+    Map<String, dynamic> body = {
+      "player_ids": type == "solo" ? participants : [],
+      "team_ids": type == "team" ? participants : [],
+      "igame_mode": 1,
+      "fixture_group": "player",
+      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+      "fixture_time":
+          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+      "fixture_type": "BR",
       "title": addFixtureRoundNameController.text,
       "streaming_platform": fixturePlatform.value,
       "livestreams": [
@@ -528,6 +585,7 @@ class TournamentRepository extends GetxController {
             "Content-type": "application/json"
           },
           body: jsonEncode(body));
+      log(response.body);
 
       if (response.statusCode == 200) {
         Get.back();
@@ -576,6 +634,7 @@ class TournamentRepository extends GetxController {
             "Content-type": "application/json"
           },
           body: jsonEncode(body));
+      log(response.body);
 
       if (response.statusCode == 200) {
         Get.back();
@@ -724,6 +783,35 @@ class TournamentRepository extends GetxController {
         Helpers().showCustomSnackbar(message: "Fixture edited successfully");
       }
     } catch (err) {}
+  }
+
+  Future createLivestream(String title, String description, String link,
+      int platform, File? image, DateTime date, TimeOfDay time) async {
+    var headers = {"Authorization": "JWT ${authController.token}"};
+    print(ApiLink.createLivestream);
+    var request =
+        http.MultipartRequest("POST", Uri.parse(ApiLink.createLivestream))
+          ..fields["title"] = title
+          ..fields["description"] = description
+          ..fields["platform_id"] = platform.toString()
+          ..fields["creator"] = "user"
+          ..fields["creator_id"] = authController.user!.id!.toString()
+          ..fields["date"] = DateFormat('yyyy-M-dd').format(date!)
+          ..fields["time"] = "${time!.hour}:${time!.minute}:00";
+
+    request.files.add(await http.MultipartFile.fromPath('banner', image!.path));
+
+    // request.fields.addAll(
+    //     event.toCreateEventJson().map((key, value) => MapEntry(key, value)));
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    var res = await response.stream.bytesToString();
+    print(res);
+
+    if (response.statusCode == 200) {
+      log("successfull");
+    }
   }
 
   Future deleteFixture(int id) async {

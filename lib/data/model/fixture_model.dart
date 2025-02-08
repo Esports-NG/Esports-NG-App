@@ -24,8 +24,8 @@ class FixtureModel {
   final PlayerModel? homePlayer;
   final TeamModel? homeTeam;
   final int? homeScore;
-  final List<dynamic>? players;
-  final List<dynamic>? teams;
+  final List<PlayerModel>? players;
+  final List<TeamModel>? teams;
   final PlayerModel? awayPlayer;
   final TeamModel? awayTeam;
   final int? awayScore;
@@ -79,10 +79,12 @@ class FixtureModel {
         homeScore: json["home_score"],
         players: json["players"] == null
             ? []
-            : List<dynamic>.from(json["players"]!.map((x) => x)),
+            : List<PlayerModel>.from(
+                json["players"]!.map((x) => PlayerModel.fromJson(x))),
         teams: json["teams"] == null
             ? []
-            : List<dynamic>.from(json["teams"]!.map((x) => x)),
+            : List<TeamModel>.from(
+                json["teams"]!.map((x) => TeamModel.fromJson(x))),
         awayPlayer: json["away_player"] == null
             ? null
             : PlayerModel.fromJson(json["away_player"]),

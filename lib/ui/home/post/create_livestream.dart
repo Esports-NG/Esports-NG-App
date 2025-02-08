@@ -1,6 +1,11 @@
 import 'dart:io';
 
+import 'package:e_sport/data/model/platform_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/data/repository/event/tournament_repository.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
+import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
 import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +16,8 @@ import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class CreateLivestream extends StatefulWidget {
   const CreateLivestream({super.key});
@@ -21,23 +28,51 @@ class CreateLivestream extends StatefulWidget {
 
 class _CreateLivestreamState extends State<CreateLivestream> {
   TextEditingController streamTitleController = TextEditingController();
+  TextEditingController streamDescriptionController = TextEditingController();
   TextEditingController streamImageController = TextEditingController();
-  TextEditingController streamDateController = TextEditingController();
-  TextEditingController streamTimeController = TextEditingController();
   TextEditingController gameCoveredController = TextEditingController();
-  TextEditingController streamingPlatformController = TextEditingController();
   TextEditingController streamLinkController = TextEditingController();
-  File? imageFile = null;
+  File? imageFile;
+
+  PlatformModel? _platform;
+  DateTime? _streamDate;
+  TimeOfDay? _streamTime;
+  List<PlatformModel> _platforms = [];
+
+  final authController = Get.put(AuthRepository());
+  final tournamentController = Get.put(TournamentRepository());
 
   bool _loading = false;
 
+  Future<void> getPlatforms() async {
+    var response = await http.get(Uri.parse(ApiLink.getPlatforms),
+        headers: {"Authorization": "JWT ${authController.token}"});
+
+    print(response.body);
+
+    setState(() {
+      _platforms = platformModelFromJson(response.body);
+    });
+  }
+
   Future<void> createLivestream() async {
+    print("creating livestream");
     setState(() {
       _loading = true;
     });
-    try {} catch (err) {
+    try {
+      await tournamentController.createLivestream(
+          streamTitleController.text,
+          streamDescriptionController.text,
+          streamLinkController.text,
+          _platform!.id!,
+          imageFile,
+          _streamDate!,
+          _streamTime!);
+    } catch (err) {
       print(err);
     }
+    print("finished creating livestream");
     setState(() {
       _loading = false;
     });
@@ -76,11 +111,18 @@ class _CreateLivestreamState extends State<CreateLivestream> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getPlatforms();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor().primaryBackGroundColor,
         centerTitle: true,
+        elevation: 0,
         title: CustomText(
           title: 'Create Livestream',
           fontFamily: "InterSemiBold",
@@ -107,6 +149,21 @@ class _CreateLivestreamState extends State<CreateLivestream> {
                 CustomTextField(
                   hint: "Enter stream title",
                   textEditingController: streamTitleController,
+                ),
+                Gap(Get.height * 0.02),
+                CustomText(
+                  title: 'Stream Description *',
+                  color: AppColor().primaryWhite,
+                  textAlign: TextAlign.center,
+                  fontFamily: 'Inter',
+                  size: Get.height * 0.017,
+                ),
+                Gap(Get.height * 0.01),
+                CustomTextField(
+                  minLines: 3,
+                  maxLines: 5,
+                  hint: "Enter stream description",
+                  textEditingController: streamDescriptionController,
                 ),
                 Gap(Get.height * 0.02),
                 CustomText(
@@ -229,64 +286,192 @@ class _CreateLivestreamState extends State<CreateLivestream> {
                   size: Get.height * 0.017,
                 ),
                 Gap(Get.height * 0.01),
-                CustomTextField(
-                  hint: "Enter stream date",
-                  textEditingController: streamDateController,
+                Row(
+                  children: [
+                    Expanded(
+                        child: GestureDetector(
+                      onTap: () async {
+                        final initialDate = DateTime.now();
+                        var date = await showDatePicker(
+                          context: context,
+                          initialDate: _streamDate ?? initialDate,
+                          firstDate: DateTime(DateTime.now().year - 40),
+                          lastDate: DateTime(DateTime.now().year + 5),
+                        );
+                        setState(() {
+                          _streamDate = date;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                            color: AppColor().primaryDark,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.calendar_month,
+                              color: AppColor().lightItemsColor,
+                              size: 24,
+                            ),
+                            const Gap(10),
+                            _streamDate != null
+                                ? CustomText(
+                                    title:
+                                        DateFormat.yMMMd().format(_streamDate!),
+                                    color: AppColor().lightItemsColor,
+                                    size: 16,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  )
+                                : CustomText(
+                                    title: "Select Date",
+                                    color: AppColor().lightItemsColor,
+                                    size: 16,
+                                  )
+                          ],
+                        ),
+                      ),
+                    )),
+                    const Gap(10),
+                    Expanded(
+                        child: GestureDetector(
+                      onTap: () async {
+                        final initialTime = TimeOfDay.now();
+                        var time = await showTimePicker(
+                            context: context,
+                            initialTime: _streamTime ?? initialTime);
+                        setState(() {
+                          _streamTime = time;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                            color: AppColor().primaryDark,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.watch_later_outlined,
+                              color: AppColor().lightItemsColor,
+                              size: 24,
+                            ),
+                            const Gap(10),
+                            _streamTime != null
+                                ? CustomText(
+                                    title:
+                                        "${_streamTime!.hour}:${_streamTime!.minute}",
+                                    color: AppColor().lightItemsColor,
+                                    size: 16,
+                                  )
+                                : CustomText(
+                                    title: "Select Time",
+                                    color: AppColor().lightItemsColor,
+                                    size: 16,
+                                  )
+                          ],
+                        ),
+                      ),
+                    ))
+                  ],
                 ),
                 Gap(Get.height * 0.02),
                 CustomText(
-                  title: 'Stream Time *',
+                  title: 'Stream Platform *',
                   color: AppColor().primaryWhite,
                   textAlign: TextAlign.center,
                   fontFamily: 'Inter',
                   size: Get.height * 0.017,
                 ),
                 Gap(Get.height * 0.01),
-                CustomTextField(
-                  hint: "Enter stream time",
-                  textEditingController: streamTimeController,
+                InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColor().primaryDark,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: AppColor().lightItemsColor, width: 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10)),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<PlatformModel>(
+                      dropdownColor: AppColor().primaryDark,
+                      borderRadius: BorderRadius.circular(10),
+                      value: _platform,
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        color: AppColor().lightItemsColor,
+                      ),
+                      items: _platforms.map((value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Row(
+                            children: [
+                              Image.network(
+                                "${ApiLink.imageUrl}${value.logo}",
+                                height: 35,
+                                fit: BoxFit.contain,
+                              ),
+                              const Gap(10),
+                              CustomText(
+                                title: value.title,
+                                color: AppColor().lightItemsColor,
+                                fontFamily: 'InterMedium',
+                                size: 18,
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _platform = value;
+                        });
+                      },
+                      hint: CustomText(
+                        title: "Select Platform",
+                        color: AppColor().lightItemsColor,
+                        fontFamily: 'InterMedium',
+                        size: 15,
+                      ),
+                    ),
+                  ),
                 ),
                 Gap(Get.height * 0.02),
                 CustomText(
-                  title: 'Game Covered *',
+                  title: "Stream link",
                   color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'Inter',
                   size: Get.height * 0.017,
                 ),
                 Gap(Get.height * 0.01),
                 CustomTextField(
-                  hint: "Enter game covered",
-                  textEditingController: gameCoveredController,
-                ),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Streaming Platform (Platforms) *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'Inter',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                CustomTextField(
-                  hint: "Enter streaming platform(s)",
-                  textEditingController: streamingPlatformController,
-                ),
-                Gap(Get.height * 0.02),
-                CustomText(
-                  title: 'Stream Link *',
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.center,
-                  fontFamily: 'Inter',
-                  size: Get.height * 0.017,
-                ),
-                Gap(Get.height * 0.01),
-                CustomTextField(
-                  hint: "Enter stream link",
                   textEditingController: streamLinkController,
+                  prefixIcon: IntrinsicWidth(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Center(
+                        child: CustomText(
+                          title: "https://",
+                          color: AppColor().greyFour,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 Gap(Get.height * 0.02),
-                CustomFillButton(buttonText: "Create Livestream")
+                CustomFillButton(
+                  buttonText: "Create Livestream",
+                  onTap: createLivestream,
+                  isLoading: _loading,
+                )
               ],
             ),
           )),

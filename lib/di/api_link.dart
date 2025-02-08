@@ -119,6 +119,7 @@ class ApiLink {
           int eventId, int participantId, String action) =>
       "${baseurl}event/edit/$eventId/participants/$participantId/$action/";
   static String getCreatedEvents = "${baseurl}event/created/";
+  static String createLivestream = "${baseurl}event/stream/create/";
 
   //Community
   static String createCommunity = "${baseurl}org/register/";
