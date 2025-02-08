@@ -24,6 +24,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../edit_post.dart';
 import './comment_tile.dart';
@@ -816,7 +817,10 @@ class _PostDetails2State extends State<PostDetails2> {
                                     color: AppColor().primaryWhite,
                                     size: Get.height * 0.03,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await Share.share(
+                                        '${widget.item.author!.userName} posted on Esports NG \nhttps://esportsng.com/post/${widget.item.id}');
+                                  },
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
                                 ),
