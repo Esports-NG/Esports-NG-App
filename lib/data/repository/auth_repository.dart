@@ -354,7 +354,7 @@ class AuthRepository extends GetxController {
           _authStatus(AuthStatus.authenticated);
           Helpers().showCustomSnackbar(message: "Login Successful");
           await Future.delayed(const Duration(seconds: 1));
-          Get.offAll(() => const RootDashboard());
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RootDashboard()));
         } else {
           if (json['message'] != null) {
             Helpers().showCustomSnackbar(message: json["message"]);
