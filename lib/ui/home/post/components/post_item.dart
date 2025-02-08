@@ -160,8 +160,7 @@ class _PostItemState extends State<PostItem>
                         CustomText(
                           title: widget.item.body!.characters
                               .take(200)
-                              .toString()
-                              .toUpperFirstCase(),
+                              .toString(),
                           size: Get.height * 0.016,
                           fontFamily: 'Inter',
                           textAlign: TextAlign.start,
@@ -372,11 +371,9 @@ class _PostItemState extends State<PostItem>
                     ? widget.item.body!.characters
                         .take(200)
                         .toString()
-                        .toUpperFirstCase()
                     : widget.item.repost!.body!.characters
                         .take(200)
-                        .toString()
-                        .toUpperFirstCase(),
+                        .toString(),
                 size: Get.height * 0.017,
                 fontFamily: 'Inter',
                 textAlign: TextAlign.start,
@@ -579,25 +576,27 @@ class _PostItemState extends State<PostItem>
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      InkWell(
-                        child: Icon(
-                          Icons.share_outlined,
-                          color: AppColor().primaryWhite,
-                          size: Get.height * 0.025,
+                  InkWell(
+                    child: Row(
+                      children: [
+                        InkWell(
+                          child: Icon(
+                            Icons.share_outlined,
+                            color: AppColor().primaryWhite,
+                            size: Get.height * 0.025,
+                          ),
+                          onTap: () {},
                         ),
-                        onTap: () {},
-                      ),
-                      Gap(Get.height * 0.005),
-                      CustomText(
-                        title: 'Share',
-                        size: Get.height * 0.014,
-                        fontFamily: 'InterBold',
-                        textAlign: TextAlign.start,
-                        color: AppColor().primaryWhite,
-                      ),
-                    ],
+                        Gap(Get.height * 0.005),
+                        CustomText(
+                          title: 'Share',
+                          size: Get.height * 0.014,
+                          fontFamily: 'InterBold',
+                          textAlign: TextAlign.start,
+                          color: AppColor().primaryWhite,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

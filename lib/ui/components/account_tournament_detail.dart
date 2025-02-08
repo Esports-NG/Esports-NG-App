@@ -599,12 +599,9 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                           itemSize: Get.height * 0.04,
                                           image:
                                               _eventDetails!.community!.logo),
-                                  Positioned(
-                                    child: SvgPicture.asset(
-                                      'assets/images/svg/check_badge.svg',
-                                      height: Get.height * 0.015,
-                                    ),
-                                  ),
+                                      if (_eventDetails!.community!.isVerified!) SvgPicture.asset(
+                                              "assets/images/svg/check_badge.svg",
+                                              width: Get.height * 0.015),
                                 ],
                               ),
                               Gap(Get.height * 0.015),

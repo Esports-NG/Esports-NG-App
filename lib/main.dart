@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/notification_service.dart';
+import 'package:e_sport/router.dart';
 import 'package:e_sport/ui/widget/no_internet.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,6 +42,7 @@ class _ESportAppState extends State<ESportApp> {
   final authController = Get.put(AuthRepository());
   late StreamSubscription<List<ConnectivityResult>> connectivitySubscription;
   bool isCurrentlyOnNoInternet = false;
+  final router = goRouter();
 
   @override
   void initState() {
@@ -75,7 +77,7 @@ class _ESportAppState extends State<ESportApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return GetMaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Esports NG',
         initialBinding: AppBinding(),
@@ -98,6 +100,10 @@ class _ESportAppState extends State<ESportApp> {
           ),
         ),
         builder: EasyLoading.init(),
-        home: const SplashScreen());
+        routeInformationParser: router.routeInformationParser,
+        routeInformationProvider: router.routeInformationProvider,
+        routerDelegate: router.routerDelegate,
+        //home: const SplashScreen()
+        );
   }
 }

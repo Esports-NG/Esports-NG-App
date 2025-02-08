@@ -85,13 +85,13 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 20,
                   children: [
-                    OtherImage(
-                        width: 60,
-                        height: 60,
-                        image:
-                            widget.fixture.tournament!.tournamentType == "solo"
-                                ? widget.fixture.players![0].profile
-                                : widget.fixture.teams![0].profilePicture),
+                    // OtherImage(
+                    //     width: 60,
+                    //     height: 60,
+                    //     image:
+                    //         widget.fixture.tournament!.tournamentType == "solo"
+                    //             ? widget.fixture.players![0].profile
+                    //             : widget.fixture.teams![0].profilePicture),
                     CustomText(
                         fontFamily: "InterSemiBold",
                         size: 24,
