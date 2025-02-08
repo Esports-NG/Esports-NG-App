@@ -22,6 +22,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'post_details.dart';
 
@@ -577,6 +578,9 @@ class _PostItemState extends State<PostItem>
                     ],
                   ),
                   InkWell(
+                    onTap: () async{
+                      await Share.share('${widget.item.author!.userName} posted on Esports NG \nhttps://esportsng.com/post/${widget.item.id}');
+                    },
                     child: Row(
                       children: [
                         InkWell(

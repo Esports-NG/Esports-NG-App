@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'account_details.dart';
 import 'my_profile.dart';
@@ -292,6 +293,28 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
           child: Row(
             children: [
               Icon(
+                Icons.share_outlined,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.016,
+              ),
+              Gap(Get.height * 0.015),
+              CustomText(
+                title: 'Share Profile',
+                size: Get.height * 0.014,
+                fontFamily: 'InterMedium',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'ScreenB',
+          height: 20,
+          padding: const EdgeInsets.only(bottom: 10, left: 20, top: 10),
+          child: Row(
+            children: [
+              Icon(
                 Icons.edit,
                 color: AppColor().primaryWhite,
                 size: Get.height * 0.016,
@@ -308,7 +331,7 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
           ),
         ),
         PopupMenuItem(
-          value: 'ScreenB',
+          value: 'ScreenC',
           height: 20,
           padding: const EdgeInsets.only(
             bottom: 10,
@@ -334,7 +357,7 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
           ),
         ),
         PopupMenuItem(
-          value: 'ScreenC',
+          value: 'ScreenD',
           height: 20,
           padding: const EdgeInsets.only(bottom: 10, left: 20, top: 10),
           child: Row(
@@ -356,7 +379,7 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
           ),
         ),
         PopupMenuItem(
-          value: 'ScreenD',
+          value: 'ScreenE',
           height: 20,
           padding: const EdgeInsets.only(
             bottom: 10,
@@ -382,7 +405,7 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
           ),
         ),
         PopupMenuItem(
-          value: 'ScreenE',
+          value: 'ScreenF',
           height: 20,
           padding: const EdgeInsets.only(
             bottom: 10,
@@ -408,7 +431,7 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
           ),
         ),
         PopupMenuItem(
-          value: 'ScreenF',
+          value: 'ScreenG',
           height: 20,
           padding: const EdgeInsets.only(
             bottom: 10,
@@ -444,21 +467,25 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
   void _navigateToScreen(String screen) {
     switch (screen) {
       case 'ScreenA':
-        Get.to(() => const MyProfile());
+        Share.share(
+                '${authController.user!.userName} on Esports NG \nhttps://esportsng.com/${authController.user!.userName}');
         break;
       case 'ScreenB':
-        // Get.to(() => const Social());
+        Get.to(() => const MyProfile());
         break;
       case 'ScreenC':
-        // Get.to(() => const Privacy());
+        // Get.to(() => const Social());
         break;
       case 'ScreenD':
-        Get.to(() => PrivacyPolicy());
+        // Get.to(() => const Privacy());
         break;
       case 'ScreenE':
-        Get.to(() => Faq());
+        Get.to(() => PrivacyPolicy());
         break;
       case 'ScreenF':
+        Get.to(() => Faq());
+        break;
+      case 'ScreenG':
         Get.to(() => DeleteAccount());
         break;
     }

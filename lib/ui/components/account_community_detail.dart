@@ -35,6 +35,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
 
 import 'no_item_page.dart';
 
@@ -268,15 +269,55 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                                       )
                                                     ],
                                                   )),
+                                              PopupMenuItem(
+                                                onTap: () async {
+                                                  await Share.share(
+                                                      '${widget.item.name} on Esports NG \nhttps://esportsng.com/community/${widget.item.id}');
+                                                },
+                                                value: '2',
+                                                child: Row(
+                                                  children: [
+                                                    Icon(Icons.share_outlined,
+                                                        color: AppColor()
+                                                            .primaryWhite),
+                                                    const Gap(10),
+                                                    CustomText(
+                                                      title: 'Share Community',
+                                                      color: AppColor()
+                                                          .primaryWhite,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
                                             ]
                                           : [
+                                              PopupMenuItem(
+                                                onTap: () async {
+                                                  await Share.share(
+                                                      '${widget.item.name} on Esports NG \nhttps://esportsng.com/community/${widget.item.id}');
+                                                },
+                                                value: '2',
+                                                child: Row(
+                                                  children: [
+                                                    Icon(Icons.share_outlined,
+                                                        color: AppColor()
+                                                            .primaryWhite),
+                                                    const Gap(10),
+                                                    CustomText(
+                                                      title: 'Share Community',
+                                                      color: AppColor()
+                                                          .primaryWhite,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
                                               PopupMenuItem(
                                                 onTap: () async {
                                                   await communityController
                                                       .blockCommunity(
                                                           widget.item.id!);
                                                 },
-                                                value: '2',
+                                                value: '3',
                                                 child: Row(
                                                   children: [
                                                     Icon(Icons.block,
@@ -297,7 +338,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                                       id: widget.item.id!,
                                                       type: "community"));
                                                 },
-                                                value: '3',
+                                                value: '4',
                                                 child: Row(
                                                   children: [
                                                     Icon(

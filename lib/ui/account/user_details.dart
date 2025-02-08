@@ -33,6 +33,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
 
 class UserDetails extends StatelessWidget {
   final int id;
@@ -235,6 +236,18 @@ class _UserProfileState extends State<UserProfile> {
       position: const RelativeRect.fromLTRB(100, 100, 0, 0),
       items: [
         PopupMenuItem(
+          onTap: () async {
+            await Share.share(
+                '${widget.userData.userName} on Esports NG \nhttps://esportsng.com/${widget.userData.userName}');
+          },
+          value: '3',
+          height: 20,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: popUpMenuItems(
+              icon: Icons.share_outlined,
+              title: 'Share Profile'),
+        ),
+        PopupMenuItem(
           value: '4',
           height: 20,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -265,6 +278,33 @@ class _UserProfileState extends State<UserProfile> {
       ],
     );
   }
+
+  showPopUpMenu2() async {
+    String? selectedMenuItem = await showMenu(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide.none,
+      ),
+      constraints: const BoxConstraints(),
+      color: AppColor().primaryMenu,
+      position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+      items: [
+        PopupMenuItem(
+          onTap: () async {
+            await Share.share(
+                '${widget.userData.userName} on Esports NG \nhttps://esportsng.com/${widget.userData.userName}');
+          },
+          value: '3',
+          height: 20,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: popUpMenuItems(
+              icon: Icons.share_outlined, title: 'Share Profile'),
+        )
+      ],
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -353,12 +393,34 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                   ),
                 ),
+                if (widget.userData.id != authController.user!.id)
                 Visibility(
-                  visible: widget.userData.id != authController.user!.id,
                   child: Row(
                     children: [
                       InkWell(
                         onTap: () => showPopUpMenu(),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              color: AppColor().primaryWhite.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Icon(
+                            Icons.more_vert,
+                            size: 20,
+                            color: AppColor().primaryWhite,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (widget.userData.id == authController.user!.id)
+                Visibility(
+                  //visible: widget.userData.id == authController.user!.id,
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () => showPopUpMenu2(),
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
