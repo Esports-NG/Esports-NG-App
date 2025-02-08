@@ -6,6 +6,7 @@ import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/events/components/add_fixture.dart';
+import 'package:e_sport/ui/events/components/br_fixture_card.dart';
 import 'package:e_sport/ui/events/components/fixture_item.dart';
 import 'package:e_sport/ui/widget/back_button.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
@@ -173,12 +174,19 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) => GestureDetector(
                               onTap: () {},
-                              child: FixtureCardTournament(
-                                  event: widget.event,
-                                  getFixtures: getFixtures,
-                                  fixture: _fixturesList[index],
-                                  backgroundColor:
-                                      _colors[index % _colors.length])),
+                              child: _fixturesList[index].fixtureType == "BR"
+                                  ? BrFixtureCard(
+                                      event: widget.event,
+                                      getFixtures: getFixtures,
+                                      fixture: _fixturesList[index],
+                                      backgroundColor:
+                                          _colors[index % _colors.length])
+                                  : FixtureCardTournament(
+                                      event: widget.event,
+                                      getFixtures: getFixtures,
+                                      fixture: _fixturesList[index],
+                                      backgroundColor:
+                                          _colors[index % _colors.length])),
                           separatorBuilder: (context, index) =>
                               Gap(Get.height * 0.02),
                           itemCount: _fixturesList.length),

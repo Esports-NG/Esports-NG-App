@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'esportsng-d7521.firebasestorage.app',
     iosBundleId: 'com.example.eSport',
   );
+
 }
