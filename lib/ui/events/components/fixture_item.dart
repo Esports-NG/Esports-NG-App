@@ -23,7 +23,6 @@ class FixtureCard extends StatefulWidget {
   final LinearGradient backgroundColor;
   final FixtureModel fixture;
 
-
   @override
   State<FixtureCard> createState() => _FixtureCardState();
 }
@@ -453,7 +452,8 @@ class FixtureCardTournament extends StatefulWidget {
       {super.key,
       required this.backgroundColor,
       required this.fixture,
-      required this.getFixtures, required this.event});
+      required this.getFixtures,
+      required this.event});
 
   final FixtureModel fixture;
   final LinearGradient backgroundColor;
@@ -676,8 +676,8 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
               ],
             ),
             Visibility(
-              visible: widget.event!.community!.owner!.id ==
-                  authController.user!.id,
+              visible:
+                  widget.event!.community!.owner!.id == authController.user!.id,
               child: Positioned(
                   right: 0,
                   child:
