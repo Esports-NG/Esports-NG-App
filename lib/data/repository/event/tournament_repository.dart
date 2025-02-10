@@ -597,7 +597,7 @@ class TournamentRepository extends GetxController {
     } catch (err) {}
   }
 
-  Future createFixtureForPlayer(int id) async {
+  Future createFixtureForPlayer(int id, int community) async {
     Map<String, dynamic> body = {
       "away_player_id": selectedAwayPlayer.value!.id,
       "away_score": addFixturesAwayPlayerScoreController.text == ""
@@ -624,6 +624,8 @@ class TournamentRepository extends GetxController {
           "title": addFixtureRoundNameController.text,
           "description": "fixture",
           "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "creator": "community",
+          "creator_id": community,
           "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
           "platform_id": fixturePlatform.value!.id!,
           "link": "https://${addFixtureStreamingLinkController.text}"
@@ -646,7 +648,7 @@ class TournamentRepository extends GetxController {
     } catch (err) {}
   }
 
-  Future createFixtureForTeam(int id) async {
+  Future createFixtureForTeam(int id, int community) async {
     Map<String, dynamic> body = {
       "away_team_id": selectedAwayTeam.value!.id,
       "away_score": addFixturesAwayTeamScoreController.text,
@@ -666,6 +668,8 @@ class TournamentRepository extends GetxController {
         {
           "title": "",
           "description": "",
+          "creator": "community",
+          "creator_id": community,
           "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
           "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
           "platform_id": fixturePlatform.value!.id!,
@@ -858,7 +862,6 @@ class TournamentRepository extends GetxController {
   Future getAllFixture() async {
     var response = await http.get(Uri.parse(ApiLink.getAllFixture()),
         headers: {"Authorization": "JWT ${authController.token}"});
-    log("all fixtures" + response.body);
     var json = jsonDecode(response.body);
     if (response.statusCode == 200) {
       var list = List.from(json['results']);
