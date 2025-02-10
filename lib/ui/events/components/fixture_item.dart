@@ -325,7 +325,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                           ),
                         ],
                       ),
-                      widget.fixture.first == null
+                      widget.fixture.homeScore != null
                       ? Stack(
                         children: [
                             Icon(
@@ -560,7 +560,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                           ),
                         ],
                       ),
-                      widget.fixture.first == null
+                      widget.fixture.homeScore != null
                       ? Stack(
                         children: [
                             Icon(
