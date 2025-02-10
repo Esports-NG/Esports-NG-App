@@ -40,7 +40,7 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
     final now = DateTime.now();
     final difference = now.difference(itemDate);
 
-    if (difference.inDays > 0) {
+    if (difference.inDays > 1) {
       return true;
     } else {
       return false;
@@ -406,7 +406,7 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
     final now = DateTime.now();
     final difference = now.difference(itemDate);
 
-    if (difference.inDays > 0) {
+    if (difference.inDays > 1) {
       return true;
     } else {
       return false;
