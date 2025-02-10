@@ -508,7 +508,8 @@ class TournamentRepository extends GetxController {
     return fixtures;
   }
 
-  Future createBRFixture(int id, List<int> participants, String type) async {
+  Future createBRFixture(
+      int id, List<int> participants, String type, int community) async {
     print(type);
     Map<String, dynamic> body = {
       "player_ids": type == "solo" ? participants : [],
@@ -530,6 +531,8 @@ class TournamentRepository extends GetxController {
       "livestreams": [
         {
           "title": addFixtureRoundNameController.text,
+          "creator": "community",
+          "creator_id": community,
           "description": "fixture",
           "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
           "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
@@ -787,8 +790,10 @@ class TournamentRepository extends GetxController {
 
   Future createLivestream(String title, String description, String link,
       int platform, File? image, DateTime date, TimeOfDay time) async {
-    var headers = {"Authorization": "JWT ${authController.token}"};
-    print(ApiLink.createLivestream);
+    var headers = {
+      "Authorization": "JWT ${authController.token}",
+      "Content-type": "multipart/form-data"
+    };
     var request =
         http.MultipartRequest("POST", Uri.parse(ApiLink.createLivestream))
           ..fields["title"] = title
@@ -806,11 +811,11 @@ class TournamentRepository extends GetxController {
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
-    var res = await response.stream.bytesToString();
-    log(res);
+    // var res = await response.stream.bytesToString();
 
     if (response.statusCode == 200) {
-      log("successfull");
+      Get.back();
+      Helpers().showCustomSnackbar(message: "Livestream created successfully");
     }
   }
 

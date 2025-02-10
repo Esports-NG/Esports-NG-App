@@ -384,7 +384,8 @@ class _AddBRFixtureState extends State<AddBRFixture> {
                             : multiSelectController.selectedItems
                                 .map((i) => i.value.id!)
                                 .toList(),
-                        widget.event.tournamentType!);
+                        widget.event.tournamentType!,
+                        widget.event.community!.id!);
                     setState(() {
                       _isLoading = false;
                     });

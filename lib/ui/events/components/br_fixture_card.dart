@@ -81,26 +81,95 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                   ),
                 ),
                 Gap(Get.height * 0.02),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 20,
-                  children: [
-                    // OtherImage(
-                    //     width: 60,
-                    //     height: 60,
-                    //     image:
-                    //         widget.fixture.tournament!.tournamentType == "solo"
-                    //             ? widget.fixture.players![0].profile
-                    //             : widget.fixture.teams![0].profilePicture),
-                    CustomText(
-                        fontFamily: "InterSemiBold",
-                        size: 24,
-                        color: AppColor().secondaryGreenColor,
-                        title:
-                            "${widget.fixture.tournament!.tournamentType == "solo" ? widget.fixture.players!.length : widget.fixture.teams!.length} ${widget.fixture.tournament!.tournamentType == "solo" ? "Players" : "Teams"}"
-                                .toUpperCase())
-                  ],
-                ),
+                widget.fixture.first != null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            spacing: 8,
+                            children: [
+                              CustomText(
+                                title: "2nd Place",
+                              ),
+                              OtherImage(
+                                  width: 49,
+                                  height: 49,
+                                  image: widget.event.tournamentType == "solo"
+                                      ? widget.fixture.second!.player!.profile
+                                      : widget.fixture.second!.team!
+                                          .profilePicture),
+                              CustomText(
+                                  title: widget.event.tournamentType == "solo"
+                                      ? widget
+                                          .fixture.second!.player!.inGameName
+                                      : widget.fixture.second!.team!.name)
+                            ],
+                          ),
+                          Column(
+                            spacing: 8,
+                            children: [
+                              CustomText(
+                                color: AppColor().secondaryGreenColor,
+                                fontFamily: "InterMedium",
+                                title: "1st Place",
+                              ),
+                              OtherImage(
+                                  width: 60,
+                                  height: 60,
+                                  image: widget.event.tournamentType == "solo"
+                                      ? widget.fixture.first!.player!.profile
+                                      : widget
+                                          .fixture.first!.team!.profilePicture),
+                              CustomText(
+                                  fontFamily: "InterMedium",
+                                  color: AppColor().secondaryGreenColor,
+                                  title: widget.event.tournamentType == "solo"
+                                      ? widget.fixture.first!.player!.inGameName
+                                      : widget.fixture.first!.team!.name)
+                            ],
+                          ),
+                          Column(
+                            spacing: 8,
+                            children: [
+                              CustomText(
+                                title: "3rd Place",
+                              ),
+                              OtherImage(
+                                  width: 49,
+                                  height: 49,
+                                  image: widget.event.tournamentType == "solo"
+                                      ? widget.fixture.third!.player!.profile
+                                      : widget
+                                          .fixture.third!.team!.profilePicture),
+                              CustomText(
+                                  title: widget.event.tournamentType == "solo"
+                                      ? widget.fixture.third!.player!.inGameName
+                                      : widget.fixture.third!.team!.name)
+                            ],
+                          )
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 20,
+                        children: [
+                          OtherImage(
+                              width: 60,
+                              height: 60,
+                              image: widget
+                                          .fixture.tournament!.tournamentType ==
+                                      "solo"
+                                  ? widget.fixture.players![0].profile
+                                  : widget.fixture.teams![0].profilePicture),
+                          CustomText(
+                              fontFamily: "InterSemiBold",
+                              size: 24,
+                              color: AppColor().secondaryGreenColor,
+                              title:
+                                  "${widget.fixture.tournament!.tournamentType == "solo" ? widget.fixture.players!.length : widget.fixture.teams!.length} ${widget.fixture.tournament!.tournamentType == "solo" ? "Players" : "Teams"}"
+                                      .toUpperCase())
+                        ],
+                      ),
                 Gap(Get.height * 0.02),
                 Divider(
                   height: 0,
