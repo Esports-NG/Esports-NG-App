@@ -28,6 +28,20 @@ class FixtureCard extends StatefulWidget {
 }
 
 class _FixtureCardState extends State<FixtureCard> {
+
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 0) {
+      return true;
+    }
+    else {
+      return false;
+    }
+    
+    }
+
   @override
   Widget build(BuildContext context) {
     var formattedTime =
@@ -269,6 +283,20 @@ class FixtureCardScrollable extends StatefulWidget {
 }
 
 class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
+
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 0) {
+      return true;
+    }
+    else {
+      return false;
+    }
+    
+    }
+
   @override
   Widget build(BuildContext context) {
     var formattedTime =
@@ -325,7 +353,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                           ),
                         ],
                       ),
-                      widget.fixture.homeScore != null
+                      dateHasPassed(widget.fixture.fixtureDate!) == false
                       ? Stack(
                         children: [
                             Icon(
@@ -503,6 +531,19 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
   final authController = Get.put(AuthRepository());
   final tournamentController = Get.put(TournamentRepository());
 
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 0) {
+      return true;
+    }
+    else {
+      return false;
+    }
+    
+    }
+
   @override
   Widget build(BuildContext context) {
     var formattedTime =
@@ -560,7 +601,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                           ),
                         ],
                       ),
-                      widget.fixture.homeScore != null
+                      dateHasPassed(widget.fixture.fixtureDate!) == false
                       ? Stack(
                         children: [
                             Icon(

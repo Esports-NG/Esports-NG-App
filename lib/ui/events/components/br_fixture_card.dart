@@ -35,6 +35,18 @@ class BrFixtureCard extends StatefulWidget {
 class _BrFixtureCardState extends State<BrFixtureCard> {
   final authController = Get.put(AuthRepository());
   final tournamentController = Get.put(TournamentRepository());
+
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -90,28 +102,28 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                           ),
                         ],
                       ),
-                      widget.fixture.first == null
-                      ? Stack(
-                        children: [
-                            Icon(
-                            Icons.calendar_today,
-                            color: AppColor().primaryWhite,
-                            size: Get.height * 0.036,
-                            ),
-                            Positioned(
-                              top: Get.height * 0.006,
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              child: Icon(
-                                Icons.add,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.012,
-                                weight: 1000,
-                              )
-                            ),
-                          ],
-                      ) : SizedBox(),
+                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                          ? Stack(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.036,
+                                ),
+                                Positioned(
+                                    top: Get.height * 0.006,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Icon(
+                                      Icons.add,
+                                      color: AppColor().primaryWhite,
+                                      size: Get.height * 0.012,
+                                      weight: 1000,
+                                    )),
+                              ],
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ),
@@ -150,7 +162,9 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: AppColor().secondaryGreenColor, width: 5),
+                                  border: Border.all(
+                                      color: AppColor().secondaryGreenColor,
+                                      width: 5),
                                   borderRadius: BorderRadius.circular(500),
                                 ),
                                 child: OtherImage(
@@ -158,8 +172,8 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                                     height: 55,
                                     image: widget.event.tournamentType == "solo"
                                         ? widget.fixture.first!.player!.profile
-                                        : widget
-                                            .fixture.first!.team!.profilePicture),
+                                        : widget.fixture.first!.team!
+                                            .profilePicture),
                               ),
                               CustomText(
                                   fontFamily: "InterMedium",
@@ -220,7 +234,8 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                 Gap(Get.height * 0.01),
                 Container(
                   padding: EdgeInsets.symmetric(
-                      horizontal: Get.width * 0.3, vertical: Get.width * 0.0001),
+                      horizontal: Get.width * 0.3,
+                      vertical: Get.width * 0.0001),
                   width: Get.width * 0.9,
                   child: InkWell(
                     onTap: () => launchUrl(
@@ -255,7 +270,6 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
     );
     ;
   }
-  
 
   Widget menuAnchor(FixtureModel fixture, EventModel event) {
     Future<void> showDeleteDialog() async {
@@ -367,12 +381,15 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
   }
 }
 
-
 //Fixture Card For Tournament Screen
 
 class BRFixtureCardScrollable extends StatefulWidget {
   const BRFixtureCardScrollable(
-      {super.key, required this.fixture, required this.backgroundColor, required this.getFixtures, required this.event});
+      {super.key,
+      required this.fixture,
+      required this.backgroundColor,
+      required this.getFixtures,
+      required this.event});
 
   final LinearGradient backgroundColor;
   final FixtureModel fixture;
@@ -380,10 +397,22 @@ class BRFixtureCardScrollable extends StatefulWidget {
   final EventModel event;
 
   @override
-  State<BRFixtureCardScrollable> createState() => _BRFixtureCardScrollableState();
+  State<BRFixtureCardScrollable> createState() =>
+      _BRFixtureCardScrollableState();
 }
 
 class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var formattedTime =
@@ -442,27 +471,27 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                           ),
                         ],
                       ),
-                      widget.fixture.first == null ?
-                      Stack(
-                        children: [
-                            Icon(
-                            Icons.calendar_today,
-                            color: AppColor().primaryWhite,
-                            size: Get.height * 0.036,
-                            ),
-                            Positioned(
-                              top: Get.height * 0.006,
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              child: Icon(
-                                Icons.add,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.012,
-                              )
-                            ),
-                          ],
-                      ) : SizedBox(),
+                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                          ? Stack(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.036,
+                                ),
+                                Positioned(
+                                    top: Get.height * 0.006,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Icon(
+                                      Icons.add,
+                                      color: AppColor().primaryWhite,
+                                      size: Get.height * 0.012,
+                                    )),
+                              ],
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ),
@@ -503,22 +532,27 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: AppColor().secondaryGreenColor, width: 5),
+                                    border: Border.all(
+                                        color: AppColor().secondaryGreenColor,
+                                        width: 5),
                                     borderRadius: BorderRadius.circular(500),
                                   ),
                                   child: OtherImage(
                                       width: 45,
                                       height: 45,
-                                      image: widget.event.tournamentType == "solo"
-                                          ? widget.fixture.first!.player!.profile
-                                          : widget
-                                              .fixture.first!.team!.profilePicture),
+                                      image:
+                                          widget.event.tournamentType == "solo"
+                                              ? widget.fixture.first!.player!
+                                                  .profile
+                                              : widget.fixture.first!.team!
+                                                  .profilePicture),
                                 ),
                                 CustomText(
                                     fontFamily: "InterMedium",
                                     color: AppColor().secondaryGreenColor,
                                     title: widget.event.tournamentType == "solo"
-                                        ? widget.fixture.first!.player!.inGameName
+                                        ? widget
+                                            .fixture.first!.player!.inGameName
                                         : widget.fixture.first!.team!.name)
                               ],
                             ),
@@ -545,16 +579,16 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                         ],
                       )
                     : SizedBox(
-                      height: Get.height * 0.12,
-                      child: Row(
+                        height: Get.height * 0.12,
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: 20,
                           children: [
                             OtherImage(
                                 width: 50,
                                 height: 50,
-                                image: widget
-                                            .fixture.tournament!.tournamentType ==
+                                image: widget.fixture.tournament!
+                                            .tournamentType ==
                                         "solo"
                                     ? widget.fixture.players![0].profile
                                     : widget.fixture.teams![0].profilePicture),
