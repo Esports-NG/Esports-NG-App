@@ -779,7 +779,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                       width: double.infinity,
                       height: _isFetchingFixtures || _fixturesList.isEmpty
                           ? 50
-                          : Get.height * 0.25,
+                          : Get.height * 0.27,
                       child: _isFetchingFixtures
                           ? const Center(child: ButtonLoader())
                           : _fixturesList.isEmpty
@@ -801,7 +801,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                           child: _fixturesList[index]
                                                       .fixtureType ==
                                                   "BR"
-                                              ? BrFixtureCard(
+                                              ? BRFixtureCardScrollable(
                                                   event: widget.item,
                                                   getFixtures: getFixtures,
                                                   fixture: _fixturesList[index],

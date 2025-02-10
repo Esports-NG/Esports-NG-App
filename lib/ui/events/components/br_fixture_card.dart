@@ -35,8 +35,22 @@ class BrFixtureCard extends StatefulWidget {
 class _BrFixtureCardState extends State<BrFixtureCard> {
   final authController = Get.put(AuthRepository());
   final tournamentController = Get.put(TournamentRepository());
+
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    var formattedTime =
+        "${int.parse(widget.fixture.fixtureTime!.split(":")[0]) > 12 ? (int.parse(widget.fixture.fixtureTime!.split(":")[0]) - 12).toString().padLeft(2, "0") : widget.fixture.fixtureTime!.split(":")[0]}:${widget.fixture.fixtureTime!.split(":")[1]} ${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).period.name.toUpperCase()}";
     return Container(
       width: Get.width * 0.9,
       decoration: BoxDecoration(
@@ -60,24 +74,59 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
               children: [
                 SizedBox(
                   width: Get.width * 0.9,
-                  child: CustomText(
-                    title: widget.fixture.title,
-                    color: AppColor().primaryWhite,
-                    fontFamily: 'Inter',
-                    textAlign: TextAlign.center,
-                    size: 14,
-                  ),
-                ),
-                Gap(Get.height * 0.0015),
-                SizedBox(
-                  width: Get.width * 0.9,
-                  child: CustomText(
-                    title:
-                        DateFormat.yMMMEd().format(widget.fixture.fixtureDate!),
-                    color: AppColor().primaryWhite,
-                    fontFamily: 'InterSemiBold',
-                    textAlign: TextAlign.center,
-                    size: 14,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: widget.fixture.title!.capitalizeFirst,
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'Inter',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                          Gap(Get.height * 0.0015),
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: "${DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'InterSemiBold',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                          ? Stack(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.036,
+                                ),
+                                Positioned(
+                                    top: Get.height * 0.006,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Icon(
+                                      Icons.add,
+                                      color: AppColor().primaryWhite,
+                                      size: Get.height * 0.012,
+                                      weight: 1000,
+                                    )),
+                              ],
+                            )
+                          : SizedBox(),
+                    ],
                   ),
                 ),
                 Gap(Get.height * 0.02),
@@ -92,8 +141,8 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                                 title: "2nd Place",
                               ),
                               OtherImage(
-                                  width: 49,
-                                  height: 49,
+                                  width: 50,
+                                  height: 50,
                                   image: widget.event.tournamentType == "solo"
                                       ? widget.fixture.second!.player!.profile
                                       : widget.fixture.second!.team!
@@ -113,13 +162,21 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                                 fontFamily: "InterMedium",
                                 title: "1st Place",
                               ),
-                              OtherImage(
-                                  width: 60,
-                                  height: 60,
-                                  image: widget.event.tournamentType == "solo"
-                                      ? widget.fixture.first!.player!.profile
-                                      : widget
-                                          .fixture.first!.team!.profilePicture),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: AppColor().secondaryGreenColor,
+                                      width: 5),
+                                  borderRadius: BorderRadius.circular(500),
+                                ),
+                                child: OtherImage(
+                                    width: 55,
+                                    height: 55,
+                                    image: widget.event.tournamentType == "solo"
+                                        ? widget.fixture.first!.player!.profile
+                                        : widget.fixture.first!.team!
+                                            .profilePicture),
+                              ),
                               CustomText(
                                   fontFamily: "InterMedium",
                                   color: AppColor().secondaryGreenColor,
@@ -135,8 +192,8 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                                 title: "3rd Place",
                               ),
                               OtherImage(
-                                  width: 49,
-                                  height: 49,
+                                  width: 45,
+                                  height: 45,
                                   image: widget.event.tournamentType == "solo"
                                       ? widget.fixture.third!.player!.profile
                                       : widget
@@ -170,7 +227,7 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                                       .toUpperCase())
                         ],
                       ),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.015),
                 Divider(
                   height: 0,
                   color: AppColor().lightItemsColor,
@@ -179,7 +236,8 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                 Gap(Get.height * 0.01),
                 Container(
                   padding: EdgeInsets.symmetric(
-                      horizontal: Get.width * 0.3, vertical: Get.width * 0.01),
+                      horizontal: Get.width * 0.3,
+                      vertical: Get.width * 0.0001),
                   width: Get.width * 0.9,
                   child: InkWell(
                     onTap: () => launchUrl(
@@ -321,6 +379,262 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
             }
           },
           child: Icon(Icons.more_vert, color: AppColor().primaryWhite)),
+    );
+  }
+}
+
+//Fixture Card For Tournament Screen
+
+class BRFixtureCardScrollable extends StatefulWidget {
+  const BRFixtureCardScrollable(
+      {super.key,
+      required this.fixture,
+      required this.backgroundColor,
+      required this.getFixtures,
+      required this.event});
+
+  final LinearGradient backgroundColor;
+  final FixtureModel fixture;
+  final Function getFixtures;
+  final EventModel event;
+
+  @override
+  State<BRFixtureCardScrollable> createState() =>
+      _BRFixtureCardScrollableState();
+}
+
+class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var formattedTime =
+        "${int.parse(widget.fixture.fixtureTime!.split(":")[0]) > 12 ? (int.parse(widget.fixture.fixtureTime!.split(":")[0]) - 12).toString().padLeft(2, "0") : widget.fixture.fixtureTime!.split(":")[0]}:${widget.fixture.fixtureTime!.split(":")[1]} ${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).period.name.toUpperCase()}";
+
+    return Container(
+      width: Get.width * 0.6,
+      decoration: BoxDecoration(
+        gradient: widget.backgroundColor,
+        image: DecorationImage(
+            image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
+            alignment: Alignment(Get.height * 0.002, 0),
+            fit: BoxFit.fitHeight),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: AppColor().darkGrey,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(Get.height * 0.01, Get.height * 0.02,
+            Get.height * 0.01, Get.height * 0.01),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: Get.width * 0.9,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: widget.fixture.title!.capitalizeFirst,
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'Inter',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                          Gap(Get.height * 0.0015),
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: "${DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'InterSemiBold',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                          ? Stack(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.036,
+                                ),
+                                Positioned(
+                                    top: Get.height * 0.006,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Icon(
+                                      Icons.add,
+                                      color: AppColor().primaryWhite,
+                                      size: Get.height * 0.012,
+                                    )),
+                              ],
+                            )
+                          : SizedBox(),
+                    ],
+                  ),
+                ),
+                Gap(Get.height * 0.02),
+                widget.fixture.first != null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            spacing: 8,
+                            children: [
+                              CustomText(
+                                title: "2nd Place",
+                              ),
+                              OtherImage(
+                                  width: 40,
+                                  height: 40,
+                                  image: widget.event.tournamentType == "solo"
+                                      ? widget.fixture.second!.player!.profile
+                                      : widget.fixture.second!.team!
+                                          .profilePicture),
+                              CustomText(
+                                  title: widget.event.tournamentType == "solo"
+                                      ? widget
+                                          .fixture.second!.player!.inGameName
+                                      : widget.fixture.second!.team!.name)
+                            ],
+                          ),
+                          SizedBox(
+                            height: Get.height * 0.12,
+                            child: Column(
+                              spacing: 8,
+                              children: [
+                                CustomText(
+                                  color: AppColor().secondaryGreenColor,
+                                  fontFamily: "InterMedium",
+                                  title: "1st Place",
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColor().secondaryGreenColor,
+                                        width: 5),
+                                    borderRadius: BorderRadius.circular(500),
+                                  ),
+                                  child: OtherImage(
+                                      width: 45,
+                                      height: 45,
+                                      image:
+                                          widget.event.tournamentType == "solo"
+                                              ? widget.fixture.first!.player!
+                                                  .profile
+                                              : widget.fixture.first!.team!
+                                                  .profilePicture),
+                                ),
+                                CustomText(
+                                    fontFamily: "InterMedium",
+                                    color: AppColor().secondaryGreenColor,
+                                    title: widget.event.tournamentType == "solo"
+                                        ? widget
+                                            .fixture.first!.player!.inGameName
+                                        : widget.fixture.first!.team!.name)
+                              ],
+                            ),
+                          ),
+                          Column(
+                            spacing: 8,
+                            children: [
+                              CustomText(
+                                title: "3rd Place",
+                              ),
+                              OtherImage(
+                                  width: 30,
+                                  height: 30,
+                                  image: widget.event.tournamentType == "solo"
+                                      ? widget.fixture.third!.player!.profile
+                                      : widget
+                                          .fixture.third!.team!.profilePicture),
+                              CustomText(
+                                  title: widget.event.tournamentType == "solo"
+                                      ? widget.fixture.third!.player!.inGameName
+                                      : widget.fixture.third!.team!.name)
+                            ],
+                          )
+                        ],
+                      )
+                    : SizedBox(
+                        height: Get.height * 0.12,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 20,
+                          children: [
+                            OtherImage(
+                                width: 50,
+                                height: 50,
+                                image: widget.fixture.tournament!
+                                            .tournamentType ==
+                                        "solo"
+                                    ? widget.fixture.players![0].profile
+                                    : widget.fixture.teams![0].profilePicture),
+                            CustomText(
+                                fontFamily: "InterSemiBold",
+                                size: 24,
+                                color: AppColor().secondaryGreenColor,
+                                title:
+                                    "${widget.fixture.tournament!.tournamentType == "solo" ? widget.fixture.players!.length : widget.fixture.teams!.length} ${widget.fixture.tournament!.tournamentType == "solo" ? "Players" : "Teams"}"
+                                        .toUpperCase())
+                          ],
+                        ),
+                      ),
+                Gap(Get.height * 0.01),
+                Divider(
+                  height: 0,
+                  color: AppColor().lightItemsColor,
+                  thickness: 0.2,
+                ),
+                Gap(Get.height * 0.01),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: Get.width * 0.2),
+                  width: Get.width * 0.9,
+                  height: Get.height * 0.035,
+                  child: InkWell(
+                    onTap: () => launchUrl(
+                        Uri.parse(widget.fixture.livestreams![0].link!)),
+                    child: ColorFiltered(
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcATop,
+                      ),
+                      child: Image.network(
+                        '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                        alignment: Alignment.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

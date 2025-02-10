@@ -28,6 +28,20 @@ class FixtureCard extends StatefulWidget {
 }
 
 class _FixtureCardState extends State<FixtureCard> {
+
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+    
+    }
+
   @override
   Widget build(BuildContext context) {
     var formattedTime =
@@ -269,6 +283,20 @@ class FixtureCardScrollable extends StatefulWidget {
 }
 
 class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
+
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+    
+    }
+
   @override
   Widget build(BuildContext context) {
     var formattedTime =
@@ -294,26 +322,61 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: Get.width * 0.9,
-              child: CustomText(
-                title: widget.fixture.title,
-                color: AppColor().primaryWhite,
-                fontFamily: 'Inter',
-                textAlign: TextAlign.center,
-                size: 14,
-              ),
-            ),
-            Gap(Get.height * 0.0015),
-            SizedBox(
-              width: Get.width * 0.9,
-              child: CustomText(
-                title: DateFormat.yMMMEd().format(widget.fixture.fixtureDate!),
-                color: AppColor().primaryWhite,
-                fontFamily: 'InterSemiBold',
-                textAlign: TextAlign.center,
-                size: 14,
-              ),
-            ),
+                  width: Get.width * 0.9,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: widget.fixture.title!.capitalizeFirst,
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'Inter',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                          Gap(Get.height * 0.0015),
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!),
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'InterSemiBold',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                      ? Stack(
+                        children: [
+                            Icon(
+                            Icons.calendar_today,
+                            color: AppColor().primaryWhite,
+                            size: Get.height * 0.036,
+                            ),
+                            Positioned(
+                              top: Get.height * 0.006,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Icon(
+                                Icons.add,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.012,
+                              )
+                            ),
+                          ],
+                      ) : SizedBox(),
+                    ],
+                  ),
+                ),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Get.height * 0.01,
@@ -468,6 +531,19 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
   final authController = Get.put(AuthRepository());
   final tournamentController = Get.put(TournamentRepository());
 
+  bool dateHasPassed(DateTime itemDate) {
+    final now = DateTime.now();
+    final difference = now.difference(itemDate);
+
+    if (difference.inDays > 1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+    
+    }
+
   @override
   Widget build(BuildContext context) {
     var formattedTime =
@@ -495,24 +571,58 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
               children: [
                 SizedBox(
                   width: Get.width * 0.9,
-                  child: CustomText(
-                    title: widget.fixture.title,
-                    color: AppColor().primaryWhite,
-                    fontFamily: 'Inter',
-                    textAlign: TextAlign.center,
-                    size: 14,
-                  ),
-                ),
-                Gap(Get.height * 0.0015),
-                SizedBox(
-                  width: Get.width * 0.9,
-                  child: CustomText(
-                    title:
-                        DateFormat.yMMMEd().format(widget.fixture.fixtureDate!),
-                    color: AppColor().primaryWhite,
-                    fontFamily: 'InterSemiBold',
-                    textAlign: TextAlign.center,
-                    size: 14,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: widget.fixture.title!.capitalizeFirst,
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'Inter',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                          Gap(Get.height * 0.0015),
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!),
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'InterSemiBold',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                      ? Stack(
+                        children: [
+                            Icon(
+                            Icons.calendar_today,
+                            color: AppColor().primaryWhite,
+                            size: Get.height * 0.036,
+                            ),
+                            Positioned(
+                              top: Get.height * 0.006,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Icon(
+                                Icons.add,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.012,
+                              )
+                            ),
+                          ],
+                      ) : SizedBox(),
+                    ],
                   ),
                 ),
                 Padding(
