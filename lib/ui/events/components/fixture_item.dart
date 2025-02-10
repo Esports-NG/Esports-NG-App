@@ -136,7 +136,6 @@ class _FixtureCardState extends State<FixtureCard> {
                           color: AppColor().primaryWhite,
                           fontFamily: 'InterMedium',
                           textAlign: TextAlign.center,
-                          size: 13,
                         ),
                       )
                     ],
@@ -189,7 +188,6 @@ class _FixtureCardState extends State<FixtureCard> {
                             color: AppColor().primaryWhite,
                             fontFamily: 'InterMedium',
                             textAlign: TextAlign.center,
-                            size: 14,
                             underline: TextDecoration.underline,
                             decorationColor: AppColor().primaryWhite,
                           )
@@ -308,7 +306,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
         gradient: widget.backgroundColor,
         image: DecorationImage(
             image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
-            alignment: Alignment(Get.height * 0.004, 0),
+            alignment: Alignment(Get.height * 0.002, 0),
             fit: BoxFit.fitHeight),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
@@ -316,8 +314,8 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(Get.height * 0.001, Get.height * 0.02,
-            Get.height * 0.001, Get.height * 0.01),
+        padding: EdgeInsets.fromLTRB(Get.height * 0.01, Get.height * 0.02,
+            Get.height * 0.01, Get.height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -343,8 +341,8 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                           SizedBox(
                             //width: Get.width * 0.9,
                             child: CustomText(
-                              title: DateFormat.yMMMEd()
-                                  .format(widget.fixture.fixtureDate!),
+                              title: "${DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
                               color: AppColor().primaryWhite,
                               fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
@@ -377,19 +375,19 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                     ],
                   ),
                 ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Get.height * 0.01,
-                vertical: Get.height * 0.01,
-              ),
+                Gap(Get.height * 0.02),
+            SizedBox(
+              height: Get.height * 0.12,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: Get.width * 0.13,
-                        height: Get.width * 0.13,
+                        width: 55,
+                        height: 55,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.cover,
@@ -413,12 +411,12 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                           color: AppColor().primaryWhite,
                           fontFamily: 'InterMedium',
                           textAlign: TextAlign.center,
-                          size: 13,
                         ),
                       )
                     ],
                   ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomText(
                         title: widget.fixture.homeScore != null
@@ -429,23 +427,14 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                         textAlign: TextAlign.center,
                         size: 20,
                       ),
-                      Gap(Get.height * 0.005),
-                      CustomText(
-                        title: formattedTime,
-                        color: AppColor().primaryWhite,
-                        fontFamily: 'InterMedium',
-                        textAlign: TextAlign.center,
-                        size: 14,
-                        underline: TextDecoration.underline,
-                        decorationColor: AppColor().primaryWhite,
-                      )
                     ],
                   ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: Get.width * 0.13,
-                        height: Get.width * 0.13,
+                        width: 55,
+                        height: 55,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.cover,
@@ -468,7 +457,6 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                           color: AppColor().primaryWhite,
                           fontFamily: 'InterMedium',
                           textAlign: TextAlign.center,
-                          size: 13,
                         ),
                       )
                     ],
@@ -476,16 +464,17 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                 ],
               ),
             ),
-            Gap(Get.height * 0.001),
+            Gap(Get.height * 0.01),
             Divider(
               height: 0,
               color: AppColor().lightItemsColor,
               thickness: 0.2,
             ),
-            Gap(Get.height * 0.015),
+            Gap(Get.height * 0.01),
             Container(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.2),
               width: Get.width * 0.9,
+              height: Get.height * 0.035,
               child: InkWell(
                 onTap: () =>
                     launchUrl(Uri.parse(widget.fixture.livestreams![0].link!)),
@@ -591,8 +580,8 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                           SizedBox(
                             //width: Get.width * 0.9,
                             child: CustomText(
-                              title: DateFormat.yMMMEd()
-                                  .format(widget.fixture.fixtureDate!),
+                              title: "${DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
                               color: AppColor().primaryWhite,
                               fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
@@ -625,6 +614,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                     ],
                   ),
                 ),
+                Gap(Get.height * 0.02),
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: Get.height * 0.01,
@@ -633,6 +623,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        spacing: 8,
                         children: [
                           Container(
                             width: Get.width * 0.15,
@@ -650,7 +641,6 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                                   width: 2, color: AppColor().lightItemsColor),
                             ),
                           ),
-                          Gap(Get.height * 0.005),
                           SizedBox(
                             width: Get.width * 0.18,
                             child: CustomText(
@@ -659,7 +649,6 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                               color: AppColor().primaryWhite,
                               fontFamily: 'InterMedium',
                               textAlign: TextAlign.center,
-                              size: 13,
                             ),
                           )
                         ],
@@ -706,21 +695,12 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                                       textAlign: TextAlign.center,
                                       size: 20,
                                     ),
-                              Gap(Get.height * 0.005),
-                              CustomText(
-                                title: formattedTime,
-                                color: AppColor().primaryWhite,
-                                fontFamily: 'InterMedium',
-                                textAlign: TextAlign.center,
-                                size: 14,
-                                underline: TextDecoration.underline,
-                                decorationColor: AppColor().primaryWhite,
-                              )
                             ],
                           ),
                         ),
                       ),
                       Column(
+                        spacing: 8,
                         children: [
                           Container(
                             width: Get.width * 0.15,
@@ -738,7 +718,6 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                                   width: 2, color: AppColor().lightItemsColor),
                             ),
                           ),
-                          Gap(Get.height * 0.005),
                           SizedBox(
                             width: Get.width * 0.17,
                             child: CustomText(
@@ -747,7 +726,6 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                               color: AppColor().primaryWhite,
                               fontFamily: 'InterMedium',
                               textAlign: TextAlign.center,
-                              size: 13,
                             ),
                           )
                         ],
@@ -755,7 +733,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                     ],
                   ),
                 ),
-                Gap(Get.height * 0.01),
+                Gap(Get.height * 0.02),
                 Divider(
                   height: 0,
                   color: AppColor().lightItemsColor,
