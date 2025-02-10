@@ -49,6 +49,8 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
 
   @override
   Widget build(BuildContext context) {
+    var formattedTime =
+        "${int.parse(widget.fixture.fixtureTime!.split(":")[0]) > 12 ? (int.parse(widget.fixture.fixtureTime!.split(":")[0]) - 12).toString().padLeft(2, "0") : widget.fixture.fixtureTime!.split(":")[0]}:${widget.fixture.fixtureTime!.split(":")[1]} ${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).period.name.toUpperCase()}";
     return Container(
       width: Get.width * 0.9,
       decoration: BoxDecoration(
@@ -92,8 +94,8 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                           SizedBox(
                             //width: Get.width * 0.9,
                             child: CustomText(
-                              title: DateFormat.yMMMEd()
-                                  .format(widget.fixture.fixtureDate!),
+                              title: "${DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
                               color: AppColor().primaryWhite,
                               fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
@@ -416,7 +418,7 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
   @override
   Widget build(BuildContext context) {
     var formattedTime =
-        "${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).hour}:${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).minute} ${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).period.name.toUpperCase()}";
+        "${int.parse(widget.fixture.fixtureTime!.split(":")[0]) > 12 ? (int.parse(widget.fixture.fixtureTime!.split(":")[0]) - 12).toString().padLeft(2, "0") : widget.fixture.fixtureTime!.split(":")[0]}:${widget.fixture.fixtureTime!.split(":")[1]} ${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).period.name.toUpperCase()}";
 
     return Container(
       width: Get.width * 0.6,
@@ -461,8 +463,8 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                           SizedBox(
                             //width: Get.width * 0.9,
                             child: CustomText(
-                              title: DateFormat.yMMMEd()
-                                  .format(widget.fixture.fixtureDate!),
+                              title: "${DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
                               color: AppColor().primaryWhite,
                               fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
