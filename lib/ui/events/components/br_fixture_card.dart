@@ -96,17 +96,18 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                             Icon(
                             Icons.calendar_today,
                             color: AppColor().primaryWhite,
-                            size: 30,
+                            size: Get.height * 0.036,
                             ),
                             Positioned(
-                              top: 5,
+                              top: Get.height * 0.006,
                               left: 0,
                               right: 0,
                               bottom: 0,
                               child: Icon(
                                 Icons.add,
                                 color: AppColor().primaryWhite,
-                                size: 12,
+                                size: Get.height * 0.012,
+                                weight: 1000,
                               )
                             ),
                           ],
@@ -447,17 +448,17 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                             Icon(
                             Icons.calendar_today,
                             color: AppColor().primaryWhite,
-                            size: 30,
+                            size: Get.height * 0.036,
                             ),
                             Positioned(
-                              top: 5,
+                              top: Get.height * 0.006,
                               left: 0,
                               right: 0,
                               bottom: 0,
                               child: Icon(
                                 Icons.add,
                                 color: AppColor().primaryWhite,
-                                size: 12,
+                                size: Get.height * 0.012,
                               )
                             ),
                           ],
