@@ -36,6 +36,9 @@ class FixtureModel {
   final String? streamingLink;
   final String? streamingPlatform;
   final List<LivestreamModel>? livestreams;
+  final PositionModel? first;
+  final PositionModel? second;
+  final PositionModel? third;
 
   FixtureModel(
       {this.id,
@@ -57,7 +60,10 @@ class FixtureModel {
       this.fixtureGroup,
       this.streamingLink,
       this.streamingPlatform,
-      this.livestreams});
+      this.livestreams,
+      this.first,
+      this.second,
+      this.third});
 
   factory FixtureModel.fromJson(Map<String, dynamic> json) => FixtureModel(
         id: json["id"],
@@ -104,6 +110,15 @@ class FixtureModel {
             ? []
             : List<LivestreamModel>.from(
                 json["livestreams"]!.map((x) => LivestreamModel.fromJson(x))),
+        first: json["first"] == null
+            ? null
+            : PositionModel.fromJson(json["first"]),
+        second: json["second"] == null
+            ? null
+            : PositionModel.fromJson(json["third"]),
+        third: json["third"] == null
+            ? null
+            : PositionModel.fromJson(json["third"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -173,4 +188,18 @@ class LivestreamModel {
         "platform": platform?.toJson(),
         "link": link,
       };
+}
+
+class PositionModel {
+  final int? id;
+  final PlayerModel? player;
+  final TeamModel? team;
+
+  PositionModel({this.id, this.player, this.team});
+
+  factory PositionModel.fromJson(Map<String, dynamic> json) => PositionModel(
+      id: json["id"],
+      player:
+          json["player"] == null ? null : PlayerModel.fromJson(json['player']),
+      team: json['team'] == null ? null : TeamModel.fromJson(json["team"]));
 }
