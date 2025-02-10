@@ -24,7 +24,7 @@ void main() async {
   final notificationService = NotificationService();
   await notificationService.initialize();
   runApp(const ESportApp());
-  configLoading();
+  configLoading(); 
 }
 
 void configLoading() {
