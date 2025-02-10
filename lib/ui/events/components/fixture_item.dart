@@ -23,7 +23,6 @@ class FixtureCard extends StatefulWidget {
   final LinearGradient backgroundColor;
   final FixtureModel fixture;
 
-
   @override
   State<FixtureCard> createState() => _FixtureCardState();
 }
@@ -295,26 +294,61 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: Get.width * 0.9,
-              child: CustomText(
-                title: widget.fixture.title,
-                color: AppColor().primaryWhite,
-                fontFamily: 'Inter',
-                textAlign: TextAlign.center,
-                size: 14,
-              ),
-            ),
-            Gap(Get.height * 0.0015),
-            SizedBox(
-              width: Get.width * 0.9,
-              child: CustomText(
-                title: DateFormat.yMMMEd().format(widget.fixture.fixtureDate!),
-                color: AppColor().primaryWhite,
-                fontFamily: 'InterSemiBold',
-                textAlign: TextAlign.center,
-                size: 14,
-              ),
-            ),
+                  width: Get.width * 0.9,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: widget.fixture.title!.capitalizeFirst,
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'Inter',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                          Gap(Get.height * 0.0015),
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!),
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'InterSemiBold',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      widget.fixture.first == null
+                      ? Stack(
+                        children: [
+                            Icon(
+                            Icons.calendar_today,
+                            color: AppColor().primaryWhite,
+                            size: 30,
+                            ),
+                            Positioned(
+                              top: 5,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Icon(
+                                Icons.add,
+                                color: AppColor().primaryWhite,
+                                size: 12,
+                              )
+                            ),
+                          ],
+                      ) : SizedBox(),
+                    ],
+                  ),
+                ),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Get.height * 0.01,
@@ -453,7 +487,8 @@ class FixtureCardTournament extends StatefulWidget {
       {super.key,
       required this.backgroundColor,
       required this.fixture,
-      required this.getFixtures, required this.event});
+      required this.getFixtures,
+      required this.event});
 
   final FixtureModel fixture;
   final LinearGradient backgroundColor;
@@ -495,24 +530,58 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
               children: [
                 SizedBox(
                   width: Get.width * 0.9,
-                  child: CustomText(
-                    title: widget.fixture.title,
-                    color: AppColor().primaryWhite,
-                    fontFamily: 'Inter',
-                    textAlign: TextAlign.center,
-                    size: 14,
-                  ),
-                ),
-                Gap(Get.height * 0.0015),
-                SizedBox(
-                  width: Get.width * 0.9,
-                  child: CustomText(
-                    title:
-                        DateFormat.yMMMEd().format(widget.fixture.fixtureDate!),
-                    color: AppColor().primaryWhite,
-                    fontFamily: 'InterSemiBold',
-                    textAlign: TextAlign.center,
-                    size: 14,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: widget.fixture.title!.capitalizeFirst,
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'Inter',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                          Gap(Get.height * 0.0015),
+                          SizedBox(
+                            //width: Get.width * 0.9,
+                            child: CustomText(
+                              title: DateFormat.yMMMEd()
+                                  .format(widget.fixture.fixtureDate!),
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'InterSemiBold',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      widget.fixture.first == null
+                      ? Stack(
+                        children: [
+                            Icon(
+                            Icons.calendar_today,
+                            color: AppColor().primaryWhite,
+                            size: 30,
+                            ),
+                            Positioned(
+                              top: 5,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Icon(
+                                Icons.add,
+                                color: AppColor().primaryWhite,
+                                size: 12,
+                              )
+                            ),
+                          ],
+                      ) : SizedBox(),
+                    ],
                   ),
                 ),
                 Padding(
@@ -676,8 +745,8 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
               ],
             ),
             Visibility(
-              visible: widget.event!.community!.owner!.id ==
-                  authController.user!.id,
+              visible:
+                  widget.event!.community!.owner!.id == authController.user!.id,
               child: Positioned(
                   right: 0,
                   child:
