@@ -96,8 +96,8 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                           SizedBox(
                             //width: Get.width * 0.9,
                             child: CustomText(
-                              title: "${DateFormat.yMMMEd()
-                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
+                              title:
+                                  "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
                               color: AppColor().primaryWhite,
                               fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
@@ -263,14 +263,15 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                 ),
               ],
             ),
-            Visibility(
-              visible:
-                  widget.event!.community!.owner!.id == authController.user!.id,
-              child: Positioned(
-                  right: 0,
-                  child:
-                      menuAnchor(widget.fixture, widget.fixture.tournament!)),
-            )
+            if (widget.event.community != null)
+              Visibility(
+                visible: widget.event!.community!.owner!.id ==
+                    authController.user!.id,
+                child: Positioned(
+                    right: 0,
+                    child:
+                        menuAnchor(widget.fixture, widget.fixture.tournament!)),
+              )
           ],
         ),
       ),
@@ -468,8 +469,8 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                           SizedBox(
                             //width: Get.width * 0.9,
                             child: CustomText(
-                              title: "${DateFormat.yMMMEd()
-                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
+                              title:
+                                  "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
                               color: AppColor().primaryWhite,
                               fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
