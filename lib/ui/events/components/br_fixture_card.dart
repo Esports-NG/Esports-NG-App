@@ -15,6 +15,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
+// BR Fixture for Tournament List
 class BrFixtureCard extends StatefulWidget {
   const BrFixtureCard(
       {super.key,
@@ -190,6 +192,7 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                             children: [
                               CustomText(
                                 title: "3rd Place",
+                                size: 13,
                               ),
                               OtherImage(
                                   width: 45,
@@ -201,14 +204,16 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                               CustomText(
                                   title: widget.event.tournamentType == "solo"
                                       ? widget.fixture.third!.player!.inGameName
-                                      : widget.fixture.third!.team!.name)
+                                      : widget.fixture.third!.team!.name,
+                                  size: 13,
+                              )
                             ],
                           )
                         ],
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 20,
+                        spacing: 10,
                         children: [
                           OtherImage(
                               width: 60,
@@ -565,6 +570,7 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                             children: [
                               CustomText(
                                 title: "3rd Place",
+                                size: 13,
                               ),
                               OtherImage(
                                   width: 30,
@@ -576,7 +582,9 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                               CustomText(
                                   title: widget.event.tournamentType == "solo"
                                       ? widget.fixture.third!.player!.inGameName
-                                      : widget.fixture.third!.team!.name)
+                                      : widget.fixture.third!.team!.name,
+                                  size: 13,
+                              ),
                             ],
                           )
                         ],
@@ -585,7 +593,7 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                         height: Get.height * 0.12,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 20,
+                          spacing: 10,
                           children: [
                             OtherImage(
                                 width: 50,
