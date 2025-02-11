@@ -90,12 +90,17 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                           children: [
                             Row(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(Get.width * 1),
-                                  child: OtherImage(
-                                    width: 30,
-                                    image: widget.fixture.tournament!.games![0].profilePicture,
-                                    ),
+                                GestureDetector(
+                                  onTap: () => Helpers().showImagePopup(context,
+                            "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}"),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(Get.width * 1),
+                                    child: OtherImage(
+                                      height: 30,
+                                      width: 30,
+                                      image: "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}",
+                                      ),
+                                  ),
                                 ),
                                 Gap(Get.height * 0.01),
                                 Column(

@@ -82,8 +82,8 @@ class _FixtureCardState extends State<FixtureCard> {
                           borderRadius: BorderRadius.circular(Get.width * 1),
                           child: OtherImage(
                             width: 30,
-                            image: widget
-                                .fixture.tournament!.games![0].profilePicture,
+                            height: 30,
+                            image: "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}",
                           ),
                         ),
                       ),
