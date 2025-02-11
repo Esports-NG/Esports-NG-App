@@ -8,13 +8,13 @@ import 'package:e_sport/ui/events/components/edit_fixture_team.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 // BR Fixture for Tournament List
 class BrFixtureCard extends StatefulWidget {
@@ -78,56 +78,77 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                   width: Get.width * 0.9,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            //width: Get.width * 0.9,
-                            child: CustomText(
-                              title: widget.fixture.title!.capitalizeFirst,
-                              color: AppColor().primaryWhite,
-                              fontFamily: 'Inter',
-                              textAlign: TextAlign.start,
-                              size: 14,
-                            ),
-                          ),
-                          Gap(Get.height * 0.0015),
-                          SizedBox(
-                            //width: Get.width * 0.9,
-                            child: CustomText(
-                              title:
-                                  "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
-                              color: AppColor().primaryWhite,
-                              fontFamily: 'InterSemiBold',
-                              textAlign: TextAlign.start,
-                              size: 14,
-                            ),
+                          Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(Get.width * 1),
+                                child: OtherImage(
+                                  width: 30,
+                                  image: widget.fixture.tournament!.games![0].profilePicture,
+                                  ),
+                              ),
+                              Gap(Get.height * 0.01),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(
+                                    title: widget.fixture.title,
+                                    color: AppColor().primaryWhite,
+                                    fontFamily: 'Inter',
+                                    textAlign: TextAlign.start,
+                                    size: 14,
+                                  ),
+                                  Gap(Get.height * 0.0015),
+                                  CustomText(
+                                    title:
+                                        "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
+                                    color: AppColor().primaryWhite,
+                                    fontFamily: 'InterSemiBold',
+                                    textAlign: TextAlign.start,
+                                    size: 14,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      dateHasPassed(widget.fixture.fixtureDate!) == false
-                          ? Stack(
-                              children: [
-                                Icon(
-                                  Icons.calendar_today,
-                                  color: AppColor().primaryWhite,
-                                  size: Get.height * 0.036,
-                                ),
-                                Positioned(
-                                    top: Get.height * 0.006,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Icon(
-                                      Icons.add,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          CustomText(
+                            title: '${widget.fixture.tournament!.games![0].abbrev} Fixture',
+                          ),
+                          Gap(Get.height * 0.0025),
+                          dateHasPassed(widget.fixture.fixtureDate!) == false
+                              ? Stack(
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_today,
                                       color: AppColor().primaryWhite,
-                                      size: Get.height * 0.012,
-                                      weight: 1000,
-                                    )),
-                              ],
-                            )
-                          : SizedBox(),
+                                      size: Get.height * 0.036,
+                                    ),
+                                    Positioned(
+                                        top: Get.height * 0.006,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        child: Icon(
+                                          Icons.add,
+                                          color: AppColor().primaryWhite,
+                                          size: Get.height * 0.012,
+                                          weight: 1000,
+                                        )),
+                                  ],
+                                )
+                              : SizedBox(),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -202,10 +223,10 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                                       : widget
                                           .fixture.third!.team!.profilePicture),
                               CustomText(
-                                  title: widget.event.tournamentType == "solo"
-                                      ? widget.fixture.third!.player!.inGameName
-                                      : widget.fixture.third!.team!.name,
-                                  size: 13,
+                                title: widget.event.tournamentType == "solo"
+                                    ? widget.fixture.third!.player!.inGameName
+                                    : widget.fixture.third!.team!.name,
+                                size: 13,
                               )
                             ],
                           )
@@ -215,24 +236,26 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 10,
                         children: [
-                          OtherImage(
-                              width: 60,
-                              height: 60,
-                              image: widget
-                                          .fixture.tournament!.tournamentType ==
-                                      "solo"
-                                  ? widget.fixture.players![0].profile
-                                  : widget.fixture.teams![0].profilePicture),
+                          GestureDetector(
+                            onTap: () => Helpers().showImagePopup(
+                                      context,"${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"),
+                            child: OtherImage(
+                                width: 60,
+                                height: 60,
+                                image: widget.fixture.livestreams![0].banner != null
+                                    ? "${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"
+                                    : widget.fixture.livestreams![0].banner),
+                          ),
                           CustomText(
                               fontFamily: "InterSemiBold",
                               size: 24,
                               color: AppColor().secondaryGreenColor,
                               title:
                                   "${widget.fixture.tournament!.tournamentType == "solo" ? widget.fixture.players!.length : widget.fixture.teams!.length} ${widget.fixture.tournament!.tournamentType == "solo" ? "Players" : "Teams"}"
-                                      .toUpperCase())
+                                      .toUpperCase()),
                         ],
                       ),
-                Gap(Get.height * 0.015),
+                Gap(Get.height * 0.02),
                 Divider(
                   height: 0,
                   color: AppColor().lightItemsColor,
@@ -517,10 +540,9 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                               OtherImage(
                                   width: 40,
                                   height: 40,
-                                  image: widget.event.tournamentType == "solo"
-                                      ? widget.fixture.second!.player!.profile
-                                      : widget.fixture.second!.team!
-                                          .profilePicture),
+                                  image: widget.fixture.livestreams![0].banner != null
+                                  ? "${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"
+                                  : widget.fixture.livestreams![0].banner),
                               CustomText(
                                   title: widget.event.tournamentType == "solo"
                                       ? widget
@@ -580,10 +602,10 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                                       : widget
                                           .fixture.third!.team!.profilePicture),
                               CustomText(
-                                  title: widget.event.tournamentType == "solo"
-                                      ? widget.fixture.third!.player!.inGameName
-                                      : widget.fixture.third!.team!.name,
-                                  size: 13,
+                                title: widget.event.tournamentType == "solo"
+                                    ? widget.fixture.third!.player!.inGameName
+                                    : widget.fixture.third!.team!.name,
+                                size: 13,
                               ),
                             ],
                           )
@@ -595,14 +617,16 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: 10,
                           children: [
-                            OtherImage(
-                                width: 50,
-                                height: 50,
-                                image: widget.fixture.tournament!
-                                            .tournamentType ==
-                                        "solo"
-                                    ? widget.fixture.players![0].profile
-                                    : widget.fixture.teams![0].profilePicture),
+                            GestureDetector(
+                              onTap: () => Helpers().showImagePopup(
+                                      context,"${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"),
+                              child: OtherImage(
+                                  width: 50,
+                                  height: 50,
+                                  image: widget.fixture.livestreams![0].banner != null
+                                    ? "${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"
+                                    : widget.fixture.livestreams![0].banner),
+                            ),
                             CustomText(
                                 fontFamily: "InterSemiBold",
                                 size: 24,

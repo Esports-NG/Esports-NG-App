@@ -410,7 +410,7 @@ class _CreateLivestreamState extends State<CreateLivestream> {
                         Icons.keyboard_arrow_down,
                         color: AppColor().lightItemsColor,
                       ),
-                      items: _platforms.map((value) {
+                      items: _platforms.where((_platform) => _platform.platformType!.contains('streaming')).map((value) {
                         return DropdownMenuItem(
                           value: value,
                           child: Row(

@@ -8,6 +8,7 @@ import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/platform_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/model/user_model.dart';
 
 List<FixtureModel> fixtureModelFromJson(String str) => List<FixtureModel>.from(
     json.decode(str).map((x) => FixtureModel.fromJson(x)));
@@ -154,6 +155,8 @@ class LivestreamModel {
   final String? time;
   final PlatformModel? platform;
   final String? link;
+  final String? banner;
+  final UserModel? user;
 
   LivestreamModel({
     this.id,
@@ -163,6 +166,8 @@ class LivestreamModel {
     this.time,
     this.platform,
     this.link,
+    this.banner,
+    this.user,
   });
 
   factory LivestreamModel.fromJson(Map<String, dynamic> json) =>
@@ -176,6 +181,8 @@ class LivestreamModel {
             ? null
             : PlatformModel.fromJson(json["platform"]),
         link: json["link"],
+        banner: json["banner"],
+        user: json["user"] == null ? null : UserModel.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -187,6 +194,8 @@ class LivestreamModel {
         "time": time,
         "platform": platform?.toJson(),
         "link": link,
+        "banner": banner,
+        "user": user?.toJson(),
       };
 }
 

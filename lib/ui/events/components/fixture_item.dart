@@ -5,8 +5,10 @@ import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/events/components/edit_fixture.dart';
 import 'package:e_sport/ui/events/components/edit_fixture_team.dart';
+import 'package:e_sport/ui/home/components/profile_image.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -28,19 +30,16 @@ class FixtureCard extends StatefulWidget {
 }
 
 class _FixtureCardState extends State<FixtureCard> {
-
   bool dateHasPassed(DateTime itemDate) {
     final now = DateTime.now();
     final difference = now.difference(itemDate);
 
     if (difference.inDays > 1) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-    
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,42 +64,83 @@ class _FixtureCardState extends State<FixtureCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomText(
-              title: widget.fixture.tournament!.name,
-              color: AppColor().primaryWhite,
-              fontFamily: 'InterSemiBold',
-              textAlign: TextAlign.start,
-              size: 14,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Helpers().showImagePopup(context,
+                          "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}"),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(Get.width * 1),
+                        child: OtherImage(
+                          width: 30,
+                          image: widget
+                              .fixture.tournament!.games![0].profilePicture,
+                        ),
+                      ),
+                    ),
+                    Gap(Get.height * 0.01),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          title: widget.fixture.title,
+                          color: AppColor().primaryWhite,
+                          fontFamily: 'Inter',
+                          textAlign: TextAlign.start,
+                          size: 14,
+                        ),
+                        Gap(Get.height * 0.002),
+                        CustomText(
+                          title:
+                              "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
+                          color: AppColor().primaryWhite,
+                          fontFamily: 'InterSemiBold',
+                          textAlign: TextAlign.start,
+                          size: 14,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    CustomText(
+                      title:
+                          '${widget.fixture.tournament!.games![0].abbrev} Fixture',
+                    ),
+                    Gap(Get.height * 0.0025),
+                    dateHasPassed(widget.fixture.fixtureDate!) == false
+                        ? Stack(
+                            children: [
+                              Icon(
+                                Icons.calendar_today,
+                                color: AppColor().primaryWhite,
+                                size: Get.height * 0.036,
+                              ),
+                              Positioned(
+                                  top: Get.height * 0.006,
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Icon(
+                                    Icons.add,
+                                    color: AppColor().primaryWhite,
+                                    size: Get.height * 0.012,
+                                    weight: 1000,
+                                  )),
+                            ],
+                          )
+                        : SizedBox(),
+                  ],
+                ),
+              ],
             ),
-            CustomText(
-              title: '${widget.fixture.tournament!.games![0].name}',
-              color: AppColor().primaryWhite,
-              fontFamily: 'Inter',
-              textAlign: TextAlign.start,
-              size: 14,
-            ),
-            Gap(Get.height * 0.01),
-            SizedBox(
-              width: Get.width * 0.9,
-              child: CustomText(
-                title: widget.fixture.title,
-                color: AppColor().primaryWhite,
-                fontFamily: 'Inter',
-                textAlign: TextAlign.center,
-                size: 14,
-              ),
-            ),
-            Gap(Get.height * 0.0015),
-            SizedBox(
-              width: Get.width * 0.9,
-              child: CustomText(
-                title: DateFormat.yMMMEd().format(widget.fixture.fixtureDate!),
-                color: AppColor().primaryWhite,
-                fontFamily: 'InterSemiBold',
-                textAlign: TextAlign.center,
-                size: 14,
-              ),
-            ),
+            Gap(Get.height * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Get.height * 0.02,
@@ -182,15 +222,6 @@ class _FixtureCardState extends State<FixtureCard> {
                                   textAlign: TextAlign.center,
                                   size: 20,
                                 ),
-                          Gap(Get.height * 0.005),
-                          CustomText(
-                            title: formattedTime,
-                            color: AppColor().primaryWhite,
-                            fontFamily: 'InterMedium',
-                            textAlign: TextAlign.center,
-                            underline: TextDecoration.underline,
-                            decorationColor: AppColor().primaryWhite,
-                          )
                         ],
                       ),
                     ),
@@ -231,7 +262,7 @@ class _FixtureCardState extends State<FixtureCard> {
                 ],
               ),
             ),
-            Gap(Get.height * 0.01),
+            Gap(Get.height * 0.02),
             Divider(
               height: 0,
               color: AppColor().lightItemsColor,
@@ -240,11 +271,12 @@ class _FixtureCardState extends State<FixtureCard> {
             Gap(Get.height * 0.02),
             Center(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.2),
+                padding: EdgeInsets.symmetric(
+                    horizontal: Get.width * 0.24, vertical: Get.width * 0.0001),
                 width: Get.width * 0.7,
                 child: InkWell(
-                  // onTap: () =>
-                  //     launchUrl(Uri.parse(widget.fixture.livestreams![0].link!)),
+                  onTap: () => launchUrl(
+                      Uri.parse(widget.fixture.livestreams![0].link!)),
                   child: widget.fixture.livestreams!.isEmpty
                       ? SizedBox()
                       : ColorFiltered(
@@ -281,19 +313,16 @@ class FixtureCardScrollable extends StatefulWidget {
 }
 
 class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
-
   bool dateHasPassed(DateTime itemDate) {
     final now = DateTime.now();
     final difference = now.difference(itemDate);
 
     if (difference.inDays > 1) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-    
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -320,62 +349,62 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-                  width: Get.width * 0.9,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              width: Get.width * 0.9,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            //width: Get.width * 0.9,
-                            child: CustomText(
-                              title: widget.fixture.title!.capitalizeFirst,
-                              color: AppColor().primaryWhite,
-                              fontFamily: 'Inter',
-                              textAlign: TextAlign.start,
-                              size: 14,
-                            ),
-                          ),
-                          Gap(Get.height * 0.0015),
-                          SizedBox(
-                            //width: Get.width * 0.9,
-                            child: CustomText(
-                              title: "${DateFormat.yMMMEd()
-                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
-                              color: AppColor().primaryWhite,
-                              fontFamily: 'InterSemiBold',
-                              textAlign: TextAlign.start,
-                              size: 14,
-                            ),
-                          ),
-                        ],
+                      SizedBox(
+                        //width: Get.width * 0.9,
+                        child: CustomText(
+                          title: widget.fixture.title!.capitalizeFirst,
+                          color: AppColor().primaryWhite,
+                          fontFamily: 'Inter',
+                          textAlign: TextAlign.start,
+                          size: 14,
+                        ),
                       ),
-                      dateHasPassed(widget.fixture.fixtureDate!) == false
-                      ? Stack(
-                        children: [
-                            Icon(
-                            Icons.calendar_today,
-                            color: AppColor().primaryWhite,
-                            size: Get.height * 0.036,
-                            ),
-                            Positioned(
-                              top: Get.height * 0.006,
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              child: Icon(
-                                Icons.add,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.012,
-                              )
-                            ),
-                          ],
-                      ) : SizedBox(),
+                      Gap(Get.height * 0.0015),
+                      SizedBox(
+                        //width: Get.width * 0.9,
+                        child: CustomText(
+                          title:
+                              "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
+                          color: AppColor().primaryWhite,
+                          fontFamily: 'InterSemiBold',
+                          textAlign: TextAlign.start,
+                          size: 14,
+                        ),
+                      ),
                     ],
                   ),
-                ),
-                Gap(Get.height * 0.02),
+                  dateHasPassed(widget.fixture.fixtureDate!) == false
+                      ? Stack(
+                          children: [
+                            Icon(
+                              Icons.calendar_today,
+                              color: AppColor().primaryWhite,
+                              size: Get.height * 0.036,
+                            ),
+                            Positioned(
+                                top: Get.height * 0.006,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                child: Icon(
+                                  Icons.add,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.012,
+                                )),
+                          ],
+                        )
+                      : SizedBox(),
+                ],
+              ),
+            ),
+            Gap(Get.height * 0.02),
             SizedBox(
               height: Get.height * 0.12,
               child: Row(
@@ -526,12 +555,10 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
 
     if (difference.inDays > 1) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-    
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -580,8 +607,8 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                           SizedBox(
                             //width: Get.width * 0.9,
                             child: CustomText(
-                              title: "${DateFormat.yMMMEd()
-                                  .format(widget.fixture.fixtureDate!)}, $formattedTime",
+                              title:
+                                  "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
                               color: AppColor().primaryWhite,
                               fontFamily: 'InterSemiBold',
                               textAlign: TextAlign.start,
@@ -591,26 +618,26 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                         ],
                       ),
                       dateHasPassed(widget.fixture.fixtureDate!) == false
-                      ? Stack(
-                        children: [
-                            Icon(
-                            Icons.calendar_today,
-                            color: AppColor().primaryWhite,
-                            size: Get.height * 0.036,
-                            ),
-                            Positioned(
-                              top: Get.height * 0.006,
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              child: Icon(
-                                Icons.add,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.012,
-                              )
-                            ),
-                          ],
-                      ) : SizedBox(),
+                          ? Stack(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.036,
+                                ),
+                                Positioned(
+                                    top: Get.height * 0.006,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Icon(
+                                      Icons.add,
+                                      color: AppColor().primaryWhite,
+                                      size: Get.height * 0.012,
+                                    )),
+                              ],
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ),
