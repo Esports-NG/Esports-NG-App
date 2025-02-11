@@ -119,7 +119,7 @@ class _LivestreamCardState extends State<LivestreamCard> {
                 ),
               ],
             ),
-            Gap(Get.height * 0.02),
+            Gap(Get.height * 0.015),
             Center(
               child: GestureDetector(
                 onTap: () => Helpers().showImagePopup(
