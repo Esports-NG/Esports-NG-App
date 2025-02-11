@@ -181,9 +181,9 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
                                       fixture: _fixturesList[index],
                                       backgroundColor:
                                           _colors[index % _colors.length])
-                                  : FixtureCardTournament(
-                                      event: widget.event,
-                                      getFixtures: getFixtures,
+                                  : FixtureCard(
+                                      //event: widget.event,
+                                      //getFixtures: getFixtures,
                                       fixture: _fixturesList[index],
                                       backgroundColor:
                                           _colors[index % _colors.length])),
