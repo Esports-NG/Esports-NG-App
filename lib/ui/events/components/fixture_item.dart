@@ -3,6 +3,7 @@ import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/ui/components/account_tournament_detail.dart';
 import 'package:e_sport/ui/events/components/edit_fixture.dart';
 import 'package:e_sport/ui/events/components/edit_fixture_team.dart';
 import 'package:e_sport/ui/home/components/profile_image.dart';
@@ -45,254 +46,259 @@ class _FixtureCardState extends State<FixtureCard> {
   Widget build(BuildContext context) {
     var formattedTime =
         "${int.parse(widget.fixture.fixtureTime!.split(":")[0]) > 12 ? (int.parse(widget.fixture.fixtureTime!.split(":")[0]) - 12).toString().padLeft(2, "0") : widget.fixture.fixtureTime!.split(":")[0]}:${widget.fixture.fixtureTime!.split(":")[1]} ${TimeOfDay(hour: int.parse(widget.fixture.fixtureTime!.split(":")[0]), minute: int.parse(widget.fixture.fixtureTime!.split(":")[1])).period.name.toUpperCase()}";
-    return Container(
-      width: Get.width * 0.9,
-      decoration: BoxDecoration(
-        gradient: widget.backgroundColor,
-        image: DecorationImage(
-            image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
-            alignment: Alignment(Get.width * -0.015, 0)),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColor().bgDark,
-          width: 0.5,
+    return InkWell(
+      onTap: () async {
+        await Get.to(AccountTournamentDetail(item: widget.fixture.tournament!));
+      },
+      child: Container(
+        width: Get.width * 0.9,
+        decoration: BoxDecoration(
+          gradient: widget.backgroundColor,
+          image: DecorationImage(
+              image: const AssetImage('assets/images/png/Fixture-zigzag.png'),
+              alignment: Alignment(Get.width * -0.015, 0)),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: AppColor().bgDark,
+            width: 0.5,
+          ),
         ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(Get.height * 0.02, Get.height * 0.02,
-            Get.height * 0.02, Get.height * 0.01),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Helpers().showImagePopup(context,
-                          "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}"),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(Get.width * 1),
-                        child: OtherImage(
-                          width: 30,
-                          image: widget
-                              .fixture.tournament!.games![0].profilePicture,
-                        ),
-                      ),
-                    ),
-                    Gap(Get.height * 0.01),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          title: widget.fixture.title,
-                          color: AppColor().primaryWhite,
-                          fontFamily: 'Inter',
-                          textAlign: TextAlign.start,
-                          size: 14,
-                        ),
-                        Gap(Get.height * 0.002),
-                        CustomText(
-                          title:
-                              "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
-                          color: AppColor().primaryWhite,
-                          fontFamily: 'InterSemiBold',
-                          textAlign: TextAlign.start,
-                          size: 14,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    CustomText(
-                      title:
-                          '${widget.fixture.tournament!.games![0].abbrev} Fixture',
-                    ),
-                    Gap(Get.height * 0.0025),
-                    dateHasPassed(widget.fixture.fixtureDate!) == false
-                        ? Stack(
-                            children: [
-                              Icon(
-                                Icons.calendar_today,
-                                color: AppColor().primaryWhite,
-                                size: Get.height * 0.036,
-                              ),
-                              Positioned(
-                                  top: Get.height * 0.006,
-                                  left: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  child: Icon(
-                                    Icons.add,
-                                    color: AppColor().primaryWhite,
-                                    size: Get.height * 0.012,
-                                    weight: 1000,
-                                  )),
-                            ],
-                          )
-                        : SizedBox(),
-                  ],
-                ),
-              ],
-            ),
-            Gap(Get.height * 0.02),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Get.height * 0.02,
-              ),
-              child: Row(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(Get.height * 0.02, Get.height * 0.02,
+              Get.height * 0.02, Get.height * 0.01),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
+                  Row(
                     children: [
-                      Container(
-                        width: Get.width * 0.15,
-                        height: Get.width * 0.15,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                  widget.fixture.homePlayer?.profile ??
-                                      widget.fixture.homeTeam?.profilePicture ??
-                                      "jhh")),
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(Get.width * 0.15)),
-                          color: Colors.redAccent,
-                          border: Border.all(
-                              width: 2, color: AppColor().lightItemsColor),
+                      GestureDetector(
+                        onTap: () => Helpers().showImagePopup(context,
+                            "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}"),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(Get.width * 1),
+                          child: OtherImage(
+                            width: 30,
+                            image: widget
+                                .fixture.tournament!.games![0].profilePicture,
+                          ),
                         ),
                       ),
-                      Gap(Get.height * 0.005),
-                      SizedBox(
-                        width: Get.width * 0.18,
-                        child: CustomText(
-                          title: widget.fixture.homePlayer?.inGameName ??
-                              widget.fixture.homeTeam?.name,
-                          color: AppColor().primaryWhite,
-                          fontFamily: 'InterMedium',
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
+                      Gap(Get.height * 0.01),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          widget.fixture.homeScore != null
-                              ? Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    CustomText(
-                                      title:
-                                          widget.fixture.homeScore.toString(),
-                                      color: AppColor().secondaryGreenColor,
-                                      fontFamily: 'InterMedium',
-                                      textAlign: TextAlign.center,
-                                      size: 28,
-                                    ),
-                                    CustomText(
-                                      title: '-',
-                                      color: AppColor().secondaryGreenColor,
-                                      fontFamily: 'InterMedium',
-                                      textAlign: TextAlign.center,
-                                      size: 20,
-                                    ),
-                                    CustomText(
-                                      title:
-                                          widget.fixture.awayScore.toString(),
-                                      color: AppColor().secondaryGreenColor,
-                                      fontFamily: 'InterMedium',
-                                      textAlign: TextAlign.center,
-                                      size: 28,
-                                    ),
-                                  ],
-                                )
-                              : CustomText(
-                                  title: 'VS',
-                                  color: AppColor().secondaryGreenColor,
-                                  fontFamily: 'InterMedium',
-                                  textAlign: TextAlign.center,
-                                  size: 20,
-                                ),
+                          CustomText(
+                            title: widget.fixture.title,
+                            color: AppColor().primaryWhite,
+                            fontFamily: 'Inter',
+                            textAlign: TextAlign.start,
+                            size: 14,
+                          ),
+                          Gap(Get.height * 0.002),
+                          CustomText(
+                            title:
+                                "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
+                            color: AppColor().primaryWhite,
+                            fontFamily: 'InterSemiBold',
+                            textAlign: TextAlign.start,
+                            size: 14,
+                          ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Container(
-                        width: Get.width * 0.15,
-                        height: Get.width * 0.15,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                  widget.fixture.awayPlayer?.profile ??
-                                      widget.fixture.awayTeam?.profilePicture ??
-                                      "jhh")),
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(Get.width * 0.15)),
-                          color: Colors.redAccent,
-                          border: Border.all(
-                              width: 2, color: AppColor().lightItemsColor),
-                        ),
+                      CustomText(
+                        title:
+                            '${widget.fixture.tournament!.games![0].abbrev} Fixture',
                       ),
-                      Gap(Get.height * 0.005),
-                      SizedBox(
-                        width: Get.width * 0.17,
-                        child: CustomText(
-                          title: widget.fixture.awayPlayer?.inGameName ??
-                              widget.fixture.awayTeam?.name,
-                          color: AppColor().primaryWhite,
-                          fontFamily: 'InterMedium',
-                          textAlign: TextAlign.center,
-                          size: 13,
-                        ),
-                      )
+                      Gap(Get.height * 0.0025),
+                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                          ? Stack(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColor().primaryWhite,
+                                  size: Get.height * 0.036,
+                                ),
+                                Positioned(
+                                    top: Get.height * 0.006,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Icon(
+                                      Icons.add,
+                                      color: AppColor().primaryWhite,
+                                      size: Get.height * 0.012,
+                                      weight: 1000,
+                                    )),
+                              ],
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ],
               ),
-            ),
-            Gap(Get.height * 0.02),
-            Divider(
-              height: 0,
-              color: AppColor().lightItemsColor,
-              thickness: 0.2,
-            ),
-            Gap(Get.height * 0.02),
-            Center(
-              child: Container(
+              Gap(Get.height * 0.02),
+              Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: Get.width * 0.24, vertical: Get.width * 0.0001),
-                width: Get.width * 0.7,
-                child: InkWell(
-                  onTap: () => launchUrl(
-                      Uri.parse(widget.fixture.livestreams![0].link!)),
-                  child: widget.fixture.livestreams!.isEmpty
-                      ? SizedBox()
-                      : ColorFiltered(
-                          colorFilter: const ColorFilter.mode(
-                            Colors.white,
-                            BlendMode.srcATop,
-                          ),
-                          child: Image.network(
-                            '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
-                            alignment: Alignment.center,
+                  horizontal: Get.height * 0.02,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          width: Get.width * 0.15,
+                          height: Get.width * 0.15,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(
+                                    widget.fixture.homePlayer?.profile ??
+                                        widget.fixture.homeTeam?.profilePicture ??
+                                        "jhh")),
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Get.width * 0.15)),
+                            color: Colors.redAccent,
+                            border: Border.all(
+                                width: 2, color: AppColor().lightItemsColor),
                           ),
                         ),
+                        Gap(Get.height * 0.005),
+                        SizedBox(
+                          width: Get.width * 0.18,
+                          child: CustomText(
+                            title: widget.fixture.homePlayer?.inGameName ??
+                                widget.fixture.homeTeam?.name,
+                            color: AppColor().primaryWhite,
+                            fontFamily: 'InterMedium',
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ],
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: [
+                            widget.fixture.homeScore != null
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      CustomText(
+                                        title:
+                                            widget.fixture.homeScore.toString(),
+                                        color: AppColor().secondaryGreenColor,
+                                        fontFamily: 'InterMedium',
+                                        textAlign: TextAlign.center,
+                                        size: 28,
+                                      ),
+                                      CustomText(
+                                        title: '-',
+                                        color: AppColor().secondaryGreenColor,
+                                        fontFamily: 'InterMedium',
+                                        textAlign: TextAlign.center,
+                                        size: 20,
+                                      ),
+                                      CustomText(
+                                        title:
+                                            widget.fixture.awayScore.toString(),
+                                        color: AppColor().secondaryGreenColor,
+                                        fontFamily: 'InterMedium',
+                                        textAlign: TextAlign.center,
+                                        size: 28,
+                                      ),
+                                    ],
+                                  )
+                                : CustomText(
+                                    title: 'VS',
+                                    color: AppColor().secondaryGreenColor,
+                                    fontFamily: 'InterMedium',
+                                    textAlign: TextAlign.center,
+                                    size: 20,
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          width: Get.width * 0.15,
+                          height: Get.width * 0.15,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(
+                                    widget.fixture.awayPlayer?.profile ??
+                                        widget.fixture.awayTeam?.profilePicture ??
+                                        "jhh")),
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(Get.width * 0.15)),
+                            color: Colors.redAccent,
+                            border: Border.all(
+                                width: 2, color: AppColor().lightItemsColor),
+                          ),
+                        ),
+                        Gap(Get.height * 0.005),
+                        SizedBox(
+                          width: Get.width * 0.17,
+                          child: CustomText(
+                            title: widget.fixture.awayPlayer?.inGameName ??
+                                widget.fixture.awayTeam?.name,
+                            color: AppColor().primaryWhite,
+                            fontFamily: 'InterMedium',
+                            textAlign: TextAlign.center,
+                            size: 13,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              Gap(Get.height * 0.02),
+              Divider(
+                height: 0,
+                color: AppColor().lightItemsColor,
+                thickness: 0.2,
+              ),
+              Gap(Get.height * 0.02),
+              Center(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Get.width * 0.24, vertical: Get.width * 0.0001),
+                  width: Get.width * 0.7,
+                  child: InkWell(
+                    onTap: () => launchUrl(
+                        Uri.parse(widget.fixture.livestreams![0].link!)),
+                    child: widget.fixture.livestreams!.isEmpty
+                        ? SizedBox()
+                        : ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcATop,
+                            ),
+                            child: Image.network(
+                              '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                              alignment: Alignment.center,
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
