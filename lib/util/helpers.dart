@@ -3,6 +3,7 @@ import 'package:e_sport/ui/widget/coming_soon_popup.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:http/http.dart' as http;
 
 class Helpers {
@@ -30,16 +31,13 @@ class Helpers {
   }
 
   void showImagePopup(BuildContext context, String imageUrl) {
-    showDialog(
-        context: context,
-        builder: (context) => Dialog(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              child: Image.network(
-                imageUrl,
-                width: Get.width,
-                fit: BoxFit.cover,
-              ),
-            ));
+    ZoomDialog(
+      backgroundColor: Colors.transparent,
+      child: Image.network(
+        imageUrl,
+        width: Get.width,
+        fit: BoxFit.cover,
+      ),
+    ).show(context);
   }
 }
