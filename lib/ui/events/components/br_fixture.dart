@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/platform_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
@@ -11,11 +13,15 @@ import 'package:e_sport/ui/events/components/team_position_selector.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
+import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 
@@ -37,6 +43,7 @@ class _AddBRFixtureState extends State<AddBRFixture> {
   bool _hasBeenPlayed = false;
   bool _isLoading = false;
   List<PlatformModel> _platforms = [];
+  File? imageFile;
 
   Future<void> getPlatforms() async {
     var response = await http.get(Uri.parse(ApiLink.getPlatforms),
@@ -46,6 +53,38 @@ class _AddBRFixtureState extends State<AddBRFixture> {
 
     setState(() {
       _platforms = platformModelFromJson(response.body);
+    });
+  }
+
+  Future pickImageFromGallery() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() {
+        imageFile = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      debugPrint('$e');
+    }
+  }
+
+  Future pickImageFromCamera() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() {
+        imageFile = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      debugPrint('$e');
+    }
+  }
+
+  void clearPhoto() {
+    setState(() {
+      imageFile = null;
     });
   }
 
@@ -260,6 +299,115 @@ class _AddBRFixtureState extends State<AddBRFixture> {
                       ),
                     )
                   : ButtonLoader(),
+              Gap(Get.height * 0.02),
+              CustomText(
+                title: "Stream banner",
+                color: AppColor().primaryWhite,
+                size: 16,
+              ),
+              Gap(Get.height * 0.01),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(Get.height * 0.04),
+                decoration: BoxDecoration(
+                    color: AppColor().bgDark,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    imageFile == null
+                        ? SvgPicture.asset(
+                            'assets/images/svg/photo.svg',
+                            height: Get.height * 0.08,
+                          )
+                        : Container(
+                            height: Get.height * 0.08,
+                            width: Get.height * 0.08,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  image: FileImage(imageFile!),
+                                  fit: BoxFit.cover),
+                            ),
+                          ),
+                    Gap(Get.height * 0.01),
+                    InkWell(
+                      onTap: () {
+                        if (imageFile == null) {
+                          debugPrint('pick image');
+                          Get.defaultDialog(
+                            title: "Select your image",
+                            backgroundColor: AppColor().primaryLightColor,
+                            titlePadding: const EdgeInsets.only(top: 30),
+                            contentPadding: const EdgeInsets.only(
+                                top: 5, bottom: 30, left: 25, right: 25),
+                            middleText: "Upload your profile picture",
+                            titleStyle: TextStyle(
+                                color: AppColor().primaryWhite,
+                                fontSize: 15,
+                                fontFamily: "InterSemiBold"),
+                            radius: 10,
+                            confirm: Column(
+                              children: [
+                                CustomFillButton(
+                                  onTap: () {
+                                    pickImageFromGallery();
+                                    Get.back();
+                                  },
+                                  height: 45,
+                                  width: Get.width * 0.5,
+                                  buttonText: 'Upload from gallery',
+                                  textColor: AppColor().primaryWhite,
+                                  buttonColor: AppColor().primaryColor,
+                                  boarderColor: AppColor().primaryColor,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                const Gap(10),
+                                CustomFillButton(
+                                  onTap: () {
+                                    pickImageFromCamera();
+                                    Get.back();
+                                  },
+                                  height: 45,
+                                  width: Get.width * 0.5,
+                                  buttonText: 'Upload from camera',
+                                  textColor: AppColor().primaryWhite,
+                                  buttonColor: AppColor().primaryColor,
+                                  boarderColor: AppColor().primaryColor,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                              ],
+                            ),
+                            middleTextStyle: TextStyle(
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                            ),
+                          );
+                        } else {
+                          clearPhoto();
+                        }
+                      },
+                      child: CustomText(
+                        title: imageFile == null ? 'Click to upload' : 'Cancel',
+                        size: 15,
+                        fontFamily: 'InterMedium',
+                        color: AppColor().primaryColor,
+                        underline: TextDecoration.underline,
+                      ),
+                    ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Max file size: 4MB',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'Inter',
+                      size: Get.height * 0.014,
+                    ),
+                  ],
+                ),
+              ),
               const Gap(20),
               CustomText(
                 title: "Streaming Platform link",
@@ -385,7 +533,8 @@ class _AddBRFixtureState extends State<AddBRFixture> {
                                 .map((i) => i.value.id!)
                                 .toList(),
                         widget.event.tournamentType!,
-                        widget.event.community!.id!);
+                        widget.event.community!.id!,
+                        imageFile);
                     setState(() {
                       _isLoading = false;
                     });
