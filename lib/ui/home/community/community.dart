@@ -69,6 +69,7 @@ class _CommunityPageState extends State<CommunityPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         surfaceTintColor: AppColor().primaryBackGroundColor,
         centerTitle: true,
