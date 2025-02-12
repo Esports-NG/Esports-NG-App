@@ -811,7 +811,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                                   fixture: _fixturesList[index],
                                                   backgroundColor: _colors[
                                                       index % _colors.length])),
-                                  itemCount: _fixturesList.take(5).length),
+                                  itemCount: _fixturesList.take(10).length),
                     ),
                   ),
                   Gap(Get.height * 0.005),

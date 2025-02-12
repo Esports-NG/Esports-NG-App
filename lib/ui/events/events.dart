@@ -52,6 +52,7 @@ class _EventsPageState extends State<EventsPage>
             physics: const AlwaysScrollableScrollPhysics(),
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverAppBar(
+                automaticallyImplyLeading: false,
                   elevation: 0,
                   centerTitle: true,
                   title: CustomText(
