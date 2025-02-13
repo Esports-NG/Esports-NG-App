@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/platform_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
@@ -7,11 +9,15 @@ import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widget/buttonLoader.dart';
 import 'package:e_sport/ui/widget/custom_text.dart';
 import 'package:e_sport/ui/widget/custom_textfield.dart';
+import 'package:e_sport/ui/widget/custom_widgets.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class AddOneVOneFixture extends StatefulWidget {
@@ -28,8 +34,10 @@ class _AddOneVOneFixtureState extends State<AddOneVOneFixture> {
   final authController = Get.put(AuthRepository());
 
   bool _hasBeenPlayed = false;
+  bool _hasLivestream = false;
   bool _isLoading = false;
   List<PlatformModel> _platforms = [];
+  File? imageFile;
 
   Future<void> getPlatforms() async {
     var response = await http.get(Uri.parse(ApiLink.getPlatforms),
@@ -39,6 +47,38 @@ class _AddOneVOneFixtureState extends State<AddOneVOneFixture> {
 
     setState(() {
       _platforms = platformModelFromJson(response.body);
+    });
+  }
+
+  Future pickImageFromGallery() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() {
+        imageFile = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      debugPrint('$e');
+    }
+  }
+
+  Future pickImageFromCamera() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() {
+        imageFile = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      debugPrint('$e');
+    }
+  }
+
+  void clearPhoto() {
+    setState(() {
+      imageFile = null;
     });
   }
 
@@ -281,90 +321,239 @@ class _AddOneVOneFixtureState extends State<AddOneVOneFixture> {
               ),
               Gap(Get.height * 0.02),
               CustomText(
-                title: "Streaming Platform",
+                title: "Fixture banner",
                 color: AppColor().primaryWhite,
                 size: 16,
               ),
               Gap(Get.height * 0.01),
-              InputDecorator(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColor().primaryDark,
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: AppColor().lightItemsColor, width: 1),
-                      borderRadius: BorderRadius.circular(10)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10)),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<PlatformModel>(
-                    dropdownColor: AppColor().primaryDark,
-                    borderRadius: BorderRadius.circular(10),
-                    value: tournamentController.fixturePlatform.value,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: AppColor().lightItemsColor,
-                    ),
-                    items: _platforms.map((value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Row(
-                          children: [
-                            Image.network(
-                              "${ApiLink.imageUrl}${value.logo}",
-                              height: 35,
-                              fit: BoxFit.contain,
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(Get.height * 0.04),
+                decoration: BoxDecoration(
+                    color: AppColor().bgDark,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    imageFile == null
+                        ? SvgPicture.asset(
+                            'assets/images/svg/photo.svg',
+                            height: Get.height * 0.08,
+                          )
+                        : Container(
+                            height: Get.height * 0.08,
+                            width: Get.height * 0.08,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  image: FileImage(imageFile!),
+                                  fit: BoxFit.cover),
                             ),
-                            const Gap(10),
-                            CustomText(
-                              title: value.title,
-                              color: AppColor().lightItemsColor,
-                              fontFamily: 'InterMedium',
-                              size: 18,
+                          ),
+                    Gap(Get.height * 0.01),
+                    InkWell(
+                      onTap: () {
+                        if (imageFile == null) {
+                          debugPrint('pick image');
+                          Get.defaultDialog(
+                            title: "Select your image",
+                            backgroundColor: AppColor().primaryLightColor,
+                            titlePadding: const EdgeInsets.only(top: 30),
+                            contentPadding: const EdgeInsets.only(
+                                top: 5, bottom: 30, left: 25, right: 25),
+                            middleText: "Upload your profile picture",
+                            titleStyle: TextStyle(
+                                color: AppColor().primaryWhite,
+                                fontSize: 15,
+                                fontFamily: "InterSemiBold"),
+                            radius: 10,
+                            confirm: Column(
+                              children: [
+                                CustomFillButton(
+                                  onTap: () {
+                                    pickImageFromGallery();
+                                    Get.back();
+                                  },
+                                  height: 45,
+                                  width: Get.width * 0.5,
+                                  buttonText: 'Upload from gallery',
+                                  textColor: AppColor().primaryWhite,
+                                  buttonColor: AppColor().primaryColor,
+                                  boarderColor: AppColor().primaryColor,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                const Gap(10),
+                                CustomFillButton(
+                                  onTap: () {
+                                    pickImageFromCamera();
+                                    Get.back();
+                                  },
+                                  height: 45,
+                                  width: Get.width * 0.5,
+                                  buttonText: 'Upload from camera',
+                                  textColor: AppColor().primaryWhite,
+                                  buttonColor: AppColor().primaryColor,
+                                  boarderColor: AppColor().primaryColor,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      tournamentController.fixturePlatform.value = value;
-                      print(value);
-                    },
-                    hint: CustomText(
-                      title: "Select Platform",
-                      color: AppColor().lightItemsColor,
-                      fontFamily: 'InterMedium',
-                      size: 15,
+                            middleTextStyle: TextStyle(
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                            ),
+                          );
+                        } else {
+                          clearPhoto();
+                        }
+                      },
+                      child: CustomText(
+                        title: imageFile == null ? 'Click to upload' : 'Cancel',
+                        size: 15,
+                        fontFamily: 'InterMedium',
+                        color: AppColor().primaryColor,
+                        underline: TextDecoration.underline,
+                      ),
                     ),
-                  ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: 'Max file size: 4MB',
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      fontFamily: 'Inter',
+                      size: Get.height * 0.014,
+                    ),
+                  ],
                 ),
               ),
               const Gap(20),
               CustomText(
-                title: "Streaming Platform link",
+                title: "Has livestream?",
                 color: AppColor().primaryWhite,
-                size: 16,
               ),
-              Gap(Get.height * 0.01),
-              CustomTextField(
-                textEditingController:
-                    tournamentController.addFixtureStreamingLinkController,
-                prefixIcon: IntrinsicWidth(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Center(
-                      child: CustomText(
-                        title: "https://",
-                        color: AppColor().greyFour,
+              Row(
+                children: [
+                  Row(children: [
+                    CustomText(title: "Yes", color: AppColor().primaryWhite),
+                    Radio<bool>(
+                      value: true,
+                      activeColor: AppColor().primaryColor,
+                      groupValue: _hasLivestream,
+                      onChanged: (value) {
+                        setState(() {
+                          _hasLivestream = true;
+                        });
+                      },
+                    )
+                  ]),
+                  Row(children: [
+                    CustomText(title: "No", color: AppColor().primaryWhite),
+                    Radio<bool>(
+                      value: false,
+                      activeColor: AppColor().primaryColor,
+                      groupValue: _hasLivestream,
+                      onChanged: (value) {
+                        setState(() {
+                          _hasLivestream = false;
+                        });
+                      },
+                    )
+                  ])
+                ],
+              ),
+              if (_hasLivestream)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      title: "Streaming Platform",
+                      color: AppColor().primaryWhite,
+                      size: 16,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: AppColor().primaryDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<PlatformModel>(
+                          dropdownColor: AppColor().primaryDark,
+                          borderRadius: BorderRadius.circular(10),
+                          value: tournamentController.fixturePlatform.value,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: AppColor().lightItemsColor,
+                          ),
+                          items: _platforms.map((value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                    "${ApiLink.imageUrl}${value.logo}",
+                                    height: 35,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const Gap(10),
+                                  CustomText(
+                                    title: value.title,
+                                    color: AppColor().lightItemsColor,
+                                    fontFamily: 'InterMedium',
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            tournamentController.fixturePlatform.value = value;
+                            print(value);
+                          },
+                          hint: CustomText(
+                            title: "Select Platform",
+                            color: AppColor().lightItemsColor,
+                            fontFamily: 'InterMedium',
+                            size: 15,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: "Streaming Platform link",
+                      color: AppColor().primaryWhite,
+                      size: 16,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      textEditingController: tournamentController
+                          .addFixtureStreamingLinkController,
+                      prefixIcon: IntrinsicWidth(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Center(
+                            child: CustomText(
+                              title: "https://",
+                              color: AppColor().greyFour,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
               Gap(Get.height * 0.02),
               CustomText(
                 title: "Has the fixture been played?",
@@ -436,7 +625,10 @@ class _AddOneVOneFixtureState extends State<AddOneVOneFixture> {
                       _isLoading = true;
                     });
                     await tournamentController.createFixtureForPlayer(
-                        widget.event.id!, widget.event.community!.id!);
+                        widget.event.id!,
+                        widget.event.community!.id!,
+                        imageFile,
+                        _hasLivestream);
                     setState(() {
                       _isLoading = false;
                     });

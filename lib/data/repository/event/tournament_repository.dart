@@ -27,7 +27,11 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
+import 'package:dio/dio.dart' as dioClass;
+
+final dio = dioClass.Dio();
 
 class TournamentRepository extends GetxController {
   final authController = Get.put(AuthRepository());
@@ -508,53 +512,80 @@ class TournamentRepository extends GetxController {
     return fixtures;
   }
 
-  Future createBRFixture(
-      int id, List<int> participants, String type, int community) async {
-    print(type);
-    Map<String, dynamic> body = {
-      "player_ids": type == "solo" ? participants : [],
-      "team_ids": type == "team" ? participants : [],
-      "igame_mode": 1,
-      "fixture_group": "player",
-      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-      "fixture_time":
-          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-      "fixture_type": "BR",
-      "title": addFixtureRoundNameController.text,
-      "streaming_platform": fixturePlatform.value,
-      "ifirst":
-          type == "solo" ? brWinnerPlayer.value?.id : brWinnerTeam.value?.id,
-      "isecond":
-          type == "solo" ? brSecondPlayer.value?.id : brSecondTeam.value?.id,
-      "ithird":
-          type == "solo" ? brThirdPlayer.value?.id : brThirdTeam.value?.id,
-      "livestreams": [
-        {
-          "title": addFixtureRoundNameController.text,
-          "creator": "community",
-          "creator_id": community,
-          "description": "fixture",
-          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-          "platform_id": fixturePlatform.value!.id!,
-          "link": "https://${addFixtureStreamingLinkController.text}"
-        }
-      ]
-    };
+  Future createBRFixture(int id, List<int> participants, String type,
+      int community, File? imageFile, bool hasLivestream) async {
     try {
-      var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
-          headers: {
+      final formData = dioClass.FormData.fromMap(
+        {
+          "ifirst": (type == "solo"
+                      ? brWinnerPlayer.value?.id
+                      : brWinnerTeam.value?.id)
+                  ?.toString() ??
+              "",
+          "isecond": (type == "solo"
+                      ? brSecondPlayer.value?.id
+                      : brSecondTeam.value?.id)
+                  ?.toString() ??
+              "",
+          "ithird":
+              (type == "solo" ? brThirdPlayer.value?.id : brThirdTeam.value?.id)
+                      ?.toString() ??
+                  "",
+          "player_ids": [
+            selectedHomePlayer.value!.id.toString(),
+            selectedAwayPlayer.value!.id.toString()
+          ],
+          "igame_mode": "1",
+          "fixture_group": "player",
+          "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "fixture_time":
+              "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+          "fixture_type": "BR",
+          "title": addFixtureRoundNameController.text,
+          "streaming_platform": jsonEncode(fixturePlatform.value),
+          "banner": imageFile != null
+              ? await dioClass.MultipartFile.fromFile(imageFile.path)
+              : null,
+        },
+      );
+
+      if (hasLivestream) {
+        var livestreams = [
+          {
+            "title": addFixtureRoundNameController.text,
+            "description": "fixture",
+            "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+            "creator": "community",
+            "creator_id": community,
+            "time":
+                "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+            "platform_id": fixturePlatform.value!.id,
+            "link": "https://${addFixtureStreamingLinkController.text}",
+          }
+        ];
+
+        for (var key in livestreams[0].keys) {
+          formData.fields.add(
+              MapEntry("ilivestreams[0].$key", livestreams[0][key].toString()));
+        }
+      }
+
+      var response = await dio.post(ApiLink.createFixture(id),
+          data: formData,
+          options: dioClass.Options(headers: {
             "Authorization": "JWT ${authController.token}",
-            "Content-type": "application/json"
-          },
-          body: jsonEncode(body));
-      log(response.body);
+            dioClass.Headers.contentTypeHeader:
+                dioClass.Headers.multipartFormDataContentType
+          }));
+      print(response.data);
 
       if (response.statusCode == 200) {
         Get.back();
         Helpers().showCustomSnackbar(message: "Fixture added successfully");
       }
-    } catch (err) {}
+    } catch (err) {
+      log("Error creating fixture: ${(err as dioClass.DioException).response?.data}");
+    }
   }
 
   Future editBRFixture(int id, List<int> participants, String type) async {
@@ -581,6 +612,7 @@ class TournamentRepository extends GetxController {
         }
       ]
     };
+
     try {
       var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
           headers: {
@@ -597,99 +629,144 @@ class TournamentRepository extends GetxController {
     } catch (err) {}
   }
 
-  Future createFixtureForPlayer(int id, int community) async {
-    Map<String, dynamic> body = {
-      "away_player_id": selectedAwayPlayer.value!.id,
-      "away_score": addFixturesAwayPlayerScoreController.text == ""
-          ? null
-          : addFixturesAwayPlayerScoreController.text,
-      "home_player_id": selectedHomePlayer.value!.id,
-      "home_score": addFixturesHomePlayerScoreController.text == ""
-          ? null
-          : addFixturesHomePlayerScoreController.text,
-      "player_ids": [
-        selectedHomePlayer.value!.id,
-        selectedAwayPlayer.value!.id
-      ],
-      "igame_mode": 1,
-      "fixture_group": "player",
-      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-      "fixture_time":
-          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-      "fixture_type": "1v1",
-      "title": addFixtureRoundNameController.text,
-      "streaming_platform": fixturePlatform.value,
-      "livestreams": [
+  Future createFixtureForPlayer(
+      int id, int community, File? imageFile, bool hasLivestream) async {
+    try {
+      final formData = dioClass.FormData.fromMap(
         {
+          "away_player_id": selectedAwayPlayer.value!.id.toString(),
+          "away_score": addFixturesAwayPlayerScoreController.text.isEmpty
+              ? ""
+              : addFixturesAwayPlayerScoreController.text,
+          "home_player_id": selectedHomePlayer.value!.id.toString(),
+          "home_score": addFixturesHomePlayerScoreController.text.isEmpty
+              ? ""
+              : addFixturesHomePlayerScoreController.text,
+          "player_ids": [
+            selectedHomePlayer.value!.id.toString(),
+            selectedAwayPlayer.value!.id.toString()
+          ],
+          "igame_mode": "1",
+          "fixture_group": "player",
+          "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "fixture_time":
+              "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+          "fixture_type": "1v1",
           "title": addFixtureRoundNameController.text,
-          "description": "fixture",
-          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-          "creator": "community",
-          "creator_id": community,
-          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-          "platform_id": fixturePlatform.value!.id!,
-          "link": "https://${addFixtureStreamingLinkController.text}"
+          "streaming_platform": jsonEncode(fixturePlatform.value),
+          "banner": imageFile != null
+              ? await dioClass.MultipartFile.fromFile(imageFile.path)
+              : null,
+        },
+      );
+
+      if (hasLivestream) {
+        var livestreams = [
+          {
+            "title": addFixtureRoundNameController.text,
+            "description": "fixture",
+            "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+            "creator": "community",
+            "creator_id": community,
+            "time":
+                "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+            "platform_id": fixturePlatform.value!.id,
+            "link": "https://${addFixtureStreamingLinkController.text}",
+          }
+        ];
+
+        for (var key in livestreams[0].keys) {
+          formData.fields.add(
+              MapEntry("ilivestreams[0].$key", livestreams[0][key].toString()));
         }
-      ]
-    };
-    try {
-      var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
-          headers: {
+      }
+
+      var response = await dio.post(ApiLink.createFixture(id),
+          data: formData,
+          options: dioClass.Options(headers: {
             "Authorization": "JWT ${authController.token}",
-            "Content-type": "application/json"
-          },
-          body: jsonEncode(body));
-      log(response.body);
+            dioClass.Headers.contentTypeHeader:
+                dioClass.Headers.multipartFormDataContentType
+          }));
+      print(response.data);
 
       if (response.statusCode == 200) {
         Get.back();
         Helpers().showCustomSnackbar(message: "Fixture added successfully");
       }
-    } catch (err) {}
+    } catch (err) {
+      log("Error creating fixture: ${(err as dioClass.DioException).response?.data}");
+    }
   }
 
-  Future createFixtureForTeam(int id, int community) async {
-    Map<String, dynamic> body = {
-      "away_team_id": selectedAwayTeam.value!.id,
-      "away_score": addFixturesAwayTeamScoreController.text,
-      "home_team_id": selectedHomeTeam.value!.id,
-      "home_score": addFixturesHomeTeamScoreController.text,
-      "team_ids": [selectedHomeTeam.value!.id, selectedAwayTeam.value!.id],
-      "igame_mode": 1,
-      "fixture_group": "team",
-      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-      "fixture_time":
-          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-      "fixture_type": "1v1",
-      "title": addFixtureRoundNameController.text,
-      "streaming_link": "https://${addFixtureStreamingLinkController.text}",
-      "streaming_platform": fixturePlatform.value,
-      "livestreams": [
-        {
-          "title": "",
-          "description": "",
-          "creator": "community",
-          "creator_id": community,
-          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-          "platform_id": fixturePlatform.value!.id!,
-          "link": "https://${addFixtureStreamingLinkController.text}"
-        }
-      ]
-    };
+  Future createFixtureForTeam(
+      int id, int community, File? imageFile, bool hasLivestream) async {
     try {
-      var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
-          headers: {
+      final formData = dioClass.FormData.fromMap(
+        {
+          "away_team_id": selectedAwayTeam.value!.id.toString(),
+          "away_score": addFixturesAwayTeamScoreController.text.isEmpty
+              ? ""
+              : addFixturesAwayTeamScoreController.text,
+          "home_team_id": selectedHomeTeam.value!.id.toString(),
+          "home_score": addFixturesHomeTeamScoreController.text.isEmpty
+              ? ""
+              : addFixturesHomeTeamScoreController.text,
+          "team_ids": [
+            selectedHomeTeam.value!.id.toString(),
+            selectedAwayTeam.value!.id.toString()
+          ],
+          "igame_mode": "1",
+          "fixture_group": "team",
+          "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+          "fixture_time":
+              "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+          "fixture_type": "1v1",
+          "title": addFixtureRoundNameController.text,
+          "streaming_platform": jsonEncode(fixturePlatform.value),
+          "banner": imageFile != null
+              ? await dioClass.MultipartFile.fromFile(imageFile.path)
+              : null,
+        },
+      );
+
+      if (hasLivestream) {
+        var livestreams = [
+          {
+            "title": addFixtureRoundNameController.text,
+            "description": "fixture",
+            "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+            "creator": "community",
+            "creator_id": community,
+            "time":
+                "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+            "platform_id": fixturePlatform.value!.id,
+            "link": "https://${addFixtureStreamingLinkController.text}",
+          }
+        ];
+
+        for (var key in livestreams[0].keys) {
+          formData.fields.add(
+              MapEntry("ilivestreams[0].$key", livestreams[0][key].toString()));
+        }
+      }
+
+      var response = await dio.post(ApiLink.createFixture(id),
+          data: formData,
+          options: dioClass.Options(headers: {
             "Authorization": "JWT ${authController.token}",
-            "Content-type": "application/json"
-          },
-          body: jsonEncode(body));
+            dioClass.Headers.contentTypeHeader:
+                dioClass.Headers.multipartFormDataContentType
+          }));
+      print(response.data);
 
       if (response.statusCode == 200) {
         Get.back();
-        Helpers().showCustomSnackbar(message: "Fixture added succesfully");
+        Helpers().showCustomSnackbar(message: "Fixture added successfully");
       }
-    } catch (err) {}
+    } catch (err) {
+      log("Error creating fixture: ${(err as dioClass.DioException).response?.data}");
+    }
   }
 
   Future getEventDetails(int id) async {
