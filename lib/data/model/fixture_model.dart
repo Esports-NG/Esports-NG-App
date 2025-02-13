@@ -40,6 +40,7 @@ class FixtureModel {
   final PositionModel? first;
   final PositionModel? second;
   final PositionModel? third;
+  final String? banner;
 
   FixtureModel(
       {this.id,
@@ -64,7 +65,8 @@ class FixtureModel {
       this.livestreams,
       this.first,
       this.second,
-      this.third});
+      this.third,
+      this.banner,});
 
   factory FixtureModel.fromJson(Map<String, dynamic> json) => FixtureModel(
         id: json["id"],
@@ -120,6 +122,7 @@ class FixtureModel {
         third: json["third"] == null
             ? null
             : PositionModel.fromJson(json["third"]),
+        banner: json["banner"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -144,6 +147,7 @@ class FixtureModel {
         "fixture_group": fixtureGroup,
         "streaming_link": streamingLink,
         "streaming_platform": streamingPlatform,
+        "banner": banner,
       };
 }
 

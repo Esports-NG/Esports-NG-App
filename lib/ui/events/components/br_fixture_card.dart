@@ -251,13 +251,13 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                           children: [
                             GestureDetector(
                               onTap: () => Helpers().showImagePopup(
-                                        context,"${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"),
+                                        context,"${ApiLink.imageUrl}${widget.fixture.banner}"),
                               child: OtherImage(
                                   width: 60,
                                   height: 60,
-                                  image: widget.fixture.livestreams![0].banner != null
-                                      ? "${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"
-                                      : widget.fixture.livestreams![0].banner),
+                                  image: widget.fixture.banner != null
+                                      ? "${ApiLink.imageUrl}${widget.fixture.banner}"
+                                      : widget.fixture.banner),
                             ),
                             CustomText(
                                 fontFamily: "InterSemiBold",
@@ -556,9 +556,11 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                               OtherImage(
                                   width: 40,
                                   height: 40,
-                                  image: widget.fixture.livestreams![0].banner != null
-                                  ? "${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"
-                                  : widget.fixture.livestreams![0].banner),
+                                  image:  widget.event.tournamentType == "solo"
+                                              ? widget.fixture.second!.player!
+                                                  .profile
+                                              : widget.fixture.second!.team!
+                                                  .profilePicture),
                               CustomText(
                                   title: widget.event.tournamentType == "solo"
                                       ? widget
@@ -635,13 +637,13 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                           children: [
                             GestureDetector(
                               onTap: () => Helpers().showImagePopup(
-                                      context,"${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"),
+                                      context,"${ApiLink.imageUrl}${widget.fixture.banner}"),
                               child: OtherImage(
                                   width: 50,
                                   height: 50,
-                                  image: widget.fixture.livestreams![0].banner != null
-                                    ? "${ApiLink.imageUrl}${widget.fixture.livestreams![0].banner}"
-                                    : widget.fixture.livestreams![0].banner),
+                                  image: widget.fixture.banner != null
+                                    ? "${ApiLink.imageUrl}${widget.fixture.banner}"
+                                    : widget.fixture.banner),
                             ),
                             CustomText(
                                 fontFamily: "InterSemiBold",
