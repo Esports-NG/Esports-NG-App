@@ -60,31 +60,34 @@ class _LivestreamCardState extends State<LivestreamCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (widget.livestream.user != null)
+                SizedBox(
+                  width: Get.width * 0.6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.livestream.user != null)
+                        SizedBox(
+                          child: CustomText(
+                            title:
+                                "${widget.livestream.user!.userName!.capitalizeFirst}'s Livestream ",
+                            color: AppColor().primaryWhite,
+                            fontFamily: 'Inter',
+                            //textAlign: TextAlign.center,
+                            size: 14,
+                          ),
+                        ),
+                      Gap(Get.height * 0.002),
                       SizedBox(
                         child: CustomText(
-                          title:
-                              "${widget.livestream.user!.userName!.capitalizeFirst}'s Livestream ",
+                          title: widget.livestream.title!.toUpperCase(),
                           color: AppColor().primaryWhite,
-                          fontFamily: 'Inter',
+                          fontFamily: 'InterSemiBold',
                           //textAlign: TextAlign.center,
                           size: 14,
                         ),
                       ),
-                    Gap(Get.height * 0.002),
-                    SizedBox(
-                      child: CustomText(
-                        title: widget.livestream.title!.toUpperCase(),
-                        color: AppColor().primaryWhite,
-                        fontFamily: 'InterSemiBold',
-                        //textAlign: TextAlign.center,
-                        size: 14,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -123,7 +126,7 @@ class _LivestreamCardState extends State<LivestreamCard> {
             Center(
               child: GestureDetector(
                 onTap: () => Helpers().showImagePopup(
-                                      context,"${ApiLink.imageUrl}${widget.livestream.banner}"),
+                    context, "${ApiLink.imageUrl}${widget.livestream.banner}"),
                 child: OtherImage(
                     width: 60,
                     height: 60,

@@ -779,7 +779,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                       width: double.infinity,
                       height: _isFetchingFixtures || _fixturesList.isEmpty
                           ? 50
-                          : Get.height * 0.27,
+                          : Get.height * 0.285,
                       child: _isFetchingFixtures
                           ? const Center(child: ButtonLoader())
                           : _fixturesList.isEmpty

@@ -88,26 +88,29 @@ class _FixtureCardState extends State<FixtureCard> {
                         ),
                       ),
                       Gap(Get.height * 0.01),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            title: widget.fixture.title,
-                            color: AppColor().primaryWhite,
-                            fontFamily: 'Inter',
-                            textAlign: TextAlign.start,
-                            size: 14,
-                          ),
-                          Gap(Get.height * 0.002),
-                          CustomText(
-                            title:
-                                "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
-                            color: AppColor().primaryWhite,
-                            fontFamily: 'InterSemiBold',
-                            textAlign: TextAlign.start,
-                            size: 14,
-                          ),
-                        ],
+                      SizedBox(
+                        width: Get.width * 0.5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              title: widget.fixture.title,
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'Inter',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                            Gap(Get.height * 0.002),
+                            CustomText(
+                              title:
+                                  "${DateFormat.yMMMEd().format(widget.fixture.fixtureDate!)}, $formattedTime",
+                              color: AppColor().primaryWhite,
+                              fontFamily: 'InterSemiBold',
+                              textAlign: TextAlign.start,
+                              size: 14,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -363,7 +366,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        //width: Get.width * 0.9,
+                        width: Get.width * 0.45,
                         child: CustomText(
                           title: widget.fixture.title!.capitalizeFirst,
                           color: AppColor().primaryWhite,
