@@ -90,12 +90,17 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                           children: [
                             Row(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(Get.width * 1),
-                                  child: OtherImage(
-                                    width: 30,
-                                    image: widget.fixture.tournament!.games![0].profilePicture,
-                                    ),
+                                GestureDetector(
+                                  onTap: () => Helpers().showImagePopup(context,
+                            "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}"),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(Get.width * 1),
+                                    child: OtherImage(
+                                      height: 30,
+                                      width: 30,
+                                      image: "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}",
+                                      ),
+                                  ),
                                 ),
                                 Gap(Get.height * 0.01),
                                 Column(
@@ -130,7 +135,7 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                               title: '${widget.fixture.tournament!.games![0].abbrev} Fixture',
                             ),
                             Gap(Get.height * 0.0025),
-                            dateHasPassed(widget.fixture.fixtureDate!) == false
+                            dateHasPassed(widget.fixture.fixtureDate!) == false && widget.fixture.livestreams!.isNotEmpty
                                 ? Stack(
                                     children: [
                                       Icon(
@@ -275,7 +280,9 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                     child: InkWell(
                       onTap: () => launchUrl(
                           Uri.parse(widget.fixture.livestreams![0].link!)),
-                      child: ColorFiltered(
+                      child: widget.fixture.livestreams!.isEmpty
+                        ? SizedBox(height: Get.height * 0.035, child: Center(child: CustomText(title: "No Livestream")))
+                        : ColorFiltered(
                         colorFilter: const ColorFilter.mode(
                           Colors.white,
                           BlendMode.srcATop,
@@ -508,7 +515,7 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                           ),
                         ],
                       ),
-                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                      dateHasPassed(widget.fixture.fixtureDate!) == false //&& widget.fixture.livestreams!.isNotEmpty
                           ? Stack(
                               children: [
                                 Icon(
@@ -657,7 +664,9 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                   child: InkWell(
                     onTap: () => launchUrl(
                         Uri.parse(widget.fixture.livestreams![0].link!)),
-                    child: ColorFiltered(
+                    child: widget.fixture.livestreams!.isEmpty
+                        ? SizedBox(height: Get.height * 0.035, child: Center(child: CustomText(title: "No Livestream")))
+                        : ColorFiltered(
                       colorFilter: const ColorFilter.mode(
                         Colors.white,
                         BlendMode.srcATop,

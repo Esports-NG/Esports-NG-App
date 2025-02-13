@@ -82,8 +82,8 @@ class _FixtureCardState extends State<FixtureCard> {
                           borderRadius: BorderRadius.circular(Get.width * 1),
                           child: OtherImage(
                             width: 30,
-                            image: widget
-                                .fixture.tournament!.games![0].profilePicture,
+                            height: 30,
+                            image: "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}",
                           ),
                         ),
                       ),
@@ -119,7 +119,7 @@ class _FixtureCardState extends State<FixtureCard> {
                             '${widget.fixture.tournament!.games![0].abbrev} Fixture',
                       ),
                       Gap(Get.height * 0.0025),
-                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                      dateHasPassed(widget.fixture.fixtureDate!) == false && widget.fixture.livestreams!.isNotEmpty
                           ? Stack(
                               children: [
                                 Icon(
@@ -283,7 +283,7 @@ class _FixtureCardState extends State<FixtureCard> {
                     onTap: () => launchUrl(
                         Uri.parse(widget.fixture.livestreams![0].link!)),
                     child: widget.fixture.livestreams!.isEmpty
-                        ? SizedBox()
+                        ? SizedBox(height: Get.height * 0.035, child: Center(child: CustomText(title: "No Livestream")))
                         : ColorFiltered(
                             colorFilter: const ColorFilter.mode(
                               Colors.white,
@@ -386,7 +386,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                       ),
                     ],
                   ),
-                  dateHasPassed(widget.fixture.fixtureDate!) == false
+                  dateHasPassed(widget.fixture.fixtureDate!) == false && widget.fixture.livestreams!.isNotEmpty
                       ? Stack(
                           children: [
                             Icon(
@@ -507,13 +507,15 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
             ),
             Gap(Get.height * 0.01),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: Get.width * 0.2),
+              padding: EdgeInsets.symmetric(horizontal: Get.width * 0.15),
               width: Get.width * 0.9,
               height: Get.height * 0.035,
               child: InkWell(
                 onTap: () =>
                     launchUrl(Uri.parse(widget.fixture.livestreams![0].link!)),
-                child: ColorFiltered(
+                child: widget.fixture.livestreams!.isEmpty
+                        ? SizedBox(height: Get.height * 0.035, child: Center(child: CustomText(title: "No Livestream")))
+                        : ColorFiltered(
                   colorFilter: const ColorFilter.mode(
                     Colors.white,
                     BlendMode.srcATop,
@@ -623,7 +625,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                           ),
                         ],
                       ),
-                      dateHasPassed(widget.fixture.fixtureDate!) == false
+                      dateHasPassed(widget.fixture.fixtureDate!) == false && widget.fixture.livestreams!.isNotEmpty
                           ? Stack(
                               children: [
                                 Icon(

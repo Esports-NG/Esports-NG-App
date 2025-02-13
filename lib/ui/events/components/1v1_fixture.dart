@@ -34,6 +34,7 @@ class _AddOneVOneFixtureState extends State<AddOneVOneFixture> {
   final authController = Get.put(AuthRepository());
 
   bool _hasBeenPlayed = false;
+  bool _hasLivestream = false;
   bool _isLoading = false;
   List<PlatformModel> _platforms = [];
   File? imageFile;
@@ -320,71 +321,7 @@ class _AddOneVOneFixtureState extends State<AddOneVOneFixture> {
               ),
               Gap(Get.height * 0.02),
               CustomText(
-                title: "Streaming Platform",
-                color: AppColor().primaryWhite,
-                size: 16,
-              ),
-              Gap(Get.height * 0.01),
-              InputDecorator(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColor().primaryDark,
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: AppColor().lightItemsColor, width: 1),
-                      borderRadius: BorderRadius.circular(10)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10)),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<PlatformModel>(
-                    dropdownColor: AppColor().primaryDark,
-                    borderRadius: BorderRadius.circular(10),
-                    value: tournamentController.fixturePlatform.value,
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: AppColor().lightItemsColor,
-                    ),
-                    items: _platforms.map((value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Row(
-                          children: [
-                            Image.network(
-                              "${ApiLink.imageUrl}${value.logo}",
-                              height: 35,
-                              fit: BoxFit.contain,
-                            ),
-                            const Gap(10),
-                            CustomText(
-                              title: value.title,
-                              color: AppColor().lightItemsColor,
-                              fontFamily: 'InterMedium',
-                              size: 18,
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      tournamentController.fixturePlatform.value = value;
-                      print(value);
-                    },
-                    hint: CustomText(
-                      title: "Select Platform",
-                      color: AppColor().lightItemsColor,
-                      fontFamily: 'InterMedium',
-                      size: 15,
-                    ),
-                  ),
-                ),
-              ),
-              Gap(Get.height * 0.02),
-              CustomText(
-                title: "Stream banner",
+                title: "Fixture banner",
                 color: AppColor().primaryWhite,
                 size: 16,
               ),
@@ -493,26 +430,130 @@ class _AddOneVOneFixtureState extends State<AddOneVOneFixture> {
               ),
               const Gap(20),
               CustomText(
-                title: "Streaming Platform link",
+                title: "Has livestream?",
                 color: AppColor().primaryWhite,
-                size: 16,
               ),
-              Gap(Get.height * 0.01),
-              CustomTextField(
-                textEditingController:
-                    tournamentController.addFixtureStreamingLinkController,
-                prefixIcon: IntrinsicWidth(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Center(
-                      child: CustomText(
-                        title: "https://",
-                        color: AppColor().greyFour,
+              Row(
+                children: [
+                  Row(children: [
+                    CustomText(title: "Yes", color: AppColor().primaryWhite),
+                    Radio<bool>(
+                      value: true,
+                      activeColor: AppColor().primaryColor,
+                      groupValue: _hasLivestream,
+                      onChanged: (value) {
+                        setState(() {
+                          _hasLivestream = true;
+                        });
+                      },
+                    )
+                  ]),
+                  Row(children: [
+                    CustomText(title: "No", color: AppColor().primaryWhite),
+                    Radio<bool>(
+                      value: false,
+                      activeColor: AppColor().primaryColor,
+                      groupValue: _hasLivestream,
+                      onChanged: (value) {
+                        setState(() {
+                          _hasLivestream = false;
+                        });
+                      },
+                    )
+                  ])
+                ],
+              ),
+              if (_hasLivestream)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      title: "Streaming Platform",
+                      color: AppColor().primaryWhite,
+                      size: 16,
+                    ),
+                    Gap(Get.height * 0.01),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: AppColor().primaryDark,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: AppColor().lightItemsColor, width: 1),
+                            borderRadius: BorderRadius.circular(10)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<PlatformModel>(
+                          dropdownColor: AppColor().primaryDark,
+                          borderRadius: BorderRadius.circular(10),
+                          value: tournamentController.fixturePlatform.value,
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: AppColor().lightItemsColor,
+                          ),
+                          items: _platforms.map((value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                    "${ApiLink.imageUrl}${value.logo}",
+                                    height: 35,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const Gap(10),
+                                  CustomText(
+                                    title: value.title,
+                                    color: AppColor().lightItemsColor,
+                                    fontFamily: 'InterMedium',
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            tournamentController.fixturePlatform.value = value;
+                            print(value);
+                          },
+                          hint: CustomText(
+                            title: "Select Platform",
+                            color: AppColor().lightItemsColor,
+                            fontFamily: 'InterMedium',
+                            size: 15,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Gap(Get.height * 0.02),
+                    CustomText(
+                      title: "Streaming Platform link",
+                      color: AppColor().primaryWhite,
+                      size: 16,
+                    ),
+                    Gap(Get.height * 0.01),
+                    CustomTextField(
+                      textEditingController: tournamentController
+                          .addFixtureStreamingLinkController,
+                      prefixIcon: IntrinsicWidth(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Center(
+                            child: CustomText(
+                              title: "https://",
+                              color: AppColor().greyFour,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
               Gap(Get.height * 0.02),
               CustomText(
                 title: "Has the fixture been played?",
@@ -586,7 +627,8 @@ class _AddOneVOneFixtureState extends State<AddOneVOneFixture> {
                     await tournamentController.createFixtureForPlayer(
                         widget.event.id!,
                         widget.event.community!.id!,
-                        imageFile);
+                        imageFile,
+                        _hasLivestream);
                     setState(() {
                       _isLoading = false;
                     });
