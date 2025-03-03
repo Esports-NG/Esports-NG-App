@@ -218,7 +218,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 children: [
                   GestureDetector(
                     onTap: () => Helpers().showImagePopup(
-                        context, "${ApiLink.imageUrl}${widget.item.banner}"),
+                        context, widget.item.banner!),
                     child: Stack(
                       alignment: Alignment.bottomCenter,
                       clipBehavior: Clip.none,
@@ -250,7 +250,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                     Icons.error,
                                     color: AppColor().primaryColor),
                                 imageUrl:
-                                    '${ApiLink.imageUrl}${_eventDetails!.banner}',
+                                    _eventDetails!.banner!,
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                   decoration: BoxDecoration(
@@ -259,7 +259,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                         topRight: Radius.circular(10)),
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                            '${ApiLink.imageUrl}${_eventDetails!.banner}'),
+                                            _eventDetails!.banner!),
                                         fit: BoxFit.cover),
                                   ),
                                 ),

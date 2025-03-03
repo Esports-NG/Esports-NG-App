@@ -97,7 +97,7 @@ class _TrendingTeamsItemState extends State<TrendingTeamsItem> {
                       ),
                       errorWidget: (context, url, error) =>
                           Icon(Icons.error, color: AppColor().primaryColor),
-                      imageUrl: '${ApiLink.imageUrl}${widget.item.cover}',
+                      imageUrl: widget.item.cover!,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
@@ -105,7 +105,7 @@ class _TrendingTeamsItemState extends State<TrendingTeamsItem> {
                               topRight: Radius.circular(10)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  '${ApiLink.imageUrl}${widget.item.cover}'),
+                                  widget.item.cover!),
                               fit: BoxFit.cover),
                         ),
                       ),
