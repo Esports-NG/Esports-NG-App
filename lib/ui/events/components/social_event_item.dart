@@ -43,7 +43,7 @@ class SocialEventItem extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => Helpers()
-                .showImagePopup(context, "${ApiLink.imageUrl}${item.banner}"),
+                .showImagePopup(context, item.banner!),
             child: Stack(
               children: [
                 (item.banner == null)
@@ -75,7 +75,7 @@ class SocialEventItem extends StatelessWidget {
                         ),
                         errorWidget: (context, url, error) =>
                             Icon(Icons.error, color: AppColor().primaryColor),
-                        imageUrl: '${ApiLink.imageUrl}${item.banner}',
+                        imageUrl: item.banner!,
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             borderRadius: const BorderRadius.only(
@@ -83,7 +83,7 @@ class SocialEventItem extends StatelessWidget {
                                 topRight: Radius.circular(10)),
                             image: DecorationImage(
                                 image: NetworkImage(
-                                    '${ApiLink.imageUrl}${item.banner}'),
+                                    item.banner!),
                                 fit: BoxFit.cover),
                           ),
                         ),

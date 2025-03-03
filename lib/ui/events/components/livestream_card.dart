@@ -126,12 +126,12 @@ class _LivestreamCardState extends State<LivestreamCard> {
             Center(
               child: GestureDetector(
                 onTap: () => Helpers().showImagePopup(
-                    context, "${ApiLink.imageUrl}${widget.livestream.banner}"),
+                    context, widget.livestream.banner!),
                 child: OtherImage(
                     width: 60,
                     height: 60,
                     image: widget.livestream.banner != null
-                        ? "${ApiLink.imageUrl}${widget.livestream.banner}"
+                        ? widget.livestream.banner
                         : widget.livestream.banner),
               ),
             ),
@@ -167,7 +167,7 @@ class _LivestreamCardState extends State<LivestreamCard> {
                       BlendMode.srcATop,
                     ),
                     child: Image.network(
-                      '${ApiLink.imageUrl}${widget.livestream.platform!.secondaryImage}',
+                      '${widget.livestream.platform!.secondaryImage}',
                       alignment: Alignment.center,
                     ),
                   ),

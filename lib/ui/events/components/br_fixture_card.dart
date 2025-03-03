@@ -92,13 +92,13 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                               children: [
                                 GestureDetector(
                                   onTap: () => Helpers().showImagePopup(context,
-                            "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}"),
+                            widget.fixture.tournament!.games![0].profilePicture!),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(Get.width * 1),
                                     child: OtherImage(
                                       height: 30,
                                       width: 30,
-                                      image: "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}",
+                                      image: widget.fixture.tournament!.games![0].profilePicture,
                                       ),
                                   ),
                                 ),
@@ -251,12 +251,12 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                           children: [
                             GestureDetector(
                               onTap: () => Helpers().showImagePopup(
-                                        context,"${ApiLink.imageUrl}${widget.fixture.banner}"),
+                                        context,widget.fixture.banner!),
                               child: OtherImage(
                                   width: 60,
                                   height: 60,
                                   image: widget.fixture.banner != null
-                                      ? "${ApiLink.imageUrl}${widget.fixture.banner}"
+                                      ? widget.fixture.banner!
                                       : widget.fixture.banner),
                             ),
                             CustomText(
@@ -291,7 +291,7 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                           BlendMode.srcATop,
                         ),
                         child: Image.network(
-                          '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                          widget.fixture.livestreams![0].platform!.secondaryImage!,
                           // height: 25,
                           fit: BoxFit.cover,
                           alignment: Alignment.center,
@@ -637,12 +637,12 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                           children: [
                             GestureDetector(
                               onTap: () => Helpers().showImagePopup(
-                                      context,"${ApiLink.imageUrl}${widget.fixture.banner}"),
+                                      context, widget.fixture.banner!),
                               child: OtherImage(
                                   width: 50,
                                   height: 50,
                                   image: widget.fixture.banner != null
-                                    ? "${ApiLink.imageUrl}${widget.fixture.banner}"
+                                    ? widget.fixture.banner!
                                     : widget.fixture.banner),
                             ),
                             CustomText(
@@ -677,7 +677,7 @@ class _BRFixtureCardScrollableState extends State<BRFixtureCardScrollable> {
                         BlendMode.srcATop,
                       ),
                       child: Image.network(
-                        '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                        widget.fixture.livestreams![0].platform!.secondaryImage!,
                         alignment: Alignment.center,
                       ),
                     ),

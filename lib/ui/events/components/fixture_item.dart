@@ -77,13 +77,13 @@ class _FixtureCardState extends State<FixtureCard> {
                     children: [
                       GestureDetector(
                         onTap: () => Helpers().showImagePopup(context,
-                            "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}"),
+                            widget.fixture.tournament!.games![0].profilePicture!),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(Get.width * 1),
                           child: OtherImage(
                             width: 30,
                             height: 30,
-                            image: "${ApiLink.imageUrl}${widget.fixture.tournament!.games![0].profilePicture}",
+                            image: widget.fixture.tournament!.games![0].profilePicture,
                           ),
                         ),
                       ),
@@ -293,7 +293,7 @@ class _FixtureCardState extends State<FixtureCard> {
                               BlendMode.srcATop,
                             ),
                             child: Image.network(
-                              '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                              widget.fixture.livestreams![0].platform!.secondaryImage!,
                               alignment: Alignment.center,
                             ),
                           ),
@@ -524,7 +524,7 @@ class _FixtureCardScrollableState extends State<FixtureCardScrollable> {
                     BlendMode.srcATop,
                   ),
                   child: Image.network(
-                    '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                    widget.fixture.livestreams![0].platform!.secondaryImage!,
                     alignment: Alignment.center,
                   ),
                 ),
@@ -791,7 +791,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                         BlendMode.srcATop,
                       ),
                       child: Image.network(
-                        '${ApiLink.imageUrl}${widget.fixture.livestreams![0].platform!.secondaryImage}',
+                        widget.fixture.livestreams![0].platform!.secondaryImage!,
                         // height: 25,
                         fit: BoxFit.cover,
                         alignment: Alignment.center,

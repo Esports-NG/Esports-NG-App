@@ -92,7 +92,7 @@ class _GameProfileState extends State<GameProfile> {
                             )
                           : GestureDetector(
                               onTap: () => Helpers().showImagePopup(context,
-                                  "${ApiLink.imageUrl}${details!.cover!}"),
+                                  details!.cover!),
                               child: CachedNetworkImage(
                                 height: Get.height * 0.15,
                                 width: double.infinity,
@@ -110,7 +110,7 @@ class _GameProfileState extends State<GameProfile> {
                                     Icons.error,
                                     color: AppColor().primaryColor),
                                 imageUrl:
-                                    "${ApiLink.imageUrl}${details!.cover!}",
+                                    details!.cover!,
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                   decoration: BoxDecoration(
@@ -142,7 +142,7 @@ class _GameProfileState extends State<GameProfile> {
                                 : GestureDetector(
                                     onTap: () => Helpers().showImagePopup(
                                         context,
-                                        "${ApiLink.imageUrl}${details!.profilePicture!}"),
+                                        details!.profilePicture!),
                                     child: CachedNetworkImage(
                                       height: Get.height * 0.1,
                                       width: Get.height * 0.1,
@@ -160,14 +160,14 @@ class _GameProfileState extends State<GameProfile> {
                                           Icon(Icons.error,
                                               color: AppColor().primaryColor),
                                       imageUrl:
-                                          "${ApiLink.imageUrl}${details!.profilePicture!}",
+                                          details!.profilePicture!,
                                       imageBuilder: (context, imageProvider) =>
                                           Container(
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           image: DecorationImage(
                                               image: NetworkImage(
-                                                  "${ApiLink.imageUrl}${details!.profilePicture!}"),
+                                                  details!.profilePicture!),
                                               fit: BoxFit.cover),
                                         ),
                                       ),
@@ -230,7 +230,6 @@ class _GameProfileState extends State<GameProfile> {
                                           BlendMode.srcATop,
                                         ),
                                         child: Image.network(
-                                          ApiLink.imageUrl +
                                               item.platform!.logo!,
                                           width: 24,
                                           height: 24,

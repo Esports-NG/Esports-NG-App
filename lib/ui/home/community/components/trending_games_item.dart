@@ -103,7 +103,7 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
                       ),
                       errorWidget: (context, url, error) =>
                           Icon(Icons.error, color: AppColor().primaryColor),
-                      imageUrl: "${ApiLink.imageUrl}${widget.game.cover!}",
+                      imageUrl: widget.game.cover!,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
@@ -111,7 +111,7 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
                               topRight: Radius.circular(10)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  "${ApiLink.imageUrl}${widget.game.cover!}"),
+                                  widget.game.cover!),
                               fit: BoxFit.cover),
                         ),
                       ),
@@ -160,7 +160,6 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
                                             BlendMode.srcATop,
                                           ),
                                           child: Image.network(
-                                            ApiLink.imageUrl +
                                                 item.platform!.logo!,
                                             width: 24,
                                             height: 24,
@@ -260,7 +259,7 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
                       errorWidget: (context, url, error) =>
                           Icon(Icons.error, color: AppColor().primaryColor),
                       imageUrl:
-                          "${ApiLink.imageUrl}${widget.game.profilePicture!}",
+                          widget.game.profilePicture!,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -268,7 +267,7 @@ class _TrendingGamesItemState extends State<TrendingGamesItem> {
                               color: AppColor().primaryWhite, width: 0.5),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  "${ApiLink.imageUrl}${widget.game.profilePicture!}"),
+                                  widget.game.profilePicture!),
                               fit: BoxFit.cover),
                         ),
                       ),

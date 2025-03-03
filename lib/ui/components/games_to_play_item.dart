@@ -109,7 +109,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                     borderRadius: BorderRadius.circular(Get.width * 1),
                     child: Image(
                       image: NetworkImage(
-                          ApiLink.imageUrl + widget.item.profilePicture!),
+                          widget.item.profilePicture!),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -154,7 +154,7 @@ class _GamesToPlayItemState extends State<GamesToPlayItem> {
                                       BlendMode.srcATop,
                                     ),
                                     child: Image.network(
-                                        ApiLink.imageUrl + feed.platform!.logo!,
+                                        feed.platform!.logo!,
                                         width: 16,
                                         height: 16,
                                         fit: BoxFit.cover),

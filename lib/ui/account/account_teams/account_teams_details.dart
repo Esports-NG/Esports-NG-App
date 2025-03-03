@@ -112,7 +112,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
               children: [
                 GestureDetector(
                   onTap: () => Helpers().showImagePopup(
-                      context, "${ApiLink.imageUrl}${_details!.cover}"),
+                      context, _details!.cover!),
                   child: Stack(
                     alignment: Alignment.bottomCenter,
                     clipBehavior: Clip.none,
@@ -130,7 +130,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                               ),
                             )
                           : CachedNetworkImage(
-                              imageUrl: "${ApiLink.imageUrl}${_details!.cover}",
+                              imageUrl: _details!.cover!,
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                     height: Get.height * 0.15,
