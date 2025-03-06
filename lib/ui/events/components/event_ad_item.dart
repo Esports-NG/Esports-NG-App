@@ -51,7 +51,7 @@ class _EventAdItemState extends State<EventAdItem> {
           children: [
             GestureDetector(
               onTap: () => Helpers().showImagePopup(
-                  context, "${ApiLink.imageUrl}${widget.item.banner}"),
+                  context, "${widget.item.banner}"),
               child: Stack(
                 children: [
                   (widget.item.banner == null)
@@ -83,7 +83,7 @@ class _EventAdItemState extends State<EventAdItem> {
                           ),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error, color: AppColor().primaryColor),
-                          imageUrl: '${ApiLink.imageUrl}${widget.item.banner}',
+                          imageUrl: '${widget.item.banner}',
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
@@ -91,7 +91,7 @@ class _EventAdItemState extends State<EventAdItem> {
                                   topRight: Radius.circular(10)),
                               image: DecorationImage(
                                   image: NetworkImage(
-                                      '${ApiLink.imageUrl}${widget.item.banner}'),
+                                      '${widget.item.banner}'),
                                   fit: BoxFit.cover),
                             ),
                           ),
