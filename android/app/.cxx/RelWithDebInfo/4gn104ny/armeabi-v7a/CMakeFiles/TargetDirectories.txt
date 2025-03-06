@@ -1,0 +1,2 @@
+C:/Users/HP/Desktop/esports_ng/android/app/.cxx/RelWithDebInfo/4gn104ny/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/HP/Desktop/esports_ng/android/app/.cxx/RelWithDebInfo/4gn104ny/armeabi-v7a/CMakeFiles/rebuild_cache.dir

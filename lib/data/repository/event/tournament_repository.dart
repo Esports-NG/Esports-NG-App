@@ -531,10 +531,8 @@ class TournamentRepository extends GetxController {
               (type == "solo" ? brThirdPlayer.value?.id : brThirdTeam.value?.id)
                       ?.toString() ??
                   "",
-          "player_ids": [
-            selectedHomePlayer.value!.id.toString(),
-            selectedAwayPlayer.value!.id.toString()
-          ],
+          "player_ids": type == "solo" ? participants : [],
+          "team_ids": type == "team" ? participants : [],
           "igame_mode": "1",
           "fixture_group": "player",
           "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
