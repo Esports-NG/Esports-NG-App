@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
               displaySwitch
                   ? "assets/images/svg/esport.svg"
                   : "assets/images/svg/esport1.svg",
-              height: Get.height * 0.1,
+              height: Get.height * 0.08,
             ),
           ),
         ],
