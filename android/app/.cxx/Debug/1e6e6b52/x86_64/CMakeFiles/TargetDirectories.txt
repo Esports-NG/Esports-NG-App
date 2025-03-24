@@ -1,0 +1,2 @@
+/Users/mac/Documents/Esports-NG-App/android/app/.cxx/Debug/1e6e6b52/x86_64/CMakeFiles/edit_cache.dir
+/Users/mac/Documents/Esports-NG-App/android/app/.cxx/Debug/1e6e6b52/x86_64/CMakeFiles/rebuild_cache.dir

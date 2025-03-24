@@ -1,0 +1,22 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "esportsng-d7521",
+          "appId": "1:491135805780:android:ec7df5108994a4731e00c1",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "esportsng-d7521",
+          "configurations": {
+            "android": "1:491135805780:android:ec7df5108994a4731e00c1",
+            "ios": "1:491135805780:ios:d674da3bf8c38e1f1e00c1"
+          }
+        }
+      }
+    }
+  }
+}

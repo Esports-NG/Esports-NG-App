@@ -1,0 +1,135 @@
+name: e_sport
+description: A new Flutter project.
+
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.2.0+9
+
+environment:
+  sdk: ">=3.2.4 <4.0.0"
+
+dependencies:
+  cached_network_image: ^3.4.1
+  change_case: ^2.1.0
+  connectivity_plus: ^6.1.0
+  csc_picker: ^0.2.7
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  flutter_easyloading: ^3.0.5
+  flutter_launcher_icons: ^0.14.2
+  flutter_local_notifications: ^18.0.1
+  flutter_svg: ^2.0.16
+  fluttertoast: ^8.2.8
+  gap: ^3.0.1
+  get: ^4.6.6
+  google_fonts: ^6.2.1
+  heroicons: ^0.10.0
+  http: ^1.2.2
+  image_picker: ^1.1.2
+  intl: ^0.17.0
+  date_time_picker: "^2.1.0"
+  intl_phone_field: ^3.2.0
+  like_button: ^2.0.5
+  line_icons: ^2.0.3
+  number_display: ^3.0.0
+  numpad_layout: ^0.0.3
+  persistent_bottom_nav_bar_v2: ^5.3.1
+  pin_code_text_field: ^1.8.0
+  shared_preferences: ^2.3.3
+  timer_count_down: ^2.2.2
+  url_launcher: ^6.3.1
+  shorebird_code_push: ^1.1.6
+  webview_flutter: ^4.10.0
+  flutter_html: ^3.0.0-beta.2
+  html: ^0.15.4
+  flutter_linkify: ^6.0.0
+  dropdown_search: ^6.0.1
+  win32: ^5.9.0
+  pinput: ^5.0.0
+  multi_dropdown: ^3.0.1
+  dio: ^5.7.0
+  flutter_slidable: ^3.1.1
+  infinite_scroll_pagination: ^4.1.0
+  web_socket_channel: ^3.0.1
+  firebase_messaging: ^15.2.0
+  firebase_core: ^3.10.0
+  device_info_plus: ^11.2.0
+  go_router: ^14.7.2
+  app_links: ^6.3.3
+  share_plus: ^10.1.4
+  ndialog: ^4.4.0
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/svg/
+    - assets/images/png/
+    - shorebird.yaml
+
+  fonts:
+    - family: GilroyBlack
+      fonts:
+        - asset: assets/font/Gilroy-Black.ttf
+
+    - family: GilroyRegular
+      fonts:
+        - asset: assets/font/Gilroy-Regular.ttf
+
+    - family: GilroyMedium
+      fonts:
+        - asset: assets/font/Gilroy-Medium.ttf
+
+    - family: GilroyLight
+      fonts:
+        - asset: assets/font/Gilroy-Light.ttf
+
+    - family: GilroySemiBold
+      fonts:
+        - asset: assets/font/Gilroy-SemiBold.ttf
+
+    - family: GilroyBold
+      fonts:
+        - asset: assets/font/Gilroy-Bold.ttf
+
+    - family: Inter
+      fonts:
+        - asset: assets/font/Inter_28pt-Regular.ttf
+
+    - family: InterMedium
+      fonts:
+        - asset: assets/font/Inter_28pt-Medium.ttf
+
+    - family: InterSemiBold
+      fonts:
+        - asset: assets/font/Inter_28pt-SemiBold.ttf
+
+    - family: InterBold
+      fonts:
+        - asset: assets/font/Inter_28pt-Bold.ttf
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/png/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  adaptive_icon_foreground: "assets/images/png/logo.png"
+  adaptive_icon_background: "#7D7AFF"
+  web:
+    generate: true
+    image_path: "assets/images/png/logo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/images/png/logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/images/png/logo.png"
