@@ -51,7 +51,7 @@ class _GameDropdownState extends State<GameDropdown> {
                     image: DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(
-                          "${ApiLink.imageUrl}${item.value.profilePicture!}",
+                          item.value.profilePicture!,
                         )),
                   )),
               const Gap(16),
