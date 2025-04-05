@@ -79,7 +79,7 @@ class _ESportAppState extends State<ESportApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title: 'Esports NG',
+        title: 'ENGY',
         initialBinding: AppBinding(),
         theme: ThemeData(
           textTheme: Theme.of(context).textTheme.apply(

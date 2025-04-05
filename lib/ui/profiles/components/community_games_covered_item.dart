@@ -71,7 +71,7 @@ class CommunityGamesCoveredItem extends StatelessWidget {
                       ),
                       errorWidget: (context, url, error) =>
                           Icon(Icons.error, color: AppColor().primaryColor),
-                      imageUrl: "${ApiLink.imageUrl}${game.cover!}",
+                      imageUrl: game.cover!,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
@@ -79,7 +79,7 @@ class CommunityGamesCoveredItem extends StatelessWidget {
                               topRight: Radius.circular(10)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  "${ApiLink.imageUrl}${game.cover!}"),
+                                  game.cover!),
                               fit: BoxFit.cover),
                         ),
                       ),
@@ -147,14 +147,14 @@ class CommunityGamesCoveredItemForList extends StatelessWidget {
             ),
             errorWidget: (context, url, error) =>
                 Icon(Icons.error, color: AppColor().primaryColor),
-            imageUrl: "${ApiLink.imageUrl}${game.cover!}",
+            imageUrl: game.cover!,
             imageBuilder: (context, imageProvider) => Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10)),
                 image: DecorationImage(
-                    image: NetworkImage("${ApiLink.imageUrl}${game.cover!}"),
+                    image: NetworkImage(game.cover!),
                     fit: BoxFit.cover),
               ),
             ),
