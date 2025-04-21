@@ -103,8 +103,11 @@ class _PostItemState extends State<PostItem>
                   Get.to(() => PostDetails(item: widget.item));
                 },
                 child: Padding(
-                  padding:
-                      const EdgeInsets.only(top: 6.0, left: 12.0, right: 12.0),
+                  padding: EdgeInsets.only(
+                    top: Get.height * 0.002,
+                    left: Get.height * 0.012,
+                    right: Get.height * 0.012,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -156,18 +159,17 @@ class _PostItemState extends State<PostItem>
                           moreMenuAnchor(),
                         ],
                       ),
-                      Gap(Get.height * 0.01),
+                      //Gap(Get.height * 0.0005),
                       if (widget.item.body != '')
                         CustomText(
-                          title: widget.item.body!.characters
-                              .take(200)
-                              .toString(),
+                          title:
+                              widget.item.body!.characters.take(200).toString(),
                           size: Get.height * 0.016,
                           fontFamily: 'Inter',
                           textAlign: TextAlign.start,
                           color: AppColor().primaryWhite,
                         ),
-                      if (widget.item.body != '') Gap(Get.height * 0.01),
+                      if (widget.item.body != '') Gap(Get.height * 0.005),
                       Divider(
                         thickness: 0.4,
                         color: AppColor().lightItemsColor,
@@ -177,7 +179,7 @@ class _PostItemState extends State<PostItem>
                 ),
               ),
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(Get.height * 0.006),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -366,22 +368,18 @@ class _PostItemState extends State<PostItem>
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.012),
               child: CustomText(
                 title: widget.item.repost == null
-                    ? widget.item.body!.characters
-                        .take(200)
-                        .toString()
-                    : widget.item.repost!.body!.characters
-                        .take(200)
-                        .toString(),
+                    ? widget.item.body!.characters.take(200).toString()
+                    : widget.item.repost!.body!.characters.take(200).toString(),
                 size: Get.height * 0.017,
                 fontFamily: 'Inter',
                 textAlign: TextAlign.start,
                 color: AppColor().primaryWhite,
               ),
             ),
-            Gap(Get.height * 0.015),
+            Gap(Get.height * 0.01),
             GestureDetector(
               onTap: () => Helpers()
                   .showImagePopup(context, "${widget.item.repost!.image}"),
@@ -470,7 +468,7 @@ class _PostItemState extends State<PostItem>
                           itemBuilder: (context, index) {
                             var items = widget.item.tags![index];
                             return Container(
-                              padding: const EdgeInsets.all(6),
+                              padding: EdgeInsets.all(Get.height * 0.005),
                               decoration: BoxDecoration(
                                 color: AppColor().primaryDark.withOpacity(0.7),
                                 borderRadius: BorderRadius.circular(20),
@@ -497,7 +495,7 @@ class _PostItemState extends State<PostItem>
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(Get.height * 0.012),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -578,8 +576,9 @@ class _PostItemState extends State<PostItem>
                     ],
                   ),
                   InkWell(
-                    onTap: () async{
-                      await Share.share('${widget.item.author!.userName} posted on Esports NG \nhttps://esportsng.com/post/${widget.item.id}');
+                    onTap: () async {
+                      await Share.share(
+                          '${widget.item.author!.userName} posted on Esports NG \nhttps://esportsng.com/post/${widget.item.id}');
                     },
                     child: Row(
                       children: [
@@ -950,7 +949,7 @@ class _PostItemState extends State<PostItem>
                             borderRadius: BorderRadius.circular(10)),
                         backgroundColor: AppColor().primaryBgColor,
                         content: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(Get.height * 0.08),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [

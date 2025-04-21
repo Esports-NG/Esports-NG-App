@@ -103,7 +103,7 @@ class _PostWidgetState extends State<PostWidget>
         separatorBuilder: (context, index) =>
             index != 0 && widget.posts![index - 1].owner != null
                 ? Gap(0)
-                : Gap(Get.height * 0.02),
+                : Gap(Get.height * 0.015),
         builderDelegate: PagedChildBuilderDelegate<PostModel>(
             itemBuilder: (context, post, index) {
               return index != 0 && widget.posts![index - 1].owner != null
