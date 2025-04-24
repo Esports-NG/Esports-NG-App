@@ -100,9 +100,9 @@ class _HomePageState extends State<HomePage>
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Gap(Get.height * 0.06),
+                              Gap(Get.height * 0.04),
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -189,9 +189,9 @@ class _HomePageState extends State<HomePage>
                                   ),
                                 ],
                               ),
-                              Gap(Get.height * 0.025),
+                              Gap(Get.height * 0.02),
                               SizedBox(
-                                  height: Get.height * 0.06,
+                                  height: Get.height * 0.05,
                                   child: CupertinoSearchTextField(
                                     placeholder: 'Search recent posts...',
                                     onSubmitted: (_) =>
@@ -212,29 +212,29 @@ class _HomePageState extends State<HomePage>
                                       height: Get.height * 0.0019,
                                     ),
                                   )),
-                              Gap(Get.height * 0.005),
+                              Gap(Get.height * 0.004),
                             ]),
                       ),
                       SliverPersistentHeader(
                           pinned: true,
                           delegate: _SliverAppBarDelegate(
-                            minHeight: 70,
-                            maxHeight: 70,
+                            minHeight: Get.height * 0.07,
+                            maxHeight: Get.height * 0.07,
                             child: TabBar(
                                 isScrollable: true,
                                 tabAlignment: TabAlignment.start,
                                 labelColor: AppColor().primaryWhite.withOpacity(0.9),
                                 indicatorColor: AppColor().primaryColor,
                                 dividerColor: Colors.transparent,
-                                labelStyle: const TextStyle(
+                                labelStyle: TextStyle(
                                   fontFamily: 'InterBold',
-                                  fontSize: 13,
+                                  fontSize: Get.height * 0.014,
                                 ),
                                 unselectedLabelColor:
                                     AppColor().lightItemsColor,
-                                unselectedLabelStyle: const TextStyle(
+                                unselectedLabelStyle: TextStyle(
                                   fontFamily: 'InterMedium',
-                                  fontSize: 13,
+                                  fontSize: Get.height * 0.014,
                                 ),
                                 controller: _tabController,
                                 tabs: const [
