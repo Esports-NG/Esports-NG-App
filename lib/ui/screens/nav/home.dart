@@ -24,6 +24,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 import '../../widgets/utils/profile_image.dart';
 
@@ -152,46 +153,44 @@ class _HomePageState extends State<HomePage>
                                           );
                                         },
                                         child: Icon(
-                                          Icons.shopping_cart_outlined,
+                                          IconsaxPlusLinear.shopping_bag,
                                           color: AppColor().primaryWhite,
-                                          size: Get.height * 0.025,
+                                          size: 22.sp,
                                         ),
                                       ),
-                                      Gap(Get.height * 0.04),
+                                      Gap(Get.height * 0.03),
                                       InkWell(
-                                        onTap: () {
-                                          // Get.to(() => const Messages());
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              backgroundColor:
-                                                  AppColor().primaryBgColor,
-                                              content: const ComingSoonPopup(),
-                                            ),
-                                          );
-                                        },
-                                        child: SvgPicture.asset(
-                                          'assets/images/svg/chat.svg',
-                                          height: Get.height * 0.025,
-                                        ),
-                                      ),
-                                      Gap(Get.height * 0.04),
+                                          onTap: () {
+                                            // Get.to(() => const Messages());
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                elevation: 0,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                backgroundColor:
+                                                    AppColor().primaryBgColor,
+                                                content:
+                                                    const ComingSoonPopup(),
+                                              ),
+                                            );
+                                          },
+                                          child: Icon(IconsaxPlusLinear.message,
+                                              color: Colors.white,
+                                              size: 22.sp)),
+                                      Gap(Get.height * 0.03),
                                       InkWell(
-                                        onTap: () {
-                                          Get.to(
-                                              () => const NotificationPage());
-                                        },
-                                        child: SvgPicture.asset(
-                                          'assets/images/svg/notification_icon.svg',
-                                          height: Get.height * 0.025,
-                                          color: AppColor().primaryWhite,
-                                        ),
-                                      ),
+                                          onTap: () {
+                                            Get.to(
+                                                () => const NotificationPage());
+                                          },
+                                          child: Icon(
+                                            IconsaxPlusLinear.notification,
+                                            color: Colors.white,
+                                            size: 22.sp,
+                                          )),
                                     ],
                                   ),
                                 ],

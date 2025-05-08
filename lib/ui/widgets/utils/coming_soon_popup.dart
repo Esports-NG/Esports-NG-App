@@ -3,6 +3,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 class ComingSoonPopup extends StatelessWidget {
   const ComingSoonPopup({super.key});
@@ -29,14 +30,14 @@ class ComingSoonPopup extends StatelessWidget {
             ],
           ),
           Icon(
-            Icons.timer_outlined,
+            IconsaxPlusLinear.clock_1,
             size: 70,
             color: AppColor().primaryWhite,
           ),
           Gap(Get.height * 0.02),
           CustomText(
             title: "Coming Soon",
-            fontFamily: "InterSemiBold",
+            fontFamily: "InterMedium",
             color: AppColor().primaryWhite,
             size: 20,
           ),

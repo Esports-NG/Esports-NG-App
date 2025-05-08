@@ -22,32 +22,32 @@ class ProfileRecentPosts extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-      child: SizedBox(
-        width: double.infinity,
-        height: Get.height * 0.46,
-        child: isLoading
-            ? const Center(child: ButtonLoader())
-            : posts.isEmpty
-                ? Center(
-                    child: CustomText(
-                        title: "No posts", color: AppColor().primaryWhite))
-                : ListView.separated(
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    separatorBuilder: (context, index) =>
-                        Gap(Get.height * 0.02),
-                    itemBuilder: (context, index) => InkWell(
-                        onTap: () {
-                          Get.to(() => PostDetails(
-                              item: posts.reversed.toList()[index]));
-                        },
-                        child: SizedBox(
-                            width: Get.height * 0.35,
-                            child: PostItemForProfile(
-                                item: posts.reversed.toList()[index]))),
-                    itemCount: posts.length),
-      ),
+      child: isLoading
+          ? const Center(child: ButtonLoader())
+          : posts.isEmpty
+              ? Center(
+                  child: CustomText(
+                      title: "No posts", color: AppColor().primaryWhite))
+              : SizedBox(
+                  width: double.infinity,
+                  height: Get.height * 0.46,
+                  child: ListView.separated(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      separatorBuilder: (context, index) =>
+                          Gap(Get.height * 0.02),
+                      itemBuilder: (context, index) => InkWell(
+                          onTap: () {
+                            Get.to(() => PostDetails(
+                                item: posts.reversed.toList()[index]));
+                          },
+                          child: SizedBox(
+                              width: Get.height * 0.35,
+                              child: PostItemForProfile(
+                                  item: posts.reversed.toList()[index]))),
+                      itemCount: posts.length),
+                ),
     );
   }
 }

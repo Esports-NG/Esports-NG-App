@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/custom/custom_button.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 class ProfileActionButtons extends StatelessWidget {
   final bool isFollowing;
@@ -43,9 +45,11 @@ class ProfileActionButtons extends StatelessWidget {
                         ),
                       ]
                     : [
-                        SvgPicture.asset('assets/images/svg/account_icon.svg',
-                            height: Get.height * 0.015,
-                            color: AppColor().primaryWhite),
+                        Icon(
+                          IconsaxPlusLinear.profile,
+                          color: Colors.white,
+                          size: 16.sp,
+                        ),
                         Gap(Get.height * 0.01),
                         CustomText(
                             title: isFollowing ? "Unfollow" : 'Follow',
@@ -63,9 +67,9 @@ class ProfileActionButtons extends StatelessWidget {
             onTap: onMessageTap,
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(
-                Icons.sms_outlined,
+                IconsaxPlusLinear.message,
                 color: AppColor().primaryWhite,
-                size: Get.height * 0.015,
+                size: 16,
               ),
               Gap(Get.height * 0.01),
               CustomText(

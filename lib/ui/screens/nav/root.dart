@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class RootDashboard extends StatefulWidget {
@@ -62,9 +63,9 @@ class _RootDashboardState extends State<RootDashboard>
               item: ItemConfig(
                   activeForegroundColor: Colors.white,
                   title: "Home",
-                  icon: HeroIcon(
-                    HeroIcons.home,
-                    size: 28,
+                  icon: Icon(
+                    IconsaxPlusLinear.home_2,
+                    size: 24.sp,
                   ))),
           PersistentTabConfig(
               screen: EventsPage(),
@@ -72,17 +73,17 @@ class _RootDashboardState extends State<RootDashboard>
               item: ItemConfig(
                   activeForegroundColor: Colors.white,
                   title: "Events",
-                  icon: HeroIcon(
-                    HeroIcons.calendar,
-                    size: 28,
+                  icon: Icon(
+                    IconsaxPlusLinear.calendar,
+                    size: 24.sp,
                   ))),
           PersistentTabConfig(
               screen: CommunityPage(),
               item: ItemConfig(
                   activeForegroundColor: Colors.white,
                   title: "Community",
-                  icon: HeroIcon(
-                    HeroIcons.userGroup,
+                  icon: Icon(
+                    IconsaxPlusLinear.profile_2user,
                     size: 28,
                   ))),
           PersistentTabConfig(
@@ -90,8 +91,8 @@ class _RootDashboardState extends State<RootDashboard>
               item: ItemConfig(
                   activeForegroundColor: Colors.white,
                   title: "Account",
-                  icon: HeroIcon(
-                    HeroIcons.user,
+                  icon: Icon(
+                    IconsaxPlusLinear.profile_circle,
                     size: 28,
                   ))),
         ],

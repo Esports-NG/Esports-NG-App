@@ -54,10 +54,6 @@ class PostStatistics extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildStatItem((viewCount ?? 0).toString(), 'Views'),
-              Gap(Get.height * 0.01),
-              _buildStatItem((repostCount ?? 0).toString(), 'Repost'),
-              Gap(Get.height * 0.01),
-              _buildStatItem((likeCount ?? 0).toString(), 'Likes'),
             ],
           ),
         ],

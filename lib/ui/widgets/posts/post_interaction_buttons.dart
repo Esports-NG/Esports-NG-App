@@ -4,7 +4,9 @@ import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:like_button/like_button.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -24,8 +26,8 @@ class PostInteractionButtons extends StatelessWidget {
 
   // Define repostItem list as static constant
   static const List<RepostOption> _repostItems = [
-    RepostOption(title: 'Repost', icon: Icons.autorenew),
-    RepostOption(title: 'Quote with comment', icon: Icons.comment),
+    RepostOption(title: 'Repost', icon: IconsaxPlusLinear.repeat),
+    RepostOption(title: 'Quote with comment', icon: IconsaxPlusLinear.message),
   ];
 
   const PostInteractionButtons({
@@ -46,84 +48,95 @@ class PostInteractionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        LikeButton(
-          size: Get.height * 0.025,
-          onTap: onLikeButtonTapped,
-          circleColor: CircleColor(
-              start: AppColor().primaryColor, end: AppColor().primaryColor),
-          bubblesColor: BubblesColor(
-            dotPrimaryColor: AppColor().primaryColor,
-            dotSecondaryColor: AppColor().primaryColor,
-          ),
-          likeBuilder: (bool isLiked) {
-            return post.likes!.any((item) => item.id == authController.user!.id)
-                ? Icon(isLiked ? Icons.favorite_outline : Icons.favorite,
-                    color: AppColor().primaryColor, size: Get.height * 0.025)
-                : Icon(isLiked ? Icons.favorite : Icons.favorite_outline,
-                    color: AppColor().primaryWhite, size: Get.height * 0.025);
-          },
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.autorenew_outlined,
-            color: AppColor().primaryWhite,
-            size: Get.height * 0.03,
-          ),
-          onPressed: () {
-            if (!isAuthor) {
-              _showRepostOptions(context);
-            }
-          },
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-        Row(
-          children: [
-            Icon(
-              Icons.sms_outlined,
-              color: AppColor().primaryWhite,
-              size: Get.height * 0.025,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.r, vertical: 20.r),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          LikeButton(
+            size: Get.height * 0.025,
+            onTap: onLikeButtonTapped,
+            likeCountPadding: EdgeInsets.only(left: 5.r),
+            likeCount: post.likeCount,
+            isLiked:
+                post.likes!.any((item) => item.id == authController.user!.id),
+            circleColor: CircleColor(
+                start: AppColor().primaryColor, end: AppColor().primaryColor),
+            bubblesColor: BubblesColor(
+              dotPrimaryColor: AppColor().primaryColor,
+              dotSecondaryColor: AppColor().primaryColor,
             ),
-            SizedBox(width: Get.height * 0.005),
-            CustomText(
-              title: post.comment!.length.toString(),
-              size: 12,
-              fontFamily: 'InterBold',
-              textAlign: TextAlign.start,
+            countBuilder: (likeCount, isLiked, text) => CustomText(
+              title: likeCount.toString(),
               color: AppColor().primaryWhite,
             ),
-          ],
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.share_outlined,
-            color: AppColor().primaryWhite,
-            size: Get.height * 0.03,
+            likeBuilder: (bool isLiked) {
+              return Icon(
+                  isLiked ? IconsaxPlusBold.heart : IconsaxPlusLinear.heart,
+                  color: isLiked
+                      ? AppColor().primaryColor
+                      : AppColor().primaryWhite,
+                  size: 22.sp);
+            },
           ),
-          onPressed: () async {
-            await Share.share(
-                '${post.author!.userName} posted on Esports NG \nhttps://esportsng.com/post/${post.id}');
-          },
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-      ],
+          Row(
+            spacing: 5.r,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (!isAuthor) {
+                    _showRepostOptions(context);
+                  }
+                },
+                child: Icon(
+                  IconsaxPlusLinear.repeat,
+                  color: AppColor().primaryWhite,
+                  size: 22.sp,
+                ),
+              ),
+              CustomText(
+                title: post.repostCount.toString(),
+                fontFamily: "InterSemiBold",
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Icon(
+                IconsaxPlusLinear.message,
+                color: AppColor().primaryWhite,
+                size: 22.sp,
+              ),
+              SizedBox(width: Get.height * 0.005),
+              CustomText(
+                title: post.comment!.length.toString(),
+                size: 12,
+                fontFamily: 'InterBold',
+                textAlign: TextAlign.start,
+                color: AppColor().primaryWhite,
+              ),
+            ],
+          ),
+          GestureDetector(
+            child: Icon(
+              IconsaxPlusLinear.export,
+              color: AppColor().primaryWhite,
+              size: 22.sp,
+            ),
+            onTap: () async {
+              await Share.share(
+                  '${post.author!.userName} posted on Esports NG \nhttps://esportsng.com/post/${post.id}');
+            },
+          ),
+        ],
+      ),
     );
   }
 
   void _showRepostOptions(BuildContext context) {
     showModalBottomSheet(
         isScrollControlled: false,
-        backgroundColor: AppColor().primaryWhite,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
+        backgroundColor: Colors.transparent,
         context: context,
         builder: (context) {
           return Container(
@@ -134,7 +147,7 @@ class PostInteractionButtons extends StatelessWidget {
               right: Get.height * 0.02,
             ),
             decoration: BoxDecoration(
-              color: AppColor().primaryModalColor,
+              color: AppColor().bgDark,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
@@ -147,7 +160,7 @@ class PostInteractionButtons extends StatelessWidget {
                   width: Get.height * 0.09,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: AppColor().greyGradient,
+                    color: AppColor().primaryWhite.withOpacity(0.5),
                   ),
                 ),
               ),
@@ -185,7 +198,7 @@ class PostInteractionButtons extends StatelessWidget {
                           color: AppColor().greyTwo,
                           weight: FontWeight.w400,
                           fontFamily: 'InterMedium',
-                          size: Get.height * 0.020,
+                          size: 18,
                         ),
                       ],
                     ),

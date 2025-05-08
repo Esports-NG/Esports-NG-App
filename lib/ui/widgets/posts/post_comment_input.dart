@@ -5,8 +5,10 @@ import 'package:e_sport/ui/widgets/custom/custom_textfield.dart';
 import 'package:e_sport/ui/widgets/utils/profile_image.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 class PostCommentInput extends StatefulWidget {
   final String slug;
@@ -50,12 +52,14 @@ class _PostCommentInputState extends State<PostCommentInput> {
               border: InputBorder.none,
               labelStyle: TextStyle(
                 color: AppColor().primaryWhite,
-                fontSize: 13,
+                fontSize: 12.sp,
+                letterSpacing: -0.32,
                 fontFamily: 'Inter',
               ),
               hintStyle: TextStyle(
                 color: AppColor().primaryWhite,
-                fontSize: 13,
+                fontSize: 12.sp,
+                letterSpacing: -0.32,
                 fontFamily: 'Inter',
               ),
             ),
@@ -93,18 +97,18 @@ class _PostCommentInputState extends State<PostCommentInput> {
                       color: AppColor().primaryColor,
                     ),
                   )
-                : Icon(Icons.send, color: AppColor().primaryColor),
+                : Icon(IconsaxPlusBold.send_1, color: AppColor().primaryColor),
           ),
           Gap(Get.height * 0.015),
           CustomText(
             title: '@',
-            size: 23,
-            fontFamily: "InterSemiBold",
+            size: 18,
+            fontFamily: "InterMedium",
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),
           Gap(Get.height * 0.015),
-          Icon(Icons.photo_camera_outlined, color: AppColor().primaryWhite)
+          Icon(IconsaxPlusLinear.gallery, color: AppColor().primaryWhite)
         ],
       ),
     );

@@ -4,8 +4,10 @@ import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:like_button/like_button.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -53,17 +55,18 @@ class PostActions extends StatelessWidget {
         dotSecondaryColor: AppColor().primaryColor,
       ),
       likeBuilder: (bool isLiked) {
-        return Icon(isLiked ? Icons.favorite : Icons.favorite_outline,
+        return Icon(isLiked ? IconsaxPlusBold.heart : IconsaxPlusLinear.heart,
             color: isLiked ? AppColor().primaryColor : AppColor().primaryWhite,
-            size: Get.height * 0.025);
+            size: 20.sp);
       },
+      likeCountPadding: EdgeInsets.only(left: 5.r),
       likeCount: post.likeCount,
       countBuilder: (int? count, bool isLiked, String text) {
         var color = AppColor().primaryWhite;
         return CustomText(
             title: "$count ${count == 1 ? "like" : "likes"}",
             size: 12,
-            fontFamily: 'InterBold',
+            fontFamily: 'InterSemiBold',
             textAlign: TextAlign.start,
             color: color);
       },
@@ -75,9 +78,9 @@ class PostActions extends StatelessWidget {
       children: [
         InkWell(
           child: Icon(
-            Icons.sms_outlined,
+            IconsaxPlusLinear.message,
             color: AppColor().primaryWhite,
-            size: Get.height * 0.025,
+            size: 20.sp,
           ),
           onTap: () {},
         ),
@@ -85,7 +88,7 @@ class PostActions extends StatelessWidget {
         CustomText(
           title: post.comment!.length.toString(),
           size: 12,
-          fontFamily: 'InterBold',
+          fontFamily: 'InterSemiBold',
           textAlign: TextAlign.start,
           color: AppColor().primaryWhite,
         ),
@@ -102,15 +105,15 @@ class PostActions extends StatelessWidget {
       child: Row(
         children: [
           Icon(
-            Icons.share_outlined,
+            IconsaxPlusLinear.export,
             color: AppColor().primaryWhite,
-            size: Get.height * 0.025,
+            size: 20.sp,
           ),
-          Gap(Get.height * 0.005),
+          Gap(Get.height * 0.01),
           CustomText(
             title: 'Share',
             size: 12,
-            fontFamily: 'InterBold',
+            fontFamily: "InterSemiBold",
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),
@@ -134,7 +137,7 @@ class PostActions extends StatelessWidget {
           child: CustomText(
             title: 'Like, Comment and Repost as:',
             size: 12,
-            fontFamily: 'InterBold',
+            fontFamily: 'InterMedium',
             textAlign: TextAlign.start,
             color: AppColor().primaryWhite,
           ),

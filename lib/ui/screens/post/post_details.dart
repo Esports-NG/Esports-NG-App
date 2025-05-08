@@ -180,12 +180,6 @@ class _PostDetailsState extends State<PostDetails> {
                                   repostCount: _postDetails!.repostCount,
                                   likeCount: _postDetails!.likeCount,
                                 ),
-
-                              Divider(
-                                thickness: 0.4,
-                                color: AppColor().lightItemsColor,
-                              ),
-
                               // Post interaction buttons
                               if (!isRepostActive)
                                 PostInteractionButtons(
@@ -200,14 +194,8 @@ class _PostDetailsState extends State<PostDetails> {
                                     });
                                   },
                                 ),
-
-                              Divider(
-                                thickness: 0.4,
-                                color: AppColor().lightItemsColor,
-                              ),
-
                               // Comments section
-                              Gap(Get.height * 0.02),
+                              Gap(Get.height * 0.01),
                               CustomText(
                                 title: 'Comments',
                                 size: 14,

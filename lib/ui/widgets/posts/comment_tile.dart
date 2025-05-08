@@ -7,8 +7,10 @@ import 'package:e_sport/ui/screens/post/report_page.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:like_button/like_button.dart';
 
 class CommentTile extends StatefulWidget {
@@ -66,7 +68,7 @@ class _CommentTileState extends State<CommentTile> {
               child: CustomText(
                 title: widget.item.body!,
                 color: AppColor().primaryWhite,
-                fontFamily: 'InterBold',
+                fontFamily: 'InterSemiBold',
                 size: Get.height * 0.015,
               ),
             ),
@@ -195,8 +197,10 @@ class _CommentTileState extends State<CommentTile> {
             dotSecondaryColor: AppColor().primaryColor,
           ),
           likeBuilder: (bool isLiked) {
-            return Icon(isLiked ? Icons.favorite : Icons.favorite_outline,
-                color: AppColor().primaryWhite, size: 20);
+            return Icon(
+                isLiked ? IconsaxPlusBold.heart : IconsaxPlusLinear.heart,
+                color: AppColor().primaryWhite,
+                size: 20.sp);
           },
         ),
       ],
