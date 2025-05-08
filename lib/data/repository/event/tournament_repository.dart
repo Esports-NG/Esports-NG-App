@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:e_sport/data/model/community_model.dart';
@@ -13,8 +12,8 @@ import 'package:e_sport/data/model/waitlist_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/home/components/create_success_page.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widgets/utils/create_success_page.dart';
+import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
@@ -23,20 +22,82 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
+import 'package:get/get.dart' hide Response, FormData, MultipartFile;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
-import 'package:dio/dio.dart' as dioClass;
-
-final dio = dioClass.Dio();
+import 'package:dio/dio.dart';
 
 class TournamentRepository extends GetxController {
+  final dio = Dio();
   final authController = Get.put(AuthRepository());
   final eventController = Get.put(EventRepository());
 
+  // Headers setup method to avoid repetition
+  Map<String, String> _getAuthHeaders() => {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      };
+
+  // Response handler to streamline error handling and data extraction
+  dynamic _handleResponse(Response response) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final responseData = response.data;
+
+      // Handle the new API response format
+      if (responseData is Map && responseData.containsKey('success')) {
+        if (responseData['success'] == true) {
+          return responseData['data'];
+        } else {
+          throw responseData['message'] ?? 'Unknown error occurred';
+        }
+      }
+
+      return responseData;
+    } else {
+      throw 'Error: ${response.statusCode} - ${response.statusMessage}';
+    }
+  }
+
+  // Error handler
+  void _handleError(dynamic error) {
+    debugPrint("Error: $error");
+    String errorMessage = 'An unknown error occurred';
+
+    if (error is DioException) {
+      if (error.type == DioExceptionType.connectionTimeout ||
+          error.type == DioExceptionType.receiveTimeout ||
+          error.type == DioExceptionType.sendTimeout) {
+        errorMessage = 'Connection timed out';
+      } else if (error.type == DioExceptionType.connectionError) {
+        errorMessage = 'No internet connection!';
+      } else if (error.response != null) {
+        // Try to extract error message from response
+        try {
+          final responseData = error.response?.data;
+          if (responseData is Map && responseData.containsKey('message')) {
+            errorMessage = responseData['message'];
+          } else if (responseData is String) {
+            errorMessage = responseData;
+          } else {
+            errorMessage = 'Server error: ${error.response?.statusCode}';
+          }
+        } catch (e) {
+          errorMessage = 'Server error: ${error.response?.statusCode}';
+        }
+      }
+    } else {
+      errorMessage = error.toString();
+    }
+
+    Fluttertoast.showToast(
+        fontSize: Get.height * 0.015,
+        msg: errorMessage,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM);
+  }
+
+  // Controllers
   late final communitiesOwnedController = TextEditingController();
   late final tournamentNameController = TextEditingController();
   late final eventNameController = TextEditingController();
@@ -52,7 +113,6 @@ class TournamentRepository extends GetxController {
   late final regEndDateController = TextEditingController();
   late final startDateController = TextEditingController();
   late final endDateController = TextEditingController();
-  // late final tournamentDateController = TextEditingController();
   late final prizePoolController = TextEditingController();
   late final entryFeeController = TextEditingController();
   late final firstPrizeController = TextEditingController();
@@ -70,7 +130,7 @@ class TournamentRepository extends GetxController {
   late final staffController = TextEditingController();
   late final tournamentHashtagController = TextEditingController();
 
-  //fixtures
+  // Fixtures
   late final addFixtureRoundNameController = TextEditingController();
   late final addFixtureStreamingLinkController = TextEditingController();
   late final addFixturesHomeTeamScoreController = TextEditingController();
@@ -270,7 +330,7 @@ class TournamentRepository extends GetxController {
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
                 fontFamily: 'Inter',
-                size: Get.height * 0.014,
+                size: 12,
               ),
             ],
           ),
@@ -321,7 +381,7 @@ class TournamentRepository extends GetxController {
               color: AppColor().primaryWhite,
               textAlign: TextAlign.center,
               fontFamily: 'Inter',
-              size: Get.height * 0.014,
+              size: 12,
             ),
           ],
         ),
@@ -332,190 +392,179 @@ class TournamentRepository extends GetxController {
   Future createTournament() async {
     try {
       eventController.createEventStatus(CreateEventStatus.loading);
-      var tournamentLink = "https://${tournamentLinkController.text}";
-      var headers = {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      };
-      var request = http.MultipartRequest("POST",
-          Uri.parse(ApiLink.createTournament(selectedCommunity.value!.id!)))
-        ..fields["name"] = tournamentNameController.text
-        ..fields["link"] = tournamentLink
-        ..fields["knockout_type"] = knockoutTypeController.text
-        ..fields["rank_type"] = rankTypeController.text
-        ..fields["reg_start"] = regDateController.text
-        ..fields["reg_end"] = regEndDateController.text
-        ..fields["start_date"] = startDateController.text
-        ..fields["end_date"] = endDateController.text
-        ..fields["prize_pool"] =
-            eventController.currency.value + prizePoolController.text
-        ..fields["summary"] = tournamentSummaryController.text
-        ..fields["entry_fee"] =
-            eventController.currency.value + entryFeeController.text
-        ..fields["requirements"] = tournamentRequirementsController.text
-        ..fields["structure"] = tournamentStructureController.text
-        ..fields["first"] =
-            eventController.currency.value + firstPrizeController.text
-        ..fields["second"] =
-            eventController.currency.value + secondPrizeController.text
-        ..fields["third"] =
-            eventController.currency.value + thirdPrizeController.text
-        ..fields["rules_regs"] = tournamentRegulationsController.text
-        ..fields["event_type"] = "tournament"
-        ..fields["hashtag"] = tournamentHashtagController.text
-        ..fields["tournament_type"] = tournamentTypeValue.value!
-        ..fields["igames"] = gameValue.value!.id.toString();
+      var httpSplit = tournamentLinkController.text.replaceAll("https://", "");
+      var tournamentLink = "https://$httpSplit";
 
+      // Create FormData for multipart request
+      final formData = FormData.fromMap({
+        "name": tournamentNameController.text,
+        "link": tournamentLink,
+        "knockout_type": knockoutTypeController.text,
+        "rank_type": rankTypeController.text,
+        "reg_start": regDateController.text,
+        "reg_end": regEndDateController.text,
+        "start_date": startDateController.text,
+        "end_date": endDateController.text,
+        "prize_pool": eventController.currency.value + prizePoolController.text,
+        "summary": tournamentSummaryController.text,
+        "entry_fee": eventController.currency.value + entryFeeController.text,
+        "requirements": tournamentRequirementsController.text,
+        "structure": tournamentStructureController.text,
+        "first": eventController.currency.value + firstPrizeController.text,
+        "second": eventController.currency.value + secondPrizeController.text,
+        "third": eventController.currency.value + thirdPrizeController.text,
+        "rules_regs": tournamentRegulationsController.text,
+        "event_type": "tournament",
+        "hashtag": tournamentHashtagController.text,
+        "tournament_type": tournamentTypeValue.value!,
+        "igames": gameValue.value!.id.toString(),
+        "profile": await MultipartFile.fromFile(eventProfileImage!.path),
+        "banner": await MultipartFile.fromFile(eventCoverImage!.path),
+      });
+
+      // Add game modes
       for (int i = 0; i < gameModesController.value.selectedItems.length; i++) {
-        request.fields['game_mode[$i]'] =
-            '${gameModesController.value.selectedItems[i].value}';
+        formData.fields.add(MapEntry('game_mode[$i]',
+            '${gameModesController.value.selectedItems[i].value}'));
       }
 
-      request.files.add(await http.MultipartFile.fromPath(
-          'profile', eventProfileImage!.path));
-      request.files.add(
-          await http.MultipartFile.fromPath('banner', eventCoverImage!.path));
+      // Send the request
+      var response = await dio.post(
+        ApiLink.createTournament(selectedCommunity.value!.id!),
+        data: formData,
+        options: Options(headers: _getAuthHeaders()),
+      );
 
-      // request.fields.addAll(
-      //     event.toCreateEventJson().map((key, value) => MapEntry(key, value)));
-      request.headers.addAll(headers);
-
-      http.StreamedResponse response = await request.send();
-      // var res = await response.stream.bytesToString();
-      // print(res);
       if (response.statusCode == 201) {
         eventController.createEventStatus(CreateEventStatus.success);
-        debugPrint(await response.stream.bytesToString());
         Get.to(() => const CreateSuccessPage(title: 'Event Created'))!
             .then((value) {
           eventController.getAllEvents(false);
           clear();
         });
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        eventController.createEventStatus(CreateEventStatus.error);
       } else {
         eventController.createEventStatus(CreateEventStatus.error);
-        debugPrint(response.reasonPhrase);
-        handleError(response.reasonPhrase);
+        debugPrint("Unexpected status code: ${response.statusCode}");
+        _handleError("Unexpected error occurred");
       }
     } catch (error) {
       eventController.createEventStatus(CreateEventStatus.error);
-      debugPrint("Error occurred ${error.toString()}");
-      handleError(error);
+      debugPrint("Error occurred: ${error.toString()}");
+
+      if (error is DioException && error.response?.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('Please try again!'));
+      } else {
+        _handleError(error);
+      }
     }
   }
 
   Future registerForTournament(int id) async {
-    var headers = {
-      "Content-Type": "application/json",
-      "Authorization": 'JWT ${authController.token}'
-    };
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.put(ApiLink.registerForEvent(id),
+          options: Options(headers: headers));
 
-    var response = await http.put(Uri.parse(ApiLink.registerForEvent(id)),
-        headers: headers);
-
-    print(response.body);
-    var json = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      debugPrint("success");
+      _handleResponse(response);
       Helpers().showCustomSnackbar(message: "Successfully registered");
       return true;
-    } else {
-      Helpers().showCustomSnackbar(message: json['error']);
+    } catch (error) {
+      _handleError(error);
       return false;
     }
   }
 
   Future registerForTeamTournament(int id, int teamId) async {
-    var headers = {
-      "Content-Type": "application/json",
-      "Authorization": 'JWT ${authController.token}'
-    };
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.put(ApiLink.registerForTeamEvent(id, teamId),
+          options: Options(headers: headers));
 
-    var response = await http.put(
-        Uri.parse(ApiLink.registerForTeamEvent(id, teamId)),
-        headers: headers);
-
-    print(response.body);
-    var json = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      debugPrint("success");
-      Helpers().showCustomSnackbar(message: json['message']);
-    } else {
-      Helpers().showCustomSnackbar(message: json['error']);
+      _handleResponse(response);
+      Helpers().showCustomSnackbar(message: "Successfully registered");
+    } catch (error) {
+      _handleError(error);
     }
   }
 
   Future getTournamentWaitlist(int id) async {
-    var response = await http.get(Uri.parse(ApiLink.getEventWaitlist(id)),
-        headers: {"Authorization": "JWT ${authController.token}"});
-    debugPrint(response.body);
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.get(ApiLink.getEventWaitlist(id),
+          options: Options(headers: headers));
 
-    List<WaitlistModel> waitlist = List<WaitlistModel>.from(
-        json.decode(response.body).map((x) => WaitlistModel.fromJson(x)));
-
-    return waitlist;
+      var responseData = _handleResponse(response);
+      return List<WaitlistModel>.from(
+          responseData.map((x) => WaitlistModel.fromJson(x)));
+    } catch (error) {
+      _handleError(error);
+      return [];
+    }
   }
 
   Future getTournamentParticipants(int id) async {
-    var response =
-        await http.get(Uri.parse(ApiLink.getEventParticipants(id)), headers: {
-      "Content-type": "application/json",
-      "Authorization": "JWT ${authController.token}"
-    });
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.get(ApiLink.getEventParticipants(id),
+          options: Options(headers: headers));
 
-    return playerModelListFromJson(response.body);
+      var responseData = _handleResponse(response);
+      return playerModelListFromJson(responseData);
+    } catch (error) {
+      _handleError(error);
+      return [];
+    }
   }
 
   Future getTeamTournamentParticipants(int id) async {
-    var response =
-        await http.get(Uri.parse(ApiLink.getEventParticipants(id)), headers: {
-      "Content-type": "application/json",
-      "Authorization": "JWT ${authController.token}"
-    });
-    return roasterModelFromJson(response.body);
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.get(ApiLink.getEventParticipants(id),
+          options: Options(headers: headers));
+
+      var responseData = _handleResponse(response);
+      return roasterModelFromJson(responseData);
+    } catch (error) {
+      _handleError(error);
+      return [];
+    }
   }
 
   Future unregisterForEvent(int eventId, String role, int roleId) async {
     try {
-      var response = await http.put(
-          Uri.parse(ApiLink.unregisterForEvent(eventId, role, roleId)),
-          headers: {
-            'Content-type': "application/json",
-            "Authorization": "JWT ${authController.token}"
-          });
+      var headers = _getAuthHeaders();
+      var response = await dio.put(
+          ApiLink.unregisterForEvent(eventId, role, roleId),
+          options: Options(headers: headers));
 
-      var json = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        Helpers().showCustomSnackbar(message: json['message']);
-      }
-    } catch (err) {}
+      _handleResponse(response);
+      Helpers().showCustomSnackbar(message: "Successfully unregistered");
+    } catch (error) {
+      _handleError(error);
+    }
   }
 
   Future getFixtures(int id) async {
-    var response = await http.get(Uri.parse(ApiLink.getFixtures(id)), headers: {
-      "Authorization": "JWT ${authController.token}",
-      "Content-type": "application/json"
-    });
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.get(ApiLink.getFixtures(id),
+          options: Options(headers: headers));
 
-    debugPrint(response.body);
-    var json = jsonDecode(response.body);
-
-    var list = List.from(json);
-    var fixtures = list.map((e) => FixtureModel.fromJson(e)).toList();
-
-    return fixtures;
+      var responseData = _handleResponse(response);
+      return List<FixtureModel>.from(
+          responseData.map((x) => FixtureModel.fromJson(x)));
+    } catch (error) {
+      _handleError(error);
+      return [];
+    }
   }
 
   Future createBRFixture(int id, List<int> participants, String type,
       int community, File? imageFile, bool hasLivestream) async {
     try {
-      final formData = dioClass.FormData.fromMap(
+      final formData = FormData.fromMap(
         {
           "ifirst": (type == "solo"
                       ? brWinnerPlayer.value?.id
@@ -542,7 +591,7 @@ class TournamentRepository extends GetxController {
           "title": addFixtureRoundNameController.text,
           "streaming_platform": jsonEncode(fixturePlatform.value),
           "banner": imageFile != null
-              ? await dioClass.MultipartFile.fromFile(imageFile.path)
+              ? await MultipartFile.fromFile(imageFile.path)
               : null,
         },
       );
@@ -568,69 +617,62 @@ class TournamentRepository extends GetxController {
         }
       }
 
-      var response = await dio.post(ApiLink.createFixture(id),
-          data: formData,
-          options: dioClass.Options(headers: {
-            "Authorization": "JWT ${authController.token}",
-            dioClass.Headers.contentTypeHeader:
-                dioClass.Headers.multipartFormDataContentType
-          }));
-      print(response.data);
+      var response = await dio.post(
+        ApiLink.createFixture(id),
+        data: formData,
+        options: Options(headers: _getAuthHeaders()),
+      );
 
-      if (response.statusCode == 200) {
-        Get.back();
-        Helpers().showCustomSnackbar(message: "Fixture added successfully");
-      }
-    } catch (err) {
-      log("Error creating fixture: ${(err as dioClass.DioException).response?.data}");
+      _handleResponse(response);
+      Get.back();
+      Helpers().showCustomSnackbar(message: "Fixture added successfully");
+    } catch (error) {
+      _handleError(error);
     }
   }
 
   Future editBRFixture(int id, List<int> participants, String type) async {
-    print(type);
-    Map<String, dynamic> body = {
-      "player_ids": type == "solo" ? participants : [],
-      "team_ids": type == "team" ? participants : [],
-      "igame_mode": 1,
-      "fixture_group": "player",
-      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-      "fixture_time":
-          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-      "fixture_type": "BR",
-      "title": addFixtureRoundNameController.text,
-      "streaming_platform": fixturePlatform.value,
-      "livestreams": [
-        {
-          "title": addFixtureRoundNameController.text,
-          "description": "fixture",
-          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-          "platform_id": fixturePlatform.value!.id!,
-          "link": "https://${addFixtureStreamingLinkController.text}"
-        }
-      ]
-    };
-
     try {
-      var response = await http.post(Uri.parse(ApiLink.createFixture(id)),
-          headers: {
-            "Authorization": "JWT ${authController.token}",
-            "Content-type": "application/json"
-          },
-          body: jsonEncode(body));
-      log(response.body);
+      Map<String, dynamic> body = {
+        "player_ids": type == "solo" ? participants : [],
+        "team_ids": type == "team" ? participants : [],
+        "igame_mode": 1,
+        "fixture_group": "player",
+        "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+        "fixture_time":
+            "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+        "fixture_type": "BR",
+        "title": addFixtureRoundNameController.text,
+        "streaming_platform": fixturePlatform.value,
+        "livestreams": [
+          {
+            "title": addFixtureRoundNameController.text,
+            "description": "fixture",
+            "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+            "time":
+                "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+            "platform_id": fixturePlatform.value!.id!,
+            "link": "https://${addFixtureStreamingLinkController.text}"
+          }
+        ]
+      };
 
-      if (response.statusCode == 200) {
-        Get.back();
-        Helpers().showCustomSnackbar(message: "Fixture added successfully");
-      }
-    } catch (err) {}
+      var headers = _getAuthHeaders();
+      var response = await dio.post(ApiLink.createFixture(id),
+          data: body, options: Options(headers: headers));
+
+      _handleResponse(response);
+      Get.back();
+      Helpers().showCustomSnackbar(message: "Fixture added successfully");
+    } catch (error) {
+      _handleError(error);
+    }
   }
 
   Future createFixtureForPlayer(
       int id, int community, File? imageFile, bool hasLivestream) async {
     try {
-      final formData = dioClass.FormData.fromMap(
+      final formData = FormData.fromMap(
         {
           "away_player_id": selectedAwayPlayer.value!.id.toString(),
           "away_score": addFixturesAwayPlayerScoreController.text.isEmpty
@@ -653,7 +695,7 @@ class TournamentRepository extends GetxController {
           "title": addFixtureRoundNameController.text,
           "streaming_platform": jsonEncode(fixturePlatform.value),
           "banner": imageFile != null
-              ? await dioClass.MultipartFile.fromFile(imageFile.path)
+              ? await MultipartFile.fromFile(imageFile.path)
               : null,
         },
       );
@@ -679,28 +721,22 @@ class TournamentRepository extends GetxController {
         }
       }
 
+      var headers = _getAuthHeaders();
       var response = await dio.post(ApiLink.createFixture(id),
-          data: formData,
-          options: dioClass.Options(headers: {
-            "Authorization": "JWT ${authController.token}",
-            dioClass.Headers.contentTypeHeader:
-                dioClass.Headers.multipartFormDataContentType
-          }));
-      print(response.data);
+          data: formData, options: Options(headers: headers));
 
-      if (response.statusCode == 200) {
-        Get.back();
-        Helpers().showCustomSnackbar(message: "Fixture added successfully");
-      }
-    } catch (err) {
-      log("Error creating fixture: ${(err as dioClass.DioException).response?.data}");
+      _handleResponse(response);
+      Get.back();
+      Helpers().showCustomSnackbar(message: "Fixture added successfully");
+    } catch (error) {
+      _handleError(error);
     }
   }
 
   Future createFixtureForTeam(
       int id, int community, File? imageFile, bool hasLivestream) async {
     try {
-      final formData = dioClass.FormData.fromMap(
+      final formData = FormData.fromMap(
         {
           "away_team_id": selectedAwayTeam.value!.id.toString(),
           "away_score": addFixturesAwayTeamScoreController.text.isEmpty
@@ -723,7 +759,7 @@ class TournamentRepository extends GetxController {
           "title": addFixtureRoundNameController.text,
           "streaming_platform": jsonEncode(fixturePlatform.value),
           "banner": imageFile != null
-              ? await dioClass.MultipartFile.fromFile(imageFile.path)
+              ? await MultipartFile.fromFile(imageFile.path)
               : null,
         },
       );
@@ -749,169 +785,171 @@ class TournamentRepository extends GetxController {
         }
       }
 
+      var headers = _getAuthHeaders();
       var response = await dio.post(ApiLink.createFixture(id),
-          data: formData,
-          options: dioClass.Options(headers: {
-            "Authorization": "JWT ${authController.token}",
-            dioClass.Headers.contentTypeHeader:
-                dioClass.Headers.multipartFormDataContentType
-          }));
-      print(response.data);
+          data: formData, options: Options(headers: headers));
 
-      if (response.statusCode == 200) {
-        Get.back();
-        Helpers().showCustomSnackbar(message: "Fixture added successfully");
-      }
-    } catch (err) {
-      log("Error creating fixture: ${(err as dioClass.DioException).response?.data}");
+      _handleResponse(response);
+      Get.back();
+      Helpers().showCustomSnackbar(message: "Fixture added successfully");
+    } catch (error) {
+      _handleError(error);
     }
   }
 
-  Future getEventDetails(int id) async {
-    var response = await http.get(Uri.parse(ApiLink.getEventDetails(id)),
-        headers: {"Authorization": "JWT ${authController.token}"});
+  Future getEventDetails(String slug) async {
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.get(ApiLink.getEventDetails(slug),
+          options: Options(headers: headers));
 
-    var json = jsonDecode(response.body);
-    var event = EventModel.fromJson(json);
-
-    return event;
+      var responseData = _handleResponse(response);
+      return EventModel.fromJson(responseData);
+    } catch (error) {
+      _handleError(error);
+    }
   }
 
   Future editFixtureForPlayer(int id) async {
-    Map<String, dynamic> body = {
-      "away_player_id": selectedAwayPlayer.value!.id,
-      "away_score": addFixturesAwayPlayerScoreController.text == ""
-          ? null
-          : addFixturesAwayPlayerScoreController.text,
-      "home_player_id": selectedHomePlayer.value!.id,
-      "home_score": addFixturesHomePlayerScoreController.text == ""
-          ? null
-          : addFixturesHomePlayerScoreController.text,
-      "player_ids": [
-        selectedHomePlayer.value!.id,
-        selectedAwayPlayer.value!.id
-      ],
-      "igame_mode": 1,
-      "fixture_group": "player",
-      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-      "fixture_time":
-          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-      "fixture_type": "1v1",
-      "title": addFixtureRoundNameController.text,
-      "streaming_platform": fixturePlatform.value,
-      "livestreams": [
-        {
-          "title": addFixtureRoundNameController.text,
-          "description": "fixture",
-          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-          "platform_id": fixturePlatform.value!.id!,
-          "link": addFixtureStreamingLinkController.text
-        }
-      ]
-    };
     try {
-      var response = await http.put(Uri.parse(ApiLink.editFixture(id)),
-          headers: {
-            "Authorization": "JWT ${authController.token}",
-            "Content-type": "application/json"
-          },
-          body: jsonEncode(body));
+      Map<String, dynamic> body = {
+        "away_player_id": selectedAwayPlayer.value!.id,
+        "away_score": addFixturesAwayPlayerScoreController.text == ""
+            ? null
+            : addFixturesAwayPlayerScoreController.text,
+        "home_player_id": selectedHomePlayer.value!.id,
+        "home_score": addFixturesHomePlayerScoreController.text == ""
+            ? null
+            : addFixturesHomePlayerScoreController.text,
+        "player_ids": [
+          selectedHomePlayer.value!.id,
+          selectedAwayPlayer.value!.id
+        ],
+        "igame_mode": 1,
+        "fixture_group": "player",
+        "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+        "fixture_time":
+            "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+        "fixture_type": "1v1",
+        "title": addFixtureRoundNameController.text,
+        "streaming_platform": fixturePlatform.value,
+        "livestreams": [
+          {
+            "title": addFixtureRoundNameController.text,
+            "description": "fixture",
+            "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+            "time":
+                "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+            "platform_id": fixturePlatform.value!.id!,
+            "link": addFixtureStreamingLinkController.text
+          }
+        ]
+      };
 
-      if (response.statusCode == 200) {
-        Get.back();
-        Helpers().showCustomSnackbar(message: "Fixture edited successfully");
-      }
-    } catch (err) {}
+      var headers = _getAuthHeaders();
+      var response = await dio.put(ApiLink.editFixture(id),
+          data: body, options: Options(headers: headers));
+
+      _handleResponse(response);
+      Get.back();
+      Helpers().showCustomSnackbar(message: "Fixture edited successfully");
+    } catch (error) {
+      _handleError(error);
+    }
   }
 
   Future editFixtureForTeam(int id) async {
-    Map<String, dynamic> body = {
-      "away_team_id": selectedAwayTeam.value!.id,
-      "away_score": addFixturesAwayTeamScoreController.text,
-      "home_team_id": selectedHomeTeam.value!.id,
-      "home_score": addFixturesHomeTeamScoreController.text,
-      "team_ids": [selectedHomeTeam.value!.id, selectedAwayTeam.value!.id],
-      "igame_mode": 1,
-      "fixture_group": "team",
-      "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-      "fixture_time":
-          "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-      "fixture_type": "1v1",
-      "title": addFixtureRoundNameController.text,
-      "streaming_link": "addFixtureStreamingLinkController.text",
-      "streaming_platform": fixturePlatform.value,
-      "livestreams": [
-        {
-          "title": "",
-          "description": "",
-          "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
-          "time": "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
-          "platform_id": fixturePlatform.value!.id!,
-          "link": addFixtureStreamingLinkController.text
-        }
-      ]
-    };
     try {
-      var response = await http.post(Uri.parse(ApiLink.editFixture(id)),
-          headers: {
-            "Authorization": "JWT ${authController.token}",
-            "Content-type": "application/json"
-          },
-          body: jsonEncode(body));
+      Map<String, dynamic> body = {
+        "away_team_id": selectedAwayTeam.value!.id,
+        "away_score": addFixturesAwayTeamScoreController.text,
+        "home_team_id": selectedHomeTeam.value!.id,
+        "home_score": addFixturesHomeTeamScoreController.text,
+        "team_ids": [selectedHomeTeam.value!.id, selectedAwayTeam.value!.id],
+        "igame_mode": 1,
+        "fixture_group": "team",
+        "fixture_date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+        "fixture_time":
+            "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+        "fixture_type": "1v1",
+        "title": addFixtureRoundNameController.text,
+        "streaming_link": "addFixtureStreamingLinkController.text",
+        "streaming_platform": fixturePlatform.value,
+        "livestreams": [
+          {
+            "title": "",
+            "description": "",
+            "date": DateFormat('yyyy-M-dd').format(fixtureDate.value!),
+            "time":
+                "${fixtureTime.value!.hour}:${fixtureTime.value!.minute}:00",
+            "platform_id": fixturePlatform.value!.id!,
+            "link": addFixtureStreamingLinkController.text
+          }
+        ]
+      };
 
-      if (response.statusCode == 200) {
-        Get.back();
-        Helpers().showCustomSnackbar(message: "Fixture edited successfully");
-      }
-    } catch (err) {}
+      var headers = _getAuthHeaders();
+      var response = await dio.post(ApiLink.editFixture(id),
+          data: body, options: Options(headers: headers));
+
+      _handleResponse(response);
+      Get.back();
+      Helpers().showCustomSnackbar(message: "Fixture edited successfully");
+    } catch (error) {
+      _handleError(error);
+    }
   }
 
   Future createLivestream(String title, String description, String link,
       int platform, File? image, DateTime date, TimeOfDay time) async {
-    var headers = {
-      "Authorization": "JWT ${authController.token}",
-      "Content-type": "multipart/form-data"
-    };
-    var request =
-        http.MultipartRequest("POST", Uri.parse(ApiLink.createLivestream))
-          ..fields["title"] = title
-          ..fields["description"] = description
-          ..fields["platform_id"] = platform.toString()
-          ..fields["creator"] = "user"
-          ..fields["creator_id"] = authController.user!.id!.toString()
-          ..fields["date"] = DateFormat('yyyy-M-dd').format(date!)
-          ..fields["time"] = "${time!.hour}:${time!.minute}:00";
+    try {
+      final formData = FormData.fromMap(
+        {
+          "title": title,
+          "description": description,
+          "platform_id": platform.toString(),
+          "creator": "user",
+          "creator_id": authController.user!.id!.toString(),
+          "date": DateFormat('yyyy-M-dd').format(date),
+          "time": "${time.hour}:${time.minute}:00",
+          "banner":
+              image != null ? await MultipartFile.fromFile(image.path) : null,
+        },
+      );
 
-    request.files.add(await http.MultipartFile.fromPath('banner', image!.path));
+      var headers = _getAuthHeaders();
+      var response = await dio.post(ApiLink.createLivestream,
+          data: formData, options: Options(headers: headers));
 
-    // request.fields.addAll(
-    //     event.toCreateEventJson().map((key, value) => MapEntry(key, value)));
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-    // var res = await response.stream.bytesToString();
-
-    if (response.statusCode == 200) {
+      _handleResponse(response);
       Get.back();
       Helpers().showCustomSnackbar(message: "Livestream created successfully");
+    } catch (error) {
+      _handleError(error);
     }
   }
 
   Future deleteFixture(int id) async {
-    var response = await http.delete(Uri.parse(ApiLink.deleteFixture(id)),
-        headers: {"Authorization": "JWT ${authController.token}"});
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.delete(ApiLink.deleteFixture(id),
+          options: Options(headers: headers));
+
+      _handleResponse(response);
+    } catch (error) {
+      _handleError(error);
+    }
   }
 
   Future takeActionOnWaitlist(
       int eventId, int applicantId, String action) async {
-    var response = await http.post(
-        Uri.parse(ApiLink.takeActionOnWaitlist(eventId, applicantId, action)),
-        headers: {
-          "Authorization": "JWT ${authController.token}",
-        });
-    debugPrint(response.body);
-    if (response.statusCode == 200) {
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.post(
+          ApiLink.takeActionOnWaitlist(eventId, applicantId, action),
+          options: Options(headers: headers));
+
+      _handleResponse(response);
       if (action == "accept") {
         Helpers()
             .showCustomSnackbar(message: "Participant accepted successfully");
@@ -919,44 +957,40 @@ class TournamentRepository extends GetxController {
         Helpers()
             .showCustomSnackbar(message: "Participant rejected successfully");
       }
+    } catch (error) {
+      _handleError(error);
     }
   }
 
   Future editParticipant(int eventId, int participantId, String action) async {
-    var response = await http.put(
-        Uri.parse(ApiLink.editParticipant(eventId, participantId, action)),
-        headers: {"Authorization": "JWT ${authController.token}"});
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.put(
+          ApiLink.editParticipant(eventId, participantId, action),
+          options: Options(headers: headers));
 
-    if (response.statusCode == 200) {
+      _handleResponse(response);
       if (action == "remove") {
         Helpers().showCustomSnackbar(message: "Removed Participant");
       }
+    } catch (error) {
+      _handleError(error);
     }
   }
 
   Future getAllFixture() async {
-    var response = await http.get(Uri.parse(ApiLink.getAllFixture()),
-        headers: {"Authorization": "JWT ${authController.token}"});
-    var json = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      var list = List.from(json['results']);
-      var fixtures = list.map((e) => FixtureModel.fromJson(e)).toList();
-      allFixtures.assignAll(fixtures);
-    }
-  }
+    try {
+      var headers = _getAuthHeaders();
+      var response = await dio.get(ApiLink.getAllFixture(),
+          options: Options(headers: headers));
 
-  void handleError(dynamic error) {
-    debugPrint("error $error");
-    Fluttertoast.showToast(
-        fontSize: Get.height * 0.015,
-        msg: (error.toString().contains("api.esportsng.com") ||
-                error.toString().contains("Network is unreachable"))
-            ? 'Event like: No internet connection!'
-            : (error.toString().contains("FormatException"))
-                ? 'Event like: Internal server error, contact admin!'
-                : error.toString(),
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM);
+      var responseData = _handleResponse(response);
+      var fixtures = List<FixtureModel>.from(
+          responseData['results'].map((x) => FixtureModel.fromJson(x)));
+      allFixtures.assignAll(fixtures);
+    } catch (error) {
+      _handleError(error);
+    }
   }
 
   void clearFixturesData() {

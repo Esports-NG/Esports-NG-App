@@ -7,6 +7,7 @@ import 'package:e_sport/data/model/user_model.dart';
 
 class EventModel {
   int? id;
+  String? slug;
   String? profile;
   String? banner;
   String? venue;
@@ -38,6 +39,7 @@ class EventModel {
 
   EventModel({
     this.id,
+    this.slug,
     this.profile,
     this.banner,
     this.name,
@@ -70,6 +72,7 @@ class EventModel {
 
   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
         id: json["id"],
+        slug: json['slug'],
         profile: json["profile"],
         banner: json["banner"],
         hashtag: json['hashtag'],

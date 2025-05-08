@@ -4,17 +4,18 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/notification_service.dart';
 import 'package:e_sport/router.dart';
-import 'package:e_sport/ui/widget/no_internet.dart';
+import 'package:e_sport/ui/widgets/utils/no_internet.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'di/app_binding.dart';
 import 'firebase_options.dart';
-import 'ui/auth/splash_screen.dart';
+import 'ui/screens/auth/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,7 @@ void main() async {
   final notificationService = NotificationService();
   await notificationService.initialize();
   runApp(const ESportApp());
-  configLoading(); 
+  configLoading();
 }
 
 void configLoading() {
@@ -77,33 +78,38 @@ class _ESportAppState extends State<ESportApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'ENGY',
-        initialBinding: AppBinding(),
-        theme: ThemeData(
-          textTheme: Theme.of(context).textTheme.apply(
-              bodyColor: AppColor().primaryWhite,
-              displayColor: AppColor().primaryWhite,
-              fontFamily: "Inter"),
-          fontFamily: "InterMedium",
-          appBarTheme: AppBarTheme(
-            backgroundColor: AppColor().primaryBackGroundColor,
-          ),
-          scaffoldBackgroundColor: AppColor().primaryBackGroundColor,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          pageTransitionsTheme: const PageTransitionsTheme(
-            builders: {
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            },
-          ),
-        ),
-        builder: EasyLoading.init(),
-        routeInformationParser: router.routeInformationParser,
-        routeInformationProvider: router.routeInformationProvider,
-        routerDelegate: router.routerDelegate,
-        //home: const SplashScreen()
-        );
+    return ScreenUtilInit(
+        designSize: Size(390, 781),
+        minTextAdapt: true,
+        builder: (_, child) {
+          return GetMaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            title: 'ENGY',
+            initialBinding: AppBinding(),
+            theme: ThemeData(
+              textTheme: Theme.of(context).textTheme.apply(
+                  bodyColor: AppColor().primaryWhite,
+                  displayColor: AppColor().primaryWhite,
+                  fontFamily: "Inter"),
+              fontFamily: "InterMedium",
+              appBarTheme: AppBarTheme(
+                backgroundColor: AppColor().primaryBackGroundColor,
+              ),
+              scaffoldBackgroundColor: AppColor().primaryBackGroundColor,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              pageTransitionsTheme: const PageTransitionsTheme(
+                builders: {
+                  TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                  TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                },
+              ),
+            ),
+            builder: EasyLoading.init(),
+            routeInformationParser: router.routeInformationParser,
+            routeInformationProvider: router.routeInformationProvider,
+            routerDelegate: router.routerDelegate,
+            // home: const SplashScreen()
+          );
+        });
   }
 }

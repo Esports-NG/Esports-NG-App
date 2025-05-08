@@ -17,6 +17,7 @@ class UserDataWithFollowers {
   final String? userName;
   final String? fullName;
   final String? email;
+  final String? slug;
   final String? bio;
   final String? phoneNumber;
   final String? country;
@@ -45,6 +46,7 @@ class UserDataWithFollowers {
     this.purpose,
     this.profile,
     this.isVerified,
+    this.slug,
     this.followers,
     this.following,
   });
@@ -54,6 +56,7 @@ class UserDataWithFollowers {
         id: json["id"],
         userName: json["user_name"],
         fullName: json["full_name"],
+        slug: json["slug"],
         bio: json["bio"],
         email: json["email"],
         phoneNumber: json["phone_number"],

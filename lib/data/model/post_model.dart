@@ -19,6 +19,7 @@ class PostModel {
   TeamModel? team;
   String? body;
   List<String>? iTags;
+  String? slug;
   List<String>? iViewers;
   int? likeCount;
   List<UserModel>? likes;
@@ -59,6 +60,7 @@ class PostModel {
       this.participantAnnouncement,
       this.owner,
       this.game,
+      this.slug,
       this.event,
       this.type,
       this.fixture});
@@ -66,7 +68,8 @@ class PostModel {
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
       id: json["id"],
       title: json["title"],
-      author: json["author"] == null ? null : UserModel.fromJson(json["author"]),
+      author:
+          json["author"] == null ? null : UserModel.fromJson(json["author"]),
       repost:
           json["repost"] == null ? null : PostModel.fromJson(json['repost']),
       community: json["community"] == null
@@ -77,6 +80,7 @@ class PostModel {
           : FixtureModel.fromJson(json["fixture"]),
       team: json["team"] == null ? null : TeamModel.fromJson(json["team"]),
       body: json["body"],
+      slug: json["slug"],
       type: json["type"],
       likeCount: json["like_count"],
       owner: json["owner"] == null ? null : UserModel.fromJson(json["owner"]),
@@ -84,7 +88,8 @@ class PostModel {
       event: json['event'] == null ? null : EventModel.fromJson(json["event"]),
       likes: json["likes"] == null
           ? []
-          : List<UserModel>.from(json["likes"]!.map((x) => UserModel.fromJson(x))),
+          : List<UserModel>.from(
+              json["likes"]!.map((x) => UserModel.fromJson(x))),
       viewCount: json["view_count"],
       // views: json["views"] == null
       //     ? []

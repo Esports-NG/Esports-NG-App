@@ -9,6 +9,7 @@ class CommunityModel {
   String? bio;
   String? abbrev;
   UserModel? owner;
+  String? slug;
   List<GamePlayed>? gamesPlayed;
   DateTime? createdAt;
   bool? enableTeamchat;
@@ -33,6 +34,7 @@ class CommunityModel {
       this.followers,
       this.abbrev,
       this.following,
+      this.slug,
       this.isVerified});
 
   factory CommunityModel.fromJson(Map<String, dynamic> json) => CommunityModel(
@@ -41,6 +43,7 @@ class CommunityModel {
         logo: json["logo"],
         cover: json["cover"],
         bio: json["bio"],
+        slug: json["slug"],
         isVerified: json['is_verified'],
         abbrev: json["abbrev"],
         owner: json["owner"] == null ? null : UserModel.fromJson(json["owner"]),

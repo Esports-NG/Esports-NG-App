@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:e_sport/ui/widgets/custom/custom_text.dart';
+import 'package:e_sport/ui/widgets/custom/custom_button.dart';
+import 'package:e_sport/util/colors.dart';
+
+class ProfileActionButtons extends StatelessWidget {
+  final bool isFollowing;
+  final bool isLoading;
+  final VoidCallback onFollowTap;
+  final VoidCallback onMessageTap;
+
+  const ProfileActionButtons({
+    Key? key,
+    required this.isFollowing,
+    required this.isLoading,
+    required this.onFollowTap,
+    required this.onMessageTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: CustomFillOption(
+            buttonColor: isLoading ? Colors.transparent : null,
+            onTap: onFollowTap,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: isLoading
+                    ? [
+                        SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: AppColor().primaryColor,
+                            strokeCap: StrokeCap.round,
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ]
+                    : [
+                        SvgPicture.asset('assets/images/svg/account_icon.svg',
+                            height: Get.height * 0.015,
+                            color: AppColor().primaryWhite),
+                        Gap(Get.height * 0.01),
+                        CustomText(
+                            title: isFollowing ? "Unfollow" : 'Follow',
+                            size: 14,
+                            fontFamily: 'Inter',
+                            color: AppColor().primaryWhite),
+                      ]),
+          ),
+        ),
+        Gap(Get.height * 0.02),
+        Expanded(
+          child: CustomFillOption(
+            buttonColor: AppColor().primaryBackGroundColor.withOpacity(0.7),
+            borderColor: AppColor().greyEight,
+            onTap: onMessageTap,
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Icon(
+                Icons.sms_outlined,
+                color: AppColor().primaryWhite,
+                size: Get.height * 0.015,
+              ),
+              Gap(Get.height * 0.01),
+              CustomText(
+                  title: 'Message',
+                  size: 14,
+                  fontFamily: 'Inter',
+                  color: AppColor().primaryWhite),
+              Gap(Get.height * 0.01),
+              Icon(
+                Icons.keyboard_arrow_down,
+                color: AppColor().primaryColor,
+                size: Get.height * 0.015,
+              ),
+            ]),
+          ),
+        ),
+      ],
+    );
+  }
+}
