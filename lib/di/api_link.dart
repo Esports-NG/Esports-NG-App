@@ -31,11 +31,11 @@ class ApiLink {
   static String logOut = "${baseurl}auth/v2/logout/";
 
   //Post
-  static String createPost = "${baseurl}post/v2/create/";
-  static String editPost = "${baseurl}post/v2/edit/";
-  static String deletePost = "${baseurl}post/v2/delete/";
+  static String createPost = "${baseurl}post/v2/";
+  static String editPost = "${baseurl}post/v2/";
+  static String deletePost = "${baseurl}post/v2/";
   static String getAllPost = "${baseurl}post/v2/";
-  static String getPostsForYou = "${baseurl}post/v2/";
+  static String getPostsForYou = "${baseurl}extra/v2/my/feed/";
   static String getBookmarkedPost = "${baseurl}post/v2/viewbooked/";
   static String getFollowingPost = "${baseurl}post/v2/following/";
   static String getMyPost = "${baseurl}post/v2/myposts/";
@@ -86,8 +86,8 @@ class ApiLink {
   static String deletePlayer(int id) => "${baseurl}player/v2/delete/$id/";
 
   //Events
-  static String createTournament(int communityId) =>
-      "${baseurl}event/v2/$communityId/create/event/";
+  static String createTournament(String slug) =>
+      "${baseurl}event/v2/?c_s=$slug";
   static String createSocialEvent(int communityId) =>
       "${baseurl}event/v2/$communityId/create/socialevent/";
   static String getEventDetails(String slug) => "${baseurl}event/v2/?p=$slug";
@@ -107,9 +107,9 @@ class ApiLink {
       "${baseurl}event/v2/participants/$id";
   static String getEventWaitlist(int id) =>
       "${baseurl}event/v2/view/waitlist/$id";
-  static String createFixture(int id) =>
-      "${baseurl}event/v2/fixture/create/$id/";
-  static String editFixture(int id) => "${baseurl}event/v2/fixture/$id/edit/";
+  static String createFixture(String slug) =>
+      "${baseurl}event/v2/fixture/$slug/";
+  static String editFixture(String slug) => "${baseurl}event/v2/fixture/$slug/";
   static String deleteFixture(int id) =>
       "${baseurl}event/v2/fixture/$id/delete/";
   static String getFixtures(int id) =>

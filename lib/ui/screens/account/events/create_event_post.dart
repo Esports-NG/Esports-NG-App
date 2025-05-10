@@ -21,12 +21,8 @@ import 'package:image_picker/image_picker.dart';
 
 class CreateEventPost extends StatefulWidget {
   const CreateEventPost(
-      {super.key,
-      this.postId,
-      this.postAs,
-      this.postName,
-      required this.event});
-  final int? postId;
+      {super.key, this.slug, this.postAs, this.postName, required this.event});
+  final String? slug;
   final String? postAs;
   final String? postName;
   final EventModel event;
@@ -56,12 +52,12 @@ class _CreateEventPostState extends State<CreateEventPost> {
   @override
   void initState() {
     super.initState();
-    if (widget.postId != null) {
-      postController.postId.value = widget.postId!;
+    if (widget.slug != null) {
+      postController.postId.value = widget.slug!;
       postController.postAs.value = widget.postAs!;
       postController.postName.value = widget.postName!;
     } else {
-      postController.postId.value = authController.user!.id!;
+      postController.postId.value = authController.user!.slug!;
       postController.postAs.value = "user";
       postController.postName.value = authController.user!.fullName!;
     }
@@ -477,7 +473,8 @@ class _CreateEventPostState extends State<CreateEventPost> {
                     GestureDetector(
                       onTap: () {
                         postController.postAs.value = "user";
-                        postController.postId.value = authController.user!.id!;
+                        postController.postId.value =
+                            authController.user!.slug!;
                         postController.postName.value =
                             authController.user!.fullName!;
                         Get.back();
@@ -529,7 +526,7 @@ class _CreateEventPostState extends State<CreateEventPost> {
                                   return GestureDetector(
                                     onTap: () {
                                       postController.postAs.value = "team";
-                                      postController.postId.value = item.id!;
+                                      postController.postId.value = item.slug!;
                                       postController.postName.value =
                                           item.name!;
                                       Get.back();
@@ -586,7 +583,7 @@ class _CreateEventPostState extends State<CreateEventPost> {
                                   return GestureDetector(
                                     onTap: () {
                                       postController.postAs.value = "community";
-                                      postController.postId.value = item.id!;
+                                      postController.postId.value = item.slug!;
                                       postController.postName.value =
                                           item.name!;
                                       Get.back();

@@ -49,12 +49,12 @@ class PostRepository extends Get.GetxController {
   MultiSelectController<GamePlayed> gameTagsController =
       MultiSelectController<GamePlayed>();
   final Get.Rx<List<PostModel>> _allPost = Get.Rx([]);
-  final Get.Rx<List<PostModel>> _myPost = Get.Rx([]);
+  final Get.RxList<PostModel> _myPost = Get.RxList([]);
   final Get.Rx<List<PostModel>> _bookmarkedPost = Get.Rx([]);
   final Get.RxList<PostModel> _followingPost = Get.RxList([]);
   final Get.RxList<PostModel> _forYouPosts = Get.RxList([]);
   final Get.Rx<List<NewsModel>> _news = Get.Rx([]);
-  final Get.Rx<int> postId = 0.obs;
+  final Get.Rx<String> postId = "".obs;
   final Get.RxString postAs = "user".obs;
   final Get.RxString postName = "".obs;
 
@@ -65,7 +65,7 @@ class PostRepository extends Get.GetxController {
   Get.RxString followingNextLink = "".obs;
 
   List<PostModel> get allPost => _allPost.value;
-  List<PostModel> get myPost => _myPost.value;
+  List<PostModel> get myPost => _myPost;
   List<PostModel> get bookmarkedPost => _bookmarkedPost.value;
   List<PostModel> get followingPost => _followingPost;
   List<PostModel> get forYouPosts => _forYouPosts;
@@ -203,8 +203,8 @@ class PostRepository extends Get.GetxController {
       var postUrl = postAs.value == "user"
           ? ApiLink.createPost
           : postAs.value == "community"
-              ? "${ApiLink.createPost}?comm_pk=${postId.value}"
-              : "${ApiLink.createPost}?team_pk=${postId.value}";
+              ? "${ApiLink.createPost}?c_s=${postId.value}"
+              : "${ApiLink.createPost}?t_s=${postId.value}";
 
       final formData = FormData.fromMap({
         "body": postBodyController.text,
@@ -446,14 +446,14 @@ class PostRepository extends Get.GetxController {
 
   Future getMyPost(bool isFirstTime) async {
     try {
-      authController.setLoading(true);
+      debugPrint('getting my post...');
       if (isFirstTime == true) {
+        authController.setLoading(true);
         _getPostStatus(GetPostStatus.loading);
       }
 
-      debugPrint('getting my post...');
       final response = await _dio.get(ApiLink.getMyPost);
-      final responseData = response.data;
+      final responseData = response.data['data'];
 
       if (responseData is List) {
         var myPosts = responseData.map((e) => PostModel.fromJson(e)).toList();

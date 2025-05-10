@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:e_sport/data/model/activity_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
@@ -60,19 +61,50 @@ class _ActivitiesState extends State<Activities>
   ];
 
   Future<List<ActivityModel>> fetchActivities() async {
-    var response = await http.get(Uri.parse(ApiLink.getActivities),
-        headers: {"Authorization": "JWT ${authController.token}"});
-    log(response.body);
-    var json = jsonDecode(response.body);
-    return activityModelFromJson(jsonEncode(json["results"]));
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final response =
+          await tournamentController.dio.get(ApiLink.getActivities);
+      final json = response.data;
+      if (json['success'] == true) {
+        _nextLink = json['data']['next'];
+        return activityModelFromJson(jsonEncode(json['data']['results']));
+      } else {
+        throw Exception(json['message'] ?? 'Failed to load activities');
+      }
+    } on DioException catch (e) {
+      log('Error fetching activities: ${e.response?.data}');
+      throw e;
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<List<ActivityModel>> fetchNextActivities() async {
-    var response = await http.get(Uri.parse(_nextLink!),
-        headers: {"Authorization": "JWT ${authController.token}"});
-    log(response.body);
-    var json = jsonDecode(response.body);
-    return activityModelFromJson(jsonEncode(json["results"]));
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final response = await tournamentController.dio.get(_nextLink!);
+      final json = response.data;
+      if (json['success'] == true) {
+        _nextLink = json['data']['next'];
+        return activityModelFromJson(jsonEncode(json['data']['results']));
+      } else {
+        throw Exception(json['message'] ?? 'Failed to load more activities');
+      }
+    } catch (e) {
+      log('Error fetching next activities: $e');
+      throw e;
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _fetchPage(int pageKey) async {

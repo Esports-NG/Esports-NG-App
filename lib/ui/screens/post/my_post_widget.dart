@@ -21,9 +21,16 @@ class _MyPostWidgetState extends State<MyPostWidget>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController =
       TabController(length: 2, vsync: this);
+  final postController = Get.put(PostRepository());
+
+  // @override
+  // void initState() {
+  //   postController.getMyPost(false);
+  //   super.initState();
+  // }
+
   @override
   Widget build(BuildContext context) {
-    final postController = Get.put(PostRepository());
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,

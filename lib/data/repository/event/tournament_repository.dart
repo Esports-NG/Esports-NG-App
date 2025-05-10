@@ -430,7 +430,7 @@ class TournamentRepository extends GetxController {
 
       // Send the request
       var response = await dio.post(
-        ApiLink.createTournament(selectedCommunity.value!.id!),
+        ApiLink.createTournament(selectedCommunity.value!.slug!),
         data: formData,
         options: Options(headers: _getAuthHeaders()),
       );
@@ -561,7 +561,7 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future createBRFixture(int id, List<int> participants, String type,
+  Future createBRFixture(String slug, List<int> participants, String type,
       int community, File? imageFile, bool hasLivestream) async {
     try {
       final formData = FormData.fromMap(
@@ -618,7 +618,7 @@ class TournamentRepository extends GetxController {
       }
 
       var response = await dio.post(
-        ApiLink.createFixture(id),
+        ApiLink.createFixture(slug),
         data: formData,
         options: Options(headers: _getAuthHeaders()),
       );
@@ -631,7 +631,7 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future editBRFixture(int id, List<int> participants, String type) async {
+  Future editBRFixture(String slug, List<int> participants, String type) async {
     try {
       Map<String, dynamic> body = {
         "player_ids": type == "solo" ? participants : [],
@@ -658,7 +658,7 @@ class TournamentRepository extends GetxController {
       };
 
       var headers = _getAuthHeaders();
-      var response = await dio.post(ApiLink.createFixture(id),
+      var response = await dio.post(ApiLink.createFixture(slug),
           data: body, options: Options(headers: headers));
 
       _handleResponse(response);
@@ -670,7 +670,7 @@ class TournamentRepository extends GetxController {
   }
 
   Future createFixtureForPlayer(
-      int id, int community, File? imageFile, bool hasLivestream) async {
+      String slug, int community, File? imageFile, bool hasLivestream) async {
     try {
       final formData = FormData.fromMap(
         {
@@ -722,7 +722,7 @@ class TournamentRepository extends GetxController {
       }
 
       var headers = _getAuthHeaders();
-      var response = await dio.post(ApiLink.createFixture(id),
+      var response = await dio.post(ApiLink.createFixture(slug),
           data: formData, options: Options(headers: headers));
 
       _handleResponse(response);
@@ -734,7 +734,7 @@ class TournamentRepository extends GetxController {
   }
 
   Future createFixtureForTeam(
-      int id, int community, File? imageFile, bool hasLivestream) async {
+      String slug, int community, File? imageFile, bool hasLivestream) async {
     try {
       final formData = FormData.fromMap(
         {
@@ -786,7 +786,7 @@ class TournamentRepository extends GetxController {
       }
 
       var headers = _getAuthHeaders();
-      var response = await dio.post(ApiLink.createFixture(id),
+      var response = await dio.post(ApiLink.createFixture(slug),
           data: formData, options: Options(headers: headers));
 
       _handleResponse(response);
@@ -810,7 +810,7 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future editFixtureForPlayer(int id) async {
+  Future editFixtureForPlayer(String slug) async {
     try {
       Map<String, dynamic> body = {
         "away_player_id": selectedAwayPlayer.value!.id,
@@ -847,7 +847,7 @@ class TournamentRepository extends GetxController {
       };
 
       var headers = _getAuthHeaders();
-      var response = await dio.put(ApiLink.editFixture(id),
+      var response = await dio.put(ApiLink.editFixture(slug),
           data: body, options: Options(headers: headers));
 
       _handleResponse(response);
@@ -858,7 +858,7 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future editFixtureForTeam(int id) async {
+  Future editFixtureForTeam(String slug) async {
     try {
       Map<String, dynamic> body = {
         "away_team_id": selectedAwayTeam.value!.id,
@@ -889,7 +889,7 @@ class TournamentRepository extends GetxController {
       };
 
       var headers = _getAuthHeaders();
-      var response = await dio.post(ApiLink.editFixture(id),
+      var response = await dio.post(ApiLink.editFixture(slug),
           data: body, options: Options(headers: headers));
 
       _handleResponse(response);

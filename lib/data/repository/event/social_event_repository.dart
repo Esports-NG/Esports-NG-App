@@ -327,7 +327,7 @@ class SocialEventRepository extends GetxController {
       );
 
       return _dio.post(
-        ApiLink.createTournament(organizingCommunity.value!.id!),
+        ApiLink.createTournament(organizingCommunity.value!.slug!),
         data: formData,
         options: options,
       );

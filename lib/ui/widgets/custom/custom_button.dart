@@ -54,7 +54,7 @@ class CustomFillButton extends StatelessWidget {
               : child ??
                   CustomText(
                     title: buttonText ?? '',
-                    size: textSize ?? 16,
+                    size: textSize ?? 14,
                     weight: fontWeight ?? FontWeight.w500,
                     fontFamily: 'InterMedium',
                     textAlign: TextAlign.center,

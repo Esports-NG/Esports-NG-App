@@ -625,7 +625,7 @@ class _AddOneVOneFixtureState extends State<AddOneVOneFixture> {
                       _isLoading = true;
                     });
                     await tournamentController.createFixtureForPlayer(
-                        widget.event.id!,
+                        widget.event.slug!,
                         widget.event.community!.id!,
                         imageFile,
                         _hasLivestream);

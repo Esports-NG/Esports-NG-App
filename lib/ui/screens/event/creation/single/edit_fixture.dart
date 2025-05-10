@@ -508,7 +508,7 @@ class _EditFixtureState extends State<EditFixture> {
                           _isLoading = true;
                         });
                         await tournamentController
-                            .editFixtureForPlayer(widget.fixture.id!);
+                            .editFixtureForPlayer(widget.fixture.slug!);
                         setState(() {
                           _isLoading = false;
                         });

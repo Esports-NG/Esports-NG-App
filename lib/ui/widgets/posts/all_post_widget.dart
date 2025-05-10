@@ -3,6 +3,7 @@ import 'package:e_sport/ui/widgets/posts/ad_list.dart';
 import 'package:e_sport/ui/screens/post/post_details.dart';
 import 'package:e_sport/ui/widgets/posts/post_item.dart';
 import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
+import 'package:e_sport/ui/widgets/custom/error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -90,6 +91,7 @@ class _PostWidgetState extends State<PostWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       onRefresh: () => Future.sync(
         // 2
@@ -105,6 +107,16 @@ class _PostWidgetState extends State<PostWidget>
                 ? Gap(0)
                 : Gap(Get.height * 0.015),
         builderDelegate: PagedChildBuilderDelegate<PostModel>(
+            firstPageErrorIndicatorBuilder: (context) => PageErrorWidget(
+                onRetry: () => _pagingController.retryLastFailedRequest()),
+            newPageErrorIndicatorBuilder: (context) => PageErrorWidget(
+                  onRetry: () => _pagingController.retryLastFailedRequest(),
+                ),
+            noItemsFoundIndicatorBuilder: (context) => PageErrorWidget(
+                  title: 'No Posts Found',
+                  message: 'There are no posts available at the moment.',
+                  onRetry: () => _pagingController.refresh(),
+                ),
             itemBuilder: (context, post, index) {
               return index != 0 && widget.posts![index - 1].owner != null
                   ? Gap(0)

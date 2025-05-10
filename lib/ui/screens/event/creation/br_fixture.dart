@@ -563,7 +563,7 @@ class _AddBRFixtureState extends State<AddBRFixture> {
                       _isLoading = true;
                     });
                     await tournamentController.createBRFixture(
-                        widget.event.id!,
+                        widget.event.slug!,
                         widget.event.tournamentType == "team"
                             ? multiSelectControllerTeam.selectedItems
                                 .map((i) => i.value.id!)
