@@ -3,12 +3,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart' as dio;
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/home/components/create_success_page.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widgets/utils/create_success_page.dart';
+import 'package:e_sport/ui/widgets/custom/custom_text.dart';
+import 'package:e_sport/util/api_helpers.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 enum PlayerStatus {
@@ -42,6 +43,7 @@ class PlayerRepository extends GetxController {
   late final gameIdController = TextEditingController();
   late final gameNameController = TextEditingController();
   late final searchController = TextEditingController();
+  final _dio = dio.Dio(); // Create a Dio instance
 
   final Rx<List<PlayerModel>> _allPlayer = Rx([]);
   final Rx<List<PlayerModel>> _myPlayer = Rx([]);
@@ -60,6 +62,11 @@ class PlayerRepository extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Configure Dio defaults
+    _dio.options.validateStatus = (status) => true; // Accept all status codes
+    _dio.options.connectTimeout = const Duration(seconds: 10);
+    _dio.options.receiveTimeout = const Duration(seconds: 10);
+
     authController.mToken.listen((p0) async {
       if (p0 != '0') {
         getAllPlayer(true);
@@ -70,26 +77,29 @@ class PlayerRepository extends GetxController {
   Future createPlayer(PlayerModel player) async {
     try {
       _createPlayerStatus(CreatePlayerStatus.loading);
-      var headers = {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      };
-      var request =
-          http.MultipartRequest("POST", Uri.parse(ApiLink.createPlayer));
 
-      request.fields.addAll(player
-          .toCreatePlayerJson()
-          .map((key, value) => MapEntry(key, value)));
-      request.fields['igames'] = player.gamePlayed!.id.toString();
-      if (playerProfileImage != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-            'profile', playerProfileImage!.path));
-      }
-      request.headers.addAll(headers);
-      http.StreamedResponse response = await request.send();
+      final formData = dio.FormData.fromMap({
+        ...player.toCreatePlayerJson(),
+        'igames': player.gamePlayed!.id.toString(),
+        if (playerProfileImage != null)
+          'profile': await dio.MultipartFile.fromFile(playerProfileImage!.path),
+      });
+
+      final options = dio.Options(
+          headers: {"Authorization": 'JWT ${authController.token}'});
+
+      final response = await _dio.post(
+        ApiLink.createPlayer,
+        data: formData,
+        options: options,
+      );
+
+      final responseData = response.data;
+
       if (response.statusCode == 201) {
         _createPlayerStatus(CreatePlayerStatus.success);
-        debugPrint(await response.stream.bytesToString());
+        debugPrint(responseData.toString());
+
         Get.to(() => const CreateSuccessPage(title: 'Player Created'))!
             .then((value) {
           getAllPlayer(false);
@@ -100,8 +110,8 @@ class PlayerRepository extends GetxController {
         _createPlayerStatus(CreatePlayerStatus.error);
       } else {
         _createPlayerStatus(CreatePlayerStatus.error);
-        debugPrint(response.reasonPhrase);
-        handleError(response.reasonPhrase);
+        debugPrint(responseData['message'] ?? response.statusMessage);
+        handleError(responseData['message'] ?? response.statusMessage);
       }
     } catch (error) {
       _createPlayerStatus(CreatePlayerStatus.error);
@@ -117,88 +127,127 @@ class PlayerRepository extends GetxController {
       }
 
       debugPrint('getting all player...');
-      var response = await http.get(Uri.parse(ApiLink.getAllPlayer), headers: {
+
+      final options = dio.Options(headers: {
         "Content-Type": "application/json",
         "Authorization": 'JWT ${authController.token}'
       });
-      var json = jsonDecode(response.body);
-      if (response.statusCode != 200) {
-        throw (json['detail']);
-      }
+
+      final response = await _dio.get(
+        ApiLink.getAllPlayer,
+        options: options,
+      );
+
+      final responseData = response.data;
 
       if (response.statusCode == 200) {
-        var list = List.from(json);
-        var players = list.map((e) => PlayerModel.fromJson(e)).toList();
-        debugPrint("${players.length} players found");
-        _allPlayer(players);
-        _playerStatus(PlayerStatus.success);
-        players.isNotEmpty
-            ? _playerStatus(PlayerStatus.available)
-            : _playerStatus(PlayerStatus.empty);
+        if (responseData['success'] == true) {
+          var list = List.from(responseData['data']);
+          var players = list.map((e) => PlayerModel.fromJson(e)).toList();
+          debugPrint("${players.length} players found");
+          _allPlayer(players);
+
+          players.isNotEmpty
+              ? _playerStatus(PlayerStatus.available)
+              : _playerStatus(PlayerStatus.empty);
+        } else {
+          _playerStatus(PlayerStatus.error);
+          handleError(responseData['message'] ?? 'Failed to load players');
+        }
       } else if (response.statusCode == 401) {
         authController
             .refreshToken()
             .then((value) => EasyLoading.showInfo('try again!'));
         _playerStatus(PlayerStatus.error);
+      } else {
+        _playerStatus(PlayerStatus.error);
+        handleError(responseData['message'] ?? response.statusMessage);
       }
-      return response.body;
+      return responseData;
     } catch (error) {
       _playerStatus(PlayerStatus.error);
       debugPrint("getting all player: ${error.toString()}");
+      handleError(error);
+      return null;
     }
   }
 
   Future editPlayerProfile(int id, Map<String, dynamic> data) async {
-    var headers = {
-      "Authorization": "JWT ${authController.token}",
-      "Content-type": "application/json"
-    };
     try {
-      var request =
-          http.MultipartRequest("PUT", Uri.parse(ApiLink.editPlayer(id)))
-            ..fields["in_game_id"] = data["in_game_id"]
-            ..fields["in_game_name"] = data["in_game_name"];
+      final formData = dio.FormData.fromMap({
+        "in_game_id": data["in_game_id"],
+        "in_game_name": data["in_game_name"],
+        if (playerProfileImage != null)
+          'profile': await dio.MultipartFile.fromFile(playerProfileImage!.path),
+      });
 
-      if (playerProfileImage != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-            'profile', playerProfileImage!.path));
-      }
-      request.headers.addAll(headers);
-      http.StreamedResponse response = await request.send();
-      // var body = await http.Response.fromStream(response);
-      // print(body.body);
+      final options = dio.Options(
+          headers: {"Authorization": "JWT ${authController.token}"});
+
+      final response = await _dio.put(
+        ApiLink.editPlayer(id),
+        data: formData,
+        options: options,
+      );
+
+      final responseData = response.data;
+
       if (response.statusCode == 200) {
-        Get.back();
-        Helpers().showCustomSnackbar(message: "Player Profile edited");
+        if (responseData['success'] == true) {
+          Get.back();
+          Helpers().showCustomSnackbar(
+              message: responseData['message'] ?? "Player Profile edited");
+          getAllPlayer(false); // Refresh the player list
+        } else {
+          handleError(
+              responseData['message'] ?? "Failed to edit player profile");
+        }
+      } else if (response.statusCode == 401) {
+        authController.refreshToken();
+      } else {
+        handleError(responseData['message'] ?? response.statusMessage);
       }
     } catch (error) {
-      print(error);
+      debugPrint("Error editing player: ${error.toString()}");
+      handleError(error);
     }
   }
 
   Future deletePlayerProfile(int id) async {
-    var response = await http.delete(Uri.parse(ApiLink.deletePlayer(id)),
-        headers: {"Authorization": "JWT ${authController.token}"});
-    debugPrint(response.body);
+    try {
+      final options = dio.Options(
+          headers: {"Authorization": "JWT ${authController.token}"});
 
-    if (response.statusCode == 200) {
-      Get.back();
-      Helpers().showCustomSnackbar(message: "Player Profile Deleted");
+      final response = await _dio.delete(
+        ApiLink.deletePlayer(id),
+        options: options,
+      );
+
+      final responseData = response.data;
+
+      if (response.statusCode == 200) {
+        if (responseData['success'] == true) {
+          Get.back();
+          Helpers().showCustomSnackbar(
+              message: responseData['message'] ?? "Player Profile Deleted");
+          getAllPlayer(false); // Refresh the player list
+        } else {
+          handleError(
+              responseData['message'] ?? "Failed to delete player profile");
+        }
+      } else if (response.statusCode == 401) {
+        authController.refreshToken();
+      } else {
+        handleError(responseData['message'] ?? response.statusMessage);
+      }
+    } catch (error) {
+      debugPrint("Error deleting player: ${error.toString()}");
+      handleError(error);
     }
   }
 
   void handleError(dynamic error) {
-    debugPrint("error $error");
-    Fluttertoast.showToast(
-        fontSize: Get.height * 0.015,
-        msg: (error.toString().contains("esports-ng.vercel.app") ||
-                error.toString().contains("Network is unreachable"))
-            ? 'Team like: No internet connection!'
-            : (error.toString().contains("FormatException"))
-                ? 'Team like: Internal server error, contact admin!'
-                : error.toString(),
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM);
+    ApiHelpers.handleApiError(error);
   }
 
   Future pickImageFromCamera(String? title) async {
@@ -279,7 +328,7 @@ class PlayerRepository extends GetxController {
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
                 fontFamily: 'Inter',
-                size: Get.height * 0.014,
+                size: 12,
               ),
             ],
           ),

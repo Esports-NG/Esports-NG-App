@@ -57,13 +57,20 @@ class DefaultFirebaseOptions {
     storageBucket: 'esportsng-d7521.firebasestorage.app',
   );
 
+  // static const FirebaseOptions ios = FirebaseOptions(
+  //   apiKey: 'AIzaSyDAj47imNfIOjUfSwLIreHINh47nYQb5nE',
+  //   appId: '1:491135805780:ios:d674da3bf8c38e1f1e00c1',
+  //   messagingSenderId: '491135805780',
+  //   projectId: 'esportsng-d7521',
+  //   storageBucket: 'esportsng-d7521.firebasestorage.app',
+  //   iosBundleId: 'com.example.eSport',
+  // );
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDAj47imNfIOjUfSwLIreHINh47nYQb5nE',
-    appId: '1:491135805780:ios:d674da3bf8c38e1f1e00c1',
+    appId: '1:491135805780:ios:78f1d3998ef49e791e00c1',
     messagingSenderId: '491135805780',
     projectId: 'esportsng-d7521',
     storageBucket: 'esportsng-d7521.firebasestorage.app',
-    iosBundleId: 'com.example.eSport',
+    iosBundleId: 'com.engyafrica.nexalgaming',
   );
-
 }

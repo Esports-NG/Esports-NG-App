@@ -1,0 +1,116 @@
+import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/ui/screens/account/team/account_teams_details.dart';
+import 'package:e_sport/ui/screens/community/account_community_detail.dart';
+import 'package:e_sport/ui/widgets/events/event_ad_item.dart';
+import 'package:e_sport/ui/widgets/events/tournament/fixture_item.dart';
+import 'package:e_sport/ui/widgets/community/community_item.dart';
+import 'package:e_sport/ui/screens/game/game_profile.dart';
+import 'package:e_sport/ui/widgets/community/trending/suggested_profile_item.dart';
+import 'package:e_sport/ui/widgets/community/trending/trending_games_item.dart';
+import 'package:e_sport/ui/widgets/community/trending/trending_team_item.dart';
+import 'package:e_sport/ui/widgets/custom/custom_text.dart';
+import 'package:e_sport/util/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+
+class AdList extends StatefulWidget {
+  const AdList({super.key, required this.ads});
+  final List<PostModel> ads;
+
+  @override
+  State<AdList> createState() => _AdListState();
+}
+
+class _AdListState extends State<AdList> {
+  final _colors = [
+    LinearGradient(
+      colors: [
+        AppColor().fixturePurple,
+        AppColor().fixturePurple,
+      ],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    ),
+    LinearGradient(
+      colors: [
+        AppColor().darkGrey.withOpacity(0.8),
+        AppColor().bgDark.withOpacity(0.005),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomCenter,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    var firstAd = widget.ads.toList()[0];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          title: firstAd.type == "game"
+              ? "Games to play"
+              : firstAd.type == "community"
+                  ? "Communities to follow"
+                  : "${firstAd.type!.capitalize}s to follow",
+          color: AppColor().primaryWhite,
+          fontFamily: "InterMedium",
+          size: 18,
+        ),
+        Gap(10),
+        SizedBox(
+            height: firstAd.type == "event"
+                ? 330
+                : firstAd.type == "fixture"
+                    ? Get.height * 0.23
+                    : firstAd.type == "game"
+                        ? Get.height * 0.35
+                        : Get.height * 0.28,
+            child: ListView.separated(
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+                itemCount: widget.ads.take(4).length,
+                itemBuilder: (context, index) {
+                  var item = widget.ads.toList()[index];
+                  return item.type == "team"
+                      ? InkWell(
+                          onTap: () => Get.to(
+                              () => AccountTeamsDetail(item: item.team!)),
+                          child: TrendingTeamsItem(item: item.team!))
+                      : item.type == "game"
+                          ? InkWell(
+                              onTap: () {
+                                Get.to(() => GameProfile(game: item.game!));
+                              },
+                              child: TrendingGamesItem(
+                                game: item.game!,
+                              ))
+                          : item.type == "user"
+                              ? SizedBox(
+                                  child:
+                                      SuggestedProfileList(item: item.owner!))
+                              : item.type == 'event'
+                                  ? SizedBox(
+                                      width: 350,
+                                      child: EventAdItem(item: item.event!))
+                                  : item.type == 'community'
+                                      ? InkWell(
+                                          onTap: () => Get.to(() =>
+                                              AccountCommunityDetail(
+                                                  item: item.community!)),
+                                          child: CommunityItem(
+                                              item: item.community!))
+                                      : item.type == "fixture"
+                                          ? FixtureCardScrollable(
+                                              fixture: item.fixture!,
+                                              backgroundColor: _colors[
+                                                  index % _colors.length])
+                                          : Gap(1);
+                })),
+      ],
+    );
+  }
+}

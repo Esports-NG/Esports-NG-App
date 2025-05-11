@@ -1,21 +1,23 @@
 // ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:change_case/change_case.dart';
+import 'package:dio/dio.dart';
 import 'package:e_sport/data/model/news_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/home/components/create_success_page.dart';
+import 'package:e_sport/ui/widgets/utils/create_success_page.dart';
+import 'package:e_sport/util/api_helpers.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
+import 'package:get/get.dart' as Get;
 import 'package:multi_dropdown/multi_dropdown.dart';
 
 enum LikePostStatus { loading, success, error, empty }
@@ -32,43 +34,43 @@ enum PostStatus { loading, success, error, empty, available }
 
 enum GetPostStatus { loading, success, error, empty, available }
 
-class PostRepository extends GetxController {
-  final authController = Get.put(AuthRepository());
+class PostRepository extends Get.GetxController {
+  final authController = Get.Get.put(AuthRepository());
   late final postBodyController = TextEditingController();
   late final seeController = TextEditingController();
   late final engageController = TextEditingController();
   late final gameTagController = TextEditingController();
   late final accountTypeController = TextEditingController();
 
-  final isEventAnnouncement = RxBool(false);
-  final isParticipantAnnouncement = RxBool(false);
+  final isEventAnnouncement = Get.RxBool(false);
+  final isParticipantAnnouncement = Get.RxBool(false);
 
-  RxList<GamePlayed> gameTags = <GamePlayed>[].obs;
+  Get.RxList<GamePlayed> gameTags = <GamePlayed>[].obs;
   MultiSelectController<GamePlayed> gameTagsController =
       MultiSelectController<GamePlayed>();
-  final Rx<List<PostModel>> _allPost = Rx([]);
-  final Rx<List<PostModel>> _myPost = Rx([]);
-  final Rx<List<PostModel>> _bookmarkedPost = Rx([]);
-  final RxList<PostModel> _followingPost = RxList([]);
-  final RxList<PostModel> _forYouPosts = RxList([]);
-  final Rx<List<NewsModel>> _news = Rx([]);
-  final Rx<int> postId = 0.obs;
-  final RxString postAs = "user".obs;
-  final RxString postName = "".obs;
+  final Get.Rx<List<PostModel>> _allPost = Get.Rx([]);
+  final Get.RxList<PostModel> _myPost = Get.RxList([]);
+  final Get.Rx<List<PostModel>> _bookmarkedPost = Get.Rx([]);
+  final Get.RxList<PostModel> _followingPost = Get.RxList([]);
+  final Get.RxList<PostModel> _forYouPosts = Get.RxList([]);
+  final Get.Rx<List<NewsModel>> _news = Get.Rx([]);
+  final Get.Rx<String> postId = "".obs;
+  final Get.RxString postAs = "user".obs;
+  final Get.RxString postName = "".obs;
 
-  RxString forYouPrevLink = "".obs;
-  RxString forYouNextlink = "".obs;
+  Get.RxString forYouPrevLink = "".obs;
+  Get.RxString forYouNextlink = "".obs;
 
-  RxString followingPrevLink = "".obs;
-  RxString followingNextLink = "".obs;
+  Get.RxString followingPrevLink = "".obs;
+  Get.RxString followingNextLink = "".obs;
 
   List<PostModel> get allPost => _allPost.value;
-  List<PostModel> get myPost => _myPost.value;
+  List<PostModel> get myPost => _myPost;
   List<PostModel> get bookmarkedPost => _bookmarkedPost.value;
   List<PostModel> get followingPost => _followingPost;
   List<PostModel> get forYouPosts => _forYouPosts;
   List<NewsModel> get news => _news.value;
-  RxList<PostModel> searchedPosts = <PostModel>[].obs;
+  Get.RxList<PostModel> searchedPosts = <PostModel>[].obs;
 
   final _postStatus = PostStatus.empty.obs;
   final _bookmarkStatus = BookmarkStatus.empty.obs;
@@ -86,8 +88,56 @@ class PostRepository extends GetxController {
   CreatePostStatus get createPostStatus => _createPostStatus.value;
   BlockPostStatus get blockPostStatus => _blockPostStatus.value;
 
-  Rx<File?> mPostImage = Rx(null);
+  Get.Rx<File?> mPostImage = Get.Rx(null);
   File? get postImage => mPostImage.value;
+
+  // Dio instance
+  late Dio _dio;
+
+  // Initialize Dio with auth interceptor
+  void _initDio() {
+    _dio = Dio(BaseOptions(
+        baseUrl: ApiLink.baseurl,
+        contentType: 'application/json',
+        responseType: ResponseType.json,
+        receiveTimeout: Duration(seconds: 20)));
+
+    // Add an interceptor to handle authentication
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // Add auth token to header if it exists
+        if (authController.token.isNotEmpty && authController.token != "0") {
+          options.headers['Authorization'] = 'JWT ${authController.token}';
+        }
+        return handler.next(options);
+      },
+      onError: (DioException error, handler) async {
+        // Handle token refresh if 401 error occurs
+        if (error.response?.statusCode == 401) {
+          try {
+            await authController.refreshToken();
+            // Retry the request with updated token
+            final opts = Options(
+              method: error.requestOptions.method,
+              headers: error.requestOptions.headers
+                ..['Authorization'] = 'JWT ${authController.token}',
+            );
+            final response = await _dio.request(
+              error.requestOptions.path,
+              options: opts,
+              data: error.requestOptions.data,
+              queryParameters: error.requestOptions.queryParameters,
+            );
+            return handler.resolve(response);
+          } catch (e) {
+            // If refresh token fails, proceed with original error
+            return handler.next(error);
+          }
+        }
+        return handler.next(error);
+      },
+    ));
+  }
 
   void addToGameTags(GamePlayed game) {
     if (gameTags.contains(game)) {
@@ -101,136 +151,124 @@ class PostRepository extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _initDio();
+
     authController.mToken.listen((p0) {
       if (p0 != '0') {
-        // postId.value = authController.user!.id!;
-        // postAs.value = "user";
-        // postName.value = authController.user!.fullName!
-        // getPostForYou(true);
-        // getFollowingPost(true);
-        // getBookmarkedPost(true);
-        // getMyPost(true);
-
         getNews();
       }
     });
   }
 
-  Future getPostDetails(int postId) async {
-    try {
-      var response = await http.get(
-        Uri.parse(ApiLink.getPostDetails(postId)),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        },
-      );
+  // Handle API errors consistently
+  void _handleApiError(dynamic error) {
+    ApiHelpers.handleApiError(error);
+  }
 
-      debugPrint(response.body);
-      var json = jsonDecode(response.body);
-      print(json['comment']);
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-      }
-      return response.body;
+  // Safe API call wrapper
+  Future<T?> _safeApiCall<T>(Future<Response> Function() apiCall,
+      {T Function(Map<String, dynamic>)? fromJson,
+      Function(dynamic)? setLoading,
+      Function(T?)? onSuccess}) async {
+    return ApiHelpers.safeApiCall(
+      apiCall,
+      fromJson: fromJson,
+      setStatus: setLoading,
+      onSuccess: onSuccess,
+    );
+  }
+
+  // Convert file to MultipartFile for uploads
+  Future<MultipartFile?> _fileToMultipart(File? file, String name) async {
+    return ApiHelpers.fileToMultipart(file, name);
+  }
+
+  Future getPostDetails(String slug) async {
+    try {
+      final response = await _dio.get(ApiLink.getPostDetails(slug));
+      print(response.data['data']);
+
+      return response.data['data'];
     } catch (error) {
       debugPrint("get post details error: ${error.toString()}");
-      handleError(error);
+      _handleApiError(error);
+      return null;
     }
   }
 
   Future createPost(PostModel post) async {
-    var postUrl = postAs.value == "user"
-        ? Uri.parse(ApiLink.createPost)
-        : postAs.value == "community"
-            ? Uri.parse("${ApiLink.createPost}?comm_pk=${postId.value}")
-            : Uri.parse("${ApiLink.createPost}?team_pk=${postId.value}");
+    _createPostStatus(CreatePostStatus.loading);
 
     try {
-      _createPostStatus(CreatePostStatus.loading);
-      var headers = {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      };
-      var request = http.MultipartRequest("POST", postUrl)
-        ..fields["body"] = postBodyController.text;
+      var postUrl = postAs.value == "user"
+          ? ApiLink.createPost
+          : postAs.value == "community"
+              ? "${ApiLink.createPost}?c_s=${postId.value}"
+              : "${ApiLink.createPost}?t_s=${postId.value}";
+
+      final formData = FormData.fromMap({
+        "body": postBodyController.text,
+      });
+
+      // Add game tags
       for (int i = 0; i < gameTagsController.selectedItems.length; i++) {
-        request.fields['itags[$i].title'] =
-            '${gameTagsController.selectedItems[i].value.abbrev}';
-        request.fields['itags[$i].event_id'] = '';
+        formData.fields.add(MapEntry('itags[$i].title',
+            gameTagsController.selectedItems[i].value.abbrev!));
+        formData.fields.add(MapEntry('itags[$i].event_id', ''));
       }
 
+      // Add image if exists
       if (postImage != null) {
-        request.files
-            .add(await http.MultipartFile.fromPath('image', postImage!.path));
+        formData.files.add(
+            MapEntry('image', await MultipartFile.fromFile(postImage!.path)));
       }
-      request.headers.addAll(headers);
 
-      http.StreamedResponse response = await request.send();
-      var res = await response.stream.bytesToString();
-      print(res);
+      final response = await _dio.post(postUrl, data: formData);
+
       if (response.statusCode == 201) {
         _createPostStatus(CreatePostStatus.success);
         getPostForYou(true);
         clear();
-        Get.to(() => const CreateSuccessPage(title: 'Post Created'));
-      } else if (response.statusCode == 401) {
-        debugPrint(response.reasonPhrase);
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        _createPostStatus(CreatePostStatus.error);
+        Get.Get.to(() => const CreateSuccessPage(title: 'Post Created'));
       } else {
         _createPostStatus(CreatePostStatus.error);
-        debugPrint(response.reasonPhrase);
-        handleError(response.reasonPhrase);
+        throw 'Failed to create post';
       }
+
+      return response.data;
     } catch (error) {
       _createPostStatus(CreatePostStatus.error);
-      debugPrint("Error occurred ${error.toString()}");
-      handleError(error);
+      _handleApiError(error);
+      return null;
     }
   }
 
   Future editPost(int postId) async {
     try {
       debugPrint('editing post...');
-      var body = {"body": postBodyController.text.trim()};
       _createPostStatus(CreatePostStatus.loading);
-      var response = await http.put(
-        Uri.parse("${ApiLink.editPost}$postId/"),
-        body: jsonEncode(body),
-        headers: {
-          "Content-type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        },
-      );
 
-      debugPrint(response.body);
-      if (response.statusCode != 200) {
-        throw ('An error occurred');
-      }
+      final data = {"body": postBodyController.text.trim()};
+      final response =
+          await _dio.put("${ApiLink.editPost}$postId/", data: data);
+
       if (response.statusCode == 200) {
         _createPostStatus(CreatePostStatus.success);
-        Get.to(() => const CreateSuccessPage(title: 'Post Updated'))!
+        Get.Get.to(() => const CreateSuccessPage(title: 'Post Updated'))!
             .then((value) {
           getPostForYou(true);
         });
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
+      } else {
         _createPostStatus(CreatePostStatus.error);
+        throw 'Failed to edit post';
       }
-      return response.body;
+
+      return response.data;
     } catch (error) {
       _createPostStatus(CreatePostStatus.error);
       debugPrint("edit post error: ${error.toString()}");
-      handleError(error);
+      _handleApiError(error);
+      return null;
     }
   }
 
@@ -238,32 +276,25 @@ class PostRepository extends GetxController {
     try {
       EasyLoading.show(status: 'Deleting post...');
       _postStatus(PostStatus.loading);
-      var response = await http.delete(
-        Uri.parse("${ApiLink.deletePost}$postId/"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        },
-      );
 
-      debugPrint(response.body);
+      final response = await _dio.delete("${ApiLink.deletePost}$postId/");
+
       if (response.statusCode == 200) {
         _postStatus(PostStatus.success);
         EasyLoading.dismiss();
         Helpers().showCustomSnackbar(message: "Post deleted");
         await getPostForYou(false);
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
+      } else {
         _postStatus(PostStatus.error);
+        throw 'Failed to delete post';
       }
-      return response.body;
+
+      return response.data;
     } catch (error) {
       _postStatus(PostStatus.error);
       EasyLoading.dismiss();
-      debugPrint("delete post error: ${error.toString()}");
-      handleError(error);
+      _handleApiError(error);
+      return null;
     }
   }
 
@@ -272,44 +303,28 @@ class PostRepository extends GetxController {
       EasyLoading.show(status: 'Reposting...');
       _postStatus(PostStatus.loading);
 
-      http.Response response;
+      Response response;
       if (title == 'quote') {
-        var body = {"body": authController.commentController.text};
-        response = await http.post(
-          Uri.parse("${ApiLink.post}$postId/quote/"),
-          body: jsonEncode(body),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": 'JWT ${authController.token}'
-          },
-        );
+        final data = {"body": authController.commentController.text};
+        response = await _dio.post("${ApiLink.post}$postId/quote/", data: data);
       } else {
-        response = await http.post(
-          Uri.parse("${ApiLink.post}$postId/repost/"),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": 'JWT ${authController.token}'
-          },
-        );
+        response = await _dio.post("${ApiLink.post}$postId/repost/");
       }
 
-      debugPrint(response.body);
-      debugPrint(response.statusCode.toString());
       if (response.statusCode == 201) {
         _postStatus(PostStatus.success);
         EasyLoading.showInfo('Success').then((value) => getAllPost(true));
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
+      } else {
         _postStatus(PostStatus.error);
+        throw 'Failed to repost';
       }
-      return response.body;
+
+      return response.data;
     } catch (error) {
       _postStatus(PostStatus.error);
       EasyLoading.dismiss();
-      debugPrint("Repost error: ${error.toString()}");
-      handleError(error);
+      _handleApiError(error);
+      return null;
     }
   }
 
@@ -318,70 +333,60 @@ class PostRepository extends GetxController {
       EasyLoading.show(status: 'processing...');
       _bookmarkPostStatus(BookmarkPostStatus.loading);
 
-      var response = await http.put(
-        Uri.parse("${ApiLink.post}$postId/bookmark/"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        },
-      );
+      final response = await _dio.put("${ApiLink.post}$postId/bookmark/");
+      final responseData = response.data;
 
-      var json = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        EasyLoading.showInfo(json['message'])
+        var message = 'Post bookmarked';
+        if (responseData is Map<String, dynamic> &&
+            responseData['message'] != null) {
+          message = responseData['message'];
+        }
+
+        EasyLoading.showInfo(message)
             .then((value) => getPostsWithBookmark(true));
 
         _bookmarkPostStatus(BookmarkPostStatus.success);
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
+      } else {
         _bookmarkPostStatus(BookmarkPostStatus.error);
+        throw 'Failed to bookmark post';
       }
-      return response.body;
+
+      return response.data;
     } catch (error) {
       _bookmarkPostStatus(BookmarkPostStatus.error);
       EasyLoading.dismiss();
-      debugPrint("bookmark error: ${error.toString()}");
-      handleError(error);
+      _handleApiError(error);
+      return null;
     }
   }
 
-  Future commentOnPost(int postId) async {
+  Future commentOnPost(String slug) async {
     try {
-      EasyLoading.show(status: 'commenting...');
-      var body = {
+      _postStatus(PostStatus.loading);
+
+      final data = {
         "name": authController.user!.fullName,
         "body": authController.chatController.text.trim(),
         "itags": ['community']
       };
-      _postStatus(PostStatus.loading);
-      var response = await http.post(
-        Uri.parse("${ApiLink.post}$postId/comment/"),
-        body: jsonEncode(body),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        },
-      );
 
-      debugPrint(response.body);
-      debugPrint(response.statusCode.toString());
+      final response =
+          await _dio.post("${ApiLink.post}$slug/comment/", data: data);
+
       if (response.statusCode == 201) {
         _postStatus(PostStatus.success);
-        EasyLoading.showInfo('Success').then((value) => getAllPost(true));
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
+      } else {
         _postStatus(PostStatus.error);
+        throw 'Failed to comment on post';
       }
-      return response.body;
+
+      return response.data;
     } catch (error) {
       _postStatus(PostStatus.error);
       EasyLoading.dismiss();
-      debugPrint("Repost error: ${error.toString()}");
-      handleError(error);
+      _handleApiError(error);
+      return null;
     }
   }
 
@@ -390,89 +395,68 @@ class PostRepository extends GetxController {
       _blockPostStatus(BlockPostStatus.loading);
       EasyLoading.show(status: 'please wait...');
 
-      _postStatus(PostStatus.loading);
-      var response = await http.post(
-        Uri.parse(title == 'block'
-            ? "${ApiLink.post}block/?pk=$postId"
-            : "${ApiLink.post}uninterested/$postId/team/1/"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        },
-      );
+      final endpoint = title == 'block'
+          ? "${ApiLink.post}block/?pk=$postId"
+          : "${ApiLink.post}uninterested/$postId/team/1/";
 
-      debugPrint(response.body);
-      debugPrint(response.statusCode.toString());
+      final response = await _dio.post(endpoint);
+
       if (response.statusCode == 200) {
         _blockPostStatus(BlockPostStatus.success);
         EasyLoading.showInfo('Success').then((value) async {
           getAllPost(true);
         });
-      } else if (response.statusCode == 401) {
-        _blockPostStatus(BlockPostStatus.error);
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
       } else {
         EasyLoading.dismiss();
         _blockPostStatus(BlockPostStatus.error);
+        throw 'Operation failed';
       }
-      return response.body;
+
+      return response.data;
     } catch (error) {
       EasyLoading.dismiss();
       _blockPostStatus(BlockPostStatus.error);
-      debugPrint("block error: ${error.toString()}");
-      handleError(error);
+      _handleApiError(error);
+      return null;
     }
   }
 
-  Future<bool> likePost(int postId) async {
+  Future<bool> likePost(String slug) async {
     _likePostStatus(LikePostStatus.loading);
     try {
       debugPrint('liking $postId post...');
-      var response = await http.post(
-        Uri.parse('${ApiLink.post}$postId/like/'),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": 'JWT ${authController.token}'
-        },
-      );
-      var json = jsonDecode(response.body);
-      if (response.statusCode == 200 && json['message'] == 'success') {
-        getBookmarkedPost(false);
-        getAllPost(false);
-        return true;
-      } else {
-        return false;
+      final response = await _dio.post('${ApiLink.post}$slug/like/');
+
+      if (response.statusCode == 200) {
+        final data = response.data;
+        if (data is Map<String, dynamic> && data['message'] == 'success') {
+          getBookmarkedPost(false);
+          getAllPost(false);
+          return true;
+        }
       }
+      return false;
     } catch (error) {
       _likePostStatus(LikePostStatus.error);
       debugPrint("like post error: $error");
-      handleError(error);
+      _handleApiError(error);
       return false;
     }
   }
 
   Future getMyPost(bool isFirstTime) async {
     try {
-      authController.setLoading(true);
+      debugPrint('getting my post...');
       if (isFirstTime == true) {
+        authController.setLoading(true);
         _getPostStatus(GetPostStatus.loading);
       }
-      debugPrint('getting my post...');
-      var response = await http.get(Uri.parse(ApiLink.getMyPost), headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      });
-      var json = jsonDecode(response.body);
 
-      if (response.statusCode != 200) {
-        throw (json['detail']);
-      }
+      final response = await _dio.get(ApiLink.getMyPost);
+      final responseData = response.data['data'];
 
-      if (response.statusCode == 200) {
-        var list = List.from(json);
-        var myPosts = list.map((e) => PostModel.fromJson(e)).toList();
+      if (responseData is List) {
+        var myPosts = responseData.map((e) => PostModel.fromJson(e)).toList();
         debugPrint("${myPosts.length} my posts found");
         _myPost(myPosts.reversed.toList());
         _getPostStatus(GetPostStatus.success);
@@ -481,19 +465,13 @@ class PostRepository extends GetxController {
             : _getPostStatus(GetPostStatus.empty);
         authController.setLoading(false);
         return myPosts;
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        _getPostStatus(GetPostStatus.error);
-        authController.setLoading(false);
-        return null;
+      } else {
+        throw 'Unexpected response format';
       }
-      return null;
     } catch (error) {
       _getPostStatus(GetPostStatus.error);
       authController.setLoading(false);
-      debugPrint("getting my post: ${error.toString()}");
+      _handleApiError(error);
       return null;
     }
   }
@@ -506,251 +484,168 @@ class PostRepository extends GetxController {
       }
 
       debugPrint('getting all post...');
-      var response = await http.get(Uri.parse(ApiLink.getAllPost), headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      });
-      var json = jsonDecode(response.body);
+      final response = await _dio.get(ApiLink.getAllPost);
+      final responseData = response.data;
 
-      if (response.statusCode != 200) {
-        throw (json['detail']);
-      }
-
-      if (response.statusCode == 200) {
-        var list = List.from(json);
-        var posts = list.map((e) => PostModel.fromJson(e)).toList();
+      if (responseData is List) {
+        var posts = responseData.map((e) => PostModel.fromJson(e)).toList();
         debugPrint("${posts.length} posts found");
         _allPost(posts.reversed.toList());
         _postStatus(PostStatus.success);
         posts.isNotEmpty
             ? _postStatus(PostStatus.available)
             : _postStatus(PostStatus.empty);
-        authController.setLoading(false);
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        _postStatus(PostStatus.error);
-        authController.setLoading(false);
+      } else {
+        throw 'Unexpected response format';
       }
-      return response.body;
+
+      authController.setLoading(false);
+      return responseData;
     } catch (error) {
       _postStatus(PostStatus.error);
       authController.setLoading(false);
-      debugPrint("getting all post: ${error.toString()}");
+      _handleApiError(error);
+      return null;
     }
   }
 
   Future getPostForYou(bool isFirstTime) async {
-    // try {
-    if (isFirstTime == true) {
-      authController.setLoading(true);
-      _bookmarkStatus(BookmarkStatus.loading);
-    }
-
-    debugPrint('getting all for you post...');
-    var response = await http.get(Uri.parse(ApiLink.getPostsForYou), headers: {
-      "Content-Type": "application/json",
-      "Authorization": 'JWT ${authController.token}'
-    });
-    var json = jsonDecode(response.body);
-
-    if (response.statusCode != 200) {
-      if (json['detail'] != null) {
-        throw (json['detail']);
-      } else if (json['error'] != null) {
-        throw (json['error']);
-      }
-    }
-
-    if (response.statusCode == 200) {
-      forYouNextlink.value = json['next'] ?? "";
-      var list = List.from(json['results']);
-      var posts = list.map((e) => PostModel.fromJson(e)).toList();
-      debugPrint("${posts.length} for you posts found");
-      _forYouPosts.assignAll(posts);
-      authController.setLoading(false);
-      return posts;
-    } else if (response.statusCode == 401) {
-      authController
-          .refreshToken()
-          .then((value) => EasyLoading.showInfo('try again!'));
-      // _bookmarkStatus(BookmarkStatus.error);
-      authController.setLoading(false);
-    }
-    return null;
-  }
-
-  Future getNextForYou() async {
-    // try {
-
-    debugPrint('getting next for you post...');
-    var response = await http.get(Uri.parse(forYouNextlink.value),
-        headers: {"Authorization": "JWT ${authController.token}"});
-    var json = jsonDecode(response.body);
-    if (response.statusCode != 200) {
-      if (json['detail'] != null) {
-        throw (json['detail']);
-      } else if (json['error'] != null) {
-        throw (json['error']);
-      }
-    }
-
-    if (response.statusCode == 200) {
-      forYouNextlink.value = json['next'] ?? "";
-      var list = List.from(json['results']);
-      var posts = list.map((e) => PostModel.fromJson(e)).toList();
-      debugPrint("${posts.length} for you posts found");
-      _forYouPosts.addAll(posts);
-      authController.setLoading(false);
-      return posts;
-    } else if (response.statusCode == 401) {
-      authController
-          .refreshToken()
-          .then((value) => EasyLoading.showInfo('try again!'));
-      // _bookmarkStatus(BookmarkStatus.error);
-      authController.setLoading(false);
-    }
-    return null;
-  }
-
-  Future getFollowingPost(bool isFirstTime) async {
-    // try {
-    if (isFirstTime == true) {
-      authController.setLoading(true);
-      _bookmarkStatus(BookmarkStatus.loading);
-    }
-
-    debugPrint('getting all following post...');
-    var response =
-        await http.get(Uri.parse(ApiLink.getFollowingPost), headers: {
-      "Content-Type": "application/json",
-      "Authorization": 'JWT ${authController.token}'
-    });
-    var json = jsonDecode(response.body);
-
-    if (response.statusCode != 200) {
-      if (json['detail'] != null) {
-        throw (json['detail']);
-      } else if (json['error'] != null) {
-        throw (json['error']);
-      }
-    }
-    debugPrint(response.body);
-
-    if (response.statusCode == 200) {
-      followingNextLink.value = json['next'] ?? "";
-      var list = List.from(json['results']);
-      var posts = list.map((e) => PostModel.fromJson(e)).toList();
-      debugPrint("${posts.length} for you posts found");
-      _followingPost.assignAll(posts);
-      authController.setLoading(false);
-
-      return posts;
-    } else if (response.statusCode == 401) {
-      authController
-          .refreshToken()
-          .then((value) => EasyLoading.showInfo('try again!'));
-      // _bookmarkStatus(BookmarkStatus.error);
-      authController.setLoading(false);
-    }
-    return null;
-  }
-
-  Future getNextFollowing() async {
-    // try {
-
-    debugPrint('getting next following post...');
-    var response = await http.get(Uri.parse(followingNextLink.value), headers: {
-      "Content-Type": "application/json",
-      "Authorization": 'JWT ${authController.token}'
-    });
-    var json = jsonDecode(response.body);
-
-    if (response.statusCode != 200) {
-      if (json['detail'] != null) {
-        throw (json['detail']);
-      } else if (json['error'] != null) {
-        throw (json['error']);
-      }
-    }
-
-    if (response.statusCode == 200) {
-      followingNextLink.value = json['next'] ?? "";
-      var list = List.from(json['results']);
-      var posts = list.map((e) => PostModel.fromJson(e)).toList();
-      debugPrint("${posts.length} for you posts found");
-
-      _followingPost.addAll(posts);
-      authController.setLoading(false);
-      return posts;
-    } else if (response.statusCode == 401) {
-      authController
-          .refreshToken()
-          .then((value) => EasyLoading.showInfo('try again!'));
-      // _bookmarkStatus(BookmarkStatus.error);
-      authController.setLoading(false);
-    }
-    return null;
-  }
-
-  Future getBookmarkedPost(bool isFirstTime) async {
     try {
       if (isFirstTime == true) {
         authController.setLoading(true);
         _bookmarkStatus(BookmarkStatus.loading);
       }
 
-      debugPrint('getting all bookmark post...');
-      var response =
-          await http.get(Uri.parse(ApiLink.getBookmarkedPost), headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      });
-      var json = jsonDecode(response.body);
+      debugPrint('getting all for you post...');
+      final response = await _dio.get(ApiLink.getPostsForYou);
+      final responseData = response.data["data"];
+      print(responseData);
 
-      if (response.statusCode != 200) {
-        throw (json['detail']);
-      }
-
-      if (response.statusCode == 200) {
-        var list = List.from(json);
+      if (responseData is Map<String, dynamic> &&
+          responseData['results'] is List) {
+        forYouNextlink.value = responseData['next'] ?? "";
+        var list = List.from(responseData['results']);
         var posts = list.map((e) => PostModel.fromJson(e)).toList();
-        debugPrint("${posts.length} bookmarked posts found");
-        _bookmarkedPost(posts.reversed.toList());
-        _bookmarkStatus(BookmarkStatus.success);
-        posts.isNotEmpty
-            ? _bookmarkStatus(BookmarkStatus.available)
-            : _bookmarkStatus(BookmarkStatus.empty);
+        debugPrint("${posts.length} for you posts found");
+        _forYouPosts.assignAll(posts);
         authController.setLoading(false);
         return posts;
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        _bookmarkStatus(BookmarkStatus.error);
-        authController.setLoading(false);
-        return null;
+      } else {
+        throw 'Unexpected response format';
       }
-      return null;
     } catch (error) {
-      _bookmarkStatus(BookmarkStatus.error);
       authController.setLoading(false);
-      debugPrint("getting bookmarked post: ${error.toString()}");
+      _handleApiError(error);
       return null;
     }
   }
 
-  Future likeComment(int commentId) async {
+  Future getNextForYou() async {
     try {
-      var response =
-          await http.put(Uri.parse(ApiLink.likeComment(commentId)), headers: {
-        "Content-type": "application/json",
-        "Authorization": "JWT ${authController.token}"
-      });
+      debugPrint('getting next for you post...');
 
-      print(response.body);
-    } catch (err) {}
+      final response = await _dio.get(forYouNextlink.value);
+      final responseData = response.data["data"];
+
+      if (responseData is Map<String, dynamic> &&
+          responseData['results'] is List) {
+        forYouNextlink.value = responseData['next'] ?? "";
+        var list = List.from(responseData['results']);
+        var posts = list.map((e) => PostModel.fromJson(e)).toList();
+        debugPrint("${posts.length} more for you posts found");
+        _forYouPosts.addAll(posts);
+        return posts;
+      } else {
+        throw 'Unexpected response format';
+      }
+    } catch (error) {
+      _handleApiError(error);
+      return null;
+    }
+  }
+
+  Future getFollowingPost(bool isFirstTime) async {
+    try {
+      if (isFirstTime == true) {
+        authController.setLoading(true);
+        _bookmarkStatus(BookmarkStatus.loading);
+      }
+
+      debugPrint('getting all following post...');
+      final response = await _dio.get(ApiLink.getFollowingPost);
+      final responseData = response.data;
+
+      if (responseData is Map<String, dynamic> &&
+          responseData['results'] is List) {
+        followingNextLink.value = responseData['next'] ?? "";
+        var list = List.from(responseData['results']);
+        var posts = list.map((e) => PostModel.fromJson(e)).toList();
+        debugPrint("${posts.length} following posts found");
+        _followingPost.assignAll(posts);
+        authController.setLoading(false);
+        return posts;
+      } else {
+        throw 'Unexpected response format';
+      }
+    } catch (error) {
+      authController.setLoading(false);
+      _handleApiError(error);
+      return null;
+    }
+  }
+
+  Future getNextFollowing() async {
+    try {
+      debugPrint('getting next following post...');
+
+      final response = await _dio.get(followingNextLink.value);
+      final responseData = response.data;
+
+      if (responseData is Map<String, dynamic> &&
+          responseData['results'] is List) {
+        followingNextLink.value = responseData['next'] ?? "";
+        var list = List.from(responseData['results']);
+        var posts = list.map((e) => PostModel.fromJson(e)).toList();
+        debugPrint("${posts.length} more following posts found");
+        _followingPost.addAll(posts);
+        return posts;
+      } else {
+        throw 'Unexpected response format';
+      }
+    } catch (error) {
+      _handleApiError(error);
+      return null;
+    }
+  }
+
+  Future getBookmarkedPost(bool isFirstTime) async {
+    return _safeApiCall(
+      () => _dio.get(ApiLink.getBookmarkedPost),
+      setLoading: (loading) {
+        if (isFirstTime) {
+          authController.setLoading(loading);
+          if (loading) _bookmarkStatus(BookmarkStatus.loading);
+        }
+      },
+      onSuccess: (data) {
+        if (data is List) {
+          var posts = data.map((e) => PostModel.fromJson(e)).toList();
+          debugPrint("${posts.length} bookmarked posts found");
+          _bookmarkedPost(posts.reversed.toList());
+          _bookmarkStatus(BookmarkStatus.success);
+          posts.isNotEmpty
+              ? _bookmarkStatus(BookmarkStatus.available)
+              : _bookmarkStatus(BookmarkStatus.empty);
+          return posts;
+        }
+      },
+    );
+  }
+
+  Future likeComment(int commentId) async {
+    return _safeApiCall(
+      () => _dio.put(ApiLink.likeComment(commentId)),
+    );
   }
 
   Future reportPost(
@@ -760,131 +655,141 @@ class PostRepository extends GetxController {
       String offenseDescription,
       String reportedTitle,
       String reporteeTitle) async {
-    try {
-      var body = {
-        "title": offenseTitle,
-        "offense": offenseDescription,
-        "reported_title": reportedTitle,
-        "reported_id": reported,
-        "reportee_title": reporteeTitle,
-        "reportee_id": reportee
-      };
+    final data = {
+      "title": offenseTitle,
+      "offense": offenseDescription,
+      "reported_title": reportedTitle,
+      "reported_id": reported,
+      "reportee_title": reporteeTitle,
+      "reportee_id": reportee
+    };
 
-      var response = await http.post(Uri.parse(ApiLink.report),
-          headers: {
-            "Content-type": "application/json",
-            "Authorization": "JWT ${authController.token}"
-          },
-          body: jsonEncode(body));
-
-      if (response.statusCode == 200) {
-        Get.back(closeOverlays: true);
+    return _safeApiCall(
+      () => _dio.post(ApiLink.report, data: data),
+      onSuccess: (data) {
+        Get.Get.back(closeOverlays: true);
         Helpers().showCustomSnackbar(
             message: "${reportedTitle.toCapitalCase()} reported");
-      } else {
-        print(response.body);
-      }
-    } catch (err) {}
+        return data;
+      },
+    );
   }
 
   Future getNews() async {
-    var response = await http.get(Uri.parse(ApiLink.getNews), headers: {
-      "Authorization":
-          "Basic ${base64.encode(utf8.encode("zillalikestogame:zillalikesnexal"))}"
-    });
+    // Create a custom Dio instance for this request since it needs different auth
+    final newsClient = Dio(BaseOptions(
+        baseUrl: ApiLink.baseurl,
+        contentType: 'application/json',
+        responseType: ResponseType.json,
+        headers: {
+          "Authorization":
+              "Basic ${base64.encode(utf8.encode("zillalikestogame:zillalikesnexal"))}"
+        }));
 
-    var newsFromJson = newsModelFromJson(response.body);
-    _news.value = newsFromJson;
+    return _safeApiCall(
+      () => newsClient.get(ApiLink.getNews),
+      onSuccess: (responseData) {
+        if (responseData != null) {
+          try {
+            var newsData = jsonEncode(responseData);
+            var newsFromJson = newsModelFromJson(newsData);
+            _news.value = newsFromJson;
+            return newsFromJson;
+          } catch (e) {
+            debugPrint("News parsing error: $e");
+            throw 'Failed to parse news data';
+          }
+        }
+      },
+    );
   }
 
   Future searchForPosts(String query) async {
-    var response = await http
-        .get(Uri.parse(ApiLink.searchForPostsorUsers(query, "post")), headers: {
-      "Authorization": "JWT ${authController.token}",
-      "Content-type": "application/json"
-    });
-    var json = jsonDecode(response.body);
-    var list = List.from(json);
-    var posts = list.map((e) => PostModel.fromJson(e)).toList();
-    searchedPosts.assignAll(posts);
+    return _safeApiCall(
+      () => _dio.get(ApiLink.searchForPostsorUsers(query, "post")),
+      onSuccess: (responseData) {
+        if (responseData is List) {
+          var posts = responseData.map((e) => PostModel.fromJson(e)).toList();
+          searchedPosts.assignAll(posts);
+          return posts;
+        }
+      },
+    );
   }
 
   Future createEventPost(int eventId, String hashtag) async {
-    var postUrl = postAs.value == "user"
-        ? Uri.parse(ApiLink.createPost)
-        : postAs.value == "community"
-            ? Uri.parse("${ApiLink.createPost}?comm_pk=${postId.value}")
-            : Uri.parse("${ApiLink.createPost}?team_pk=${postId.value}");
+    _createPostStatus(CreatePostStatus.loading);
 
     try {
-      _createPostStatus(CreatePostStatus.loading);
-      var headers = {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      };
-      var request = http.MultipartRequest("POST", postUrl)
-        ..fields["body"] = postBodyController.text
-        ..fields["annoucement"] = isEventAnnouncement.value.toString()
-        ..fields["participant_annoucement"] =
-            isParticipantAnnouncement.value.toString()
-        ..fields["itags[0].title"] = hashtag
-        ..fields["itags[0].event_id"] = eventId.toString();
+      var postUrl = postAs.value == "user"
+          ? ApiLink.createPost
+          : postAs.value == "community"
+              ? "${ApiLink.createPost}?comm_pk=${postId.value}"
+              : "${ApiLink.createPost}?team_pk=${postId.value}";
+
+      final formData = FormData.fromMap({
+        "body": postBodyController.text,
+        "annoucement": isEventAnnouncement.value.toString(),
+        "participant_annoucement": isParticipantAnnouncement.value.toString(),
+        "itags[0].title": hashtag,
+        "itags[0].event_id": eventId.toString(),
+      });
+
+      // Add game tags
       for (int i = 0; i < gameTags.length; i++) {
-        request.fields['itags[${i + 1}].title'] = '${gameTags[i].abbrev}';
+        formData.fields
+            .add(MapEntry('itags[${i + 1}].title', gameTags[i].abbrev!));
       }
 
+      // Add image if exists
       if (postImage != null) {
-        request.files
-            .add(await http.MultipartFile.fromPath('image', postImage!.path));
+        formData.files.add(MapEntry('image',
+            await _fileToMultipart(postImage, 'post_image') as MultipartFile));
       }
-      request.headers.addAll(headers);
 
-      http.StreamedResponse response = await request.send();
-      // Log the response body for debugging
-      if (response.statusCode == 201) {
-        _createPostStatus(CreatePostStatus.success);
-        getPostForYou(true);
-        clear();
-        Get.to(() => const CreateSuccessPage(title: 'Post Created'));
-      } else if (response.statusCode == 401) {
-        debugPrint(response.reasonPhrase);
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        _createPostStatus(CreatePostStatus.error);
-      } else {
-        _createPostStatus(CreatePostStatus.error);
-        debugPrint(response.reasonPhrase);
-        handleError(response.reasonPhrase);
-      }
+      return _safeApiCall(
+        () => _dio.post(postUrl, data: formData),
+        setLoading: (loading) {
+          if (!loading)
+            _createPostStatus(
+                loading ? CreatePostStatus.loading : CreatePostStatus.success);
+        },
+        onSuccess: (data) {
+          getPostForYou(true);
+          clear();
+          Get.Get.to(() => const CreateSuccessPage(title: 'Post Created'));
+          return data;
+        },
+      );
     } catch (error) {
       _createPostStatus(CreatePostStatus.error);
-      debugPrint("Error occurred ${error.toString()}");
-      handleError(error);
+      _handleApiError(error);
+      return null;
     }
   }
 
   Future getEventPosts(int id) async {
-    var response = await http.get(Uri.parse(ApiLink.getEventPosts(id)),
-        headers: {"Authorization": "JWT ${authController.token}"});
-
-    debugPrint(response.body);
-
-    var json = jsonDecode(response.body);
-    var list = List.from(json);
-    var posts = list.map((e) => PostModel.fromJson(e)).toList();
-    return posts;
+    return _safeApiCall(
+      () => _dio.get(ApiLink.getEventPosts(id)),
+      onSuccess: (responseData) {
+        if (responseData is List) {
+          var posts = responseData.map((e) => PostModel.fromJson(e)).toList();
+          return posts;
+        }
+      },
+    );
   }
 
   Future getAdverts() async {
-    var response = await http.get(Uri.parse(ApiLink.getAds),
-        headers: {"Authorization": "JWT ${authController.token}"});
+    return _safeApiCall(
+      () => _dio.get(ApiLink.getAds),
+    );
   }
 
   void handleError(dynamic error) {
     debugPrint("error $error");
     Fluttertoast.showToast(
-        fontSize: Get.height * 0.015,
+        fontSize: Get.Get.height * 0.015,
         msg: (error.toString().contains("esports-ng.vercel.app") ||
                 error.toString().contains("Network is unreachable"))
             ? 'No internet connection!'

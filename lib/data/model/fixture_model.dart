@@ -19,6 +19,7 @@ String fixtureModelToJson(List<FixtureModel> data) =>
 class FixtureModel {
   final int? id;
   final String? title;
+  final String? slug;
   final String? fixtureRound;
   final EventModel? tournament;
   final List<GameMode>? gameMode;
@@ -42,36 +43,39 @@ class FixtureModel {
   final PositionModel? third;
   final String? banner;
 
-  FixtureModel(
-      {this.id,
-      this.title,
-      this.fixtureRound,
-      this.tournament,
-      this.gameMode,
-      this.homePlayer,
-      this.homeTeam,
-      this.homeScore,
-      this.players,
-      this.teams,
-      this.awayPlayer,
-      this.awayTeam,
-      this.awayScore,
-      this.fixtureDate,
-      this.fixtureTime,
-      this.fixtureType,
-      this.fixtureGroup,
-      this.streamingLink,
-      this.streamingPlatform,
-      this.livestreams,
-      this.first,
-      this.second,
-      this.third,
-      this.banner,});
+  FixtureModel({
+    this.id,
+    this.title,
+    this.fixtureRound,
+    this.tournament,
+    this.slug,
+    this.gameMode,
+    this.homePlayer,
+    this.homeTeam,
+    this.homeScore,
+    this.players,
+    this.teams,
+    this.awayPlayer,
+    this.awayTeam,
+    this.awayScore,
+    this.fixtureDate,
+    this.fixtureTime,
+    this.fixtureType,
+    this.fixtureGroup,
+    this.streamingLink,
+    this.streamingPlatform,
+    this.livestreams,
+    this.first,
+    this.second,
+    this.third,
+    this.banner,
+  });
 
   factory FixtureModel.fromJson(Map<String, dynamic> json) => FixtureModel(
         id: json["id"],
         title: json["title"],
         fixtureRound: json["fixture_round"],
+        slug: json["slug"],
         tournament: json["tournament"] == null
             ? null
             : EventModel.fromJson(json["tournament"]),

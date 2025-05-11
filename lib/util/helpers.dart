@@ -1,5 +1,5 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
-import 'package:e_sport/ui/widget/coming_soon_popup.dart';
+import 'package:e_sport/ui/widgets/utils/coming_soon_popup.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +14,7 @@ class Helpers {
         margin: EdgeInsets.all(Get.height * 0.02),
         borderRadius: 10,
         barBlur: 3,
+        snackPosition: SnackPosition.TOP,
         duration: const Duration(seconds: 5),
         animationDuration: const Duration(milliseconds: 750));
   }

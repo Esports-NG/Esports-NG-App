@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:e_sport/data/model/community_model.dart';
@@ -6,8 +5,8 @@ import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/home/components/create_success_page.dart';
-import 'package:e_sport/ui/widget/custom_text.dart';
+import 'package:e_sport/ui/widgets/utils/create_success_page.dart';
+import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +16,39 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart' as dio;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+
+// Response model to handle the new backend structure
+class ApiResponse<T> {
+  final String? message;
+  final bool success;
+  final T? data;
+
+  ApiResponse({
+    this.message,
+    required this.success,
+    this.data,
+  });
+
+  factory ApiResponse.fromJson(
+      Map<String, dynamic> json, T Function(Map<String, dynamic>)? fromJson) {
+    return ApiResponse(
+      message: json['message'],
+      success: json['success'] ?? false,
+      data: json['data'] != null && fromJson != null
+          ? fromJson(json['data'])
+          : null,
+    );
+  }
+}
 
 class SocialEventRepository extends GetxController {
   final eventController = Get.put(EventRepository());
   final authController = Get.put(AuthRepository());
   final Rx<CommunityModel?> organizingCommunity = Rx(null);
+  late final dio.Dio _dio;
 
   final TextEditingController startTimeController = TextEditingController();
   final TextEditingController endTimeController = TextEditingController();
@@ -43,13 +67,125 @@ class SocialEventRepository extends GetxController {
   final TextEditingController eventHashtagController = TextEditingController();
 
   Rx<GamePlayed?> gameValue = Rx(null);
-
   Rx<DateTime?> date = Rx(null);
-
-  // Rx<File?> mEventProfileImage = Rx(null);
   Rx<File?> mEventCoverImage = Rx(null);
-  // File? get eventProfileImage => mEventProfileImage.value;
   File? get eventCoverImage => mEventCoverImage.value;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _initDio();
+  }
+
+  void _initDio() {
+    _dio = dio.Dio(dio.BaseOptions(
+      baseUrl: ApiLink.baseurl,
+      contentType: 'application/json',
+      responseType: dio.ResponseType.json,
+    ));
+
+    // Add an interceptor to handle authentication
+    _dio.interceptors.add(dio.InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // Add auth token to header if it exists
+        if (authController.token.isNotEmpty && authController.token != "0") {
+          options.headers['Authorization'] = 'JWT ${authController.token}';
+        }
+        return handler.next(options);
+      },
+      onError: (dio.DioException error, handler) async {
+        // Handle token refresh if 401 error occurs
+        if (error.response?.statusCode == 401) {
+          try {
+            await authController.refreshToken();
+            // Retry the request with updated token
+            final opts = dio.Options(
+              method: error.requestOptions.method,
+              headers: error.requestOptions.headers
+                ..['Authorization'] = 'JWT ${authController.token}',
+            );
+            final response = await _dio.request(
+              error.requestOptions.path,
+              options: opts,
+              data: error.requestOptions.data,
+              queryParameters: error.requestOptions.queryParameters,
+            );
+            return handler.resolve(response);
+          } catch (e) {
+            // If refresh token fails, proceed with original error
+            return handler.next(error);
+          }
+        }
+        return handler.next(error);
+      },
+    ));
+  }
+
+  // Safe API call method
+  Future<T?> _safeApiCall<T>(Future<dio.Response> Function() apiCall,
+      {T Function(Map<String, dynamic>)? fromJson,
+      Function(bool)? setStatus,
+      Function(T?)? onSuccess}) async {
+    try {
+      if (setStatus != null) setStatus(true);
+      final response = await apiCall();
+
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        final apiResponse = ApiResponse.fromJson(
+            response.data is Map<String, dynamic>
+                ? response.data
+                : {'success': true, 'data': response.data},
+            fromJson);
+
+        if (apiResponse.message != null) {
+          Helpers().showCustomSnackbar(message: apiResponse.message!);
+        }
+
+        if (onSuccess != null) {
+          onSuccess(apiResponse.data);
+        }
+
+        return apiResponse.data;
+      } else {
+        throw dio.DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            message: 'Unexpected status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      handleError(error);
+      return null;
+    } finally {
+      if (setStatus != null) setStatus(false);
+    }
+  }
+
+  void handleError(dynamic error) {
+    debugPrint("error $error");
+    String errorMessage = 'An error occurred';
+
+    if (error is dio.DioException) {
+      if (error.type == dio.DioExceptionType.connectionTimeout ||
+          error.type == dio.DioExceptionType.connectionError ||
+          error.type == dio.DioExceptionType.unknown) {
+        errorMessage = 'No internet connection!';
+      } else if (error.response != null) {
+        final responseData = error.response?.data;
+        if (responseData != null && responseData is Map) {
+          errorMessage =
+              responseData['message'] ?? error.message ?? 'Server error';
+        }
+      }
+    } else {
+      errorMessage = error.toString();
+    }
+
+    Fluttertoast.showToast(
+        fontSize: Get.height * 0.015,
+        msg: errorMessage,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM);
+  }
 
   void clearPhoto() {
     debugPrint('image cleared');
@@ -67,43 +203,27 @@ class SocialEventRepository extends GetxController {
     eventVenueController.clear();
     eventLinkController.clear();
     eventDateController.clear();
+    eventHashtagController.clear();
+    partnersController.clear();
   }
 
-  void handleError(dynamic error) {
-    debugPrint("error $error");
-    Fluttertoast.showToast(
-        fontSize: Get.height * 0.015,
-        msg: (error.toString().contains("api.esportsng.com") ||
-                error.toString().contains("Network is unreachable"))
-            ? 'Event like: No internet connection!'
-            : (error.toString().contains("FormatException"))
-                ? 'Event like: Internal server error, contact admin!'
-                : error.toString(),
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM);
-  }
-
-  Future pickImageFromGallery(String? title) async {
+  Future<void> pickImageFromGallery(String? title) async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
-      final imageTemporary = File(image.path);
-
-      mEventCoverImage(imageTemporary);
+      mEventCoverImage(File(image.path));
     } on PlatformException catch (e) {
-      debugPrint('$e');
+      debugPrint('Failed to pick image: $e');
     }
   }
 
-  Future pickImageFromCamera(String? title) async {
+  Future<void> pickImageFromCamera(String? title) async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
       if (image == null) return;
-      final imageTemporary = File(image.path);
-
-      mEventCoverImage(imageTemporary);
+      mEventCoverImage(File(image.path));
     } on PlatformException catch (e) {
-      debugPrint('$e');
+      debugPrint('Failed to pick image: $e');
     }
   }
 
@@ -150,7 +270,7 @@ class SocialEventRepository extends GetxController {
                 color: AppColor().primaryWhite,
                 textAlign: TextAlign.center,
                 fontFamily: 'Inter',
-                size: Get.height * 0.014,
+                size: 12,
               ),
             ],
           ),
@@ -159,84 +279,82 @@ class SocialEventRepository extends GetxController {
     );
   }
 
-  Future createSocialEvent() async {
-    try {
+  Future<void> createSocialEvent() async {
+    return _safeApiCall(() async {
       eventController.createEventStatus(CreateEventStatus.loading);
-      var headers = {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      };
+
+      // Prepare form data
+      final formData = dio.FormData();
+      formData.fields.addAll([
+        MapEntry('name', eventNameController.text),
+        MapEntry('description', eventDescController.text),
+        MapEntry('entry_fee',
+            eventController.currency.value + entryFeeController.text),
+        MapEntry('igames', gameValue.value!.id!.toString()),
+        MapEntry('reg_start', regStartDateController.text),
+        MapEntry('reg_end', regEndDateController.text),
+        MapEntry('hashtag', eventHashtagController.text),
+        MapEntry('event_type', 'social'),
+        MapEntry('venue', eventVenueController.text),
+        MapEntry('link', eventLinkController.text),
+      ]);
+
+      // Format date and time fields
       var startTime = DateFormat.jm().parse(startTimeController.text);
       var endTime = DateFormat.jm().parse(endTimeController.text);
+      formData.fields.addAll([
+        MapEntry('start',
+            "${eventDateController.text}T${DateFormat("HH:mm").format(startTime)}"),
+        MapEntry('end',
+            "${eventDateController.text}T${DateFormat("HH:mm").format(endTime)}"),
+        MapEntry('start_date', eventDateController.text),
+        MapEntry('end_date', eventDateController.text),
+      ]);
 
-      var request = http.MultipartRequest("POST",
-          Uri.parse(ApiLink.createTournament(organizingCommunity.value!.id!)))
-        ..fields["name"] = eventNameController.text
-        ..fields["description"] = eventDescController.text
-        ..fields["entry_fee"] =
-            eventController.currency.value + entryFeeController.text
-        ..fields["igames"] = gameValue.value!.id!.toString()
-        ..fields["reg_start"] = regStartDateController.text
-        ..fields["reg_end"] = regEndDateController.text
-        ..fields["start"] =
-            "${eventDateController.text}T${DateFormat("HH:mm").format(startTime)}"
-        ..fields["end_date"] = eventDateController.text
-        ..fields["start_date"] = eventDateController.text
-        ..fields["end"] =
-            "${eventDateController.text}T${DateFormat("HH:mm").format(endTime)}"
-        ..fields["venue"] = eventVenueController.text
-        ..fields["link"] = eventLinkController.text
-        ..fields["hashtag"] = eventHashtagController.text
-        ..fields["event_type"] = "social";
-
+      // Add image if available
       if (eventCoverImage != null) {
-        request.files.add(
-            await http.MultipartFile.fromPath('banner', eventCoverImage!.path));
+        formData.files.add(MapEntry(
+          'banner',
+          await dio.MultipartFile.fromFile(eventCoverImage!.path),
+        ));
       }
-      request.headers.addAll(headers);
-      http.StreamedResponse response = await request.send();
-      // var res = await response.stream.bytesToString();
-      // print(res);
-      if (response.statusCode == 201) {
+
+      // Configure headers
+      final options = dio.Options(
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      );
+
+      return _dio.post(
+        ApiLink.createTournament(organizingCommunity.value!.slug!),
+        data: formData,
+        options: options,
+      );
+    }, setStatus: (loading) {
+      if (!loading) {
         eventController.createEventStatus(CreateEventStatus.success);
-        debugPrint(await response.stream.bytesToString());
-        Get.to(() => const CreateSuccessPage(title: 'Event Created'))!
-            .then((value) {
-          eventController.getAllEvents(false);
-          clear();
-        });
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        eventController.createEventStatus(CreateEventStatus.error);
-      } else {
-        eventController.createEventStatus(CreateEventStatus.error);
-        debugPrint(response.reasonPhrase);
-        handleError(response.reasonPhrase);
       }
-    } catch (error) {
-      eventController.createEventStatus(CreateEventStatus.error);
-      debugPrint("Error occurred ${error.toString()}");
-      handleError(error);
-    }
+    }, onSuccess: (_) {
+      Get.to(() => const CreateSuccessPage(title: 'Event Created'))!
+          .then((value) {
+        eventController.getAllEvents(false);
+        clear();
+      });
+    });
   }
 
-  Future registerForSocialEvent(int id) async {
-    var response =
-        await http.put(Uri.parse(ApiLink.registerForSocialEvent(id)), headers: {
-      "Content-type": "application/json",
-      "Authorization": "JWT ${authController.token}"
+  Future<void> registerForSocialEvent(int id) async {
+    return _safeApiCall(
+        () => _dio.put(
+              ApiLink.registerForSocialEvent(id),
+              options: dio.Options(
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              ),
+            ), onSuccess: (data) {
+      // Success is already handled by showing message in _safeApiCall
     });
-
-    var json = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      Helpers().showCustomSnackbar(
-          message: toBeginningOfSentenceCase(json['message'])!);
-    } else {
-      Helpers().showCustomSnackbar(
-          message: toBeginningOfSentenceCase(json['error'])!);
-    }
   }
 }

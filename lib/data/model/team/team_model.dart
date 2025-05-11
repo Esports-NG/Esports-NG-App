@@ -15,6 +15,7 @@ class TeamModel {
   String? abbrev;
   String? name;
   String? profilePicture;
+  String? slug;
   String? cover;
   List<GamePlayed>? gamesPlayed;
   String? bio;
@@ -40,6 +41,7 @@ class TeamModel {
       this.membersCount,
       this.abbrev,
       this.players,
+      this.slug,
       this.playerProfiles,
       this.isVerified});
 
@@ -50,6 +52,7 @@ class TeamModel {
       profilePicture: json["profile_picture"],
       cover: json["cover"],
       abbrev: json["abbrev"],
+      slug: json["slug"],
       isVerified: json['is_verified'],
       gamesPlayed: json["games_played"] == null
           ? []

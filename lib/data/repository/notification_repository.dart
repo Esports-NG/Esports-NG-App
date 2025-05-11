@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:e_sport/data/model/notification_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/util/api_helpers.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/io.dart';
@@ -14,11 +17,35 @@ class NotificationRepository extends GetxController {
   RxList<NotificationModel> notifications = RxList([]);
   RxString nextLink = RxString("");
 
+  // Dio instance for using ApiHelpers
+  late Dio _dio;
+
   @override
   void onInit() {
+    _initDio();
     listenForNotifications();
     getNotifications();
     super.onInit();
+  }
+
+  // Initialize Dio with auth interceptor
+  void _initDio() {
+    _dio = Dio(BaseOptions(
+      baseUrl: ApiLink.baseurl,
+      contentType: 'application/json',
+      responseType: ResponseType.json,
+    ));
+
+    // Add an interceptor to handle authentication
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // Add auth token to header if it exists
+        if (authController.token.isNotEmpty && authController.token != "0") {
+          options.headers['Authorization'] = 'JWT ${authController.token}';
+        }
+        return handler.next(options);
+      },
+    ));
   }
 
   Future listenForNotifications() async {
@@ -33,29 +60,41 @@ class NotificationRepository extends GetxController {
   }
 
   Future getNotifications() async {
-    var response = await http.get(
-        Uri.parse(ApiLink.getNotifications(authController.user!.id!)),
-        headers: {"Authorization": "JWT ${authController.token}"});
+    try {
+      final response =
+          await _dio.get(ApiLink.getNotifications(authController.user!.id!));
 
-    log('notification' + response.body);
-    var json = jsonDecode(response.body);
-    nextLink.value = json["next"] ?? "";
-    var notificationList =
-        notificationModelFromJson(jsonEncode(json['results']));
-    notifications.assignAll(notificationList);
-    return notificationList;
+      log('notification: ${response.data}');
+      var json = response.data;
+      nextLink.value = json["next"] ?? "";
+      var notificationList =
+          notificationModelFromJson(jsonEncode(json['results']));
+      notifications.assignAll(notificationList);
+      return notificationList;
+    } catch (error) {
+      debugPrint("Error getting notifications: $error");
+      ApiHelpers.handleApiError(error);
+      return [];
+    }
   }
 
   Future getNext() async {
-    var response = await http.get(Uri.parse(nextLink.value),
-        headers: {"Authorization": "JWT ${authController.token}"});
+    try {
+      if (nextLink.value.isEmpty) return [];
 
-    log('next notification' + response.body);
-    var json = jsonDecode(response.body);
-    nextLink.value = json["next"] ?? "";
-    var notificationList =
-        notificationModelFromJson(jsonEncode(json['results']));
-    notifications.assignAll(notificationList);
-    return notificationList;
+      final response = await _dio.get(nextLink.value);
+
+      log('next notification: ${response.data}');
+      var json = response.data;
+      nextLink.value = json["next"] ?? "";
+      var notificationList =
+          notificationModelFromJson(jsonEncode(json['results']));
+      notifications.addAll(notificationList);
+      return notificationList;
+    } catch (error) {
+      debugPrint("Error getting next notifications: $error");
+      ApiHelpers.handleApiError(error);
+      return [];
+    }
   }
 }

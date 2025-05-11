@@ -3,14 +3,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/auth/register.dart';
+import 'package:e_sport/ui/screens/auth/register.dart';
+import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
+import 'package:get/get.dart' as Get;
 
 enum EventStatus {
   empty,
@@ -41,11 +42,38 @@ enum DeleteEventStatus {
   success,
 }
 
-class EventRepository extends GetxController
-    with GetSingleTickerProviderStateMixin {
-  final authController = Get.put(AuthRepository());
+// Response model to handle the new backend structure
+class EventApiResponse<T> {
+  final String? message;
+  final bool success;
+  final T? data;
 
-  final RxList<OverlayPortalController> currentOverlay =
+  EventApiResponse({
+    this.message,
+    required this.success,
+    this.data,
+  });
+
+  factory EventApiResponse.fromJson(
+      Map<String, dynamic> json, T Function(Map<String, dynamic>)? fromJson) {
+    return EventApiResponse(
+      message: json['message'],
+      success: json['success'] ?? false,
+      data: json['data'] != null && fromJson != null
+          ? fromJson(json['data'])
+          : null,
+    );
+  }
+}
+
+class EventRepository extends Get.GetxController
+    with Get.GetSingleTickerProviderStateMixin {
+  final authController = Get.Get.put(AuthRepository());
+
+  // Dio instance for HTTP requests
+  late Dio _dio;
+
+  final Get.RxList<OverlayPortalController> currentOverlay =
       <OverlayPortalController>[].obs;
 
   late final eventTypeController = TextEditingController();
@@ -53,21 +81,21 @@ class EventRepository extends GetxController
 
   late TabController tabController;
 
-  Rx<bool> fetchingCreatedEvents = Rx(false);
+  Get.Rx<bool> fetchingCreatedEvents = Get.Rx(false);
 
-  final Rx<List<EventModel>> _allEvent = Rx([]);
-  final Rx<List<EventModel>> _filteredEvent = Rx([]);
-  final Rx<List<EventModel>> _myEvent = Rx([]);
-  final Rx<List<EventModel>> _allTournaments = Rx([]);
-  final Rx<List<EventModel>> _myTournaments = Rx([]);
-  final Rx<List<EventModel>> _allSocialEvent = Rx([]);
-  final Rx<List<EventModel>> _mySocialEvent = Rx([]);
-  final RxList<EventModel> createdEvents = <EventModel>[].obs;
+  final Get.Rx<List<EventModel>> _allEvent = Get.Rx([]);
+  final Get.Rx<List<EventModel>> _filteredEvent = Get.Rx([]);
+  final Get.Rx<List<EventModel>> _myEvent = Get.Rx([]);
+  final Get.Rx<List<EventModel>> _allTournaments = Get.Rx([]);
+  final Get.Rx<List<EventModel>> _myTournaments = Get.Rx([]);
+  final Get.Rx<List<EventModel>> _allSocialEvent = Get.Rx([]);
+  final Get.Rx<List<EventModel>> _mySocialEvent = Get.Rx([]);
+  final Get.RxList<EventModel> createdEvents = <EventModel>[].obs;
 
-  final Rx<String> currency = "".obs;
-  final RxString nextLink = "".obs;
+  final Get.Rx<String> currency = "".obs;
+  final Get.RxString nextLink = "".obs;
 
-  final RxList<EventModel> searchedEvents = <EventModel>[].obs;
+  final Get.RxList<EventModel> searchedEvents = <EventModel>[].obs;
 
   Map<String, String> currencies = {
     "NGN": "₦", // Nigerian Naira
@@ -113,7 +141,7 @@ class EventRepository extends GetxController
     "SZL": "E", // Eswatini Lilangeni
   };
 
-  RxBool isFiltering = true.obs;
+  Get.RxBool isFiltering = true.obs;
 
   List<EventModel> get allEvent => _allEvent.value;
   List<EventModel> get filteredEvent => _filteredEvent.value;
@@ -123,14 +151,15 @@ class EventRepository extends GetxController
   List<EventModel> get allTournaments => _allTournaments.value;
   List<EventModel> get myTournaments => _myTournaments.value;
 
-  final Rx<String?> typeFilter = Rx("All");
-  final Rx<String?> gameFilter = Rx("All");
-  final Rx<String?> statusFilter = Rx("All");
+  final Get.Rx<String?> typeFilter = Get.Rx("All");
+  final Get.Rx<String?> gameFilter = Get.Rx("All");
+  final Get.Rx<String?> statusFilter = Get.Rx("All");
 
-  final RxList<String> typeFilterList =
+  final Get.RxList<String> typeFilterList =
       ["All", "Tournament", "Social Event"].obs;
-  final RxList<String> statusFilterList = ["All", "Ongoing", "Concluded"].obs;
-  final RxList<String> gameFilterList =
+  final Get.RxList<String> statusFilterList =
+      ["All", "Ongoing", "Concluded"].obs;
+  final Get.RxList<String> gameFilterList =
       ["All", "CODM", "MLBB", "Brawl Stars"].obs;
 
   var maxTabs = 3.obs, eventTypeCount = 0.obs, participantCount = 0.obs;
@@ -140,17 +169,130 @@ class EventRepository extends GetxController
   final eventStatus = EventStatus.empty.obs;
   final myEventStatus = EventStatus.empty.obs;
   final createEventStatus = CreateEventStatus.empty.obs;
-  RxMap<dynamic, dynamic> eventFilter = {}.obs;
+  final updateEventStatus = UpdateEventStatus.empty.obs;
+  final deleteEventStatus = DeleteEventStatus.empty.obs;
 
-  // EventStatus get eventStatus => eventStatus.value;
-  // CreateEventStatus get createEventStatus => createEventStatus.value;
+  Get.RxMap<dynamic, dynamic> eventFilter = {}.obs;
 
-  Rx<File?> mEventProfileImage = Rx(null);
-  Rx<File?> mEventCoverImage = Rx(null);
+  Get.Rx<File?> mEventProfileImage = Get.Rx(null);
+  Get.Rx<File?> mEventCoverImage = Get.Rx(null);
   File? get eventProfileImage => mEventProfileImage.value;
   File? get eventCoverImage => mEventCoverImage.value;
 
   DateTime? date;
+
+  void _initDio() {
+    _dio = Dio(BaseOptions(
+      baseUrl: ApiLink.baseurl,
+      contentType: 'application/json',
+      responseType: ResponseType.json,
+    ));
+
+    // Add an interceptor to handle authentication
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // Add auth token to header if it exists
+        if (authController.token.isNotEmpty && authController.token != "0") {
+          options.headers['Authorization'] = 'JWT ${authController.token}';
+        }
+        return handler.next(options);
+      },
+      onError: (DioException error, handler) async {
+        // Handle token refresh if 401 error occurs
+        if (error.response?.statusCode == 401) {
+          try {
+            await authController.refreshToken();
+            // Retry the request with updated token
+            final opts = Options(
+              method: error.requestOptions.method,
+              headers: error.requestOptions.headers
+                ..['Authorization'] = 'JWT ${authController.token}',
+            );
+            final response = await _dio.request(
+              error.requestOptions.path,
+              options: opts,
+              data: error.requestOptions.data,
+              queryParameters: error.requestOptions.queryParameters,
+            );
+            return handler.resolve(response);
+          } catch (e) {
+            // If refresh token fails, proceed with original error
+            return handler.next(error);
+          }
+        }
+        return handler.next(error);
+      },
+    ));
+  }
+
+  // Handle error responses consistently
+  void _handleApiError(dynamic error) {
+    if (error is DioException) {
+      final response = error.response;
+      if (response != null) {
+        final data = response.data;
+        if (data is Map<String, dynamic> && data['message'] != null) {
+          Helpers().showCustomSnackbar(message: data['message']);
+          return;
+        }
+      }
+      // Handle network errors
+      if (error.type == DioExceptionType.connectionTimeout ||
+          error.type == DioExceptionType.receiveTimeout ||
+          error.type == DioExceptionType.connectionError) {
+        Helpers().showCustomSnackbar(
+            message: 'Network error! Please check your connection.');
+        return;
+      }
+    }
+    // Fallback error message
+    Helpers().showCustomSnackbar(
+        message: (error.toString().contains("esports-ng.vercel.app") ||
+                error.toString().contains("Network is unreachable"))
+            ? 'No internet connection!'
+            : (error.toString().contains("FormatException"))
+                ? 'Internal server error, contact admin!'
+                : error.toString().replaceAll('(', '').replaceAll(')', ''));
+  }
+
+  // Safe API call method
+  Future<T?> _safeApiCall<T>(Future<Response> Function() apiCall,
+      {T Function(Map<String, dynamic>)? fromJson,
+      Function(bool)? setStatus,
+      Function(T?)? onSuccess}) async {
+    try {
+      if (setStatus != null) setStatus(true);
+      final response = await apiCall();
+
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        final apiResponse = EventApiResponse.fromJson(
+            response.data is Map<String, dynamic>
+                ? response.data
+                : {'success': true, 'data': response.data},
+            fromJson);
+
+        if (apiResponse.message != null) {
+          Helpers().showCustomSnackbar(message: apiResponse.message!);
+        }
+
+        if (onSuccess != null) {
+          onSuccess(apiResponse.data);
+        }
+
+        return apiResponse.data;
+      } else {
+        throw DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            message: 'Unexpected status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      _handleApiError(error);
+      return null;
+    } finally {
+      if (setStatus != null) setStatus(false);
+    }
+  }
 
   void hideAllOverlays() {
     if (currentOverlay.isNotEmpty) {
@@ -198,7 +340,6 @@ class EventRepository extends GetxController
 
   void changeFixtureType({required int index, required PrimaryUse item}) {
     fixtureTypeCount.value = index;
-
     eventTypeController.text = item.title!;
   }
 
@@ -210,6 +351,7 @@ class EventRepository extends GetxController
   @override
   void onInit() {
     super.onInit();
+    _initDio();
     tabController = TabController(length: 3, vsync: this);
 
     tabController.addListener(() {
@@ -239,172 +381,128 @@ class EventRepository extends GetxController
     super.dispose();
   }
 
-  Future getAllEvents(bool? firstTime) async {
-    debugPrint("getting all events");
-    var response = await http.get(Uri.parse(ApiLink.getAllEvent), headers: {
-      "Content-type": "application/json",
-      "Authorization": 'JWT ${authController.token}'
-    });
+  Future<List<EventModel>?> getAllEvents(bool? firstTime) async {
+    debugPrint("Getting all events");
 
-    var json = jsonDecode(response.body);
-    debugPrint(response.body);
-    if (response.statusCode != 200) {
-      return null;
-    } else {
-      nextLink.value = json['next'] ?? "";
-      var list = List.from(json['results']);
-      var events = list.map((e) => EventModel.fromJson(e)).toList();
-      _allEvent(events);
-      return events;
-    }
-  }
-
-  Future getNextEvents() async {
-    var response = await http.get(Uri.parse(nextLink.value), headers: {
-      "Content-type": "application/json",
-      "Authorization": 'JWT ${authController.token}'
-    });
-
-    debugPrint(response.body);
-    var json = jsonDecode(response.body);
-    if (response.statusCode != 200) {
-      return null;
-    } else {
-      nextLink.value = json['next'] ?? "";
-      var list = List.from(json['results']);
-      var events = list.map((e) => EventModel.fromJson(e)).toList();
-      _allEvent(events);
-      return events;
-    }
-  }
-
-  Future getMyEvents(bool? firstTime) async {
-    myEventStatus.value = EventStatus.loading;
-    var response = await http.get(Uri.parse(ApiLink.getMyEvents), headers: {
-      "Content-type": "application/json",
-      "Authorization": 'JWT ${authController.token}'
-    });
-
-    var json = jsonDecode(response.body);
-    if (response.statusCode != 200) {
-      myEventStatus.value = EventStatus.error;
-      return null;
-    } else {
-      var list = List.from(json);
-      var events = list.map((e) => EventModel.fromJson(e)).toList();
-      _myEvent(events);
-      myEventStatus.value = EventStatus.available;
-      return events;
-    }
-  }
-
-  Future getAllTournaments(bool isFirstTime) async {
-    try {
-      if (isFirstTime == true) {
-        eventStatus(EventStatus.loading);
+    return _safeApiCall(() => _dio.get(ApiLink.getAllEvent), fromJson: (data) {
+      final results = data['results'] as List<dynamic>;
+      nextLink.value = data['next'] ?? "";
+      print(results);
+      return results.map((e) => EventModel.fromJson(e)).toList();
+    }, setStatus: (loading) {
+      if (firstTime == true) {
+        eventStatus(loading ? EventStatus.loading : EventStatus.empty);
       }
+    }, onSuccess: (events) {
+      if (events != null) {
+        _allEvent(events);
 
-      debugPrint('getting all event...');
-      var response =
-          await http.get(Uri.parse(ApiLink.getAllTournaments), headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      });
-      var json = jsonDecode(response.body);
-      if (response.statusCode != 200) {
-        throw (json['detail']);
+        eventStatus(
+            events.isNotEmpty ? EventStatus.available : EventStatus.empty);
       }
+    });
+  }
 
-      if (response.statusCode == 200) {
-        var list = List.from(json);
-        var events = list.map((e) => EventModel.fromJson(e)).toList();
-        debugPrint("${events.length} events found");
+  Future<List<EventModel>?> getNextEvents() async {
+    if (nextLink.value.isEmpty) return null;
+
+    return _safeApiCall(() => _dio.get(nextLink.value), fromJson: (data) {
+      final results = data['results'] as List<dynamic>;
+      nextLink.value = data['next'] ?? "";
+      return results.map((e) => EventModel.fromJson(e)).toList();
+    }, onSuccess: (events) {
+      if (events != null) {
+        _allEvent.value.addAll(events);
+        _allEvent.refresh();
+      }
+    });
+  }
+
+  Future<List<EventModel>?> getMyEvents(bool? firstTime) async {
+    return _safeApiCall(() => _dio.get(ApiLink.getMyEvents), fromJson: (data) {
+      return (data as List<dynamic>)
+          .map((e) => EventModel.fromJson(e))
+          .toList();
+    }, setStatus: (loading) {
+      myEventStatus(loading ? EventStatus.loading : EventStatus.empty);
+    }, onSuccess: (events) {
+      if (events != null) {
+        _myEvent(events);
+        myEventStatus(
+            events.isNotEmpty ? EventStatus.available : EventStatus.empty);
+      }
+    });
+  }
+
+  Future<List<EventModel>?> getAllTournaments(bool isFirstTime) async {
+    return _safeApiCall(() => _dio.get(ApiLink.getAllTournaments),
+        fromJson: (data) {
+      return (data as List<dynamic>)
+          .map((e) => EventModel.fromJson(e))
+          .toList();
+    }, setStatus: (loading) {
+      if (isFirstTime) {
+        eventStatus(loading ? EventStatus.loading : EventStatus.empty);
+      }
+    }, onSuccess: (events) {
+      if (events != null) {
         _allTournaments(events);
-        eventStatus(EventStatus.success);
-        events.isNotEmpty
-            ? eventStatus(EventStatus.available)
-            : eventStatus(EventStatus.empty);
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        eventStatus(EventStatus.error);
-      }
-      return response.body;
-    } catch (error) {
-      eventStatus(EventStatus.error);
-      debugPrint("getting tournament: ${error.toString()}");
-    }
-  }
-
-  Future getAllSocialEvents(bool isFirstTime) async {
-    try {
-      if (isFirstTime == true) {
-        eventStatus(EventStatus.loading);
-      }
-
-      debugPrint('getting all social event...');
-      var response =
-          await http.get(Uri.parse(ApiLink.getAllSocialEvents), headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'JWT ${authController.token}'
-      });
-      var json = jsonDecode(response.body);
-      if (response.statusCode != 200) {
-        throw (json['detail']);
-      }
-
-      if (response.statusCode == 200) {
-        var list = List.from(json);
-        var events = list.map((e) => EventModel.fromJson(e)).toList();
         debugPrint("${events.length} events found");
-        _allSocialEvent(events);
-        eventStatus(EventStatus.success);
-        events.isNotEmpty
-            ? eventStatus(EventStatus.available)
-            : eventStatus(EventStatus.empty);
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        eventStatus(EventStatus.error);
+        eventStatus(
+            events.isNotEmpty ? EventStatus.available : EventStatus.empty);
       }
-      return response.body;
-    } catch (error) {
-      eventStatus(EventStatus.error);
-      debugPrint("getting all event: ${error.toString()}");
-    }
-  }
-
-  Future getCreatedEvents() async {
-    fetchingCreatedEvents.value = true;
-    var response =
-        await http.get(Uri.parse(ApiLink.getCreatedEvents), headers: {
-      "Authorization": "JWT ${authController.token}",
     });
-
-    var json = jsonDecode(response.body);
-    var list = List.from(json);
-    var events = list.map((e) => EventModel.fromJson(e));
-    createdEvents.assignAll(events);
-    fetchingCreatedEvents.value = false;
   }
 
-  Future filterEvents() async {
-    try {
-      isFiltering(true);
-      var response = await http.get(
-          Uri.https(
-              "api.esportsng.com", "/event/search/", eventFilter.cast()),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": 'JWT ${authController.token}'
-          });
-      var json = jsonDecode(response.body);
-      var list = List.from(json);
-      var filteredEvents = list.map((e) => EventModel.fromJson(e)).toList();
-      _filteredEvent(filteredEvents);
-    } catch (err) {}
-    isFiltering(false);
+  Future<List<EventModel>?> getAllSocialEvents(bool isFirstTime) async {
+    return _safeApiCall(() => _dio.get(ApiLink.getAllSocialEvents),
+        fromJson: (data) {
+      return (data as List<dynamic>)
+          .map((e) => EventModel.fromJson(e))
+          .toList();
+    }, setStatus: (loading) {
+      if (isFirstTime) {
+        eventStatus(loading ? EventStatus.loading : EventStatus.empty);
+      }
+    }, onSuccess: (events) {
+      if (events != null) {
+        _allSocialEvent(events);
+        debugPrint("${events.length} events found");
+        eventStatus(
+            events.isNotEmpty ? EventStatus.available : EventStatus.empty);
+      }
+    });
+  }
+
+  Future<List<EventModel>?> getCreatedEvents() async {
+    return _safeApiCall(() => _dio.get(ApiLink.getCreatedEvents),
+        fromJson: (data) {
+      return (data as List<dynamic>)
+          .map((e) => EventModel.fromJson(e))
+          .toList();
+    }, setStatus: (loading) {
+      fetchingCreatedEvents.value = loading;
+    }, onSuccess: (events) {
+      if (events != null) {
+        createdEvents.assignAll(events);
+      }
+    });
+  }
+
+  Future<List<EventModel>?> filterEvents() async {
+    return _safeApiCall(
+        () => _dio.get('/event/search/',
+            queryParameters: eventFilter.cast<String, dynamic>()),
+        fromJson: (data) {
+      return (data as List<dynamic>)
+          .map((e) => EventModel.fromJson(e))
+          .toList();
+    }, setStatus: (loading) {
+      isFiltering(loading);
+    }, onSuccess: (events) {
+      if (events != null) {
+        _filteredEvent(events);
+      }
+    });
   }
 }

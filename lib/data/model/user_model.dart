@@ -16,6 +16,7 @@ class UserModel {
   String? gender;
   String? bio;
   String? dOB;
+  String? slug;
   List<String>? ipurpose;
   Profile? profile;
   UserProfile? userProfile;
@@ -27,6 +28,7 @@ class UserModel {
   List<dynamic>? followers;
 
   UserModel({
+    this.slug,
     this.id,
     this.email,
     this.fullName,
@@ -52,6 +54,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
+        slug: json['slug'],
         email: json["email"],
         bio: json["bio"],
         fullName: json["full_name"],
@@ -86,6 +89,7 @@ class UserModel {
 
   factory UserModel.fromPostJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
+        slug: json['slug'],
         bio: json["bio"],
         userName: json["user_name"],
         fullName: json["full_name"],

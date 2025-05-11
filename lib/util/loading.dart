@@ -1,4 +1,4 @@
-import 'package:e_sport/ui/widget/buttonLoader.dart';
+import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

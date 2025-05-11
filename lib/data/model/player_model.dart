@@ -202,6 +202,7 @@ class Player {
   String? country;
   String? state;
   String? gender;
+  String? slug;
   DateTime? dOB;
   String? referralCode;
   List<Purpose>? purpose;
@@ -219,6 +220,7 @@ class Player {
     this.dOB,
     this.referralCode,
     this.purpose,
+    this.slug,
     this.profile,
   });
 
@@ -226,6 +228,7 @@ class Player {
         id: json["id"],
         userName: json["user_name"],
         fullName: json["full_name"],
+        slug: json["slug"],
         email: json["email"],
         phoneNumber: json["phone_number"],
         country: json["country"],

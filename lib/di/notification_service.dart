@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:e_sport/util/colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
@@ -25,11 +28,56 @@ class NotificationService {
 
   Future<void> initialize() async {
     // Request permission for iOS devices
-    await _firebaseMessaging.requestPermission(
+    final permissionRequest = await _firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
       sound: true,
     );
+
+    if (permissionRequest.authorizationStatus ==
+        AuthorizationStatus.authorized) {
+      String? fcmToken;
+
+      if (Platform.isIOS) {
+        String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+
+        if (apnsToken != null) {
+          debugPrint("APNS Token: $apnsToken");
+          fcmToken = await FirebaseMessaging.instance.getToken();
+          debugPrint("FCM Token: $fcmToken");
+        } else {
+          debugPrint("APNS Token not available, waiting ...");
+
+          await Future<void>.delayed(
+            const Duration(
+              seconds: 3,
+            ),
+          );
+
+          apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+
+          if (apnsToken != null) {
+            debugPrint("APNS Token: $apnsToken");
+            fcmToken = await FirebaseMessaging.instance.getToken();
+            debugPrint("FCM Token: $fcmToken");
+          } else {
+            debugPrint(
+                "APNS Token not available, trying to get FCM token anyway ...");
+
+            try {
+              fcmToken = await FirebaseMessaging.instance.getToken();
+            } catch (err) {
+              debugPrint("FCM Token not available ($err)");
+            }
+          }
+        }
+      } else {
+        fcmToken = await FirebaseMessaging.instance.getToken();
+        debugPrint("FCM Token: $fcmToken");
+      }
+    } else {
+      debugPrint("Notifications not authorized");
+    }
 
     // Get FCM token
     String? token = await _firebaseMessaging.getToken();
@@ -119,14 +167,12 @@ class NotificationService {
       title,
       body,
       NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          importance: Importance.high,
-          priority: Priority.high,
-          icon: "@drawable/ic_stat_notify", color: AppColor().primaryColor
-        ),
+        android: AndroidNotificationDetails(channel.id, channel.name,
+            channelDescription: channel.description,
+            importance: Importance.high,
+            priority: Priority.high,
+            icon: "@drawable/ic_stat_notify",
+            color: AppColor().primaryColor),
         iOS: const DarwinNotificationDetails(),
       ),
       payload: payload,
