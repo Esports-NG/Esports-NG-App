@@ -51,7 +51,7 @@ class PostAuthorInfo extends StatelessWidget {
         const SmallCircle(),
         Gap(Get.height * 0.005),
         CustomText(
-          title: timeAgo,
+          title: timeAgo[0] + timeAgo[2] + " ago",
           size: Get.height * 0.015,
           fontFamily: 'InterMedium',
           textAlign: TextAlign.start,

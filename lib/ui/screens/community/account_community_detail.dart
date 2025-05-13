@@ -68,7 +68,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
         });
 
     var json = jsonDecode(response.body);
-    var list = List.from(json);
+    var list = List.from(json['data']);
 
     setState(() {
       _recentPosts = list.map((e) => PostModel.fromJson(e)).toList();
@@ -224,7 +224,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                       color: AppColor().primaryMenu,
                                       position: const RelativeRect.fromLTRB(
                                           100, 100, 0, 0),
-                                      items: widget.item.owner!.id! ==
+                                      items: details!.owner!.id! ==
                                               authController.user!.id!
                                           ? [
                                               PopupMenuItem(
@@ -627,9 +627,9 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                   children: [
                                     OtherImage(
                                         itemSize: Get.height * 0.04,
-                                        image: widget.item.owner!.profile!
-                                            .profilePicture),
-                                    if (widget.item.owner!.isVerified!)
+                                        image: details!
+                                            .owner!.profile!.profilePicture),
+                                    if (details!.owner!.isVerified!)
                                       SvgPicture.asset(
                                         "assets/images/svg/check_badge.svg",
                                         width: Get.width * 0.04,

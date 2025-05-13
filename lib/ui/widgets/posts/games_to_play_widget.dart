@@ -33,8 +33,7 @@ class _GamesToPlayWidgetState extends State<GamesToPlayWidget>
   bool get wantKeepAlive => true;
 
   var _scrollController = ScrollController();
-  PagingController<int, GameToPlay> _pagingController =
-      PagingController<int, GameToPlay>(firstPageKey: 1);
+  late final PagingController<int, GameToPlay> _pagingController;
   List<PostModel> parseAds(int initial, List<PostModel> posts) {
     List<PostModel> result = [];
 
@@ -62,38 +61,30 @@ class _GamesToPlayWidgetState extends State<GamesToPlayWidget>
 
   @override
   void initState() {
+    _pagingController = PagingController<int, GameToPlay>(
+      fetchPage: (pageKey) => _fetchPage(pageKey),
+      getNextPageKey: (state) => (state.keys?.last ?? 0) + 1,
+    );
     super.initState();
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
     // _scrollController.addListener(_loadMore);
   }
 
-  Future<void> _fetchPage(int pageKey) async {
+  Future<List<GameToPlay>> _fetchPage(int pageKey) async {
     try {
       if (widget.nextLink != null && widget.nextLink != "" && pageKey > 1) {
         var posts = await widget.getNext!();
-        _pagingController.appendPage(posts, pageKey + 1);
+        return posts;
       } else {
         if (widget.refresh != null && pageKey == 1) {
           var posts = await widget.refresh!(false);
-          if (widget.type == "announcement") {
-            _pagingController.appendPage(
-                posts.where((e) => e.announcement! == true).toList(),
-                pageKey + 1);
-          } else if (widget.type == "participant") {
-            _pagingController.appendPage(
-                posts.where((e) => e.participantAnnouncement! == true).toList(),
-                pageKey + 1);
-          } else {
-            _pagingController.appendPage(posts, pageKey + 1);
-          }
+
+          return posts;
         } else {
-          _pagingController.appendLastPage([]);
+          return [];
         }
       }
     } catch (err) {
-      _pagingController.error = err;
+      return [];
     }
   }
 
@@ -104,21 +95,25 @@ class _GamesToPlayWidgetState extends State<GamesToPlayWidget>
         // 2
         () => _pagingController.refresh(),
       ),
-      child: PagedListView.separated(
-        pagingController: _pagingController,
-        padding: EdgeInsets.only(top: 10, bottom: 50),
-        separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-        builderDelegate: PagedChildBuilderDelegate<GameToPlay>(
-            itemBuilder: (context, feed, index) {
-              return GestureDetector(
-                  onTap: () => Get.to(() =>
-                      GameProfile(game: GamePlayed.fromJson({"id": feed.id}))),
-                  child: GamesToPlayItem(item: feed, index: index));
-            },
-            firstPageProgressIndicatorBuilder: (context) =>
-                Center(child: ButtonLoader()),
-            newPageProgressIndicatorBuilder: (context) =>
-                Center(child: ButtonLoader())),
+      child: PagingListener(
+        controller: _pagingController,
+        builder: (context, state, fetchNextPage) => PagedListView.separated(
+          padding: EdgeInsets.only(top: 10, bottom: 50),
+          state: state,
+          fetchNextPage: fetchNextPage,
+          separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+          builderDelegate: PagedChildBuilderDelegate<GameToPlay>(
+              itemBuilder: (context, feed, index) {
+                return GestureDetector(
+                    onTap: () => Get.to(() => GameProfile(
+                        game: GamePlayed.fromJson({"id": feed.id}))),
+                    child: GamesToPlayItem(item: feed, index: index));
+              },
+              firstPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader()),
+              newPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader())),
+        ),
       ),
     );
   }

@@ -33,8 +33,8 @@ class _PostWidgetState extends State<PostWidget>
   bool get wantKeepAlive => true;
 
   var _scrollController = ScrollController();
-  PagingController<int, PostModel> _pagingController =
-      PagingController<int, PostModel>(firstPageKey: 1);
+  late final PagingController<int, PostModel> _pagingController;
+
   List<PostModel> parseAds(int initial, List<PostModel> posts) {
     List<PostModel> result = [];
 
@@ -55,37 +55,37 @@ class _PostWidgetState extends State<PostWidget>
 
   @override
   void initState() {
+    _pagingController = PagingController<int, PostModel>(
+      getNextPageKey: (state) => (state.keys?.last ?? 0) + 1,
+      fetchPage: (pageKey) => _fetchPage(pageKey),
+    );
     super.initState();
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
   }
 
-  Future<void> _fetchPage(int pageKey) async {
+  Future<List<PostModel>> _fetchPage(int pageKey) async {
     try {
       if (widget.nextLink != null && widget.nextLink != "" && pageKey > 1) {
         var posts = await widget.getNext!();
-        _pagingController.appendPage(posts, pageKey + 1);
+        return posts;
       } else {
         if (widget.refresh != null && pageKey == 1) {
           var posts = await widget.refresh!(false);
+          print(posts);
           if (widget.type == "announcement") {
-            _pagingController.appendPage(
-                posts.where((e) => e.announcement! == true).toList(),
-                pageKey + 1);
+            return posts.where((e) => e.announcement! == true).toList();
           } else if (widget.type == "participant") {
-            _pagingController.appendPage(
-                posts.where((e) => e.participantAnnouncement! == true).toList(),
-                pageKey + 1);
+            return posts
+                .where((e) => e.participantAnnouncement! == true)
+                .toList();
           } else {
-            _pagingController.appendPage(posts, pageKey + 1);
+            return posts;
           }
         } else {
-          _pagingController.appendLastPage([]);
+          return [];
         }
       }
     } catch (err) {
-      _pagingController.error = err;
+      return [];
     }
   }
 
@@ -97,39 +97,46 @@ class _PostWidgetState extends State<PostWidget>
         // 2
         () => _pagingController.refresh(),
       ),
-      child: PagedListView.separated(
-        addAutomaticKeepAlives: true,
-        cacheExtent: 9999,
-        pagingController: _pagingController,
-        padding: EdgeInsets.only(top: 10, bottom: 50),
-        separatorBuilder: (context, index) =>
-            index != 0 && widget.posts![index - 1].owner != null
-                ? Gap(0)
-                : Gap(Get.height * 0.015),
-        builderDelegate: PagedChildBuilderDelegate<PostModel>(
-            firstPageErrorIndicatorBuilder: (context) => PageErrorWidget(
-                onRetry: () => _pagingController.retryLastFailedRequest()),
-            newPageErrorIndicatorBuilder: (context) => PageErrorWidget(
-                  onRetry: () => _pagingController.retryLastFailedRequest(),
-                ),
-            noItemsFoundIndicatorBuilder: (context) => PageErrorWidget(
-                  title: 'No Posts Found',
-                  message: 'There are no posts available at the moment.',
-                  onRetry: () => _pagingController.refresh(),
-                ),
-            itemBuilder: (context, post, index) {
-              return index != 0 && widget.posts![index - 1].owner != null
+      child: PagingListener(
+        controller: _pagingController,
+        builder: (context, state, fetchNextPage) => PagedListView.separated(
+          addAutomaticKeepAlives: true,
+          cacheExtent: 9999,
+          state: state,
+          fetchNextPage: fetchNextPage,
+          padding: EdgeInsets.only(top: 10, bottom: 50),
+          separatorBuilder: (context, index) =>
+              index != 0 && state.items?[index - 1].owner != null
                   ? Gap(0)
-                  : post.owner != null
-                      ? AdList(ads: parseAds(index, widget.posts!))
-                      : GestureDetector(
-                          onTap: () => Get.to(() => PostDetails(item: post)),
-                          child: PostItem(item: post));
-            },
-            firstPageProgressIndicatorBuilder: (context) =>
-                Center(child: ButtonLoader()),
-            newPageProgressIndicatorBuilder: (context) =>
-                Center(child: ButtonLoader())),
+                  : Gap(Get.height * 0.015),
+          builderDelegate: PagedChildBuilderDelegate<PostModel>(
+              firstPageErrorIndicatorBuilder: (context) => PageErrorWidget(
+                  // onRetry: () => _pagingController.retryLastFailedRequest()),
+                  // newPageErrorIndicatorBuilder: (context) => PageErrorWidget(
+                  // onRetry: () => _pagingController.retryLastFailedRequest(),
+                  ),
+              noItemsFoundIndicatorBuilder: (context) => PageErrorWidget(
+                    title: 'No Posts Found',
+                    message: 'There are no posts available at the moment.',
+                    onRetry: () => _pagingController.refresh(),
+                  ),
+              itemBuilder: (context, post, index) {
+                return index != 0 && state.items![index - 1].owner != null
+                    ? Gap(0)
+                    : post.owner != null
+                        ? AdList(ads: parseAds(index, widget.posts!))
+                        : GestureDetector(
+                            onTap: () {
+                              // print(post);
+                              Get.to(() => PostDetails(item: post));
+                            },
+                            child: PostItem(item: post));
+              },
+              firstPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader()),
+              newPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader())),
+        ),
       ),
     );
   }

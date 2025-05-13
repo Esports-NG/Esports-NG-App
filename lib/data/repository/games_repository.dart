@@ -60,7 +60,7 @@ class GamesRepository extends GetxController {
       print("games response: $response");
 
       if (response.statusCode == 200 && response.data['success'] == true) {
-        final list = List.from(response.data['data']);
+        final list = List.from(response.data['data']['results']);
         final games = list.map((e) => GamePlayed.fromJson(e)).toList();
         allGames.assignAll(games);
         filteredGames.assignAll(games);

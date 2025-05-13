@@ -142,7 +142,7 @@ class _PostDetailsState extends State<PostDetails> {
                               // Display repost form or author info
                               isRepostActive
                                   ? RepostForm(
-                                      postId: _postDetails!.id!,
+                                      slug: _postDetails!.slug!,
                                       authController: authController,
                                       postController: postController,
                                       formKey: formKey,

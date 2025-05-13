@@ -261,7 +261,7 @@ class CommunityRepository extends Get.GetxController {
       if (response.statusCode == 200) {
         final apiResponse = response.data;
         if (apiResponse['success'] == true && apiResponse['data'] != null) {
-          var list = List.from(apiResponse['data']);
+          var list = List.from(apiResponse['data']['results']);
           var communities =
               list.map((e) => CommunityModel.fromJson(e)).toList();
           debugPrint("${communities.length} communities found");

@@ -243,9 +243,10 @@ class TeamRepository extends GetxController {
       if (response.statusCode == 200) {
         final responseData = response.data;
         final success = responseData['success'] ?? false;
+        print(response.data);
 
         if (success) {
-          final data = responseData['data'] ?? [];
+          final data = responseData['data']['results'] ?? [];
           var teams = (data as List).map((e) => TeamModel.fromJson(e)).toList();
           debugPrint("${teams.length} teams found");
           _allTeam(teams);

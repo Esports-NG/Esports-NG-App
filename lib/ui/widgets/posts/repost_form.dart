@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RepostForm extends StatelessWidget {
-  final int postId;
+  final String slug;
   final AuthRepository authController;
   final PostRepository postController;
   final GlobalKey<FormState> formKey;
@@ -17,7 +17,7 @@ class RepostForm extends StatelessWidget {
 
   const RepostForm({
     Key? key,
-    required this.postId,
+    required this.slug,
     required this.authController,
     required this.postController,
     required this.formKey,
@@ -46,7 +46,7 @@ class RepostForm extends StatelessWidget {
               onTap: () {
                 if (formKey.currentState!.validate() &&
                     postController.postStatus != PostStatus.loading) {
-                  postController.rePost(postId, 'quote').then((value) {
+                  postController.rePost(slug, 'quote').then((value) {
                     onCancel();
                   });
                 }

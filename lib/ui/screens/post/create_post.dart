@@ -57,10 +57,15 @@ class _CreatePostState extends State<CreatePost> {
       postController.postId.value = widget.slug!;
       postController.postAs.value = widget.postAs!;
       postController.postName.value = widget.postName!;
-    } else {
-      postController.postId.value = authController.user!.slug!;
+    } else if (authController.user != null) {
+      postController.postId.value = authController.user!.slug ?? '';
       postController.postAs.value = "user";
-      postController.postName.value = authController.user!.fullName!;
+      postController.postName.value = authController.user!.fullName ?? '';
+    } else {
+      // Handle case when user is null
+      postController.postId.value = '';
+      postController.postAs.value = "user";
+      postController.postName.value = '';
     }
   }
 

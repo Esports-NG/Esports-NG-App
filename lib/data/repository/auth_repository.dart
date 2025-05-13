@@ -446,6 +446,7 @@ class AuthRepository extends Get.GetxController {
 
       if (responseData['success'] == true && responseData['data'] != null) {
         var userModel = UserModel.fromJson(responseData['data']);
+        print("slug : ${userModel.slug}");
         mUser(userModel);
         pref!.setUser(userModel);
       } else {

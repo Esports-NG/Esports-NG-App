@@ -265,12 +265,12 @@ class EventRepository extends Get.GetxController
       final response = await apiCall();
 
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        print(response.data);
         final apiResponse = EventApiResponse.fromJson(
             response.data is Map<String, dynamic>
                 ? response.data
-                : {'success': true, 'data': response.data},
+                : {'success': true, 'data': response.data['data']},
             fromJson);
-
         if (apiResponse.message != null) {
           Helpers().showCustomSnackbar(message: apiResponse.message!);
         }
@@ -420,7 +420,8 @@ class EventRepository extends Get.GetxController
 
   Future<List<EventModel>?> getMyEvents(bool? firstTime) async {
     return _safeApiCall(() => _dio.get(ApiLink.getMyEvents), fromJson: (data) {
-      return (data as List<dynamic>)
+      print(data);
+      return (data['results'] as List<dynamic>)
           .map((e) => EventModel.fromJson(e))
           .toList();
     }, setStatus: (loading) {

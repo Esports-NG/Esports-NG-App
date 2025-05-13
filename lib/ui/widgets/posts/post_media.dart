@@ -84,7 +84,7 @@ class PostMedia extends StatelessWidget {
                     ),
                     child: Center(
                       child: CustomText(
-                        title: tag.title,
+                        title: "${tag.title}",
                         color: AppColor().primaryWhite,
                         textAlign: TextAlign.center,
                         size: 12,

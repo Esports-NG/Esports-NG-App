@@ -33,8 +33,16 @@ class _ActivitiesState extends State<Activities>
   var tournamentController = Get.put(TournamentRepository());
 
   final authController = Get.put(AuthRepository());
-  PagingController<int, ActivityModel> _pagingController =
-      PagingController<int, ActivityModel>(firstPageKey: 1);
+  late final PagingController<int, ActivityModel> _pagingController;
+
+  @override
+  void initState() {
+    _pagingController = PagingController<int, ActivityModel>(
+      getNextPageKey: (state) => (state.keys?.last ?? 0) + 1,
+      fetchPage: (pageKey) => _fetchPage(pageKey),
+    );
+    super.initState();
+  }
 
   List<ActivityModel> _activities = [];
 
@@ -107,31 +115,24 @@ class _ActivitiesState extends State<Activities>
     }
   }
 
-  Future<void> _fetchPage(int pageKey) async {
+  Future<List<ActivityModel>> _fetchPage(int pageKey) async {
     try {
       if (_nextLink != null && _nextLink != "" && pageKey > 1) {
         var activities = await fetchNextActivities();
-        _pagingController.appendPage(activities, pageKey + 1);
+        return activities;
       } else {
         if (pageKey == 1) {
           var activities = await fetchActivities();
 
-          _pagingController.appendPage(activities, pageKey + 1);
+          return activities;
         } else {
-          _pagingController.appendLastPage([]);
+          return [];
         }
       }
     } catch (err) {
-      _pagingController.error = err;
+      // _pagingController.error = err;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    return [];
   }
 
   @override
@@ -141,33 +142,37 @@ class _ActivitiesState extends State<Activities>
         // 2
         () => _pagingController.refresh(),
       ),
-      child: PagedListView.separated(
-        addAutomaticKeepAlives: true,
-        cacheExtent: 9999,
-        pagingController: _pagingController,
-        padding: EdgeInsets.only(top: 10, bottom: 50),
-        separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-        builderDelegate: PagedChildBuilderDelegate<ActivityModel>(
-            itemBuilder: (context, activity, index) {
-              return activity.livestream != null
-                  ? LivestreamCard(
-                      backgroundColor: _colors[index % _colors.length],
-                      livestream: activity.livestream!,
-                    )
-                  : activity.fixture!.fixtureType == "BR"
-                      ? BrFixtureCard(
-                          backgroundColor: _colors[index % _colors.length],
-                          fixture: activity.fixture!,
-                          getFixtures: () => null,
-                          event: activity.fixture!.tournament!)
-                      : FixtureCard(
-                          backgroundColor: _colors[index % _colors.length],
-                          fixture: activity.fixture!);
-            },
-            firstPageProgressIndicatorBuilder: (context) =>
-                Center(child: ButtonLoader()),
-            newPageProgressIndicatorBuilder: (context) =>
-                Center(child: ButtonLoader())),
+      child: PagingListener(
+        controller: _pagingController,
+        builder: (context, state, fetchNextPage) => PagedListView.separated(
+          addAutomaticKeepAlives: true,
+          cacheExtent: 9999,
+          state: state,
+          fetchNextPage: fetchNextPage,
+          padding: EdgeInsets.only(top: 10, bottom: 50),
+          separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+          builderDelegate: PagedChildBuilderDelegate<ActivityModel>(
+              itemBuilder: (context, activity, index) {
+                return activity.livestream != null
+                    ? LivestreamCard(
+                        backgroundColor: _colors[index % _colors.length],
+                        livestream: activity.livestream!,
+                      )
+                    : activity.fixture!.fixtureType == "BR"
+                        ? BrFixtureCard(
+                            backgroundColor: _colors[index % _colors.length],
+                            fixture: activity.fixture!,
+                            getFixtures: () => null,
+                            event: activity.fixture!.tournament!)
+                        : FixtureCard(
+                            backgroundColor: _colors[index % _colors.length],
+                            fixture: activity.fixture!);
+              },
+              firstPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader()),
+              newPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader())),
+        ),
       ),
     );
   }

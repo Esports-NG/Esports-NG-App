@@ -57,221 +57,226 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor().primaryBackGroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              alignment: Alignment.bottomCenter,
-              clipBehavior: Clip.none,
-              children: [
-                authController.user!.profile!.cover == null
-                    ? Container(
-                        height: Get.height * 0.15,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/images/png/account_header.png'),
-                              opacity: 0.2),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () => Helpers().showImagePopup(
-                            context, "${authController.user!.profile!.cover}"),
-                        child: CachedNetworkImage(
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.bottomCenter,
+                clipBehavior: Clip.none,
+                children: [
+                  authController.user!.profile!.cover == null
+                      ? Container(
                           height: Get.height * 0.15,
-                          width: double.infinity,
-                          progressIndicatorBuilder: (context, url, progress) =>
-                              Center(
-                            child: SizedBox(
-                              height: Get.height * 0.05,
-                              width: Get.height * 0.05,
-                              child: CircularProgressIndicator(
-                                  color: AppColor().primaryWhite,
-                                  value: progress.progress),
-                            ),
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                    'assets/images/png/account_header.png'),
+                                opacity: 0.2),
                           ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error, color: AppColor().primaryColor),
-                          imageUrl: '${authController.user!.profile!.cover}',
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10)),
-                              image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                  opacity: 0.6),
+                        )
+                      : GestureDetector(
+                          onTap: () => Helpers().showImagePopup(context,
+                              "${authController.user!.profile!.cover}"),
+                          child: CachedNetworkImage(
+                            height: Get.height * 0.15,
+                            width: double.infinity,
+                            progressIndicatorBuilder:
+                                (context, url, progress) => Center(
+                              child: SizedBox(
+                                height: Get.height * 0.05,
+                                width: Get.height * 0.05,
+                                child: CircularProgressIndicator(
+                                    color: AppColor().primaryWhite,
+                                    value: progress.progress),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Icon(
+                                Icons.error,
+                                color: AppColor().primaryColor),
+                            imageUrl: '${authController.user!.profile!.cover}',
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10)),
+                                image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    opacity: 0.6),
+                              ),
                             ),
                           ),
                         ),
+                  Positioned(
+                    top: Get.height * 0.1,
+                    child: GestureDetector(
+                      onTap: () => Helpers().showImagePopup(context,
+                          "${authController.user!.profile!.profilePicture}"),
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          OtherImage(
+                            itemSize: Get.height * 0.11,
+                            image: authController.user!.profile!.profilePicture,
+                          ),
+                          if (authController.user!.isVerified! == true)
+                            SvgPicture.asset(
+                                "assets/images/svg/check_badge.svg")
+                        ],
                       ),
-                Positioned(
-                  top: Get.height * 0.1,
-                  child: GestureDetector(
-                    onTap: () => Helpers().showImagePopup(context,
-                        "${authController.user!.profile!.profilePicture}"),
-                    child: Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        OtherImage(
-                          itemSize: Get.height * 0.11,
-                          image: authController.user!.profile!.profilePicture,
+                    ),
+                  ),
+                  Positioned(
+                    right: Get.height * 0.03,
+                    bottom: Get.height * 0.05,
+                    child: InkWell(
+                      onTap: () => showPopupMenu(),
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                            color: AppColor().primaryWhite.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Icon(
+                          Icons.settings,
+                          size: 25,
+                          color: AppColor().primaryWhite,
                         ),
-                        if (authController.user!.isVerified! == true)
-                          SvgPicture.asset("assets/images/svg/check_badge.svg")
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: Get.height * 0.03,
-                  bottom: Get.height * 0.05,
-                  child: InkWell(
-                    onTap: () => showPopupMenu(),
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                          color: AppColor().primaryWhite.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Icon(
-                        Icons.settings,
-                        size: 25,
-                        color: AppColor().primaryWhite,
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Gap(Get.height * 0.1),
-            Obx(() {
-              return CustomText(
-                title: '@ ${authController.user?.userName ?? 'yourusername'}',
+                ],
+              ),
+              Gap(Get.height * 0.1),
+              Obx(() {
+                return CustomText(
+                  title: '@ ${authController.user?.userName ?? 'yourusername'}',
+                  size: 16,
+                  fontFamily: 'Inter',
+                  textAlign: TextAlign.start,
+                  color: AppColor().lightItemsColor,
+                );
+              }),
+              Gap(Get.height * 0.01),
+              Obx(() {
+                return CustomText(
+                  title: authController.user!.fullName!.toCapitalCase(),
+                  size: 20,
+                  fontFamily: 'InterBold',
+                  textAlign: TextAlign.start,
+                  color: AppColor().primaryWhite,
+                );
+              }),
+              const Gap(5),
+              CustomText(
+                title: authController.user?.bio,
                 size: 16,
                 fontFamily: 'Inter',
                 textAlign: TextAlign.start,
                 color: AppColor().lightItemsColor,
-              );
-            }),
-            Gap(Get.height * 0.01),
-            Obx(() {
-              return CustomText(
-                title: authController.user!.fullName!.toCapitalCase(),
-                size: 20,
-                fontFamily: 'InterBold',
-                textAlign: TextAlign.start,
-                color: AppColor().primaryWhite,
-              );
-            }),
-            const Gap(5),
-            CustomText(
-              title: authController.user?.bio,
-              size: 16,
-              fontFamily: 'Inter',
-              textAlign: TextAlign.start,
-              color: AppColor().lightItemsColor,
-            ),
-            Gap(Get.height * 0.03),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-              child: ListView.separated(
-                physics: const ScrollPhysics(),
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: accountItem.length,
-                separatorBuilder: (context, index) => Divider(
-                  color: AppColor().lightItemsColor.withOpacity(0.2),
-                  height: 0,
-                  thickness: 0.5,
-                ),
-                itemBuilder: (context, index) {
-                  var item = accountItem[index];
-                  return InkWell(
-                    splashColor: AppColor().primaryColor,
-                    onTap: () {
-                      debugPrint(item.title);
-                      setState(() {
-                        accountTab = index;
-                        if (item.title == 'Logout') {
-                          logOutDialog(context);
-                        } else if (item.title == 'Ads') {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: AppColor().primaryBgColor,
-                              content: const ComingSoonPopup(),
-                            ),
-                          );
-                        } else if (item.title == 'Posts') {
-                          Get.to(() => const MyPostWidget());
-                        } else if (item.title == "Referrals") {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: AppColor().primaryBgColor,
-                              content: const ComingSoonPopup(),
-                            ),
-                          );
-                        } else if (item.title == "Wallet") {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: AppColor().primaryBgColor,
-                              content: const ComingSoonPopup(),
-                            ),
-                          );
-                        } else {
-                          Get.to(() => AccountDetails(
-                                title: item.title,
-                              ));
-                        }
-                      });
-                    },
-                    child: Container(
-                      height: Get.height * 0.065,
-                      padding: EdgeInsets.all(Get.height * 0.02),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomText(
-                            title: item.title,
-                            size: 16,
-                            fontFamily: 'InterMedium',
-                            textAlign: TextAlign.start,
-                            color: item.title == 'Logout'
-                                ? AppColor().primaryRed
-                                : accountTab == index
-                                    ? AppColor().primaryWhite
-                                    : AppColor().lightItemsColor,
-                          ),
-                          Visibility(
-                              visible: item.title != "Logout",
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: accountTab == index
-                                    ? AppColor().primaryWhite
-                                    : AppColor().lightItemsColor,
-                                size: 16,
-                              ))
-                        ],
-                      ),
-                    ),
-                  );
-                },
               ),
-            ),
-            Gap(Get.height * 0.04),
-          ],
+              Gap(Get.height * 0.03),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                child: ListView.separated(
+                  physics: const ScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: accountItem.length,
+                  separatorBuilder: (context, index) => Divider(
+                    color: AppColor().lightItemsColor.withOpacity(0.2),
+                    height: 0,
+                    thickness: 0.5,
+                  ),
+                  itemBuilder: (context, index) {
+                    var item = accountItem[index];
+                    return InkWell(
+                      splashColor: AppColor().primaryColor,
+                      onTap: () {
+                        debugPrint(item.title);
+                        setState(() {
+                          accountTab = index;
+                          if (item.title == 'Logout') {
+                            logOutDialog(context);
+                          } else if (item.title == 'Ads') {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: AppColor().primaryBgColor,
+                                content: const ComingSoonPopup(),
+                              ),
+                            );
+                          } else if (item.title == 'Posts') {
+                            Get.to(() => const MyPostWidget());
+                          } else if (item.title == "Referrals") {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: AppColor().primaryBgColor,
+                                content: const ComingSoonPopup(),
+                              ),
+                            );
+                          } else if (item.title == "Wallet") {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: AppColor().primaryBgColor,
+                                content: const ComingSoonPopup(),
+                              ),
+                            );
+                          } else {
+                            Get.to(() => AccountDetails(
+                                  title: item.title,
+                                ));
+                          }
+                        });
+                      },
+                      child: Container(
+                        height: Get.height * 0.065,
+                        padding: EdgeInsets.all(Get.height * 0.02),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomText(
+                              title: item.title,
+                              size: 16,
+                              fontFamily: 'InterMedium',
+                              textAlign: TextAlign.start,
+                              color: item.title == 'Logout'
+                                  ? AppColor().primaryRed
+                                  : accountTab == index
+                                      ? AppColor().primaryWhite
+                                      : AppColor().lightItemsColor,
+                            ),
+                            Visibility(
+                                visible: item.title != "Logout",
+                                child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: accountTab == index
+                                      ? AppColor().primaryWhite
+                                      : AppColor().lightItemsColor,
+                                  size: 16,
+                                ))
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Gap(Get.height * 0.04),
+            ],
+          ),
         ),
       ),
     );

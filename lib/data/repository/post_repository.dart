@@ -272,12 +272,12 @@ class PostRepository extends Get.GetxController {
     }
   }
 
-  Future deletePost(int postId) async {
+  Future deletePost(String slug) async {
     try {
       EasyLoading.show(status: 'Deleting post...');
       _postStatus(PostStatus.loading);
 
-      final response = await _dio.delete("${ApiLink.deletePost}$postId/");
+      final response = await _dio.delete("${ApiLink.deletePost}$slug/");
 
       if (response.statusCode == 200) {
         _postStatus(PostStatus.success);
@@ -298,17 +298,18 @@ class PostRepository extends Get.GetxController {
     }
   }
 
-  Future rePost(int postId, String title) async {
+  Future rePost(String slug, String title) async {
     try {
       EasyLoading.show(status: 'Reposting...');
       _postStatus(PostStatus.loading);
+      print(slug);
 
       Response response;
       if (title == 'quote') {
         final data = {"body": authController.commentController.text};
-        response = await _dio.post("${ApiLink.post}$postId/quote/", data: data);
+        response = await _dio.post("${ApiLink.post}$slug/quote/", data: data);
       } else {
-        response = await _dio.post("${ApiLink.post}$postId/repost/");
+        response = await _dio.post("${ApiLink.post}$slug/repost/");
       }
 
       if (response.statusCode == 201) {
@@ -453,7 +454,8 @@ class PostRepository extends Get.GetxController {
       }
 
       final response = await _dio.get(ApiLink.getMyPost);
-      final responseData = response.data['data'];
+      final responseData = response.data['data']['results'];
+      print(response);
 
       if (responseData is List) {
         var myPosts = responseData.map((e) => PostModel.fromJson(e)).toList();

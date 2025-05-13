@@ -606,7 +606,8 @@ class _RepostDetailsState extends State<RepostDetails> {
                                             onTap: () {
                                               if (index == 0) {
                                                 postController.rePost(
-                                                    widget.item.id!, 'repost');
+                                                    widget.item.slug!,
+                                                    'repost');
                                               } else {}
                                               Get.back();
                                             },
