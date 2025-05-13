@@ -56,13 +56,13 @@ class PostActions extends StatelessWidget {
       ),
       likeBuilder: (bool isLiked) {
         return Icon(isLiked ? IconsaxPlusBold.heart : IconsaxPlusLinear.heart,
-            color: isLiked ? AppColor().primaryColor : AppColor().primaryWhite,
+            color: isLiked ? AppColor().primaryColor : AppColor().greyTwo,
             size: 20.sp);
       },
       likeCountPadding: EdgeInsets.only(left: 5.r),
       likeCount: post.likeCount,
       countBuilder: (int? count, bool isLiked, String text) {
-        var color = AppColor().primaryWhite;
+        var color = AppColor().greyTwo;
         return CustomText(
             title: "$count ${count == 1 ? "like" : "likes"}",
             size: 12,
@@ -79,7 +79,7 @@ class PostActions extends StatelessWidget {
         InkWell(
           child: Icon(
             IconsaxPlusLinear.message,
-            color: AppColor().primaryWhite,
+            color: AppColor().greyTwo,
             size: 20.sp,
           ),
           onTap: () {},
@@ -90,7 +90,7 @@ class PostActions extends StatelessWidget {
           size: 12,
           fontFamily: 'InterSemiBold',
           textAlign: TextAlign.start,
-          color: AppColor().primaryWhite,
+          color: AppColor().greyTwo,
         ),
       ],
     );
@@ -106,7 +106,7 @@ class PostActions extends StatelessWidget {
         children: [
           Icon(
             IconsaxPlusLinear.export,
-            color: AppColor().primaryWhite,
+            color: AppColor().greyTwo,
             size: 20.sp,
           ),
           Gap(Get.height * 0.01),
@@ -115,7 +115,7 @@ class PostActions extends StatelessWidget {
             size: 12,
             fontFamily: "InterSemiBold",
             textAlign: TextAlign.start,
-            color: AppColor().primaryWhite,
+            color: AppColor().greyTwo,
           ),
         ],
       ),
@@ -231,14 +231,14 @@ class PostActions extends StatelessWidget {
                     ),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: AppColor().primaryWhite,
+                      color: AppColor().greyTwo,
                       width: 1,
                     ),
                   ),
                 ),
           Icon(
             Icons.keyboard_arrow_down,
-            color: AppColor().primaryWhite,
+            color: AppColor().greyTwo,
             size: Get.height * 0.025,
           ),
         ],
