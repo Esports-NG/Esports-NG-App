@@ -31,7 +31,7 @@ class PostMedia extends StatelessWidget {
         GestureDetector(
           onTap: () => Helpers().showImagePopup(context, imageUrl),
           child: CachedNetworkImage(
-            height: Get.height * 0.4,
+            height: Get.height * 0.35,
             width: double.infinity,
             progressIndicatorBuilder: (context, url, progress) => Center(
               child: SizedBox(
