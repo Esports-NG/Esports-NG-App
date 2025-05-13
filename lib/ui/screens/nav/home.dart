@@ -93,8 +93,8 @@ class _HomePageState extends State<HomePage>
           Padding(
             padding: EdgeInsets.only(
               top: Get.height * 0.02,
-              left: Get.height * 0.02,
-              right: Get.height * 0.02,
+              left: Get.height * 0.01,
+              right: Get.height * 0.01,
             ),
             child: NestedScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -119,13 +119,16 @@ class _HomePageState extends State<HomePage>
                                         children: [
                                           OtherImage(
                                               image: authController.user!
-                                                  .profile!.profilePicture),
+                                                  .profile!.profilePicture,
+                                              width: Get.height * 0.045,
+                                              height: Get.height * 0.045,
+                                                  ),
                                           if (authController
                                                   .user!.isVerified! ==
                                               true)
                                             SvgPicture.asset(
                                               "assets/images/svg/check_badge.svg",
-                                              height: Get.height * 0.02,
+                                              height: Get.height * 0.015,
                                             )
                                         ]),
                                   ),
@@ -215,7 +218,7 @@ class _HomePageState extends State<HomePage>
                                       color: AppColor().primaryWhite,
                                       fontFamily: 'InterMedium',
                                       fontSize: 14,
-                                      height: Get.height * 0.0019,
+                                      //height: Get.height * 0.0019,
                                     ),
                                   )),
                               Gap(Get.height * 0.004),

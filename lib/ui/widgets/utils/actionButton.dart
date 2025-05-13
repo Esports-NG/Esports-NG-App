@@ -26,19 +26,22 @@ class _ActionButtonState extends State<ActionButton> {
       onTap: () {
         _showItemListDialog(context);
       },
-      child: Container(
-          // padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-              color: AppColor().primaryColor,
-              borderRadius: BorderRadius.circular(999)),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Icon(
-              Icons.add,
-              color: AppColor().primaryWhite,
-              size: 30,
-            ),
-          )),
+      child: Padding(
+        padding: EdgeInsets.only(top: Get.height * 0.04),
+        child: Container(
+            // padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+                color: AppColor().primaryColor,
+                borderRadius: BorderRadius.circular(999)),
+            child: Padding(
+              padding: EdgeInsets.all(Get.height * 0.018),
+              child: Icon(
+                Icons.add,
+                color: AppColor().primaryWhite,
+                size: Get.width * 0.06,
+              ),
+            )),
+      ),
     );
   }
 
