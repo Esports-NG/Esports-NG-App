@@ -112,8 +112,11 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
 
   Future getParticipants() async {
     if (widget.item.tournamentType == "team") {
-      List<RoasterModel> teamParticipantList = (await tournamentController
-          .getTeamTournamentParticipants(widget.item.id!))!;
+      List<dynamic> participantResponse = (await tournamentController
+          .getTeamTournamentParticipants(widget.item.slug!))!;
+      List<RoasterModel> teamParticipantList = participantResponse
+          .map((item) => RoasterModel.fromJson(item))
+          .toList();
       setState(() {
         _teamParticipantList = teamParticipantList;
         if (teamParticipantList
@@ -132,10 +135,13 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
         _isRegisterLoading = false;
       });
     } else {
-      List<PlayerModel> participantList = (await tournamentController
-          .getTournamentParticipants(widget.item.id!))!;
-      List<WaitlistModel> waitlist =
-          (await tournamentController.getTournamentWaitlist(widget.item.id!))!;
+      List<dynamic> participantResponse = (await tournamentController
+          .getTournamentParticipants(widget.item.slug!))!;
+      List<PlayerModel> participantList = participantResponse
+          .map((item) => PlayerModel.fromJson(item))
+          .toList();
+      List<WaitlistModel> waitlist = (await tournamentController
+          .getTournamentWaitlist(widget.item.slug!))!;
       setState(() {
         _waitlist = waitlist;
         _participantList = participantList;
@@ -167,7 +173,8 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
     setState(() {
       _isFetchingFixtures = true;
     });
-    var fixturesList = await tournamentController.getFixtures(widget.item.id!);
+    var fixturesList =
+        await tournamentController.getFixtures(widget.item.slug!);
     setState(() {
       _fixturesList = fixturesList!;
       _isFetchingFixtures = false;
@@ -328,7 +335,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                     showDialog(
                                       context: context,
                                       builder: (context) => ChooseTeamDialog(
-                                        id: _eventDetails!.id!,
+                                        slug: _eventDetails!.slug!,
                                         isRegistered: _isRegistered,
                                       ),
                                     );
@@ -343,14 +350,14 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                     if (_isRegistered) {
                                       await tournamentController
                                           .unregisterForEvent(
-                                              _eventDetails!.id!,
+                                              _eventDetails!.slug!,
                                               "player",
-                                              _participantProfile!.id!);
+                                              _participantProfile!.slug!);
                                       _isRegistered = false;
                                     } else {
                                       var success = await tournamentController
                                           .registerForTournament(
-                                              _eventDetails!.id!);
+                                              _eventDetails!.slug!);
                                       if (success) {
                                         setState(() {
                                           _isRegistered = true;
@@ -463,49 +470,49 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                               ]),
                                   ),
                                 ),
-                                Gap(Get.height * 0.02),
-                                Expanded(
-                                  child: CustomFillOption(
-                                    buttonColor: AppColor()
-                                        .primaryBackGroundColor
-                                        .withOpacity(0.7),
-                                    borderColor: AppColor().greyEight,
-                                    onTap: () => showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        backgroundColor:
-                                            AppColor().primaryBgColor,
-                                        content: const ComingSoonPopup(),
-                                      ),
-                                    ),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.sms_outlined,
-                                            color: AppColor().primaryWhite,
-                                            size: Get.height * 0.015,
-                                          ),
-                                          Gap(Get.height * 0.01),
-                                          CustomText(
-                                              title: 'Message',
-                                              size: 14,
-                                              fontFamily: 'Inter',
-                                              color: AppColor().primaryWhite),
-                                          Gap(Get.height * 0.01),
-                                          Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color: AppColor().primaryColor,
-                                            size: Get.height * 0.015,
-                                          ),
-                                        ]),
-                                  ),
-                                ),
+                                // Gap(Get.height * 0.02),
+                                // Expanded(
+                                //   child: CustomFillOption(
+                                //     buttonColor: AppColor()
+                                //         .primaryBackGroundColor
+                                //         .withOpacity(0.7),
+                                //     borderColor: AppColor().greyEight,
+                                //     onTap: () => showDialog(
+                                //       context: context,
+                                //       builder: (context) => AlertDialog(
+                                //         elevation: 0,
+                                //         shape: RoundedRectangleBorder(
+                                //             borderRadius:
+                                //                 BorderRadius.circular(10)),
+                                //         backgroundColor:
+                                //             AppColor().primaryBgColor,
+                                //         content: const ComingSoonPopup(),
+                                //       ),
+                                //     ),
+                                //     child: Row(
+                                //         mainAxisAlignment:
+                                //             MainAxisAlignment.center,
+                                //         children: [
+                                //           Icon(
+                                //             Icons.sms_outlined,
+                                //             color: AppColor().primaryWhite,
+                                //             size: Get.height * 0.015,
+                                //           ),
+                                //           Gap(Get.height * 0.01),
+                                //           CustomText(
+                                //               title: 'Message',
+                                //               size: 14,
+                                //               fontFamily: 'Inter',
+                                //               color: AppColor().primaryWhite),
+                                //           Gap(Get.height * 0.01),
+                                //           Icon(
+                                //             Icons.keyboard_arrow_down,
+                                //             color: AppColor().primaryColor,
+                                //             size: Get.height * 0.015,
+                                //           ),
+                                //         ]),
+                                //   ),
+                                // ),
                               ],
                             ),
                             Gap(Get.height * 0.03),
@@ -816,26 +823,26 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                                   itemCount: _fixturesList.take(10).length),
                     ),
                   ),
-                  Gap(Get.height * 0.005),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {
-                        Get.to(() => FixturesAndResults(
-                              event: _eventDetails!,
-                            ));
-                      },
-                      title: 'Livestreams',
-                    ),
-                  ),
-                  Gap(Get.height * 0.02),
-                  const ComingSoonWidget(),
+                  // Gap(Get.height * 0.005),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {
+                  //       Get.to(() => FixturesAndResults(
+                  //             event: _eventDetails!,
+                  //           ));
+                  //     },
+                  //     title: 'Livestreams',
+                  //   ),
+                  // ),
+                  // Gap(Get.height * 0.02),
+                  // const ComingSoonWidget(),
                   // Padding(
                   //   padding:
                   //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
@@ -941,85 +948,85 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                       ],
                     ),
                   ),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Tournament Staff',
-                    ),
-                  ),
-                  const ComingSoonWidget(),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {
-                        Get.to(
-                            () => TournamentLeaderboard(event: _eventDetails!));
-                      },
-                      title: 'Tournament Leaderboard',
-                    ),
-                  ),
-                  const Gap(16),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: RankingCard(title: "Rankings"),
-                  ),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Other Tournaments',
-                    ),
-                  ),
-                  const ComingSoonWidget(),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Badges',
-                    ),
-                  ),
-                  const ComingSoonWidget(),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Media, Links and Document',
-                    ),
-                  ),
-                  Gap(Get.height * 0.02),
-                  const ComingSoonWidget(),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {},
+                  //     title: 'Tournament Staff',
+                  //   ),
+                  // ),
+                  // const ComingSoonWidget(),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {
+                  //       Get.to(
+                  //           () => TournamentLeaderboard(event: _eventDetails!));
+                  //     },
+                  //     title: 'Tournament Leaderboard',
+                  //   ),
+                  // ),
+                  // const Gap(16),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: RankingCard(title: "Rankings"),
+                  // ),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {},
+                  //     title: 'Other Tournaments',
+                  //   ),
+                  // ),
+                  // const ComingSoonWidget(),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {},
+                  //     title: 'Badges',
+                  //   ),
+                  // ),
+                  // const ComingSoonWidget(),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {},
+                  //     title: 'Media, Links and Document',
+                  //   ),
+                  // ),
+                  // Gap(Get.height * 0.02),
+                  // const ComingSoonWidget(),
                   Gap(Get.height * 0.04),
                   Padding(
                     padding:

@@ -857,7 +857,7 @@ class _FixtureCardTournamentState extends State<FixtureCardTournament> {
                 ),
                 onPressed: () async {
                   Get.back();
-                  await tournamentController.deleteFixture(fixture.id!);
+                  await tournamentController.deleteFixture(fixture.slug!);
                   await widget.getFixtures();
                 },
               ),

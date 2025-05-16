@@ -72,7 +72,7 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
       _isRegistering = true;
     });
     var response = await http.get(
-        Uri.parse(ApiLink.getEventParticipants(widget.item.id!)),
+        Uri.parse(ApiLink.getEventParticipants(widget.item.slug!)),
         headers: {
           "Content-type": "application/json",
           "Authorization": "JWT ${authController.token}"
@@ -286,15 +286,15 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
                             });
                             if (_isRegistered) {
                               await tournamentController.unregisterForEvent(
-                                  _eventDetails!.id!,
+                                  _eventDetails!.slug!,
                                   "user",
-                                  authController.user!.id!);
+                                  authController.user!.slug!);
                               setState(() {
                                 _isRegistered = false;
                               });
                             } else {
                               await socialEventController
-                                  .registerForSocialEvent(_eventDetails!.id!);
+                                  .registerForSocialEvent(_eventDetails!.slug!);
                               setState(() {
                                 _isRegistered = true;
                               });

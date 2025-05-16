@@ -28,7 +28,7 @@ class _PlayerApplicationListState extends State<PlayerApplicationList> {
       _isLoading = true;
     });
     var teamApplications =
-        await teamController.getTeamApplications(widget.item.id!);
+        await teamController.getTeamApplications(widget.item.slug!);
     setState(() {
       _isLoading = false;
       _teamApplications = teamApplications;

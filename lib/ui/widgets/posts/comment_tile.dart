@@ -187,7 +187,7 @@ class _CommentTileState extends State<CommentTile> {
               }
               _isLiked = !isLiked;
             });
-            await postController.likeComment(widget.item.id!);
+            await postController.likeComment(widget.item.slug!);
             return null;
           },
           circleColor: CircleColor(

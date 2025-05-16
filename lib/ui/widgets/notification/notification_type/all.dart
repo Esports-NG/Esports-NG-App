@@ -4,6 +4,7 @@ import 'package:e_sport/ui/widgets/notification/notification_item.dart';
 import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -50,7 +51,7 @@ class _AllNotificationState extends State<AllNotification> {
   Widget build(BuildContext context) {
     final notificationController = Get.put(NotificationRepository());
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0, top: 18),
+      padding: EdgeInsets.only(bottom: 16.r, top: 18.r),
       child: RefreshIndicator(
         onRefresh: () => Future.sync(() => _pagingController.refresh()),
         child: PagingListener(

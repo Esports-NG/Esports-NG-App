@@ -59,33 +59,33 @@ class ProfileActionButtons extends StatelessWidget {
                       ]),
           ),
         ),
-        Gap(Get.height * 0.02),
-        Expanded(
-          child: CustomFillOption(
-            buttonColor: AppColor().primaryBackGroundColor.withOpacity(0.7),
-            borderColor: AppColor().greyEight,
-            onTap: onMessageTap,
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(
-                IconsaxPlusLinear.message,
-                color: AppColor().primaryWhite,
-                size: 16,
-              ),
-              Gap(Get.height * 0.01),
-              CustomText(
-                  title: 'Message',
-                  size: 14,
-                  fontFamily: 'Inter',
-                  color: AppColor().primaryWhite),
-              Gap(Get.height * 0.01),
-              Icon(
-                Icons.keyboard_arrow_down,
-                color: AppColor().primaryColor,
-                size: Get.height * 0.015,
-              ),
-            ]),
-          ),
-        ),
+        // Gap(Get.height * 0.02),
+        // Expanded(
+        //   child: CustomFillOption(
+        //     buttonColor: AppColor().primaryBackGroundColor.withOpacity(0.7),
+        //     borderColor: AppColor().greyEight,
+        //     onTap: onMessageTap,
+        //     child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        //       Icon(
+        //         IconsaxPlusLinear.message,
+        //         color: AppColor().primaryWhite,
+        //         size: 16,
+        //       ),
+        //       Gap(Get.height * 0.01),
+        //       CustomText(
+        //           title: 'Message',
+        //           size: 14,
+        //           fontFamily: 'Inter',
+        //           color: AppColor().primaryWhite),
+        //       Gap(Get.height * 0.01),
+        //       Icon(
+        //         Icons.keyboard_arrow_down,
+        //         color: AppColor().primaryColor,
+        //         size: Get.height * 0.015,
+        //       ),
+        //     ]),
+        //   ),
+        // ),
       ],
     );
   }

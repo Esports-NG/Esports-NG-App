@@ -241,7 +241,7 @@ String teamApplicationModelToJson(List<TeamApplicationModel> data) =>
 
 class TeamApplicationModel {
   final int? id;
-  final Team? team;
+  final TeamModel? team;
   final String? message;
   final List<PlayerModel>? playerProfiles;
   final String? role;
@@ -260,7 +260,7 @@ class TeamApplicationModel {
   factory TeamApplicationModel.fromJson(Map<String, dynamic> json) =>
       TeamApplicationModel(
           id: json["id"],
-          team: json["team"] == null ? null : Team.fromJson(json["team"]),
+          team: json["team"] == null ? null : TeamModel.fromJson(json["team"]),
           message: json["message"],
           playerProfiles: json["player_profiles"] == null
               ? []

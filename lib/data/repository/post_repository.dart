@@ -100,7 +100,7 @@ class PostRepository extends Get.GetxController {
         baseUrl: ApiLink.baseurl,
         contentType: 'application/json',
         responseType: ResponseType.json,
-        receiveTimeout: Duration(seconds: 20)));
+        receiveTimeout: Duration(seconds: 90)));
 
     // Add an interceptor to handle authentication
     _dio.interceptors.add(InterceptorsWrapper(
@@ -243,14 +243,14 @@ class PostRepository extends Get.GetxController {
     }
   }
 
-  Future editPost(int postId) async {
+  Future editPost(String postSlug) async {
     try {
       debugPrint('editing post...');
       _createPostStatus(CreatePostStatus.loading);
 
       final data = {"body": postBodyController.text.trim()};
       final response =
-          await _dio.put("${ApiLink.editPost}$postId/", data: data);
+          await _dio.put("${ApiLink.editPost}$postSlug/", data: data);
 
       if (response.statusCode == 200) {
         _createPostStatus(CreatePostStatus.success);
@@ -644,9 +644,9 @@ class PostRepository extends Get.GetxController {
     );
   }
 
-  Future likeComment(int commentId) async {
+  Future likeComment(String slug) async {
     return _safeApiCall(
-      () => _dio.put(ApiLink.likeComment(commentId)),
+      () => _dio.put(ApiLink.likeComment(slug)),
     );
   }
 

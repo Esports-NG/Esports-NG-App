@@ -223,7 +223,7 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                                 _isEditing = true;
                               });
                               await playerController.editPlayerProfile(
-                                  widget.player.id!, data);
+                                  widget.player.slug!, data);
                               setState(() {
                                 _isEditing = false;
                               });
@@ -258,7 +258,7 @@ class _EditPlayerProfileState extends State<EditPlayerProfile> {
                               _isDeleting = true;
                             });
                             await playerController
-                                .deletePlayerProfile(widget.player.id!);
+                                .deletePlayerProfile(widget.player.slug!);
                             setState(() {
                               _isDeleting = false;
                             });

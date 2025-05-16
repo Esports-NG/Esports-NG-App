@@ -473,8 +473,7 @@ class AuthRepository extends Get.GetxController {
         "bio": bioController.text.trim()
       };
 
-      final response =
-          await _dio.put('${ApiLink.user}${user!.id}/update/', data: data);
+      final response = await _dio.put(ApiLink.user, data: data);
       final responseData = response.data;
 
       if (responseData['success'] == true) {

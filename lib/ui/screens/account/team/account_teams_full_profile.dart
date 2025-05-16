@@ -145,10 +145,10 @@ class _AccountTeamsFullProfileState extends State<AccountTeamsFullProfile> {
                                         .withOpacity(0.3),
                                     height: Get.height * 0.05,
                                     thickness: 0.5),
-                                tournamentDetails(
-                                    onTap: () {},
-                                    title:
-                                        'Staff (${teamController.teamInbox!.team!.teamStaffs!.length})'),
+                                // tournamentDetails(
+                                //     onTap: () {},
+                                //     title:
+                                //         'Staff (${teamController.teamInbox!.team!.teamStaffs!.length})'),
                                 Gap(Get.height * 0.01),
                               ],
                             ),

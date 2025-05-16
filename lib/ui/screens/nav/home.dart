@@ -118,11 +118,11 @@ class _HomePageState extends State<HomePage>
                                         alignment: Alignment.bottomRight,
                                         children: [
                                           OtherImage(
-                                              image: authController.user!
-                                                  .profile!.profilePicture,
-                                              width: Get.height * 0.045,
-                                              height: Get.height * 0.045,
-                                                  ),
+                                            image: authController
+                                                .user!.profile!.profilePicture,
+                                            width: Get.height * 0.045,
+                                            height: Get.height * 0.045,
+                                          ),
                                           if (authController
                                                   .user!.isVerified! ==
                                               true)
@@ -138,52 +138,52 @@ class _HomePageState extends State<HomePage>
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      InkWell(
-                                        onTap: () {
-                                          // Get.to(() => const Leaderboard());
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              backgroundColor:
-                                                  AppColor().primaryBgColor,
-                                              content: const ComingSoonPopup(),
-                                            ),
-                                          );
-                                        },
-                                        child: Icon(
-                                          IconsaxPlusLinear.shopping_bag,
-                                          color: AppColor().primaryWhite,
-                                          size: 22.sp,
-                                        ),
-                                      ),
-                                      Gap(Get.height * 0.03),
-                                      InkWell(
-                                          onTap: () {
-                                            // Get.to(() => const Messages());
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                elevation: 0,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                backgroundColor:
-                                                    AppColor().primaryBgColor,
-                                                content:
-                                                    const ComingSoonPopup(),
-                                              ),
-                                            );
-                                          },
-                                          child: Icon(IconsaxPlusLinear.message,
-                                              color: Colors.white,
-                                              size: 22.sp)),
-                                      Gap(Get.height * 0.03),
+                                      // InkWell(
+                                      //   onTap: () {
+                                      //     // Get.to(() => const Leaderboard());
+                                      //     showDialog(
+                                      //       context: context,
+                                      //       builder: (context) => AlertDialog(
+                                      //         elevation: 0,
+                                      //         shape: RoundedRectangleBorder(
+                                      //             borderRadius:
+                                      //                 BorderRadius.circular(
+                                      //                     10)),
+                                      //         backgroundColor:
+                                      //             AppColor().primaryBgColor,
+                                      //         content: const ComingSoonPopup(),
+                                      //       ),
+                                      //     );
+                                      //   },
+                                      //   child: Icon(
+                                      //     IconsaxPlusLinear.shopping_bag,
+                                      //     color: AppColor().primaryWhite,
+                                      //     size: 22.sp,
+                                      //   ),
+                                      // ),
+                                      // Gap(Get.height * 0.03),
+                                      // InkWell(
+                                      //     onTap: () {
+                                      //       // Get.to(() => const Messages());
+                                      //       showDialog(
+                                      //         context: context,
+                                      //         builder: (context) => AlertDialog(
+                                      //           elevation: 0,
+                                      //           shape: RoundedRectangleBorder(
+                                      //               borderRadius:
+                                      //                   BorderRadius.circular(
+                                      //                       10)),
+                                      //           backgroundColor:
+                                      //               AppColor().primaryBgColor,
+                                      //           content:
+                                      //               const ComingSoonPopup(),
+                                      //         ),
+                                      //       );
+                                      //     },
+                                      //     child: Icon(IconsaxPlusLinear.message,
+                                      //         color: Colors.white,
+                                      //         size: 22.sp)),
+                                      // Gap(Get.height * 0.03),
                                       InkWell(
                                           onTap: () {
                                             Get.to(

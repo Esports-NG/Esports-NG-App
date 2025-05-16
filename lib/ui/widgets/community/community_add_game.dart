@@ -74,7 +74,7 @@ class _CommunityAddGameState extends State<CommunityAddGame> {
                     _isAdding = true;
                   });
                   await communityController
-                      .addGameToCommunity(widget.community.id!);
+                      .addGameToCommunity(widget.community.slug!);
                   setState(() {
                     _isAdding = false;
                   });

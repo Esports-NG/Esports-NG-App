@@ -27,9 +27,9 @@ var accountItem = [
   CategoryItem(title: 'Teams'),
   CategoryItem(title: 'Communities'),
   CategoryItem(title: 'Events'),
-  CategoryItem(title: 'Wallet'),
-  CategoryItem(title: 'Referrals'),
-  CategoryItem(title: 'Ads'),
+  // CategoryItem(title: 'Wallet'),
+  // CategoryItem(title: 'Referrals'),
+  // CategoryItem(title: 'Ads'),
   CategoryItem(title: 'Logout'),
 ];
 

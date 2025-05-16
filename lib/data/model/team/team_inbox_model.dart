@@ -1,8 +1,9 @@
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/model/team/team_model.dart';
 
 class TeamInboxModel {
   int? id;
-  Team? team;
+  TeamModel? team;
   List<Message>? message;
 
   TeamInboxModel({
@@ -13,7 +14,7 @@ class TeamInboxModel {
 
   factory TeamInboxModel.fromJson(Map<String, dynamic> json) => TeamInboxModel(
         id: json["id"],
-        team: json["team"] == null ? null : Team.fromJson(json["team"]),
+        team: json["team"] == null ? null : TeamModel.fromJson(json["team"]),
         message: json["message"] == null
             ? []
             : List<Message>.from(
@@ -50,73 +51,6 @@ class Message {
         "id": id,
         "name": name,
         "text": text,
-      };
-}
-
-class Team {
-  int? id;
-  Owner? owner;
-  String? name;
-  String? profilePicture;
-  String? cover;
-  GamePlayed? gamePlayed;
-  String? bio;
-  dynamic manager;
-  List<Member>? members;
-  List<dynamic>? teamStaffs;
-  String? membersCount;
-
-  Team({
-    this.id,
-    this.owner,
-    this.name,
-    this.profilePicture,
-    this.cover,
-    this.gamePlayed,
-    this.bio,
-    this.manager,
-    this.members,
-    this.teamStaffs,
-    this.membersCount,
-  });
-
-  factory Team.fromJson(Map<String, dynamic> json) => Team(
-        id: json["id"],
-        owner: json["owner"] == null ? null : Owner.fromJson(json["owner"]),
-        name: json["name"],
-        profilePicture: json["profile_picture"],
-        cover: json["cover"],
-        gamePlayed: json["game_played"] == null
-            ? null
-            : GamePlayed.fromJson(json["game_played"]),
-        bio: json["bio"],
-        manager: json["manager"],
-        members: json["members"] == null
-            ? []
-            : List<Member>.from(
-                json["members"]!.map((x) => Member.fromJson(x))),
-        teamStaffs: json["team_staffs"] == null
-            ? []
-            : List<dynamic>.from(json["team_staffs"]!.map((x) => x)),
-        membersCount: json["members_count"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "owner": owner?.toJson(),
-        "name": name,
-        "profile_picture": profilePicture,
-        "cover": cover,
-        "game_played": gamePlayed?.toJson(),
-        "bio": bio,
-        "manager": manager,
-        "members": members == null
-            ? []
-            : List<dynamic>.from(members!.map((x) => x.toJson())),
-        "team_staffs": teamStaffs == null
-            ? []
-            : List<dynamic>.from(teamStaffs!.map((x) => x)),
-        "members_count": membersCount,
       };
 }
 

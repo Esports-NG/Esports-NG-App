@@ -359,7 +359,7 @@ class CommunityRepository extends Get.GetxController {
   }
 
   // Add game to community
-  Future addGameToCommunity(int commId) async {
+  Future addGameToCommunity(String slug) async {
     try {
       if (addToGamesPlayedValue.value == null ||
           addToGamesPlayedValue.value!.id == null) {
@@ -368,7 +368,7 @@ class CommunityRepository extends Get.GetxController {
       }
 
       final response = await _dio.post(
-          ApiLink.addGameToCommunity(commId, addToGamesPlayedValue.value!.id!));
+          ApiLink.addGameToCommunity(slug, addToGamesPlayedValue.value!.id!));
 
       if (response.statusCode == 200) {
         final apiResponse = response.data;
@@ -389,9 +389,9 @@ class CommunityRepository extends Get.GetxController {
   }
 
   // Block community
-  Future blockCommunity(int id) async {
+  Future blockCommunity(String slug) async {
     try {
-      final response = await _dio.post(ApiLink.blockCommunity(id));
+      final response = await _dio.post(ApiLink.blockCommunity(slug));
 
       if (response.statusCode == 200) {
         final apiResponse = response.data;
@@ -410,7 +410,7 @@ class CommunityRepository extends Get.GetxController {
   }
 
   // Edit community
-  Future editCommunity(int id, Map<String, dynamic> data) async {
+  Future editCommunity(String slug, Map<String, dynamic> data) async {
     try {
       // Create form data
       final formData = FormData.fromMap(
@@ -428,7 +428,7 @@ class CommunityRepository extends Get.GetxController {
       }
 
       final response =
-          await _dio.put(ApiLink.editCommunity(id), data: formData);
+          await _dio.put(ApiLink.editCommunity(slug), data: formData);
 
       if (response.statusCode == 200) {
         final apiResponse = response.data;

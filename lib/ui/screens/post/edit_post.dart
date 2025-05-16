@@ -333,7 +333,7 @@ class _EditPostState extends State<EditPost> {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        postController.editPost(widget.item.id!);
+                        postController.editPost(widget.item.slug!);
                       }
                     },
                     child: Container(

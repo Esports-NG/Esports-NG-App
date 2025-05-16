@@ -220,16 +220,25 @@ class Purpose {
 
 class Comment {
   int? id;
+  String? slug;
   String? body;
   List<UserModel>? likes;
   List<Tag>? tags;
   dynamic image;
   UserModel? user;
 
-  Comment({this.id, this.body, this.likes, this.tags, this.image, this.user});
+  Comment(
+      {this.id,
+      this.body,
+      this.slug,
+      this.likes,
+      this.tags,
+      this.image,
+      this.user});
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         id: json["id"],
+        slug: json["slug"],
         body: json["body"],
         user: UserModel.fromJson(json["user"]),
         likes: json["likes"] == null

@@ -74,7 +74,7 @@ class _TeamAddGameState extends State<TeamAddGame> {
                   setState(() {
                     _isAdding = true;
                   });
-                  await teamController.addGameToTeam(widget.team.id!);
+                  await teamController.addGameToTeam(widget.team.slug!);
                   setState(() {
                     _isAdding = false;
                   });

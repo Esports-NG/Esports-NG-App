@@ -417,10 +417,10 @@ class TeamRepository extends GetxController {
     return null;
   }
 
-  Future addGameToTeam(int teamId) async {
+  Future addGameToTeam(String slug) async {
     try {
       final response = await _dio.post(
-        ApiLink.addGameToTeam(teamId, addToGamesPlayedValue.value!.id!),
+        ApiLink.addGameToTeam(slug, addToGamesPlayedValue.value!.id!),
       );
 
       if (response.statusCode == 200) {
@@ -431,7 +431,7 @@ class TeamRepository extends GetxController {
           final body = {"game_id": addToGamesPlayedValue.value!.id};
 
           final rosterResponse = await _dio.post(
-            ApiLink.createRosterForGame(teamId),
+            ApiLink.createRosterForGame(slug),
             data: body,
           );
 
@@ -496,10 +496,10 @@ class TeamRepository extends GetxController {
     }
   }
 
-  Future<List<TeamApplicationModel>?> getTeamApplications(int id) async {
+  Future<List<TeamApplicationModel>?> getTeamApplications(String slug) async {
     try {
       final response = await _dio.get(
-        ApiLink.getTeamApplications(id),
+        ApiLink.getTeamApplications(slug),
       );
 
       if (response.statusCode == 200) {
@@ -521,10 +521,11 @@ class TeamRepository extends GetxController {
     return null;
   }
 
-  Future takeActionOnApplication(int id, String action, int teamId) async {
+  Future takeActionOnApplication(
+      String slug, String action, String teamSlug) async {
     try {
       final response = await _dio.put(
-        ApiLink.respondToApplication(id, teamId, action),
+        ApiLink.respondToApplication(slug, teamSlug, action),
       );
 
       if (response.statusCode == 200) {
@@ -548,10 +549,10 @@ class TeamRepository extends GetxController {
     }
   }
 
-  Future<List<RoasterModel>> getTeamRoster(int teamId) async {
+  Future<List<RoasterModel>> getTeamRoster(String slug) async {
     try {
       final response = await _dio.get(
-        ApiLink.getRosters(teamId),
+        ApiLink.getRosters(slug),
       );
 
       if (response.statusCode == 200) {
@@ -600,10 +601,10 @@ class TeamRepository extends GetxController {
     }
   }
 
-  Future blockTeam(int id) async {
+  Future blockTeam(String slug) async {
     try {
       final response = await _dio.post(
-        ApiLink.blockTeam(id),
+        ApiLink.blockTeam(slug),
       );
 
       if (response.statusCode == 200) {
@@ -627,7 +628,7 @@ class TeamRepository extends GetxController {
     }
   }
 
-  Future editTeam(int id, Map<String, dynamic> data) async {
+  Future editTeam(String slug, Map<String, dynamic> data) async {
     try {
       final formData = dio.FormData.fromMap({
         "name": data["name"],
@@ -650,7 +651,7 @@ class TeamRepository extends GetxController {
       }
 
       final response = await _dio.put(
-        ApiLink.editTeam(id),
+        ApiLink.editTeam(slug),
         data: formData,
       );
 
