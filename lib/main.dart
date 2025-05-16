@@ -79,8 +79,11 @@ class _ESportAppState extends State<ESportApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: Size(390, 781),
+        designSize: MediaQuery.of(context).size.shortestSide >= 600
+            ? Size(834, 1194)
+            : Size(390, 781),
         minTextAdapt: true,
+        splitScreenMode: true,
         builder: (_, child) {
           return GetMaterialApp.router(
             debugShowCheckedModeBanner: false,
