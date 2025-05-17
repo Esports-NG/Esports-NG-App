@@ -151,7 +151,7 @@ class _EditPostState extends State<EditPost> {
                     children: [
                       CustomFillButton(
                         onTap: () {
-                          postController.deletePost(widget.item.id!);
+                          postController.deletePost(widget.item.slug!);
                           Get.back();
                         },
                         height: 45,
@@ -333,7 +333,7 @@ class _EditPostState extends State<EditPost> {
                       if (_formKey.currentState!.validate() &&
                           postController.createPostStatus !=
                               CreatePostStatus.loading) {
-                        postController.editPost(widget.item.id!);
+                        postController.editPost(widget.item.slug!);
                       }
                     },
                     child: Container(
@@ -475,7 +475,7 @@ class _EditPostState extends State<EditPost> {
                 child: Column(
                   children: [
                     InkWell(
-                      onTap: () => postController.deletePost(widget.item.id!),
+                      onTap: () => postController.deletePost(widget.item.slug!),
                       child: Container(
                         padding: EdgeInsets.all(Get.height * 0.025),
                         decoration: BoxDecoration(

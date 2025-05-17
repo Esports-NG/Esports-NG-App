@@ -180,7 +180,7 @@ class PostInteractionButtons extends StatelessWidget {
                   return InkWell(
                     onTap: () {
                       if (index == 0) {
-                        postController.rePost(post.id!, "repost");
+                        postController.rePost(post.slug!, "repost");
                       } else {
                         onRepostActive();
                       }

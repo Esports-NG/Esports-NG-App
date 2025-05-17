@@ -578,69 +578,69 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ]),
       ),
-      Gap(Get.height * 0.02),
+      // Gap(Get.height * 0.02),
 
-      // Other sections
-      SectionDivider(),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: PageHeaderWidget(
-          onTap: () {},
-          title: 'Livestreams',
-        ),
-      ),
-      Gap(Get.height * 0.02),
-      const ComingSoonWidget(),
+      // // Other sections
+      // SectionDivider(),
+      // Padding(
+      //   padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+      //   child: PageHeaderWidget(
+      //     onTap: () {},
+      //     title: 'Livestreams',
+      //   ),
+      // ),
+      // Gap(Get.height * 0.02),
+      // const ComingSoonWidget(),
 
-      SectionDivider(),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: PageHeaderWidget(
-          onTap: () {},
-          title: 'Qualifications',
-        ),
-      ),
-      Gap(Get.height * 0.02),
-      const ComingSoonWidget(),
+      // SectionDivider(),
+      // Padding(
+      //   padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+      //   child: PageHeaderWidget(
+      //     onTap: () {},
+      //     title: 'Qualifications',
+      //   ),
+      // ),
+      // Gap(Get.height * 0.02),
+      // const ComingSoonWidget(),
 
-      SectionDivider(),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-        child: PageHeaderWidget(
-          onTap: () {},
-          title: 'Media, Links and Document',
-        ),
-      ),
-      Gap(Get.height * 0.02),
-      const ComingSoonWidget(),
+      // SectionDivider(),
+      // Padding(
+      //   padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+      //   child: PageHeaderWidget(
+      //     onTap: () {},
+      //     title: 'Media, Links and Document',
+      //   ),
+      // ),
+      // Gap(Get.height * 0.02),
+      // const ComingSoonWidget(),
 
       SectionDivider(),
 
       // Social Links Section
-      ProfileSocialLinks(socialLinks: [
-        // Uncomment and add your social links as needed
-        // SocialLink(
-        //   iconPath: 'assets/images/svg/discord.svg',
-        //   url: 'https://discord.com/username',
-        //   onTap: () {/* handle tap */},
-        // ),
-        // SocialLink(
-        //   iconPath: 'assets/images/svg/twitter.svg',
-        //   url: 'https://twitter.com/username',
-        //   onTap: () {/* handle tap */},
-        // ),
-        // SocialLink(
-        //   iconPath: 'assets/images/svg/telegram.svg',
-        //   url: 'https://t.me/username',
-        //   onTap: () {/* handle tap */},
-        // ),
-        // SocialLink(
-        //   iconPath: 'assets/images/svg/meduim.svg',
-        //   url: 'https://medium.com/@username',
-        //   onTap: () {/* handle tap */},
-        // ),
-      ]),
-      Gap(Get.height * 0.02),
+      // ProfileSocialLinks(socialLinks: [
+      //   // Uncomment and add your social links as needed
+      //   // SocialLink(
+      //   //   iconPath: 'assets/images/svg/discord.svg',
+      //   //   url: 'https://discord.com/username',
+      //   //   onTap: () {/* handle tap */},
+      //   // ),
+      //   // SocialLink(
+      //   //   iconPath: 'assets/images/svg/twitter.svg',
+      //   //   url: 'https://twitter.com/username',
+      //   //   onTap: () {/* handle tap */},
+      //   // ),
+      //   // SocialLink(
+      //   //   iconPath: 'assets/images/svg/telegram.svg',
+      //   //   url: 'https://t.me/username',
+      //   //   onTap: () {/* handle tap */},
+      //   // ),
+      //   // SocialLink(
+      //   //   iconPath: 'assets/images/svg/meduim.svg',
+      //   //   url: 'https://medium.com/@username',
+      //   //   onTap: () {/* handle tap */},
+      //   // ),
+      // ]),
+      // Gap(Get.height * 0.02),
     ]);
   }
 }

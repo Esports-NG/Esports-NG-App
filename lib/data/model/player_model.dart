@@ -17,6 +17,7 @@ String playerModelToJson(PlayerModel data) => json.encode(data.toJson());
 class PlayerModel {
   int? id;
   Player? player;
+  String? slug;
   dynamic profile;
   List<dynamic>? statistics;
   GamePlayed? gamePlayed;
@@ -29,6 +30,7 @@ class PlayerModel {
     this.player,
     this.profile,
     this.statistics,
+    this.slug,
     this.gamePlayed,
     this.inGameId,
     this.inGameName,
@@ -37,6 +39,7 @@ class PlayerModel {
 
   factory PlayerModel.fromJson(Map<String, dynamic> json) => PlayerModel(
         id: json["id"],
+        slug: json["slug"],
         player: json["player"] == null ? null : Player.fromJson(json["player"]),
         profile: json["profile"],
         statistics: json["statistics"] == null

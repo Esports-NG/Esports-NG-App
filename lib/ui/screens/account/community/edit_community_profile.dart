@@ -414,7 +414,7 @@ class _EditCommunityState extends State<EditCommunityPage> {
                     _isEditing = true;
                   });
                   await communityController.editCommunity(
-                      widget.community.id!, body);
+                      widget.community.slug!, body);
                   setState(() {
                     _isEditing = false;
                   });

@@ -38,7 +38,7 @@ class PostActions extends StatelessWidget {
         _buildProfileMenu(),
         _buildLikeButton(),
         _buildCommentButton(),
-        _buildShareButton(),
+        _buildShareButton(context),
       ],
     );
   }
@@ -96,11 +96,14 @@ class PostActions extends StatelessWidget {
     );
   }
 
-  Widget _buildShareButton() {
+  Widget _buildShareButton(BuildContext context) {
+    final box = context.findRenderObject() as RenderBox?;
+
     return InkWell(
       onTap: () async {
         await Share.share(
-            '${post.author!.userName} posted on Esports NG \nhttps://esportsng.com/post/${post.id}');
+            '${post.author!.userName} posted on Esports NG \nhttps://esportsng.com/post/${post.id}',
+            sharePositionOrigin: box!.localToGlobal(Offset(0, 0)) & box.size);
       },
       child: Row(
         children: [

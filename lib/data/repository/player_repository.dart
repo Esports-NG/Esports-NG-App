@@ -172,7 +172,7 @@ class PlayerRepository extends GetxController {
     }
   }
 
-  Future editPlayerProfile(int id, Map<String, dynamic> data) async {
+  Future editPlayerProfile(String slug, Map<String, dynamic> data) async {
     try {
       final formData = dio.FormData.fromMap({
         "in_game_id": data["in_game_id"],
@@ -185,7 +185,7 @@ class PlayerRepository extends GetxController {
           headers: {"Authorization": "JWT ${authController.token}"});
 
       final response = await _dio.put(
-        ApiLink.editPlayer(id),
+        ApiLink.editPlayer(slug),
         data: formData,
         options: options,
       );
@@ -213,13 +213,13 @@ class PlayerRepository extends GetxController {
     }
   }
 
-  Future deletePlayerProfile(int id) async {
+  Future deletePlayerProfile(String slug) async {
     try {
       final options = dio.Options(
           headers: {"Authorization": "JWT ${authController.token}"});
 
       final response = await _dio.delete(
-        ApiLink.deletePlayer(id),
+        ApiLink.deletePlayer(slug),
         options: options,
       );
 

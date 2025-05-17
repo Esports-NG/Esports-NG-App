@@ -461,10 +461,10 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future registerForTournament(int id) async {
+  Future registerForTournament(String slug) async {
     try {
       var headers = _getAuthHeaders();
-      var response = await dio.put(ApiLink.registerForEvent(id),
+      var response = await dio.put(ApiLink.registerForEvent(slug),
           options: Options(headers: headers));
 
       _handleResponse(response);
@@ -476,10 +476,10 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future registerForTeamTournament(int id, int teamId) async {
+  Future registerForTeamTournament(String slug, String teamSlug) async {
     try {
       var headers = _getAuthHeaders();
-      var response = await dio.put(ApiLink.registerForTeamEvent(id, teamId),
+      var response = await dio.put(ApiLink.registerForTeamEvent(slug, teamSlug),
           options: Options(headers: headers));
 
       _handleResponse(response);
@@ -489,10 +489,10 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future getTournamentWaitlist(int id) async {
+  Future getTournamentWaitlist(String slug) async {
     try {
       var headers = _getAuthHeaders();
-      var response = await dio.get(ApiLink.getEventWaitlist(id),
+      var response = await dio.get(ApiLink.getEventWaitlist(slug),
           options: Options(headers: headers));
 
       var responseData = _handleResponse(response);
@@ -504,10 +504,10 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future getTournamentParticipants(int id) async {
+  Future getTournamentParticipants(String slug) async {
     try {
       var headers = _getAuthHeaders();
-      var response = await dio.get(ApiLink.getEventParticipants(id),
+      var response = await dio.get(ApiLink.getEventParticipants(slug),
           options: Options(headers: headers));
 
       var responseData = _handleResponse(response);
@@ -518,10 +518,10 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future getTeamTournamentParticipants(int id) async {
+  Future getTeamTournamentParticipants(String slug) async {
     try {
       var headers = _getAuthHeaders();
-      var response = await dio.get(ApiLink.getEventParticipants(id),
+      var response = await dio.get(ApiLink.getEventParticipants(slug),
           options: Options(headers: headers));
 
       var responseData = _handleResponse(response);
@@ -532,11 +532,11 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future unregisterForEvent(int eventId, String role, int roleId) async {
+  Future unregisterForEvent(String slug, String role, String roleSlug) async {
     try {
       var headers = _getAuthHeaders();
       var response = await dio.put(
-          ApiLink.unregisterForEvent(eventId, role, roleId),
+          ApiLink.unregisterForEvent(slug, role, roleSlug),
           options: Options(headers: headers));
 
       _handleResponse(response);
@@ -546,10 +546,10 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future getFixtures(int id) async {
+  Future getFixtures(String slug) async {
     try {
       var headers = _getAuthHeaders();
-      var response = await dio.get(ApiLink.getFixtures(id),
+      var response = await dio.get(ApiLink.getFixtures(slug),
           options: Options(headers: headers));
 
       var responseData = _handleResponse(response);
@@ -929,10 +929,10 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future deleteFixture(int id) async {
+  Future deleteFixture(String slug) async {
     try {
       var headers = _getAuthHeaders();
-      var response = await dio.delete(ApiLink.deleteFixture(id),
+      var response = await dio.delete(ApiLink.deleteFixture(slug),
           options: Options(headers: headers));
 
       _handleResponse(response);
@@ -942,11 +942,11 @@ class TournamentRepository extends GetxController {
   }
 
   Future takeActionOnWaitlist(
-      int eventId, int applicantId, String action) async {
+      String eventSlug, String applicantSlug, String action) async {
     try {
       var headers = _getAuthHeaders();
       var response = await dio.post(
-          ApiLink.takeActionOnWaitlist(eventId, applicantId, action),
+          ApiLink.takeActionOnWaitlist(eventSlug, applicantSlug, action),
           options: Options(headers: headers));
 
       _handleResponse(response);
@@ -962,11 +962,12 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future editParticipant(int eventId, int participantId, String action) async {
+  Future editParticipant(
+      String eventSlug, String participantSlug, String action) async {
     try {
       var headers = _getAuthHeaders();
       var response = await dio.put(
-          ApiLink.editParticipant(eventId, participantId, action),
+          ApiLink.editParticipant(eventSlug, participantSlug, action),
           options: Options(headers: headers));
 
       _handleResponse(response);

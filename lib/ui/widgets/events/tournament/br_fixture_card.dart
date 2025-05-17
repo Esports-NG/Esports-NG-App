@@ -359,7 +359,7 @@ class _BrFixtureCardState extends State<BrFixtureCard> {
                 ),
                 onPressed: () async {
                   Get.back();
-                  await tournamentController.deleteFixture(fixture.id!);
+                  await tournamentController.deleteFixture(fixture.slug!);
                   await widget.getFixtures();
                 },
               ),

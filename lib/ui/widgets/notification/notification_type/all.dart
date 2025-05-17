@@ -4,6 +4,7 @@ import 'package:e_sport/ui/widgets/notification/notification_item.dart';
 import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -15,65 +16,69 @@ class AllNotification extends StatefulWidget {
 }
 
 class _AllNotificationState extends State<AllNotification> {
-  final PagingController<int, NotificationModel> _pagingController =
-      PagingController<int, NotificationModel>(firstPageKey: 1);
+  late final PagingController<int, NotificationModel> _pagingController;
   final notificationController = Get.put(NotificationRepository());
 
-  Future<void> _fetchPage(int pageKey) async {
+  Future<List<NotificationModel>> _fetchPage(int pageKey) async {
     try {
       if (notificationController.nextLink.value != "" && pageKey > 1) {
         var posts = await notificationController.getNext();
-        _pagingController.appendPage(posts, pageKey + 1);
+        return posts;
       } else {
         if (pageKey == 1) {
           var notifications = await notificationController.getNotifications();
 
-          _pagingController.appendPage(notifications, pageKey + 1);
+          return notifications;
         } else {
-          _pagingController.appendLastPage([]);
+          return [];
         }
       }
     } catch (err) {
-      _pagingController.error = err;
+      return [];
     }
   }
 
   @override
   void initState() {
+    _pagingController = PagingController<int, NotificationModel>(
+      fetchPage: (pageKey) => _fetchPage(pageKey),
+      getNextPageKey: (state) => (state.keys?.last ?? 0) + 1,
+    );
     super.initState();
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final notificationController = Get.put(NotificationRepository());
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0, top: 18),
+      padding: EdgeInsets.only(bottom: 16.r, top: 18.r),
       child: RefreshIndicator(
         onRefresh: () => Future.sync(() => _pagingController.refresh()),
-        child: PagedListView.separated(
-          pagingController: _pagingController,
-          padding: EdgeInsets.zero,
-          // shrinkWrap: true,
-          separatorBuilder: (context, index) => Divider(
-            color: AppColor().lightItemsColor.withOpacity(0.3),
-            height: Get.height * 0.05,
-            thickness: 0.5,
+        child: PagingListener(
+          controller: _pagingController,
+          builder: (context, state, fetchNextPage) => PagedListView.separated(
+            state: state,
+            fetchNextPage: fetchNextPage,
+            padding: EdgeInsets.zero,
+            // shrinkWrap: true,
+            separatorBuilder: (context, index) => Divider(
+              color: AppColor().lightItemsColor.withOpacity(0.3),
+              height: Get.height * 0.05,
+              thickness: 0.5,
+            ),
+            builderDelegate: PagedChildBuilderDelegate<NotificationModel>(
+                itemBuilder: (context, notification, index) {
+                  return GestureDetector(
+                    child: NotificationItem(
+                      notification: notification,
+                    ),
+                  );
+                },
+                firstPageProgressIndicatorBuilder: (context) =>
+                    Center(child: ButtonLoader()),
+                newPageProgressIndicatorBuilder: (context) =>
+                    Center(child: ButtonLoader())),
           ),
-          builderDelegate: PagedChildBuilderDelegate<NotificationModel>(
-              itemBuilder: (context, notification, index) {
-                return GestureDetector(
-                  child: NotificationItem(
-                    notification: notification,
-                  ),
-                );
-              },
-              firstPageProgressIndicatorBuilder: (context) =>
-                  Center(child: ButtonLoader()),
-              newPageProgressIndicatorBuilder: (context) =>
-                  Center(child: ButtonLoader())),
         ),
       ),
     );

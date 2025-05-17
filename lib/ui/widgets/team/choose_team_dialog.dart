@@ -12,8 +12,8 @@ import 'package:get/get.dart';
 
 class ChooseTeamDialog extends StatefulWidget {
   const ChooseTeamDialog(
-      {super.key, required this.id, required this.isRegistered});
-  final int id;
+      {super.key, required this.slug, required this.isRegistered});
+  final String slug;
   final bool isRegistered;
 
   @override
@@ -39,15 +39,15 @@ class _ChooseTeamDialogState extends State<ChooseTeamDialog> {
           ],
         ),
         children: teamController.myTeam
-            .map((e) => TeamItem(team: e, id: widget.id))
+            .map((e) => TeamItem(team: e, slug: widget.slug))
             .toList());
   }
 }
 
 class TeamItem extends StatefulWidget {
-  const TeamItem({super.key, required this.team, required this.id});
+  const TeamItem({super.key, required this.team, required this.slug});
   final TeamModel team;
-  final int id;
+  final String slug;
 
   @override
   State<TeamItem> createState() => _TeamItemState();
@@ -62,7 +62,7 @@ class _TeamItemState extends State<TeamItem> {
 
   Future getTeamParticipants() async {
     List<RoasterModel> teamParticipantList =
-        await tournamentController.getTeamTournamentParticipants(widget.id);
+        await tournamentController.getTeamTournamentParticipants(widget.slug);
     setState(() {
       _teamParticipantList = teamParticipantList;
       if (teamParticipantList
@@ -90,13 +90,13 @@ class _TeamItemState extends State<TeamItem> {
         });
         if (_isRegistered) {
           await tournamentController.unregisterForEvent(
-              widget.id, "team", widget.team.id!);
+              widget.slug, "team", widget.team.slug!);
           setState(() {
             _isRegistered = false;
           });
         } else {
           await tournamentController.registerForTeamTournament(
-              widget.id, widget.team.id!);
+              widget.slug, widget.team.slug!);
           setState(() {
             _isRegistered = true;
           });

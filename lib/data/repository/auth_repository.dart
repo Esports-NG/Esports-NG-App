@@ -446,6 +446,7 @@ class AuthRepository extends Get.GetxController {
 
       if (responseData['success'] == true && responseData['data'] != null) {
         var userModel = UserModel.fromJson(responseData['data']);
+        print("slug : ${userModel.slug}");
         mUser(userModel);
         pref!.setUser(userModel);
       } else {
@@ -472,8 +473,7 @@ class AuthRepository extends Get.GetxController {
         "bio": bioController.text.trim()
       };
 
-      final response =
-          await _dio.put('${ApiLink.user}${user!.id}/update/', data: data);
+      final response = await _dio.put(ApiLink.user, data: data);
       final responseData = response.data;
 
       if (responseData['success'] == true) {

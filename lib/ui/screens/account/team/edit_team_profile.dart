@@ -334,7 +334,7 @@ class _EditTeamState extends State<EditTeamPage> {
                   "abbrev": _teamAbbrevController.text,
                   "bio": _teamBioController.text
                 };
-                await teamController.editTeam(widget.team.id!, data);
+                await teamController.editTeam(widget.team.slug!, data);
                 setState(() {
                   _isEditing = false;
                 });

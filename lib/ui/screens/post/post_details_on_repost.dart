@@ -180,7 +180,7 @@ class _PostDetails2State extends State<PostDetails2> {
                                                   postController.postStatus !=
                                                       PostStatus.loading) {
                                                 postController
-                                                    .rePost(_postDetails!.id!,
+                                                    .rePost(_postDetails!.slug!,
                                                         'quote')
                                                     .then((value) {
                                                   setState(() {
@@ -749,7 +749,8 @@ class _PostDetails2State extends State<PostDetails2> {
                                                           //         ToastGravity
                                                           //             .BOTTOM);
                                                           postController.rePost(
-                                                              _postDetails!.id!,
+                                                              _postDetails!
+                                                                  .slug!,
                                                               "repost");
                                                         } else {
                                                           setState(() {

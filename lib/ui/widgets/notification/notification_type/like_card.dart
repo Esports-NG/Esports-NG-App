@@ -3,6 +3,7 @@ import 'package:e_sport/ui/widgets/utils/profile_image.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class LikeCard extends StatefulWidget {
@@ -40,8 +41,8 @@ class _LikeCardState extends State<LikeCard> {
                             padding: const EdgeInsets.all(5),
                             child: OtherImage(
                               image: user.profile!.profilePicture,
-                              width: 30,
-                              height: 30,
+                              width: 30.r,
+                              height: 30.r,
                             ),
                           ))
                       .toList(),

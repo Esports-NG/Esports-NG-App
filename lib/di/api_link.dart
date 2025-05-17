@@ -3,7 +3,7 @@ class ApiLink {
   static String baseurl = "$domain/";
   static String imageUrl = "https://imagedelivery.net/4-uVHHK5QQ1cIDzJPKVNLQ/";
 
-  static String register = "${baseurl}user/v2/register/";
+  static String register = "${baseurl}user/v2/";
   static String login = "${baseurl}user/v2/login/";
   static String user = "${baseurl}user/v2/";
   static String tokenRefresh = "${baseurl}user/v2/token/refresh/";
@@ -17,8 +17,8 @@ class ApiLink {
       "${baseurl}user/v2/resendlink/$email/";
   static String requestPasswordOtp = "${baseurl}user/v2/otp_request/";
   static String verifyOtp = "${baseurl}user/v2/reset/otp/verify/";
-  static String resetPassword(String id) =>
-      "${baseurl}user/v2/password_reset/$id/";
+  static String resetPassword(String slug) =>
+      "${baseurl}user/v2/password_reset/$slug/";
 
   static String followUser = "${baseurl}extra/v2/followuser/";
   // static String followCommunity = "${baseurl}extra/v2/followcomm/";
@@ -44,8 +44,8 @@ class ApiLink {
   static String comment = "${baseurl}post/v2/comment/";
   static String turnNotification = "${baseurl}post/v2/on_notifs/team/";
   static String getPostDetails(String slug) => "${baseurl}post/v2/?p=$slug";
-  static String likeComment(int commentId) =>
-      "${baseurl}post/v2/comment/$commentId/like/";
+  static String likeComment(String slug) =>
+      "${baseurl}post/v2/comment/$slug/like/";
   static String report = "${baseurl}extra/v2/report/";
   static String searchForPostsorUsers(String query, String type) =>
       "${baseurl}$type/v2/search_${type}s/?search=$query";
@@ -54,7 +54,7 @@ class ApiLink {
   static String getAds = "${baseurl}extra/v2/advert/view/";
 
   //Team
-  static String createTeam = "${baseurl}team/v2/create/";
+  static String createTeam = "${baseurl}team/v2/";
   static String getAllTeam = "${baseurl}team/v2/";
   static String team = "${baseurl}team/v2/";
   static String getMyTeam = "${baseurl}team/v2/myteam/";
@@ -62,82 +62,85 @@ class ApiLink {
       "${baseurl}extra/v2/followers/team/view/?g_s=$slug";
   static String followTeam(String slug) =>
       "${baseurl}extra/v2/followteam/$slug/";
-  static String addGameToTeam(int teamId, int gameId) =>
-      "${baseurl}team/v2/$teamId/addgame/$gameId/";
-  static String sendTeamApplication = "${baseurl}team/v2/application/create/";
-  static String respondToApplication(int playerId, int teamId, String action) =>
-      "${baseurl}team/v2/application/edit/$playerId/$teamId/$action/";
-  static String getTeamApplications(int id) =>
-      "${baseurl}team/v2/application/view/";
-  static String createRosterForGame(int teamId) =>
-      '${baseurl}team/v2/create/roster/$teamId/';
-  static String getRosters(int teamId) =>
-      "${baseurl}team/v2/bygame/$teamId/roasters/";
-  static String addToRoster(int teamId, int playerId, int rosterId) =>
-      "${baseurl}team/v2/$teamId/addplayer/$playerId/roster/$rosterId/";
-  static String blockTeam(id) => "${baseurl}post/v2/block/?team_pk=$id";
-  static String editTeam(id) => "${baseurl}team/v2/edit/$id/";
+  static String addGameToTeam(String teamSlug, int gameId) =>
+      "${baseurl}team/v2/$teamSlug/addgame/$gameId/";
+  static String sendTeamApplication = "${baseurl}team/v2/application/";
+  static String respondToApplication(
+          String playerSlug, String teamSlug, String action) =>
+      "${baseurl}team/v2/$teamSlug/$action/$playerSlug/";
+  static String getTeamApplications(String slug) =>
+      "${baseurl}team/v2/application/?t_s=$slug";
+  static String createRosterForGame(String slug) =>
+      '${baseurl}team/v2/create/roster/$slug/';
+  static String getRosters(String slug) =>
+      "${baseurl}team/v2/bygame/$slug/roasters/";
+  static String addToRoster(String teamSlug, String playerSlug, int rosterId) =>
+      "${baseurl}team/v2/$teamSlug/addplayer/$playerSlug/roster/$rosterId/";
+  static String blockTeam(String slug) => "${baseurl}post/v2/block/?t_s=$slug";
+  static String editTeam(String slug) => "${baseurl}team/v2/$slug/";
   static String getTeamByOwner(String slug) => "${baseurl}team/v2/owner/$slug/";
 
   //Player
-  static String createPlayer = "${baseurl}player/v2/register/";
+  static String createPlayer = "${baseurl}player/v2/";
   static String getAllPlayer = "${baseurl}player/v2/";
-  static String editPlayer(int id) => "${baseurl}player/v2/edit/$id/";
-  static String deletePlayer(int id) => "${baseurl}player/v2/delete/$id/";
+  static String editPlayer(String slug) => "${baseurl}player/v2/$slug/";
+  static String deletePlayer(String slug) => "${baseurl}player/v2/$slug/";
 
   //Events
   static String createTournament(String slug) =>
       "${baseurl}event/v2/?c_s=$slug";
-  static String createSocialEvent(int communityId) =>
-      "${baseurl}event/v2/$communityId/create/socialevent/";
+  static String createSocialEvent(String slug) =>
+      "${baseurl}event/v2/$slug/create/socialevent/";
   static String getEventDetails(String slug) => "${baseurl}event/v2/?p=$slug";
   static String getAllEvent = "${baseurl}event/v2/";
   static String getMyEvents = "${baseurl}event/v2/myevents/";
   static String getAllSocialEvents = "${baseurl}event/v2/view/social";
   static String getAllTournaments = "${baseurl}event/v2/view/tournament";
-  static String registerForEvent(int id) => "${baseurl}event/v2/$id/join/";
-  static String registerForSocialEvent(int id) =>
-      "${baseurl}event/v2/social/$id/join/";
-  static String unregisterForEvent(int eventId, String role, int roleId) =>
-      "${baseurl}event/v2/leave/$eventId/$role/$roleId/";
-  static String registerForTeamEvent(int id, int teamId) =>
-      "${baseurl}event/v2/$id/join/?teampk=$teamId";
+  static String registerForEvent(String slug) =>
+      "${baseurl}event/v2/joinevent/";
+  static String registerForSocialEvent(String slug) =>
+      "${baseurl}event/v2/joinevent/";
+  static String unregisterForEvent(String slug, String role, String roleSlug) =>
+      "${baseurl}event/v2/leave/$slug/$role/$roleSlug/";
+  static String registerForTeamEvent(String slug, String teamSlug) =>
+      "${baseurl}event/v2/$slug/joinevent/?t_s=$teamSlug";
   static String filterEvents = "event/v2/search";
-  static String getEventParticipants(int id) =>
-      "${baseurl}event/v2/participants/$id";
-  static String getEventWaitlist(int id) =>
-      "${baseurl}event/v2/view/waitlist/$id";
+  static String getEventParticipants(String slug) =>
+      "${baseurl}event/v2/participants/$slug";
+  static String getEventWaitlist(String slug) =>
+      "${baseurl}event/v2/view/waitlist/$slug";
   static String createFixture(String slug) =>
       "${baseurl}event/v2/fixture/$slug/";
   static String editFixture(String slug) => "${baseurl}event/v2/fixture/$slug/";
-  static String deleteFixture(int id) =>
-      "${baseurl}event/v2/fixture/$id/delete/";
-  static String getFixtures(int id) =>
-      "${baseurl}event/v2/fixture/view/?eventpk=$id";
-  static String getAllFixture() => "${baseurl}event/v2/fixtures/all/";
+  static String deleteFixture(String slug) =>
+      "${baseurl}event/v2/fixture/$slug/";
+  static String getFixtures(String slug) =>
+      "${baseurl}event/v2/fixture/?e_s=$slug";
+  static String getAllFixture() => "${baseurl}event/v2/fixtures/";
   static String getPlatforms = "${baseurl}event/v2/platforms/";
   static String takeActionOnWaitlist(
-          int eventId, int applicantId, String action) =>
-      "${baseurl}event/v2/$eventId/$action/$applicantId/";
+          String slug, String applicantSlug, String action) =>
+      "${baseurl}event/v2/$slug/$action/$applicantSlug/";
   static String editParticipant(
-          int eventId, int participantId, String action) =>
-      "${baseurl}event/v2/edit/$eventId/participants/$participantId/$action/";
+          String slug, String participantSlug, String action) =>
+      "${baseurl}event/v2/edit/$slug/participants/$participantSlug/$action/";
   static String getCreatedEvents = "${baseurl}event/v2/created/";
-  static String createLivestream = "${baseurl}event/v2/stream/create/";
+  static String createLivestream = "${baseurl}event/v2/";
   static String getActivities = "${baseurl}event/v2/activities/feed/";
 
   //Community
-  static String createCommunity = "${baseurl}org/v2/register/";
+  static String createCommunity = "${baseurl}org/v2/";
   static String getAllCommunity = "${baseurl}org/v2/";
   static String followCommunity(String slug) =>
       "${baseurl}extra/v2/followcomm/$slug/";
   static String getCommunityFollowers(String slug) =>
       "${baseurl}extra/v2/followers/comm/view/?g_s=$slug";
   static String getSuggestedUsers = "${baseurl}extra/v2/suggest/users/";
-  static String addGameToCommunity(int commId, int gameId) =>
-      "${baseurl}org/v2/$commId/addgame/$gameId/";
-  static String blockCommunity(id) => "${baseurl}post/v2/block/?comm_pk=$id";
-  static String editCommunity(id) => "${baseurl}org/v2/edit/$id/";
+  static String addGameToCommunity(String commSlug, int gameId) =>
+      "${baseurl}org/v2/$commSlug/addgame/$gameId/";
+  static String blockCommunity(String slug) =>
+      "${baseurl}post/v2/block/?c_s=$slug";
+  static String editCommunity(String slug) => "${baseurl}org/v2/$slug/";
   static String getCommunityByOwner(String slug) =>
       "${baseurl}org/v2/owner/$slug/";
 

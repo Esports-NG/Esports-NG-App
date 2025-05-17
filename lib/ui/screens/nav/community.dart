@@ -314,28 +314,28 @@ class _CommunityPageState extends State<CommunityPage>
                             : const ErrorPage(),
                   ],
                 ),
-                Gap(Get.height * 0.03),
-                Divider(
-                  color: AppColor().primaryWhite.withOpacity(0.1),
-                  thickness: 4,
-                ),
-                Gap(Get.height * 0.03),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          title: "Leaderboard",
-                          color: AppColor().primaryWhite,
-                          fontFamily: "InterSemiBold",
-                          size: 16,
-                        ),
-                        Gap(Get.height * 0.02),
-                        const Center(child: ComingSoonWidget())
-                      ]),
-                ),
-                Gap(Get.height * 0.03),
+                // Gap(Get.height * 0.03),
+                // Divider(
+                //   color: AppColor().primaryWhite.withOpacity(0.1),
+                //   thickness: 4,
+                // ),
+                // Gap(Get.height * 0.03),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                //   child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         CustomText(
+                //           title: "Leaderboard",
+                //           color: AppColor().primaryWhite,
+                //           fontFamily: "InterSemiBold",
+                //           size: 16,
+                //         ),
+                //         Gap(Get.height * 0.02),
+                //         const Center(child: ComingSoonWidget())
+                //       ]),
+                // ),
+                // Gap(Get.height * 0.03),
               ],
             ),
           ),

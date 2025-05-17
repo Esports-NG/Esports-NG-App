@@ -37,19 +37,19 @@ class _PostItemState extends State<PostItem>
     final difference = now.difference(itemDate);
 
     if (difference.inSeconds < 60) {
-      return '${difference.inSeconds} seconds ago';
+      return '${difference.inSeconds}s ago';
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes} minutes ago';
+      return '${difference.inMinutes}mins ago';
     } else if (difference.inHours < 24) {
-      return '${difference.inHours} hours ago';
+      return '${difference.inHours}h ago';
     } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
+      return '${difference.inDays}d ago';
     } else if (difference.inDays < 30) {
-      return '${(difference.inDays / 7).floor()} weeks ago';
+      return '${(difference.inDays / 7).floor()}wks ago';
     } else if (difference.inDays < 365) {
-      return '${(difference.inDays / 30).floor()} months ago';
+      return '${(difference.inDays / 30).floor()}mths ago';
     } else {
-      return '${(difference.inDays / 365).floor()} years ago';
+      return '${(difference.inDays / 365).floor()}y ago';
     }
   }
 

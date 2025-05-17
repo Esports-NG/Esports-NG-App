@@ -33,7 +33,7 @@ class _TeamPlayersListState extends State<TeamPlayersList> {
 
   Future getTeamRoster() async {
     List<RoasterModel> roasterList =
-        await teamController.getTeamRoster(widget.item.id!);
+        await teamController.getTeamRoster(widget.item.slug!);
     setState(() {
       _roasterList = roasterList;
       _isOpen = List.filled(roasterList.length, true);

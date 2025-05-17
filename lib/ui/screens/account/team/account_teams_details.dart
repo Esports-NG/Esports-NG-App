@@ -278,7 +278,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                             PopupMenuItem(
                                               onTap: () async {
                                                 await teamController
-                                                    .blockTeam(_details!.id!);
+                                                    .blockTeam(_details!.slug!);
                                               },
                                               value: '3',
                                               child: Row(
@@ -467,39 +467,39 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                         ]),
                             ),
                           ),
-                          Gap(Get.height * 0.02),
-                          Expanded(
-                            child: CustomFillOption(
-                              buttonColor: AppColor()
-                                  .primaryBackGroundColor
-                                  .withOpacity(0.7),
-                              borderColor: AppColor().darkGrey,
-                              onTap: () {
-                                Helpers().showComingSoonDialog(context);
-                              },
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.sms_outlined,
-                                      color: AppColor().primaryWhite,
-                                      size: Get.height * 0.015,
-                                    ),
-                                    Gap(Get.height * 0.01),
-                                    CustomText(
-                                        title: 'Message',
-                                        size: 14,
-                                        fontFamily: 'Inter',
-                                        color: AppColor().primaryWhite),
-                                    Gap(Get.height * 0.01),
-                                    Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: AppColor().primaryColor,
-                                      size: Get.height * 0.015,
-                                    ),
-                                  ]),
-                            ),
-                          ),
+                          // Gap(Get.height * 0.02),
+                          // Expanded(
+                          //   child: CustomFillOption(
+                          //     buttonColor: AppColor()
+                          //         .primaryBackGroundColor
+                          //         .withOpacity(0.7),
+                          //     borderColor: AppColor().darkGrey,
+                          //     onTap: () {
+                          //       Helpers().showComingSoonDialog(context);
+                          //     },
+                          //     child: Row(
+                          //         mainAxisAlignment: MainAxisAlignment.center,
+                          //         children: [
+                          //           Icon(
+                          //             Icons.sms_outlined,
+                          //             color: AppColor().primaryWhite,
+                          //             size: Get.height * 0.015,
+                          //           ),
+                          //           Gap(Get.height * 0.01),
+                          //           CustomText(
+                          //               title: 'Message',
+                          //               size: 14,
+                          //               fontFamily: 'Inter',
+                          //               color: AppColor().primaryWhite),
+                          //           Gap(Get.height * 0.01),
+                          //           Icon(
+                          //             Icons.keyboard_arrow_down,
+                          //             color: AppColor().primaryColor,
+                          //             size: Get.height * 0.015,
+                          //           ),
+                          //         ]),
+                          //   ),
+                          // ),
                         ],
                       ),
                       Gap(Get.height * 0.02),

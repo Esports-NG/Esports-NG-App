@@ -39,10 +39,10 @@ class _ParticipantListState extends State<ParticipantList>
       TabController(length: 2, vsync: this);
 
   Future getParticipants() async {
-    List<PlayerModel> participantList =
-        await tournamentController.getTournamentParticipants(widget.event.id!);
+    List<PlayerModel> participantList = await tournamentController
+        .getTournamentParticipants(widget.event.slug!);
     List<WaitlistModel> waitlist =
-        await tournamentController.getTournamentWaitlist(widget.event.id!);
+        await tournamentController.getTournamentWaitlist(widget.event.slug!);
     setState(() {
       _participantList = participantList;
       _waitlist = waitlist;
@@ -126,7 +126,7 @@ class _ParticipantListState extends State<ParticipantList>
                     _isRegisterLoading = true;
                   });
                   await tournamentController
-                      .registerForTournament(widget.event.id!);
+                      .registerForTournament(widget.event.slug!);
                   await getParticipants();
                   setState(() {
                     _isRegisterLoading = false;
@@ -386,8 +386,8 @@ class _ParticipantListState extends State<ParticipantList>
                                                 });
                                                 await tournamentController
                                                     .takeActionOnWaitlist(
-                                                        widget.event.id!,
-                                                        item.player!.id!,
+                                                        widget.event.slug!,
+                                                        item.player!.slug!,
                                                         "accept");
                                                 setState(() {
                                                   _isTakingAction = false;
@@ -419,8 +419,8 @@ class _ParticipantListState extends State<ParticipantList>
                                               });
                                               await tournamentController
                                                   .takeActionOnWaitlist(
-                                                      widget.event.id!,
-                                                      item.player!.id!,
+                                                      widget.event.slug!,
+                                                      item.player!.slug!,
                                                       "reject");
                                               setState(() {
                                                 _isTakingAction = false;
@@ -636,7 +636,9 @@ class _EventPlayerRowState extends State<EventPlayerRow> {
                           _isRemoving = true;
                         });
                         await tournamentController.editParticipant(
-                            widget.event.id!, widget.participant.id!, "remove");
+                            widget.event.slug!,
+                            widget.participant.slug!,
+                            "remove");
                         widget.removeParticipant(widget.participant.id!);
                         setState(() {
                           _isRemoving = false;

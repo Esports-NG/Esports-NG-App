@@ -344,10 +344,10 @@ class SocialEventRepository extends GetxController {
     });
   }
 
-  Future<void> registerForSocialEvent(int id) async {
+  Future<void> registerForSocialEvent(String slug) async {
     return _safeApiCall(
         () => _dio.put(
-              ApiLink.registerForSocialEvent(id),
+              ApiLink.registerForSocialEvent(slug),
               options: dio.Options(
                 headers: {
                   "Content-Type": "application/json",

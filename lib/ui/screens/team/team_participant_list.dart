@@ -35,9 +35,9 @@ class _TeamParticipantListState extends State<TeamParticipantList>
 
   Future getParticipants() async {
     List<RoasterModel> participantList = await tournamentController
-        .getTeamTournamentParticipants(widget.event.id!);
+        .getTeamTournamentParticipants(widget.event.slug!);
     List<WaitlistModel> waitlist =
-        await tournamentController.getTournamentWaitlist(widget.event.id!);
+        await tournamentController.getTournamentWaitlist(widget.event.slug!);
     setState(() {
       _participantList = participantList;
       _waitlist = waitlist;
@@ -404,8 +404,8 @@ class _TeamParticipantListState extends State<TeamParticipantList>
                                                 });
                                                 await tournamentController
                                                     .takeActionOnWaitlist(
-                                                        widget.event.id!,
-                                                        item.team!.team!.id!,
+                                                        widget.event.slug!,
+                                                        item.team!.team!.slug!,
                                                         "accept");
                                                 setState(() {
                                                   _isTakingAction = false;
@@ -437,8 +437,8 @@ class _TeamParticipantListState extends State<TeamParticipantList>
                                               });
                                               await tournamentController
                                                   .takeActionOnWaitlist(
-                                                      widget.event.id!,
-                                                      item.player!.id!,
+                                                      widget.event.slug!,
+                                                      item.player!.slug!,
                                                       "reject");
                                               setState(() {
                                                 _isTakingAction = false;

@@ -100,7 +100,7 @@ class PostRepository extends Get.GetxController {
         baseUrl: ApiLink.baseurl,
         contentType: 'application/json',
         responseType: ResponseType.json,
-        receiveTimeout: Duration(seconds: 20)));
+        receiveTimeout: Duration(seconds: 90)));
 
     // Add an interceptor to handle authentication
     _dio.interceptors.add(InterceptorsWrapper(
@@ -243,14 +243,14 @@ class PostRepository extends Get.GetxController {
     }
   }
 
-  Future editPost(int postId) async {
+  Future editPost(String postSlug) async {
     try {
       debugPrint('editing post...');
       _createPostStatus(CreatePostStatus.loading);
 
       final data = {"body": postBodyController.text.trim()};
       final response =
-          await _dio.put("${ApiLink.editPost}$postId/", data: data);
+          await _dio.put("${ApiLink.editPost}$postSlug/", data: data);
 
       if (response.statusCode == 200) {
         _createPostStatus(CreatePostStatus.success);
@@ -272,12 +272,12 @@ class PostRepository extends Get.GetxController {
     }
   }
 
-  Future deletePost(int postId) async {
+  Future deletePost(String slug) async {
     try {
       EasyLoading.show(status: 'Deleting post...');
       _postStatus(PostStatus.loading);
 
-      final response = await _dio.delete("${ApiLink.deletePost}$postId/");
+      final response = await _dio.delete("${ApiLink.deletePost}$slug/");
 
       if (response.statusCode == 200) {
         _postStatus(PostStatus.success);
@@ -298,17 +298,18 @@ class PostRepository extends Get.GetxController {
     }
   }
 
-  Future rePost(int postId, String title) async {
+  Future rePost(String slug, String title) async {
     try {
       EasyLoading.show(status: 'Reposting...');
       _postStatus(PostStatus.loading);
+      print(slug);
 
       Response response;
       if (title == 'quote') {
         final data = {"body": authController.commentController.text};
-        response = await _dio.post("${ApiLink.post}$postId/quote/", data: data);
+        response = await _dio.post("${ApiLink.post}$slug/quote/", data: data);
       } else {
-        response = await _dio.post("${ApiLink.post}$postId/repost/");
+        response = await _dio.post("${ApiLink.post}$slug/repost/");
       }
 
       if (response.statusCode == 201) {
@@ -453,7 +454,8 @@ class PostRepository extends Get.GetxController {
       }
 
       final response = await _dio.get(ApiLink.getMyPost);
-      final responseData = response.data['data'];
+      final responseData = response.data['data']['results'];
+      print(response);
 
       if (responseData is List) {
         var myPosts = responseData.map((e) => PostModel.fromJson(e)).toList();
@@ -642,9 +644,9 @@ class PostRepository extends Get.GetxController {
     );
   }
 
-  Future likeComment(int commentId) async {
+  Future likeComment(String slug) async {
     return _safeApiCall(
-      () => _dio.put(ApiLink.likeComment(commentId)),
+      () => _dio.put(ApiLink.likeComment(slug)),
     );
   }
 

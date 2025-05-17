@@ -156,7 +156,7 @@ class PostMenuOptions extends StatelessWidget {
                 color: AppColor().primaryRed,
               ),
               onPressed: () {
-                postController.deletePost(post.id!);
+                postController.deletePost(post.slug!);
                 Get.back();
               },
             ),

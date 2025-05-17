@@ -36,7 +36,8 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
     setState(() {
       _isLoading = true;
     });
-    var fixturesList = await tournamentController.getFixtures(widget.event.id!);
+    var fixturesList =
+        await tournamentController.getFixtures(widget.event.slug!);
     setState(() {
       _fixturesList = fixturesList;
       _isLoading = false;

@@ -68,7 +68,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
         });
 
     var json = jsonDecode(response.body);
-    var list = List.from(json);
+    var list = List.from(json['data']);
 
     setState(() {
       _recentPosts = list.map((e) => PostModel.fromJson(e)).toList();
@@ -224,7 +224,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                       color: AppColor().primaryMenu,
                                       position: const RelativeRect.fromLTRB(
                                           100, 100, 0, 0),
-                                      items: widget.item.owner!.id! ==
+                                      items: details!.owner!.id! ==
                                               authController.user!.id!
                                           ? [
                                               PopupMenuItem(
@@ -315,7 +315,7 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                                 onTap: () async {
                                                   await communityController
                                                       .blockCommunity(
-                                                          widget.item.id!);
+                                                          widget.item.slug!);
                                                 },
                                                 value: '3',
                                                 child: Row(
@@ -507,72 +507,72 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                           ]),
                               ),
                             ),
-                            Gap(Get.height * 0.02),
-                            Expanded(
-                              child: CustomFillOption(
-                                buttonColor: AppColor()
-                                    .primaryBackGroundColor
-                                    .withOpacity(0.7),
-                                borderColor: AppColor().darkGrey,
-                                onTap: () => showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    backgroundColor: AppColor().primaryBgColor,
-                                    content: const ComingSoonPopup(),
-                                  ),
-                                ),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.sms_outlined,
-                                        color: AppColor().primaryWhite,
-                                        size: Get.height * 0.015,
-                                      ),
-                                      Gap(Get.height * 0.01),
-                                      CustomText(
-                                          title: 'Message',
-                                          size: 14,
-                                          fontFamily: 'Inter',
-                                          color: AppColor().primaryWhite),
-                                      Gap(Get.height * 0.01),
-                                      Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: AppColor().primaryColor,
-                                        size: Get.height * 0.015,
-                                      ),
-                                    ]),
-                              ),
-                            ),
+                            // Gap(Get.height * 0.02),
+                            // Expanded(
+                            //   child: CustomFillOption(
+                            //     buttonColor: AppColor()
+                            //         .primaryBackGroundColor
+                            //         .withOpacity(0.7),
+                            //     borderColor: AppColor().darkGrey,
+                            //     onTap: () => showDialog(
+                            //       context: context,
+                            //       builder: (context) => AlertDialog(
+                            //         elevation: 0,
+                            //         shape: RoundedRectangleBorder(
+                            //             borderRadius:
+                            //                 BorderRadius.circular(10)),
+                            //         backgroundColor: AppColor().primaryBgColor,
+                            //         content: const ComingSoonPopup(),
+                            //       ),
+                            //     ),
+                            //     child: Row(
+                            //         mainAxisAlignment: MainAxisAlignment.center,
+                            //         children: [
+                            //           Icon(
+                            //             Icons.sms_outlined,
+                            //             color: AppColor().primaryWhite,
+                            //             size: Get.height * 0.015,
+                            //           ),
+                            //           Gap(Get.height * 0.01),
+                            //           CustomText(
+                            //               title: 'Message',
+                            //               size: 14,
+                            //               fontFamily: 'Inter',
+                            //               color: AppColor().primaryWhite),
+                            //           Gap(Get.height * 0.01),
+                            //           Icon(
+                            //             Icons.keyboard_arrow_down,
+                            //             color: AppColor().primaryColor,
+                            //             size: Get.height * 0.015,
+                            //           ),
+                            //         ]),
+                            //   ),
+                            // ),
                           ],
                         ),
                         Gap(Get.height * 0.02),
-                        CustomFillOption(
-                          buttonColor: AppColor()
-                              .primaryBackGroundColor
-                              .withOpacity(0.7),
-                          borderColor: AppColor().darkGrey,
-                          onTap: () => showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: AppColor().primaryBgColor,
-                              content: const ComingSoonPopup(),
-                            ),
-                          ),
-                          child: CustomText(
-                              title: 'Apply as a staff',
-                              size: 14,
-                              fontFamily: 'Inter',
-                              color: AppColor().primaryWhite),
-                        ),
-                        Gap(Get.height * 0.02),
+                        // CustomFillOption(
+                        //   buttonColor: AppColor()
+                        //       .primaryBackGroundColor
+                        //       .withOpacity(0.7),
+                        //   borderColor: AppColor().darkGrey,
+                        //   onTap: () => showDialog(
+                        //     context: context,
+                        //     builder: (context) => AlertDialog(
+                        //       elevation: 0,
+                        //       shape: RoundedRectangleBorder(
+                        //           borderRadius: BorderRadius.circular(10)),
+                        //       backgroundColor: AppColor().primaryBgColor,
+                        //       content: const ComingSoonPopup(),
+                        //     ),
+                        //   ),
+                        //   child: CustomText(
+                        //       title: 'Apply as a staff',
+                        //       size: 14,
+                        //       fontFamily: 'Inter',
+                        //       color: AppColor().primaryWhite),
+                        // ),
+                        // Gap(Get.height * 0.02),
                         CustomFillOption(
                           buttonColor: AppColor()
                               .primaryBackGroundColor
@@ -627,9 +627,9 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                   children: [
                                     OtherImage(
                                         itemSize: Get.height * 0.04,
-                                        image: widget.item.owner!.profile!
-                                            .profilePicture),
-                                    if (widget.item.owner!.isVerified!)
+                                        image: details!
+                                            .owner!.profile!.profilePicture),
+                                    if (details!.owner!.isVerified!)
                                       SvgPicture.asset(
                                         "assets/images/svg/check_badge.svg",
                                         width: Get.width * 0.04,
@@ -769,111 +769,111 @@ class _AccountCommunityDetailState extends State<AccountCommunityDetail> {
                                   ));
                             }),
                   ),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Tournaments',
-                    ),
-                  ),
-                  NoItemPage(title: 'Tournaments', size: Get.height * 0.05),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Social Events',
-                    ),
-                  ),
-                  NoItemPage(title: 'Social events', size: Get.height * 0.05),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Community Staff',
-                    ),
-                  ),
-                  NoItemPage(title: 'Community staff', size: Get.height * 0.05),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Badges',
-                    ),
-                  ),
-                  NoItemPage(title: 'Badges', size: Get.height * 0.05),
-                  Divider(
-                    color: AppColor().lightItemsColor.withOpacity(0.3),
-                    height: Get.height * 0.05,
-                    thickness: 4,
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: PageHeaderWidget(
-                      onTap: () {},
-                      title: 'Media, Links and Documents',
-                    ),
-                  ),
-                  Gap(Get.height * 0.02),
-                  const ComingSoonWidget(),
-                  Gap(Get.height * 0.04),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomText(
-                          title: 'Join our Community:',
-                          fontFamily: 'InterSemiBold',
-                          size: 16,
-                          color: AppColor().primaryWhite,
-                        ),
-                        Gap(Get.height * 0.02),
-                      ],
-                    ),
-                  ),
-                  Gap(Get.height * 0.02),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset('assets/images/svg/discord.svg'),
-                        Gap(Get.height * 0.01),
-                        SvgPicture.asset('assets/images/svg/twitter.svg'),
-                        Gap(Get.height * 0.01),
-                        SvgPicture.asset('assets/images/svg/telegram.svg'),
-                        Gap(Get.height * 0.01),
-                        SvgPicture.asset('assets/images/svg/meduim.svg'),
-                      ],
-                    ),
-                  ),
-                  Gap(Get.height * 0.02),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {},
+                  //     title: 'Tournaments',
+                  //   ),
+                  // ),
+                  // NoItemPage(title: 'Tournaments', size: Get.height * 0.05),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {},
+                  //     title: 'Social Events',
+                  //   ),
+                  // ),
+                  // NoItemPage(title: 'Social events', size: Get.height * 0.05),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {},
+                  //     title: 'Community Staff',
+                  //   ),
+                  // ),
+                  // NoItemPage(title: 'Community staff', size: Get.height * 0.05),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {},
+                  //     title: 'Badges',
+                  //   ),
+                  // ),
+                  // NoItemPage(title: 'Badges', size: Get.height * 0.05),
+                  // Divider(
+                  //   color: AppColor().lightItemsColor.withOpacity(0.3),
+                  //   height: Get.height * 0.05,
+                  //   thickness: 4,
+                  // ),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: PageHeaderWidget(
+                  //     onTap: () {},
+                  //     title: 'Media, Links and Documents',
+                  //   ),
+                  // ),
+                  // Gap(Get.height * 0.02),
+                  // const ComingSoonWidget(),
+                  // Gap(Get.height * 0.04),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       CustomText(
+                  //         title: 'Join our Community:',
+                  //         fontFamily: 'InterSemiBold',
+                  //         size: 16,
+                  //         color: AppColor().primaryWhite,
+                  //       ),
+                  //       Gap(Get.height * 0.02),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Gap(Get.height * 0.02),
+                  // Padding(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                  //   child: Row(
+                  //     children: [
+                  //       SvgPicture.asset('assets/images/svg/discord.svg'),
+                  //       Gap(Get.height * 0.01),
+                  //       SvgPicture.asset('assets/images/svg/twitter.svg'),
+                  //       Gap(Get.height * 0.01),
+                  //       SvgPicture.asset('assets/images/svg/telegram.svg'),
+                  //       Gap(Get.height * 0.01),
+                  //       SvgPicture.asset('assets/images/svg/meduim.svg'),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Gap(Get.height * 0.02),
                 ],
               )
             : SizedBox(

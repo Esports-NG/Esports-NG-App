@@ -26,30 +26,30 @@ class _AllEventListState extends State<AllEventList> {
 
   @override
   void initState() {
+    _pagingController = PagingController<int, EventModel>(
+      getNextPageKey: (state) => (state.keys?.last ?? 0) + 1,
+      fetchPage: (pageKey) => _fetchPage(pageKey),
+    );
     super.initState();
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
   }
 
-  final PagingController<int, EventModel> _pagingController =
-      PagingController<int, EventModel>(firstPageKey: 1);
+  late final PagingController<int, EventModel> _pagingController;
 
-  Future<void> _fetchPage(int pageKey) async {
+  Future<List<EventModel>> _fetchPage(int pageKey) async {
     try {
       if (widget.nextLink != null && widget.nextLink != "" && pageKey > 1) {
         var events = await widget.getNext!();
-        _pagingController.appendPage(events, pageKey + 1);
+        return events;
       } else {
         if (widget.refresh != null && pageKey == 1) {
           var events = await widget.refresh!(false);
-          _pagingController.appendPage(events, pageKey + 1);
+          return events;
         } else {
-          _pagingController.appendLastPage([]);
+          return [];
         }
       }
     } catch (err) {
-      _pagingController.error = err;
+      return [];
     }
   }
 
@@ -59,26 +59,30 @@ class _AllEventListState extends State<AllEventList> {
       onRefresh: () => Future.sync(
         () => _pagingController.refresh(),
       ),
-      child: PagedListView.separated(
-          pagingController: _pagingController,
-          padding: const EdgeInsets.only(top: 20, bottom: 40),
-          // shrinkWrap: true,
-          builderDelegate: PagedChildBuilderDelegate<EventModel>(
-            itemBuilder: (context, event, index) => GestureDetector(
-                onTap: () {
-                  if (event.type == "tournament") {
-                    Get.to(() => AccountTournamentDetail(item: event));
-                  } else {
-                    Get.to(() => SocialEventDetails(item: event));
-                  }
-                },
-                child: AccountEventsItem(item: event)),
-            newPageProgressIndicatorBuilder: (context) =>
-                Center(child: ButtonLoader()),
-            firstPageProgressIndicatorBuilder: (context) =>
-                Center(child: ButtonLoader()),
-          ),
-          separatorBuilder: (context, index) => Gap(Get.height * 0.02)),
+      child: PagingListener(
+        controller: _pagingController,
+        builder: (context, state, fetchNextPage) => PagedListView.separated(
+            state: state,
+            fetchNextPage: fetchNextPage,
+            padding: const EdgeInsets.only(top: 20, bottom: 40),
+            // shrinkWrap: true,
+            builderDelegate: PagedChildBuilderDelegate<EventModel>(
+              itemBuilder: (context, event, index) => GestureDetector(
+                  onTap: () {
+                    if (event.type == "tournament") {
+                      Get.to(() => AccountTournamentDetail(item: event));
+                    } else {
+                      Get.to(() => SocialEventDetails(item: event));
+                    }
+                  },
+                  child: AccountEventsItem(item: event)),
+              newPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader()),
+              firstPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader()),
+            ),
+            separatorBuilder: (context, index) => Gap(Get.height * 0.02)),
+      ),
     );
   }
 }
