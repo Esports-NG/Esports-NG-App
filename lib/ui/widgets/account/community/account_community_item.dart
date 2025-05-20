@@ -94,32 +94,26 @@ class AccountCommunityItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            title: item.name,
-                            size: 16,
-                            fontFamily: 'InterBold',
-                            textAlign: TextAlign.start,
-                            color: AppColor().greyOne,
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Divider(
-                            color: AppColor().lightItemsColor.withOpacity(0.3),
-                            height: Get.height * 0.03,
-                            thickness: 0.5,
-                          ),
-                          // CustomText(
-                          //   title: item.bio!.toSentenceCase(),
-                          //   size: 12,
-                          //   fontFamily: 'InterMedium',
-                          //   textAlign: TextAlign.start,
-                          //   color: AppColor().greySix,
-                          // ),
-                        ]),
+                    Flexible(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              title: item.name,
+                              size: 16,
+                              fontFamily: 'InterBold',
+                              textAlign: TextAlign.start,
+                              color: AppColor().greyOne,
+                            ),
+                            // CustomText(
+                            //   title: item.bio!.toSentenceCase(),
+                            //   size: 12,
+                            //   fontFamily: 'InterMedium',
+                            //   textAlign: TextAlign.start,
+                            //   color: AppColor().greySix,
+                            // ),
+                          ]),
+                    ),
                     CustomFillButton(
                       onTap: () {
                         Navigator.push(

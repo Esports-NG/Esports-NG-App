@@ -96,14 +96,16 @@ class ApiLink {
   static String getMyEvents = "${baseurl}event/v2/?q=mine";
   static String getAllSocialEvents = "${baseurl}event/v2/view/social";
   static String getAllTournaments = "${baseurl}event/v2/view/tournament";
-  static String registerForEvent(String slug) =>
-      "${baseurl}event/v2/joinevent/";
-  static String registerForSocialEvent(String slug) =>
-      "${baseurl}event/v2/joinevent/";
+  static String registerForEvent(
+    String eventSlug,
+  ) =>
+      "${baseurl}event/v2/$eventSlug/join/tournament/";
+  static String registerForSocialEvent(String eventSlug) =>
+      "${baseurl}event/v2/$eventSlug/join/social/";
   static String unregisterForEvent(String slug, String role, String roleSlug) =>
       "${baseurl}event/v2/leave/$slug/$role/$roleSlug/";
   static String registerForTeamEvent(String slug, String teamSlug) =>
-      "${baseurl}event/v2/$slug/joinevent/?t_s=$teamSlug";
+      "${baseurl}event/v2/$slug/join/tournament/?t_s=$teamSlug";
   static String filterEvents = "event/v2/search";
   static String getEventParticipants(String slug) =>
       "${baseurl}event/v2/participants/$slug";

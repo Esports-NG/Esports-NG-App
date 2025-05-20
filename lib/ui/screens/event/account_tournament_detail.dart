@@ -1,7 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:change_case/change_case.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
@@ -15,36 +13,26 @@ import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
-import 'package:e_sport/di/api_link.dart';
-import 'package:e_sport/ui/screens/account/events/account_events_item.dart';
 import 'package:e_sport/ui/screens/account/events/components/tournament_details.dart';
 import 'package:e_sport/ui/screens/event/event_posts_and_announcements.dart';
-import 'package:e_sport/ui/screens/account/events/tournament_leaderboard.dart';
-import 'package:e_sport/ui/screens/community/account_community_detail.dart';
-import 'package:e_sport/ui/widgets/team/choose_team_dialog.dart';
+import 'package:e_sport/ui/screens/event/fixtures_and_results.dart';
 import 'package:e_sport/ui/screens/event/participant_list.dart';
 import 'package:e_sport/ui/screens/team/team_participant_list.dart';
-import 'package:e_sport/ui/widgets/events/tournament/br_fixture_card.dart';
-import 'package:e_sport/ui/widgets/events/tournament/fixture_item.dart';
-import 'package:e_sport/ui/screens/event/fixtures_and_results.dart';
-import 'package:e_sport/ui/widgets/utils/page_header.dart';
-import 'package:e_sport/ui/widgets/utils/profile_image.dart';
-import 'package:e_sport/ui/screens/post/post_details.dart';
-import 'package:e_sport/ui/widgets/events/tournament/ranking_card.dart';
-import 'package:e_sport/ui/widgets/profile/recent_posts.dart';
-import 'package:e_sport/ui/widgets/utils/back_button.dart';
+import 'package:e_sport/ui/widgets/events/tournament/tournament_announcements_section.dart';
+import 'package:e_sport/ui/widgets/events/tournament/tournament_community_follow_button.dart';
+import 'package:e_sport/ui/widgets/events/tournament/tournament_community_info_section.dart';
+import 'package:e_sport/ui/widgets/events/tournament/tournament_details_section_widget.dart';
+import 'package:e_sport/ui/widgets/events/tournament/tournament_fixtures_section.dart';
+import 'package:e_sport/ui/widgets/events/tournament/tournament_header.dart';
+import 'package:e_sport/ui/widgets/events/tournament/tournament_registration_button.dart';
+import 'package:e_sport/ui/widgets/events/tournament/tournament_summary.dart';
+import 'package:e_sport/ui/widgets/events/tournament/social_links_section.dart';
 import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
-import 'package:e_sport/ui/widgets/utils/coming_soon.dart';
-import 'package:e_sport/ui/widgets/utils/coming_soon_popup.dart';
-import 'package:e_sport/ui/widgets/custom/custom_text.dart';
-import 'package:e_sport/ui/widgets/custom/custom_button.dart';
+import 'package:e_sport/ui/widgets/utils/page_header.dart';
 import 'package:e_sport/util/colors.dart';
-import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AccountTournamentDetail extends StatefulWidget {
   final EventModel item;
@@ -56,29 +44,32 @@ class AccountTournamentDetail extends StatefulWidget {
 }
 
 class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
+  // Controllers
   final authController = Get.put(AuthRepository());
   final communityController = Get.put(CommunityRepository());
   final tournamentController = Get.put(TournamentRepository());
   final teamController = Get.put(TeamRepository());
-  var eventController = Get.put(EventRepository());
+  final eventController = Get.put(EventRepository());
   final postController = Get.put(PostRepository());
+
+  // State variables
   List<FixtureModel> _fixturesList = [];
-
   List<PostModel> _posts = [];
+  List<Map<String, dynamic>>? _communityFollowers;
   bool _isLoading = true;
+  bool _isFollowing = false;
+  bool _isRegisterLoading = true;
+  List<PlayerModel>? _participantList;
+  List<RoasterModel>? _teamParticipantList;
+  List<WaitlistModel>? _waitlist;
+  bool _isRegistered = false;
+  RoasterModel? _registeredTeam;
+  PlayerModel? _participantProfile;
+  bool _isFetchingPosts = true;
+  EventModel? _eventDetails;
+  bool _isFetchingFixtures = true;
 
-  Future getEventPosts() async {
-    setState(() {
-      _isFetchingPosts = true;
-    });
-    List<PostModel>? postsResponse =
-        await postController.getEventPosts(widget.item.slug!);
-    setState(() {
-      _posts = postsResponse ?? [];
-      _isFetchingPosts = false;
-    });
-  }
-
+  // Gradients for fixtures
   final _colors = [
     LinearGradient(
       colors: [
@@ -98,79 +89,107 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
     ),
   ];
 
-  List<Map<String, dynamic>>? _communityFollowers;
-  bool _isFollowing = false;
-  bool _isRegisterLoading = true;
-  List<PlayerModel>? _participantList;
-  List<RoasterModel>? _teamParticipantList;
-  List<WaitlistModel>? _waitlist;
-  bool _isRegistered = false;
-  TeamModel? _registeredTeam;
-  PlayerModel? _participantProfile;
-  bool _isFetchingPosts = true;
-  EventModel? _eventDetails;
-  bool _isFetchingFixtures = true;
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
 
-  Future getParticipants() async {
+  void _loadData() {
+    getCommunityFollowers();
+    getParticipants();
+    getFixtures();
+    getEventDetails();
+    getEventPosts();
+  }
+
+  // Data fetching methods
+  Future<void> getEventPosts() async {
+    setState(() {
+      _isFetchingPosts = true;
+    });
+    List<PostModel>? postsResponse =
+        await postController.getEventPosts(widget.item.slug!);
+    setState(() {
+      _posts = postsResponse ?? [];
+      _isFetchingPosts = false;
+    });
+  }
+
+  Future<void> getParticipants() async {
     if (widget.item.tournamentType == "team") {
-      List<dynamic> participantResponse = (await tournamentController
-          .getTeamTournamentParticipants(widget.item.slug!))!;
-      List<RoasterModel> teamParticipantList = participantResponse
-          .map((item) => RoasterModel.fromJson(item))
-          .toList();
-      setState(() {
-        _teamParticipantList = teamParticipantList;
-        if (teamParticipantList
-            .where((e) => teamController.myTeam
-                .where((item) => item.id == e.id)
-                .isNotEmpty)
-            .isNotEmpty) {
-          _isRegistered = true;
-          _registeredTeam ==
-              teamParticipantList
-                  .where((e) => teamController.myTeam
-                      .where((item) => item.id == e.id)
-                      .isNotEmpty)
-                  .toList()[0];
-        }
-        _isRegisterLoading = false;
-      });
+      await _getTeamParticipants();
     } else {
-      List<dynamic> participantResponse = (await tournamentController
-          .getTournamentParticipants(widget.item.slug!))!;
-      List<PlayerModel> participantList = participantResponse
-          .map((item) => PlayerModel.fromJson(item))
-          .toList();
-      List<WaitlistModel> waitlist = (await tournamentController
-          .getTournamentWaitlist(widget.item.slug!))!;
-      setState(() {
-        _waitlist = waitlist;
-        _participantList = participantList;
-        if (participantList
-                .where((element) =>
-                    element.player!.id! == authController.user!.id!)
-                .isNotEmpty ||
-            waitlist
-                .where((element) =>
-                    element.player!.player!.id! == authController.user!.id!)
-                .isNotEmpty) {
-          _isRegistered = true;
-          _participantProfile = participantList.isNotEmpty
-              ? participantList
-                  .where((element) =>
-                      element.player!.id! == authController.user!.id!)
-                  .toList()[0]
-              : waitlist
-                  .where((e) => e.player!.player!.id == authController.user!.id)
-                  .toList()[0]
-                  .player;
-        }
-        _isRegisterLoading = false;
-      });
+      await _getIndividualParticipants();
     }
   }
 
-  Future getFixtures() async {
+  Future<void> _getTeamParticipants() async {
+    List<dynamic> participantResponse = (await tournamentController
+        .getTeamTournamentParticipants(widget.item.slug!))!;
+    List<RoasterModel> teamParticipantList =
+        participantResponse.map((item) => RoasterModel.fromJson(item)).toList();
+
+    setState(() {
+      _teamParticipantList = teamParticipantList;
+
+      // Check if user's team is registered
+      if (teamParticipantList
+          .where((e) =>
+              teamController.myTeam.where((item) => item.id == e.id).isNotEmpty)
+          .isNotEmpty) {
+        _isRegistered = true;
+        _registeredTeam = teamParticipantList
+            .where((e) => teamController.myTeam
+                .where((item) => item.id == e.id)
+                .isNotEmpty)
+            .toList()[0];
+      }
+
+      _isRegisterLoading = false;
+    });
+  }
+
+  Future<void> _getIndividualParticipants() async {
+    List<dynamic> participantResponse = (await tournamentController
+        .getTournamentParticipants(widget.item.slug!))!;
+    List<PlayerModel> participantList = List<PlayerModel>.from(
+        participantResponse.map((item) => PlayerModel.fromJson(item)).toList());
+
+    List<WaitlistModel> waitlist =
+        (await tournamentController.getTournamentWaitlist(widget.item.slug!))!;
+
+    setState(() {
+      _waitlist = waitlist;
+      _participantList = participantList;
+
+      // Check if user is registered
+      if (participantList
+              .where(
+                  (element) => element.player!.id! == authController.user!.id!)
+              .isNotEmpty ||
+          waitlist
+              .where((element) =>
+                  element.player!.player!.id! == authController.user!.id!)
+              .isNotEmpty) {
+        _isRegistered = true;
+
+        _participantProfile = participantList.isNotEmpty
+            ? participantList
+                .where((element) =>
+                    element.player!.id! == authController.user!.id!)
+                .toList()[0]
+            : waitlist
+                .where((e) => e.player!.player!.id == authController.user!.id)
+                .toList()[0]
+                .player;
+      }
+
+      _isRegisterLoading = false;
+    });
+  }
+
+  Future<void> getFixtures() async {
     setState(() {
       _isFetchingFixtures = true;
     });
@@ -182,38 +201,36 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
     });
   }
 
-  Future getCommunityFollowers() async {
+  Future<void> getCommunityFollowers() async {
     var followers = await communityController
         .getCommunityFollowers(widget.item.community!.slug!);
     setState(() {
       _communityFollowers = followers;
-      if (followers.any(
-          (element) => element["user_id"]["id"] == authController.user!.id)) {
-        _isFollowing = true;
-      } else {
-        _isFollowing = false;
-      }
+      _isFollowing = followers.any(
+          (element) => element["user_id"]["id"] == authController.user!.id);
       _isLoading = false;
     });
   }
 
-  Future getEventDetails() async {
+  Future<void> getEventDetails() async {
     var event = await tournamentController.getEventDetails(widget.item.slug!);
     setState(() {
       _eventDetails = event;
       _isLoading = false;
     });
-    print(event?.regEnd);
   }
 
-  @override
-  initState() {
-    getCommunityFollowers();
+  void onRegistrationChanged() {
+    setState(() {
+      _isRegistered = !_isRegistered;
+    });
     getParticipants();
-    getFixtures();
-    getEventDetails();
-    getEventPosts();
-    super.initState();
+  }
+
+  void onFollowChanged(bool isFollowing) {
+    setState(() {
+      _isFollowing = isFollowing;
+    });
   }
 
   @override
@@ -226,523 +243,56 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: () => Helpers()
-                          .showImagePopup(context, widget.item.banner!),
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        clipBehavior: Clip.none,
-                        children: [
-                          _eventDetails!.banner == null
-                              ? Container(
-                                  height: Get.height * 0.15,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/png/tournament_cover.png'),
-                                        opacity: 0.2),
-                                  ),
-                                )
-                              : CachedNetworkImage(
-                                  height: Get.height * 0.15,
-                                  width: double.infinity,
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) => Center(
-                                    child: SizedBox(
-                                      height: Get.height * 0.05,
-                                      width: Get.height * 0.05,
-                                      child: CircularProgressIndicator(
-                                          color: AppColor().primaryWhite,
-                                          value: progress.progress),
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) => Icon(
-                                      Icons.error,
-                                      color: AppColor().primaryColor),
-                                  imageUrl: _eventDetails!.banner!,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10)),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              _eventDetails!.banner!),
-                                          fit: BoxFit.cover),
-                                    ),
-                                  ),
-                                ),
-                          Positioned(
-                            top: Get.height * 0.1,
-                            child: GestureDetector(
-                              onTap: () => Helpers().showImagePopup(
-                                  context, "${_eventDetails!.profile}"),
-                              child: Stack(
-                                alignment: Alignment.bottomRight,
-                                children: [
-                                  OtherImage(
-                                      itemSize: Get.height * 0.1,
-                                      image: '${_eventDetails!.profile}'),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned.fill(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GoBackButton(onPressed: () => Get.back()),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(right: Get.height * 0.02),
-                                  child: InkWell(
-                                    child: Icon(
-                                      Icons.settings,
-                                      color: AppColor().primaryWhite,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Tournament Header with Banner and Profile Image
+                    TournamentHeader(event: _eventDetails!),
                     Gap(Get.height * 0.07),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                      child: Column(
-                        children: [
-                          CustomText(
-                              title: _eventDetails!.name,
-                              size: Get.height * 0.02,
-                              fontFamily: 'InterBold',
-                              color: AppColor().primaryWhite),
-                          Gap(Get.height * 0.02),
-                          AccountEventsItem(
-                            item: _eventDetails!,
-                            onDetailsPage: true,
-                          ),
-                          Gap(Get.height * 0.05),
-                          InkWell(
-                            borderRadius: BorderRadius.circular(30),
-                            onTap: DateTime.now()
-                                    .isAfter(_eventDetails!.regEnd!)
-                                ? null
-                                : () async {
-                                    if (_eventDetails!.tournamentType ==
-                                        "team") {
-                                      setState(() {
-                                        _isRegisterLoading = true;
-                                      });
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => ChooseTeamDialog(
-                                          slug: _eventDetails!.slug!,
-                                          isRegistered: _isRegistered,
-                                        ),
-                                      );
 
-                                      setState(() {
-                                        _isRegisterLoading = false;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _isRegisterLoading = true;
-                                      });
-                                      if (_isRegistered) {
-                                        await tournamentController
-                                            .unregisterForEvent(
-                                                _eventDetails!.slug!,
-                                                "player",
-                                                _participantProfile!.slug!);
-                                        _isRegistered = false;
-                                      } else {
-                                        var success = await tournamentController
-                                            .registerForTournament(
-                                                _eventDetails!.slug!);
-                                        if (success) {
-                                          setState(() {
-                                            _isRegistered = true;
-                                          });
-                                        }
-                                      }
-                                      setState(() {
-                                        _isRegisterLoading = false;
-                                      });
-                                    }
-                                  },
-                            child: Container(
-                              height: Get.height * 0.06,
-                              width: Get.width,
-                              decoration: BoxDecoration(
-                                border: !_isRegisterLoading
-                                    ? null
-                                    : Border.all(
-                                        width: 1,
-                                        color: AppColor()
-                                            .primaryColor
-                                            .withOpacity(0.4)),
-                                borderRadius: BorderRadius.circular(30),
-                                color: _isRegisterLoading
-                                    ? Colors.transparent
-                                    : !DateTime.now()
-                                            .isAfter(_eventDetails!.regEnd!)
-                                        ? AppColor().primaryColor
-                                        : AppColor().darkGrey,
-                              ),
-                              child: _isRegisterLoading
-                                  ? Center(
-                                      child: SizedBox(
-                                        width: Get.height * 0.03,
-                                        height: Get.height * 0.03,
-                                        child: CircularProgressIndicator(
-                                          color: AppColor().primaryColor,
-                                          strokeWidth: 2,
-                                        ),
-                                      ),
-                                    )
-                                  : Center(
-                                      child: CustomText(
-                                      title: _eventDetails!.tournamentType ==
-                                              "team"
-                                          ? !DateTime.now().isAfter(
-                                                  _eventDetails!.regEnd!)
-                                              ? "Pick Team"
-                                              : !DateTime.now().isAfter(
-                                                      _eventDetails!.endDate!)
-                                                  ? "Registration Ended"
-                                                  : "Event Ended"
-                                          : _isRegistered
-                                              ? "Unregister"
-                                              : !DateTime.now().isAfter(
-                                                      _eventDetails!.regEnd!)
-                                                  ? 'Register Now'
-                                                  : !DateTime.now().isAfter(
-                                                          _eventDetails!
-                                                              .endDate!)
-                                                      ? "Registration Ended"
-                                                      : "Event Ended",
-                                      color: AppColor().primaryWhite,
-                                      size: 14,
-                                      fontFamily: 'InterMedium',
-                                    )),
-                            ),
-                          ),
-                          Gap(Get.height * 0.02),
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: CustomFillOption(
-                                      buttonColor: AppColor()
-                                          .primaryBackGroundColor
-                                          .withOpacity(0.7),
-                                      borderColor: AppColor().greyEight,
-                                      onTap: () async {
-                                        setState(() {
-                                          _isLoading = true;
-                                        });
-                                        String message = await authController
-                                            .followCommunity(_eventDetails!
-                                                .community!.slug!);
-                                        setState(() {
-                                          if (message == "followed") {
-                                            _isFollowing = true;
-                                          } else if (message == "unfollowed") {
-                                            _isFollowing = false;
-                                          }
-                                          _isLoading = false;
-                                        });
-                                      },
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: _isLoading
-                                              ? [
-                                                  Center(
-                                                    child: SizedBox(
-                                                      width: Get.height * 0.03,
-                                                      height: Get.height * 0.03,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        color: AppColor()
-                                                            .primaryColor,
-                                                        strokeWidth: 2,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ]
-                                              : [
-                                                  CustomText(
-                                                      title: _isFollowing
-                                                          ? "Unfollow"
-                                                          : "Follow Community",
-                                                      size: 14,
-                                                      fontFamily: 'Inter',
-                                                      color: AppColor()
-                                                          .primaryWhite),
-                                                ]),
-                                    ),
-                                  ),
-                                  // Gap(Get.height * 0.02),
-                                  // Expanded(
-                                  //   child: CustomFillOption(
-                                  //     buttonColor: AppColor()
-                                  //         .primaryBackGroundColor
-                                  //         .withOpacity(0.7),
-                                  //     borderColor: AppColor().greyEight,
-                                  //     onTap: () => showDialog(
-                                  //       context: context,
-                                  //       builder: (context) => AlertDialog(
-                                  //         elevation: 0,
-                                  //         shape: RoundedRectangleBorder(
-                                  //             borderRadius:
-                                  //                 BorderRadius.circular(10)),
-                                  //         backgroundColor:
-                                  //             AppColor().primaryBgColor,
-                                  //         content: const ComingSoonPopup(),
-                                  //       ),
-                                  //     ),
-                                  //     child: Row(
-                                  //         mainAxisAlignment:
-                                  //             MainAxisAlignment.center,
-                                  //         children: [
-                                  //           Icon(
-                                  //             Icons.sms_outlined,
-                                  //             color: AppColor().primaryWhite,
-                                  //             size: Get.height * 0.015,
-                                  //           ),
-                                  //           Gap(Get.height * 0.01),
-                                  //           CustomText(
-                                  //               title: 'Message',
-                                  //               size: 14,
-                                  //               fontFamily: 'Inter',
-                                  //               color: AppColor().primaryWhite),
-                                  //           Gap(Get.height * 0.01),
-                                  //           Icon(
-                                  //             Icons.keyboard_arrow_down,
-                                  //             color: AppColor().primaryColor,
-                                  //             size: Get.height * 0.015,
-                                  //           ),
-                                  //         ]),
-                                  //   ),
-                                  // ),
-                                ],
-                              ),
-                              Gap(Get.height * 0.03),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CustomText(
-                                      title: 'Tournament/Bracket Link: ',
-                                      size: 14,
-                                      fontFamily: 'InterMedium',
-                                      underline: TextDecoration.underline,
-                                      color: AppColor().primaryWhite),
-                                  Gap(Get.height * 0.01),
-                                  InkWell(
-                                    onTap: () => launchUrl(Uri.parse(
-                                        _eventDetails!.linkForBracket!)),
-                                    child: CustomText(
-                                      title: _eventDetails!.linkForBracket,
-                                      size: 14,
-                                      fontFamily: 'InterMedium',
-                                      underline: TextDecoration.underline,
-                                      color: AppColor().primaryColor,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Gap(Get.height * 0.02),
-                              CustomText(
-                                  title: _eventDetails!.summary,
-                                  maxLines: 5,
-                                  overflow: TextOverflow.ellipsis,
-                                  size: Get.height * 0.015,
-                                  fontFamily: 'Inter',
-                                  textAlign: TextAlign.center,
-                                  height: 1.5,
-                                  color: AppColor().greyFour),
-                              // Gap(Get.height * 0.02),
-                              // InkWell(
-                              //   onTap: () =>
-                              //       Get.to(() => TournamentDetails(item: _eventDetails!)),
-                              //   child: CustomText(
-                              //       title: 'See tournament details',
-                              //
-                              //       size: 14,
-                              //       fontFamily: 'InterMedium',
-                              //       underline: TextDecoration.underline,
-                              //       color: AppColor().primaryColor),
-                              // ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Divider(
-                      color: AppColor().lightItemsColor.withOpacity(0.3),
-                      height: Get.height * 0.05,
-                      thickness: 4,
-                    ),
+                    // Tournament Summary Section
+                    TournamentSummary(eventDetails: _eventDetails!),
+                    Gap(Get.height * 0.05),
+
+                    // Registration Button
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                              title: 'Organising Community',
-                              size: 20,
-                              fontFamily: 'InterSemiBold',
-                              color: AppColor().primaryWhite),
-                          Gap(Get.height * 0.02),
-                          GestureDetector(
-                            onTap: () => Get.to(AccountCommunityDetail(
-                                item: _eventDetails!.community!)),
-                            child: Row(
-                              children: [
-                                Stack(
-                                  alignment: Alignment.bottomRight,
-                                  children: [
-                                    _eventDetails!.community!.logo == null
-                                        ? Container(
-                                            height: Get.height * 0.04,
-                                            width: Get.height * 0.04,
-                                            decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: SvgPicture.asset(
-                                              'assets/images/svg/people.svg',
-                                            ),
-                                          )
-                                        : OtherImage(
-                                            itemSize: Get.height * 0.04,
-                                            image:
-                                                _eventDetails!.community!.logo),
-                                    if (_eventDetails!.community!.isVerified!)
-                                      SvgPicture.asset(
-                                          "assets/images/svg/check_badge.svg",
-                                          width: Get.height * 0.015),
-                                  ],
-                                ),
-                                Gap(Get.height * 0.015),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomText(
-                                        title: _eventDetails!.community!.name!
-                                            .toCapitalCase(),
-                                        size: 14,
-                                        fontFamily: 'InterMedium',
-                                        color: AppColor().primaryWhite),
-                                    Gap(Get.height * 0.005),
-                                    CustomText(
-                                        title: 'No members',
-                                        size: Get.height * 0.015,
-                                        fontFamily: 'Inter',
-                                        textAlign: TextAlign.left,
-                                        height: 1.5,
-                                        color: AppColor().greyEight),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Gap(Get.height * 0.01),
-                          CustomText(
-                              title: _eventDetails!.community!.bio != ''
-                                  ? _eventDetails!.community!.bio!
-                                      .toSentenceCase()
-                                  : 'Bio: Nil',
-                              size: Get.height * 0.015,
-                              fontFamily: 'Inter',
-                              textAlign: TextAlign.left,
-                              height: 1.5,
-                              color: AppColor().greyEight),
-                          Gap(Get.height * 0.02),
-                          GestureDetector(
-                            onTap: () => Get.to(AccountCommunityDetail(
-                                item: _eventDetails!.community!)),
-                            child: Center(
-                              child: CustomText(
-                                  title: 'See full profile',
-                                  size: 14,
-                                  fontFamily: 'InterMedium',
-                                  underline: TextDecoration.underline,
-                                  color: AppColor().primaryColor),
-                            ),
-                          ),
-                          Divider(
-                            color: AppColor().lightItemsColor.withOpacity(0.3),
-                            height: Get.height * 0.05,
-                            thickness: 0.5,
-                          ),
-                          CustomText(
-                              title: 'Partners',
-                              size: 20,
-                              fontFamily: 'InterSemiBold',
-                              color: AppColor().primaryWhite),
-                          Gap(Get.height * 0.02),
-                          Row(
-                            children: [
-                              _eventDetails!.community!.logo == null
-                                  ? Container(
-                                      height: Get.height * 0.04,
-                                      width: Get.height * 0.04,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: SvgPicture.asset(
-                                        'assets/images/svg/people.svg',
-                                      ),
-                                    )
-                                  : OtherImage(
-                                      itemSize: Get.height * 0.04,
-                                      image: _eventDetails!.community!.logo),
-                              Gap(Get.height * 0.015),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                      title: _eventDetails!.community!.name!
-                                          .toCapitalCase(),
-                                      size: 14,
-                                      fontFamily: 'InterMedium',
-                                      color: AppColor().primaryWhite),
-                                  Gap(Get.height * 0.005),
-                                  CustomText(
-                                      title: 'No members',
-                                      size: Get.height * 0.015,
-                                      fontFamily: 'Inter',
-                                      textAlign: TextAlign.left,
-                                      height: 1.5,
-                                      color: AppColor().greyEight),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                      child: TournamentRegistrationButton(
+                        eventDetails: _eventDetails!,
+                        isRegistered: _isRegistered,
+                        onRegistrationChanged: onRegistrationChanged,
+                        participantSlug: _participantProfile?.slug,
                       ),
                     ),
-                    Divider(
-                      color: AppColor().lightItemsColor.withOpacity(0.3),
-                      height: Get.height * 0.05,
-                      thickness: 4,
+                    Gap(Get.height * 0.02),
+
+                    // Follow Community Button
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                      child: TournamentCommunityFollowButton(
+                        eventDetails: _eventDetails!,
+                        isFollowing: _isFollowing,
+                        onFollowChanged: onFollowChanged,
+                      ),
                     ),
+
+                    // Section Divider
+                    _buildSectionDivider(),
+
+                    // Community Info Section
+                    TournamentCommunityInfoSection(
+                        eventDetails: _eventDetails!),
+
+                    // Section Divider
+                    _buildSectionDivider(),
+
+                    // Announcements Section
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                       child: PageHeaderWidget(
                         onTap: () {
                           Get.to(() => EventPostsAndAnnouncements(
-                                event: _eventDetails!,
-                              ));
+                              event: _eventDetails!));
                         },
                         title: 'Announcements and Posts',
                       ),
@@ -751,49 +301,23 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: _isFetchingPosts || _posts.isEmpty ? 50 : 390,
-                        child: _isFetchingPosts
-                            ? const Center(child: ButtonLoader())
-                            : _posts.isEmpty
-                                ? Center(
-                                    child: CustomText(
-                                        title: "No posts",
-                                        size: 16,
-                                        fontFamily: "InterMedium",
-                                        color: AppColor().lightItemsColor))
-                                : ListView.separated(
-                                    physics: const ScrollPhysics(),
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    separatorBuilder: (context, index) =>
-                                        Gap(Get.height * 0.02),
-                                    itemBuilder: (context, index) => InkWell(
-                                        onTap: () {
-                                          Get.to(() =>
-                                              PostDetails(item: _posts[index]));
-                                        },
-                                        child: SizedBox(
-                                            width: Get.height * 0.35,
-                                            child: PostItemForProfile(
-                                                item: _posts[index]))),
-                                    itemCount: _posts.length),
+                      child: TournamentAnnouncementsSection(
+                        posts: _posts,
+                        isFetchingPosts: _isFetchingPosts,
                       ),
                     ),
-                    Divider(
-                      color: AppColor().lightItemsColor.withOpacity(0.3),
-                      height: Get.height * 0.05,
-                      thickness: 4,
-                    ),
+
+                    // Section Divider
+                    _buildSectionDivider(),
+
+                    // Fixtures Section
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                       child: PageHeaderWidget(
                         onTap: () {
-                          Get.to(() => FixturesAndResults(
-                                event: _eventDetails!,
-                              ));
+                          Get.to(
+                              () => FixturesAndResults(event: _eventDetails!));
                         },
                         title: 'Fixtures and Results',
                       ),
@@ -802,286 +326,29 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: _isFetchingFixtures || _fixturesList.isEmpty
-                            ? 50
-                            : Get.height * 0.285,
-                        child: _isFetchingFixtures
-                            ? const Center(child: ButtonLoader())
-                            : _fixturesList.isEmpty
-                                ? Center(
-                                    child: CustomText(
-                                        title: "No fixtures",
-                                        size: 16,
-                                        fontFamily: "InterMedium",
-                                        color: AppColor().lightItemsColor))
-                                : ListView.separated(
-                                    physics: const ScrollPhysics(),
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    separatorBuilder: (context, index) =>
-                                        Gap(Get.height * 0.02),
-                                    itemBuilder: (context, index) =>
-                                        GestureDetector(
-                                            onTap: () {},
-                                            child: _fixturesList[index]
-                                                        .fixtureType ==
-                                                    "BR"
-                                                ? BRFixtureCardScrollable(
-                                                    event: widget.item,
-                                                    getFixtures: getFixtures,
-                                                    fixture:
-                                                        _fixturesList[index],
-                                                    backgroundColor: _colors[
-                                                        index % _colors.length])
-                                                : FixtureCardScrollable(
-                                                    fixture:
-                                                        _fixturesList[index],
-                                                    backgroundColor: _colors[
-                                                        index %
-                                                            _colors.length])),
-                                    itemCount: _fixturesList.take(10).length),
+                      child: TournamentFixturesSection(
+                        fixturesList: _fixturesList,
+                        isFetchingFixtures: _isFetchingFixtures,
+                        event: widget.item,
+                        getFixtures: getFixtures,
+                        backgroundColors: _colors,
                       ),
                     ),
-                    // Gap(Get.height * 0.005),
-                    // Divider(
-                    //   color: AppColor().lightItemsColor.withOpacity(0.3),
-                    //   height: Get.height * 0.05,
-                    //   thickness: 4,
-                    // ),
-                    // Padding(
-                    //   padding:
-                    //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    //   child: PageHeaderWidget(
-                    //     onTap: () {
-                    //       Get.to(() => FixturesAndResults(
-                    //             event: _eventDetails!,
-                    //           ));
-                    //     },
-                    //     title: 'Livestreams',
-                    //   ),
-                    // ),
-                    // Gap(Get.height * 0.02),
-                    // const ComingSoonWidget(),
-                    // Padding(
-                    //   padding:
-                    //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    //   child: SizedBox(
-                    //     width: double.infinity,
-                    //     height: _isFetchingFixtures || _fixturesList.isEmpty
-                    //         ? 50
-                    //         : Get.height * 0.25,
-                    //     child: _isFetchingFixtures
-                    //         ? const Center(child: ButtonLoader())
-                    //         : _fixturesList.isEmpty
-                    //             ? Center(
-                    //                 child: CustomText(
-                    //                     title: "No streams",
-                    //                     size: 16,
-                    //                     fontFamily: "InterMedium",
-                    //                     color: AppColor().lightItemsColor))
-                    //             : ListView.separated(
-                    //                 physics: const ScrollPhysics(),
-                    //                 shrinkWrap: true,
-                    //                 scrollDirection: Axis.horizontal,
-                    //                 separatorBuilder: (context, index) =>
-                    //                     Gap(Get.height * 0.02),
-                    //                 itemBuilder: (context, index) =>
-                    //                     GestureDetector(
-                    //                         onTap: () {},
-                    //                         child: FixtureCardScrollable(
-                    //                             fixture: _fixturesList[index],
-                    //                             backgroundColor: _colors[
-                    //                                 index % _colors.length])),
-                    //                 itemCount: _fixturesList.take(5).length),
-                    //   ),
-                    // ),
                     Gap(Get.height * 0.005),
-                    Divider(
-                      color: AppColor().lightItemsColor.withOpacity(0.3),
-                      height: Get.height * 0.05,
-                      thickness: 4,
-                    ),
+
+                    // Section Divider
+                    _buildSectionDivider(),
+
+                    // Tournament Details Section
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            title: 'Tournament Details',
-                            fontFamily: 'InterSemiBold',
-                            size: 16,
-                            color: AppColor().primaryWhite,
-                          ),
-                          Gap(Get.height * 0.02),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Get.height * 0.02),
-                            child: Column(
-                              children: [
-                                tournamentDetails(
-                                    onTap: () {
-                                      Get.to(() =>
-                                          _eventDetails!.tournamentType ==
-                                                  "team"
-                                              ? TeamParticipantList(
-                                                  event: _eventDetails!)
-                                              : ParticipantList(
-                                                  event: _eventDetails!,
-                                                ));
-                                    },
-                                    title: 'Participants List'),
-                                Divider(
-                                    color: AppColor()
-                                        .lightItemsColor
-                                        .withOpacity(0.3),
-                                    thickness: 0.5),
-                                tournamentDetails(
-                                    onTap: () => Get.to(() => TournamentDetails(
-                                        title: "Tournament Structure",
-                                        value: _eventDetails!.structure!)),
-                                    title: 'Tournament Structure'),
-                                Divider(
-                                    color: AppColor()
-                                        .lightItemsColor
-                                        .withOpacity(0.3),
-                                    thickness: 0.5),
-                                tournamentDetails(
-                                    onTap: () => Get.to(() => TournamentDetails(
-                                        title: "Rules and Regulations",
-                                        value: _eventDetails!.rulesRegs!)),
-                                    title: 'Rules and regulations'),
-                                Divider(
-                                    color: AppColor()
-                                        .lightItemsColor
-                                        .withOpacity(0.3),
-                                    thickness: 0.5),
-                                tournamentDetails(
-                                    onTap: () => Get.to(() => TournamentDetails(
-                                        title: "Tournament Requirements",
-                                        value: _eventDetails!.requirements!)),
-                                    title: 'Tournament Requirements'),
-                                Gap(Get.height * 0.01),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: _buildTournamentDetailsSection(),
                     ),
-                    // Divider(
-                    //   color: AppColor().lightItemsColor.withOpacity(0.3),
-                    //   height: Get.height * 0.05,
-                    //   thickness: 4,
-                    // ),
-                    // Padding(
-                    //   padding:
-                    //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    //   child: PageHeaderWidget(
-                    //     onTap: () {},
-                    //     title: 'Tournament Staff',
-                    //   ),
-                    // ),
-                    // const ComingSoonWidget(),
-                    // Divider(
-                    //   color: AppColor().lightItemsColor.withOpacity(0.3),
-                    //   height: Get.height * 0.05,
-                    //   thickness: 4,
-                    // ),
-                    // Padding(
-                    //   padding:
-                    //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    //   child: PageHeaderWidget(
-                    //     onTap: () {
-                    //       Get.to(
-                    //           () => TournamentLeaderboard(event: _eventDetails!));
-                    //     },
-                    //     title: 'Tournament Leaderboard',
-                    //   ),
-                    // ),
-                    // const Gap(16),
-                    // Padding(
-                    //   padding:
-                    //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    //   child: RankingCard(title: "Rankings"),
-                    // ),
-                    // Divider(
-                    //   color: AppColor().lightItemsColor.withOpacity(0.3),
-                    //   height: Get.height * 0.05,
-                    //   thickness: 4,
-                    // ),
-                    // Padding(
-                    //   padding:
-                    //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    //   child: PageHeaderWidget(
-                    //     onTap: () {},
-                    //     title: 'Other Tournaments',
-                    //   ),
-                    // ),
-                    // const ComingSoonWidget(),
-                    // Divider(
-                    //   color: AppColor().lightItemsColor.withOpacity(0.3),
-                    //   height: Get.height * 0.05,
-                    //   thickness: 4,
-                    // ),
-                    // Padding(
-                    //   padding:
-                    //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    //   child: PageHeaderWidget(
-                    //     onTap: () {},
-                    //     title: 'Badges',
-                    //   ),
-                    // ),
-                    // const ComingSoonWidget(),
-                    // Divider(
-                    //   color: AppColor().lightItemsColor.withOpacity(0.3),
-                    //   height: Get.height * 0.05,
-                    //   thickness: 4,
-                    // ),
-                    // Padding(
-                    //   padding:
-                    //       EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                    //   child: PageHeaderWidget(
-                    //     onTap: () {},
-                    //     title: 'Media, Links and Document',
-                    //   ),
-                    // ),
-                    // Gap(Get.height * 0.02),
-                    // const ComingSoonWidget(),
                     Gap(Get.height * 0.04),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomText(
-                            title: 'Join our Community:',
-                            fontFamily: 'InterSemiBold',
-                            size: 16,
-                            color: AppColor().primaryWhite,
-                          ),
-                          Gap(Get.height * 0.02),
-                        ],
-                      ),
-                    ),
-                    Gap(Get.height * 0.02),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset('assets/images/svg/discord.svg'),
-                          Gap(Get.height * 0.01),
-                          SvgPicture.asset('assets/images/svg/twitter.svg'),
-                          Gap(Get.height * 0.01),
-                          SvgPicture.asset('assets/images/svg/telegram.svg'),
-                          Gap(Get.height * 0.01),
-                          SvgPicture.asset('assets/images/svg/meduim.svg'),
-                        ],
-                      ),
-                    ),
+
+                    // Social Links Section
+                    const SocialLinksSection(),
                     Gap(Get.height * 0.02),
                   ],
                 ),
@@ -1090,7 +357,76 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
     );
   }
 
-  tournamentDetails({String? title, VoidCallback? onTap}) {
+  Widget _buildSectionDivider() {
+    return Divider(
+      color: AppColor().lightItemsColor.withOpacity(0.3),
+      height: Get.height * 0.05,
+      thickness: 4,
+    );
+  }
+
+  Widget _buildTournamentDetailsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Title
+        Text(
+          'Tournament Details',
+          style: TextStyle(
+            fontFamily: 'InterSemiBold',
+            fontSize: 16,
+            color: AppColor().primaryWhite,
+          ),
+        ),
+        Gap(Get.height * 0.02),
+
+        // Details Items
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+          child: Column(
+            children: [
+              _buildDetailItem(
+                title: 'Participants List',
+                onTap: () {
+                  Get.to(() => _eventDetails!.tournamentType == "team"
+                      ? TeamParticipantList(event: _eventDetails!)
+                      : ParticipantList(event: _eventDetails!));
+                },
+              ),
+              _buildDivider(),
+              _buildDetailItem(
+                title: 'Tournament Structure',
+                onTap: () => Get.to(() => TournamentDetails(
+                      title: "Tournament Structure",
+                      value: _eventDetails!.structure!,
+                    )),
+              ),
+              _buildDivider(),
+              _buildDetailItem(
+                title: 'Rules and regulations',
+                onTap: () => Get.to(() => TournamentDetails(
+                      title: "Rules and Regulations",
+                      value: _eventDetails!.rulesRegs!,
+                    )),
+              ),
+              _buildDivider(),
+              _buildDetailItem(
+                title: 'Tournament Requirements',
+                onTap: () => Get.to(() => TournamentDetails(
+                      title: "Tournament Requirements",
+                      value: _eventDetails!.requirements!,
+                    )),
+              ),
+              Gap(Get.height * 0.01),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailItem(
+      {required String title, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -1098,11 +434,14 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomText(
-                title: title,
-                size: 14,
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
                 fontFamily: 'InterMedium',
-                color: AppColor().greySix),
+                color: AppColor().greySix,
+              ),
+            ),
             Icon(
               Icons.arrow_forward_ios,
               color: AppColor().primaryColor,
@@ -1111,6 +450,13 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Divider(
+      color: AppColor().lightItemsColor.withOpacity(0.3),
+      thickness: 0.5,
     );
   }
 }

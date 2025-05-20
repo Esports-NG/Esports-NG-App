@@ -367,15 +367,15 @@ class _AccountEventsItemState extends State<AccountEventsItem> {
                             ),
                           ),
                           Gap(Get.height * 0.01),
-                          textItem(
-                            title: 'Venue: ',
-                            subTitle: widget.item.venue!,
-                          ),
+                          // textItem(
+                          //   title: 'Venue: ',
+                          //   subTitle: widget.item.venue!,
+                          // ),
                           Gap(Get.height * 0.01),
-                          textItem(
-                            title: 'Event link: ',
-                            subTitle: widget.item.linkForBracket,
-                          ),
+                          // textItem(
+                          //   title: 'Event link: ',
+                          //   subTitle: widget.item.linkForBracket,
+                          // ),
                           Gap(Get.height * 0.01),
                         ],
                       )

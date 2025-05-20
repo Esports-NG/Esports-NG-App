@@ -26,7 +26,7 @@ class _AccountCommunityWidgetState extends State<AccountCommunityWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      padding: EdgeInsets.zero,
+      padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
       physics: const ScrollPhysics(),
       shrinkWrap: true,
       itemCount: communityController.myCommunity.length,

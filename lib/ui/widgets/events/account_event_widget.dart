@@ -37,7 +37,7 @@ class _AccountEventsWidgetState extends State<AccountEventsWidget> {
   Widget build(BuildContext context) {
     return Obx(() {
       return ListView.separated(
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
         physics: const ScrollPhysics(),
         shrinkWrap: true,
         itemCount: eventController.myEvent.value.length,

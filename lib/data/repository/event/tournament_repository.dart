@@ -515,8 +515,10 @@ class TournamentRepository extends GetxController {
           options: Options(headers: headers));
 
       var responseData = _handleResponse(response);
-      return playerModelListFromJson(responseData);
+      print(responseData);
+      return responseData;
     } catch (error) {
+      print(error);
       _handleError(error);
       return [];
     }
@@ -536,7 +538,8 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future unregisterForEvent(String slug, String role, String roleSlug) async {
+  Future<bool> unregisterForEvent(
+      String slug, String role, String roleSlug) async {
     try {
       var headers = _getAuthHeaders();
       var response = await dio.put(
@@ -545,9 +548,11 @@ class TournamentRepository extends GetxController {
 
       _handleResponse(response);
       Helpers().showCustomSnackbar(message: "Successfully unregistered");
+      return true;
     } catch (error) {
       _handleError(error);
     }
+    return false;
   }
 
   Future getFixtures(String slug) async {
