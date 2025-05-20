@@ -112,13 +112,12 @@ class TeamRepository extends GetxController {
   late final accountTypeController = TextEditingController();
 
   final Rx<List<TeamModel>> _allTeam = Rx([]);
-  final Rx<List<TeamModel>?> _myTeam = Rx([]);
+  final RxList<TeamModel> myTeam = RxList([]);
   final Rx<TeamInboxModel?> _teamInbox = Rx(null);
 
   final RxList<TeamModel> searchedTeams = <TeamModel>[].obs;
 
   List<TeamModel> get allTeam => _allTeam.value;
-  List<TeamModel> get myTeam => _myTeam.value!;
   TeamInboxModel? get teamInbox => _teamInbox.value;
 
   // apply to team controller
@@ -294,32 +293,17 @@ class TeamRepository extends GetxController {
       final response = await _dio.get(
         ApiLink.getMyTeam,
       );
-
-      if (response.statusCode == 200) {
-        final responseData = response.data;
-        final success = responseData['success'] ?? false;
-
-        if (success) {
-          final data = responseData['data'] ?? [];
-          var teams = (data as List).map((e) => TeamModel.fromJson(e)).toList();
-          debugPrint("${teams.length} teams found");
-          _myTeam(teams);
-          teams.isNotEmpty
-              ? _myTeamStatus(MyTeamStatus.available)
-              : _myTeamStatus(MyTeamStatus.empty);
-        } else {
-          _myTeamStatus(MyTeamStatus.error);
-          handleError(responseData['message'] ?? 'Unknown error occurred');
-        }
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        _myTeamStatus(MyTeamStatus.error);
-      }
-      return response.data;
+      final responseData = response.data;
+      final data = responseData['data'] ?? [];
+      var teams = List<TeamModel>.from(
+          (data as List).map((e) => TeamModel.fromJson(e)).toList());
+      debugPrint("${teams.length} teams found");
+      myTeam.assignAll(teams);
     } on dio.DioException catch (error) {
       _myTeamStatus(MyTeamStatus.error);
+      if (error.response?.data != null) {
+        print(error.response?.data);
+      }
       if (error.response?.statusCode == 401) {
         authController
             .refreshToken()

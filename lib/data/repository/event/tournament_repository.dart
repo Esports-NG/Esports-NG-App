@@ -447,6 +447,10 @@ class TournamentRepository extends GetxController {
         debugPrint("Unexpected status code: ${response.statusCode}");
         _handleError("Unexpected error occurred");
       }
+    } on DioException catch (err) {
+      if (err.response?.data != null) {
+        print(err.response?.data);
+      }
     } catch (error) {
       eventController.createEventStatus(CreateEventStatus.error);
       debugPrint("Error occurred: ${error.toString()}");

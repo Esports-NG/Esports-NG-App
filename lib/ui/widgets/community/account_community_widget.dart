@@ -25,35 +25,19 @@ class _AccountCommunityWidgetState extends State<AccountCommunityWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (communityController.communityStatus == CommunityStatus.loading) {
-      return LoadingWidget(color: AppColor().primaryColor);
-    } else if (communityController.communityStatus ==
-        CommunityStatus.available) {
-      return ListView.separated(
-        padding: EdgeInsets.zero,
-        physics: const ScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: communityController.allCommunity
-            .where(
-                (community) => community.owner!.id == authController.user!.id)
-            .toList()
-            .length,
-        separatorBuilder: (context, index) => Gap(Get.height * 0.02),
-        itemBuilder: (context, index) {
-          var item = communityController.allCommunity
-              .where(
-                  (community) => community.owner!.id == authController.user!.id)
-              .toList()[index];
-          return InkWell(
-            onTap: () => Get.to(() => AccountCommunityDetail(item: item)),
-            child: AccountCommunityItem(item: item),
-          );
-        },
-      );
-    } else if (communityController.communityStatus == CommunityStatus.empty) {
-      return const NoItemPage(title: 'Community');
-    } else {
-      return const ErrorPage();
-    }
+    return ListView.separated(
+      padding: EdgeInsets.zero,
+      physics: const ScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: communityController.myCommunity.length,
+      separatorBuilder: (context, index) => Gap(Get.height * 0.02),
+      itemBuilder: (context, index) {
+        var item = communityController.myCommunity[index];
+        return InkWell(
+          onTap: () => Get.to(() => AccountCommunityDetail(item: item)),
+          child: AccountCommunityItem(item: item),
+        );
+      },
+    );
   }
 }

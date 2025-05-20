@@ -76,9 +76,8 @@ class CommunityRepository extends Get.GetxController {
 
   // Community data observables
   final Get.Rx<List<CommunityModel>> _allCommunity = Get.Rx([]);
-  final Get.Rx<List<CommunityModel>> _myCommunity = Get.Rx([]);
+  final Get.RxList<CommunityModel> myCommunity = Get.RxList([]);
   List<CommunityModel> get allCommunity => _allCommunity.value;
-  List<CommunityModel> get myCommunity => _myCommunity.value;
 
   final Get.RxList<CommunityModel> searchedCommunities = <CommunityModel>[].obs;
   Get.RxList<UserModel> suggestedProfiles = Get.RxList([]);
@@ -285,6 +284,22 @@ class CommunityRepository extends Get.GetxController {
       _communityStatus(CommunityStatus.error);
       debugPrint("getting all community: ${error.toString()}");
       return null;
+    }
+  }
+
+  Future getUserCommunity() async {
+    try {
+      final response = await _dio.get(ApiLink.getUserCommunity);
+      print(response.data);
+
+      var communityData = response.data['data'] as List;
+      var userCommunity = List<CommunityModel>.from(
+          communityData.map((x) => CommunityModel.fromJson(x)));
+      myCommunity.assignAll(userCommunity);
+    } on DioException catch (err) {
+      if (err.response?.data != null) {
+        print(err.response?.data);
+      }
     }
   }
 

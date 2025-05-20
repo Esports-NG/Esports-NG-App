@@ -26,10 +26,10 @@ class _AccountTeamsWidgetState extends State<AccountTeamsWidget> {
         padding: EdgeInsets.zero,
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        itemCount: teamController.myTeam.length,
+        itemCount: teamController.myTeam.value.length,
         separatorBuilder: (context, index) => Gap(Get.height * 0.02),
         itemBuilder: (context, index) {
-          var item = teamController.myTeam[index];
+          var item = teamController.myTeam.value[index];
           return InkWell(
             onTap: () => Get.to(() => AccountTeamsDetail(item: item)),
             child: AccountTeamsItem(item: item),

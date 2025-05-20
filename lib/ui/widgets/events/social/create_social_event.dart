@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:e_sport/data/model/category_model.dart';
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
@@ -11,6 +12,7 @@ import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/custom/custom_textfield.dart';
 import 'package:e_sport/ui/widgets/custom/custom_button.dart';
 import 'package:e_sport/ui/widgets/game/game_list_dropdown.dart';
+import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -254,6 +256,30 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
     );
   }
 
+  List<GamePlayed> _games = [];
+  bool _fetchingGames = false;
+
+  @override
+  void initState() {
+    socialEventController.organizingCommunity.listen((value) async {
+      setState(() {
+        _fetchingGames = true;
+      });
+      if (value != null) {
+        var community = await communityController.getCommunityData(value.slug!);
+        if (community != null) {
+          setState(() {
+            _games = community.gamesPlayed!;
+          });
+        }
+      }
+      setState(() {
+        _fetchingGames = false;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -282,9 +308,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
               InputDecorator(
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: isCommunities == true
-                      ? AppColor().primaryWhite
-                      : AppColor().primaryDark,
+                  fillColor: AppColor().primaryDark,
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: AppColor().lightItemsColor, width: 1),
@@ -292,8 +316,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(10)),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<CommunityModel>(
@@ -302,23 +325,15 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                     value: socialEventController.organizingCommunity.value,
                     icon: Icon(
                       Icons.keyboard_arrow_down,
-                      color: isCommunities == true
-                          ? AppColor().primaryBackGroundColor
-                          : AppColor().lightItemsColor,
+                      color: AppColor().lightItemsColor,
                     ),
-                    items: communityController.allCommunity
-                        .where((e) => e.owner!.id! == authController.user!.id!)
-                        .toList()
-                        .map((value) {
+                    items: communityController.myCommunity.map((value) {
                       return DropdownMenuItem<CommunityModel>(
                         value: value,
                         child: CustomText(
                           title: value.name,
-                          color: isCommunities == true
-                              ? AppColor().primaryBackGroundColor
-                              : AppColor().lightItemsColor,
                           fontFamily: 'InterMedium',
-                          size: 16,
+                          size: 14,
                         ),
                       );
                     }).toList(),
@@ -335,7 +350,7 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                           ? AppColor().primaryBackGroundColor
                           : AppColor().lightItemsColor,
                       fontFamily: 'InterMedium',
-                      size: 16,
+                      size: 14,
                     ),
                   ),
                 ),
@@ -568,11 +583,12 @@ class _CreateSocialEventState extends State<CreateSocialEvent> {
                   ? CustomText(
                       title: "Please select a community",
                       color: AppColor().primaryRed)
-                  : GameDropdown(
-                      gameValue: socialEventController.gameValue,
-                      gameList: socialEventController
-                          .organizingCommunity.value!.gamesPlayed,
-                    ),
+                  : _fetchingGames
+                      ? ButtonLoader()
+                      : GameDropdown(
+                          gameValue: socialEventController.gameValue,
+                          gameList: _games,
+                        ),
               Gap(Get.height * 0.02),
               CustomText(
                 title: 'Registration Start date *',

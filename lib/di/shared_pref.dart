@@ -23,6 +23,7 @@ class SharedPref {
 
   void logout() {
     _preferences!.setString(isLogin, "");
+    _preferences!.remove("token");
   }
 
   String read() {

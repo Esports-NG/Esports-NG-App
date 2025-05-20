@@ -80,23 +80,23 @@ class _CommentTileState extends State<CommentTile> {
                         ? 'Like'
                         : _likeCount == 1
                             ? '1 Like'
-                            : '$_likeCount Like',
+                            : '$_likeCount Likes',
                     color: AppColor().greySix,
                     fontFamily: 'InterMedium',
                     size: 12),
+                // Gap(Get.height * 0.02),
+                // CustomText(
+                //     title: 'Reply',
+                //     color: AppColor().greySix,
+                //     fontFamily: 'InterMedium',
+                //     size: 12),
+                // Gap(Get.height * 0.02),
+                // CustomText(
+                //     title: 'Repost',
+                //     color: AppColor().greySix,
+                //     fontFamily: 'InterMedium',
+                //     size: 12),
                 Gap(Get.height * 0.02),
-                CustomText(
-                    title: 'Reply',
-                    color: AppColor().greySix,
-                    fontFamily: 'InterMedium',
-                    size: 12),
-                Gap(Get.height * 0.02),
-                CustomText(
-                    title: 'Repost',
-                    color: AppColor().greySix,
-                    fontFamily: 'InterMedium',
-                    size: 12),
-                Gap(Get.height * 0.03),
                 InkWell(
                   onTap: () {
                     showDialog(

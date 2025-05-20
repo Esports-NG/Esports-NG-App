@@ -49,15 +49,15 @@ class ApiLink {
   static String report = "${baseurl}extra/v2/report/";
   static String searchForPostsorUsers(String query, String type) =>
       "${baseurl}$type/v2/search_${type}s/?search=$query";
-  static String getEventPosts(int id) =>
-      "${baseurl}post/v2/filter_posts/?tags__event_id=$id";
+  static String getEventPosts(String slug) =>
+      "${baseurl}post/v2/filter_posts/?tags=$slug";
   static String getAds = "${baseurl}extra/v2/advert/view/";
 
   //Team
   static String createTeam = "${baseurl}team/v2/";
   static String getAllTeam = "${baseurl}team/v2/";
   static String team = "${baseurl}team/v2/";
-  static String getMyTeam = "${baseurl}team/v2/myteam/";
+  static String getMyTeam = "${baseurl}team/v2/member/";
   static String getTeamFollowers(String slug) =>
       "${baseurl}extra/v2/followers/team/view/?g_s=$slug";
   static String followTeam(String slug) =>
@@ -93,7 +93,7 @@ class ApiLink {
       "${baseurl}event/v2/$slug/create/socialevent/";
   static String getEventDetails(String slug) => "${baseurl}event/v2/?p=$slug";
   static String getAllEvent = "${baseurl}event/v2/";
-  static String getMyEvents = "${baseurl}event/v2/myevents/";
+  static String getMyEvents = "${baseurl}event/v2/?q=mine";
   static String getAllSocialEvents = "${baseurl}event/v2/view/social";
   static String getAllTournaments = "${baseurl}event/v2/view/tournament";
   static String registerForEvent(String slug) =>
@@ -143,6 +143,7 @@ class ApiLink {
   static String editCommunity(String slug) => "${baseurl}org/v2/$slug/";
   static String getCommunityByOwner(String slug) =>
       "${baseurl}org/v2/owner/$slug/";
+  static String getUserCommunity = "${baseurl}org/v2/member/";
 
   //Profile
   static String getDataWithFollowers(

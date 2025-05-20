@@ -85,7 +85,7 @@ class EventRepository extends Get.GetxController
 
   final Get.Rx<List<EventModel>> _allEvent = Get.Rx([]);
   final Get.Rx<List<EventModel>> _filteredEvent = Get.Rx([]);
-  final Get.Rx<List<EventModel>> _myEvent = Get.Rx([]);
+  final Get.RxList<EventModel> myEvent = Get.RxList([]);
   final Get.Rx<List<EventModel>> _allTournaments = Get.Rx([]);
   final Get.Rx<List<EventModel>> _myTournaments = Get.Rx([]);
   final Get.Rx<List<EventModel>> _allSocialEvent = Get.Rx([]);
@@ -145,7 +145,6 @@ class EventRepository extends Get.GetxController
 
   List<EventModel> get allEvent => _allEvent.value;
   List<EventModel> get filteredEvent => _filteredEvent.value;
-  List<EventModel> get myEvent => _myEvent.value;
   List<EventModel> get allSocialEvent => _allSocialEvent.value;
   List<EventModel> get mySocialEvent => _mySocialEvent.value;
   List<EventModel> get allTournaments => _allTournaments.value;
@@ -419,20 +418,19 @@ class EventRepository extends Get.GetxController
   }
 
   Future<List<EventModel>?> getMyEvents(bool? firstTime) async {
-    return _safeApiCall(() => _dio.get(ApiLink.getMyEvents), fromJson: (data) {
-      print(data);
-      return (data['results'] as List<dynamic>)
-          .map((e) => EventModel.fromJson(e))
-          .toList();
-    }, setStatus: (loading) {
-      myEventStatus(loading ? EventStatus.loading : EventStatus.empty);
-    }, onSuccess: (events) {
-      if (events != null) {
-        _myEvent(events);
-        myEventStatus(
-            events.isNotEmpty ? EventStatus.available : EventStatus.empty);
-      }
-    });
+    return _safeApiCall(() => _dio.get(ApiLink.getMyEvents),
+        fromJson: (data) {
+          print(data);
+          return (data['results'] as List<dynamic>)
+              .map((e) => EventModel.fromJson(e))
+              .toList();
+        },
+        setStatus: (loading) {},
+        onSuccess: (events) {
+          if (events != null) {
+            myEvent.assignAll(events);
+          }
+        });
   }
 
   Future<List<EventModel>?> getAllTournaments(bool isFirstTime) async {
