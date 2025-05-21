@@ -447,6 +447,10 @@ class TournamentRepository extends GetxController {
         debugPrint("Unexpected status code: ${response.statusCode}");
         _handleError("Unexpected error occurred");
       }
+    } on DioException catch (err) {
+      if (err.response?.data != null) {
+        print(err.response?.data);
+      }
     } catch (error) {
       eventController.createEventStatus(CreateEventStatus.error);
       debugPrint("Error occurred: ${error.toString()}");
@@ -511,8 +515,10 @@ class TournamentRepository extends GetxController {
           options: Options(headers: headers));
 
       var responseData = _handleResponse(response);
-      return playerModelListFromJson(responseData);
+      print(responseData);
+      return responseData;
     } catch (error) {
+      print(error);
       _handleError(error);
       return [];
     }
@@ -532,7 +538,8 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future unregisterForEvent(String slug, String role, String roleSlug) async {
+  Future<bool> unregisterForEvent(
+      String slug, String role, String roleSlug) async {
     try {
       var headers = _getAuthHeaders();
       var response = await dio.put(
@@ -541,9 +548,11 @@ class TournamentRepository extends GetxController {
 
       _handleResponse(response);
       Helpers().showCustomSnackbar(message: "Successfully unregistered");
+      return true;
     } catch (error) {
       _handleError(error);
     }
+    return false;
   }
 
   Future getFixtures(String slug) async {

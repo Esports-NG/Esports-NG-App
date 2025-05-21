@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
@@ -34,6 +35,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
   final eventController = Get.put(EventRepository());
   final authController = Get.put(AuthRepository());
   final gameController = Get.put(GamesRepository());
+  List<GamePlayed> _games = [];
 
   Future pickDate(String title) async {
     final initialDate = DateTime.now();
@@ -111,6 +113,7 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
 
   @override
   void initState() {
+    communityController.getUserCommunity();
     tournamentController.gameValue.listen(
       (p0) async {
         tournamentController.gameModesController.value =
@@ -118,9 +121,17 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
       },
     );
     tournamentController.selectedCommunity.listen(
-      (p0) async {
+      (value) async {
         tournamentController.selectingCommunity.value = true;
-        await Future.delayed(const Duration(milliseconds: 500));
+        if (value != null) {
+          var community =
+              await communityController.getCommunityData(value.slug!);
+          if (community != null) {
+            setState(() {
+              _games = community.gamesPlayed!;
+            });
+          }
+        }
         tournamentController.selectingCommunity.value = false;
       },
     );
@@ -198,48 +209,51 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<CommunityModel>(
-                  dropdownColor: AppColor().primaryDark,
-                  borderRadius: BorderRadius.circular(10),
-                  value: tournamentController.selectedCommunity.value,
-                  icon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: tournamentController.isCommunities.value == true
-                        ? AppColor().primaryBackGroundColor
-                        : AppColor().lightItemsColor,
-                  ),
-                  items: communityController.allCommunity
-                      .where((e) => e.owner!.id! == authController.user!.id!)
-                      .toList()
-                      .map((value) {
-                    return DropdownMenuItem<CommunityModel>(
-                      value: value,
-                      child: CustomText(
-                        title: value.name,
-                        color: tournamentController.isCommunities.value == true
-                            ? AppColor().primaryBackGroundColor
-                            : AppColor().lightItemsColor,
-                        fontFamily: 'InterMedium',
-                        size: 15,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    tournamentController.selectedCommunity.value = value;
-                    tournamentController.communitiesValue.value = value!.name;
-                    tournamentController.communitiesOwnedController.text =
-                        value.name!;
-                    debugPrint(tournamentController.communitiesValue.value);
-                    tournamentController.handleTap('commu');
-                  },
-                  hint: CustomText(
-                    title: "Communities Owned",
-                    color: tournamentController.isCommunities.value == true
-                        ? AppColor().primaryBackGroundColor
-                        : AppColor().lightItemsColor,
-                    fontFamily: 'InterMedium',
-                    size: 15,
+              child: Obx(
+                () => DropdownButtonHideUnderline(
+                  child: DropdownButton<CommunityModel>(
+                    dropdownColor: AppColor().primaryDark,
+                    borderRadius: BorderRadius.circular(10),
+                    value: tournamentController.selectedCommunity.value,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: tournamentController.isCommunities.value == true
+                          ? AppColor().primaryBackGroundColor
+                          : AppColor().lightItemsColor,
+                    ),
+                    items: communityController.myCommunity.value
+                        // .where((e) => e.owner!.id! == authController.user!.id!)
+                        .toList()
+                        .map((value) {
+                      return DropdownMenuItem<CommunityModel>(
+                        value: value,
+                        child: CustomText(
+                          title: value.name,
+                          color:
+                              tournamentController.isCommunities.value == true
+                                  ? AppColor().primaryBackGroundColor
+                                  : AppColor().lightItemsColor,
+                          fontFamily: 'InterMedium',
+                          size: 15,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      tournamentController.selectedCommunity.value = value;
+                      tournamentController.communitiesValue.value = value!.name;
+                      tournamentController.communitiesOwnedController.text =
+                          value.name!;
+                      debugPrint(tournamentController.communitiesValue.value);
+                      tournamentController.handleTap('commu');
+                    },
+                    hint: CustomText(
+                      title: "Communities Owned",
+                      color: tournamentController.isCommunities.value == true
+                          ? AppColor().primaryBackGroundColor
+                          : AppColor().lightItemsColor,
+                      fontFamily: 'InterMedium',
+                      size: 15,
+                    ),
                   ),
                 ),
               ),
@@ -345,15 +359,13 @@ class _CreateTournamentFormState extends State<CreateTournamentForm> {
                         color: AppColor().primaryRed)
                     : tournamentController.selectingCommunity.value
                         ? const ButtonLoader()
-                        : tournamentController
-                                .selectedCommunity.value!.gamesPlayed!.isEmpty
+                        : _games.isEmpty
                             ? CustomText(
                                 title:
                                     "This community does not have a game. Please add a a game to the community then try again.",
                                 color: AppColor().primaryRed)
                             : GameDropdown(
-                                gameList: tournamentController
-                                    .selectedCommunity.value!.gamesPlayed,
+                                gameList: _games,
                                 enableFill: tournamentController.isGame.value,
                                 gameValue: tournamentController.gameValue,
                                 handleTap: () =>

@@ -49,6 +49,7 @@ class ApiHelpers {
     try {
       if (setStatus != null) setStatus(true);
       final response = await apiCall();
+      // print(response);
 
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         final apiResponse = ApiResponse.fromJson(

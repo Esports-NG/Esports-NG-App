@@ -90,26 +90,11 @@ class AccountCommunityItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: CustomFillButton(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (ctx) => EditCommunityPage(
-                                        community: item,
-                                      )));
-                        },
-                        buttonText: 'Edit',
-                        width: 80,
-                        height: 40,
-                      ),
-                    ),
-                    Positioned(
+                    Flexible(
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -120,23 +105,27 @@ class AccountCommunityItem extends StatelessWidget {
                               textAlign: TextAlign.start,
                               color: AppColor().greyOne,
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Divider(
-                              color:
-                                  AppColor().lightItemsColor.withOpacity(0.3),
-                              height: Get.height * 0.03,
-                              thickness: 0.5,
-                            ),
-                            CustomText(
-                              title: item.bio!.toSentenceCase(),
-                              size: 12,
-                              fontFamily: 'InterMedium',
-                              textAlign: TextAlign.start,
-                              color: AppColor().greySix,
-                            ),
+                            // CustomText(
+                            //   title: item.bio!.toSentenceCase(),
+                            //   size: 12,
+                            //   fontFamily: 'InterMedium',
+                            //   textAlign: TextAlign.start,
+                            //   color: AppColor().greySix,
+                            // ),
                           ]),
+                    ),
+                    CustomFillButton(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (ctx) => EditCommunityPage(
+                                      community: item,
+                                    )));
+                      },
+                      buttonText: 'Edit',
+                      width: 80,
+                      height: 40,
                     ),
                   ],
                 ),

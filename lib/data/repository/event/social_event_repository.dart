@@ -282,7 +282,8 @@ class SocialEventRepository extends GetxController {
   Future<void> createSocialEvent() async {
     return _safeApiCall(() async {
       eventController.createEventStatus(CreateEventStatus.loading);
-
+      var httpSplit = eventLinkController.text.replaceAll("https://", "");
+      var eventLink = "https://$httpSplit";
       // Prepare form data
       final formData = dio.FormData();
       formData.fields.addAll([
@@ -296,7 +297,7 @@ class SocialEventRepository extends GetxController {
         MapEntry('hashtag', eventHashtagController.text),
         MapEntry('event_type', 'social'),
         MapEntry('venue', eventVenueController.text),
-        MapEntry('link', eventLinkController.text),
+        MapEntry('link', eventLink),
       ]);
 
       // Format date and time fields

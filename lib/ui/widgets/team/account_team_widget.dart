@@ -23,13 +23,13 @@ class _AccountTeamsWidgetState extends State<AccountTeamsWidget> {
   Widget build(BuildContext context) {
     return Obx(
       () => ListView.separated(
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        itemCount: teamController.myTeam.length,
+        itemCount: teamController.myTeam.value.length,
         separatorBuilder: (context, index) => Gap(Get.height * 0.02),
         itemBuilder: (context, index) {
-          var item = teamController.myTeam[index];
+          var item = teamController.myTeam.value[index];
           return InkWell(
             onTap: () => Get.to(() => AccountTeamsDetail(item: item)),
             child: AccountTeamsItem(item: item),

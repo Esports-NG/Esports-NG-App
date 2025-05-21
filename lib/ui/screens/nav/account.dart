@@ -7,7 +7,11 @@ import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/screens/account/delete_account.dart';
 import 'package:e_sport/ui/screens/account/faq.dart';
 import 'package:e_sport/ui/screens/account/privacy_policy.dart';
+import 'package:e_sport/ui/screens/community/my_communities.dart';
+import 'package:e_sport/ui/screens/event/my_events.dart';
+import 'package:e_sport/ui/screens/player/my_player_profile.dart';
 import 'package:e_sport/ui/screens/post/my_post_widget.dart';
+import 'package:e_sport/ui/screens/team/my_teams.dart';
 import 'package:e_sport/ui/widgets/utils/profile_image.dart';
 import 'package:e_sport/ui/widgets/utils/coming_soon_popup.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
@@ -212,28 +216,14 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
                             );
                           } else if (item.title == 'Posts') {
                             Get.to(() => const MyPostWidget());
-                          } else if (item.title == "Referrals") {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                backgroundColor: AppColor().primaryBgColor,
-                                content: const ComingSoonPopup(),
-                              ),
-                            );
-                          } else if (item.title == "Wallet") {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                backgroundColor: AppColor().primaryBgColor,
-                                content: const ComingSoonPopup(),
-                              ),
-                            );
+                          } else if (item.title == "Player Profile") {
+                            Get.to(() => MyPlayerProfile());
+                          } else if (item.title == "Teams") {
+                            Get.to(() => MyTeams());
+                          } else if (item.title == "Communities") {
+                            Get.to(() => MyCommunities());
+                          } else if (item.title == "Events") {
+                            Get.to(() => MyEvents());
                           } else {
                             Get.to(() => AccountDetails(
                                   title: item.title,

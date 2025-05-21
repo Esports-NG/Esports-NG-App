@@ -34,8 +34,11 @@ class _TeamParticipantListState extends State<TeamParticipantList>
   bool _isTakingAction = false;
 
   Future getParticipants() async {
-    List<RoasterModel> participantList = await tournamentController
+    List<dynamic> participantData = await tournamentController
         .getTeamTournamentParticipants(widget.event.slug!);
+    print(participantData);
+    List<RoasterModel> participantList = List<RoasterModel>.from(
+        participantData.map((x) => RoasterModel.fromJson(x)));
     List<WaitlistModel> waitlist =
         await tournamentController.getTournamentWaitlist(widget.event.slug!);
     setState(() {
@@ -56,7 +59,7 @@ class _TeamParticipantListState extends State<TeamParticipantList>
         appBar: AppBar(
           title: Row(children: [
             CachedNetworkImage(
-              imageUrl: ApiLink.imageUrl + widget.event.banner!,
+              imageUrl: widget.event.banner!,
               imageBuilder: (context, imageProvider) => Container(
                 width: 40,
                 height: 40,

@@ -97,18 +97,9 @@ class _PostCommentInputState extends State<PostCommentInput> {
                       color: AppColor().primaryColor,
                     ),
                   )
-                : Icon(IconsaxPlusBold.send_1, color: AppColor().primaryColor),
+                : Icon(IconsaxPlusLinear.send_1,
+                    color: AppColor().primaryColor),
           ),
-          Gap(Get.height * 0.015),
-          CustomText(
-            title: '@',
-            size: 18,
-            fontFamily: "InterMedium",
-            textAlign: TextAlign.start,
-            color: AppColor().primaryWhite,
-          ),
-          Gap(Get.height * 0.015),
-          Icon(IconsaxPlusLinear.gallery, color: AppColor().primaryWhite)
         ],
       ),
     );

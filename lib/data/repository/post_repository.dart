@@ -425,7 +425,7 @@ class PostRepository extends Get.GetxController {
   Future<bool> likePost(String slug) async {
     _likePostStatus(LikePostStatus.loading);
     try {
-      debugPrint('liking $postId post...');
+      debugPrint('liking $slug post...');
       final response = await _dio.post('${ApiLink.post}$slug/like/');
 
       if (response.statusCode == 200) {
@@ -438,6 +438,7 @@ class PostRepository extends Get.GetxController {
       }
       return false;
     } catch (error) {
+      print(error);
       _likePostStatus(LikePostStatus.error);
       debugPrint("like post error: $error");
       _handleApiError(error);
@@ -770,16 +771,25 @@ class PostRepository extends Get.GetxController {
     }
   }
 
-  Future getEventPosts(int id) async {
-    return _safeApiCall(
-      () => _dio.get(ApiLink.getEventPosts(id)),
+  Future<List<PostModel>?> getEventPosts(String slug) async {
+    var response = await _safeApiCall(
+      () => _dio.get(ApiLink.getEventPosts(slug)),
+      fromJson: (value) {
+        return value['results'];
+      },
       onSuccess: (responseData) {
         if (responseData is List) {
-          var posts = responseData.map((e) => PostModel.fromJson(e)).toList();
+          var list = List.from(responseData!.toList());
+          var posts = list.map((e) => PostModel.fromJson(e)).toList();
           return posts;
         }
       },
     );
+    var list = List.from(response!.toList());
+    var posts =
+        List<PostModel>.from(list.map((e) => PostModel.fromJson(e)).toList());
+
+    return posts;
   }
 
   Future getAdverts() async {

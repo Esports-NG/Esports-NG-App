@@ -46,9 +46,8 @@ class PlayerRepository extends GetxController {
   final _dio = dio.Dio(); // Create a Dio instance
 
   final Rx<List<PlayerModel>> _allPlayer = Rx([]);
-  final Rx<List<PlayerModel>> _myPlayer = Rx([]);
+  final RxList<PlayerModel> myPlayer = RxList([]);
   List<PlayerModel> get allPlayer => _allPlayer.value;
-  List<PlayerModel> get myPlayer => _myPlayer.value;
 
   final _playerStatus = PlayerStatus.empty.obs;
   final _createPlayerStatus = CreatePlayerStatus.empty.obs;
@@ -118,6 +117,52 @@ class PlayerRepository extends GetxController {
       debugPrint("Error occurred ${error.toString()}");
       handleError(error);
     }
+  }
+
+  Future getMyPlayer() async {
+    try {
+      final options = dio.Options(headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+
+      final response = await _dio.get(
+        "${ApiLink.getAllPlayer}?q=profiles",
+        options: options,
+      );
+      print(response.data);
+      var responseData = response.data["data"];
+      var players = List<PlayerModel>.from(
+          responseData.map((x) => PlayerModel.fromJson(x)));
+      myPlayer.assignAll(players);
+    } on dio.DioException catch (err) {
+      if (err.response?.data) {
+        print(err.response?.data);
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<PlayerModel?> getProfile(String slug) async {
+    try {
+      final options = dio.Options(headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'JWT ${authController.token}'
+      });
+
+      final response = await _dio.get(
+        "${ApiLink.getAllPlayer}?p_s=$slug",
+        options: options,
+      );
+      var responseData = response.data['data'];
+      return PlayerModel.fromJson(responseData);
+    } on dio.DioException catch (err) {
+      if (err.response?.data) {
+        print(err.response?.data);
+      }
+    }
+    return null;
   }
 
   Future getAllPlayer(bool isFirstTime) async {

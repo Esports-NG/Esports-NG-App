@@ -60,9 +60,9 @@ class _SocialEventDetailsState extends State<SocialEventDetails> {
     setState(() {
       _isFetchingPosts = true;
     });
-    var posts = await postController.getEventPosts(widget.item.id!);
+    var posts = await postController.getEventPosts(widget.item.slug!);
     setState(() {
-      _posts = posts;
+      _posts = posts ?? [];
       _isFetchingPosts = false;
     });
   }

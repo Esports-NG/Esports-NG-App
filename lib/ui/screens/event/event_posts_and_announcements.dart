@@ -32,9 +32,9 @@ class _EventPostsAndAnnouncementsState extends State<EventPostsAndAnnouncements>
   bool _isLoading = true;
 
   Future getEventPosts(bool? firstTime) async {
-    var posts = await postController.getEventPosts(widget.event.id!);
+    var posts = await postController.getEventPosts(widget.event.slug!);
     setState(() {
-      _posts = posts;
+      _posts = posts ?? [];
       _isLoading = false;
     });
     return posts;

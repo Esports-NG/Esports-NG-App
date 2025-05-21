@@ -366,7 +366,7 @@ class AuthRepository extends Get.GetxController {
                 'Account created successfully!\nConfirmation email sent, Please check your email for further instructions!',
                 duration: const Duration(seconds: 2))
             .then((value) async {
-          await Future.delayed(const Duration(seconds: 2));
+          // await Future.delayed(const Duration(seconds: 2));
           Get.Get.offAll(() => const LoginScreen());
           clear();
           clearPhoto();
@@ -419,7 +419,7 @@ class AuthRepository extends Get.GetxController {
 
           Helpers().showCustomSnackbar(
               message: responseData['message'] ?? "Login Successful");
-          await Future.delayed(const Duration(seconds: 1));
+          // await Future.delayed(const Duration(seconds: 1));
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const RootDashboard()));
         }
@@ -819,8 +819,10 @@ class AuthRepository extends Get.GetxController {
   Future searchAll(String query) async {
     try {
       final response = await _dio.get(ApiLink.searchAll(query));
-      return response.data;
-    } catch (error) {
+      // print(response);
+      return response.data['data'];
+    } on DioException catch (error) {
+      print(error.response?.data);
       _handleApiError(error);
       return null;
     }
@@ -944,8 +946,7 @@ class AuthRepository extends Get.GetxController {
       await _dio.post(ApiLink.logout);
       _authStatus(AuthStatus.unAuthenticated);
       clear();
-      pref!.saveToken("0");
-      mToken("0");
+      mToken("");
       pref!.logout();
       Get.Get.offAll(() => const FirstScreen());
     } catch (error) {
@@ -953,10 +954,9 @@ class AuthRepository extends Get.GetxController {
       // Even if logout API fails, still clear local data
       _authStatus(AuthStatus.unAuthenticated);
       clear();
-      pref!.saveToken("0");
-      mToken("0");
+      mToken("");
       pref!.logout();
-      Get.Get.offAll(() => const FirstScreen());
+      Get.Get.off(() => const FirstScreen());
     }
   }
 }
