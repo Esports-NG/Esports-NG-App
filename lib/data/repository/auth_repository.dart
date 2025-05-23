@@ -422,6 +422,7 @@ class AuthRepository extends Get.GetxController {
           // await Future.delayed(const Duration(seconds: 1));
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const RootDashboard()));
+          // Get.Get.offAll(() => RootDashboard());
         }
       } else {
         _signInStatus(SignInStatus.error);
@@ -440,7 +441,7 @@ class AuthRepository extends Get.GetxController {
   Future getUserInfo() async {
     try {
       debugPrint('getting user info...');
-      final response = await _dio.get(ApiLink.getUser);
+      final response = await _dio.get(ApiLink.user);
       final responseData = response.data;
       print(responseData);
 
@@ -697,7 +698,8 @@ class AuthRepository extends Get.GetxController {
         _followStatus(FollowStatus.error);
         return "error";
       }
-    } catch (error) {
+    } on DioException catch (error) {
+      print(error.response?.data);
       _followStatus(FollowStatus.error);
       _handleApiError(error);
       return "error";

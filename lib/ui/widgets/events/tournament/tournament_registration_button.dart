@@ -4,8 +4,10 @@ import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
 import 'package:e_sport/ui/screens/account/games_played/create_player_profile.dart';
+import 'package:e_sport/ui/screens/team/create_team.dart';
 import 'package:e_sport/ui/widgets/custom/custom_button.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
+import 'package:e_sport/ui/widgets/team/add_team_game_dialog.dart';
 import 'package:e_sport/ui/widgets/team/choose_team_dialog.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -42,12 +44,13 @@ class _TournamentRegistrationButtonState
 
   bool _isRegisterLoading = true;
   bool _canRegister = true;
+  bool _noTeam = false;
 
   Future getPlayerProfile() async {
     await playerController.getMyPlayer();
-    print(playerController.myPlayer[0].gamePlayed!.name);
-    print(widget.eventDetails.games![0].id);
-    if (playerController.myPlayer.value.any((player) =>
+    // print(playerController.myPlayer[0].id);
+    // print(widget.eventDetails.games![0].id);
+    if (playerController.myPlayer.any((player) =>
         player.gamePlayed!.id == widget.eventDetails.games![0].id)) {
       setState(() {
         _canRegister = true;
@@ -64,10 +67,13 @@ class _TournamentRegistrationButtonState
 
   Future getTeamProfile() async {
     await teamController.getMyTeam(false);
-    if (teamController.myTeam.value
-        .where((team) => team.gamesPlayed!
-            .any((game) => game.id! == widget.eventDetails.games![0].id!))
-        .isNotEmpty) {
+    if (teamController.myTeam.value.isEmpty) {
+      setState(() {
+        _noTeam = true;
+      });
+    }
+    if (teamController.myTeam.value.any((team) => team.gamesPlayed!
+        .any((game) => game.id! == widget.eventDetails.games![0].id!))) {
       setState(() {
         _canRegister = true;
       });
@@ -96,33 +102,55 @@ class _TournamentRegistrationButtonState
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          spacing: 8.w,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomText(
-              title: "You don't play this game",
-              size: 14,
-            ),
-            Row(
-              spacing: 4.w,
-              children: [
-                GestureDetector(
-                  onTap: () => Get.to(() => CreatePlayerProfile()),
-                  child: CustomText(
-                    title: "Add new profile",
-                    color: AppColor().primaryColor,
+        if (!_canRegister || _noTeam)
+          Row(
+            spacing: 8.w,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomText(
+                title: _noTeam
+                    ? "You don't have a team"
+                    : widget.eventDetails.tournamentType == "team"
+                        ? "Your teams don't play this game"
+                        : "You don't play this game",
+                size: 14,
+              ),
+              // if (widget.eventDetails.tournamentType != 'team')
+              Row(
+                spacing: 4.w,
+                children: [
+                  GestureDetector(
+                    onTap: _noTeam
+                        ? () => Get.to(() => CreateTeamPage())
+                        : widget.eventDetails.tournamentType == "team"
+                            ? () => showDialog(
+                                context: context,
+                                builder: (context) => AddTeamGameDialog(
+                                      game: widget.eventDetails.games![0],
+                                    ))
+                            : () => Get.to(() => CreatePlayerProfile()),
+                    child: CustomText(
+                      title: _noTeam
+                          ? "Create a team"
+                          : widget.eventDetails.tournamentType == "team" &&
+                                  teamController.myTeam.value.any((team) =>
+                                      team.gamesPlayed!.any((game) =>
+                                          game.id! ==
+                                          widget.eventDetails.games![0].id!))
+                              ? "Add Game to team"
+                              : "Add player profile",
+                      color: AppColor().primaryColor,
+                    ),
                   ),
-                ),
-                Icon(
-                  IconsaxPlusLinear.arrow_right,
-                  color: AppColor().primaryColor,
-                  size: 16.r,
-                )
-              ],
-            )
-          ],
-        ),
+                  Icon(
+                    IconsaxPlusLinear.arrow_right,
+                    color: AppColor().primaryColor,
+                    size: 16.r,
+                  )
+                ],
+              )
+            ],
+          ),
         Gap(Get.height * 0.02),
         InkWell(
           borderRadius: BorderRadius.circular(30),

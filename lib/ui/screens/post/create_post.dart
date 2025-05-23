@@ -1,12 +1,16 @@
 import 'dart:io';
 
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/data/repository/team_repository.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/screens/account/team/game_selection_chip.dart';
+import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
 import 'package:e_sport/ui/widgets/utils/profile_image.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/custom/custom_textfield.dart';
@@ -38,6 +42,7 @@ class _CreatePostState extends State<CreatePost> {
   final communityController = Get.put(CommunityRepository());
   final authController = Get.put(AuthRepository());
   final gameController = Get.put(GamesRepository());
+  final tournamentController = Get.put(TournamentRepository());
 
   String? gameTag, seePost, engagePost;
   int? selectedMenu = 0;
@@ -49,10 +54,25 @@ class _CreatePostState extends State<CreatePost> {
 
   final FocusNode postBodyFocusNode = FocusNode();
   final FocusNode gameTagFocusNode = FocusNode();
+  List<GamePlayed> _games = [];
+  bool _loading = true;
+
+  Future getGames() async {
+    var dio = tournamentController.dio;
+    var response = await dio.get(ApiLink.getUntrimmedGames);
+    // print(response.data['data']);
+    var gamesList = List<GamePlayed>.from(
+        response.data['data'].map((x) => GamePlayed.fromJson(x)));
+    setState(() {
+      _games = gamesList;
+      _loading = false;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    getGames();
     if (widget.slug != null) {
       postController.postId.value = widget.slug!;
       postController.postAs.value = widget.postAs!;
@@ -344,11 +364,13 @@ class _CreatePostState extends State<CreatePost> {
                     size: 14,
                   ),
                   Gap(Get.height * 0.01),
-                  GameSelectionChip(
-                    postCreation: true,
-                    controller: postController.gameTagsController,
-                    gameList: gameController.allGames,
-                  ),
+                  _games.isEmpty
+                      ? ButtonLoader()
+                      : GameSelectionChip(
+                          postCreation: true,
+                          controller: postController.gameTagsController,
+                          gameList: _games,
+                        ),
                   Gap(Get.height * 0.05),
                   InkWell(
                     onTap: () {

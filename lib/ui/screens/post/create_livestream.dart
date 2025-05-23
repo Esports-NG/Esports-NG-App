@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:e_sport/data/model/platform_model.dart';
@@ -48,10 +49,13 @@ class _CreateLivestreamState extends State<CreateLivestream> {
     var response = await http.get(Uri.parse(ApiLink.getPlatforms),
         headers: {"Authorization": "JWT ${authController.token}"});
 
-    print(response.body);
+    var responseJson = jsonDecode(response.body);
+
+    var platformsList = List<PlatformModel>.from(
+        responseJson['data'].map((x) => PlatformModel.fromJson(x)));
 
     setState(() {
-      _platforms = platformModelFromJson(response.body);
+      _platforms = platformsList;
     });
   }
 
@@ -419,7 +423,7 @@ class _CreateLivestreamState extends State<CreateLivestream> {
                           child: Row(
                             children: [
                               Image.network(
-                                "${ApiLink.imageUrl}${value.logo}",
+                                "${value.logo}",
                                 height: 35,
                                 fit: BoxFit.contain,
                               ),

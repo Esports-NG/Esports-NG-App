@@ -5,6 +5,7 @@ import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/custom/custom_textfield.dart';
 import 'package:e_sport/ui/widgets/custom/custom_button.dart';
+import 'package:e_sport/ui/widgets/utils/create_success_page.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -330,7 +331,7 @@ class _CreateCommunityState extends State<CreateCommunityPage> {
                     if (communityController.createCommunityStatus !=
                         CreateCommunityStatus.loading) {
                       await communityController.createCommunity(body);
-                      // Get.to(() =>
+                      // Get.off(() =>
                       //     const CreateSuccessPage(title: 'Community Created'));
                     }
                   },

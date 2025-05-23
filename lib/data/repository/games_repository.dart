@@ -22,6 +22,7 @@ class GamesRepository extends GetxController {
   RxList<GamePlayed> searchedGames = <GamePlayed>[].obs;
   RxString feedNextlink = "".obs;
   RxList<GameToPlay> gameFeed = RxList([]);
+  RxString gamesNextLink = "".obs;
 
   @override
   onInit() {
@@ -53,17 +54,44 @@ class GamesRepository extends GetxController {
     }));
   }
 
-  Future<void> getAllGames() async {
+  Future<List<GamePlayed>> getAllGames() async {
     isLoading.value = true;
     try {
       final response = await _dio.get(ApiLink.getAllGames);
       print("games response: $response");
 
+      final list = List.from(response.data['data']['results']);
+      gamesNextLink.value = response.data['data']['next'] ?? "";
+      final games = list.map((e) => GamePlayed.fromJson(e)).toList();
+      allGames.assignAll(games);
+      filteredGames.assignAll(games);
+      return games;
+    } on DioException catch (error) {
+      print("games error: ${error.response?.data}");
+      debugPrint("Getting all games error: ${error.message}");
+    } catch (error) {
+      debugPrint("Unexpected error: $error");
+    } finally {
+      isLoading.value = false;
+    }
+    return [];
+  }
+
+  Future<List<GamePlayed>> getNextGames() async {
+    if (gamesNextLink.value.isEmpty) {
+      return [];
+    }
+    try {
+      final response = await _dio.get(gamesNextLink.value);
+      print("games response: $response");
+
       if (response.statusCode == 200 && response.data['success'] == true) {
         final list = List.from(response.data['data']['results']);
+        gamesNextLink.value = response.data['data']['next'] ?? "";
         final games = list.map((e) => GamePlayed.fromJson(e)).toList();
-        allGames.assignAll(games);
+        // allGames.assignAll(games);
         filteredGames.assignAll(games);
+        return games;
       } else {
         debugPrint("Error: ${response.data['message']}");
       }
@@ -75,6 +103,7 @@ class GamesRepository extends GetxController {
     } finally {
       isLoading.value = false;
     }
+    return [];
   }
 
   Future<void> getUserGames() async {

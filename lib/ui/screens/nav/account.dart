@@ -152,10 +152,10 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
                   ),
                 ],
               ),
-              Gap(Get.height * 0.1),
+              Gap(Get.height * 0.08),
               Obx(() {
                 return CustomText(
-                  title: '@ ${authController.user?.userName ?? 'yourusername'}',
+                  title: '@${authController.user?.userName ?? 'yourusername'}',
                   size: 16,
                   fontFamily: 'Inter',
                   textAlign: TextAlign.start,

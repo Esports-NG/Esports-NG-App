@@ -94,6 +94,7 @@ class CommunityRepository extends Get.GetxController {
   Get.Rx<String> typeFilter = Get.RxString("All");
   Get.Rx<GamePlayed?> addToGamesPlayedValue = Get.Rx(null);
   Get.RxBool isLoading = false.obs;
+  Get.RxString communitiesNextLink = "".obs;
 
   // Dio instance
   late Dio _dio;
@@ -221,7 +222,8 @@ class CommunityRepository extends Get.GetxController {
         if (apiResponse['success'] == true) {
           _createCommunityStatus(CreateCommunityStatus.success);
           debugPrint('Community created: ${apiResponse['data']}');
-          Get.Get.to(() => const CreateSuccessPage(title: 'Community Created'))!
+          Get.Get.off(
+                  () => const CreateSuccessPage(title: 'Community Created'))!
               .then((value) {
             getAllCommunity(false);
             clear();
@@ -248,7 +250,7 @@ class CommunityRepository extends Get.GetxController {
   }
 
   // Get all communities
-  Future getAllCommunity(bool isFirstTime) async {
+  Future<List<CommunityModel>> getAllCommunity(bool isFirstTime) async {
     try {
       if (isFirstTime == true) {
         _communityStatus(CommunityStatus.loading);
@@ -257,33 +259,51 @@ class CommunityRepository extends Get.GetxController {
       debugPrint('getting all community...');
       final response = await _dio.get(ApiLink.getAllCommunity);
 
-      if (response.statusCode == 200) {
-        final apiResponse = response.data;
-        if (apiResponse['success'] == true && apiResponse['data'] != null) {
-          var list = List.from(apiResponse['data']['results']);
-          var communities =
-              list.map((e) => CommunityModel.fromJson(e)).toList();
-          debugPrint("${communities.length} communities found");
-          _allCommunity(communities);
-          communities.isNotEmpty
-              ? _communityStatus(CommunityStatus.available)
-              : _communityStatus(CommunityStatus.empty);
+      final apiResponse = response.data;
+      var list = List.from(apiResponse['data']['results']);
+      communitiesNextLink.value = apiResponse['data']['next'] ?? "";
+      var communities = list.map((e) => CommunityModel.fromJson(e)).toList();
+      debugPrint("${communities.length} communities found");
+      _allCommunity(communities);
+      communities.isNotEmpty
+          ? _communityStatus(CommunityStatus.available)
+          : _communityStatus(CommunityStatus.empty);
 
-          if (apiResponse['message'] != null) {
-            Helpers().showCustomSnackbar(message: apiResponse['message']);
-          }
-        } else {
-          throw apiResponse['message'] ?? 'Failed to get communities';
-        }
-      } else {
-        throw 'Failed to get communities';
-      }
-
-      return response.data;
+      return communities;
     } catch (error) {
       _communityStatus(CommunityStatus.error);
       debugPrint("getting all community: ${error.toString()}");
-      return null;
+      return [];
+    }
+  }
+
+  Future<List<CommunityModel>> getNextCommunity(bool isFirstTime) async {
+    if (communitiesNextLink.value.isEmpty) {
+      return [];
+    }
+    try {
+      if (isFirstTime == true) {
+        _communityStatus(CommunityStatus.loading);
+      }
+
+      debugPrint('getting all community...');
+      final response = await _dio.get(communitiesNextLink.value);
+
+      final apiResponse = response.data;
+      var list = List.from(apiResponse['data']['results']);
+      communitiesNextLink.value = apiResponse['data']['next'] ?? "";
+      var communities = list.map((e) => CommunityModel.fromJson(e)).toList();
+      debugPrint("${communities.length} communities found");
+      // _allCommunity(communities);
+      communities.isNotEmpty
+          ? _communityStatus(CommunityStatus.available)
+          : _communityStatus(CommunityStatus.empty);
+
+      return communities;
+    } catch (error) {
+      _communityStatus(CommunityStatus.error);
+      debugPrint("getting all community: ${error.toString()}");
+      return [];
     }
   }
 
@@ -341,7 +361,8 @@ class CommunityRepository extends Get.GetxController {
       } else {
         throw 'Failed to get community followers';
       }
-    } catch (error) {
+    } on DioException catch (error) {
+      print(error.response?.data);
       _handleApiError(error);
       return [];
     }
@@ -385,20 +406,12 @@ class CommunityRepository extends Get.GetxController {
       final response = await _dio.post(
           ApiLink.addGameToCommunity(slug, addToGamesPlayedValue.value!.id!));
 
-      if (response.statusCode == 200) {
-        final apiResponse = response.data;
-        if (apiResponse['success'] == true) {
-          Helpers().showCustomSnackbar(
-              message: apiResponse['message'] ?? "Game added to community");
-          getAllCommunity(false);
-        } else {
-          throw apiResponse['message'] ?? 'Failed to add game to community';
-        }
-      } else {
-        throw 'Failed to add game to community';
-      }
-    } catch (err) {
-      debugPrint('adding game to community error: $err');
+      final apiResponse = response.data;
+      Helpers().showCustomSnackbar(
+          message: apiResponse['message'] ?? "Game added to community");
+      getAllCommunity(false);
+    } on DioException catch (err) {
+      debugPrint('adding game to community error: ${err.response?.data}');
       _handleApiError(err);
     }
   }

@@ -6,8 +6,7 @@ import 'package:get/get.dart';
 class LoadingWidget extends StatelessWidget {
   final Color? color;
   final double? size;
-  const LoadingWidget({Key? key, this.color = Colors.white, this.size})
-      : super(key: key);
+  const LoadingWidget({Key? key, this.color, this.size}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -18,7 +17,7 @@ class LoadingWidget extends StatelessWidget {
             heightFactor: 1,
             widthFactor: 1,
             child: ButtonLoader(
-              color: color,
+              color: color ?? AppColor().primaryColor,
             )),
       ),
     );

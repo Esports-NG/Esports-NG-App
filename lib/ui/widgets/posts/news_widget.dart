@@ -18,11 +18,15 @@ class NewsWidget extends StatefulWidget {
   });
 
   @override
-  State<NewsWidget> createState() => _PostWidgetState();
+  State<NewsWidget> createState() => _NewsState();
 }
 
-class _PostWidgetState extends State<NewsWidget>
-    with AutomaticKeepAliveClientMixin {
+class _NewsState extends State<NewsWidget> with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   bool get wantKeepAlive => true;
   @override

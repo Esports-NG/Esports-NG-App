@@ -210,11 +210,12 @@ class PostRepository extends Get.GetxController {
         "body": postBodyController.text,
       });
 
+      print(gameTagsController.selectedItems[0].value.abbrev);
       // Add game tags
       for (int i = 0; i < gameTagsController.selectedItems.length; i++) {
         formData.fields.add(MapEntry('itags[$i].title',
             gameTagsController.selectedItems[i].value.abbrev!));
-        formData.fields.add(MapEntry('itags[$i].event_id', ''));
+        // formData.fields.add(MapEntry('itags[$i].event_id', ''));
       }
 
       // Add image if exists
@@ -229,7 +230,7 @@ class PostRepository extends Get.GetxController {
         _createPostStatus(CreatePostStatus.success);
         getPostForYou(true);
         clear();
-        Get.Get.to(() => const CreateSuccessPage(title: 'Post Created'));
+        Get.Get.off(() => const CreateSuccessPage(title: 'Post Created'));
       } else {
         _createPostStatus(CreatePostStatus.error);
         throw 'Failed to create post';
@@ -254,7 +255,7 @@ class PostRepository extends Get.GetxController {
 
       if (response.statusCode == 200) {
         _createPostStatus(CreatePostStatus.success);
-        Get.Get.to(() => const CreateSuccessPage(title: 'Post Updated'))!
+        Get.Get.off(() => const CreateSuccessPage(title: 'Post Updated'))!
             .then((value) {
           getPostForYou(true);
         });
@@ -680,6 +681,7 @@ class PostRepository extends Get.GetxController {
 
   Future getNews() async {
     // Create a custom Dio instance for this request since it needs different auth
+    print("getting news");
     final newsClient = Dio(BaseOptions(
         baseUrl: ApiLink.baseurl,
         contentType: 'application/json',
@@ -692,6 +694,7 @@ class PostRepository extends Get.GetxController {
     return _safeApiCall(
       () => newsClient.get(ApiLink.getNews),
       onSuccess: (responseData) {
+        print("news: $responseData");
         if (responseData != null) {
           try {
             var newsData = jsonEncode(responseData);
@@ -703,6 +706,10 @@ class PostRepository extends Get.GetxController {
             throw 'Failed to parse news data';
           }
         }
+      },
+      fromJson: (value) {
+        print(value);
+        return value;
       },
     );
   }
@@ -760,7 +767,7 @@ class PostRepository extends Get.GetxController {
         onSuccess: (data) {
           getPostForYou(true);
           clear();
-          Get.Get.to(() => const CreateSuccessPage(title: 'Post Created'));
+          Get.Get.off(() => const CreateSuccessPage(title: 'Post Created'));
           return data;
         },
       );

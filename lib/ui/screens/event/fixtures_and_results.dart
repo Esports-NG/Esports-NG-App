@@ -75,7 +75,7 @@ class _FixturesAndResultsState extends State<FixturesAndResults> {
       appBar: AppBar(
         title: Row(children: [
           CachedNetworkImage(
-            imageUrl: ApiLink.imageUrl + widget.event.banner!,
+            imageUrl: widget.event.banner!,
             imageBuilder: (context, imageProvider) => Container(
               width: 40,
               height: 40,

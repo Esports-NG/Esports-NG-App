@@ -65,6 +65,7 @@ class NotificationRepository extends GetxController {
           await _dio.get(ApiLink.getNotifications(authController.user!.id!));
 
       log('notification: ${response.data}');
+      print(response.data);
       var json = response.data;
       nextLink.value = json["next"] ?? "";
       var notificationList =
@@ -83,6 +84,7 @@ class NotificationRepository extends GetxController {
       if (nextLink.value.isEmpty) return [];
 
       final response = await _dio.get(nextLink.value);
+      print(response.data);
 
       log('next notification: ${response.data}');
       var json = response.data;

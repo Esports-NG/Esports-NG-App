@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
@@ -96,7 +97,6 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   }
 
   void _loadData() {
-    getCommunityFollowers();
     getParticipants();
     getFixtures();
     getEventDetails();
@@ -201,9 +201,9 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
     });
   }
 
-  Future<void> getCommunityFollowers() async {
-    var followers = await communityController
-        .getCommunityFollowers(widget.item.community!.slug!);
+  Future<void> getCommunityFollowers(CommunityModel community) async {
+    var followers =
+        await communityController.getCommunityFollowers(community.slug!);
     setState(() {
       _communityFollowers = followers;
       _isFollowing = followers.any(
@@ -218,6 +218,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
       _eventDetails = event;
       _isLoading = false;
     });
+    getCommunityFollowers(event!.community!);
   }
 
   void onRegistrationChanged() {

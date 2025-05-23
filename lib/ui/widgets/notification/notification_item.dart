@@ -1,5 +1,6 @@
 import 'package:e_sport/data/model/notification_model.dart';
 import 'package:e_sport/ui/widgets/notification/notification_type/comment_card.dart';
+import 'package:e_sport/ui/widgets/notification/notification_type/follow_card.dart';
 import 'package:e_sport/ui/widgets/notification/notification_type/like_card.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -20,8 +21,10 @@ class _NotificationItemState extends State<NotificationItem> {
         ? CommentCard(notification: widget.notification)
         : widget.notification.actionType! == "like"
             ? LikeCard(notification: widget.notification)
-            : Container(
-                color: AppColor().primaryColor,
-                child: CustomText(title: widget.notification.actionType));
+            : widget.notification.actionType == "followed"
+                ? FollowCard(notification: widget.notification)
+                : Container(
+                    color: AppColor().primaryColor,
+                    child: CustomText(title: widget.notification.actionType));
   }
 }
