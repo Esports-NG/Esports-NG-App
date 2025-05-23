@@ -229,9 +229,9 @@ class CommunityRepository extends Get.GetxController {
             clear();
           });
 
-          if (apiResponse['message'] != null) {
-            Helpers().showCustomSnackbar(message: apiResponse['message']);
-          }
+          // if (apiResponse['message'] != null) {
+          //   Helpers().showCustomSnackbar(message: apiResponse['message']);
+          // }
 
           return apiResponse['data'];
         } else {
@@ -380,9 +380,9 @@ class CommunityRepository extends Get.GetxController {
           suggestedProfiles
               .assignAll(list.map((e) => UserModel.fromJson(e)).toList());
 
-          if (apiResponse['message'] != null) {
-            Helpers().showCustomSnackbar(message: apiResponse['message']);
-          }
+          // if (apiResponse['message'] != null) {
+          //   Helpers().showCustomSnackbar(message: apiResponse['message']);
+          // }
         } else {
           throw apiResponse['message'] ?? 'Failed to get suggested profiles';
         }

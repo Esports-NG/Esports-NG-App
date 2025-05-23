@@ -664,29 +664,41 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   ),
                 ),
                 Gap(Get.height * 0.02),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: Get.height * 0.46,
-                    child: ListView.separated(
-                        physics: const ScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            Gap(Get.height * 0.02),
-                        itemBuilder: (context, index) => InkWell(
-                            onTap: () {
-                              Get.to(
-                                  () => PostDetails(item: _recentPosts[index]));
-                            },
+                _fetchingPosts
+                    ? Center(
+                        child: ButtonLoader(),
+                      )
+                    : _recentPosts.isEmpty
+                        ? Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Get.height * 0.02),
+                            child: NoItemPage(
+                                title: 'Posts', size: Get.height * 0.05),
+                          )
+                        : Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Get.height * 0.02),
                             child: SizedBox(
-                                width: Get.height * 0.35,
-                                child: PostItemForProfile(
-                                    item: _recentPosts[index]))),
-                        itemCount: _recentPosts.length),
-                  ),
-                ),
+                              width: double.infinity,
+                              height: Get.height * 0.46,
+                              child: ListView.separated(
+                                  physics: const ScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  separatorBuilder: (context, index) =>
+                                      Gap(Get.height * 0.02),
+                                  itemBuilder: (context, index) => InkWell(
+                                      onTap: () {
+                                        Get.to(() => PostDetails(
+                                            item: _recentPosts[index]));
+                                      },
+                                      child: SizedBox(
+                                          width: Get.height * 0.35,
+                                          child: PostItemForProfile(
+                                              item: _recentPosts[index]))),
+                                  itemCount: _recentPosts.length),
+                            ),
+                          ),
                 Gap(Get.height * 0.005),
                 Divider(
                   color: AppColor().lightItemsColor.withOpacity(0.3),

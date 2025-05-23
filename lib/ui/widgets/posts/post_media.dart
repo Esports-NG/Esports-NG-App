@@ -22,11 +22,45 @@ class PostMedia extends StatelessWidget {
     final imageUrl = isRepost ? post.repost?.image : post.image;
 
     if (imageUrl == null) {
-      return const SizedBox.shrink();
+      return (post.tags!.isEmpty
+          ? SizedBox.shrink()
+          : SizedBox(
+              height: Get.height * 0.03,
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                scrollDirection: Axis.horizontal,
+                itemCount: post.tags!.length,
+                separatorBuilder: (context, index) => Gap(Get.height * 0.01),
+                itemBuilder: (context, index) {
+                  var tag = post.tags![index];
+                  return Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Get.height * 0.01),
+                    decoration: BoxDecoration(
+                      color: AppColor().primaryColor.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: AppColor().primaryColor.withOpacity(0.05),
+                        width: 0.5,
+                      ),
+                    ),
+                    child: Center(
+                      child: CustomText(
+                        title: "${tag.title}",
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        size: 12,
+                        fontFamily: 'InterBold',
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ));
     }
 
     return Stack(
-      alignment: Alignment.center,
+      alignment: Alignment.bottomLeft,
       children: [
         GestureDetector(
           onTap: () => Helpers().showImagePopup(context, imageUrl),
@@ -58,44 +92,42 @@ class PostMedia extends StatelessWidget {
             ),
           ),
         ),
-        if (post.tags != null && post.tags!.isNotEmpty)
-          Positioned.fill(
-            left: Get.height * 0.02,
-            bottom: Get.height * 0.02,
-            top: Get.height * 0.34,
-            child: SizedBox(
-              height: Get.height * 0.03,
-              child: ListView.separated(
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.horizontal,
-                itemCount: post.tags!.length,
-                separatorBuilder: (context, index) => Gap(Get.height * 0.01),
-                itemBuilder: (context, index) {
-                  var tag = post.tags![index];
-                  return Container(
-                    padding: EdgeInsets.all(Get.height * 0.005),
-                    decoration: BoxDecoration(
-                      color: AppColor().primaryDark.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: AppColor().primaryColor.withOpacity(0.05),
-                        width: 0.5,
-                      ),
+        // if (post.tags != null && post.tags!.isNotEmpty)
+        Padding(
+          padding: EdgeInsets.all(Get.height * 0.02),
+          child: SizedBox(
+            height: Get.height * 0.03,
+            child: ListView.separated(
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.horizontal,
+              itemCount: post.tags!.length,
+              separatorBuilder: (context, index) => Gap(Get.height * 0.01),
+              itemBuilder: (context, index) {
+                var tag = post.tags![index];
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01),
+                  decoration: BoxDecoration(
+                    color: AppColor().primaryDark.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: AppColor().primaryColor.withOpacity(0.05),
+                      width: 0.5,
                     ),
-                    child: Center(
-                      child: CustomText(
-                        title: "${tag.title}",
-                        color: AppColor().primaryWhite,
-                        textAlign: TextAlign.center,
-                        size: 12,
-                        fontFamily: 'InterBold',
-                      ),
+                  ),
+                  child: Center(
+                    child: CustomText(
+                      title: "${tag.title}",
+                      color: AppColor().primaryWhite,
+                      textAlign: TextAlign.center,
+                      size: 12,
+                      fontFamily: 'InterBold',
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
+        ),
       ],
     );
   }

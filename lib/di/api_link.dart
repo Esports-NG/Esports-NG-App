@@ -50,7 +50,7 @@ class ApiLink {
   static String searchForPostsorUsers(String query, String type) =>
       "${baseurl}$type/v2/search_${type}s/?search=$query";
   static String getEventPosts(String slug) =>
-      "${baseurl}post/v2/filter_posts/?tags__event_id=$slug";
+      "${baseurl}post/v2/filter_posts/?tags__event_slug=$slug";
   static String getAds = "${baseurl}extra/v2/advert/view/";
 
   //Team
