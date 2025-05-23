@@ -691,27 +691,11 @@ class PostRepository extends Get.GetxController {
               "Basic ${base64.encode(utf8.encode("zillalikestogame:zillalikesnexal"))}"
         }));
 
-    return _safeApiCall(
-      () => newsClient.get(ApiLink.getNews),
-      onSuccess: (responseData) {
-        print("news: $responseData");
-        if (responseData != null) {
-          try {
-            var newsData = jsonEncode(responseData);
-            var newsFromJson = newsModelFromJson(newsData);
-            _news.value = newsFromJson;
-            return newsFromJson;
-          } catch (e) {
-            debugPrint("News parsing error: $e");
-            throw 'Failed to parse news data';
-          }
-        }
-      },
-      fromJson: (value) {
-        print(value);
-        return value;
-      },
-    );
+    var response = await newsClient.get(ApiLink.getNews);
+    print(response.data);
+    var newsList =
+        List<NewsModel>.from(response.data.map((x) => NewsModel.fromJson(x)));
+    news.assignAll(newsList);
   }
 
   Future searchForPosts(String query) async {
