@@ -66,10 +66,10 @@ class NotificationRepository extends GetxController {
 
       log('notification: ${response.data}');
       print(response.data);
-      var json = response.data;
+      var json = response.data['data'];
       nextLink.value = json["next"] ?? "";
-      var notificationList =
-          notificationModelFromJson(jsonEncode(json['results']));
+      var notificationList = List<NotificationModel>.from(
+          json['results'].map((x) => NotificationModel.fromJson(x)));
       notifications.assignAll(notificationList);
       return notificationList;
     } catch (error) {
@@ -87,10 +87,10 @@ class NotificationRepository extends GetxController {
       print(response.data);
 
       log('next notification: ${response.data}');
-      var json = response.data;
+      var json = response.data['data'];
       nextLink.value = json["next"] ?? "";
-      var notificationList =
-          notificationModelFromJson(jsonEncode(json['results']));
+      var notificationList = List<NotificationModel>.from(
+          json['results'].map((x) => NotificationModel.fromJson(x)));
       notifications.addAll(notificationList);
       return notificationList;
     } catch (error) {

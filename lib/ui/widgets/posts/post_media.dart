@@ -27,7 +27,7 @@ class PostMedia extends StatelessWidget {
           : SizedBox(
               height: Get.height * 0.03,
               child: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01),
                 scrollDirection: Axis.horizontal,
                 itemCount: post.tags!.length,
                 separatorBuilder: (context, index) => Gap(Get.height * 0.01),

@@ -16,7 +16,7 @@ class LikeCard extends StatefulWidget {
 class _LikeCardState extends State<LikeCard> {
   @override
   Widget build(BuildContext context) {
-    var firstUser = widget.notification.userActors![0];
+    // var firstUser = widget.notification.userActors![0];
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Row(
@@ -33,26 +33,26 @@ class _LikeCardState extends State<LikeCard> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(
-                  direction: Axis.horizontal,
-                  children: widget.notification.userActors!
-                      .take(4)
-                      .map((user) => Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: OtherImage(
-                              image: user.profile!.profilePicture,
-                              width: 30.r,
-                              height: 30.r,
-                            ),
-                          ))
-                      .toList(),
-                ),
+                // Wrap(
+                //   direction: Axis.horizontal,
+                //   children: widget.notification.userActors!
+                //       .take(4)
+                //       .map((user) => Padding(
+                //             padding: const EdgeInsets.all(5),
+                //             child: OtherImage(
+                //               image: user.profile!.profilePicture,
+                //               width: 30.r,
+                //               height: 30.r,
+                //             ),
+                //           ))
+                //       .toList(),
+                // ),
                 Gap(5),
-                CustomText(
-                    size: 12,
-                    title: widget.notification.totalCount! == 1
-                        ? "${firstUser.fullName} liked your post"
-                        : "${firstUser.fullName} and ${widget.notification.totalCount! - 1} others liked your post"),
+                // CustomText(
+                //     size: 12,
+                //     title: widget.notification.totalCount! == 1
+                //         ? "${firstUser.fullName} liked your post"
+                //         : "${firstUser.fullName} and ${widget.notification.totalCount! - 1} others liked your post"),
                 Gap(4),
                 CustomText(
                   title: widget.notification.targetPost!.body,

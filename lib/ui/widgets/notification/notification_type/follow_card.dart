@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 class FollowCard extends StatelessWidget {
   const FollowCard({super.key, required this.notification});
@@ -22,8 +23,8 @@ class FollowCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Icon(
-                CupertinoIcons.heart_fill,
-                color: Color(0xffCE3939),
+                IconsaxPlusBold.user,
+                color: AppColor().primaryColor,
               ),
             ),
             Gap(13),
@@ -55,13 +56,13 @@ class FollowCard extends StatelessWidget {
                         ? "${firstUser.fullName} followed you"
                         : "${firstUser.fullName} and ${notification.totalCount! - 1} followed you"),
                 Gap(4),
-                // CustomText(
-                //   title: widget.notification.targetPost!.body,
-                //   color: AppColor().greySix,
-                //   fontFamily: "InterMedium",
-                //   maxLines: 3,
-                //   size: 12,
-                // )
+                CustomText(
+                  title: notification.targetPost?.body ?? "",
+                  color: AppColor().greySix,
+                  fontFamily: "InterMedium",
+                  maxLines: 3,
+                  size: 12,
+                )
               ],
             )
           ],

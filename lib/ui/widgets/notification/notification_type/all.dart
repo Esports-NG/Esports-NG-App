@@ -28,7 +28,7 @@ class _AllNotificationState extends State<AllNotification> {
       } else {
         if (pageKey == 1) {
           var notifications = await notificationController.getNotifications();
-
+          print("all notifications: $notifications");
           return notifications;
         } else {
           return [];

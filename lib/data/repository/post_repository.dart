@@ -429,17 +429,9 @@ class PostRepository extends Get.GetxController {
       debugPrint('liking $slug post...');
       final response = await _dio.post('${ApiLink.post}$slug/like/');
 
-      if (response.statusCode == 200) {
-        final data = response.data;
-        if (data is Map<String, dynamic> && data['message'] == 'success') {
-          getBookmarkedPost(false);
-          getAllPost(false);
-          return true;
-        }
-      }
-      return false;
-    } catch (error) {
-      print(error);
+      return true;
+    } on DioException catch (error) {
+      // print(error.response?.body);
       _likePostStatus(LikePostStatus.error);
       debugPrint("like post error: $error");
       _handleApiError(error);
