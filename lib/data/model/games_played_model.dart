@@ -47,7 +47,7 @@ class GameToPlay {
             : List<DownloadLink>.from(
                 json["download_links"]!.map((x) => DownloadLink.fromJson(x))),
         events: json["events"],
-        // players: json["players"],
+        players: json["players"],
       );
 
   Map<String, dynamic> toJson() => {
