@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'first_screen.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 // final shorebirdCodePush = ShorebirdCodePush();
 
@@ -18,19 +19,23 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final authController = Get.put(AuthRepository());
+  final updater = ShorebirdUpdater();
   Timer? timer;
   bool displaySwitch = true;
 
-  // Future<void> _checkForUpdates() async {
-  //
-  //   final isUpdateAvailable =
-  //       await shorebirdCodePush.isNewPatchAvailableForDownload();
+  Future<void> _checkForUpdates() async {
+    // Check whether a new update is available.
+    final status = await updater.checkForUpdate();
 
-  //   if (isUpdateAvailable) {
-  //
-  //     await shorebirdCodePush.downloadUpdateIfAvailable();
-  //   }
-  // }
+    if (status == UpdateStatus.outdated) {
+      try {
+        // Perform the update
+        await updater.update();
+      } on UpdateException catch (error) {
+        // Handle any errors that occur while updating.
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -40,9 +45,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   startTime() async {
-    // await _checkForUpdates();
+    await _checkForUpdates();
     var duration = const Duration(seconds: 5);
-    return Timer(duration, route);
+    Timer(duration, route);
   }
 
   display() async {
@@ -55,17 +60,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   route() async {
     if (authController.authStatus == AuthStatus.isFirstTime) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const FirstScreen()));
-      //Get.off(() => const FirstScreen());
+      Get.to(() => FirstScreen());
     } else if (authController.authStatus == AuthStatus.authenticated) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const RootDashboard()));
-      //Get.off(() => const RootDashboard());
+      Get.to(() => RootDashboard());
     } else {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const FirstScreen()));
-      //Get.off(() => const FirstScreen());
+      Get.to(() => FirstScreen());
     }
   }
 

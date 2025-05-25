@@ -20,6 +20,7 @@ class TournamentRegistrationButton extends StatefulWidget {
   final EventModel eventDetails;
   final bool isRegistered;
   final Function onRegistrationChanged;
+  final Function onAddGame;
   final String? participantSlug;
 
   const TournamentRegistrationButton({
@@ -27,6 +28,7 @@ class TournamentRegistrationButton extends StatefulWidget {
     required this.eventDetails,
     required this.isRegistered,
     required this.onRegistrationChanged,
+    required this.onAddGame,
     this.participantSlug,
   }) : super(key: key);
 
@@ -125,18 +127,15 @@ class _TournamentRegistrationButtonState
                         : widget.eventDetails.tournamentType == "team"
                             ? () => showDialog(
                                 context: context,
+                                // useRootNavigator: true,
                                 builder: (context) => AddTeamGameDialog(
                                       game: widget.eventDetails.games![0],
-                                    ))
+                                    )).whenComplete(() => widget.onAddGame())
                             : () => Get.to(() => CreatePlayerProfile()),
                     child: CustomText(
                       title: _noTeam
                           ? "Create a team"
-                          : widget.eventDetails.tournamentType == "team" &&
-                                  teamController.myTeam.value.any((team) =>
-                                      team.gamesPlayed!.any((game) =>
-                                          game.id! ==
-                                          widget.eventDetails.games![0].id!))
+                          : widget.eventDetails.tournamentType == "team"
                               ? "Add Game to team"
                               : "Add player profile",
                       color: AppColor().primaryColor,
@@ -210,14 +209,14 @@ class _TournamentRegistrationButtonState
         return "Event Ended";
       }
     } else {
-      if (widget.isRegistered) {
-        return "Unregister";
-      } else if (!DateTime.now().isAfter(widget.eventDetails.regEnd!)) {
-        return 'Register Now';
-      } else if (!DateTime.now().isAfter(widget.eventDetails.endDate!)) {
-        return "Registration Ended";
-      } else {
+      if (DateTime.now().isAfter(widget.eventDetails.endDate!)) {
         return "Event Ended";
+      } else if (DateTime.now().isAfter(widget.eventDetails.regEnd!)) {
+        return "Registration Ended";
+      } else if (widget.isRegistered) {
+        return "Unregister";
+      } else {
+        return 'Register Now';
       }
     }
   }

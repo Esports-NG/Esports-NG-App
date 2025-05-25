@@ -49,7 +49,16 @@ class _MyPlayerProfileState extends State<MyPlayerProfile> {
           ? LoadingWidget(
               color: AppColor().primaryColor,
             )
-          : GamesPlayedWidget(),
+          : playerController.myPlayer.value == null
+              ? Center(
+                  child: CustomText(
+                    title: "No player profile found",
+                    fontFamily: 'InterMedium',
+                    size: 16,
+                    color: AppColor().primaryWhite,
+                  ),
+                )
+              : GamesPlayedWidget(),
     );
   }
 }

@@ -5,6 +5,8 @@ import 'package:e_sport/ui/widgets/utils/back_button.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class MyCommunities extends StatefulWidget {
@@ -44,6 +46,26 @@ class _MyCommunitiesState extends State<MyCommunities> {
           ),
           leading: GoBackButton(onPressed: () => Get.back()),
         ),
-        body: _loading ? LoadingWidget() : AccountCommunityWidget());
+        body: _loading
+            ? LoadingWidget()
+            : communityController.myCommunity.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.group_off,
+                          size: 80.sp,
+                          color: AppColor().primaryColor,
+                        ),
+                        Gap(20.h),
+                        CustomText(
+                          title: "No Communities Found",
+                          size: 18,
+                        ),
+                      ],
+                    ),
+                  )
+                : AccountCommunityWidget());
   }
 }

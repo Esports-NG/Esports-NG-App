@@ -209,8 +209,6 @@ class PostRepository extends Get.GetxController {
       final formData = FormData.fromMap({
         "body": postBodyController.text,
       });
-
-      print(gameTagsController.selectedItems[0].value.abbrev);
       // Add game tags
       for (int i = 0; i < gameTagsController.selectedItems.length; i++) {
         formData.fields.add(MapEntry('itags[$i].title',

@@ -213,6 +213,9 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   }
 
   Future<void> getEventDetails() async {
+    setState(() {
+      _isLoading = true;
+    });
     var event = await tournamentController.getEventDetails(widget.item.slug!);
     setState(() {
       _eventDetails = event;
@@ -237,7 +240,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _eventDetails == null && _isLoading
+      body: _isLoading
           ? const Center(child: ButtonLoader())
           : RefreshIndicator(
               onRefresh: () => getEventDetails(),
@@ -258,6 +261,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                       child: TournamentRegistrationButton(
                         eventDetails: _eventDetails!,
+                        onAddGame: getEventDetails,
                         isRegistered: _isRegistered,
                         onRegistrationChanged: onRegistrationChanged,
                         participantSlug: _participantProfile?.slug,

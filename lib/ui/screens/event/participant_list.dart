@@ -116,62 +116,6 @@ class _ParticipantListState extends State<ParticipantList>
           leading: GoBackButton(
             onPressed: () => Get.back(),
           ),
-          actions: [
-            InkWell(
-              borderRadius: BorderRadius.circular(30),
-              onTap: () async {
-                if (widget.event.tournamentType == "team") {
-                } else {
-                  setState(() {
-                    _isRegisterLoading = true;
-                  });
-                  await tournamentController
-                      .registerForTournament(widget.event.slug!);
-                  await getParticipants();
-                  setState(() {
-                    _isRegisterLoading = false;
-                  });
-                }
-              },
-              child: IntrinsicHeight(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Get.height * 0.03,
-                      vertical: Get.height * 0.015),
-                  decoration: BoxDecoration(
-                    border: !_isRegisterLoading
-                        ? null
-                        : Border.all(
-                            width: 1,
-                            color: AppColor().primaryColor.withOpacity(0.4)),
-                    borderRadius: BorderRadius.circular(30),
-                    color: _isRegisterLoading
-                        ? Colors.transparent
-                        : AppColor().primaryColor,
-                  ),
-                  child: _isRegisterLoading
-                      ? Center(
-                          child: SizedBox(
-                            width: Get.height * 0.02,
-                            height: Get.height * 0.02,
-                            child: CircularProgressIndicator(
-                              color: AppColor().primaryColor,
-                              strokeWidth: 2,
-                            ),
-                          ),
-                        )
-                      : Center(
-                          child: CustomText(
-                          title: _isRegistered ? "Registered" : 'Register Now',
-                          color: AppColor().primaryWhite,
-                          size: 12,
-                          fontFamily: 'InterMedium',
-                        )),
-                ),
-              ),
-            ),
-            Gap(Get.height * 0.02)
-          ],
         ),
         body: Column(
           children: [
@@ -371,8 +315,9 @@ class _ParticipantListState extends State<ParticipantList>
                                         ),
                                       ),
                                       Visibility(
-                                        visible: authController.user!.id! ==
-                                            widget.event.community!.owner!.id!,
+                                        visible: authController.user!.slug! ==
+                                            widget
+                                                .event.community!.owner!.slug!,
                                         child: Row(children: [
                                           IconButton(
                                               icon: _isTakingAction

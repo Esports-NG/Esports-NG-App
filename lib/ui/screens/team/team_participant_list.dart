@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/team/roaster_model.dart';
 import 'package:e_sport/data/model/waitlist_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/screens/account/team/account_teams_details.dart';
@@ -25,6 +26,7 @@ class TeamParticipantList extends StatefulWidget {
 class _TeamParticipantListState extends State<TeamParticipantList>
     with SingleTickerProviderStateMixin {
   final tournamentController = Get.put(TournamentRepository());
+  final authController = Get.put(AuthRepository());
   final bool _isRegisterLoading = false;
   List<RoasterModel>? _participantList;
   final bool _isRegistered = false;
@@ -97,48 +99,6 @@ class _TeamParticipantListState extends State<TeamParticipantList>
           leading: GoBackButton(
             onPressed: () => Get.back(),
           ),
-          actions: [
-            InkWell(
-              borderRadius: BorderRadius.circular(30),
-              child: IntrinsicHeight(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Get.height * 0.03,
-                      vertical: Get.height * 0.015),
-                  decoration: BoxDecoration(
-                    border: !_isRegisterLoading
-                        ? null
-                        : Border.all(
-                            width: 1,
-                            color: AppColor().primaryColor.withOpacity(0.4)),
-                    borderRadius: BorderRadius.circular(30),
-                    color: _isRegisterLoading
-                        ? Colors.transparent
-                        : AppColor().primaryColor,
-                  ),
-                  child: _isRegisterLoading
-                      ? Center(
-                          child: SizedBox(
-                            width: Get.height * 0.02,
-                            height: Get.height * 0.02,
-                            child: CircularProgressIndicator(
-                              color: AppColor().primaryColor,
-                              strokeWidth: 2,
-                            ),
-                          ),
-                        )
-                      : Center(
-                          child: CustomText(
-                          title: _isRegistered ? "Registered" : "Register",
-                          color: AppColor().primaryWhite,
-                          size: 12,
-                          fontFamily: 'InterMedium',
-                        )),
-                ),
-              ),
-            ),
-            Gap(Get.height * 0.02)
-          ],
         ),
         body: Column(
           children: [
@@ -394,13 +354,49 @@ class _TeamParticipantListState extends State<TeamParticipantList>
                                                     AppColor().lightItemsColor)
                                           ],
                                         ),
-                                        Row(children: [
-                                          IconButton(
+                                        if (authController.user?.slug ==
+                                            widget.event.community?.owner?.slug)
+                                          Row(children: [
+                                            IconButton(
+                                                icon: _isTakingAction
+                                                    ? ButtonLoader(
+                                                        color: AppColor()
+                                                            .primaryBackGroundColor)
+                                                    : const Icon(Icons.check),
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    _isTakingAction = true;
+                                                  });
+                                                  await tournamentController
+                                                      .takeActionOnWaitlist(
+                                                          widget.event.slug!,
+                                                          item.team!.team!
+                                                              .slug!,
+                                                          "accept");
+                                                  setState(() {
+                                                    _isTakingAction = false;
+                                                    _participantList!
+                                                        .add(item.team!);
+                                                    _waitlist!.removeWhere(
+                                                        (element) =>
+                                                            element.team!.id! ==
+                                                            item.team!.id!);
+                                                  });
+                                                },
+                                                color: AppColor()
+                                                    .primaryBackGroundColor,
+                                                style: ButtonStyle(
+                                                    backgroundColor:
+                                                        WidgetStatePropertyAll(
+                                                            AppColor()
+                                                                .secondaryGreenColor))),
+                                            const Gap(10),
+                                            IconButton(
                                               icon: _isTakingAction
                                                   ? ButtonLoader(
                                                       color: AppColor()
-                                                          .primaryBackGroundColor)
-                                                  : const Icon(Icons.check),
+                                                          .primaryWhite)
+                                                  : const Icon(Icons.close),
                                               onPressed: () async {
                                                 setState(() {
                                                   _isTakingAction = true;
@@ -408,56 +404,24 @@ class _TeamParticipantListState extends State<TeamParticipantList>
                                                 await tournamentController
                                                     .takeActionOnWaitlist(
                                                         widget.event.slug!,
-                                                        item.team!.team!.slug!,
-                                                        "accept");
+                                                        item.player!.slug!,
+                                                        "reject");
                                                 setState(() {
                                                   _isTakingAction = false;
-                                                  _participantList!
-                                                      .add(item.team!);
                                                   _waitlist!.removeWhere(
                                                       (element) =>
                                                           element.team!.id! ==
                                                           item.team!.id!);
                                                 });
                                               },
-                                              color: AppColor()
-                                                  .primaryBackGroundColor,
+                                              color: AppColor().primaryWhite,
                                               style: ButtonStyle(
                                                   backgroundColor:
                                                       WidgetStatePropertyAll(
                                                           AppColor()
-                                                              .secondaryGreenColor))),
-                                          const Gap(10),
-                                          IconButton(
-                                            icon: _isTakingAction
-                                                ? ButtonLoader(
-                                                    color:
-                                                        AppColor().primaryWhite)
-                                                : const Icon(Icons.close),
-                                            onPressed: () async {
-                                              setState(() {
-                                                _isTakingAction = true;
-                                              });
-                                              await tournamentController
-                                                  .takeActionOnWaitlist(
-                                                      widget.event.slug!,
-                                                      item.player!.slug!,
-                                                      "reject");
-                                              setState(() {
-                                                _isTakingAction = false;
-                                                _waitlist!.removeWhere(
-                                                    (element) =>
-                                                        element.team!.id! ==
-                                                        item.team!.id!);
-                                              });
-                                            },
-                                            color: AppColor().primaryWhite,
-                                            style: ButtonStyle(
-                                                backgroundColor:
-                                                    WidgetStatePropertyAll(
-                                                        AppColor().primaryRed)),
-                                          )
-                                        ])
+                                                              .primaryRed)),
+                                            )
+                                          ])
                                       ],
                                     ),
                                   );

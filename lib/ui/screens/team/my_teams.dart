@@ -46,6 +46,17 @@ class _MyTeamsState extends State<MyTeams> {
           ),
           leading: GoBackButton(onPressed: () => Get.back()),
         ),
-        body: _loading ? LoadingWidget() : AccountTeamsWidget());
+        body: _loading
+            ? const LoadingWidget()
+            : teamController.myTeam.isEmpty
+                ? Center(
+                    child: CustomText(
+                      title: "You don't have any teams yet",
+                      fontFamily: 'InterMedium',
+                      size: 16,
+                      color: AppColor().primaryWhite,
+                    ),
+                  )
+                : AccountTeamsWidget());
   }
 }

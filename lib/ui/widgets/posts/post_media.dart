@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/post_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/screens/search/search_screen.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
@@ -20,7 +22,7 @@ class PostMedia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageUrl = isRepost ? post.repost?.image : post.image;
-
+    final authController = Get.find<AuthRepository>();
     if (imageUrl == null) {
       return (post.tags!.isEmpty
           ? SizedBox.shrink()
@@ -33,24 +35,30 @@ class PostMedia extends StatelessWidget {
                 separatorBuilder: (context, index) => Gap(Get.height * 0.01),
                 itemBuilder: (context, index) {
                   var tag = post.tags![index];
-                  return Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Get.height * 0.01),
-                    decoration: BoxDecoration(
-                      color: AppColor().primaryColor.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: AppColor().primaryColor.withOpacity(0.05),
-                        width: 0.5,
+                  return GestureDetector(
+                    onTap: () {
+                      authController.searchController.text = tag.title!;
+                      Get.to(() => SearchScreen(selectedPage: 0));
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Get.height * 0.01),
+                      decoration: BoxDecoration(
+                        color: AppColor().primaryColor.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: AppColor().primaryColor.withOpacity(0.05),
+                          width: 0.5,
+                        ),
                       ),
-                    ),
-                    child: Center(
-                      child: CustomText(
-                        title: "${tag.title}",
-                        color: AppColor().primaryWhite,
-                        textAlign: TextAlign.center,
-                        size: 12,
-                        fontFamily: 'InterBold',
+                      child: Center(
+                        child: CustomText(
+                          title: "${tag.title}",
+                          color: AppColor().primaryWhite,
+                          textAlign: TextAlign.center,
+                          size: 12,
+                          fontFamily: 'InterBold',
+                        ),
                       ),
                     ),
                   );
@@ -104,23 +112,30 @@ class PostMedia extends StatelessWidget {
               separatorBuilder: (context, index) => Gap(Get.height * 0.01),
               itemBuilder: (context, index) {
                 var tag = post.tags![index];
-                return Container(
-                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01),
-                  decoration: BoxDecoration(
-                    color: AppColor().primaryDark.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: AppColor().primaryColor.withOpacity(0.05),
-                      width: 0.5,
+                return GestureDetector(
+                  onTap: () {
+                    authController.searchController.text = tag.title!;
+                    Get.to(() => SearchScreen(selectedPage: 0));
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Get.height * 0.01),
+                    decoration: BoxDecoration(
+                      color: AppColor().primaryDark.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: AppColor().primaryColor.withOpacity(0.05),
+                        width: 0.5,
+                      ),
                     ),
-                  ),
-                  child: Center(
-                    child: CustomText(
-                      title: "${tag.title}",
-                      color: AppColor().primaryWhite,
-                      textAlign: TextAlign.center,
-                      size: 12,
-                      fontFamily: 'InterBold',
+                    child: Center(
+                      child: CustomText(
+                        title: "${tag.title}",
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        size: 12,
+                        fontFamily: 'InterBold',
+                      ),
                     ),
                   ),
                 );

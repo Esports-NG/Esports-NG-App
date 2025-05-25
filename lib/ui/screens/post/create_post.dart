@@ -398,7 +398,9 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                       child: (postController.createPostStatus ==
                               CreatePostStatus.loading)
-                          ? const LoadingWidget()
+                          ? const LoadingWidget(
+                              color: Colors.white,
+                            )
                           : Center(
                               child: CustomText(
                               title: 'Create Post',
