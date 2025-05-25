@@ -231,7 +231,7 @@ class EventRepository extends Get.GetxController
       if (response != null) {
         final data = response.data;
         if (data is Map<String, dynamic> && data['message'] != null) {
-          Helpers().showCustomSnackbar(message: data['message']);
+          // Helpers().showCustomSnackbar(message: data['message']);
           return;
         }
       }
@@ -271,7 +271,7 @@ class EventRepository extends Get.GetxController
                 : {'success': true, 'data': response.data['data']},
             fromJson);
         if (apiResponse.message != null) {
-          Helpers().showCustomSnackbar(message: apiResponse.message!);
+          // Helpers().showCustomSnackbar(message: apiResponse.message!);
         }
 
         if (onSuccess != null) {

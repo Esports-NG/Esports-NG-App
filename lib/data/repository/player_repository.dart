@@ -99,9 +99,10 @@ class PlayerRepository extends GetxController {
         _createPlayerStatus(CreatePlayerStatus.success);
         debugPrint(responseData.toString());
 
-        Get.to(() => const CreateSuccessPage(title: 'Player Created'))!
+        Get.off(() => const CreateSuccessPage(title: 'Player Created'))!
             .then((value) {
           getAllPlayer(false);
+          getMyPlayer();
           clear();
         });
       } else if (response.statusCode == 401) {

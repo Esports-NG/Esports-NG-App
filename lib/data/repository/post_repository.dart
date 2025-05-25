@@ -209,12 +209,11 @@ class PostRepository extends Get.GetxController {
       final formData = FormData.fromMap({
         "body": postBodyController.text,
       });
-
       // Add game tags
       for (int i = 0; i < gameTagsController.selectedItems.length; i++) {
         formData.fields.add(MapEntry('itags[$i].title',
             gameTagsController.selectedItems[i].value.abbrev!));
-        formData.fields.add(MapEntry('itags[$i].event_id', ''));
+        // formData.fields.add(MapEntry('itags[$i].event_id', ''));
       }
 
       // Add image if exists
@@ -229,7 +228,7 @@ class PostRepository extends Get.GetxController {
         _createPostStatus(CreatePostStatus.success);
         getPostForYou(true);
         clear();
-        Get.Get.to(() => const CreateSuccessPage(title: 'Post Created'));
+        Get.Get.off(() => const CreateSuccessPage(title: 'Post Created'));
       } else {
         _createPostStatus(CreatePostStatus.error);
         throw 'Failed to create post';
@@ -254,7 +253,7 @@ class PostRepository extends Get.GetxController {
 
       if (response.statusCode == 200) {
         _createPostStatus(CreatePostStatus.success);
-        Get.Get.to(() => const CreateSuccessPage(title: 'Post Updated'))!
+        Get.Get.off(() => const CreateSuccessPage(title: 'Post Updated'))!
             .then((value) {
           getPostForYou(true);
         });
@@ -428,17 +427,9 @@ class PostRepository extends Get.GetxController {
       debugPrint('liking $slug post...');
       final response = await _dio.post('${ApiLink.post}$slug/like/');
 
-      if (response.statusCode == 200) {
-        final data = response.data;
-        if (data is Map<String, dynamic> && data['message'] == 'success') {
-          getBookmarkedPost(false);
-          getAllPost(false);
-          return true;
-        }
-      }
-      return false;
-    } catch (error) {
-      print(error);
+      return true;
+    } on DioException catch (error) {
+      // print(error.response?.body);
       _likePostStatus(LikePostStatus.error);
       debugPrint("like post error: $error");
       _handleApiError(error);
@@ -680,6 +671,7 @@ class PostRepository extends Get.GetxController {
 
   Future getNews() async {
     // Create a custom Dio instance for this request since it needs different auth
+    print("getting news");
     final newsClient = Dio(BaseOptions(
         baseUrl: ApiLink.baseurl,
         contentType: 'application/json',
@@ -689,22 +681,11 @@ class PostRepository extends Get.GetxController {
               "Basic ${base64.encode(utf8.encode("zillalikestogame:zillalikesnexal"))}"
         }));
 
-    return _safeApiCall(
-      () => newsClient.get(ApiLink.getNews),
-      onSuccess: (responseData) {
-        if (responseData != null) {
-          try {
-            var newsData = jsonEncode(responseData);
-            var newsFromJson = newsModelFromJson(newsData);
-            _news.value = newsFromJson;
-            return newsFromJson;
-          } catch (e) {
-            debugPrint("News parsing error: $e");
-            throw 'Failed to parse news data';
-          }
-        }
-      },
-    );
+    var response = await newsClient.get(ApiLink.getNews);
+    print(response.data);
+    var newsList =
+        List<NewsModel>.from(response.data.map((x) => NewsModel.fromJson(x)));
+    news.assignAll(newsList);
   }
 
   Future searchForPosts(String query) async {
@@ -760,7 +741,7 @@ class PostRepository extends Get.GetxController {
         onSuccess: (data) {
           getPostForYou(true);
           clear();
-          Get.Get.to(() => const CreateSuccessPage(title: 'Post Created'));
+          Get.Get.off(() => const CreateSuccessPage(title: 'Post Created'));
           return data;
         },
       );

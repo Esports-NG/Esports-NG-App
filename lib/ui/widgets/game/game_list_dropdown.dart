@@ -33,6 +33,24 @@ class _GameDropdownState extends State<GameDropdown> {
   final gameController = Get.put(GamesRepository());
   final eventController = Get.put(EventRepository());
   final LayerLink _link = LayerLink();
+  final selectController = MultiSelectController<GamePlayed>();
+
+  @override
+  void initState() {
+    super.initState();
+    selectItems();
+  }
+
+  Future selectItems() async {
+    await Future.delayed(Duration(milliseconds: 200));
+    if (widget.gameValue.value != null) {
+      selectController.selectWhere(
+        (item) {
+          return item.value.id == widget.gameValue.value?.id;
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +96,7 @@ class _GameDropdownState extends State<GameDropdown> {
         title: item.label,
         color: AppColor().primaryWhite,
       ),
+      controller: selectController,
       singleSelect: true,
       searchDecoration: SearchFieldDecoration(
           searchIcon: Icon(

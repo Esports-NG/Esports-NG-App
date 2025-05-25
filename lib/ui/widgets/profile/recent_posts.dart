@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:like_button/like_button.dart';
 
 // Post Item For Profile
@@ -481,7 +482,9 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                         ),
                         likeBuilder: (bool isLiked) {
                           return Icon(
-                              isLiked ? Icons.favorite : Icons.favorite_outline,
+                              isLiked
+                                  ? IconsaxPlusBold.heart
+                                  : IconsaxPlusLinear.heart,
                               color: isLiked
                                   ? AppColor().primaryColor
                                   : AppColor().primaryWhite,
@@ -522,7 +525,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                     children: [
                       GestureDetector(
                         child: Icon(
-                          Icons.sms_outlined,
+                          IconsaxPlusLinear.message,
                           color: AppColor().primaryWhite,
                           size: Get.height * 0.025,
                         ),
@@ -542,7 +545,7 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                     children: [
                       GestureDetector(
                         child: Icon(
-                          Icons.share_outlined,
+                          IconsaxPlusLinear.export,
                           color: AppColor().primaryWhite,
                           size: Get.height * 0.025,
                         ),
@@ -796,7 +799,6 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                     title: 'Report Post by ${widget.item.author!.userName}',
                     // Additional fields after this should be Comment details, Reason for reporting etc
                     color: AppColor().primaryWhite,
-
                     fontFamily: 'InterBold',
                     size: Get.height * 0.015,
                   ),
@@ -812,7 +814,6 @@ class _PostItemForProfileState extends State<PostItemForProfile> {
                     title: 'Report ${widget.item.author!.userName}',
                     // Additional fields after this should be Comment details, Reason for reporting etc
                     color: AppColor().primaryWhite,
-
                     fontFamily: 'InterBold',
                     size: Get.height * 0.015,
                   ),

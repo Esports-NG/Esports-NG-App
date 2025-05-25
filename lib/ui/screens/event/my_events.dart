@@ -45,7 +45,18 @@ class _MyEventsState extends State<MyEvents> {
         ),
         leading: GoBackButton(onPressed: () => Get.back()),
       ),
-      body: _loading ? LoadingWidget() : AccountEventsWidget(),
+      body: _loading
+          ? const LoadingWidget()
+          : Obx(() => eventController.myEvent.value.isEmpty
+              ? Center(
+                  child: CustomText(
+                    title: "You don't have any events yet",
+                    fontFamily: 'InterMedium',
+                    size: 16,
+                    color: AppColor().primaryWhite,
+                  ),
+                )
+              : const AccountEventsWidget()),
     );
   }
 }

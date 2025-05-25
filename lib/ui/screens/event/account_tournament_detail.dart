@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/events_model.dart';
 import 'package:e_sport/data/model/fixture_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
@@ -96,7 +97,6 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   }
 
   void _loadData() {
-    getCommunityFollowers();
     getParticipants();
     getFixtures();
     getEventDetails();
@@ -201,9 +201,9 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
     });
   }
 
-  Future<void> getCommunityFollowers() async {
-    var followers = await communityController
-        .getCommunityFollowers(widget.item.community!.slug!);
+  Future<void> getCommunityFollowers(CommunityModel community) async {
+    var followers =
+        await communityController.getCommunityFollowers(community.slug!);
     setState(() {
       _communityFollowers = followers;
       _isFollowing = followers.any(
@@ -213,11 +213,15 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   }
 
   Future<void> getEventDetails() async {
+    setState(() {
+      _isLoading = true;
+    });
     var event = await tournamentController.getEventDetails(widget.item.slug!);
     setState(() {
       _eventDetails = event;
       _isLoading = false;
     });
+    getCommunityFollowers(event!.community!);
   }
 
   void onRegistrationChanged() {
@@ -236,7 +240,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _eventDetails == null && _isLoading
+      body: _isLoading
           ? const Center(child: ButtonLoader())
           : RefreshIndicator(
               onRefresh: () => getEventDetails(),
@@ -257,6 +261,7 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                           EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                       child: TournamentRegistrationButton(
                         eventDetails: _eventDetails!,
+                        onAddGame: getEventDetails,
                         isRegistered: _isRegistered,
                         onRegistrationChanged: onRegistrationChanged,
                         participantSlug: _participantProfile?.slug,

@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
+import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
@@ -60,6 +61,30 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
   final List<bool> _isOpen = [true];
   TeamModel? _details = null;
 
+  List<PostModel> _recentPosts = [];
+  bool _fetchingPosts = false;
+
+  Future fetchRecentPosts() async {
+    setState(() {
+      _fetchingPosts = true;
+    });
+    var response = await http.get(
+        Uri.parse(ApiLink.postFromGroup(widget.item.slug!, "team")),
+        headers: {
+          "Authorization": "JWT ${authController.token}",
+          "Content-type": "application/json"
+        });
+    print("team post: ${response.body}");
+
+    var json = jsonDecode(response.body);
+    var list = List.from(json['data']['results']);
+
+    setState(() {
+      _recentPosts = list.map((e) => PostModel.fromJson(e)).toList();
+      _fetchingPosts = false;
+    });
+  }
+
   Future getTeamDetails() async {
     setState(() {
       _isFetching = true;
@@ -99,6 +124,7 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
     super.initState();
     getTeamFollowers();
     getTeamDetails();
+    fetchRecentPosts();
     // teamController.getTeamInbox(true, widget.item.id!);
   }
 
@@ -638,29 +664,41 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                   ),
                 ),
                 Gap(Get.height * 0.02),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: Get.height * 0.46,
-                    child: ListView.separated(
-                        physics: const ScrollPhysics(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            Gap(Get.height * 0.02),
-                        itemBuilder: (context, index) => InkWell(
-                            onTap: () {
-                              Get.to(() => PostDetails(
-                                  item: postController.forYouPosts[index]));
-                            },
+                _fetchingPosts
+                    ? Center(
+                        child: ButtonLoader(),
+                      )
+                    : _recentPosts.isEmpty
+                        ? Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Get.height * 0.02),
+                            child: NoItemPage(
+                                title: 'Posts', size: Get.height * 0.05),
+                          )
+                        : Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Get.height * 0.02),
                             child: SizedBox(
-                                width: Get.height * 0.35,
-                                child: PostItemForProfile(
-                                    item: postController.forYouPosts[index]))),
-                        itemCount: postController.forYouPosts.length),
-                  ),
-                ),
+                              width: double.infinity,
+                              height: Get.height * 0.46,
+                              child: ListView.separated(
+                                  physics: const ScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  separatorBuilder: (context, index) =>
+                                      Gap(Get.height * 0.02),
+                                  itemBuilder: (context, index) => InkWell(
+                                      onTap: () {
+                                        Get.to(() => PostDetails(
+                                            item: _recentPosts[index]));
+                                      },
+                                      child: SizedBox(
+                                          width: Get.height * 0.35,
+                                          child: PostItemForProfile(
+                                              item: _recentPosts[index]))),
+                                  itemCount: _recentPosts.length),
+                            ),
+                          ),
                 Gap(Get.height * 0.005),
                 Divider(
                   color: AppColor().lightItemsColor.withOpacity(0.3),
@@ -817,8 +855,8 @@ class _AccountTeamsDetailState extends State<AccountTeamsDetail> {
                                               separatorBuilder:
                                                   (context, index) =>
                                                       Gap(Get.height * 0.02),
-                                              itemCount: widget
-                                                  .item.gamesPlayed!.length,
+                                              itemCount:
+                                                  _details!.gamesPlayed!.length,
                                               itemBuilder: (context, index) {
                                                 return InkWell(
                                                     onTap: () {

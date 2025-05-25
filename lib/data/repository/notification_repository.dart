@@ -65,10 +65,11 @@ class NotificationRepository extends GetxController {
           await _dio.get(ApiLink.getNotifications(authController.user!.id!));
 
       log('notification: ${response.data}');
-      var json = response.data;
+      print(response.data);
+      var json = response.data['data'];
       nextLink.value = json["next"] ?? "";
-      var notificationList =
-          notificationModelFromJson(jsonEncode(json['results']));
+      var notificationList = List<NotificationModel>.from(
+          json['results'].map((x) => NotificationModel.fromJson(x)));
       notifications.assignAll(notificationList);
       return notificationList;
     } catch (error) {
@@ -83,12 +84,13 @@ class NotificationRepository extends GetxController {
       if (nextLink.value.isEmpty) return [];
 
       final response = await _dio.get(nextLink.value);
+      print(response.data);
 
       log('next notification: ${response.data}');
-      var json = response.data;
+      var json = response.data['data'];
       nextLink.value = json["next"] ?? "";
-      var notificationList =
-          notificationModelFromJson(jsonEncode(json['results']));
+      var notificationList = List<NotificationModel>.from(
+          json['results'].map((x) => NotificationModel.fromJson(x)));
       notifications.addAll(notificationList);
       return notificationList;
     } catch (error) {

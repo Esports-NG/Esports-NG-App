@@ -50,7 +50,7 @@ class ApiLink {
   static String searchForPostsorUsers(String query, String type) =>
       "${baseurl}$type/v2/search_${type}s/?search=$query";
   static String getEventPosts(String slug) =>
-      "${baseurl}post/v2/filter_posts/?tags=$slug";
+      "${baseurl}post/v2/filter_posts/?tags__event_slug=$slug";
   static String getAds = "${baseurl}extra/v2/advert/view/";
 
   //Team
@@ -127,7 +127,7 @@ class ApiLink {
           String slug, String participantSlug, String action) =>
       "${baseurl}event/v2/edit/$slug/participants/$participantSlug/$action/";
   static String getCreatedEvents = "${baseurl}event/v2/created/";
-  static String createLivestream = "${baseurl}event/v2/";
+  static String createLivestream = "${baseurl}event/v2/stream/";
   static String getActivities = "${baseurl}event/v2/activities/feed/";
 
   //Community
@@ -159,6 +159,7 @@ class ApiLink {
 
   // Games
   static String getAllGames = "${baseurl}games/v2/";
+  static String getUntrimmedGames = "${baseurl}games/v2/notrim/";
   static String getGame(int id) => "${baseurl}games/v2/?p=$id";
   static String getUserGames = "${baseurl}player/v2/games";
   static String followGame(int gameId) => "${baseurl}games/v2/follow/$gameId/";

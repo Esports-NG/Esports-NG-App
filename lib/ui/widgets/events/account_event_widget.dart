@@ -23,13 +23,13 @@ class _AccountEventsWidgetState extends State<AccountEventsWidget> {
   final eventController = Get.put(EventRepository());
   final authController = Get.put(AuthRepository());
 
-  Future fetchCreatedEvents() async {
-    await eventController.getCreatedEvents();
-  }
+  // Future fetchCreatedEvents() async {
+  //   await eventController.getCreatedEvents();
+  // }
 
   @override
   void initState() {
-    fetchCreatedEvents();
+    // fetchCreatedEvents();
     super.initState();
   }
 

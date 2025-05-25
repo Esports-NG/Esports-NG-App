@@ -184,16 +184,16 @@ class _HomePageState extends State<HomePage>
                                       //         color: Colors.white,
                                       //         size: 22.sp)),
                                       // Gap(Get.height * 0.03),
-                                      InkWell(
-                                          onTap: () {
-                                            Get.to(
-                                                () => const NotificationPage());
-                                          },
-                                          child: Icon(
-                                            IconsaxPlusLinear.notification,
-                                            color: Colors.white,
-                                            size: 22.sp,
-                                          )),
+                                      // InkWell(
+                                      //     onTap: () {
+                                      //       Get.to(
+                                      //           () => const NotificationPage());
+                                      //     },
+                                      //     child: Icon(
+                                      //       IconsaxPlusLinear.notification,
+                                      //       color: Colors.white,
+                                      //       size: 22.sp,
+                                      //     )),
                                     ],
                                   ),
                                 ],

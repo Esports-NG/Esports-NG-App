@@ -162,6 +162,8 @@ class TeamRepository extends GetxController {
   File? get teamProfileImage => mTeamProfileImage.value;
   File? get teamCoverImage => mTeamCoverImage.value;
 
+  RxString teamsNextLink = "".obs;
+
   // Single Dio instance for all API calls
   final _dio = dio.Dio();
 
@@ -214,7 +216,7 @@ class TeamRepository extends GetxController {
       if (response.success) {
         _createTeamStatus(CreateTeamStatus.success);
         debugPrint("Team created successfully: ${response.message}");
-        Get.to(() => const CreateSuccessPage(title: 'Team Created'))!
+        Get.off(() => const CreateSuccessPage(title: 'Team Created'))!
             .then((value) {
           getAllTeam(false);
           clear();
@@ -230,7 +232,7 @@ class TeamRepository extends GetxController {
     }
   }
 
-  Future getAllTeam(bool isFirstTime) async {
+  Future<List<TeamModel>> getAllTeam(bool isFirstTime) async {
     try {
       _teamStatus(TeamStatus.loading);
       debugPrint('getting all team...');
@@ -238,34 +240,17 @@ class TeamRepository extends GetxController {
       final response = await _dio.get(
         ApiLink.getAllTeam,
       );
+      final responseData = response.data;
+      final data = responseData['data']['results'] ?? [];
+      teamsNextLink.value = responseData['data']['next'] ?? "";
+      var teams = (data as List).map((e) => TeamModel.fromJson(e)).toList();
+      debugPrint("${teams.length} teams found");
+      _allTeam(teams);
+      teams.isNotEmpty
+          ? _teamStatus(TeamStatus.available)
+          : _teamStatus(TeamStatus.empty);
 
-      if (response.statusCode == 200) {
-        final responseData = response.data;
-        final success = responseData['success'] ?? false;
-        print(response.data);
-
-        if (success) {
-          final data = responseData['data']['results'] ?? [];
-          var teams = (data as List).map((e) => TeamModel.fromJson(e)).toList();
-          debugPrint("${teams.length} teams found");
-          _allTeam(teams);
-          teams.isNotEmpty
-              ? _teamStatus(TeamStatus.available)
-              : _teamStatus(TeamStatus.empty);
-        } else {
-          _teamStatus(TeamStatus.error);
-          handleError(responseData['message'] ?? 'Unknown error occurred');
-        }
-      } else if (response.statusCode == 401) {
-        authController
-            .refreshToken()
-            .then((value) => EasyLoading.showInfo('try again!'));
-        _teamStatus(TeamStatus.error);
-      } else {
-        _teamStatus(TeamStatus.error);
-        handleError(response.statusMessage);
-      }
-      return response.data;
+      return teams;
     } on dio.DioException catch (error) {
       _teamStatus(TeamStatus.error);
       if (error.response?.statusCode == 401) {
@@ -281,7 +266,47 @@ class TeamRepository extends GetxController {
       debugPrint("getting all team: ${error.toString()}");
       handleError(error);
     }
-    return null;
+    return [];
+  }
+
+  Future<List<TeamModel>> getNextTeam(bool isFirstTime) async {
+    if (teamsNextLink.value.isEmpty) {
+      return [];
+    }
+    try {
+      _teamStatus(TeamStatus.loading);
+      debugPrint('getting all team...');
+
+      final response = await _dio.get(
+        teamsNextLink.value,
+      );
+      final responseData = response.data;
+      final data = responseData['data']['results'] ?? [];
+      teamsNextLink.value = responseData['data']['next'] ?? "";
+      var teams = (data as List).map((e) => TeamModel.fromJson(e)).toList();
+      debugPrint("${teams.length} teams found");
+      // _allTeam(teams);
+      teams.isNotEmpty
+          ? _teamStatus(TeamStatus.available)
+          : _teamStatus(TeamStatus.empty);
+
+      return teams;
+    } on dio.DioException catch (error) {
+      _teamStatus(TeamStatus.error);
+      if (error.response?.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('try again!'));
+      } else {
+        debugPrint("Error occurred ${error.message}");
+        handleError(error.message);
+      }
+    } catch (error) {
+      _teamStatus(TeamStatus.error);
+      debugPrint("getting all team: ${error.toString()}");
+      handleError(error);
+    }
+    return [];
   }
 
   Future getMyTeam(bool isFirstTime) async {
@@ -426,7 +451,7 @@ class TeamRepository extends GetxController {
             if (rosterSuccess) {
               Helpers().showCustomSnackbar(
                   message: "Successfully added game to team");
-              getMyTeam(true);
+              await getMyTeam(true);
             } else {
               handleError(rosterData['message'] ?? 'Failed to create roster');
             }
@@ -436,7 +461,7 @@ class TeamRepository extends GetxController {
         }
       }
     } on dio.DioException catch (error) {
-      debugPrint("Adding game to team error: ${error.message}");
+      debugPrint("Adding game to team error: ${error.response?.data}");
       handleError(error.message);
     } catch (err) {
       debugPrint("Adding game to team error: ${err.toString()}");

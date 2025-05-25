@@ -160,7 +160,7 @@ class _UserProfileState extends State<UserProfile> {
 
     var json = jsonDecode(response.body);
     print(response.body);
-    var list = List.from(json['data']);
+    var list = List.from(json['data']['results']);
 
     setState(() {
       _recentPosts = list.map((e) => PostModel.fromJson(e)).toList();
@@ -509,6 +509,7 @@ class _UserProfileState extends State<UserProfile> {
           ProfileExpandableSection(
             title: "Team History",
             isExpanded: _isOpen3[0],
+            emptyMessage: "No teams",
             isEmpty: true,
             onExpansionChanged: (isExpanded) {
               setState(() {
@@ -565,6 +566,7 @@ class _UserProfileState extends State<UserProfile> {
           ),
           ProfileExpandableSection(
             title: "Communities Owned",
+            emptyMessage: "No Communities",
             count: _ownedCommunities.length.toString(),
             isExpanded: _isOpen2[1],
             isEmpty: _ownedCommunities.isEmpty,

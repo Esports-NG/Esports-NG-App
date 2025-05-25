@@ -45,31 +45,31 @@ class _CommentCardState extends State<CommentCard> {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: OtherImage(
-                image:
-                    widget.notification.userActors![0].profile!.profilePicture,
-                width: 20,
-                height: 20),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 10),
+          //   child: OtherImage(
+          //       image:
+          //           widget.notification.userActors![0].profile!.profilePicture,
+          //       width: 20,
+          //       height: 20),
+          // ),
           Gap(16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  RichText(
-                      text: TextSpan(
-                          text: widget.notification.userActors![0].fullName,
-                          style: TextStyle(fontSize: 12, fontFamily: "Inter"),
-                          children: [
-                        TextSpan(
-                            text:
-                                ' @${widget.notification.userActors![0].userName!}',
-                            style: TextStyle(
-                                fontSize: 12, color: AppColor().greySix))
-                      ])),
+                  // RichText(
+                  //     text: TextSpan(
+                  //         text: widget.notification.userActors![0].fullName,
+                  //         style: TextStyle(fontSize: 12, fontFamily: "Inter"),
+                  //         children: [
+                  //       TextSpan(
+                  //           text:
+                  //               ' @${widget.notification.userActors![0].userName!}',
+                  //           style: TextStyle(
+                  //               fontSize: 12, color: AppColor().greySix))
+                  //     ])),
                   Gap(Get.height * 0.005),
                   const SmallCircle(),
                   Gap(Get.height * 0.005),

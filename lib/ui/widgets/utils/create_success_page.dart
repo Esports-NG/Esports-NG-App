@@ -52,17 +52,7 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
           const Spacer(),
           InkWell(
             onTap: () {
-              if ((widget.title == 'Post Deleted' ||
-                  widget.title == 'Post Updated')) {
-                Get.back();
-                Get.back();
-                Get.back();
-              } else if (widget.title == 'Profile Updated') {
-                Get.back();
-                Get.back();
-              } else {
-                Get.back();
-              }
+              Get.back();
             },
             child: Container(
               height: Get.height * 0.07,
@@ -87,7 +77,7 @@ class _CreateSuccessPageState extends State<CreateSuccessPage> {
           ),
           Gap(Get.height * 0.02),
           InkWell(
-            onTap: () => Get.off(() => const RootDashboard()),
+            onTap: () => Get.back(),
             child: Container(
               height: Get.height * 0.07,
               width: Get.width,

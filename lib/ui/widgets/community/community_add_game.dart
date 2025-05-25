@@ -1,10 +1,14 @@
 import 'package:e_sport/data/model/community_model.dart';
+import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/community_repository.dart';
+import 'package:e_sport/data/repository/event/tournament_repository.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widgets/utils/back_button.dart';
 import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/game/game_list_dropdown.dart';
 import 'package:e_sport/util/colors.dart';
+import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -20,6 +24,30 @@ class CommunityAddGame extends StatefulWidget {
 class _CommunityAddGameState extends State<CommunityAddGame> {
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final communityController = Get.put(CommunityRepository());
+  final tournamentController = Get.put(TournamentRepository());
+
+  List<GamePlayed> _games = [];
+  bool _loading = true;
+
+  Future getGames() async {
+    var dio = tournamentController.dio;
+    var response = await dio.get(ApiLink.getUntrimmedGames);
+    // print(response.data['data']);
+    var gamesList = List<GamePlayed>.from(
+        response.data['data'].map((x) => GamePlayed.fromJson(x)));
+    print(gamesList);
+    setState(() {
+      _games = gamesList;
+      _loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    getGames();
+    super.initState();
+  }
+
   bool _isAdding = false;
   @override
   Widget build(BuildContext context) {
@@ -44,65 +72,71 @@ class _CommunityAddGameState extends State<CommunityAddGame> {
         //   ),
         // ],
       ),
-      body: Form(
-          key: formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Container(
-            decoration: BoxDecoration(
-                color: AppColor().primaryBackGroundColor,
-                borderRadius: BorderRadius.circular(10)),
-            padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Gap(Get.height * 0.02),
-              CustomText(
-                title: 'Game to be covered *',
-                color: AppColor().primaryWhite,
-                textAlign: TextAlign.center,
-                fontFamily: 'Inter',
-                size: 14,
-              ),
-              Gap(Get.height * 0.01),
-              GameDropdown(
-                enableFill: true,
-                gameValue: communityController.addToGamesPlayedValue,
-              ),
-              Gap(Get.height * 0.02),
-              InkWell(
-                onTap: () async {
-                  setState(() {
-                    _isAdding = true;
-                  });
-                  await communityController
-                      .addGameToCommunity(widget.community.slug!);
-                  setState(() {
-                    _isAdding = false;
-                  });
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  decoration: BoxDecoration(
-                      color: _isAdding
-                          ? Colors.transparent
-                          : AppColor().primaryColor,
-                      borderRadius: BorderRadius.circular(90),
-                      border: _isAdding
-                          ? Border.all(
-                              color: AppColor().primaryColor.withOpacity(0.4))
-                          : null),
-                  child: _isAdding
-                      ? const Center(child: ButtonLoader())
-                      : Center(
-                          child: CustomText(
-                              title: "Add Game",
-                              fontFamily: "InterSemiBold",
-                              color: AppColor().primaryWhite),
+      body: _loading
+          ? LoadingWidget()
+          : Form(
+              key: formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: AppColor().primaryBackGroundColor,
+                    borderRadius: BorderRadius.circular(10)),
+                padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Gap(Get.height * 0.02),
+                      CustomText(
+                        title: 'Game to be covered *',
+                        color: AppColor().primaryWhite,
+                        textAlign: TextAlign.center,
+                        fontFamily: 'Inter',
+                        size: 14,
+                      ),
+                      Gap(Get.height * 0.01),
+                      GameDropdown(
+                        enableFill: true,
+                        gameList: _games,
+                        gameValue: communityController.addToGamesPlayedValue,
+                      ),
+                      Gap(Get.height * 0.02),
+                      InkWell(
+                        onTap: () async {
+                          setState(() {
+                            _isAdding = true;
+                          });
+                          await communityController
+                              .addGameToCommunity(widget.community.slug!);
+                          setState(() {
+                            _isAdding = false;
+                          });
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          decoration: BoxDecoration(
+                              color: _isAdding
+                                  ? Colors.transparent
+                                  : AppColor().primaryColor,
+                              borderRadius: BorderRadius.circular(90),
+                              border: _isAdding
+                                  ? Border.all(
+                                      color: AppColor()
+                                          .primaryColor
+                                          .withOpacity(0.4))
+                                  : null),
+                          child: _isAdding
+                              ? const Center(child: ButtonLoader())
+                              : Center(
+                                  child: CustomText(
+                                      title: "Add Game",
+                                      fontFamily: "InterSemiBold",
+                                      color: AppColor().primaryWhite),
+                                ),
                         ),
-                ),
-              )
-            ]),
-          )),
+                      )
+                    ]),
+              )),
     );
   }
 }

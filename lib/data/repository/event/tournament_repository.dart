@@ -437,7 +437,7 @@ class TournamentRepository extends GetxController {
 
       if (response.statusCode == 201) {
         eventController.createEventStatus(CreateEventStatus.success);
-        Get.to(() => const CreateSuccessPage(title: 'Event Created'))!
+        Get.off(() => const CreateSuccessPage(title: 'Event Created'))!
             .then((value) {
           eventController.getAllEvents(false);
           clear();
@@ -488,7 +488,8 @@ class TournamentRepository extends GetxController {
 
       _handleResponse(response);
       Helpers().showCustomSnackbar(message: "Successfully registered");
-    } catch (error) {
+    } on DioException catch (error) {
+      print(error.response?.data);
       _handleError(error);
     }
   }
@@ -529,9 +530,12 @@ class TournamentRepository extends GetxController {
       var headers = _getAuthHeaders();
       var response = await dio.get(ApiLink.getEventParticipants(slug),
           options: Options(headers: headers));
+      print(response.data);
 
       var responseData = _handleResponse(response);
-      return roasterModelFromJson(responseData);
+
+      return List<RoasterModel>.from(
+          responseData.map((x) => RoasterModel.fromJson(x)));
     } catch (error) {
       _handleError(error);
       return [];
@@ -806,7 +810,7 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future getEventDetails(String slug) async {
+  Future<EventModel?> getEventDetails(String slug) async {
     try {
       var headers = _getAuthHeaders();
       var response = await dio.get(ApiLink.getEventDetails(slug),
@@ -817,6 +821,7 @@ class TournamentRepository extends GetxController {
     } catch (error) {
       _handleError(error);
     }
+    return null;
   }
 
   Future editFixtureForPlayer(String slug) async {
@@ -927,13 +932,15 @@ class TournamentRepository extends GetxController {
       );
 
       var headers = _getAuthHeaders();
+      print(ApiLink.createLivestream);
       var response = await dio.post(ApiLink.createLivestream,
           data: formData, options: Options(headers: headers));
 
       _handleResponse(response);
       Get.back();
       Helpers().showCustomSnackbar(message: "Livestream created successfully");
-    } catch (error) {
+    } on DioException catch (error) {
+      print(error?.response?.data);
       _handleError(error);
     }
   }

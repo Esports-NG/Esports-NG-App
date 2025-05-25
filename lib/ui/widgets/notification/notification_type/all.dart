@@ -22,12 +22,13 @@ class _AllNotificationState extends State<AllNotification> {
   Future<List<NotificationModel>> _fetchPage(int pageKey) async {
     try {
       if (notificationController.nextLink.value != "" && pageKey > 1) {
-        var posts = await notificationController.getNext();
-        return posts;
+        print("fetching next page");
+        var notifications = await notificationController.getNext();
+        return notifications;
       } else {
         if (pageKey == 1) {
           var notifications = await notificationController.getNotifications();
-
+          print("all notifications: $notifications");
           return notifications;
         } else {
           return [];
@@ -50,35 +51,32 @@ class _AllNotificationState extends State<AllNotification> {
   @override
   Widget build(BuildContext context) {
     final notificationController = Get.put(NotificationRepository());
-    return Padding(
-      padding: EdgeInsets.only(bottom: 16.r, top: 18.r),
-      child: RefreshIndicator(
-        onRefresh: () => Future.sync(() => _pagingController.refresh()),
-        child: PagingListener(
-          controller: _pagingController,
-          builder: (context, state, fetchNextPage) => PagedListView.separated(
-            state: state,
-            fetchNextPage: fetchNextPage,
-            padding: EdgeInsets.zero,
-            // shrinkWrap: true,
-            separatorBuilder: (context, index) => Divider(
-              color: AppColor().lightItemsColor.withOpacity(0.3),
-              height: Get.height * 0.05,
-              thickness: 0.5,
-            ),
-            builderDelegate: PagedChildBuilderDelegate<NotificationModel>(
-                itemBuilder: (context, notification, index) {
-                  return GestureDetector(
-                    child: NotificationItem(
-                      notification: notification,
-                    ),
-                  );
-                },
-                firstPageProgressIndicatorBuilder: (context) =>
-                    Center(child: ButtonLoader()),
-                newPageProgressIndicatorBuilder: (context) =>
-                    Center(child: ButtonLoader())),
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(() => _pagingController.refresh()),
+      child: PagingListener(
+        controller: _pagingController,
+        builder: (context, state, fetchNextPage) => PagedListView.separated(
+          state: state,
+          fetchNextPage: fetchNextPage,
+          padding: EdgeInsets.only(bottom: 16.r, top: 18.r),
+          // shrinkWrap: true,
+          separatorBuilder: (context, index) => Divider(
+            color: AppColor().lightItemsColor.withOpacity(0.3),
+            height: Get.height * 0.05,
+            thickness: 0.5,
           ),
+          builderDelegate: PagedChildBuilderDelegate<NotificationModel>(
+              itemBuilder: (context, notification, index) {
+                return GestureDetector(
+                  child: NotificationItem(
+                    notification: notification,
+                  ),
+                );
+              },
+              firstPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader()),
+              newPageProgressIndicatorBuilder: (context) =>
+                  Center(child: ButtonLoader())),
         ),
       ),
     );

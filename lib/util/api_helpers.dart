@@ -17,7 +17,7 @@ class ApiHelpers {
       if (response != null) {
         final data = response.data;
         if (data is Map<String, dynamic> && data['message'] != null) {
-          Helpers().showCustomSnackbar(message: data['message']);
+          // Helpers().showCustomSnackbar(message: data['message']);
           return;
         }
       }

@@ -145,6 +145,7 @@ class UserModel {
         "email": email,
         "full_name": fullName,
         "user_name": userName,
+        "slug": slug,
         "bio": bio,
         "phone_number": phoneNumber,
         "country": country,
