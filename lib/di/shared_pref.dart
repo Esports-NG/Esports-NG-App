@@ -33,8 +33,18 @@ class SharedPref {
     return value.isEmpty ? "0" : value;
   }
 
+  String readRefresh() {
+    String value = _preferences!.getString('refresh')!;
+
+    return value.isEmpty ? "0" : value;
+  }
+
   saveToken(String value) {
     _preferences!.setString("token", value);
+  }
+
+  saveRefreshToken(String value) {
+    _preferences!.setString("refresh", value);
   }
 
   UserModel? getUser() {

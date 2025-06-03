@@ -47,7 +47,7 @@ class _PostItemState extends State<PostItem>
     } else if (difference.inDays < 30) {
       return '${(difference.inDays / 7).floor()}w ago';
     } else if (difference.inDays < 365) {
-      return '${(difference.inDays / 30).floor()}m ago';
+      return '${(difference.inDays / 30).floor()}mo ago';
     } else {
       return '${(difference.inDays / 365).floor()}y ago';
     }

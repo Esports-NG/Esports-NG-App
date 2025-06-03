@@ -5,6 +5,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'first_screen.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
 
@@ -60,11 +61,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   route() async {
     if (authController.authStatus == AuthStatus.isFirstTime) {
-      Get.to(() => FirstScreen());
+      context.replace("/onboarding");
     } else if (authController.authStatus == AuthStatus.authenticated) {
-      Get.to(() => RootDashboard());
+      context.replace("/home");
     } else {
-      Get.to(() => FirstScreen());
+      context.replace("/onboarding");
     }
   }
 

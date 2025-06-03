@@ -525,7 +525,7 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
                 child: Column(
                   children: [
                     InkWell(
-                      onTap: () => authController.logout(),
+                      onTap: () => authController.logout(context),
                       child: Container(
                         padding: EdgeInsets.all(Get.height * 0.025),
                         decoration: BoxDecoration(

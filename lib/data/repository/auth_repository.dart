@@ -19,6 +19,7 @@ import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart' as Get;
+import 'package:go_router/go_router.dart';
 import 'package:web_socket_channel/io.dart';
 
 // Status enums
@@ -208,6 +209,8 @@ class AuthRepository extends Get.GetxController {
 
   Get.Rx<String> mToken = Get.Rx("");
   String get token => mToken.value;
+  Get.Rx<String> mRefreshToken = Get.Rx("");
+  String get refreshTokenValue => mRefreshToken.value;
 
   Get.RxBool mOnSelect = false.obs;
   Get.RxBool mGetCountryCode = false.obs;
@@ -301,6 +304,7 @@ class AuthRepository extends Get.GetxController {
       if (pref!.getUser() != null) {
         mUser(pref!.getUser()!);
         mToken(pref!.read());
+        mRefreshToken(pref!.readRefresh());
         getUserInfo();
         _authStatus(AuthStatus.authenticated);
         if (mToken.value == "0") {
@@ -376,7 +380,8 @@ class AuthRepository extends Get.GetxController {
         _signUpStatus(SignUpStatus.error);
         throw 'Failed to create account';
       }
-    } catch (error) {
+    } on DioException catch (error) {
+      Helpers().showCustomSnackbar(message: error.response?.data['message']);
       _signUpStatus(SignUpStatus.error);
       _handleApiError(error);
       return null;
@@ -411,18 +416,17 @@ class AuthRepository extends Get.GetxController {
         if (responseData['data']['tokens'] != null) {
           var userModel = UserModel.fromJson(responseData['data']);
           mToken(userModel.tokens?.access ?? "");
+          mRefreshToken(userModel.tokens?.refresh);
           pref!.saveToken(token);
+          pref!.saveRefreshToken(token);
           mUser(userModel);
           pref!.setUser(userModel);
           _signInStatus(SignInStatus.success);
           _authStatus(AuthStatus.authenticated);
 
-          Helpers().showCustomSnackbar(
-              message: responseData['message'] ?? "Login Successful");
+          Helpers().showCustomSnackbar(message: "Login Successful");
           // await Future.delayed(const Duration(seconds: 1));
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const RootDashboard()));
-          // Get.Get.offAll(() => RootDashboard());
+          context.replace("/home"); // Get.Get.offAll(() => RootDashboard());
         }
       } else {
         _signInStatus(SignInStatus.error);
@@ -431,7 +435,7 @@ class AuthRepository extends Get.GetxController {
       }
 
       return responseData;
-    } catch (error) {
+    } on DioException catch (error) {
       _signInStatus(SignInStatus.error);
       _handleApiError(error);
       return null;
@@ -943,22 +947,38 @@ class AuthRepository extends Get.GetxController {
     countryCodeController.clear();
   }
 
-  void logout() async {
+  void logout(BuildContext context) async {
+    final notificationService = NotificationService();
+    final deviceInfo = DeviceInfoPlugin();
     try {
-      await _dio.post(ApiLink.logout);
+      var fcmToken = await notificationService.getFCMToken();
+      debugPrint('login here...');
+
+      var androidInfo =
+          Platform.isAndroid ? await deviceInfo.androidInfo : null;
+      var iosInfo = Platform.isIOS ? await deviceInfo.iosInfo : null;
+
+      final data = {
+        "token": fcmToken,
+        "refresh": refreshTokenValue,
+        "device_name": androidInfo != null ? androidInfo.device : iosInfo?.name,
+        "device_type": Platform.isAndroid ? "android" : "ios"
+      };
+      var response = await _dio.post(ApiLink.logout, data: data);
+      print(response.data);
       _authStatus(AuthStatus.unAuthenticated);
       clear();
-      mToken("");
+      mToken("0");
       pref!.logout();
-      Get.Get.offAll(() => const FirstScreen());
-    } catch (error) {
-      debugPrint("logout error: ${error.toString()}");
+      context.replace("/signin");
+    } on DioException catch (error) {
+      print('logout error ${error.response?.data}');
       // Even if logout API fails, still clear local data
       _authStatus(AuthStatus.unAuthenticated);
       clear();
       mToken("");
       pref!.logout();
-      Get.Get.off(() => const FirstScreen());
+      context.replace("/signin");
     }
   }
 }

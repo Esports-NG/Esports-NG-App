@@ -131,7 +131,8 @@ class _TournamentRegistrationButtonState
                                 builder: (context) => AddTeamGameDialog(
                                       game: widget.eventDetails.games![0],
                                     )).whenComplete(() => widget.onAddGame())
-                            : () => Get.to(() => CreatePlayerProfile()),
+                            : () => Get.to(() => CreatePlayerProfile(
+                                game: widget.eventDetails.games![0])),
                     child: CustomText(
                       title: _noTeam
                           ? "Create a team"

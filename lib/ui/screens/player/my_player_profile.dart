@@ -1,4 +1,5 @@
 import 'package:e_sport/data/repository/player_repository.dart';
+import 'package:e_sport/ui/screens/account/games_played/create_player_profile.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/game/games_played_widget.dart';
 import 'package:e_sport/ui/widgets/utils/back_button.dart';
@@ -6,6 +7,7 @@ import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 class MyPlayerProfile extends StatefulWidget {
   const MyPlayerProfile({super.key});
@@ -34,6 +36,14 @@ class _MyPlayerProfileState extends State<MyPlayerProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.to(() => CreatePlayerProfile()),
+        backgroundColor: AppColor().primaryColor,
+        child: Icon(
+          IconsaxPlusLinear.add,
+          color: Colors.white,
+        ),
+      ),
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,

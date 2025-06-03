@@ -8,7 +8,7 @@ class ApiLink {
   static String user = "${baseurl}user/v2/";
   static String tokenRefresh = "${baseurl}user/v2/token/refresh/";
   static String getCountryCode = "https://restcountries.com/v3/name/";
-  static String logout = "${baseurl}user/v2/logout";
+  static String logout = "${baseurl}user/v2/logout/";
   static String validateResetOtp = "${baseurl}user/v2/otp/verify";
   static String getUser = "${baseurl}user/v2/info/";
   static String updateUser = "${baseurl}users/v2/profile";
@@ -89,6 +89,7 @@ class ApiLink {
   //Events
   static String createTournament(String slug) =>
       "${baseurl}event/v2/?c_s=$slug";
+  static String editTournament(String slug) => "${baseurl}event/v2/$slug/";
   static String createSocialEvent(String slug) =>
       "${baseurl}event/v2/$slug/create/socialevent/";
   static String getEventDetails(String slug) => "${baseurl}event/v2/?p=$slug";

@@ -1,5 +1,7 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/screens/account/user_details.dart';
+import 'package:e_sport/ui/screens/auth/first_screen.dart';
+import 'package:e_sport/ui/screens/auth/login.dart';
 import 'package:e_sport/ui/screens/auth/splash_screen.dart';
 import 'package:e_sport/ui/screens/nav/events.dart';
 import 'package:e_sport/ui/screens/nav/home.dart';
@@ -15,18 +17,22 @@ GoRouter goRouter() {
       navigatorKey: Get.key,
       routes: <RouteBase>[
         GoRoute(
-            path: '/',
-            builder: (context, state) {
-              return const SplashScreen();
-            },
-            routes: <RouteBase>[
-              GoRoute(
-                  path: '/home',
-                  name: 'home',
-                  builder: (_, __) {
-                    return const RootDashboard();
-                  }),
-            ]),
+          path: '/',
+          builder: (context, state) {
+            return const SplashScreen();
+          },
+        ),
+        GoRoute(
+            path: '/onboarding',
+            builder: (context, state) => const FirstScreen()),
+        GoRoute(
+            path: "/signin", builder: (context, state) => const LoginScreen()),
+        GoRoute(
+            path: '/home',
+            name: 'home',
+            builder: (_, __) {
+              return const RootDashboard();
+            }),
         GoRoute(
           path: '/events',
           name: 'events',

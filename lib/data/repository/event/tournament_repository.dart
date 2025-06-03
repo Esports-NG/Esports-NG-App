@@ -465,6 +465,95 @@ class TournamentRepository extends GetxController {
     }
   }
 
+  Future updateTournament(String slug) async {
+    try {
+      eventController.createEventStatus(CreateEventStatus.loading);
+      var httpSplit = tournamentLinkController.text.replaceAll("https://", "");
+      var tournamentLink = "https://$httpSplit";
+
+      // Create FormData for multipart request
+      final formData = FormData.fromMap({
+        "name": tournamentNameController.text,
+        "link": tournamentLink,
+        "knockout_type": knockoutTypeController.text,
+        "rank_type": rankTypeController.text,
+        "reg_start": regDateController.text,
+        "reg_end": regEndDateController.text,
+        "start_date": startDateController.text,
+        "end_date": endDateController.text,
+        "prize_pool": eventController.currency.value + prizePoolController.text,
+        "summary": tournamentSummaryController.text,
+        "entry_fee": eventController.currency.value + entryFeeController.text,
+        "requirements": tournamentRequirementsController.text,
+        "structure": tournamentStructureController.text,
+        "first": eventController.currency.value + firstPrizeController.text,
+        "second": eventController.currency.value + secondPrizeController.text,
+        "third": eventController.currency.value + thirdPrizeController.text,
+        "rules_regs": tournamentRegulationsController.text,
+        "event_type": "tournament",
+        "hashtag": tournamentHashtagController.text,
+        "tournament_type": tournamentTypeValue.value!,
+        "igames": gameValue.value!.id.toString(),
+        "team_size": participantController.text,
+        "enable_leaderboard": enableLeaderboardController.text,
+      });
+
+      // Add images if they are updated
+      if (eventProfileImage != null) {
+        formData.files.add(MapEntry(
+            "profile", await MultipartFile.fromFile(eventProfileImage!.path)));
+      }
+      if (eventCoverImage != null) {
+        formData.files.add(MapEntry(
+            "banner", await MultipartFile.fromFile(eventCoverImage!.path)));
+      }
+
+      // Add game modes
+      for (int i = 0; i < gameModesController.value.selectedItems.length; i++) {
+        formData.fields.add(MapEntry('game_mode[$i]',
+            '${gameModesController.value.selectedItems[i].value}'));
+      }
+
+      // Send the request
+      var response = await dio.put(
+        ApiLink.editTournament(slug),
+        data: formData,
+        options: Options(headers: _getAuthHeaders()),
+      );
+
+      if (response.statusCode == 200) {
+        eventController.createEventStatus(CreateEventStatus.success);
+        Helpers()
+            .showCustomSnackbar(message: "Tournament updated successfully");
+        Get.back(); // Navigate back to tournament details
+        eventController.getAllEvents(false); // Refresh the events list
+      } else {
+        eventController.createEventStatus(CreateEventStatus.error);
+        debugPrint("Unexpected status code: ${response.statusCode}");
+        _handleError("Unexpected error occurred");
+      }
+    } on DioException catch (err) {
+      eventController.createEventStatus(CreateEventStatus.error);
+      if (err.response?.data != null) {
+        print(err.response?.data);
+        _handleError(err.response?.data);
+      } else {
+        _handleError("Failed to update tournament");
+      }
+    } catch (error) {
+      eventController.createEventStatus(CreateEventStatus.error);
+      debugPrint("Error occurred: ${error.toString()}");
+
+      if (error is DioException && error.response?.statusCode == 401) {
+        authController
+            .refreshToken()
+            .then((value) => EasyLoading.showInfo('Please try again!'));
+      } else {
+        _handleError(error);
+      }
+    }
+  }
+
   Future registerForTournament(String slug) async {
     try {
       var headers = _getAuthHeaders();
@@ -940,7 +1029,7 @@ class TournamentRepository extends GetxController {
       Get.back();
       Helpers().showCustomSnackbar(message: "Livestream created successfully");
     } on DioException catch (error) {
-      print(error?.response?.data);
+      print(error.response?.data);
       _handleError(error);
     }
   }

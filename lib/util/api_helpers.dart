@@ -59,7 +59,7 @@ class ApiHelpers {
             fromJson);
 
         if (apiResponse.message != null) {
-          Helpers().showCustomSnackbar(message: apiResponse.message!);
+          // Helpers().showCustomSnackbar(message: apiResponse.message!);
         }
 
         if (onSuccess != null) {

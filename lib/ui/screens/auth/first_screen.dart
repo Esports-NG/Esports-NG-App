@@ -1,8 +1,10 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/screens/activities/activities.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/custom/custom_button.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -50,7 +52,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   Center(
                     child: CustomText(
                       title:
-                          'Esports NG is your all in one social\nnetworking platform for Gaming',
+                          'ENGY Africa is your all in one social\nnetworking platform for Gaming',
                       color: AppColor().primaryWhite.withOpacity(0.9),
                       textAlign: TextAlign.center,
                       fontFamily: 'InterMedium',
@@ -80,6 +82,13 @@ class _FirstScreenState extends State<FirstScreen> {
                     },
                     isLoading: false,
                   ),
+                  Gap(10.h),
+                  CustomFillButton(
+                    onTap: () => Get.to(() => ActivitiesScreen()),
+                    buttonText: "View activities",
+                    buttonColor: Colors.transparent,
+                    boarderColor: Colors.transparent,
+                  )
                   // Gap(Get.height * 0.05),
                   // Center(
                   //   child: Row(

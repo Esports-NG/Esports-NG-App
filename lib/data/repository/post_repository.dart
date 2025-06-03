@@ -235,7 +235,8 @@ class PostRepository extends Get.GetxController {
       }
 
       return response.data;
-    } catch (error) {
+    } on DioException catch (error) {
+      print(error.response?.data);
       _createPostStatus(CreatePostStatus.error);
       _handleApiError(error);
       return null;

@@ -43,6 +43,7 @@ class _GameDropdownState extends State<GameDropdown> {
 
   Future selectItems() async {
     await Future.delayed(Duration(milliseconds: 200));
+    print("game value: ${widget.gameValue.value?.name}");
     if (widget.gameValue.value != null) {
       selectController.selectWhere(
         (item) {
