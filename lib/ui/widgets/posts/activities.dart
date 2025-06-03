@@ -76,6 +76,7 @@ class _ActivitiesState extends State<Activities>
       final response =
           await tournamentController.dio.get(ApiLink.getActivities);
       final json = response.data;
+      print(response.data);
       if (json['success'] == true) {
         _nextLink = json['data']['next'];
         return activityModelFromJson(jsonEncode(json['data']['results']));

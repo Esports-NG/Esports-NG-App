@@ -1,11 +1,14 @@
 import 'package:e_sport/data/model/player_model.dart';
+import 'package:e_sport/data/repository/event/tournament_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
+import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/ui/widgets/utils/back_button.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/custom/custom_textfield.dart';
 import 'package:e_sport/ui/widgets/custom/custom_button.dart';
 import 'package:e_sport/ui/widgets/game/game_list_dropdown.dart';
+import 'package:e_sport/ui/widgets/utils/buttonLoader.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/validator.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +16,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class CreatePlayerProfile extends StatefulWidget {
-  const CreatePlayerProfile({super.key});
+  const CreatePlayerProfile({super.key, this.game});
+
+  final GamePlayed? game;
 
   @override
   State<CreatePlayerProfile> createState() => _CreatePlayerProfileState();
@@ -23,6 +28,31 @@ class _CreatePlayerProfileState extends State<CreatePlayerProfile> {
   static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   var playerController = Get.put(PlayerRepository());
   var gamesController = Get.put(GamesRepository());
+  final tournamentController = Get.put(TournamentRepository());
+
+  bool _isAdding = false;
+  List<GamePlayed> _games = [];
+  bool _loading = true;
+
+  Future getGames() async {
+    var dio = tournamentController.dio;
+    var response = await dio.get(ApiLink.getUntrimmedGames);
+    var gamesList = List<GamePlayed>.from(
+        response.data['data'].map((x) => GamePlayed.fromJson(x)));
+    setState(() {
+      _games = gamesList;
+      _loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    if (widget.game != null) {
+      gamesController.selectedGame.value = widget.game;
+    }
+    getGames();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +85,12 @@ class _CreatePlayerProfileState extends State<CreatePlayerProfile> {
                   color: AppColor().greyFour,
                 ),
                 Gap(Get.height * 0.01),
-                GameDropdown(gameValue: gamesController.selectedGame),
+                _loading
+                    ? ButtonLoader()
+                    : GameDropdown(
+                        gameValue: gamesController.selectedGame,
+                        gameList: _games,
+                      ),
                 Gap(Get.height * 0.03),
                 CustomText(
                   title: "IGN",

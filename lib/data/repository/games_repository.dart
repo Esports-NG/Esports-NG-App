@@ -45,11 +45,11 @@ class GamesRepository extends GetxController {
       options.headers["Authorization"] = "JWT ${authController.token}";
       return handler.next(options);
     }, onError: (error, handler) {
-      if (error.response?.statusCode == 401) {
-        authController.refreshToken().then((_) {
-          EasyLoading.showInfo('Session refreshed. Please try again.');
-        });
-      }
+      // if (error.response?.statusCode == 401) {
+      //   authController.refreshToken().then((_) {
+      //     EasyLoading.showInfo('Session refreshed. Please try again.');
+      //   });
+      // }
       return handler.next(error);
     }));
   }

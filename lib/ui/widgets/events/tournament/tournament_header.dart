@@ -1,11 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/model/events_model.dart';
+import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/ui/screens/event/edit_tournament.dart';
 import 'package:e_sport/ui/widgets/utils/back_button.dart';
 import 'package:e_sport/ui/widgets/utils/profile_image.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 class TournamentHeader extends StatelessWidget {
   final EventModel event;
@@ -61,7 +65,9 @@ class TournamentHeader extends StatelessWidget {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10)),
                 image: DecorationImage(
-                    image: NetworkImage(event.banner!), fit: BoxFit.cover),
+                    opacity: 0.6,
+                    image: NetworkImage(event.banner!),
+                    fit: BoxFit.cover),
               ),
             ),
           );
@@ -83,20 +89,24 @@ class TournamentHeader extends StatelessWidget {
   }
 
   Widget _buildHeaderButtons() {
+    final authController = Get.find<AuthRepository>();
     return Positioned.fill(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GoBackButton(onPressed: () => Get.back()),
-          Padding(
-            padding: EdgeInsets.only(right: Get.height * 0.02),
-            child: InkWell(
-              child: Icon(
-                Icons.settings,
-                color: AppColor().primaryWhite,
+          if (event.community?.owner?.slug == authController.user?.slug)
+            Padding(
+              padding: EdgeInsets.only(right: Get.height * 0.02),
+              child: InkWell(
+                onTap: () => Get.to(() => EditTournament(tournament: event)),
+                child: Icon(
+                  IconsaxPlusBold.edit,
+                  size: 24.r,
+                  color: AppColor().primaryWhite,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
