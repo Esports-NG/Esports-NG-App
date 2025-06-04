@@ -248,7 +248,10 @@ class _AccountTournamentDetailState extends State<AccountTournamentDetail> {
                 child: Column(
                   children: [
                     // Tournament Header with Banner and Profile Image
-                    TournamentHeader(event: _eventDetails!),
+                    TournamentHeader(
+                      event: _eventDetails!,
+                      getDetails: getEventDetails,
+                    ),
                     Gap(Get.height * 0.07),
 
                     // Tournament Summary Section

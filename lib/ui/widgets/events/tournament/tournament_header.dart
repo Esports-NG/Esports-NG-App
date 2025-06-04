@@ -13,9 +13,11 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 
 class TournamentHeader extends StatelessWidget {
   final EventModel event;
+  final dynamic getDetails;
 
   const TournamentHeader({
     Key? key,
+    required this.getDetails,
     required this.event,
   }) : super(key: key);
 
@@ -99,7 +101,8 @@ class TournamentHeader extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(right: Get.height * 0.02),
               child: InkWell(
-                onTap: () => Get.to(() => EditTournament(tournament: event)),
+                onTap: () => Get.to(() => EditTournament(tournament: event))
+                    ?.whenComplete(getDetails),
                 child: Icon(
                   IconsaxPlusBold.edit,
                   size: 24.r,

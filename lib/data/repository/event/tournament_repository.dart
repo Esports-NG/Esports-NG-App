@@ -465,7 +465,10 @@ class TournamentRepository extends GetxController {
     }
   }
 
-  Future updateTournament(String slug) async {
+  Future updateTournament(
+    String eventSlug,
+    String communitySlug,
+  ) async {
     try {
       eventController.createEventStatus(CreateEventStatus.loading);
       var httpSplit = tournamentLinkController.text.replaceAll("https://", "");
@@ -516,23 +519,15 @@ class TournamentRepository extends GetxController {
 
       // Send the request
       var response = await dio.put(
-        ApiLink.editTournament(slug),
+        ApiLink.editTournament(eventSlug, communitySlug),
         data: formData,
         options: Options(headers: _getAuthHeaders()),
       );
-
-      if (response.statusCode == 200) {
-        eventController.createEventStatus(CreateEventStatus.success);
-        Helpers()
-            .showCustomSnackbar(message: "Tournament updated successfully");
-        Get.back(); // Navigate back to tournament details
-        eventController.getAllEvents(false); // Refresh the events list
-      } else {
-        eventController.createEventStatus(CreateEventStatus.error);
-        debugPrint("Unexpected status code: ${response.statusCode}");
-        _handleError("Unexpected error occurred");
-      }
+      Get.back(); // Navigate back to tournament details
+      Helpers().showCustomSnackbar(message: "Tournament updated successfully");
+      eventController.getMyEvents(false); // Refresh the events list
     } on DioException catch (err) {
+      print("edit tournament error: ${err.response?.data}");
       eventController.createEventStatus(CreateEventStatus.error);
       if (err.response?.data != null) {
         print(err.response?.data);

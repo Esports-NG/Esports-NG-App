@@ -1,3 +1,5 @@
+import 'package:e_sport/data/model/category_model.dart';
+
 class ApiLink {
   static String domain = "https://api.esportsng.com";
   static String baseurl = "$domain/";
@@ -18,7 +20,7 @@ class ApiLink {
   static String requestPasswordOtp = "${baseurl}user/v2/otp_request/";
   static String verifyOtp = "${baseurl}user/v2/reset/otp/verify/";
   static String resetPassword(String slug) =>
-      "${baseurl}user/v2/password_reset/$slug/";
+      "${baseurl}user/v2/password_reset/";
 
   static String followUser = "${baseurl}extra/v2/followuser/";
   // static String followCommunity = "${baseurl}extra/v2/followcomm/";
@@ -50,7 +52,7 @@ class ApiLink {
   static String searchForPostsorUsers(String query, String type) =>
       "${baseurl}$type/v2/search_${type}s/?search=$query";
   static String getEventPosts(String slug) =>
-      "${baseurl}post/v2/filter_posts/?tags__event_slug=$slug";
+      "${baseurl}post/v2/filter_posts/?event=$slug";
   static String getAds = "${baseurl}extra/v2/advert/view/";
 
   //Team
@@ -89,7 +91,8 @@ class ApiLink {
   //Events
   static String createTournament(String slug) =>
       "${baseurl}event/v2/?c_s=$slug";
-  static String editTournament(String slug) => "${baseurl}event/v2/$slug/";
+  static String editTournament(String eventSlug, String communitySlug) =>
+      "${baseurl}event/v2/?e_s=$eventSlug&c_s=$communitySlug";
   static String createSocialEvent(String slug) =>
       "${baseurl}event/v2/$slug/create/socialevent/";
   static String getEventDetails(String slug) => "${baseurl}event/v2/?p=$slug";

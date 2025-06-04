@@ -306,7 +306,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     CustomText(
                       title: pageCount == 0
-                          ? 'Welcome to Esport NG, please sign up to get\nexclusive access our services.'
+                          ? 'Welcome to ENGY Africa, please sign up to get\nexclusive access our services.'
                           : pageCount == 1
                               ? 'Let’s know about you, to improve your experience,\nwhat would you be primarily using the Esport NG for?'
                               : 'Please select as many categories as you like, to\nimprove your feed experience',

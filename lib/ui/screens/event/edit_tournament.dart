@@ -310,7 +310,7 @@ class _EditTournamentState extends State<EditTournament> {
                   tournamentHashtagFocusNode: _tournamentHashtagFocusNode,
                   tournamentLinkFocusNode: _tournamentLinkFocusNode,
                 ),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.05),
 
                 // Game Configuration
                 const TournamentSectionTitle(title: "Game Configuration"),
@@ -320,7 +320,7 @@ class _EditTournamentState extends State<EditTournament> {
                   gameController: gameController,
                   games: _games,
                 ),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.05),
 
                 // Tournament Settings
                 const TournamentSectionTitle(title: "Tournament Settings"),
@@ -328,7 +328,7 @@ class _EditTournamentState extends State<EditTournament> {
                 TournamentSettingsForm(
                   tournamentController: tournamentController,
                 ),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.05),
 
                 // Schedule
                 const TournamentSectionTitle(title: "Schedule"),
@@ -341,7 +341,7 @@ class _EditTournamentState extends State<EditTournament> {
                   tournamentEndDateFocusNode: _tournamentEndDateFocusNode,
                   pickDate: pickDate,
                 ),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.05),
 
                 // Prize Pool & Fees
                 const TournamentSectionTitle(title: "Prize Pool & Fees"),
@@ -355,14 +355,14 @@ class _EditTournamentState extends State<EditTournament> {
                   secondPrizeFocusNode: _secondPrizeFocusNode,
                   thirdPrizeFocusNode: _thirdPrizeFocusNode,
                 ),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.05),
 
                 // Participant Settings
                 TournamentParticipantSettings(
                   tournamentController: tournamentController,
                   thirdPrizeFocusNode: _thirdPrizeFocusNode,
                 ),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.05),
 
                 // Tournament Details
                 const TournamentSectionTitle(title: "Tournament Details"),
@@ -376,11 +376,11 @@ class _EditTournamentState extends State<EditTournament> {
                   tournamentRegulationsFocusNode:
                       _tournamentRegulationsFocusNode,
                 ),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.05),
 
                 // Images Section
                 const TournamentSectionTitle(title: "Tournament Images"),
-                Gap(Get.height * 0.02),
+                Gap(Get.height * 0.05),
                 TournamentImagesSection(
                   tournamentController: tournamentController,
                 ),
@@ -458,27 +458,10 @@ class _EditTournamentState extends State<EditTournament> {
     setState(() {
       _isLoading = true;
     });
-
-    try {
-      await tournamentController.updateTournament(widget.tournament.slug!);
-      Get.back(); // Return to previous screen
-      Get.snackbar(
-        'Success',
-        'Tournament updated successfully',
-        backgroundColor: AppColor().primaryColor,
-        colorText: AppColor().primaryWhite,
-      );
-    } catch (error) {
-      Get.snackbar(
-        'Error',
-        'Failed to update tournament',
-        backgroundColor: AppColor().primaryRed,
-        colorText: AppColor().primaryWhite,
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    await tournamentController.updateTournament(
+        widget.tournament.slug!, widget.tournament.community!.slug!);
+    setState(() {
+      _isLoading = false;
+    });
   }
 }
