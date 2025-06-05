@@ -1,5 +1,6 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/ui/screens/activities/activities.dart';
+import 'package:e_sport/ui/screens/news/news.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/custom/custom_button.dart';
 import 'package:e_sport/util/colors.dart';
@@ -84,28 +85,57 @@ class _FirstScreenState extends State<FirstScreen> {
                     isLoading: false,
                   ),
                   Gap(10.h),
-                  CustomFillButton(
-                    onTap: () => Get.to(() => ActivitiesScreen()),
-                    buttonText: "View activities",
-                    child: Row(
-                      spacing: 8.w,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomText(
-                          title: "View Activities",
-                          size: 14,
-                          fontFamily: "InterSemiBold",
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomFillButton(
+                        onTap: () => Get.to(() => NewsScreen()),
+                        buttonText: "See News",
+                        buttonColor: Colors.transparent,
+                        boarderColor: Colors.transparent,
+                        width: Get.width * 0.4,
+                        child: Row(
+                          spacing: 8.w,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              title: "See News",
+                              size: 14,
+                              fontFamily: "InterSemiBold",
+                            ),
+                            Icon(
+                              IconsaxPlusLinear.arrow_right,
+                              size: 16.sp,
+                              color: Colors.white,
+                            ),
+                          ],
                         ),
-                        Icon(
-                          IconsaxPlusLinear.arrow_right,
-                          size: 16.sp,
-                          color: Colors.white,
+                      ),
+                      CustomFillButton(
+                        onTap: () => Get.to(() => ActivitiesScreen()),
+                        buttonText: "View activities",
+                        buttonColor: Colors.transparent,
+                        boarderColor: Colors.transparent,
+                        width: Get.width * 0.4,
+                        child: Row(
+                          spacing: 8.w,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              title: "View Activities",
+                              size: 14,
+                              fontFamily: "InterSemiBold",
+                            ),
+                            Icon(
+                              IconsaxPlusLinear.arrow_right,
+                              size: 16.sp,
+                              color: Colors.white,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    buttonColor: Colors.transparent,
-                    boarderColor: Colors.transparent,
-                  )
+                      ),
+                    ],
+                  ),
                   // Gap(Get.height * 0.05),
                   // Center(
                   //   child: Row(

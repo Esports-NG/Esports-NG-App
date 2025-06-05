@@ -58,6 +58,19 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        leading: IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: () {
+                setState(() {});
+                Get.back();
+                authController.clear();
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: AppColor().primaryWhite,
+            ),
+          ),
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
