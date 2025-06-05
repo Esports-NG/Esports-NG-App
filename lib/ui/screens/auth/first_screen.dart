@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'login.dart';
 import 'register.dart';
@@ -86,6 +87,22 @@ class _FirstScreenState extends State<FirstScreen> {
                   CustomFillButton(
                     onTap: () => Get.to(() => ActivitiesScreen()),
                     buttonText: "View activities",
+                    child: Row(
+                      spacing: 8.w,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomText(
+                          title: "View Activities",
+                          size: 14,
+                          fontFamily: "InterSemiBold",
+                        ),
+                        Icon(
+                          IconsaxPlusLinear.arrow_right,
+                          size: 16.sp,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
                     buttonColor: Colors.transparent,
                     boarderColor: Colors.transparent,
                   )

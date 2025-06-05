@@ -436,6 +436,7 @@ class AuthRepository extends Get.GetxController {
 
       return responseData;
     } on DioException catch (error) {
+      Helpers().showCustomSnackbar(message: error.response?.data['message']);
       _signInStatus(SignInStatus.error);
       _handleApiError(error);
       return null;
@@ -860,6 +861,11 @@ class AuthRepository extends Get.GetxController {
       final response = await _dio.post(ApiLink.requestPasswordOtp, data: data);
       final responseData = response.data;
 
+      var cookies = response.headers.map['set-cookie'];
+      if (cookies != null && cookies.isNotEmpty) {
+        _dio.options.headers['cookie'] = cookies;
+      }
+
       if (responseData['success'] == true) {
         Helpers().showCustomSnackbar(
             message: responseData['message'] ?? "OTP sent successfully");
@@ -888,7 +894,8 @@ class AuthRepository extends Get.GetxController {
       } else {
         throw responseData['message'] ?? 'Failed to verify OTP';
       }
-    } catch (error) {
+    } on DioException catch (error) {
+      Helpers().showCustomSnackbar(message: error.response?.data['message']);
       _handleApiError(error);
       return false;
     }
@@ -897,6 +904,7 @@ class AuthRepository extends Get.GetxController {
   Future resetPassword() async {
     try {
       final data = {
+        "email": resetPasswordEmailController.text,
         "password": resetPasswordController.text,
         "password2": resetPasswordConfirmController.text
       };
@@ -914,7 +922,8 @@ class AuthRepository extends Get.GetxController {
       } else {
         throw responseData['message'] ?? 'Failed to reset password';
       }
-    } catch (error) {
+    } on DioException catch (error) {
+      Helpers().showCustomSnackbar(message: error.response?.data['message']);
       _handleApiError(error);
       return false;
     }

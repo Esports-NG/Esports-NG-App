@@ -47,7 +47,7 @@ class _ActivitiesState extends State<Activities>
   List<ActivityModel> _activities = [];
 
   bool _isLoading = false;
-  String? _nextLink;
+  String _nextLink = '';
 
   final _colors = [
     LinearGradient(
@@ -78,7 +78,7 @@ class _ActivitiesState extends State<Activities>
       final json = response.data;
       print(response.data);
       if (json['success'] == true) {
-        _nextLink = json['data']['next'];
+        _nextLink = json['data']['next'] ?? "";
         return activityModelFromJson(jsonEncode(json['data']['results']));
       } else {
         throw Exception(json['message'] ?? 'Failed to load activities');
@@ -94,6 +94,9 @@ class _ActivitiesState extends State<Activities>
   }
 
   Future<List<ActivityModel>> fetchNextActivities() async {
+    if (_nextLink.isEmpty) {
+      return [];
+    }
     setState(() {
       _isLoading = true;
     });
@@ -101,13 +104,13 @@ class _ActivitiesState extends State<Activities>
       final response = await tournamentController.dio.get(_nextLink!);
       final json = response.data;
       if (json['success'] == true) {
-        _nextLink = json['data']['next'];
+        _nextLink = json['data']['next'] ?? "";
         return activityModelFromJson(jsonEncode(json['data']['results']));
       } else {
         throw Exception(json['message'] ?? 'Failed to load more activities');
       }
-    } catch (e) {
-      log('Error fetching next activities: $e');
+    } on DioException catch (e) {
+      log('Error fetching next activities: ${e.response?.data}');
       throw e;
     } finally {
       setState(() {
