@@ -29,7 +29,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Needs camera access</string>
+	<string>ENGY requires camera access to capture photos for sharing with users on Engy Africa</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Needs PhotoLib access</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
