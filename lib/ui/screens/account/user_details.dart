@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:e_sport/data/model/community_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
+import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/data/model/user_profile.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/player_repository.dart';
@@ -47,7 +48,7 @@ class UserDetails extends StatelessWidget {
   final String slug;
   const UserDetails({super.key, required this.slug});
 
-  Future<UserDataWithFollowers> fetchUserProfile(String token) async {
+  Future<UserModel> fetchUserProfile(String token) async {
     try {
       final dio = Dio();
       dio.options.headers = {
@@ -62,7 +63,7 @@ class UserDetails extends StatelessWidget {
       if (response.statusCode == 200) {
         final responseData = response.data;
         if (responseData['success'] == true) {
-          return UserDataWithFollowers.fromJson(responseData['data']);
+          return UserModel.fromJson(responseData['data']);
         } else {
           throw Exception(responseData['message'] ?? 'Failed to load profile');
         }
@@ -125,7 +126,7 @@ class UserProfile extends StatefulWidget {
     required this.userData,
   });
 
-  final UserDataWithFollowers userData;
+  final UserModel userData;
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -377,6 +378,7 @@ class _UserProfileState extends State<UserProfile> {
             children: [
               Gap(Get.height * 0.04),
               ProfileActionButtons(
+                user: widget.userData,
                 isFollowing: _isFollowing,
                 isLoading: _isLoading,
                 onFollowTap: () async {
@@ -400,16 +402,6 @@ class _UserProfileState extends State<UserProfile> {
                     _isLoading = false;
                   });
                 },
-                onMessageTap: () => showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: AppColor().primaryBgColor,
-                    content: const ComingSoonPopup(),
-                  ),
-                ),
               ),
             ],
           ),

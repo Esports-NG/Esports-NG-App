@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
+import 'package:e_sport/di/dependency_injection.dart';
 import 'package:e_sport/di/notification_service.dart';
 import 'package:e_sport/router.dart';
 import 'package:e_sport/ui/widgets/utils/no_internet.dart';
@@ -25,6 +26,10 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final notificationService = NotificationService();
   await notificationService.initialize();
+  
+  // Initialize dependency injection
+  await DependencyInjection.init();
+  
   runApp(const ESportApp());
   configLoading();
 }

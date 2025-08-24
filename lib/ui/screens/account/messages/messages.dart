@@ -1,6 +1,5 @@
 import 'package:e_sport/data/repository/auth_repository.dart';
-import 'package:e_sport/data/repository/message_repository.dart';
-import 'package:e_sport/ui/screens/account/messages/archive.dart';
+import 'package:e_sport/data/repository/chat_repository.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/ui/widgets/utils/small_circle.dart';
 import 'package:e_sport/util/colors.dart';
@@ -22,24 +21,86 @@ class Messages extends StatefulWidget {
 
 class _MessagesPageState extends State<Messages>
     with SingleTickerProviderStateMixin {
-  final authController = Get.put(AuthRepository());
-  final messageController = Get.put(MessageRepository());
+  final authController = Get.find<AuthRepository>();
+  final chatController = Get.put(ChatRepository());
   late TabController _tabController;
   int? _selectedIndex;
 
+  // Cache color instances to avoid creating new ones on each build
+  final _primaryColor = AppColor().primaryColor;
+  final _primaryWhite = AppColor().primaryWhite;
+  final _primaryBackGroundColor = AppColor().primaryBackGroundColor;
+  final _lightItemsColor = AppColor().lightItemsColor;
+  final _primaryMenu = AppColor().primaryMenu;
+
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(() {
-      setState(() {});
-    });
     super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  void _handleTabSelection() {
+    if (_tabController.indexIsChanging) {
+      setState(() {});
+    }
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_handleTabSelection);
     _tabController.dispose();
     super.dispose();
+  }
+
+  Widget _buildTab(
+      {required int index,
+      required String title,
+      required String count,
+      String fontFamily = "InterBold"}) {
+    final bool isSelected = _tabController.index == index;
+    final Color textColor = isSelected ? _primaryColor : _lightItemsColor;
+
+    return Tab(
+      child: isSelected
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomText(
+                  title: title,
+                  color: textColor,
+                  size: 13,
+                  fontFamily: fontFamily,
+                ),
+                Gap(Get.height * 0.01),
+                Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                      color: _primaryColor, shape: BoxShape.circle),
+                  child: Center(
+                    child: CustomText(
+                      title: count,
+                      color: _primaryWhite,
+                      size: 8,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SmallCircle(),
+                Gap(Get.height * 0.01),
+                CustomText(
+                  title: title,
+                  color: textColor,
+                  size: 14,
+                  fontFamily: fontFamily,
+                ),
+              ],
+            ),
+    );
   }
 
   @override
@@ -47,27 +108,27 @@ class _MessagesPageState extends State<Messages>
     return Obx(() {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor().primaryBackGroundColor,
+          backgroundColor: _primaryBackGroundColor,
           centerTitle: true,
-          title: (messageController.messageOnSelect.isFalse)
+          title: (chatController.messageOnSelect.isFalse)
               ? CustomText(
                   title: 'Messages',
                   fontFamily: "InterSemiBold",
                   size: 18,
-                  color: AppColor().primaryWhite,
+                  color: _primaryWhite,
                 )
               : null,
           leading: IconButton(
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
-            onPressed: () => Get.back(),
+            onPressed: Get.back,
             icon: Icon(
               Icons.arrow_back,
-              color: AppColor().primaryWhite,
+              color: _primaryWhite,
             ),
           ),
           actions: [
-            if (messageController.messageOnSelect.isFalse) ...[
+            if (chatController.messageOnSelect.isFalse) ...[
               InkWell(
                 onTap: () {
                   // Get.to(() => const Messages());
@@ -75,6 +136,8 @@ class _MessagesPageState extends State<Messages>
                 child: SvgPicture.asset(
                   'assets/images/svg/search.svg',
                   height: Get.height * 0.025,
+                  width: Get.height * 0.025,
+                  cacheColorFilter: true,
                 ),
               ),
               Gap(Get.height * 0.02),
@@ -84,7 +147,7 @@ class _MessagesPageState extends State<Messages>
                     side: BorderSide.none),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                color: AppColor().primaryMenu,
+                color: _primaryMenu,
                 offset: const Offset(0, -10),
                 initialValue: _selectedIndex,
                 onSelected: (value) {
@@ -128,7 +191,7 @@ class _MessagesPageState extends State<Messages>
                       size: Get.height * 0.016,
                       fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
+                      color: _primaryWhite,
                     ),
                   ),
                   PopupMenuItem(
@@ -142,13 +205,15 @@ class _MessagesPageState extends State<Messages>
                       size: Get.height * 0.016,
                       fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
+                      color: _primaryWhite,
                     ),
                   ),
                 ],
                 child: SvgPicture.asset(
                   'assets/images/svg/sort.svg',
                   height: Get.height * 0.025,
+                  width: Get.height * 0.025,
+                  cacheColorFilter: true,
                 ),
               ),
             ] else ...[
@@ -159,6 +224,8 @@ class _MessagesPageState extends State<Messages>
                 child: SvgPicture.asset(
                   'assets/images/svg/pin.svg',
                   height: Get.height * 0.025,
+                  width: Get.height * 0.025,
+                  cacheColorFilter: true,
                 ),
               ),
               Gap(Get.height * 0.05),
@@ -169,6 +236,8 @@ class _MessagesPageState extends State<Messages>
                 child: SvgPicture.asset(
                   'assets/images/svg/mute.svg',
                   height: Get.height * 0.025,
+                  width: Get.height * 0.025,
+                  cacheColorFilter: true,
                 ),
               ),
               Gap(Get.height * 0.05),
@@ -179,16 +248,18 @@ class _MessagesPageState extends State<Messages>
                 child: SvgPicture.asset(
                   'assets/images/svg/trash.svg',
                   height: Get.height * 0.025,
+                  width: Get.height * 0.025,
+                  cacheColorFilter: true,
                 ),
               ),
               Gap(Get.height * 0.05),
               InkWell(
-                onTap: () {
-                  Get.to(() => const Archives());
-                },
+                onTap: () {},
                 child: SvgPicture.asset(
                   'assets/images/svg/archive.svg',
                   height: Get.height * 0.025,
+                  width: Get.height * 0.025,
+                  cacheColorFilter: true,
                 ),
               ),
               Gap(Get.height * 0.05),
@@ -198,7 +269,7 @@ class _MessagesPageState extends State<Messages>
                     side: BorderSide.none),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                color: AppColor().primaryMenu,
+                color: _primaryMenu,
                 offset: const Offset(0, -10),
                 initialValue: _selectedIndex,
                 onSelected: (value) {
@@ -239,7 +310,7 @@ class _MessagesPageState extends State<Messages>
                       size: Get.height * 0.016,
                       fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
+                      color: _primaryWhite,
                     ),
                   ),
                   PopupMenuItem(
@@ -254,7 +325,7 @@ class _MessagesPageState extends State<Messages>
                       size: Get.height * 0.016,
                       fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
+                      color: _primaryWhite,
                     ),
                   ),
                   PopupMenuItem(
@@ -269,7 +340,7 @@ class _MessagesPageState extends State<Messages>
                       size: Get.height * 0.016,
                       fontFamily: 'InterMedium',
                       textAlign: TextAlign.start,
-                      color: AppColor().primaryWhite,
+                      color: _primaryWhite,
                     ),
                   ),
                   PopupMenuItem(
@@ -291,6 +362,8 @@ class _MessagesPageState extends State<Messages>
                 child: SvgPicture.asset(
                   'assets/images/svg/dots-vert.svg',
                   height: Get.height * 0.025,
+                  width: Get.height * 0.025,
+                  cacheColorFilter: true,
                 ),
               ),
               // InkWell(
@@ -307,155 +380,27 @@ class _MessagesPageState extends State<Messages>
           ],
           bottom: TabBar(
               controller: _tabController,
-              indicatorColor: AppColor().primaryColor,
-              padding: EdgeInsets.only(top: Get.height * 0.02),
+              indicatorColor: _primaryColor,
+              dividerHeight: 0.5,
+              dividerColor: Colors.grey.withOpacity(0.4),
+              // padding: EdgeInsets.only(top: Get.height * 0.02),
+              labelPadding: EdgeInsets.symmetric(horizontal: 4.0),
               tabs: [
-                Tab(
-                  child: _tabController.index == 0
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomText(
-                              title: 'Chats',
-                              color: _tabController.index == 0
-                                  ? AppColor().primaryColor
-                                  : AppColor().lightItemsColor,
-                              size: 13,
-                              fontFamily: "InterSemiBold",
-                            ),
-                            Gap(Get.height * 0.01),
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  color: AppColor().primaryColor,
-                                  shape: BoxShape.circle),
-                              child: Center(
-                                child: CustomText(
-                                  title: '1000',
-                                  color: AppColor().primaryWhite,
-                                  size: 8,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SmallCircle(),
-                            Gap(Get.height * 0.01),
-                            CustomText(
-                              title: 'Chats',
-                              color: _tabController.index == 0
-                                  ? AppColor().primaryColor
-                                  : AppColor().lightItemsColor,
-                              size: 14,
-                              fontFamily: "InterSemiBold",
-                            ),
-                          ],
-                        ),
-                ),
-                Tab(
-                  child: _tabController.index == 1
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomText(
-                              title: 'Communities',
-                              color: _tabController.index == 1
-                                  ? AppColor().primaryColor
-                                  : AppColor().lightItemsColor,
-                              size: 13,
-                              fontFamily: "InterSemiBold",
-                            ),
-                            Gap(Get.height * 0.01),
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  color: AppColor().primaryColor,
-                                  shape: BoxShape.circle),
-                              child: Center(
-                                child: CustomText(
-                                  title: '500',
-                                  color: AppColor().primaryWhite,
-                                  size: 8,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SmallCircle(),
-                            Gap(Get.height * 0.01),
-                            CustomText(
-                              title: 'Communities',
-                              color: _tabController.index == 1
-                                  ? AppColor().primaryColor
-                                  : AppColor().lightItemsColor,
-                              size: 14,
-                              fontFamily: "InterSemiBold",
-                            ),
-                          ],
-                        ),
-                ),
-                Tab(
-                  child: _tabController.index == 2
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomText(
-                              title: 'Tournaments',
-                              color: _tabController.index == 2
-                                  ? AppColor().primaryColor
-                                  : AppColor().lightItemsColor,
-                              size: 13,
-                              fontFamily: "InterSemiBold",
-                            ),
-                            Gap(Get.height * 0.01),
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  color: AppColor().primaryColor,
-                                  shape: BoxShape.circle),
-                              child: Center(
-                                child: CustomText(
-                                  title: '200',
-                                  color: AppColor().primaryWhite,
-                                  size: 8,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SmallCircle(),
-                            Gap(Get.height * 0.01),
-                            CustomText(
-                              title: 'Tournaments',
-                              color: _tabController.index == 2
-                                  ? AppColor().primaryColor
-                                  : AppColor().lightItemsColor,
-                              size: 14,
-                              fontFamily: "InterSemiBold",
-                            ),
-                          ],
-                        ),
-                ),
+                _buildTab(index: 0, title: 'Chats', count: '1000'),
+                _buildTab(
+                    index: 1,
+                    title: 'Communities',
+                    count: '500',
+                    fontFamily: "InterSemiBold"),
+                _buildTab(index: 2, title: 'Tournaments', count: '200'),
               ]),
         ),
-        backgroundColor: AppColor().primaryBackGroundColor,
-        body: Padding(
-          padding: EdgeInsets.only(top: Get.height * 0.02),
-          child: TabBarView(controller: _tabController, children: const [
-            Chats(),
-            Communities(),
-            Tournaments(),
-          ]),
-        ),
+        backgroundColor: _primaryBackGroundColor,
+        body: TabBarView(controller: _tabController, children: const [
+          Chats(),
+          Communities(),
+          Tournaments(),
+        ]),
       );
     });
   }

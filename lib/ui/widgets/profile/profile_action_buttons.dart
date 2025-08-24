@@ -1,3 +1,6 @@
+import 'package:e_sport/data/db/chat_database.dart';
+import 'package:e_sport/data/model/user_model.dart';
+import 'package:e_sport/ui/screens/account/messages/message_type/chats/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,15 +15,15 @@ class ProfileActionButtons extends StatelessWidget {
   final bool isFollowing;
   final bool isLoading;
   final VoidCallback onFollowTap;
-  final VoidCallback onMessageTap;
+  final UserModel user;
 
-  const ProfileActionButtons({
-    Key? key,
-    required this.isFollowing,
-    required this.isLoading,
-    required this.onFollowTap,
-    required this.onMessageTap,
-  }) : super(key: key);
+  const ProfileActionButtons(
+      {Key? key,
+      required this.isFollowing,
+      required this.isLoading,
+      required this.onFollowTap,
+      required this.user})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,33 +62,32 @@ class ProfileActionButtons extends StatelessWidget {
                       ]),
           ),
         ),
-        // Gap(Get.height * 0.02),
-        // Expanded(
-        //   child: CustomFillOption(
-        //     buttonColor: AppColor().primaryBackGroundColor.withOpacity(0.7),
-        //     borderColor: AppColor().greyEight,
-        //     onTap: onMessageTap,
-        //     child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        //       Icon(
-        //         IconsaxPlusLinear.message,
-        //         color: AppColor().primaryWhite,
-        //         size: 16,
-        //       ),
-        //       Gap(Get.height * 0.01),
-        //       CustomText(
-        //           title: 'Message',
-        //           size: 14,
-        //           fontFamily: 'Inter',
-        //           color: AppColor().primaryWhite),
-        //       Gap(Get.height * 0.01),
-        //       Icon(
-        //         Icons.keyboard_arrow_down,
-        //         color: AppColor().primaryColor,
-        //         size: Get.height * 0.015,
-        //       ),
-        //     ]),
-        //   ),
-        // ),
+        Gap(Get.height * 0.02),
+        Expanded(
+          child: CustomFillOption(
+            buttonColor: AppColor().primaryBackGroundColor.withOpacity(0.7),
+            borderColor: AppColor().greyEight,
+            onTap: () => Get.to(() => ChatPage(
+                chat: Chat(
+                    name: user.fullName!,
+                    slug: user.slug!,
+                    image: user.profile?.profilePicture,
+                    username: user.userName))),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Icon(
+                IconsaxPlusLinear.message,
+                color: AppColor().primaryWhite,
+                size: 16,
+              ),
+              Gap(Get.height * 0.01),
+              CustomText(
+                  title: 'Message',
+                  size: 14,
+                  fontFamily: 'Inter',
+                  color: AppColor().primaryWhite),
+            ]),
+          ),
+        ),
       ],
     );
   }

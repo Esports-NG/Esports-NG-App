@@ -11,6 +11,7 @@ import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/model/post_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/dependency_injection.dart';
 import 'package:e_sport/ui/widgets/utils/create_success_page.dart';
 import 'package:e_sport/util/api_helpers.dart';
 import 'package:e_sport/util/helpers.dart';
@@ -91,52 +92,59 @@ class PostRepository extends Get.GetxController {
   Get.Rx<File?> mPostImage = Get.Rx(null);
   File? get postImage => mPostImage.value;
 
-  // Dio instance
+  // Dio instance from ApiService
   late Dio _dio;
 
-  // Initialize Dio with auth interceptor
+  // Get Dio instance from ApiService
   void _initDio() {
-    _dio = Dio(BaseOptions(
-        baseUrl: ApiLink.baseurl,
-        contentType: 'application/json',
-        responseType: ResponseType.json,
-        receiveTimeout: Duration(seconds: 90)));
+    try {
+      // Get the shared Dio instance from ApiService
+      _dio = Get.Get.find<ApiService>().dio;
+    } catch (e) {
+      // Fallback to creating a new Dio instance if ApiService is not available
+      debugPrint('Error getting Dio from ApiService: $e');
+      _dio = Dio(BaseOptions(
+          baseUrl: ApiLink.baseurl,
+          contentType: 'application/json',
+          responseType: ResponseType.json,
+          receiveTimeout: Duration(seconds: 90)));
 
-    // Add an interceptor to handle authentication
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // Add auth token to header if it exists
-        if (authController.token.isNotEmpty && authController.token != "0") {
-          options.headers['Authorization'] = 'JWT ${authController.token}';
-        }
-        return handler.next(options);
-      },
-      onError: (DioException error, handler) async {
-        // Handle token refresh if 401 error occurs
-        if (error.response?.statusCode == 401) {
-          try {
-            await authController.refreshToken();
-            // Retry the request with updated token
-            final opts = Options(
-              method: error.requestOptions.method,
-              headers: error.requestOptions.headers
-                ..['Authorization'] = 'JWT ${authController.token}',
-            );
-            final response = await _dio.request(
-              error.requestOptions.path,
-              options: opts,
-              data: error.requestOptions.data,
-              queryParameters: error.requestOptions.queryParameters,
-            );
-            return handler.resolve(response);
-          } catch (e) {
-            // If refresh token fails, proceed with original error
-            return handler.next(error);
+      // Add an interceptor to handle authentication
+      _dio.interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) {
+          // Add auth token to header if it exists
+          if (authController.token.isNotEmpty && authController.token != "0") {
+            options.headers['Authorization'] = 'JWT ${authController.token}';
           }
-        }
-        return handler.next(error);
-      },
-    ));
+          return handler.next(options);
+        },
+        onError: (DioException error, handler) async {
+          // Handle token refresh if 401 error occurs
+          if (error.response?.statusCode == 401) {
+            try {
+              await authController.refreshToken();
+              // Retry the request with updated token
+              final opts = Options(
+                method: error.requestOptions.method,
+                headers: error.requestOptions.headers
+                  ..['Authorization'] = 'JWT ${authController.token}',
+              );
+              final response = await _dio.request(
+                error.requestOptions.path,
+                options: opts,
+                data: error.requestOptions.data,
+                queryParameters: error.requestOptions.queryParameters,
+              );
+              return handler.resolve(response);
+            } catch (e) {
+              // If refresh token fails, proceed with original error
+              return handler.next(error);
+            }
+          }
+          return handler.next(error);
+        },
+      ));
+    }
   }
 
   void addToGameTags(GamePlayed game) {

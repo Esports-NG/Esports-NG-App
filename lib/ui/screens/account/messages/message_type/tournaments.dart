@@ -56,11 +56,7 @@ class _TournamentsState extends State<Tournaments> {
                           !authController.mOnSelect.value;
                     });
                   },
-                  child: ChatsItem(
-                    item: item,
-                    index: index,
-                    count: longSelect,
-                  ),
+                  child: Container(),
                 );
               },
             ),

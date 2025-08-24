@@ -6,6 +6,7 @@ import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/data/repository/nav_repository.dart';
 import 'package:e_sport/data/repository/notification_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
+import 'package:e_sport/ui/screens/account/messages/messages.dart';
 import 'package:e_sport/ui/screens/account/user_details.dart';
 import 'package:e_sport/ui/widgets/posts/all_post_widget.dart';
 import 'package:e_sport/ui/widgets/posts/games_to_play_widget.dart';
@@ -162,27 +163,27 @@ class _HomePageState extends State<HomePage>
                                       //   ),
                                       // ),
                                       // Gap(Get.height * 0.03),
-                                      // InkWell(
-                                      //     onTap: () {
-                                      //       // Get.to(() => const Messages());
-                                      //       showDialog(
-                                      //         context: context,
-                                      //         builder: (context) => AlertDialog(
-                                      //           elevation: 0,
-                                      //           shape: RoundedRectangleBorder(
-                                      //               borderRadius:
-                                      //                   BorderRadius.circular(
-                                      //                       10)),
-                                      //           backgroundColor:
-                                      //               AppColor().primaryBgColor,
-                                      //           content:
-                                      //               const ComingSoonPopup(),
-                                      //         ),
-                                      //       );
-                                      //     },
-                                      //     child: Icon(IconsaxPlusLinear.message,
-                                      //         color: Colors.white,
-                                      //         size: 22.sp)),
+                                      GestureDetector(
+                                          onTap: () {
+                                            Get.to(() => const Messages());
+                                            // showDialog(
+                                            //   context: context,
+                                            //   builder: (context) => AlertDialog(
+                                            //     elevation: 0,
+                                            //     shape: RoundedRectangleBorder(
+                                            //         borderRadius:
+                                            //             BorderRadius.circular(
+                                            //                 10)),
+                                            //     backgroundColor:
+                                            //         AppColor().primaryBgColor,
+                                            //     content:
+                                            //         const ComingSoonPopup(),
+                                            //   ),
+                                            // );
+                                          },
+                                          child: Icon(IconsaxPlusLinear.message,
+                                              color: Colors.white,
+                                              size: 22.sp)),
                                       // Gap(Get.height * 0.03),
                                       // InkWell(
                                       //     onTap: () {

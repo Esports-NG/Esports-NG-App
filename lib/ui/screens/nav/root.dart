@@ -102,19 +102,5 @@ class _RootDashboardState extends State<RootDashboard>
                   padding: EdgeInsets.symmetric(horizontal: Get.height * 0.02),
                   color: AppColor().primaryBackGroundColor),
             ));
-    return Scaffold(
-        body: PageView(
-          physics: NeverScrollableScrollPhysics(),
-          controller: _pageViewController,
-          children: _pages,
-          onPageChanged: (value) {
-            navController.currentIndex.value = value;
-          },
-        ),
-        bottomNavigationBar: BottomNavigation(
-          setPage: setPage,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: const ActionButton());
   }
 }
