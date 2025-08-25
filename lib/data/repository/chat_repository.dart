@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:e_sport/data/model/chat_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
@@ -72,13 +74,16 @@ class ChatRepository extends GetxController {
         .map((item) => Message(
             content: item["text"],
             slug: item["slug"],
+            imageUrls: item['images'] != null
+                ? jsonEncode((item['images'] as List<dynamic>)
+                    .map((item) => item['url'])
+                    .toList())
+                : null,
             chatSlug: json['chat']["user"]["slug"],
             createdAt: DateTime.parse(item["sent_at"]),
-            senderName: item['sender']['full_name'] ??
-                json['chat']['user']['full_name'],
-            senderSlug: item['sender']['slug'] ?? json['chat']['user']['slug'],
-            senderImage: item['sender']['profile']?['profile_picture'] ??
-                json['chat']['user']['profile']['profile_picture'],
+            senderName: json['chat']['user']['full_name'],
+            senderSlug: json['chat']['user']['slug'],
+            senderImage: json['chat']['user']['profile']['profile_picture'],
             isRead: (item['read_by'] as List).isNotEmpty))
         .toList();
     await db.insertChat(chat);

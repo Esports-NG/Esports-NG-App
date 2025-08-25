@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_sport/data/db/chat_database.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 
 class ChatBubble extends StatelessWidget {
   final Message message;
@@ -27,6 +31,28 @@ class ChatBubble extends StatelessWidget {
           crossAxisAlignment:
               isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
+            if (message.imageUrls != null)
+              ListView.separated(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Container(
+                    height: 200.h,
+                    width: 200.w,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.r),
+                        image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                                (jsonDecode(message.imageUrls!)
+                                    as List<dynamic>)[index]),
+                            fit: BoxFit.cover)),
+                  );
+                },
+                separatorBuilder: (context, index) => Gap(6.h),
+                itemCount:
+                    (jsonDecode(message.imageUrls!) as List<dynamic>).length,
+              ),
+            if (message.imageUrls != null) Gap(6.h),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               decoration: BoxDecoration(
