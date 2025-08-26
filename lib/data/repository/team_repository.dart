@@ -11,6 +11,7 @@ import 'package:e_sport/data/model/team/team_inbox_model.dart';
 import 'package:e_sport/data/model/team/team_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/dependency_injection.dart';
 import 'package:e_sport/ui/widgets/utils/create_success_page.dart';
 import 'package:e_sport/util/api_helpers.dart';
 import 'package:e_sport/util/helpers.dart';
@@ -22,7 +23,22 @@ import 'package:multi_dropdown/multi_dropdown.dart';
 
 // Simple API client to handle form data requests
 class ApiClient {
-  final _dio = dio.Dio();
+  late dio.Dio _dio;
+  
+  // Constructor that can accept a Dio instance
+  ApiClient({dio.Dio? dioInstance}) {
+    if (dioInstance != null) {
+      _dio = dioInstance;
+    } else {
+      // Try to get the shared Dio instance from ApiService
+      try {
+        _dio = Get.find<ApiService>().dio;
+      } catch (e) {
+        // Fallback to creating a new Dio instance
+        _dio = dio.Dio();
+      }
+    }
+  }
 
   Future<ApiResponse> postFormData(String url,
       {required dio.FormData formData}) async {
@@ -164,22 +180,33 @@ class TeamRepository extends GetxController {
 
   RxString teamsNextLink = "".obs;
 
-  // Single Dio instance for all API calls
-  final _dio = dio.Dio();
+  // Dio instance from ApiService
+  late dio.Dio _dio;
 
-  final ApiClient _apiClient = ApiClient();
+  // ApiClient for form data requests
+  late ApiClient _apiClient;
 
   @override
   void onInit() {
     super.onInit();
-    // Configure Dio with default headers
-    _dio.options.headers = {"Content-Type": "application/json"};
-    _dio.options.receiveTimeout = Duration(seconds: 40);
+    
+    // Get the shared Dio instance from ApiService
+    try {
+      _dio = Get.find<ApiService>().dio;
+    } catch (e) {
+      // Fallback to creating a new Dio instance if ApiService is not available
+      debugPrint('Error getting Dio from ApiService: $e');
+      _dio = dio.Dio();
+      _dio.options.headers = {"Content-Type": "application/json"};
+      _dio.options.receiveTimeout = Duration(seconds: 40);
+    }
+    
+    // Initialize ApiClient with shared Dio instance
+    _apiClient = ApiClient();
 
     // Update auth token when it changes
     authController.mToken.listen((token) async {
       if (token != '0') {
-        _dio.options.headers["Authorization"] = "JWT $token";
         getAllTeam(true);
         getMyTeam(true);
       }

@@ -1,113 +1,82 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:e_sport/data/model/message_model.dart';
+import 'package:e_sport/data/db/chat_database.dart';
+import 'package:e_sport/data/repository/chat_repository.dart';
+import 'package:e_sport/ui/screens/account/messages/message_type/chats/chat.dart';
+
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
+import 'package:e_sport/ui/widgets/utils/profile_image.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class ChatsItem extends StatelessWidget {
-  final MessageModel item;
-  final int? index, count;
-  const ChatsItem({
-    super.key,
-    required this.item,
-    required this.index,
-    required this.count,
-  });
+class ChatsItem extends StatefulWidget {
+  final Chat chat;
+  const ChatsItem({super.key, required this.chat});
+
+  @override
+  State<ChatsItem> createState() => _ChatsItemState();
+}
+
+class _ChatsItemState extends State<ChatsItem> {
+  final chatController = Get.find<ChatRepository>();
+  Message? lastMessage;
+  @override
+  void initState() {
+    super.initState();
+    getLastMessage();
+  }
+
+  Future<void> getLastMessage() async {
+    if (widget.chat.lastMessageSlug == null) {
+      return null;
+    }
+    var message = await chatController.getMessage(widget.chat.lastMessageSlug!);
+    setState(() {
+      lastMessage = message;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          EdgeInsets.only(right: Get.height * 0.02, left: Get.height * 0.01),
-      child: Row(
-        children: [
-          Expanded(
-            child: Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                Container(
-                  height: Get.height * 0.06,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image:
-                          DecorationImage(image: AssetImage(item.userImage!))),
-                ),
-                if (count == index)
-                  Positioned(
-                    right: Get.height * 0.01,
-                    child: Container(
-                      padding: EdgeInsets.all(Get.height * 0.002),
-                      decoration: BoxDecoration(
-                          color: AppColor().primaryGreen,
-                          shape: BoxShape.circle),
-                      child: Icon(
-                        Icons.done,
-                        color: AppColor().primaryWhite,
-                        size: 14,
-                      ),
+    return InkWell(
+      onTap: () => Get.to(() => ChatPage(chat: widget.chat)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
+        child: Row(
+          spacing: 12.r,
+          children: [
+            OtherImage(
+              image: widget.chat.image,
+              height: 48.r,
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText(
+                    title: widget.chat.name,
+                    color: AppColor().primaryWhite,
+                    textAlign: TextAlign.start,
+                    fontFamily: 'InterMedium',
+                    size: 14,
+                  ),
+                  if (lastMessage != null)
+                    CustomText(
+                      title: lastMessage?.content,
+                      size: 14,
+                      fontFamily: 'InterMedium',
+                      color: AppColor().lightItemsColor,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  )
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            flex: 4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(
-                  title: item.userName,
-                  color: AppColor().primaryWhite,
-                  textAlign: TextAlign.start,
-                  fontFamily: 'InterMedium',
-                  size: 14,
-                ),
-                CustomText(
-                  title: item.lastMessage,
-                  size: Get.height * 0.016,
-                  fontFamily: 'InterMedium',
-                  color: AppColor().lightItemsColor,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomText(
-                  title: item.time,
-                  color: AppColor().lightItemsColor,
-                  textAlign: TextAlign.start,
-                  fontFamily: 'InterMedium',
-                  size: 14,
-                ),
-                Gap(Get.height * 0.005),
-                item.newMessage == '0'
-                    ? Container()
-                    : Container(
-                        padding: EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColor().primaryRed,
-                        ),
-                        child: Center(
-                          child: CustomText(
-                            title: item.newMessage,
-                            size: Get.height * 0.016,
-                            fontFamily: 'InterMedium',
-                            color: AppColor().primaryWhite,
-                          ),
-                        ),
-                      ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -12,6 +12,7 @@ import 'package:e_sport/data/model/waitlist_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/event/event_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/dependency_injection.dart';
 import 'package:e_sport/ui/widgets/utils/create_success_page.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/colors.dart';
@@ -29,7 +30,25 @@ import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:dio/dio.dart';
 
 class TournamentRepository extends GetxController {
-  final dio = Dio();
+  late Dio dio;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _initDio();
+  }
+
+  void _initDio() {
+    try {
+      // Try to get the shared Dio instance from ApiService
+      dio = Get.find<ApiService>().dio;
+    } catch (e) {
+      // Fallback to creating a new Dio instance if ApiService is not available
+      debugPrint('Error getting Dio from ApiService: $e');
+      dio = Dio();
+    }
+  }
+
   final authController = Get.put(AuthRepository());
   final eventController = Get.put(EventRepository());
 
@@ -439,6 +458,7 @@ class TournamentRepository extends GetxController {
         eventController.createEventStatus(CreateEventStatus.success);
         Get.off(() => const CreateSuccessPage(title: 'Event Created'))!
             .then((value) {
+          // Refresh the events list
           eventController.getAllEvents(false);
           clear();
         });
@@ -525,7 +545,8 @@ class TournamentRepository extends GetxController {
       );
       Get.back(); // Navigate back to tournament details
       Helpers().showCustomSnackbar(message: "Tournament updated successfully");
-      eventController.getMyEvents(false); // Refresh the events list
+      // Refresh the events list
+      eventController.getMyEvents(false);
     } on DioException catch (err) {
       print("edit tournament error: ${err.response?.data}");
       eventController.createEventStatus(CreateEventStatus.error);

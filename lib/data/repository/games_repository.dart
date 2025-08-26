@@ -3,13 +3,14 @@ import 'package:e_sport/data/model/games_played_model.dart';
 import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class GamesRepository extends GetxController {
   final authController = Get.put(AuthRepository());
-  final Dio _dio = Dio();
+  late Dio _dio;
 
   RxList<GamePlayed> allGames = <GamePlayed>[].obs;
   RxList<GamePlayed> userGames = <GamePlayed>[].obs;
@@ -37,21 +38,29 @@ class GamesRepository extends GetxController {
   }
 
   void _initDio() {
-    _dio.options.headers = {
-      "Content-Type": "application/json",
-    };
+    try {
+      // Try to get the shared Dio instance from ApiService
+      _dio = Get.find<ApiService>().dio;
+    } catch (e) {
+      // Fallback to creating a new Dio instance if ApiService is not available
+      debugPrint('Error getting Dio from ApiService: $e');
+      _dio = Dio();
+      _dio.options.headers = {
+        "Content-Type": "application/json",
+      };
 
-    _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
-      options.headers["Authorization"] = "JWT ${authController.token}";
-      return handler.next(options);
-    }, onError: (error, handler) {
-      // if (error.response?.statusCode == 401) {
-      //   authController.refreshToken().then((_) {
-      //     EasyLoading.showInfo('Session refreshed. Please try again.');
-      //   });
-      // }
-      return handler.next(error);
-    }));
+      _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+        options.headers["Authorization"] = "JWT ${authController.token}";
+        return handler.next(options);
+      }, onError: (error, handler) {
+        // if (error.response?.statusCode == 401) {
+        //   authController.refreshToken().then((_) {
+        //     EasyLoading.showInfo('Session refreshed. Please try again.');
+        //   });
+        // }
+        return handler.next(error);
+      }));
+    }
   }
 
   Future<List<GamePlayed>> getAllGames() async {

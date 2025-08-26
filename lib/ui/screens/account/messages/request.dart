@@ -120,7 +120,7 @@ class _DMRequestState extends State<DMRequest> {
                         !authController.mOnSelect.value;
                   });
                 },
-                child: ChatsItem(item: item, index: index, count: longSelect),
+                child: Container(),
               );
             },
           ),
