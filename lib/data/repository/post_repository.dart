@@ -161,11 +161,7 @@ class PostRepository extends Get.GetxController {
     super.onInit();
     _initDio();
 
-    authController.mToken.listen((p0) {
-      if (p0 != '0') {
-        getNews();
-      }
-    });
+    getNews();
   }
 
   // Handle API errors consistently
