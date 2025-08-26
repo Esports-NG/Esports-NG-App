@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:e_sport/data/model/notification_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/dependency_injection.dart';
 import 'package:e_sport/util/api_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,22 +31,29 @@ class NotificationRepository extends GetxController {
 
   // Initialize Dio with auth interceptor
   void _initDio() {
-    _dio = Dio(BaseOptions(
-      baseUrl: ApiLink.baseurl,
-      contentType: 'application/json',
-      responseType: ResponseType.json,
-    ));
+    try {
+      // Try to get the shared Dio instance from ApiService
+      _dio = Get.find<ApiService>().dio;
+    } catch (e) {
+      // Fallback to creating a new Dio instance if ApiService is not available
+      debugPrint('Error getting Dio from ApiService: $e');
+      _dio = Dio(BaseOptions(
+        baseUrl: ApiLink.baseurl,
+        contentType: 'application/json',
+        responseType: ResponseType.json,
+      ));
 
-    // Add an interceptor to handle authentication
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // Add auth token to header if it exists
-        if (authController.token.isNotEmpty && authController.token != "0") {
-          options.headers['Authorization'] = 'JWT ${authController.token}';
-        }
-        return handler.next(options);
-      },
-    ));
+      // Add an interceptor to handle authentication
+      _dio.interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) {
+          // Add auth token to header if it exists
+          if (authController.token.isNotEmpty && authController.token != "0") {
+            options.headers['Authorization'] = 'JWT ${authController.token}';
+          }
+          return handler.next(options);
+        },
+      ));
+    }
   }
 
   Future listenForNotifications() async {

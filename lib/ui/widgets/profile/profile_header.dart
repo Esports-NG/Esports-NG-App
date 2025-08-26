@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:change_case/change_case.dart';
+import 'package:e_sport/data/model/user_model.dart';
 import 'package:e_sport/util/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,7 +12,7 @@ import 'package:e_sport/ui/widgets/utils/profile_image.dart';
 import 'package:e_sport/util/colors.dart';
 
 class ProfileHeader extends StatelessWidget {
-  final UserDataWithFollowers userData;
+  final UserModel userData;
   final VoidCallback onBackPressed;
   final VoidCallback onMenuPressed;
 
@@ -139,7 +140,7 @@ class ProfileHeader extends StatelessWidget {
 }
 
 class ProfileUserInfo extends StatelessWidget {
-  final UserDataWithFollowers userData;
+  final UserModel userData;
 
   const ProfileUserInfo({
     Key? key,

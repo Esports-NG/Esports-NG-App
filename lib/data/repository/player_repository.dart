@@ -8,6 +8,7 @@ import 'package:e_sport/data/model/player_model.dart';
 import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/data/repository/games_repository.dart';
 import 'package:e_sport/di/api_link.dart';
+import 'package:e_sport/di/dependency_injection.dart';
 import 'package:e_sport/ui/widgets/utils/create_success_page.dart';
 import 'package:e_sport/ui/widgets/custom/custom_text.dart';
 import 'package:e_sport/util/api_helpers.dart';
@@ -43,7 +44,7 @@ class PlayerRepository extends GetxController {
   late final gameIdController = TextEditingController();
   late final gameNameController = TextEditingController();
   late final searchController = TextEditingController();
-  final _dio = dio.Dio(); // Create a Dio instance
+  late dio.Dio _dio; // Dio instance from ApiService
 
   final Rx<List<PlayerModel>> _allPlayer = Rx([]);
   final RxList<PlayerModel> myPlayer = RxList([]);
@@ -61,10 +62,20 @@ class PlayerRepository extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Configure Dio defaults
-    _dio.options.validateStatus = (status) => true; // Accept all status codes
-    _dio.options.connectTimeout = const Duration(seconds: 10);
-    _dio.options.receiveTimeout = const Duration(seconds: 10);
+    
+    // Get the shared Dio instance from ApiService
+    try {
+      _dio = Get.find<ApiService>().dio;
+      // Configure additional options specific to this repository
+      _dio.options.validateStatus = (status) => true; // Accept all status codes
+    } catch (e) {
+      // Fallback to creating a new Dio instance if ApiService is not available
+      debugPrint('Error getting Dio from ApiService: $e');
+      _dio = dio.Dio();
+      _dio.options.validateStatus = (status) => true; // Accept all status codes
+      _dio.options.connectTimeout = const Duration(seconds: 10);
+      _dio.options.receiveTimeout = const Duration(seconds: 10);
+    }
 
     authController.mToken.listen((p0) async {
       if (p0 != '0') {

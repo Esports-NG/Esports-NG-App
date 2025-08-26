@@ -24,8 +24,8 @@ class UserModel {
   List<Purpose>? purpose;
   bool? isVerified;
   Tokens? tokens;
-  List<dynamic>? following;
-  List<dynamic>? followers;
+  int? following;
+  int? followers;
 
   UserModel({
     this.slug,
@@ -53,39 +53,38 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-        id: json["id"],
-        slug: json['slug'],
-        email: json["email"],
-        bio: json["bio"],
-        fullName: json["full_name"],
-        userName: json["user_name"],
-        phoneNumber: json["phone_number"],
-        country: json["country"],
-        state: json["state"],
-        gender: json["gender"],
-        dOB: json["d_o_b"],
-        ipurpose: json["ipurpose"] == null
-            ? []
-            : List<String>.from(json["ipurpose"]!.map((x) => x)),
-        profile:
-            json["profile"] == null ? null : Profile.fromJson(json["profile"]),
-        referralCode: json["referral_code"],
-        purpose: json["purpose"] == null
-            ? []
-            : List<Purpose>.from(
-                json["purpose"]!.map((x) => Purpose.fromJson(x))),
-        userProfile: json["profile"] == null
-            ? null
-            : UserProfile.fromJson(json["profile"]),
-        isVerified: json["is_verified"] ?? false,
-        tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
-        following: json["following"] == null
-            ? []
-            : List<dynamic>.from(json["following"]!.map((x) => x)),
-        followers: json["followers"] == null
-            ? []
-            : List<dynamic>.from(json["followers"]!.map((x) => x)),
-      );
+      id: json["id"],
+      slug: json['slug'],
+      email: json["email"],
+      bio: json["bio"],
+      fullName: json["full_name"],
+      userName: json["user_name"],
+      phoneNumber: json["phone_number"],
+      country: json["country"],
+      state: json["state"],
+      gender: json["gender"],
+      dOB: json["d_o_b"],
+      ipurpose: json["ipurpose"] == null
+          ? []
+          : List<String>.from(json["ipurpose"]!.map((x) => x)),
+      profile:
+          json["profile"] == null ? null : Profile.fromJson(json["profile"]),
+      referralCode: json["referral_code"],
+      purpose: json["purpose"] == null
+          ? []
+          : List<Purpose>.from(
+              json["purpose"]!.map((x) => Purpose.fromJson(x))),
+      userProfile: json["profile"] == null
+          ? null
+          : UserProfile.fromJson(json["profile"]),
+      isVerified: json["is_verified"] ?? false,
+      tokens: json["tokens"] == null ? null : Tokens.fromJson(json["tokens"]),
+      following: json["following"] is List
+          ? (json["following"] as List).length
+          : json["following"],
+      followers: json["followers"] is List
+          ? (json["followers"] as List).length
+          : json["followers"]);
 
   factory UserModel.fromPostJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
@@ -158,12 +157,8 @@ class UserModel {
             : List<dynamic>.from(purpose!.map((x) => x.toJson())),
         "profile": userProfile?.toJson(),
         "is_verified": isVerified,
-        "following": following == null
-            ? []
-            : List<dynamic>.from(following!.map((x) => x)),
-        "followers": followers == null
-            ? []
-            : List<dynamic>.from(followers!.map((x) => x)),
+        "following": following,
+        "followers": followers
       };
 
   Map<String, dynamic> toPostUser() => {

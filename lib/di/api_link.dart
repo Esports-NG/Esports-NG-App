@@ -1,8 +1,9 @@
 import 'package:e_sport/data/model/category_model.dart';
 
 class ApiLink {
-  static String domain = "https://api.esportsng.com";
+  static String domain = "https://api.engy.africa";
   static String baseurl = "$domain/";
+  static String socketUrl = "wss://api.engy.africa/";
   static String imageUrl = "https://imagedelivery.net/4-uVHHK5QQ1cIDzJPKVNLQ/";
 
   static String register = "${baseurl}user/v2/";
@@ -172,6 +173,13 @@ class ApiLink {
   static String searchForGames(String query) =>
       "${baseurl}games/v2/find_game/?search=$query";
   static String getGamesToPlay = "${baseurl}games/v2/feed/";
+
+  // Chat
+  static String getChatHistory(String username) =>
+      "${baseurl}notification/v2/chat/${username}/";
+  static String getUserChats = "${baseurl}notification/v2/user/channels/";
+  static String webSocketUrl(String username, String token) =>
+      "${socketUrl}ws/chat/$username/?token=$token";
 
   // News
   static String getNews =
