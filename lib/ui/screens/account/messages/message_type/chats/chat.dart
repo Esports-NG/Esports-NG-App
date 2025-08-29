@@ -25,9 +25,9 @@ class _ChatPageState extends State<ChatPage> {
 
   Future<void> getChat() async {
     try {
-      // Get current user's slug for message comparison
+      chatController.connectToWebSocket(
+          widget.chat.username!, widget.chat.slug);
       currentUserSlug = await chatController.getCurrentUserSlug();
-      // var chat = await chatController.getChat(widget.chat.slug);
     } catch (err) {
       // Handle error appropriately
     }
@@ -116,7 +116,7 @@ class _ChatPageState extends State<ChatPage> {
                         itemCount: messages.length);
                   }),
             ),
-            ChatBox()
+            ChatBox(slug: widget.chat.slug)
           ],
         ),
       ),

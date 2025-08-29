@@ -75,7 +75,9 @@ class ChatBubble extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 4.h, left: 8.w, right: 8.w),
               child: CustomText(
-                title: _formatTime(message.createdAt),
+                title: message.status == "pending"
+                    ? "Sending..."
+                    : _formatTime(message.createdAt),
                 color: AppColor().greySix,
                 size: 12,
               ),

@@ -1,14 +1,25 @@
+import 'package:e_sport/data/repository/chat_repository.dart';
 import 'package:e_sport/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:get/get.dart';
 
 class ChatBox extends StatelessWidget {
-  const ChatBox({super.key});
+  const ChatBox({super.key, required this.slug});
+  final String slug;
 
   @override
   Widget build(BuildContext context) {
+    final chatController = Get.find<ChatRepository>();
+    final messageController = TextEditingController();
+    Future<void> sendMessage() async {
+      await chatController.sendMessage(
+          message: messageController.text, chatSlug: slug);
+      messageController.clear();
+    }
+
     return Container(
       width: double.infinity,
       color: AppColor().primaryBackGroundColor,
@@ -33,6 +44,7 @@ class ChatBox extends StatelessWidget {
                   ),
                   Expanded(
                     child: TextField(
+                      controller: messageController,
                       style: TextStyle(color: Colors.white, fontSize: 14.sp),
                       decoration: InputDecoration(
                           isDense: true,
@@ -70,6 +82,7 @@ class ChatBox extends StatelessWidget {
             ),
           ),
           GestureDetector(
+            onTap: sendMessage,
             child: Icon(
               IconsaxPlusBold.send_2,
               size: 30.r,

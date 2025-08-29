@@ -22,21 +22,10 @@ class ChatsItem extends StatefulWidget {
 
 class _ChatsItemState extends State<ChatsItem> {
   final chatController = Get.find<ChatRepository>();
-  Message? lastMessage;
+
   @override
   void initState() {
     super.initState();
-    getLastMessage();
-  }
-
-  Future<void> getLastMessage() async {
-    if (widget.chat.lastMessageSlug == null) {
-      return null;
-    }
-    var message = await chatController.getMessage(widget.chat.lastMessageSlug!);
-    setState(() {
-      lastMessage = message;
-    });
   }
 
   @override
@@ -64,14 +53,21 @@ class _ChatsItemState extends State<ChatsItem> {
                     fontFamily: 'InterMedium',
                     size: 14,
                   ),
-                  if (lastMessage != null)
-                    CustomText(
-                      title: lastMessage?.content,
-                      size: 14,
-                      fontFamily: 'InterMedium',
-                      color: AppColor().lightItemsColor,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  StreamBuilder<Message?>(
+                    stream: chatController.getLastMessage(widget.chat.slug),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data != null) {
+                        return CustomText(
+                          title: snapshot.data?.content,
+                          size: 14,
+                          fontFamily: 'InterMedium',
+                          color: AppColor().lightItemsColor,
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
                 ],
               ),
             ),
