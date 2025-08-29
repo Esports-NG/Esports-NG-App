@@ -45,7 +45,7 @@ class _NewsState extends State<NewsWidget> with AutomaticKeepAliveClientMixin {
           child: Column(
             children: [
               if (widget.posts!.isEmpty)
-                const NoItemPage(title: 'Post')
+                const NoItemPage(title: 'News')
               else if (widget.posts!.isNotEmpty)
                 ListView.separated(
                   padding: EdgeInsets.zero,
