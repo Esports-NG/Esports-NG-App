@@ -118,15 +118,15 @@ class _MessagesPageState extends State<Messages>
                   color: _primaryWhite,
                 )
               : null,
-          leading: IconButton(
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            onPressed: Get.back,
-            icon: Icon(
-              Icons.arrow_back,
-              color: _primaryWhite,
-            ),
-          ),
+          // leading: IconButton(
+          //   padding: EdgeInsets.zero,
+          //   constraints: const BoxConstraints(),
+          //   onPressed: Get.back,
+          //   icon: Icon(
+          //     Icons.arrow_back,
+          //     color: _primaryWhite,
+          //   ),
+          // ),
           actions: [
             if (chatController.messageOnSelect.isFalse) ...[
               InkWell(

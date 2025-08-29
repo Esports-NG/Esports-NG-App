@@ -8,6 +8,7 @@ import 'package:e_sport/data/repository/notification_repository.dart';
 import 'package:e_sport/data/repository/post_repository.dart';
 import 'package:e_sport/ui/screens/account/messages/messages.dart';
 import 'package:e_sport/ui/screens/account/user_details.dart';
+import 'package:e_sport/ui/screens/nav/account.dart';
 import 'package:e_sport/ui/widgets/posts/all_post_widget.dart';
 import 'package:e_sport/ui/widgets/posts/games_to_play_widget.dart';
 import 'package:e_sport/ui/widgets/posts/news_widget.dart';
@@ -165,7 +166,7 @@ class _HomePageState extends State<HomePage>
                                       // Gap(Get.height * 0.03),
                                       GestureDetector(
                                           onTap: () {
-                                            Get.to(() => const Messages());
+                                            Get.to(() => const Account());
                                             // showDialog(
                                             //   context: context,
                                             //   builder: (context) => AlertDialog(
@@ -181,7 +182,7 @@ class _HomePageState extends State<HomePage>
                                             //   ),
                                             // );
                                           },
-                                          child: Icon(IconsaxPlusLinear.message,
+                                          child: Icon(IconsaxPlusLinear.profile_circle,
                                               color: Colors.white,
                                               size: 22.sp)),
                                       // Gap(Get.height * 0.03),

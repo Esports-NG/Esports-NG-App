@@ -1,4 +1,5 @@
 import 'package:e_sport/data/repository/nav_repository.dart';
+import 'package:e_sport/ui/screens/account/messages/messages.dart';
 import 'package:e_sport/ui/screens/nav/account.dart';
 import 'package:e_sport/ui/widgets/custom/custom_navbar.dart';
 import 'package:e_sport/ui/screens/nav/events.dart';
@@ -48,7 +49,7 @@ class _RootDashboardState extends State<RootDashboard>
       const HomePage(),
       const EventsPage(),
       const CommunityPage(),
-      const Account(),
+      const Messages(),
     ];
 
     return PersistentTabView(
@@ -87,12 +88,12 @@ class _RootDashboardState extends State<RootDashboard>
                     size: 28,
                   ))),
           PersistentTabConfig(
-              screen: Account(),
+              screen: Messages(),
               item: ItemConfig(
                   activeForegroundColor: Colors.white,
-                  title: "Account",
+                  title: "Messages",
                   icon: Icon(
-                    IconsaxPlusLinear.profile_circle,
+                    IconsaxPlusLinear.message,
                     size: 28,
                   ))),
         ],

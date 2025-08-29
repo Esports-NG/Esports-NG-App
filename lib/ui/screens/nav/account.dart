@@ -60,6 +60,25 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: AppColor().primaryBackGroundColor,
+          centerTitle: true,
+          title: CustomText(
+                  title: 'Account',
+                  fontFamily: "InterSemiBold",
+                  size: 18,
+                  color: AppColor().primaryWhite,
+                ),
+          leading: IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: Get.back,
+            icon: Icon(
+              Icons.arrow_back,
+              color: AppColor().primaryWhite,
+            ),
+          ),
+      ),
       backgroundColor: AppColor().primaryBackGroundColor,
       body: SafeArea(
         top: false,
@@ -134,7 +153,7 @@ class _AccountState extends State<Account> with AutomaticKeepAliveClientMixin {
                   ),
                   Positioned(
                     right: Get.height * 0.03,
-                    bottom: Get.height * 0.05,
+                    bottom: Get.height * 0.1,
                     child: InkWell(
                       onTap: () => showPopupMenu(),
                       child: Container(
