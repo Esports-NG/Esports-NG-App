@@ -438,6 +438,13 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
   late final GeneratedColumn<String> imageUrls = GeneratedColumn<String>(
       'image_urls', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+      'status', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('sent'));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -462,6 +469,7 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
         senderName,
         senderImage,
         imageUrls,
+        status,
         createdAt,
         isRead
       ];
@@ -517,6 +525,10 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
       context.handle(_imageUrlsMeta,
           imageUrls.isAcceptableOrUnknown(data['image_urls']!, _imageUrlsMeta));
     }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status']!, _statusMeta));
+    }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -550,6 +562,8 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
           .read(DriftSqlType.string, data['${effectivePrefix}sender_image']),
       imageUrls: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}image_urls']),
+      status: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       isRead: attachedDatabase.typeMapping
@@ -571,6 +585,7 @@ class Message extends DataClass implements Insertable<Message> {
   final String senderName;
   final String? senderImage;
   final String? imageUrls;
+  final String status;
   final DateTime createdAt;
   final bool isRead;
   const Message(
@@ -581,6 +596,7 @@ class Message extends DataClass implements Insertable<Message> {
       required this.senderName,
       this.senderImage,
       this.imageUrls,
+      required this.status,
       required this.createdAt,
       required this.isRead});
   @override
@@ -599,6 +615,7 @@ class Message extends DataClass implements Insertable<Message> {
     if (!nullToAbsent || imageUrls != null) {
       map['image_urls'] = Variable<String>(imageUrls);
     }
+    map['status'] = Variable<String>(status);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['is_read'] = Variable<bool>(isRead);
     return map;
@@ -619,6 +636,7 @@ class Message extends DataClass implements Insertable<Message> {
       imageUrls: imageUrls == null && nullToAbsent
           ? const Value.absent()
           : Value(imageUrls),
+      status: Value(status),
       createdAt: Value(createdAt),
       isRead: Value(isRead),
     );
@@ -635,6 +653,7 @@ class Message extends DataClass implements Insertable<Message> {
       senderName: serializer.fromJson<String>(json['senderName']),
       senderImage: serializer.fromJson<String?>(json['senderImage']),
       imageUrls: serializer.fromJson<String?>(json['imageUrls']),
+      status: serializer.fromJson<String>(json['status']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       isRead: serializer.fromJson<bool>(json['isRead']),
     );
@@ -650,6 +669,7 @@ class Message extends DataClass implements Insertable<Message> {
       'senderName': serializer.toJson<String>(senderName),
       'senderImage': serializer.toJson<String?>(senderImage),
       'imageUrls': serializer.toJson<String?>(imageUrls),
+      'status': serializer.toJson<String>(status),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'isRead': serializer.toJson<bool>(isRead),
     };
@@ -663,6 +683,7 @@ class Message extends DataClass implements Insertable<Message> {
           String? senderName,
           Value<String?> senderImage = const Value.absent(),
           Value<String?> imageUrls = const Value.absent(),
+          String? status,
           DateTime? createdAt,
           bool? isRead}) =>
       Message(
@@ -673,6 +694,7 @@ class Message extends DataClass implements Insertable<Message> {
         senderName: senderName ?? this.senderName,
         senderImage: senderImage.present ? senderImage.value : this.senderImage,
         imageUrls: imageUrls.present ? imageUrls.value : this.imageUrls,
+        status: status ?? this.status,
         createdAt: createdAt ?? this.createdAt,
         isRead: isRead ?? this.isRead,
       );
@@ -688,6 +710,7 @@ class Message extends DataClass implements Insertable<Message> {
       senderImage:
           data.senderImage.present ? data.senderImage.value : this.senderImage,
       imageUrls: data.imageUrls.present ? data.imageUrls.value : this.imageUrls,
+      status: data.status.present ? data.status.value : this.status,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       isRead: data.isRead.present ? data.isRead.value : this.isRead,
     );
@@ -703,6 +726,7 @@ class Message extends DataClass implements Insertable<Message> {
           ..write('senderName: $senderName, ')
           ..write('senderImage: $senderImage, ')
           ..write('imageUrls: $imageUrls, ')
+          ..write('status: $status, ')
           ..write('createdAt: $createdAt, ')
           ..write('isRead: $isRead')
           ..write(')'))
@@ -711,7 +735,7 @@ class Message extends DataClass implements Insertable<Message> {
 
   @override
   int get hashCode => Object.hash(slug, chatSlug, content, senderSlug,
-      senderName, senderImage, imageUrls, createdAt, isRead);
+      senderName, senderImage, imageUrls, status, createdAt, isRead);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -723,6 +747,7 @@ class Message extends DataClass implements Insertable<Message> {
           other.senderName == this.senderName &&
           other.senderImage == this.senderImage &&
           other.imageUrls == this.imageUrls &&
+          other.status == this.status &&
           other.createdAt == this.createdAt &&
           other.isRead == this.isRead);
 }
@@ -735,6 +760,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
   final Value<String> senderName;
   final Value<String?> senderImage;
   final Value<String?> imageUrls;
+  final Value<String> status;
   final Value<DateTime> createdAt;
   final Value<bool> isRead;
   final Value<int> rowid;
@@ -746,6 +772,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     this.senderName = const Value.absent(),
     this.senderImage = const Value.absent(),
     this.imageUrls = const Value.absent(),
+    this.status = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.isRead = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -758,6 +785,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     required String senderName,
     this.senderImage = const Value.absent(),
     this.imageUrls = const Value.absent(),
+    this.status = const Value.absent(),
     required DateTime createdAt,
     this.isRead = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -774,6 +802,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     Expression<String>? senderName,
     Expression<String>? senderImage,
     Expression<String>? imageUrls,
+    Expression<String>? status,
     Expression<DateTime>? createdAt,
     Expression<bool>? isRead,
     Expression<int>? rowid,
@@ -786,6 +815,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
       if (senderName != null) 'sender_name': senderName,
       if (senderImage != null) 'sender_image': senderImage,
       if (imageUrls != null) 'image_urls': imageUrls,
+      if (status != null) 'status': status,
       if (createdAt != null) 'created_at': createdAt,
       if (isRead != null) 'is_read': isRead,
       if (rowid != null) 'rowid': rowid,
@@ -800,6 +830,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
       Value<String>? senderName,
       Value<String?>? senderImage,
       Value<String?>? imageUrls,
+      Value<String>? status,
       Value<DateTime>? createdAt,
       Value<bool>? isRead,
       Value<int>? rowid}) {
@@ -811,6 +842,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
       senderName: senderName ?? this.senderName,
       senderImage: senderImage ?? this.senderImage,
       imageUrls: imageUrls ?? this.imageUrls,
+      status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       isRead: isRead ?? this.isRead,
       rowid: rowid ?? this.rowid,
@@ -841,6 +873,9 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     if (imageUrls.present) {
       map['image_urls'] = Variable<String>(imageUrls.value);
     }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -863,6 +898,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
           ..write('senderName: $senderName, ')
           ..write('senderImage: $senderImage, ')
           ..write('imageUrls: $imageUrls, ')
+          ..write('status: $status, ')
           ..write('createdAt: $createdAt, ')
           ..write('isRead: $isRead, ')
           ..write('rowid: $rowid')
@@ -1087,6 +1123,7 @@ typedef $$MessagesTableCreateCompanionBuilder = MessagesCompanion Function({
   required String senderName,
   Value<String?> senderImage,
   Value<String?> imageUrls,
+  Value<String> status,
   required DateTime createdAt,
   Value<bool> isRead,
   Value<int> rowid,
@@ -1099,6 +1136,7 @@ typedef $$MessagesTableUpdateCompanionBuilder = MessagesCompanion Function({
   Value<String> senderName,
   Value<String?> senderImage,
   Value<String?> imageUrls,
+  Value<String> status,
   Value<DateTime> createdAt,
   Value<bool> isRead,
   Value<int> rowid,
@@ -1133,6 +1171,9 @@ class $$MessagesTableFilterComposer
 
   ColumnFilters<String> get imageUrls => $composableBuilder(
       column: $table.imageUrls, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
@@ -1171,6 +1212,9 @@ class $$MessagesTableOrderingComposer
   ColumnOrderings<String> get imageUrls => $composableBuilder(
       column: $table.imageUrls, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
@@ -1207,6 +1251,9 @@ class $$MessagesTableAnnotationComposer
 
   GeneratedColumn<String> get imageUrls =>
       $composableBuilder(column: $table.imageUrls, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -1245,6 +1292,7 @@ class $$MessagesTableTableManager extends RootTableManager<
             Value<String> senderName = const Value.absent(),
             Value<String?> senderImage = const Value.absent(),
             Value<String?> imageUrls = const Value.absent(),
+            Value<String> status = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<bool> isRead = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -1257,6 +1305,7 @@ class $$MessagesTableTableManager extends RootTableManager<
             senderName: senderName,
             senderImage: senderImage,
             imageUrls: imageUrls,
+            status: status,
             createdAt: createdAt,
             isRead: isRead,
             rowid: rowid,
@@ -1269,6 +1318,7 @@ class $$MessagesTableTableManager extends RootTableManager<
             required String senderName,
             Value<String?> senderImage = const Value.absent(),
             Value<String?> imageUrls = const Value.absent(),
+            Value<String> status = const Value.absent(),
             required DateTime createdAt,
             Value<bool> isRead = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -1281,6 +1331,7 @@ class $$MessagesTableTableManager extends RootTableManager<
             senderName: senderName,
             senderImage: senderImage,
             imageUrls: imageUrls,
+            status: status,
             createdAt: createdAt,
             isRead: isRead,
             rowid: rowid,
