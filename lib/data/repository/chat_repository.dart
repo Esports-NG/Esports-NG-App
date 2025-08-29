@@ -6,6 +6,7 @@ import 'package:e_sport/data/repository/auth_repository.dart';
 import 'package:e_sport/di/api_link.dart';
 import 'package:e_sport/di/dependency_injection.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -18,6 +19,7 @@ var storage = FlutterSecureStorage(
 
 class ChatRepository extends GetxController {
   final ChatDatabase db = ChatDatabase.instance;
+  final authController = Get.find<AuthRepository>();
 
   RxBool messageOnSelect = false.obs;
   RxBool archiveOnSelect = false.obs;
@@ -47,16 +49,7 @@ class ChatRepository extends GetxController {
     loadingChats.value = true;
     // try {
     final response = await _dio.get(ApiLink.getUserChats);
-    print("chat data:" + response.data.toString());
-    chats.assignAll((response.data['data'] as List?)
-            ?.map((e) => ChatModel.fromJson(e))
-            .toList() ??
-        []);
-
-    // await db.insertChats();
-    // } catch (err) {
-    //   Get.log("chat retrieving error" + err.toString());
-    // }
+    print("all chat data:" + response.data.toString());
     loadingChats.value = false;
   }
 
@@ -74,6 +67,7 @@ class ChatRepository extends GetxController {
         .map((item) => Message(
             content: item["text"],
             slug: item["slug"],
+            status: "sent",
             imageUrls: item['images'] != null
                 ? jsonEncode((item['images'] as List<dynamic>)
                     .map((item) => item['url'])
@@ -81,19 +75,53 @@ class ChatRepository extends GetxController {
                 : null,
             chatSlug: json['chat']["user"]["slug"],
             createdAt: DateTime.parse(item["sent_at"]),
-            senderName: json['chat']['user']['full_name'],
-            senderSlug: json['chat']['user']['slug'],
-            senderImage: json['chat']['user']['profile']['profile_picture'],
+            senderName: item['user']['full_name'],
+            senderSlug: item['user']['slug'],
+            senderImage: item['user']['profile']['profile_picture'],
             isRead: (item['read_by'] as List).isNotEmpty))
         .toList();
     await db.insertChat(chat);
     await db.insertMessages(messages);
+    var pendingMessages =
+        await db.getPendingMessages(json['chat']['user']['slug']);
+    // Send any pending messages that were stored while offline
+    for (var message in pendingMessages) {
+      if (channel != null && isConnected.value) {
+        final payload = {
+          "message": message.content,
+          "slug": message.slug,
+          "user_id": authController.user?.id,
+          "user_name": authController.user?.userName!,
+          "message_type": "text",
+          "read_by": [],
+          "url":
+              message.imageUrls != null ? jsonDecode(message.imageUrls!) : [],
+          "reply_to": {
+            "message": null,
+            "slug": null,
+            "user_id": null,
+            "user_name": null,
+            "message_type": "text",
+            "read_by": [],
+            "url": []
+          }
+        };
+
+        try {
+          channel?.sink.add(jsonEncode(payload));
+          // Update message status to sent
+          await db.insertMessage(message.copyWith(status: 'sent'));
+        } catch (e) {
+          print("Error sending pending message: $e");
+        }
+      }
+    }
     // } catch (err) {
     //   print(err.toString());
     // }
   }
 
-  Future connectToWebSocket(String username) async {
+  Future connectToWebSocket(String username, String chatSlug) async {
     print("connecting to websocket");
     try {
       final authController = Get.find<AuthRepository>();
@@ -101,8 +129,19 @@ class ChatRepository extends GetxController {
           Uri.parse(ApiLink.webSocketUrl(username, authController.token)),
           headers: {"Origin": "wss://api.engy.africa"});
       isConnected.value = true;
-      channel?.stream.listen((message) {
-        print("WebSocket Message: $message");
+      channel?.stream.listen((message) async {
+        var json = jsonDecode(message);
+        if (json['message'] == null) return;
+        await db.insertMessage(Message(
+            slug: json['slug'],
+            chatSlug: chatSlug,
+            content: json["message"],
+            senderName: json['user_name'],
+            senderSlug: json['user_slug'],
+            status: "sent",
+            createdAt: DateTime.parse(json['timestamp']),
+            isRead: false));
+        await db.updateLastMessage(chatSlug, json['slug']);
       }, onError: (error) {
         isConnected.value = false;
         print("WebSocket error: $error");
@@ -113,6 +152,59 @@ class ChatRepository extends GetxController {
     } catch (e) {
       isConnected.value = false;
       print("WebSocket exception: $e");
+    }
+  }
+
+  Future<void> sendMessage({
+    required String message,
+    required String chatSlug,
+    List<String>? imageUrls,
+    String? replyToSlug,
+  }) async {
+    var uuid = Uuid();
+    var slug = uuid.v4().toString();
+    Message record = Message(
+        content: message,
+        slug: slug,
+        status: "pending",
+        imageUrls: imageUrls != null ? jsonEncode(imageUrls) : null,
+        chatSlug: chatSlug,
+        createdAt: DateTime.now(),
+        senderName: authController.user!.fullName!,
+        senderSlug: authController.user?.slug,
+        senderImage: authController.user?.profile?.profilePicture,
+        isRead: false);
+    await db.insertMessage(record);
+    if (!isConnected.value || channel == null) {
+      print("WebSocket not connected");
+      return;
+    }
+
+    final payload = {
+      "message": message,
+      "slug": slug,
+      "user_id": authController
+          .user?.id, // Should be dynamically set based on current user
+      "user_name": authController.user?.userName!,
+      "message_type": "text",
+      "read_by": [],
+      // "timestamp": DateTime.now().toUtc().toIso8601String(),
+      "url": imageUrls ?? [],
+      "reply_to": {
+        "message": null,
+        "slug": replyToSlug,
+        "user_id": null,
+        "user_name": null,
+        "message_type": "text",
+        "read_by": [],
+        "url": []
+      }
+    };
+
+    try {
+      channel?.sink.add(jsonEncode(payload));
+    } catch (e) {
+      print("Error sending message: $e");
     }
   }
 
@@ -132,6 +224,10 @@ class ChatRepository extends GetxController {
 
   Future<Message> getMessage(String slug) async {
     return await db.getMessage(slug);
+  }
+
+  Stream<Message?> getLastMessage(String chatSlug) {
+    return db.watchLastMessage(chatSlug);
   }
 
   Future<Chat> getChat(String slug) async {

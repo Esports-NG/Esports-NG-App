@@ -30,93 +30,85 @@ class _ChatsState extends State<Chats> {
       body: RefreshIndicator(
         onRefresh: () => chatController.getUserChats(),
         child: SingleChildScrollView(
-          child: Obx(
-            () => chatController.loadingChats.value
-                ? const Center(
-                    child: ButtonLoader(),
-                  )
-                : Column(
+          child: Column(
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.to(() => const DMRequest());
+                },
+                child: Container(
+                  color: AppColor().primaryLightColor,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.r, vertical: 12.r),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          Get.to(() => const DMRequest());
-                        },
-                        child: Container(
-                          color: AppColor().primaryLightColor,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.r, vertical: 12.r),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CustomText(
-                                title: '4 Requests',
-                                size: 14,
-                                fontFamily: 'InterMedium',
-                                color: AppColor().primaryLiteColor,
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: AppColor().primaryLiteColor,
-                                size: 20.r,
-                              )
-                            ],
-                          ),
-                        ),
+                      CustomText(
+                        title: '4 Requests',
+                        size: 14,
+                        fontFamily: 'InterMedium',
+                        color: AppColor().primaryLiteColor,
                       ),
-                      StreamBuilder<List<Chat>>(
-                          stream: chatController.watchChats(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
-                            }
-                            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                              return Center(
-                                  child: CustomText(
-                                title: "No chats yet",
-                              ));
-                            }
-
-                            final chats = snapshot.data!;
-                            return ListView.separated(
-                              padding: EdgeInsets.zero,
-                              physics: const ScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: chats.length,
-                              separatorBuilder: (context, index) => Divider(
-                                color:
-                                    AppColor().lightItemsColor.withOpacity(0.2),
-                                height: 0,
-                                thickness: 0,
-                              ),
-                              itemBuilder: (context, index) {
-                                var item = chats[index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    // Get.to(
-                                    //   () => PostDetails(
-                                    //     item: item,
-                                    //   ),
-                                    // );
-                                  },
-                                  onLongPress: () {
-                                    setState(() {
-                                      if (longSelect == index) {
-                                        longSelect = null;
-                                      } else {
-                                        longSelect = index;
-                                      }
-                                    });
-                                  },
-                                  child: ChatsItem(
-                                    chat: item,
-                                  ),
-                                );
-                              },
-                            );
-                          }),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: AppColor().primaryLiteColor,
+                        size: 20.r,
+                      )
                     ],
                   ),
+                ),
+              ),
+              StreamBuilder<List<Chat>>(
+                  stream: chatController.watchChats(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                          child: CustomText(
+                        title: "No chats yet",
+                      ));
+                    }
+
+                    final chats = snapshot.data!;
+                    return ListView.separated(
+                      padding: EdgeInsets.zero,
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: chats.length,
+                      separatorBuilder: (context, index) => Divider(
+                        color: AppColor().lightItemsColor.withOpacity(0.2),
+                        height: 0,
+                        thickness: 0,
+                      ),
+                      itemBuilder: (context, index) {
+                        var item = chats[index];
+                        return GestureDetector(
+                          onTap: () {
+                            // Get.to(
+                            //   () => PostDetails(
+                            //     item: item,
+                            //   ),
+                            // );
+                          },
+                          onLongPress: () {
+                            setState(() {
+                              if (longSelect == index) {
+                                longSelect = null;
+                              } else {
+                                longSelect = index;
+                              }
+                            });
+                          },
+                          child: ChatsItem(
+                            chat: item,
+                          ),
+                        );
+                      },
+                    );
+                  }),
+            ],
           ),
         ),
       ),

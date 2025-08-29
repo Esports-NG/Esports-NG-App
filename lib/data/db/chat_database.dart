@@ -30,6 +30,7 @@ class Messages extends Table {
   TextColumn get senderName => text()();
   TextColumn get senderImage => text().nullable()();
   TextColumn get imageUrls => text().nullable()();
+  TextColumn get status => text().withDefault(const Constant('sent'))();
 
   DateTimeColumn get createdAt => dateTime()();
   BoolColumn get isRead => boolean().withDefault(const Constant(false))();
@@ -49,7 +50,7 @@ class ChatDatabase extends _$ChatDatabase {
   }
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration {
@@ -58,14 +59,9 @@ class ChatDatabase extends _$ChatDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        if (from < 2) {
-          // Add username column if upgrading from version 1
-          await m.addColumn(chats, chats.username);
-        }
-
-        if (from < 3) {
-          // Add senderSlug column if upgrading from version 2 or earlier
-          await m.addColumn(messages, messages.senderSlug);
+        if (from < 4) {
+          // Add status column if upgrading from version 3 or earlier
+          await m.addColumn(messages, messages.status);
         }
       },
     );
@@ -149,7 +145,37 @@ extension ChatDao on ChatDatabase {
   Stream<List<Message>> watchMessages(String slug) {
     return (select(messages)
           ..where((m) => m.chatSlug.equals(slug))
-          ..orderBy([(m) => OrderingTerm.asc(m.createdAt)]))
+          ..orderBy([(m) => OrderingTerm.desc(m.createdAt)]))
         .watch();
+  }
+
+  Future<List<Message>> getPendingMessages(String chatSlug) async {
+    return (select(messages)
+          ..where(
+              (m) => m.chatSlug.equals(chatSlug) & m.status.equals('pending')))
+        .get();
+  }
+
+  Stream<Message?> watchLastMessage(String chatSlug) {
+    try {
+      return (select(messages)
+            ..where((m) => m.chatSlug.equals(chatSlug))
+            ..orderBy([(m) => OrderingTerm.desc(m.createdAt)])
+            ..limit(1))
+          .watchSingleOrNull();
+    } catch (e) {
+      print('Error watching last message: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateLastMessage(String chatSlug, String slug) async {
+    try {
+      await (update(chats)..where((c) => c.slug.equals(chatSlug)))
+          .write(ChatsCompanion(lastMessageSlug: Value(slug)));
+    } catch (err) {
+      print(err);
+      rethrow;
+    }
   }
 }

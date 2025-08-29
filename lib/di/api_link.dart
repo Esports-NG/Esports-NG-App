@@ -177,7 +177,7 @@ class ApiLink {
   // Chat
   static String getChatHistory(String username) =>
       "${baseurl}notification/v2/chat/${username}/";
-  static String getUserChats = "${baseurl}notification/v2/user/channels/";
+  static String getUserChats = "${baseurl}notification/v2/all/channels/";
   static String webSocketUrl(String username, String token) =>
       "${socketUrl}ws/chat/$username/?token=$token";
 
